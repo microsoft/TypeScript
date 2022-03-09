@@ -64,8 +64,8 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/projects/temp/node_modules/
 Running: /dev/null/inferredProject1*
 Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/temp/node_modules 1 undefined WatchType: node_modules for closed script infos in them
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/temp/node_modules 1 undefined WatchType: node_modules for closed script infos in them
+DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/temp/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/temp/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 2 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Project '/dev/null/inferredProject1*' (Inferred)
 	Files (3)

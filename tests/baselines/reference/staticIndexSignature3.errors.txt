@@ -1,4 +1,4 @@
-tests/cases/conformance/classes/staticIndexSignature/staticIndexSignature3.ts(12,5): error TS2413: Numeric index type '1' is not assignable to string index type 'boolean'.
+tests/cases/conformance/classes/staticIndexSignature/staticIndexSignature3.ts(12,5): error TS2413: 'number' index type '1' is not assignable to 'string' index type 'boolean'.
 
 
 ==== tests/cases/conformance/classes/staticIndexSignature/staticIndexSignature3.ts (1 errors) ====
@@ -15,7 +15,7 @@ tests/cases/conformance/classes/staticIndexSignature/staticIndexSignature3.ts(12
         static readonly [s: string]: boolean
         static readonly [s: number]: 1 
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2413: Numeric index type '1' is not assignable to string index type 'boolean'.
+!!! error TS2413: 'number' index type '1' is not assignable to 'string' index type 'boolean'.
     }
     
     class DD extends D {

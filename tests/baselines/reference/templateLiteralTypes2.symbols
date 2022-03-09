@@ -178,6 +178,7 @@ function ft12(s: string) {
     const c5 = `foo${s}` as const;
 >c5 : Symbol(c5, Decl(templateLiteralTypes2.ts, 48, 9))
 >s : Symbol(s, Decl(templateLiteralTypes2.ts, 39, 14))
+>const : Symbol(const)
 
     let v5 = c5;
 >v5 : Symbol(v5, Decl(templateLiteralTypes2.ts, 49, 7))

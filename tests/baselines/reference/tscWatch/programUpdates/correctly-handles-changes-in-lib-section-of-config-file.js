@@ -48,6 +48,10 @@ Semantic diagnostics in builder refreshed for::
 /compiler/lib.es5.d.ts
 /src/app.ts
 
+Shape signatures in builder refreshed for::
+/compiler/lib.es5.d.ts (used version)
+/src/app.ts (used version)
+
 WatchedFiles::
 /src/tsconfig.json:
   {"fileName":"/src/tsconfig.json","pollingInterval":250}
@@ -98,6 +102,10 @@ Semantic diagnostics in builder refreshed for::
 /compiler/lib.es5.d.ts
 /compiler/lib.es2015.promise.d.ts
 /src/app.ts
+
+Shape signatures in builder refreshed for::
+/compiler/lib.es2015.promise.d.ts (used version)
+/src/app.ts (computed .d.ts)
 
 WatchedFiles::
 /src/tsconfig.json:

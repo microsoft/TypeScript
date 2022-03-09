@@ -1,6 +1,6 @@
 === tests/cases/compiler/index.d.ts ===
 export declare function foo({a}?: {
->foo : ({ a }?: { a?: string; } | undefined) => void
+>foo : ({ a }?: { a?: string | undefined; } | undefined) => void
 >a : string | undefined
 
     a?: string;

@@ -111,6 +111,13 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/transitiveReferences/refs/a.d.ts
 /user/username/projects/transitiveReferences/c/index.ts
 
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/transitivereferences/a/index.d.ts (used version)
+/user/username/projects/transitivereferences/b/index.d.ts (used version)
+/user/username/projects/transitivereferences/refs/a.d.ts (used version)
+/user/username/projects/transitivereferences/c/index.ts (used version)
+
 Dependencies for::
 /a/lib/lib.d.ts:
   /a/lib/lib.d.ts
@@ -148,6 +155,10 @@ WatchedFiles::
   {"fileName":"/user/username/projects/transitiveReferences/refs/a.d.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/user/username/projects/transitivereferences/b/package.json:
+  {"fileName":"/user/username/projects/transitivereferences/b/package.json","pollingInterval":250}
+/user/username/projects/transitivereferences/a/package.json:
+  {"fileName":"/user/username/projects/transitivereferences/a/package.json","pollingInterval":250}
 
 FsWatches::
 /user/username/projects/transitivereferences:
@@ -221,6 +232,10 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /user/username/projects/transitiveReferences/b/index.d.ts
 /user/username/projects/transitiveReferences/c/index.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/transitivereferences/b/index.d.ts (used version)
+/user/username/projects/transitivereferences/c/index.ts (computed .d.ts)
 
 Dependencies for::
 /a/lib/lib.d.ts:
@@ -318,6 +333,10 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/transitiveReferences/nrefs/a.d.ts
 /user/username/projects/transitiveReferences/c/index.ts
 
+Shape signatures in builder refreshed for::
+/user/username/projects/transitivereferences/nrefs/a.d.ts (used version)
+/user/username/projects/transitivereferences/c/index.ts (computed .d.ts)
+
 Dependencies for::
 /a/lib/lib.d.ts:
   /a/lib/lib.d.ts
@@ -355,6 +374,10 @@ WatchedFiles::
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 /user/username/projects/transitivereferences/nrefs/a.d.ts:
   {"fileName":"/user/username/projects/transitiveReferences/nrefs/a.d.ts","pollingInterval":250}
+/user/username/projects/transitivereferences/b/package.json:
+  {"fileName":"/user/username/projects/transitivereferences/b/package.json","pollingInterval":250}
+/user/username/projects/transitivereferences/a/package.json:
+  {"fileName":"/user/username/projects/transitivereferences/a/package.json","pollingInterval":250}
 
 FsWatches::
 /user/username/projects/transitivereferences:
@@ -409,6 +432,10 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/transitiveReferences/refs/a.d.ts
 /user/username/projects/transitiveReferences/c/index.ts
 
+Shape signatures in builder refreshed for::
+/user/username/projects/transitivereferences/refs/a.d.ts (used version)
+/user/username/projects/transitivereferences/c/index.ts (computed .d.ts)
+
 Dependencies for::
 /a/lib/lib.d.ts:
   /a/lib/lib.d.ts
@@ -444,6 +471,10 @@ WatchedFiles::
   {"fileName":"/user/username/projects/transitiveReferences/a/index.d.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/user/username/projects/transitivereferences/b/package.json:
+  {"fileName":"/user/username/projects/transitivereferences/b/package.json","pollingInterval":250}
+/user/username/projects/transitivereferences/a/package.json:
+  {"fileName":"/user/username/projects/transitivereferences/a/package.json","pollingInterval":250}
 /user/username/projects/transitivereferences/refs/a.d.ts:
   {"fileName":"/user/username/projects/transitiveReferences/refs/a.d.ts","pollingInterval":250}
 
@@ -499,6 +530,10 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /user/username/projects/transitiveReferences/nrefs/a.d.ts
 /user/username/projects/transitiveReferences/b/index.d.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/transitivereferences/nrefs/a.d.ts (used version)
+/user/username/projects/transitivereferences/b/index.d.ts (used version)
 
 Dependencies for::
 /a/lib/lib.d.ts:
@@ -589,6 +624,9 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /user/username/projects/transitiveReferences/b/index.d.ts
 
+Shape signatures in builder refreshed for::
+/user/username/projects/transitivereferences/b/index.d.ts (used version)
+
 Dependencies for::
 /a/lib/lib.d.ts:
   /a/lib/lib.d.ts
@@ -674,6 +712,10 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/transitiveReferences/b/index.ts
 /user/username/projects/transitiveReferences/c/index.ts
 
+Shape signatures in builder refreshed for::
+/user/username/projects/transitivereferences/b/index.ts (computed .d.ts)
+/user/username/projects/transitivereferences/c/index.ts (computed .d.ts)
+
 Dependencies for::
 /a/lib/lib.d.ts:
   /a/lib/lib.d.ts
@@ -755,6 +797,11 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/transitiveReferences/b/index.d.ts
 /user/username/projects/transitiveReferences/c/index.ts
 
+Shape signatures in builder refreshed for::
+/user/username/projects/transitivereferences/a/index.d.ts (used version)
+/user/username/projects/transitivereferences/b/index.d.ts (used version)
+/user/username/projects/transitivereferences/c/index.ts (computed .d.ts)
+
 Dependencies for::
 /a/lib/lib.d.ts:
   /a/lib/lib.d.ts
@@ -792,6 +839,8 @@ WatchedFiles::
   {"fileName":"/user/username/projects/transitiveReferences/b/index.d.ts","pollingInterval":250}
 /user/username/projects/transitivereferences/a/index.d.ts:
   {"fileName":"/user/username/projects/transitiveReferences/a/index.d.ts","pollingInterval":250}
+/user/username/projects/transitivereferences/a/package.json:
+  {"fileName":"/user/username/projects/transitivereferences/a/package.json","pollingInterval":250}
 
 FsWatches::
 /user/username/projects/transitivereferences:
@@ -848,6 +897,10 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /user/username/projects/transitiveReferences/a/index.ts
 /user/username/projects/transitiveReferences/b/index.d.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/transitivereferences/a/index.ts (computed .d.ts)
+/user/username/projects/transitivereferences/b/index.d.ts (used version)
 
 Dependencies for::
 /a/lib/lib.d.ts:
@@ -939,6 +992,11 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/transitiveReferences/a/index.d.ts
 /user/username/projects/transitiveReferences/b/index.d.ts
 /user/username/projects/transitiveReferences/c/index.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/transitivereferences/a/index.d.ts (used version)
+/user/username/projects/transitivereferences/b/index.d.ts (used version)
+/user/username/projects/transitivereferences/c/index.ts (used version)
 
 Dependencies for::
 /a/lib/lib.d.ts:

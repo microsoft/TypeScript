@@ -11,7 +11,7 @@
 verify.applyCodeActionFromCompletion("", {
   name: "foo",
   source: "/a",
-  description: `Import 'foo' from module "./a"`,
+  description: `Add import from "./a"`,
   newFileContent: `import { foo } from "./a"
 
 const x = 0

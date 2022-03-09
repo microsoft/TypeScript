@@ -43,6 +43,8 @@ Program files::
 
 No cached semantic diagnostics in the builder::
 
+No shapes updated in the builder::
+
 Program root files: ["/user/username/projects/sample1/logic/index.ts"]
 Program options: {"composite":true,"declaration":true,"outFile":"/user/username/projects/sample1/logic/index.js","watch":true,"configFilePath":"/user/username/projects/sample1/logic/tsconfig.json"}
 Program structureReused: Not
@@ -52,6 +54,8 @@ Program files::
 /user/username/projects/sample1/logic/index.ts
 
 No cached semantic diagnostics in the builder::
+
+No shapes updated in the builder::
 
 WatchedFiles::
 /user/username/projects/sample1/core/tsconfig.json:
@@ -253,6 +257,8 @@ Program files::
 
 No cached semantic diagnostics in the builder::
 
+No shapes updated in the builder::
+
 WatchedFiles::
 /user/username/projects/sample1/core/tsconfig.json:
   {"fileName":"/user/username/projects/sample1/core/tsconfig.json","pollingInterval":250}
@@ -353,6 +359,8 @@ Program files::
 /user/username/projects/sample1/logic/index.ts
 
 No cached semantic diagnostics in the builder::
+
+No shapes updated in the builder::
 
 WatchedFiles::
 /user/username/projects/sample1/core/tsconfig.json:
@@ -500,6 +508,8 @@ Program files::
 /user/username/projects/sample1/core/index.ts
 
 No cached semantic diagnostics in the builder::
+
+No shapes updated in the builder::
 
 WatchedFiles::
 /user/username/projects/sample1/core/tsconfig.json:

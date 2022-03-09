@@ -260,25 +260,25 @@ type NameMap = { 'a': 'x', 'b': 'y', 'c': 'z' };
 // Distributive, will be simplified
 
 type TS0<T> = keyof { [P in keyof T as keyof Record<P, number>]: string };
->TS0 : keyof T
+>TS0 : keyof { [P in keyof T as P]: string; }
 
 type TS1<T> = keyof { [P in keyof T as Extract<P, 'a' | 'b' | 'c'>]: string };
->TS1 : Extract<keyof T, "a" | "b" | "c">
+>TS1 : keyof { [P in keyof T as Extract<P, "a" | "b" | "c">]: string; }
 
 type TS2<T> = keyof { [P in keyof T as P & ('a' | 'b' | 'c')]: string };
->TS2 : keyof T & ("a" | "b" | "c")
+>TS2 : keyof { [P in keyof T as P & ("a" | "b" | "c")]: string; }
 
 type TS3<T> = keyof { [P in keyof T as Exclude<P, 'a' | 'b' | 'c'>]: string };
->TS3 : Exclude<keyof T, "a" | "b" | "c">
+>TS3 : keyof { [P in keyof T as Exclude<P, "a" | "b" | "c">]: string; }
 
 type TS4<T> = keyof { [P in keyof T as NameMap[P & keyof NameMap]]: string };
->TS4 : NameMap[keyof T & keyof NameMap]
+>TS4 : keyof { [P in keyof T as NameMap[P & keyof NameMap]]: string; }
 
 type TS5<T> = keyof { [P in keyof T & keyof NameMap as NameMap[P]]: string };
 >TS5 : NameMap[keyof T & "a"] | NameMap[keyof T & "b"] | NameMap[keyof T & "c"]
 
 type TS6<T, U, V> = keyof { [ K in keyof T as V & (K extends U ? K : never)]: string };
->TS6 : V & (keyof T extends U ? U & keyof T : never)
+>TS6 : keyof { [K in keyof T as V & (K extends U ? K : never)]: string; }
 
 // Non-distributive, won't be simplified
 

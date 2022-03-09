@@ -24,7 +24,7 @@ exports.__esModule = true;
 /** @jsxImportSource @emotion/react */
 var react_1 = require("@emotion/react");
 function Component() {
-    return (<input css={react_1.css(templateObject_1 || (templateObject_1 = __makeTemplateObject(["\n        color: red;\n      "], ["\n        color: red;\n      "])))}/>);
+    return (<input css={(0, react_1.css)(templateObject_1 || (templateObject_1 = __makeTemplateObject(["\n        color: red;\n      "], ["\n        color: red;\n      "])))}/>);
 }
 exports["default"] = Component;
 var templateObject_1;

@@ -29,7 +29,7 @@ exports.fooFunc = fooFunc;
 exports.__esModule = true;
 function check(x) {
     switch (x) {
-        case 0 /* Some */:
+        case 0 /* Foo.ConstFooEnum.Some */:
             break;
     }
 }

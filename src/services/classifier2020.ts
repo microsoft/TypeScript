@@ -79,7 +79,7 @@ namespace ts.classifier.v2020 {
                 inJSXElement = false;
             }
 
-            if (isIdentifier(node) && !inJSXElement && !inImportClause(node)) {
+            if (isIdentifier(node) && !inJSXElement && !inImportClause(node) && !isInfinityOrNaNString(node.escapedText)) {
                 let symbol = typeChecker.getSymbolAtLocation(node);
                 if (symbol) {
                     if (symbol.flags & SymbolFlags.Alias) {

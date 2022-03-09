@@ -1,7 +1,7 @@
 /* @internal */
 namespace ts.refactor {
     /**
-     * Returned by refactor funtions when some error message needs to be surfaced to users.
+     * Returned by refactor functions when some error message needs to be surfaced to users.
      */
     export interface RefactorErrorInfo {
         error: string;

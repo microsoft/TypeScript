@@ -1,7 +1,7 @@
 === tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts ===
 // Object literals in unions are normalized upon widening
 let a1 = [{ a: 0 }, { a: 1, b: "x" }, { a: 2, b: "y", c: true }][0];
->a1 : { a: number; b?: never; c?: never; } | { a: number; b: string; c?: never; } | { a: number; b: string; c: boolean; }
+>a1 : { a: number; b?: undefined; c?: undefined; } | { a: number; b: string; c?: undefined; } | { a: number; b: string; c: boolean; }
 >[{ a: 0 }, { a: 1, b: "x" }, { a: 2, b: "y", c: true }][0] : { a: number; } | { a: number; b: string; } | { a: number; b: string; c: boolean; }
 >[{ a: 0 }, { a: 1, b: "x" }, { a: 2, b: "y", c: true }] : ({ a: number; } | { a: number; b: string; } | { a: number; b: string; c: boolean; })[]
 >{ a: 0 } : { a: number; }
@@ -23,29 +23,29 @@ let a1 = [{ a: 0 }, { a: 1, b: "x" }, { a: 2, b: "y", c: true }][0];
 
 a1.a;  // number
 >a1.a : number
->a1 : { a: number; b?: never; c?: never; } | { a: number; b: string; c?: never; } | { a: number; b: string; c: boolean; }
+>a1 : { a: number; b?: undefined; c?: undefined; } | { a: number; b: string; c?: undefined; } | { a: number; b: string; c: boolean; }
 >a : number
 
 a1.b;  // string | undefined
 >a1.b : string | undefined
->a1 : { a: number; b?: never; c?: never; } | { a: number; b: string; c?: never; } | { a: number; b: string; c: boolean; }
+>a1 : { a: number; b?: undefined; c?: undefined; } | { a: number; b: string; c?: undefined; } | { a: number; b: string; c: boolean; }
 >b : string | undefined
 
 a1.c;  // boolean | undefined
 >a1.c : boolean | undefined
->a1 : { a: number; b?: never; c?: never; } | { a: number; b: string; c?: never; } | { a: number; b: string; c: boolean; }
+>a1 : { a: number; b?: undefined; c?: undefined; } | { a: number; b: string; c?: undefined; } | { a: number; b: string; c: boolean; }
 >c : boolean | undefined
 
 a1 = { a: 1 };
 >a1 = { a: 1 } : { a: number; }
->a1 : { a: number; b?: never; c?: never; } | { a: number; b: string; c?: never; } | { a: number; b: string; c: boolean; }
+>a1 : { a: number; b?: undefined; c?: undefined; } | { a: number; b: string; c?: undefined; } | { a: number; b: string; c: boolean; }
 >{ a: 1 } : { a: number; }
 >a : number
 >1 : 1
 
 a1 = { a: 0, b: 0 };  // Error
 >a1 = { a: 0, b: 0 } : { a: number; b: number; }
->a1 : { a: number; b?: never; c?: never; } | { a: number; b: string; c?: never; } | { a: number; b: string; c: boolean; }
+>a1 : { a: number; b?: undefined; c?: undefined; } | { a: number; b: string; c?: undefined; } | { a: number; b: string; c: boolean; }
 >{ a: 0, b: 0 } : { a: number; b: number; }
 >a : number
 >0 : 0
@@ -54,20 +54,20 @@ a1 = { a: 0, b: 0 };  // Error
 
 a1 = { b: "y" };  // Error
 >a1 = { b: "y" } : { b: string; }
->a1 : { a: number; b?: never; c?: never; } | { a: number; b: string; c?: never; } | { a: number; b: string; c: boolean; }
+>a1 : { a: number; b?: undefined; c?: undefined; } | { a: number; b: string; c?: undefined; } | { a: number; b: string; c: boolean; }
 >{ b: "y" } : { b: string; }
 >b : string
 >"y" : "y"
 
 a1 = { c: true };  // Error
 >a1 = { c: true } : { c: true; }
->a1 : { a: number; b?: never; c?: never; } | { a: number; b: string; c?: never; } | { a: number; b: string; c: boolean; }
+>a1 : { a: number; b?: undefined; c?: undefined; } | { a: number; b: string; c?: undefined; } | { a: number; b: string; c: boolean; }
 >{ c: true } : { c: true; }
 >c : true
 >true : true
 
 let a2 = [{ a: 1, b: 2 }, { a: "abc" }, {}][0];
->a2 : { a: number; b: number; } | { a: string; b?: never; } | { a?: never; b?: never; }
+>a2 : { a: number; b: number; } | { a: string; b?: undefined; } | { a?: undefined; b?: undefined; }
 >[{ a: 1, b: 2 }, { a: "abc" }, {}][0] : { a: number; b: number; } | { a: string; } | {}
 >[{ a: 1, b: 2 }, { a: "abc" }, {}] : ({ a: number; b: number; } | { a: string; } | {})[]
 >{ a: 1, b: 2 } : { a: number; b: number; }
@@ -83,17 +83,17 @@ let a2 = [{ a: 1, b: 2 }, { a: "abc" }, {}][0];
 
 a2.a;  // string | number | undefined
 >a2.a : string | number | undefined
->a2 : { a: number; b: number; } | { a: string; b?: never; } | { a?: never; b?: never; }
+>a2 : { a: number; b: number; } | { a: string; b?: undefined; } | { a?: undefined; b?: undefined; }
 >a : string | number | undefined
 
 a2.b;  // number | undefined
 >a2.b : number | undefined
->a2 : { a: number; b: number; } | { a: string; b?: never; } | { a?: never; b?: never; }
+>a2 : { a: number; b: number; } | { a: string; b?: undefined; } | { a?: undefined; b?: undefined; }
 >b : number | undefined
 
 a2 = { a: 10, b: 20 };
 >a2 = { a: 10, b: 20 } : { a: number; b: number; }
->a2 : { a: number; b: number; } | { a: string; b?: never; } | { a?: never; b?: never; }
+>a2 : { a: number; b: number; } | { a: string; b?: undefined; } | { a?: undefined; b?: undefined; }
 >{ a: 10, b: 20 } : { a: number; b: number; }
 >a : number
 >10 : 10
@@ -102,19 +102,19 @@ a2 = { a: 10, b: 20 };
 
 a2 = { a: "def" };
 >a2 = { a: "def" } : { a: string; }
->a2 : { a: number; b: number; } | { a: string; b?: never; } | { a?: never; b?: never; }
+>a2 : { a: number; b: number; } | { a: string; b?: undefined; } | { a?: undefined; b?: undefined; }
 >{ a: "def" } : { a: string; }
 >a : string
 >"def" : "def"
 
 a2 = {};
 >a2 = {} : {}
->a2 : { a: number; b: number; } | { a: string; b?: never; } | { a?: never; b?: never; }
+>a2 : { a: number; b: number; } | { a: string; b?: undefined; } | { a?: undefined; b?: undefined; }
 >{} : {}
 
 a2 = { a: "def", b: 20 };  // Error
 >a2 = { a: "def", b: 20 } : { a: string; b: number; }
->a2 : { a: number; b: number; } | { a: string; b?: never; } | { a?: never; b?: never; }
+>a2 : { a: number; b: number; } | { a: string; b?: undefined; } | { a?: undefined; b?: undefined; }
 >{ a: "def", b: 20 } : { a: string; b: number; }
 >a : string
 >"def" : "def"
@@ -123,7 +123,7 @@ a2 = { a: "def", b: 20 };  // Error
 
 a2 = { a: 1 };  // Error
 >a2 = { a: 1 } : { a: number; }
->a2 : { a: number; b: number; } | { a: string; b?: never; } | { a?: never; b?: never; }
+>a2 : { a: number; b: number; } | { a: string; b?: undefined; } | { a?: undefined; b?: undefined; }
 >{ a: 1 } : { a: number; }
 >a : number
 >1 : 1
@@ -151,29 +151,29 @@ let b3 = { ...b2 };
 // Before widening {} acts like { [x: string]: undefined }, which is a
 // subtype of types with all optional properties
 declare let opts: { foo?: string, bar?: string, baz?: boolean };
->opts : { foo?: string; bar?: string; baz?: boolean; }
+>opts : { foo?: string | undefined; bar?: string | undefined; baz?: boolean | undefined; }
 >foo : string | undefined
 >bar : string | undefined
 >baz : boolean | undefined
 
 let c1 = !true ? {} : opts;
->c1 : { foo?: string; bar?: string; baz?: boolean; }
->!true ? {} : opts : { foo?: string; bar?: string; baz?: boolean; }
+>c1 : { foo?: string | undefined; bar?: string | undefined; baz?: boolean | undefined; }
+>!true ? {} : opts : { foo?: string | undefined; bar?: string | undefined; baz?: boolean | undefined; }
 >!true : false
 >true : true
 >{} : {}
->opts : { foo?: string; bar?: string; baz?: boolean; }
+>opts : { foo?: string | undefined; bar?: string | undefined; baz?: boolean | undefined; }
 
 let c2 = !true ? opts : {};
->c2 : { foo?: string; bar?: string; baz?: boolean; }
->!true ? opts : {} : { foo?: string; bar?: string; baz?: boolean; }
+>c2 : { foo?: string | undefined; bar?: string | undefined; baz?: boolean | undefined; }
+>!true ? opts : {} : { foo?: string | undefined; bar?: string | undefined; baz?: boolean | undefined; }
 >!true : false
 >true : true
->opts : { foo?: string; bar?: string; baz?: boolean; }
+>opts : { foo?: string | undefined; bar?: string | undefined; baz?: boolean | undefined; }
 >{} : {}
 
 let c3 = !true ? { a: 0, b: 0 } : {};
->c3 : { a: number; b: number; } | { a?: never; b?: never; }
+>c3 : { a: number; b: number; } | { a?: undefined; b?: undefined; }
 >!true ? { a: 0, b: 0 } : {} : { a: number; b: number; } | {}
 >!true : false
 >true : true
@@ -185,7 +185,7 @@ let c3 = !true ? { a: 0, b: 0 } : {};
 >{} : {}
 
 let c4 = !true ? {} : { a: 0, b: 0 };
->c4 : { a?: never; b?: never; } | { a: number; b: number; }
+>c4 : { a?: undefined; b?: undefined; } | { a: number; b: number; }
 >!true ? {} : { a: 0, b: 0 } : {} | { a: number; b: number; }
 >!true : false
 >true : true
@@ -198,7 +198,7 @@ let c4 = !true ? {} : { a: 0, b: 0 };
 
 // Normalization applies to nested properties
 let d1 = [{ kind: 'a', pos: { x: 0, y: 0 } }, { kind: 'b', pos: !true ? { a: "x" } : { b: 0 } }][0];
->d1 : { kind: string; pos: { x: number; y: number; a?: never; b?: never; }; } | { kind: string; pos: { a: string; x?: never; y?: never; b?: never; } | { b: number; x?: never; y?: never; a?: never; }; }
+>d1 : { kind: string; pos: { x: number; y: number; a?: undefined; b?: undefined; }; } | { kind: string; pos: { a: string; x?: undefined; y?: undefined; b?: undefined; } | { b: number; x?: undefined; y?: undefined; a?: undefined; }; }
 >[{ kind: 'a', pos: { x: 0, y: 0 } }, { kind: 'b', pos: !true ? { a: "x" } : { b: 0 } }][0] : { kind: string; pos: { x: number; y: number; }; } | { kind: string; pos: { a: string; } | { b: number; }; }
 >[{ kind: 'a', pos: { x: 0, y: 0 } }, { kind: 'b', pos: !true ? { a: "x" } : { b: 0 } }] : ({ kind: string; pos: { x: number; y: number; }; } | { kind: string; pos: { a: string; } | { b: number; }; })[]
 >{ kind: 'a', pos: { x: 0, y: 0 } } : { kind: string; pos: { x: number; y: number; }; }
@@ -227,40 +227,40 @@ let d1 = [{ kind: 'a', pos: { x: 0, y: 0 } }, { kind: 'b', pos: !true ? { a: "x"
 
 d1.kind;
 >d1.kind : string
->d1 : { kind: string; pos: { x: number; y: number; a?: never; b?: never; }; } | { kind: string; pos: { a: string; x?: never; y?: never; b?: never; } | { b: number; x?: never; y?: never; a?: never; }; }
+>d1 : { kind: string; pos: { x: number; y: number; a?: undefined; b?: undefined; }; } | { kind: string; pos: { a: string; x?: undefined; y?: undefined; b?: undefined; } | { b: number; x?: undefined; y?: undefined; a?: undefined; }; }
 >kind : string
 
 d1.pos;
->d1.pos : { x: number; y: number; a?: never; b?: never; } | { a: string; x?: never; y?: never; b?: never; } | { b: number; x?: never; y?: never; a?: never; }
->d1 : { kind: string; pos: { x: number; y: number; a?: never; b?: never; }; } | { kind: string; pos: { a: string; x?: never; y?: never; b?: never; } | { b: number; x?: never; y?: never; a?: never; }; }
->pos : { x: number; y: number; a?: never; b?: never; } | { a: string; x?: never; y?: never; b?: never; } | { b: number; x?: never; y?: never; a?: never; }
+>d1.pos : { x: number; y: number; a?: undefined; b?: undefined; } | { a: string; x?: undefined; y?: undefined; b?: undefined; } | { b: number; x?: undefined; y?: undefined; a?: undefined; }
+>d1 : { kind: string; pos: { x: number; y: number; a?: undefined; b?: undefined; }; } | { kind: string; pos: { a: string; x?: undefined; y?: undefined; b?: undefined; } | { b: number; x?: undefined; y?: undefined; a?: undefined; }; }
+>pos : { x: number; y: number; a?: undefined; b?: undefined; } | { a: string; x?: undefined; y?: undefined; b?: undefined; } | { b: number; x?: undefined; y?: undefined; a?: undefined; }
 
 d1.pos.x;
 >d1.pos.x : number | undefined
->d1.pos : { x: number; y: number; a?: never; b?: never; } | { a: string; x?: never; y?: never; b?: never; } | { b: number; x?: never; y?: never; a?: never; }
->d1 : { kind: string; pos: { x: number; y: number; a?: never; b?: never; }; } | { kind: string; pos: { a: string; x?: never; y?: never; b?: never; } | { b: number; x?: never; y?: never; a?: never; }; }
->pos : { x: number; y: number; a?: never; b?: never; } | { a: string; x?: never; y?: never; b?: never; } | { b: number; x?: never; y?: never; a?: never; }
+>d1.pos : { x: number; y: number; a?: undefined; b?: undefined; } | { a: string; x?: undefined; y?: undefined; b?: undefined; } | { b: number; x?: undefined; y?: undefined; a?: undefined; }
+>d1 : { kind: string; pos: { x: number; y: number; a?: undefined; b?: undefined; }; } | { kind: string; pos: { a: string; x?: undefined; y?: undefined; b?: undefined; } | { b: number; x?: undefined; y?: undefined; a?: undefined; }; }
+>pos : { x: number; y: number; a?: undefined; b?: undefined; } | { a: string; x?: undefined; y?: undefined; b?: undefined; } | { b: number; x?: undefined; y?: undefined; a?: undefined; }
 >x : number | undefined
 
 d1.pos.y;
 >d1.pos.y : number | undefined
->d1.pos : { x: number; y: number; a?: never; b?: never; } | { a: string; x?: never; y?: never; b?: never; } | { b: number; x?: never; y?: never; a?: never; }
->d1 : { kind: string; pos: { x: number; y: number; a?: never; b?: never; }; } | { kind: string; pos: { a: string; x?: never; y?: never; b?: never; } | { b: number; x?: never; y?: never; a?: never; }; }
->pos : { x: number; y: number; a?: never; b?: never; } | { a: string; x?: never; y?: never; b?: never; } | { b: number; x?: never; y?: never; a?: never; }
+>d1.pos : { x: number; y: number; a?: undefined; b?: undefined; } | { a: string; x?: undefined; y?: undefined; b?: undefined; } | { b: number; x?: undefined; y?: undefined; a?: undefined; }
+>d1 : { kind: string; pos: { x: number; y: number; a?: undefined; b?: undefined; }; } | { kind: string; pos: { a: string; x?: undefined; y?: undefined; b?: undefined; } | { b: number; x?: undefined; y?: undefined; a?: undefined; }; }
+>pos : { x: number; y: number; a?: undefined; b?: undefined; } | { a: string; x?: undefined; y?: undefined; b?: undefined; } | { b: number; x?: undefined; y?: undefined; a?: undefined; }
 >y : number | undefined
 
 d1.pos.a;
 >d1.pos.a : string | undefined
->d1.pos : { x: number; y: number; a?: never; b?: never; } | { a: string; x?: never; y?: never; b?: never; } | { b: number; x?: never; y?: never; a?: never; }
->d1 : { kind: string; pos: { x: number; y: number; a?: never; b?: never; }; } | { kind: string; pos: { a: string; x?: never; y?: never; b?: never; } | { b: number; x?: never; y?: never; a?: never; }; }
->pos : { x: number; y: number; a?: never; b?: never; } | { a: string; x?: never; y?: never; b?: never; } | { b: number; x?: never; y?: never; a?: never; }
+>d1.pos : { x: number; y: number; a?: undefined; b?: undefined; } | { a: string; x?: undefined; y?: undefined; b?: undefined; } | { b: number; x?: undefined; y?: undefined; a?: undefined; }
+>d1 : { kind: string; pos: { x: number; y: number; a?: undefined; b?: undefined; }; } | { kind: string; pos: { a: string; x?: undefined; y?: undefined; b?: undefined; } | { b: number; x?: undefined; y?: undefined; a?: undefined; }; }
+>pos : { x: number; y: number; a?: undefined; b?: undefined; } | { a: string; x?: undefined; y?: undefined; b?: undefined; } | { b: number; x?: undefined; y?: undefined; a?: undefined; }
 >a : string | undefined
 
 d1.pos.b;
 >d1.pos.b : number | undefined
->d1.pos : { x: number; y: number; a?: never; b?: never; } | { a: string; x?: never; y?: never; b?: never; } | { b: number; x?: never; y?: never; a?: never; }
->d1 : { kind: string; pos: { x: number; y: number; a?: never; b?: never; }; } | { kind: string; pos: { a: string; x?: never; y?: never; b?: never; } | { b: number; x?: never; y?: never; a?: never; }; }
->pos : { x: number; y: number; a?: never; b?: never; } | { a: string; x?: never; y?: never; b?: never; } | { b: number; x?: never; y?: never; a?: never; }
+>d1.pos : { x: number; y: number; a?: undefined; b?: undefined; } | { a: string; x?: undefined; y?: undefined; b?: undefined; } | { b: number; x?: undefined; y?: undefined; a?: undefined; }
+>d1 : { kind: string; pos: { x: number; y: number; a?: undefined; b?: undefined; }; } | { kind: string; pos: { a: string; x?: undefined; y?: undefined; b?: undefined; } | { b: number; x?: undefined; y?: undefined; a?: undefined; }; }
+>pos : { x: number; y: number; a?: undefined; b?: undefined; } | { a: string; x?: undefined; y?: undefined; b?: undefined; } | { b: number; x?: undefined; y?: undefined; a?: undefined; }
 >b : number | undefined
 
 declare function f<T>(...items: T[]): T;
@@ -276,8 +276,8 @@ declare let data: { a: 1, b: "abc", c: true };
 
 // Object literals are inferred as a single normalized union type
 let e1 = f({ a: 1, b: 2 }, { a: "abc" }, {});
->e1 : { a: number; b: number; } | { a: string; b?: never; } | { a?: never; b?: never; }
->f({ a: 1, b: 2 }, { a: "abc" }, {}) : { a: number; b: number; } | { a: string; b?: never; } | { a?: never; b?: never; }
+>e1 : { a: number; b: number; } | { a: string; b?: undefined; } | { a?: undefined; b?: undefined; }
+>f({ a: 1, b: 2 }, { a: "abc" }, {}) : { a: number; b: number; } | { a: string; b?: undefined; } | { a?: undefined; b?: undefined; }
 >f : <T>(...items: T[]) => T
 >{ a: 1, b: 2 } : { a: number; b: number; }
 >a : number
@@ -290,8 +290,8 @@ let e1 = f({ a: 1, b: 2 }, { a: "abc" }, {});
 >{} : {}
 
 let e2 = f({}, { a: "abc" }, { a: 1, b: 2 });
->e2 : { a?: never; b?: never; } | { a: string; b?: never; } | { a: number; b: number; }
->f({}, { a: "abc" }, { a: 1, b: 2 }) : { a?: never; b?: never; } | { a: string; b?: never; } | { a: number; b: number; }
+>e2 : { a?: undefined; b?: undefined; } | { a: string; b?: undefined; } | { a: number; b: number; }
+>f({}, { a: "abc" }, { a: 1, b: 2 }) : { a?: undefined; b?: undefined; } | { a: string; b?: undefined; } | { a: number; b: number; }
 >f : <T>(...items: T[]) => T
 >{} : {}
 >{ a: "abc" } : { a: string; }

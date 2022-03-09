@@ -1,0 +1,104 @@
+=== tests/cases/conformance/classes/classStaticBlock/classStaticBlock6.ts ===
+class B {
+>B : Symbol(B, Decl(classStaticBlock6.ts, 0, 0))
+
+    static a = 1;
+>a : Symbol(B.a, Decl(classStaticBlock6.ts, 0, 9))
+}
+
+class C extends B {
+>C : Symbol(C, Decl(classStaticBlock6.ts, 2, 1))
+>B : Symbol(B, Decl(classStaticBlock6.ts, 0, 0))
+
+    static {
+        let await = 1;
+>await : Symbol(await, Decl(classStaticBlock6.ts, 6, 11))
+
+        let arguments = 1;
+>arguments : Symbol(arguments, Decl(classStaticBlock6.ts, 7, 11))
+
+        let eval = 1;
+>eval : Symbol(eval, Decl(classStaticBlock6.ts, 8, 11))
+    }
+
+    static {
+        await: if (true) {
+
+        }
+
+        arguments;
+        await;
+        super();
+    }
+}
+
+class CC {
+>CC : Symbol(CC, Decl(classStaticBlock6.ts, 20, 1))
+
+    constructor () {
+        class C extends B {
+>C : Symbol(C, Decl(classStaticBlock6.ts, 23, 20))
+>B : Symbol(B, Decl(classStaticBlock6.ts, 0, 0))
+
+            static {
+                class CC extends B {
+>CC : Symbol(CC, Decl(classStaticBlock6.ts, 25, 20))
+>B : Symbol(B, Decl(classStaticBlock6.ts, 0, 0))
+
+                    constructor () {
+                        super();
+>super : Symbol(B, Decl(classStaticBlock6.ts, 0, 0))
+                    }
+                }
+                super();
+            }
+        }
+    }
+}
+
+async function foo () {
+>foo : Symbol(foo, Decl(classStaticBlock6.ts, 35, 1))
+
+    class C extends B {
+>C : Symbol(C, Decl(classStaticBlock6.ts, 37, 23))
+>B : Symbol(B, Decl(classStaticBlock6.ts, 0, 0))
+
+        static {
+            arguments;
+>arguments : Symbol(arguments)
+
+            await;
+
+            async function ff () {
+>ff : Symbol(ff, Decl(classStaticBlock6.ts, 41, 18))
+
+                arguments;
+>arguments : Symbol(arguments)
+
+                await;
+            }
+        }
+    }
+}
+
+function foo1 () {
+>foo1 : Symbol(foo1, Decl(classStaticBlock6.ts, 49, 1))
+
+    class C extends B {
+>C : Symbol(C, Decl(classStaticBlock6.ts, 51, 18))
+>B : Symbol(B, Decl(classStaticBlock6.ts, 0, 0))
+
+        static {
+            arguments;
+>arguments : Symbol(arguments)
+
+            function ff () {
+>ff : Symbol(ff, Decl(classStaticBlock6.ts, 54, 22))
+
+                arguments;
+>arguments : Symbol(arguments)
+            }
+        }
+    }
+}
+

@@ -102,6 +102,7 @@ namespace ts.projectSystem {
                 s.replace(/Elapsed::?\s*\d+(?:\.\d+)?ms/g, "Elapsed:: *ms")
                     .replace(/\"updateGraphDurationMs\"\:\d+(?:\.\d+)?/g, `"updateGraphDurationMs":*`)
                     .replace(/\"createAutoImportProviderProgramDurationMs\"\:\d+(?:\.\d+)?/g, `"createAutoImportProviderProgramDurationMs":*`)
+                    .replace(`"version":"${version}"`, `"version":"FakeVersion"`)
             )
         };
     }
@@ -422,6 +423,7 @@ namespace ts.projectSystem {
             super({
                 host,
                 logger,
+                session: undefined,
                 cancellationToken,
                 useSingleInferredProject,
                 useInferredProjectPerProjectRoot: false,

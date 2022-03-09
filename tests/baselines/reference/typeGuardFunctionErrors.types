@@ -30,7 +30,7 @@ function hasANonBooleanReturnStatement(x): x is A {
 }
 
 function hasTypeGuardTypeInsideTypeGuardType(x): x is x is A {
->hasTypeGuardTypeInsideTypeGuardType : (x: any) => x is any
+>hasTypeGuardTypeInsideTypeGuardType : (x: any) => x is x
 >x : any
 >is : any
 >A : typeof A
@@ -40,7 +40,7 @@ function hasTypeGuardTypeInsideTypeGuardType(x): x is x is A {
 }
 
 function hasMissingIsKeyword(): x {
->hasMissingIsKeyword : () => any
+>hasMissingIsKeyword : () => x
 
     return true;
 >true : true
@@ -221,13 +221,13 @@ assign3 = function(p1, p2, p3): p1 is A {
 
 // Type predicates in non-return type positions
 var b1: b is A;
->b1 : any
+>b1 : b
 >is : any
 >A : any
 
 function b2(a: b is A) {};
->b2 : (a: any, is: any, A: any) => void
->a : any
+>b2 : (a: b, is: any, A: any) => void
+>a : b
 >is : any
 >A : any
 

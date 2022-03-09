@@ -3,10 +3,15 @@ namespace ts.codefix {
     const fixId = "fixSpelling";
     const errorCodes = [
         Diagnostics.Property_0_does_not_exist_on_type_1_Did_you_mean_2.code,
+        Diagnostics.Property_0_may_not_exist_on_type_1_Did_you_mean_2.code,
         Diagnostics.Cannot_find_name_0_Did_you_mean_1.code,
+        Diagnostics.Could_not_find_name_0_Did_you_mean_1.code,
+        Diagnostics.Cannot_find_namespace_0_Did_you_mean_1.code,
         Diagnostics.Cannot_find_name_0_Did_you_mean_the_instance_member_this_0.code,
         Diagnostics.Cannot_find_name_0_Did_you_mean_the_static_member_1_0.code,
         Diagnostics._0_has_no_exported_member_named_1_Did_you_mean_2.code,
+        Diagnostics.This_member_cannot_have_an_override_modifier_because_it_is_not_declared_in_the_base_class_0_Did_you_mean_1.code,
+        Diagnostics.This_member_cannot_have_a_JSDoc_comment_with_an_override_tag_because_it_is_not_declared_in_the_base_class_0_Did_you_mean_1.code,
         // for JSX class components
         Diagnostics.No_overload_matches_this_call.code,
         // for JSX FC
@@ -19,15 +24,15 @@ namespace ts.codefix {
             const info = getInfo(sourceFile, context.span.start, context, errorCode);
             if (!info) return undefined;
             const { node, suggestedSymbol } = info;
-            const { target } = context.host.getCompilationSettings();
-            const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, node, suggestedSymbol, target!));
+            const target = getEmitScriptTarget(context.host.getCompilationSettings());
+            const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, node, suggestedSymbol, target));
             return [createCodeFixAction("spelling", changes, [Diagnostics.Change_spelling_to_0, symbolName(suggestedSymbol)], fixId, Diagnostics.Fix_all_detected_spelling_errors)];
         },
         fixIds: [fixId],
         getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
             const info = getInfo(diag.file, diag.start, context, diag.code);
-            const { target } = context.host.getCompilationSettings();
-            if (info) doChange(changes, context.sourceFile, info.node, info.suggestedSymbol, target!);
+            const target = getEmitScriptTarget(context.host.getCompilationSettings());
+            if (info) doChange(changes, context.sourceFile, info.node, info.suggestedSymbol, target);
         }),
     });
 
@@ -53,6 +58,10 @@ namespace ts.codefix {
             }
             suggestedSymbol = checker.getSuggestedSymbolForNonexistentProperty(node, containingType);
         }
+        else if (isBinaryExpression(parent) && parent.operatorToken.kind === SyntaxKind.InKeyword && parent.left === node && isPrivateIdentifier(node)) {
+            const receiverType = checker.getTypeAtLocation(parent.right);
+            suggestedSymbol = checker.getSuggestedSymbolForNonexistentProperty(node, receiverType);
+        }
         else if (isQualifiedName(parent) && parent.right === node) {
             const symbol = checker.getSymbolAtLocation(parent.left);
             if (symbol && symbol.flags & SymbolFlags.Module) {
@@ -72,6 +81,14 @@ namespace ts.codefix {
             const tag = findAncestor(node, isJsxOpeningLikeElement)!;
             const props = checker.getContextualTypeForArgumentAtIndex(tag, 0);
             suggestedSymbol = checker.getSuggestedSymbolForNonexistentJSXAttribute(node, props!);
+        }
+        else if (hasSyntacticModifier(parent, ModifierFlags.Override) && isClassElement(parent) && parent.name === node) {
+            const baseDeclaration = findAncestor(node, isClassLike);
+            const baseTypeNode = baseDeclaration ? getEffectiveBaseTypeNode(baseDeclaration) : undefined;
+            const baseType = baseTypeNode ? checker.getTypeAtLocation(baseTypeNode) : undefined;
+            if (baseType) {
+                suggestedSymbol = checker.getSuggestedSymbolForNonexistentClassMember(getTextOfNode(node), baseType);
+            }
         }
         else {
             const meaning = getMeaningFromLocation(node);
@@ -116,7 +133,7 @@ namespace ts.codefix {
     function getResolvedSourceFileFromImportDeclaration(sourceFile: SourceFile, context: CodeFixContextBase, importDeclaration: ImportDeclaration): SourceFile | undefined {
         if (!importDeclaration || !isStringLiteralLike(importDeclaration.moduleSpecifier)) return undefined;
 
-        const resolvedModule = getResolvedModule(sourceFile, importDeclaration.moduleSpecifier.text);
+        const resolvedModule = getResolvedModule(sourceFile, importDeclaration.moduleSpecifier.text, getModeForUsageLocation(sourceFile, importDeclaration.moduleSpecifier));
         if (!resolvedModule) return undefined;
 
         return context.program.getSourceFile(resolvedModule.resolvedFileName);

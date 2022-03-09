@@ -67,10 +67,8 @@ namespace ts.server {
             }
             const lm = LineIndex.linesFromText(insertedText);
             const lines = lm.lines;
-            if (lines.length > 1) {
-                if (lines[lines.length - 1] === "") {
-                    lines.pop();
-                }
+            if (lines.length > 1 && lines[lines.length - 1] === "") {
+                lines.pop();
             }
             let branchParent: LineNode | undefined;
             let lastZeroCount: LineCollection | undefined;
@@ -683,8 +681,12 @@ namespace ts.server {
             }
 
             // Skipped all children
-            const { leaf } = this.lineNumberToInfo(this.lineCount(), 0);
-            return { oneBasedLine: this.lineCount(), zeroBasedColumn: leaf ? leaf.charCount() : 0, lineText: undefined };
+            const lineCount = this.lineCount();
+            if (lineCount === 0) { // it's empty! (and lineNumberToInfo expects a one-based line)
+                return { oneBasedLine: 1, zeroBasedColumn: 0, lineText: undefined };
+            }
+            const leaf = Debug.checkDefined(this.lineNumberToInfo(lineCount, 0).leaf);
+            return { oneBasedLine: lineCount, zeroBasedColumn: leaf.charCount(), lineText: undefined };
         }
 
         /**

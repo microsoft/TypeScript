@@ -33,7 +33,7 @@ Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	src/main.ts
 	  Matched by include pattern '**/*' in 'tsconfig.json'
 
@@ -41,7 +41,7 @@ Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 event:
     {"seq":0,"type":"event","event":"projectLoadingFinish","body":{"projectName":"/user/username/projects/myproject/tsconfig.json"}}
 event:
-    {"seq":0,"type":"event","event":"telemetry","body":{"telemetryEventName":"projectInfo","payload":{"projectId":"4a33d78ee40d836c4f4e64c59aed976628aea0013be9585c5ff171dfc41baf98","fileStats":{"js":0,"jsSize":0,"jsx":0,"jsxSize":0,"ts":1,"tsSize":36,"tsx":0,"tsxSize":0,"dts":1,"dtsSize":334,"deferred":0,"deferredSize":0},"compilerOptions":{},"typeAcquisition":{"enable":false,"include":false,"exclude":false},"extends":false,"files":false,"include":false,"exclude":false,"compileOnSave":false,"configFileName":"tsconfig.json","projectType":"configured","languageServiceEnabled":true,"version":"4.4.0-dev"}}}
+    {"seq":0,"type":"event","event":"telemetry","body":{"telemetryEventName":"projectInfo","payload":{"projectId":"4a33d78ee40d836c4f4e64c59aed976628aea0013be9585c5ff171dfc41baf98","fileStats":{"js":0,"jsSize":0,"jsx":0,"jsxSize":0,"ts":1,"tsSize":36,"tsx":0,"tsxSize":0,"dts":1,"dtsSize":334,"deferred":0,"deferredSize":0},"compilerOptions":{},"typeAcquisition":{"enable":false,"include":false,"exclude":false},"extends":false,"files":false,"include":false,"exclude":false,"compileOnSave":false,"configFileName":"tsconfig.json","projectType":"configured","languageServiceEnabled":true,"version":"FakeVersion"}}}
 event:
     {"seq":0,"type":"event","event":"configFileDiag","body":{"triggerFile":"/user/username/projects/myproject/src/main.ts","configFile":"/user/username/projects/myproject/tsconfig.json","diagnostics":[]}}
 Project '/user/username/projects/myproject/tsconfig.json' (Configured)
@@ -245,8 +245,8 @@ Scheduled: /user/username/projects/myproject/tsconfig.json, Cancelled earlier on
 Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Running: /user/username/projects/myproject/tsconfig.json
 Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined WatchType: node_modules for closed script infos in them
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined WatchType: node_modules for closed script infos in them
+DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 3 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 	Files (3)
@@ -256,7 +256,7 @@ Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	node_modules/@angular/core/index.d.ts
 	  Imported via '@angular/core' from file 'src/main.ts'
 	src/main.ts

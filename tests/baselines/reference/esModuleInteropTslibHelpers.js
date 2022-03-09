@@ -51,7 +51,7 @@ exports.__esModule = true;
 exports.Foo3 = void 0;
 var tslib_1 = require("tslib");
 var path_1 = tslib_1.__importDefault(require("path"));
-path_1["default"]("", "../");
+(0, path_1["default"])("", "../");
 var Foo3 = /** @class */ (function () {
     function Foo3() {
     }
@@ -65,4 +65,4 @@ exports.Bar = void 0;
 var tslib_1 = require("tslib");
 var path_1 = tslib_1.__importStar(require("path"));
 exports.Bar = path_1.Bar;
-path_1["default"]("", "../");
+(0, path_1["default"])("", "../");

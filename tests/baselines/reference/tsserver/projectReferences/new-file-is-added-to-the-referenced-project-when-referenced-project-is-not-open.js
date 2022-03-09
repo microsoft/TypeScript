@@ -54,7 +54,7 @@ Project '/user/username/projects/myproject/projects/project2/tsconfig.json' (Con
 
 
 	../../../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	../project1/class1.ts
 	  Source from referenced project '../project1/tsconfig.json' included because '--module' is specified as 'none'
 	class2.ts
@@ -88,7 +88,7 @@ Project '/user/username/projects/myproject/projects/project2/tsconfig.json' (Con
 
 
 	../../../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	../project1/class1.ts
 	  Source from referenced project '../project1/tsconfig.json' included because '--module' is specified as 'none'
 	../project1/class3.ts

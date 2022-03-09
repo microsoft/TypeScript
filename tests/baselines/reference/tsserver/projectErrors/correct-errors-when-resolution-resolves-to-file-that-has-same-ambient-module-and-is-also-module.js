@@ -18,8 +18,8 @@ DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/myproject/src 1 u
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/myproject/src 1 undefined Config: /users/username/projects/myproject/tsconfig.json WatchType: Wild card directory
 Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
 Starting updateGraphWorker: Project: /users/username/projects/myproject/tsconfig.json
-DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/myproject/node_modules 1 undefined WatchType: node_modules for closed script infos in them
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/myproject/node_modules 1 undefined WatchType: node_modules for closed script infos in them
+DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/myproject/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/myproject/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/myproject/node_modules 1 undefined Project: /users/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/myproject/node_modules 1 undefined Project: /users/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
 FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
@@ -35,7 +35,7 @@ Project '/users/username/projects/myproject/tsconfig.json' (Configured)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	node_modules/@custom/plugin/proposed.d.ts
 	  Imported via './proposed' from file 'node_modules/@custom/plugin/index.d.ts'
 	node_modules/@custom/plugin/index.d.ts
@@ -47,7 +47,7 @@ Project '/users/username/projects/myproject/tsconfig.json' (Configured)
 event:
     {"seq":0,"type":"event","event":"projectLoadingFinish","body":{"projectName":"/users/username/projects/myproject/tsconfig.json"}}
 event:
-    {"seq":0,"type":"event","event":"telemetry","body":{"telemetryEventName":"projectInfo","payload":{"projectId":"49814c247d0e4666719ac54e31c3f19091be4020c5ac046c86474826dc7e4ede","fileStats":{"js":0,"jsSize":0,"jsx":0,"jsxSize":0,"ts":1,"tsSize":73,"tsx":0,"tsxSize":0,"dts":3,"dtsSize":486,"deferred":0,"deferredSize":0},"compilerOptions":{},"typeAcquisition":{"enable":false,"include":false,"exclude":false},"extends":false,"files":false,"include":true,"exclude":false,"compileOnSave":false,"configFileName":"tsconfig.json","projectType":"configured","languageServiceEnabled":true,"version":"4.4.0-dev"}}}
+    {"seq":0,"type":"event","event":"telemetry","body":{"telemetryEventName":"projectInfo","payload":{"projectId":"49814c247d0e4666719ac54e31c3f19091be4020c5ac046c86474826dc7e4ede","fileStats":{"js":0,"jsSize":0,"jsx":0,"jsxSize":0,"ts":1,"tsSize":73,"tsx":0,"tsxSize":0,"dts":3,"dtsSize":486,"deferred":0,"deferredSize":0},"compilerOptions":{},"typeAcquisition":{"enable":false,"include":false,"exclude":false},"extends":false,"files":false,"include":true,"exclude":false,"compileOnSave":false,"configFileName":"tsconfig.json","projectType":"configured","languageServiceEnabled":true,"version":"FakeVersion"}}}
 event:
     {"seq":0,"type":"event","event":"configFileDiag","body":{"triggerFile":"/users/username/projects/myproject/src/a.ts","configFile":"/users/username/projects/myproject/tsconfig.json","diagnostics":[]}}
 Project '/users/username/projects/myproject/tsconfig.json' (Configured)

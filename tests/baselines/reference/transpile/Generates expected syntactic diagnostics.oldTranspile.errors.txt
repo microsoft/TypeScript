@@ -1,7 +1,7 @@
-file.ts(1,3): error TS1005: ';' expected.
+file.ts(1,1): error TS1434: Unexpected keyword or identifier.
 
 
 ==== file.ts (1 errors) ====
     a b
-      ~
-!!! error TS1005: ';' expected.
+    ~
+!!! error TS1434: Unexpected keyword or identifier.

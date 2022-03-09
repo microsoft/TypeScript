@@ -50,7 +50,7 @@ elem = <h></h>; // Expect assignability error here
 exports.__esModule = true;
 /** @jsx predom */
 var renderer2_1 = require("./renderer2");
-exports["default"] = renderer2_1.predom("h", null);
+exports["default"] = (0, renderer2_1.predom)("h", null);
 //// [index.js]
 "use strict";
 exports.__esModule = true;
@@ -58,4 +58,4 @@ exports.__esModule = true;
 var renderer_1 = require("./renderer");
 var component_1 = require("./component");
 var elem = component_1["default"];
-elem = renderer_1.dom("h", null); // Expect assignability error here
+elem = (0, renderer_1.dom)("h", null); // Expect assignability error here

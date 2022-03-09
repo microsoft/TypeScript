@@ -37,7 +37,7 @@ type V23 = Tup3<[number], string[], [boolean?]>;  // [number, (string | boolean 
 >V23 : [number, ...(string | boolean | undefined)[]]
 
 type V24 = Tup3<[number], [boolean?], string[]>;  // [number, boolean?, ...string[]]
->V24 : [number, boolean?, ...string[]]
+>V24 : [number, (boolean | undefined)?, ...string[]]
 
 type V25 = Tup3<string[], number[], boolean[]>;  // (string | number | boolean)[]
 >V25 : (string | number | boolean)[]
@@ -46,7 +46,7 @@ type V26 = Tup3<string[], number[], [boolean]>;  // [...(string | number)[], boo
 >V26 : [...(string | number)[], boolean]
 
 type V27 = Tup3<[number?], [string], [boolean?]>;  // [number | undefined, string, boolean?]
->V27 : [number | undefined, string, boolean?]
+>V27 : [number | undefined, string, (boolean | undefined)?]
 
 type V30<A extends unknown[]> = Tup3<A, string[], number[]>;  // [...A, ...(string | number)[]]
 >V30 : [...A, ...(string | number)[]]
@@ -58,13 +58,13 @@ type V32<A extends unknown[]> = Tup3<string[], number[], A>;  // [...(string | n
 >V32 : [...(string | number)[], ...A]
 
 type V40<A extends unknown[]> = Tup3<A, [string?], number[]>;  // [...A, string?, ...number[]]
->V40 : [...A, string?, ...number[]]
+>V40 : [...A, (string | undefined)?, ...number[]]
 
 type V41<A extends unknown[]> = Tup3<[string?], A, number[]>;  // [string?, ...A, ...number[]]
->V41 : [string?, ...A, ...number[]]
+>V41 : [(string | undefined)?, ...A, ...number[]]
 
 type V42<A extends unknown[]> = Tup3<[string?], number[], A>;  // [string?, ...number[], ...A]
->V42 : [string?, ...number[], ...A]
+>V42 : [(string | undefined)?, ...number[], ...A]
 
 type V50<A extends unknown[]> = Tup3<A, string[], [number?]>;  // [...A, ...(string | number | undefined)[]]
 >V50 : [...A, ...(string | number | undefined)[]]

@@ -54,6 +54,11 @@ Semantic diagnostics in builder refreshed for::
 /a/b/c/module.d.ts
 /a/b/c/app.ts
 
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/a/b/c/module.d.ts (used version)
+/a/b/c/app.ts (used version)
+
 WatchedFiles::
 /a/b/c/app.ts:
   {"fileName":"/a/b/c/app.ts","pollingInterval":250}

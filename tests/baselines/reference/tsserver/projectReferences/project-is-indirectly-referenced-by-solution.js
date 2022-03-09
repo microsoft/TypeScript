@@ -81,7 +81,7 @@ Different program with same set of files
 event:
     {"seq":0,"type":"event","event":"projectLoadingFinish","body":{"projectName":"/user/username/projects/myproject/tsconfig.json"}}
 event:
-    {"seq":0,"type":"event","event":"telemetry","body":{"telemetryEventName":"projectInfo","payload":{"projectId":"4a33d78ee40d836c4f4e64c59aed976628aea0013be9585c5ff171dfc41baf98","fileStats":{"js":0,"jsSize":0,"jsx":0,"jsxSize":0,"ts":0,"tsSize":0,"tsx":0,"tsxSize":0,"dts":0,"dtsSize":0,"deferred":0,"deferredSize":0},"compilerOptions":{},"typeAcquisition":{"enable":false,"include":false,"exclude":false},"extends":false,"files":true,"include":false,"exclude":false,"compileOnSave":false,"configFileName":"tsconfig.json","projectType":"configured","languageServiceEnabled":true,"version":"4.4.0-dev"}}}
+    {"seq":0,"type":"event","event":"telemetry","body":{"telemetryEventName":"projectInfo","payload":{"projectId":"4a33d78ee40d836c4f4e64c59aed976628aea0013be9585c5ff171dfc41baf98","fileStats":{"js":0,"jsSize":0,"jsx":0,"jsxSize":0,"ts":0,"tsSize":0,"tsx":0,"tsxSize":0,"dts":0,"dtsSize":0,"deferred":0,"deferredSize":0},"compilerOptions":{},"typeAcquisition":{"enable":false,"include":false,"exclude":false},"extends":false,"files":true,"include":false,"exclude":false,"compileOnSave":false,"configFileName":"tsconfig.json","projectType":"configured","languageServiceEnabled":true,"version":"FakeVersion"}}}
 Creating configuration project /user/username/projects/myproject/tsconfig-src.json
 event:
     {"seq":0,"type":"event","event":"projectLoadingStart","body":{"projectName":"/user/username/projects/myproject/tsconfig-src.json","reason":"Creating project referenced in solution /user/username/projects/myproject/tsconfig.json to find possible configured project for /user/username/projects/myproject/src/main.ts to open"}}
@@ -100,7 +100,7 @@ Project '/user/username/projects/myproject/tsconfig-src.json' (Configured)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	src/helpers/functions.ts
 	  Imported via 'helpers/functions' from file 'src/main.ts'
 	  Matched by include pattern './src/**/*' in 'tsconfig-src.json'
@@ -111,7 +111,7 @@ Project '/user/username/projects/myproject/tsconfig-src.json' (Configured)
 event:
     {"seq":0,"type":"event","event":"projectLoadingFinish","body":{"projectName":"/user/username/projects/myproject/tsconfig-src.json"}}
 event:
-    {"seq":0,"type":"event","event":"telemetry","body":{"telemetryEventName":"projectInfo","payload":{"projectId":"75d5ba36c0a162a329bf40235b10e96d2d129b95469e1f02c08da775fb38a2b4","fileStats":{"js":0,"jsSize":0,"jsx":0,"jsxSize":0,"ts":2,"tsSize":77,"tsx":0,"tsxSize":0,"dts":1,"dtsSize":334,"deferred":0,"deferredSize":0},"compilerOptions":{"composite":true,"outDir":"","baseUrl":""},"typeAcquisition":{"enable":false,"include":false,"exclude":false},"extends":false,"files":false,"include":true,"exclude":false,"compileOnSave":false,"configFileName":"other","projectType":"configured","languageServiceEnabled":true,"version":"4.4.0-dev"}}}
+    {"seq":0,"type":"event","event":"telemetry","body":{"telemetryEventName":"projectInfo","payload":{"projectId":"75d5ba36c0a162a329bf40235b10e96d2d129b95469e1f02c08da775fb38a2b4","fileStats":{"js":0,"jsSize":0,"jsx":0,"jsxSize":0,"ts":2,"tsSize":77,"tsx":0,"tsxSize":0,"dts":1,"dtsSize":334,"deferred":0,"deferredSize":0},"compilerOptions":{"composite":true,"outDir":"","baseUrl":""},"typeAcquisition":{"enable":false,"include":false,"exclude":false},"extends":false,"files":false,"include":true,"exclude":false,"compileOnSave":false,"configFileName":"other","projectType":"configured","languageServiceEnabled":true,"version":"FakeVersion"}}}
 event:
     {"seq":0,"type":"event","event":"configFileDiag","body":{"triggerFile":"/user/username/projects/myproject/src/main.ts","configFile":"/user/username/projects/myproject/tsconfig-src.json","diagnostics":[]}}
 Project '/user/username/projects/myproject/tsconfig.json' (Configured)
@@ -243,7 +243,7 @@ Project '/user/username/projects/myproject/tsconfig-src.json' (Configured)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	src/helpers/functions.ts
 	  Imported via 'helpers/functions' from file 'src/main.ts'
 	  Matched by include pattern './src/**/*' in 'tsconfig-src.json'
@@ -363,7 +363,7 @@ Project '/user/username/projects/myproject/tsconfig-src.json' (Configured)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	src/helpers/functions.ts
 	  Imported via 'helpers/functions' from file 'src/main.ts'
 	  Matched by include pattern './src/**/*' in 'tsconfig-src.json'
@@ -588,6 +588,7 @@ Open files:
 	FileName: /dummy/dummy.ts ProjectRootPath: undefined
 		Projects: /dev/null/inferredProject1*
 request:{"command":"references","arguments":{"file":"/user/username/projects/myproject/src/main.ts","line":2,"offset":10},"seq":2,"type":"request"}
+Finding references to /user/username/projects/myproject/src/main.ts position 50 in project /user/username/projects/myproject/tsconfig-src.json
 Creating configuration project /user/username/projects/myproject/tsconfig-indirect1.json
 event:
     {"seq":0,"type":"event","event":"projectLoadingStart","body":{"projectName":"/user/username/projects/myproject/tsconfig-indirect1.json","reason":"Creating project referenced by : /user/username/projects/myproject/tsconfig.json as it references project /user/username/projects/myproject/tsconfig-src.json"}}
@@ -606,7 +607,7 @@ Project '/user/username/projects/myproject/tsconfig-indirect1.json' (Configured)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	src/helpers/functions.ts
 	  Imported via 'helpers/functions' from file 'src/main.ts'
 	src/main.ts
@@ -618,7 +619,7 @@ Project '/user/username/projects/myproject/tsconfig-indirect1.json' (Configured)
 event:
     {"seq":0,"type":"event","event":"projectLoadingFinish","body":{"projectName":"/user/username/projects/myproject/tsconfig-indirect1.json"}}
 event:
-    {"seq":0,"type":"event","event":"telemetry","body":{"telemetryEventName":"projectInfo","payload":{"projectId":"9ccc3aed1af08832ccb25ea453f7b771199f56af238b53cc428549dbd2d59246","fileStats":{"js":0,"jsSize":0,"jsx":0,"jsxSize":0,"ts":3,"tsSize":134,"tsx":0,"tsxSize":0,"dts":1,"dtsSize":334,"deferred":0,"deferredSize":0},"compilerOptions":{"composite":true,"outDir":"","baseUrl":""},"typeAcquisition":{"enable":false,"include":false,"exclude":false},"extends":false,"files":true,"include":false,"exclude":false,"compileOnSave":false,"configFileName":"other","projectType":"configured","languageServiceEnabled":true,"version":"4.4.0-dev"}}}
+    {"seq":0,"type":"event","event":"telemetry","body":{"telemetryEventName":"projectInfo","payload":{"projectId":"9ccc3aed1af08832ccb25ea453f7b771199f56af238b53cc428549dbd2d59246","fileStats":{"js":0,"jsSize":0,"jsx":0,"jsxSize":0,"ts":3,"tsSize":134,"tsx":0,"tsxSize":0,"dts":1,"dtsSize":334,"deferred":0,"deferredSize":0},"compilerOptions":{"composite":true,"outDir":"","baseUrl":""},"typeAcquisition":{"enable":false,"include":false,"exclude":false},"extends":false,"files":true,"include":false,"exclude":false,"compileOnSave":false,"configFileName":"other","projectType":"configured","languageServiceEnabled":true,"version":"FakeVersion"}}}
 Creating configuration project /user/username/projects/myproject/tsconfig-indirect2.json
 event:
     {"seq":0,"type":"event","event":"projectLoadingStart","body":{"projectName":"/user/username/projects/myproject/tsconfig-indirect2.json","reason":"Creating project referenced by : /user/username/projects/myproject/tsconfig.json as it references project /user/username/projects/myproject/tsconfig-src.json"}}
@@ -637,7 +638,7 @@ Project '/user/username/projects/myproject/tsconfig-indirect2.json' (Configured)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	src/helpers/functions.ts
 	  Imported via 'helpers/functions' from file 'src/main.ts'
 	src/main.ts
@@ -649,18 +650,20 @@ Project '/user/username/projects/myproject/tsconfig-indirect2.json' (Configured)
 event:
     {"seq":0,"type":"event","event":"projectLoadingFinish","body":{"projectName":"/user/username/projects/myproject/tsconfig-indirect2.json"}}
 event:
-    {"seq":0,"type":"event","event":"telemetry","body":{"telemetryEventName":"projectInfo","payload":{"projectId":"d9a040bddd6b85b85abd507a988a4b809b1515b5e61257ea3f8263da59589565","fileStats":{"js":0,"jsSize":0,"jsx":0,"jsxSize":0,"ts":3,"tsSize":134,"tsx":0,"tsxSize":0,"dts":1,"dtsSize":334,"deferred":0,"deferredSize":0},"compilerOptions":{"composite":true,"outDir":"","baseUrl":""},"typeAcquisition":{"enable":false,"include":false,"exclude":false},"extends":false,"files":true,"include":false,"exclude":false,"compileOnSave":false,"configFileName":"other","projectType":"configured","languageServiceEnabled":true,"version":"4.4.0-dev"}}}
+    {"seq":0,"type":"event","event":"telemetry","body":{"telemetryEventName":"projectInfo","payload":{"projectId":"d9a040bddd6b85b85abd507a988a4b809b1515b5e61257ea3f8263da59589565","fileStats":{"js":0,"jsSize":0,"jsx":0,"jsxSize":0,"ts":3,"tsSize":134,"tsx":0,"tsxSize":0,"dts":1,"dtsSize":334,"deferred":0,"deferredSize":0},"compilerOptions":{"composite":true,"outDir":"","baseUrl":""},"typeAcquisition":{"enable":false,"include":false,"exclude":false},"extends":false,"files":true,"include":false,"exclude":false,"compileOnSave":false,"configFileName":"other","projectType":"configured","languageServiceEnabled":true,"version":"FakeVersion"}}}
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/target/src/helpers/functions.d.ts 500 undefined WatchType: Closed Script info
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/target/src/helpers/functions.d.ts.map 500 undefined WatchType: Closed Script info
+Finding references to /user/username/projects/myproject/src/helpers/functions.ts position 13 in project /user/username/projects/myproject/tsconfig-indirect1.json
 Search path: /user/username/projects/myproject/src/helpers
 For info: /user/username/projects/myproject/src/helpers/functions.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
 Search path: /user/username/projects/myproject/src
 For info: /user/username/projects/myproject/src/main.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
+Finding references to /user/username/projects/myproject/src/helpers/functions.ts position 13 in project /user/username/projects/myproject/tsconfig-indirect2.json
 Search path: /user/username/projects/myproject/src/helpers
 For info: /user/username/projects/myproject/src/helpers/functions.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
 Search path: /user/username/projects/myproject/src
 For info: /user/username/projects/myproject/src/main.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
-response:{"response":{"refs":[{"file":"/user/username/projects/myproject/src/main.ts","start":{"line":1,"offset":10},"end":{"line":1,"offset":13},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":41},"lineText":"import { foo } from 'helpers/functions';","isWriteAccess":true,"isDefinition":true},{"file":"/user/username/projects/myproject/src/main.ts","start":{"line":2,"offset":10},"end":{"line":2,"offset":13},"contextStart":{"line":2,"offset":1},"contextEnd":{"line":2,"offset":16},"lineText":"export { foo };","isWriteAccess":true,"isDefinition":true},{"file":"/user/username/projects/myproject/src/helpers/functions.ts","start":{"line":1,"offset":14},"end":{"line":1,"offset":17},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":22},"lineText":"export const foo = 1;","isWriteAccess":true,"isDefinition":true},{"file":"/user/username/projects/myproject/indirect1/main.ts","start":{"line":1,"offset":10},"end":{"line":1,"offset":13},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":28},"lineText":"import { foo } from 'main';","isWriteAccess":true,"isDefinition":true},{"file":"/user/username/projects/myproject/indirect1/main.ts","start":{"line":2,"offset":1},"end":{"line":2,"offset":4},"lineText":"foo;","isWriteAccess":false,"isDefinition":false},{"file":"/user/username/projects/myproject/indirect2/main.ts","start":{"line":1,"offset":10},"end":{"line":1,"offset":13},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":28},"lineText":"import { foo } from 'main';","isWriteAccess":true,"isDefinition":true},{"file":"/user/username/projects/myproject/indirect2/main.ts","start":{"line":2,"offset":1},"end":{"line":2,"offset":4},"lineText":"foo;","isWriteAccess":false,"isDefinition":false}],"symbolName":"foo","symbolStartOffset":10,"symbolDisplayString":"(alias) const foo: 1\nexport foo"},"responseRequired":true}
+response:{"response":{"refs":[{"file":"/user/username/projects/myproject/src/main.ts","start":{"line":1,"offset":10},"end":{"line":1,"offset":13},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":41},"lineText":"import { foo } from 'helpers/functions';","isWriteAccess":true,"isDefinition":false},{"file":"/user/username/projects/myproject/src/main.ts","start":{"line":2,"offset":10},"end":{"line":2,"offset":13},"contextStart":{"line":2,"offset":1},"contextEnd":{"line":2,"offset":16},"lineText":"export { foo };","isWriteAccess":true,"isDefinition":true},{"file":"/user/username/projects/myproject/src/helpers/functions.ts","start":{"line":1,"offset":14},"end":{"line":1,"offset":17},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":22},"lineText":"export const foo = 1;","isWriteAccess":true,"isDefinition":false},{"file":"/user/username/projects/myproject/indirect1/main.ts","start":{"line":1,"offset":10},"end":{"line":1,"offset":13},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":28},"lineText":"import { foo } from 'main';","isWriteAccess":true,"isDefinition":false},{"file":"/user/username/projects/myproject/indirect1/main.ts","start":{"line":2,"offset":1},"end":{"line":2,"offset":4},"lineText":"foo;","isWriteAccess":false,"isDefinition":false},{"file":"/user/username/projects/myproject/indirect2/main.ts","start":{"line":1,"offset":10},"end":{"line":1,"offset":13},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":28},"lineText":"import { foo } from 'main';","isWriteAccess":true,"isDefinition":false},{"file":"/user/username/projects/myproject/indirect2/main.ts","start":{"line":2,"offset":1},"end":{"line":2,"offset":4},"lineText":"foo;","isWriteAccess":false,"isDefinition":false}],"symbolName":"foo","symbolStartOffset":10,"symbolDisplayString":"(alias) const foo: 1\nexport foo"},"responseRequired":true}
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/main.ts 500 undefined WatchType: Closed Script info
 Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 	Files (0)
@@ -743,7 +746,7 @@ Project '/user/username/projects/myproject/indirect3/tsconfig.json' (Configured)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	../target/src/helpers/functions.d.ts
 	  Imported via 'helpers/functions' from file '../target/src/main.d.ts'
 	../target/src/main.d.ts
@@ -755,7 +758,7 @@ Project '/user/username/projects/myproject/indirect3/tsconfig.json' (Configured)
 event:
     {"seq":0,"type":"event","event":"projectLoadingFinish","body":{"projectName":"/user/username/projects/myproject/indirect3/tsconfig.json"}}
 event:
-    {"seq":0,"type":"event","event":"telemetry","body":{"telemetryEventName":"projectInfo","payload":{"projectId":"5b0817f69b6871821661b976aa73f4f2533b37c5f4b920541094c2d727d0dc39","fileStats":{"js":0,"jsSize":0,"jsx":0,"jsxSize":0,"ts":1,"tsSize":57,"tsx":0,"tsxSize":0,"dts":3,"dtsSize":494,"deferred":0,"deferredSize":0},"compilerOptions":{"baseUrl":""},"typeAcquisition":{"enable":false,"include":false,"exclude":false},"extends":false,"files":false,"include":false,"exclude":false,"compileOnSave":false,"configFileName":"tsconfig.json","projectType":"configured","languageServiceEnabled":true,"version":"4.4.0-dev"}}}
+    {"seq":0,"type":"event","event":"telemetry","body":{"telemetryEventName":"projectInfo","payload":{"projectId":"5b0817f69b6871821661b976aa73f4f2533b37c5f4b920541094c2d727d0dc39","fileStats":{"js":0,"jsSize":0,"jsx":0,"jsxSize":0,"ts":1,"tsSize":57,"tsx":0,"tsxSize":0,"dts":3,"dtsSize":494,"deferred":0,"deferredSize":0},"compilerOptions":{"baseUrl":""},"typeAcquisition":{"enable":false,"include":false,"exclude":false},"extends":false,"files":false,"include":false,"exclude":false,"compileOnSave":false,"configFileName":"tsconfig.json","projectType":"configured","languageServiceEnabled":true,"version":"FakeVersion"}}}
 event:
     {"seq":0,"type":"event","event":"configFileDiag","body":{"triggerFile":"/user/username/projects/myproject/indirect3/main.ts","configFile":"/user/username/projects/myproject/indirect3/tsconfig.json","diagnostics":[]}}
 `remove Project::
@@ -777,7 +780,7 @@ Project '/user/username/projects/myproject/tsconfig-src.json' (Configured)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	src/helpers/functions.ts
 	  Imported via 'helpers/functions' from file 'src/main.ts'
 	  Matched by include pattern './src/**/*' in 'tsconfig-src.json'
@@ -797,7 +800,7 @@ Project '/user/username/projects/myproject/tsconfig-indirect1.json' (Configured)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	src/helpers/functions.ts
 	  Imported via 'helpers/functions' from file 'src/main.ts'
 	src/main.ts
@@ -819,7 +822,7 @@ Project '/user/username/projects/myproject/tsconfig-indirect2.json' (Configured)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	src/helpers/functions.ts
 	  Imported via 'helpers/functions' from file 'src/main.ts'
 	src/main.ts
@@ -861,6 +864,7 @@ Open files:
 	FileName: /user/username/projects/myproject/indirect3/main.ts ProjectRootPath: undefined
 		Projects: /user/username/projects/myproject/indirect3/tsconfig.json
 request:{"command":"references","arguments":{"file":"/user/username/projects/myproject/indirect3/main.ts","line":1,"offset":10},"seq":3,"type":"request"}
+Finding references to /user/username/projects/myproject/indirect3/main.ts position 9 in project /user/username/projects/myproject/indirect3/tsconfig.json
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/target/src/main.d.ts.map 500 undefined WatchType: Closed Script info
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/main.ts 500 undefined WatchType: Closed Script info
 Search path: /user/username/projects/myproject/src
@@ -960,7 +964,7 @@ Project '/user/username/projects/myproject/tsconfig-src.json' (Configured)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	src/helpers/functions.ts
 	  Imported via 'helpers/functions' from file 'src/main.ts'
 	  Matched by include pattern './src/**/*' in 'tsconfig-src.json'
@@ -996,7 +1000,7 @@ Project '/user/username/projects/myproject/tsconfig-indirect1.json' (Configured)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	src/helpers/functions.ts
 	  Imported via 'helpers/functions' from file 'src/main.ts'
 	src/main.ts
@@ -1025,7 +1029,7 @@ Project '/user/username/projects/myproject/tsconfig-indirect2.json' (Configured)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	src/helpers/functions.ts
 	  Imported via 'helpers/functions' from file 'src/main.ts'
 	src/main.ts
@@ -1036,6 +1040,7 @@ Project '/user/username/projects/myproject/tsconfig-indirect2.json' (Configured)
 -----------------------------------------------
 event:
     {"seq":0,"type":"event","event":"projectLoadingFinish","body":{"projectName":"/user/username/projects/myproject/tsconfig-indirect2.json"}}
+Finding references to /user/username/projects/myproject/src/helpers/functions.ts position 13 in project /user/username/projects/myproject/tsconfig-indirect1.json
 Search path: /user/username/projects/myproject/src/helpers
 For info: /user/username/projects/myproject/src/helpers/functions.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
 Search path: /user/username/projects/myproject/src/helpers
@@ -1046,8 +1051,10 @@ Search path: /user/username/projects/myproject/src
 For info: /user/username/projects/myproject/src/main.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
 Search path: /user/username/projects/myproject/src
 For info: /user/username/projects/myproject/src/main.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
+Finding references to /user/username/projects/myproject/src/helpers/functions.ts position 13 in project /user/username/projects/myproject/tsconfig-indirect2.json
 Search path: /user/username/projects/myproject/src/helpers
 For info: /user/username/projects/myproject/src/helpers/functions.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
 Search path: /user/username/projects/myproject/src
 For info: /user/username/projects/myproject/src/main.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
-response:{"response":{"refs":[{"file":"/user/username/projects/myproject/indirect3/main.ts","start":{"line":1,"offset":10},"end":{"line":1,"offset":13},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":28},"lineText":"import { foo } from 'main';","isWriteAccess":true,"isDefinition":true},{"file":"/user/username/projects/myproject/indirect3/main.ts","start":{"line":2,"offset":1},"end":{"line":2,"offset":4},"lineText":"foo;","isWriteAccess":false,"isDefinition":false},{"file":"/user/username/projects/myproject/src/main.ts","start":{"line":1,"offset":10},"end":{"line":1,"offset":13},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":41},"lineText":"import { foo } from 'helpers/functions';","isWriteAccess":true,"isDefinition":true},{"file":"/user/username/projects/myproject/src/main.ts","start":{"line":2,"offset":10},"end":{"line":2,"offset":13},"contextStart":{"line":2,"offset":1},"contextEnd":{"line":2,"offset":16},"lineText":"export { foo };","isWriteAccess":true,"isDefinition":true},{"file":"/user/username/projects/myproject/src/helpers/functions.ts","start":{"line":1,"offset":14},"end":{"line":1,"offset":17},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":22},"lineText":"export const foo = 1;","isWriteAccess":true,"isDefinition":true},{"file":"/user/username/projects/myproject/indirect1/main.ts","start":{"line":1,"offset":10},"end":{"line":1,"offset":13},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":28},"lineText":"import { foo } from 'main';","isWriteAccess":true,"isDefinition":true},{"file":"/user/username/projects/myproject/indirect1/main.ts","start":{"line":2,"offset":1},"end":{"line":2,"offset":4},"lineText":"foo;","isWriteAccess":false,"isDefinition":false},{"file":"/user/username/projects/myproject/indirect2/main.ts","start":{"line":1,"offset":10},"end":{"line":1,"offset":13},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":28},"lineText":"import { foo } from 'main';","isWriteAccess":true,"isDefinition":true},{"file":"/user/username/projects/myproject/indirect2/main.ts","start":{"line":2,"offset":1},"end":{"line":2,"offset":4},"lineText":"foo;","isWriteAccess":false,"isDefinition":false}],"symbolName":"foo","symbolStartOffset":10,"symbolDisplayString":"(alias) const foo: 1\nimport foo"},"responseRequired":true}
+Finding references to /user/username/projects/myproject/src/main.ts position 9 in project /user/username/projects/myproject/tsconfig-src.json
+response:{"response":{"refs":[{"file":"/user/username/projects/myproject/indirect3/main.ts","start":{"line":1,"offset":10},"end":{"line":1,"offset":13},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":28},"lineText":"import { foo } from 'main';","isWriteAccess":true,"isDefinition":true},{"file":"/user/username/projects/myproject/indirect3/main.ts","start":{"line":2,"offset":1},"end":{"line":2,"offset":4},"lineText":"foo;","isWriteAccess":false,"isDefinition":false},{"file":"/user/username/projects/myproject/src/main.ts","start":{"line":1,"offset":10},"end":{"line":1,"offset":13},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":41},"lineText":"import { foo } from 'helpers/functions';","isWriteAccess":true,"isDefinition":false},{"file":"/user/username/projects/myproject/src/main.ts","start":{"line":2,"offset":10},"end":{"line":2,"offset":13},"contextStart":{"line":2,"offset":1},"contextEnd":{"line":2,"offset":16},"lineText":"export { foo };","isWriteAccess":true,"isDefinition":false},{"file":"/user/username/projects/myproject/src/helpers/functions.ts","start":{"line":1,"offset":14},"end":{"line":1,"offset":17},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":22},"lineText":"export const foo = 1;","isWriteAccess":true,"isDefinition":true},{"file":"/user/username/projects/myproject/indirect1/main.ts","start":{"line":1,"offset":10},"end":{"line":1,"offset":13},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":28},"lineText":"import { foo } from 'main';","isWriteAccess":true,"isDefinition":false},{"file":"/user/username/projects/myproject/indirect1/main.ts","start":{"line":2,"offset":1},"end":{"line":2,"offset":4},"lineText":"foo;","isWriteAccess":false,"isDefinition":false},{"file":"/user/username/projects/myproject/indirect2/main.ts","start":{"line":1,"offset":10},"end":{"line":1,"offset":13},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":28},"lineText":"import { foo } from 'main';","isWriteAccess":true,"isDefinition":false},{"file":"/user/username/projects/myproject/indirect2/main.ts","start":{"line":2,"offset":1},"end":{"line":2,"offset":4},"lineText":"foo;","isWriteAccess":false,"isDefinition":false}],"symbolName":"foo","symbolStartOffset":10,"symbolDisplayString":"(alias) const foo: 1\nimport foo"},"responseRequired":true}

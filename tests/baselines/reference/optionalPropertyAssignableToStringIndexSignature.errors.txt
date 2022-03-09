@@ -2,7 +2,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/optional
   Property 'k1' is incompatible with index signature.
     Type 'string | undefined' is not assignable to type 'string'.
       Type 'undefined' is not assignable to type 'string'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/optionalPropertyAssignableToStringIndexSignature.ts(10,1): error TS2322: Type '{ 1?: string; }' is not assignable to type '{ [key: number]: string; }'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/optionalPropertyAssignableToStringIndexSignature.ts(10,1): error TS2322: Type '{ 1?: string | undefined; }' is not assignable to type '{ [key: number]: string; }'.
   Property '1' is incompatible with index signature.
     Type 'string | undefined' is not assignable to type 'string'.
       Type 'undefined' is not assignable to type 'string'.
@@ -28,7 +28,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/optional
     declare let numberLiteralKeys: { 1?: string };
     probablyArray = numberLiteralKeys;  // error
     ~~~~~~~~~~~~~
-!!! error TS2322: Type '{ 1?: string; }' is not assignable to type '{ [key: number]: string; }'.
+!!! error TS2322: Type '{ 1?: string | undefined; }' is not assignable to type '{ [key: number]: string; }'.
 !!! error TS2322:   Property '1' is incompatible with index signature.
 !!! error TS2322:     Type 'string | undefined' is not assignable to type 'string'.
 !!! error TS2322:       Type 'undefined' is not assignable to type 'string'.

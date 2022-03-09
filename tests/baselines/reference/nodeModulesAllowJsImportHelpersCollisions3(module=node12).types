@@ -1,0 +1,36 @@
+=== tests/cases/conformance/node/allowJs/subfolder/index.js ===
+// cjs format file
+export {default} from "fs";
+>default : any
+
+export {default as foo} from "fs";
+>default : any
+>foo : any
+
+export {bar as baz} from "fs";
+>bar : any
+>baz : any
+
+=== tests/cases/conformance/node/allowJs/index.js ===
+// esm format file
+export {default} from "fs";
+>default : any
+
+export {default as foo} from "fs";
+>default : any
+>foo : any
+
+export {bar as baz} from "fs";
+>bar : any
+>baz : any
+
+=== tests/cases/conformance/node/allowJs/types.d.ts ===
+declare module "fs";
+>"fs" : any
+
+declare module "tslib" {
+>"tslib" : typeof import("tslib")
+
+    export {};
+    // intentionally missing all helpers
+}

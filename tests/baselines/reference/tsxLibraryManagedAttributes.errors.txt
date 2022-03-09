@@ -3,7 +3,7 @@ tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx(55,12): error TS2322
 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx(57,41): error TS2322: Type '{ bar: string; baz: string; bat: string; }' is not assignable to type 'Defaultize<InferredPropTypes<{ foo: PropTypeChecker<number, false>; bar: PropTypeChecker<ReactNode, false>; baz: PropTypeChecker<string, true>; }>, { foo: number; }>'.
   Property 'bat' does not exist on type 'Defaultize<InferredPropTypes<{ foo: PropTypeChecker<number, false>; bar: PropTypeChecker<ReactNode, false>; baz: PropTypeChecker<string, true>; }>, { foo: number; }>'.
 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx(59,42): error TS2322: Type 'null' is not assignable to type 'string'.
-tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx(69,26): error TS2322: Type 'string' is not assignable to type 'number | null | undefined'.
+tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx(69,26): error TS2322: Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx(71,35): error TS2322: Type 'null' is not assignable to type 'ReactNode'.
 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx(80,38): error TS2322: Type '{ foo: number; bar: string; }' is not assignable to type 'Defaultize<{}, { foo: number; }>'.
   Property 'bar' does not exist on type 'Defaultize<{}, { foo: number; }>'.
@@ -100,7 +100,7 @@ tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx(123,49): error TS232
     const g = <JustPropTypes foo={12} bar="ok" />;
     const h = <JustPropTypes foo="no" />; // error, wrong type
                              ~~~
-!!! error TS2322: Type 'string' is not assignable to type 'number | null | undefined'.
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
 !!! related TS6500 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx:63:9: The expected type comes from property 'foo' which is declared here on type 'InferredPropTypes<{ foo: PropTypeChecker<number, false>; bar: PropTypeChecker<ReactNode, true>; }>'
     const i = <JustPropTypes foo={null} bar="ok" />;
     const j = <JustPropTypes foo={12} bar={null} />; // error, bar is required

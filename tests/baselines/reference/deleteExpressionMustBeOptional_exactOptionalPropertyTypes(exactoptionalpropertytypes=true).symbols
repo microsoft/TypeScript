@@ -1,0 +1,171 @@
+=== tests/cases/compiler/deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts ===
+interface Foo {
+>Foo : Symbol(Foo, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 0, 0))
+
+    a: number
+>a : Symbol(Foo.a, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 0, 15))
+
+    b: number | undefined
+>b : Symbol(Foo.b, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 1, 13))
+
+    c: number | null
+>c : Symbol(Foo.c, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 2, 25))
+
+    d?: number
+>d : Symbol(Foo.d, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 3, 20))
+
+    e: number | undefined | null
+>e : Symbol(Foo.e, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 4, 14))
+
+    f?: number | undefined | null
+>f : Symbol(Foo.f, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 5, 32))
+
+    g: unknown
+>g : Symbol(Foo.g, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 6, 33))
+
+    h: any
+>h : Symbol(Foo.h, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 7, 14))
+
+    i: never
+>i : Symbol(Foo.i, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 8, 10))
+}
+
+interface AA {
+>AA : Symbol(AA, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 10, 1))
+
+    [s: string]: number
+>s : Symbol(s, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 13, 5))
+}
+
+type BB = {
+>BB : Symbol(BB, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 14, 1))
+
+    [P in keyof any]: number
+>P : Symbol(P, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 17, 5))
+}
+
+declare const f: Foo
+>f : Symbol(f, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 20, 13))
+>Foo : Symbol(Foo, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 0, 0))
+
+declare const g: Partial<Foo>
+>g : Symbol(g, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 21, 13))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Foo : Symbol(Foo, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 0, 0))
+
+declare const a: AA
+>a : Symbol(a, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 22, 13))
+>AA : Symbol(AA, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 10, 1))
+
+declare const b: BB
+>b : Symbol(b, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 23, 13))
+>BB : Symbol(BB, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 14, 1))
+
+delete f.a
+>f.a : Symbol(Foo.a, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 0, 15))
+>f : Symbol(f, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 20, 13))
+>a : Symbol(Foo.a, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 0, 15))
+
+delete f.b
+>f.b : Symbol(Foo.b, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 1, 13))
+>f : Symbol(f, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 20, 13))
+>b : Symbol(Foo.b, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 1, 13))
+
+delete f.c
+>f.c : Symbol(Foo.c, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 2, 25))
+>f : Symbol(f, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 20, 13))
+>c : Symbol(Foo.c, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 2, 25))
+
+delete f.d
+>f.d : Symbol(Foo.d, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 3, 20))
+>f : Symbol(f, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 20, 13))
+>d : Symbol(Foo.d, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 3, 20))
+
+delete f.e
+>f.e : Symbol(Foo.e, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 4, 14))
+>f : Symbol(f, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 20, 13))
+>e : Symbol(Foo.e, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 4, 14))
+
+delete f.f
+>f.f : Symbol(Foo.f, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 5, 32))
+>f : Symbol(f, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 20, 13))
+>f : Symbol(Foo.f, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 5, 32))
+
+delete f.g
+>f.g : Symbol(Foo.g, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 6, 33))
+>f : Symbol(f, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 20, 13))
+>g : Symbol(Foo.g, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 6, 33))
+
+delete f.h
+>f.h : Symbol(Foo.h, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 7, 14))
+>f : Symbol(f, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 20, 13))
+>h : Symbol(Foo.h, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 7, 14))
+
+delete f.i
+>f.i : Symbol(Foo.i, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 8, 10))
+>f : Symbol(f, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 20, 13))
+>i : Symbol(Foo.i, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 8, 10))
+
+delete f.j
+>f : Symbol(f, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 20, 13))
+
+delete g.a
+>g.a : Symbol(a, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 0, 15))
+>g : Symbol(g, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 21, 13))
+>a : Symbol(a, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 0, 15))
+
+delete g.b
+>g.b : Symbol(b, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 1, 13))
+>g : Symbol(g, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 21, 13))
+>b : Symbol(b, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 1, 13))
+
+delete g.c
+>g.c : Symbol(c, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 2, 25))
+>g : Symbol(g, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 21, 13))
+>c : Symbol(c, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 2, 25))
+
+delete g.d
+>g.d : Symbol(d, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 3, 20))
+>g : Symbol(g, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 21, 13))
+>d : Symbol(d, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 3, 20))
+
+delete g.e
+>g.e : Symbol(e, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 4, 14))
+>g : Symbol(g, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 21, 13))
+>e : Symbol(e, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 4, 14))
+
+delete g.f
+>g.f : Symbol(f, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 5, 32))
+>g : Symbol(g, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 21, 13))
+>f : Symbol(f, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 5, 32))
+
+delete g.g
+>g.g : Symbol(g, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 6, 33))
+>g : Symbol(g, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 21, 13))
+>g : Symbol(g, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 6, 33))
+
+delete g.h
+>g.h : Symbol(h, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 7, 14))
+>g : Symbol(g, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 21, 13))
+>h : Symbol(h, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 7, 14))
+
+delete g.i
+>g.i : Symbol(i, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 8, 10))
+>g : Symbol(g, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 21, 13))
+>i : Symbol(i, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 8, 10))
+
+delete g.j
+>g : Symbol(g, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 21, 13))
+
+delete a.a
+>a : Symbol(a, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 22, 13))
+
+delete a.b
+>a : Symbol(a, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 22, 13))
+
+delete b.a
+>b : Symbol(b, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 23, 13))
+
+delete b.b
+>b : Symbol(b, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 23, 13))
+

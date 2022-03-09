@@ -57,7 +57,7 @@ Project '/users/username/projects/myproject/javascript/packages/recognizers-date
 
 
 	../../../../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	src/datetime/baseDate.ts
 	  Matched by include pattern 'src' in 'tsconfig.json'
 
@@ -65,7 +65,7 @@ Project '/users/username/projects/myproject/javascript/packages/recognizers-date
 event:
     {"seq":0,"type":"event","event":"projectLoadingFinish","body":{"projectName":"/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json"}}
 event:
-    {"seq":0,"type":"event","event":"telemetry","body":{"telemetryEventName":"projectInfo","payload":{"projectId":"a6bd830f3b019a6f703b938422f5798726d0914f0d6f67c2539798ea5e66fed2","fileStats":{"js":0,"jsSize":0,"jsx":0,"jsxSize":0,"ts":1,"tsSize":55,"tsx":0,"tsxSize":0,"dts":1,"dtsSize":334,"deferred":0,"deferredSize":0},"compilerOptions":{"rootDir":"","baseUrl":"","paths":""},"typeAcquisition":{"enable":false,"include":false,"exclude":false},"extends":false,"files":false,"include":true,"exclude":false,"compileOnSave":false,"configFileName":"tsconfig.json","projectType":"configured","languageServiceEnabled":true,"version":"4.4.0-dev"}}}
+    {"seq":0,"type":"event","event":"telemetry","body":{"telemetryEventName":"projectInfo","payload":{"projectId":"a6bd830f3b019a6f703b938422f5798726d0914f0d6f67c2539798ea5e66fed2","fileStats":{"js":0,"jsSize":0,"jsx":0,"jsxSize":0,"ts":1,"tsSize":55,"tsx":0,"tsxSize":0,"dts":1,"dtsSize":334,"deferred":0,"deferredSize":0},"compilerOptions":{"rootDir":"","baseUrl":"","paths":""},"typeAcquisition":{"enable":false,"include":false,"exclude":false},"extends":false,"files":false,"include":true,"exclude":false,"compileOnSave":false,"configFileName":"tsconfig.json","projectType":"configured","languageServiceEnabled":true,"version":"FakeVersion"}}}
 event:
     {"seq":0,"type":"event","event":"configFileDiag","body":{"triggerFile":"/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts","configFile":"/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json","diagnostics":[]}}
 Project '/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json' (Configured)
@@ -128,7 +128,7 @@ Project '/users/username/projects/myproject/javascript/packages/recognizers-date
 
 
 	../../../../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	../recognizers-text/dist/types/recognizers-text.d.ts
 	  Imported via "@microsoft/recognizers-text" from file 'src/datetime/baseDate.ts'
 	src/datetime/baseDate.ts

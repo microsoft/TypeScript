@@ -14,10 +14,7 @@
 
 verify.completions({
     marker: "",
-    exact: [
-        completion.globalThisEntry,
-        ...completion.globalsVars,
-        completion.undefinedVarEntry,
+    exact: completion.globalsPlus([
         {
             name: "foo",
             source: "/a/b/impl",
@@ -28,14 +25,13 @@ verify.completions({
             hasAction: true,
             sortText: completion.SortText.AutoImportSuggestions
         },
-        ...completion.globalKeywords,
-    ],
+    ]),
     preferences: { includeCompletionsForModuleExports: true },
 });
 verify.applyCodeActionFromCompletion("", {
     name: "foo",
     source: "/a/b/impl",
-    description: `Import 'foo' from module "./a"`,
+    description: `Add import from "./a"`,
     newFileContent: `import { foo } from "./a";
 
 fo`,

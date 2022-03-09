@@ -135,6 +135,13 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/transitiveReferences/refs/a.d.ts
 /user/username/projects/transitiveReferences/c.ts
 
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/transitivereferences/a.d.ts (used version)
+/user/username/projects/transitivereferences/b.d.ts (used version)
+/user/username/projects/transitivereferences/refs/a.d.ts (used version)
+/user/username/projects/transitivereferences/c.ts (used version)
+
 Dependencies for::
 /a/lib/lib.d.ts:
   /a/lib/lib.d.ts
@@ -235,6 +242,10 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/transitiveReferences/b.d.ts
 /user/username/projects/transitiveReferences/c.ts
 
+Shape signatures in builder refreshed for::
+/user/username/projects/transitivereferences/b.d.ts (used version)
+/user/username/projects/transitivereferences/c.ts (computed .d.ts)
+
 Dependencies for::
 /a/lib/lib.d.ts:
   /a/lib/lib.d.ts
@@ -319,6 +330,10 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/transitiveReferences/nrefs/a.d.ts
 /user/username/projects/transitiveReferences/c.ts
 
+Shape signatures in builder refreshed for::
+/user/username/projects/transitivereferences/nrefs/a.d.ts (used version)
+/user/username/projects/transitivereferences/c.ts (computed .d.ts)
+
 Dependencies for::
 /a/lib/lib.d.ts:
   /a/lib/lib.d.ts
@@ -397,6 +412,10 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /user/username/projects/transitiveReferences/refs/a.d.ts
 /user/username/projects/transitiveReferences/c.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/transitivereferences/refs/a.d.ts (used version)
+/user/username/projects/transitivereferences/c.ts (computed .d.ts)
 
 Dependencies for::
 /a/lib/lib.d.ts:
@@ -477,6 +496,10 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/transitiveReferences/nrefs/a.d.ts
 /user/username/projects/transitiveReferences/b.d.ts
 
+Shape signatures in builder refreshed for::
+/user/username/projects/transitivereferences/nrefs/a.d.ts (used version)
+/user/username/projects/transitivereferences/b.d.ts (used version)
+
 Dependencies for::
 /a/lib/lib.d.ts:
   /a/lib/lib.d.ts
@@ -555,6 +578,9 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /user/username/projects/transitiveReferences/b.d.ts
 
+Shape signatures in builder refreshed for::
+/user/username/projects/transitivereferences/b.d.ts (used version)
+
 Dependencies for::
 /a/lib/lib.d.ts:
   /a/lib/lib.d.ts
@@ -628,6 +654,10 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /user/username/projects/transitiveReferences/b.ts
 /user/username/projects/transitiveReferences/c.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/transitivereferences/b.ts (computed .d.ts)
+/user/username/projects/transitivereferences/c.ts (computed .d.ts)
 
 Dependencies for::
 /a/lib/lib.d.ts:
@@ -713,6 +743,11 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/transitiveReferences/b.d.ts
 /user/username/projects/transitiveReferences/c.ts
 
+Shape signatures in builder refreshed for::
+/user/username/projects/transitivereferences/a.d.ts (used version)
+/user/username/projects/transitivereferences/b.d.ts (used version)
+/user/username/projects/transitivereferences/c.ts (computed .d.ts)
+
 Dependencies for::
 /a/lib/lib.d.ts:
   /a/lib/lib.d.ts
@@ -795,6 +830,10 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/transitiveReferences/a.ts
 /user/username/projects/transitiveReferences/b.d.ts
 
+Shape signatures in builder refreshed for::
+/user/username/projects/transitivereferences/a.ts (computed .d.ts)
+/user/username/projects/transitivereferences/b.d.ts (used version)
+
 Dependencies for::
 /a/lib/lib.d.ts:
   /a/lib/lib.d.ts
@@ -875,6 +914,11 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/transitiveReferences/a.d.ts
 /user/username/projects/transitiveReferences/b.d.ts
 /user/username/projects/transitiveReferences/c.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/transitivereferences/a.d.ts (used version)
+/user/username/projects/transitivereferences/b.d.ts (used version)
+/user/username/projects/transitivereferences/c.ts (used version)
 
 Dependencies for::
 /a/lib/lib.d.ts:

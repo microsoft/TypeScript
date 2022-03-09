@@ -1,0 +1,26 @@
+=== tests/cases/conformance/node/index.ts ===
+// esm format file
+import { Thing } from "inner/other";
+>Thing : any
+
+export const a = (await import("inner/index.js")).x();
+>a : any
+>(await import("inner/index.js")).x() : any
+>(await import("inner/index.js")).x : any
+>(await import("inner/index.js")) : any
+>await import("inner/index.js") : any
+>import("inner/index.js") : Promise<any>
+>"inner/index.js" : "inner/index.js"
+>x : any
+
+=== tests/cases/conformance/node/node_modules/inner/index.d.ts ===
+// esm format file
+export { x } from "./other.js";
+>x : () => import("tests/cases/conformance/node/node_modules/inner/other").Thing
+
+=== tests/cases/conformance/node/node_modules/inner/other.d.ts ===
+// esm format file
+export interface Thing {}
+export const x: () => Thing;
+>x : () => Thing
+
