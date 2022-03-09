@@ -424,6 +424,7 @@ declare namespace ts {
         JSDocFunctionType = 316,
         JSDocVariadicType = 317,
         JSDocNamepathType = 318,
+        /** @deprecated Use SyntaxKind.JSDoc */
         JSDocComment = 319,
         JSDocText = 320,
         JSDocTypeLiteral = 321,
@@ -491,6 +492,7 @@ declare namespace ts {
         LastJSDocNode = 346,
         FirstJSDocTagNode = 326,
         LastJSDocTagNode = 346,
+        JSDoc = 319
     }
     export type TriviaSyntaxKind = SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia | SyntaxKind.NewLineTrivia | SyntaxKind.WhitespaceTrivia | SyntaxKind.ShebangTrivia | SyntaxKind.ConflictMarkerTrivia;
     export type LiteralSyntaxKind = SyntaxKind.NumericLiteral | SyntaxKind.BigIntLiteral | SyntaxKind.StringLiteral | SyntaxKind.JsxText | SyntaxKind.JsxTextAllWhiteSpaces | SyntaxKind.RegularExpressionLiteral | SyntaxKind.NoSubstitutionTemplateLiteral;
@@ -1820,7 +1822,7 @@ declare namespace ts {
     }
     export type JSDocTypeReferencingNode = JSDocVariadicType | JSDocOptionalType | JSDocNullableType | JSDocNonNullableType;
     export interface JSDoc extends Node {
-        readonly kind: SyntaxKind.JSDocComment;
+        readonly kind: SyntaxKind.JSDoc;
         readonly parent: HasJSDoc;
         readonly tags?: NodeArray<JSDocTag>;
         readonly comment?: string | NodeArray<JSDocComment>;
