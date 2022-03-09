@@ -814,6 +814,8 @@ namespace ts {
 
         const restrictiveMapper: TypeMapper = makeFunctionTypeMapper(t => t.flags & TypeFlags.TypeParameter ? getRestrictiveTypeParameter(t as TypeParameter) : t);
         const permissiveMapper: TypeMapper = makeFunctionTypeMapper(t => t.flags & TypeFlags.TypeParameter ? wildcardType : t);
+        const uniqueLiteralType = createIntrinsicType(TypeFlags.Never, "never"); // `uniqueLiteralType` is a special `never` flagged by union reduction to behave as a literal
+        const uniqueLiteralMapper: TypeMapper = makeFunctionTypeMapper(t => t.flags & TypeFlags.TypeParameter ? uniqueLiteralType : t); // replace all type parameters with the unique literal type (disregarding constraints)
 
         const emptyObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, emptyArray);
         const emptyJsxObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, emptyArray);
@@ -1831,7 +1833,7 @@ namespace ts {
                             // - parameters are only in the scope of function body
                             // This restriction does not apply to JSDoc comment types because they are parented
                             // at a higher level than type parameters would normally be
-                            if (meaning & result.flags & SymbolFlags.Type && lastLocation.kind !== SyntaxKind.JSDocComment) {
+                            if (meaning & result.flags & SymbolFlags.Type && lastLocation.kind !== SyntaxKind.JSDoc) {
                                 useResult = result.flags & SymbolFlags.TypeParameter
                                     // type parameters are visible in parameter list, return type and type parameter list
                                     ? lastLocation === (location as FunctionLikeDeclaration).type ||
@@ -5079,10 +5081,16 @@ namespace ts {
                     const readonlyToken = type.declaration.readonlyToken ? factory.createToken(type.declaration.readonlyToken.kind) as ReadonlyKeyword | PlusToken | MinusToken : undefined;
                     const questionToken = type.declaration.questionToken ? factory.createToken(type.declaration.questionToken.kind) as QuestionToken | PlusToken | MinusToken : undefined;
                     let appropriateConstraintTypeNode: TypeNode;
+                    let newTypeVariable: TypeReferenceNode | undefined;
                     if (isMappedTypeWithKeyofConstraintDeclaration(type)) {
                         // We have a { [P in keyof T]: X }
                         // We do this to ensure we retain the toplevel keyof-ness of the type which may be lost due to keyof distribution during `getConstraintTypeFromMappedType`
-                        appropriateConstraintTypeNode = factory.createTypeOperatorNode(SyntaxKind.KeyOfKeyword, typeToTypeNodeHelper(getModifiersTypeFromMappedType(type), context));
+                        if (!(getModifiersTypeFromMappedType(type).flags & TypeFlags.TypeParameter) && context.flags & NodeBuilderFlags.GenerateNamesForShadowedTypeParams) {
+                            const newParam = createTypeParameter(createSymbol(SymbolFlags.TypeParameter, "T" as __String));
+                            const name = typeParameterToName(newParam, context);
+                            newTypeVariable = factory.createTypeReferenceNode(name);
+                        }
+                        appropriateConstraintTypeNode = factory.createTypeOperatorNode(SyntaxKind.KeyOfKeyword, newTypeVariable || typeToTypeNodeHelper(getModifiersTypeFromMappedType(type), context));
                     }
                     else {
                         appropriateConstraintTypeNode = typeToTypeNodeHelper(getConstraintTypeFromMappedType(type), context);
@@ -5092,7 +5100,19 @@ namespace ts {
                     const templateTypeNode = typeToTypeNodeHelper(removeMissingType(getTemplateTypeFromMappedType(type), !!(getMappedTypeModifiers(type) & MappedTypeModifiers.IncludeOptional)), context);
                     const mappedTypeNode = factory.createMappedTypeNode(readonlyToken, typeParameterNode, nameTypeNode, questionToken, templateTypeNode, /*members*/ undefined);
                     context.approximateLength += 10;
-                    return setEmitFlags(mappedTypeNode, EmitFlags.SingleLine);
+                    const result = setEmitFlags(mappedTypeNode, EmitFlags.SingleLine);
+                    if (isMappedTypeWithKeyofConstraintDeclaration(type) && !(getModifiersTypeFromMappedType(type).flags & TypeFlags.TypeParameter) && context.flags & NodeBuilderFlags.GenerateNamesForShadowedTypeParams) {
+                        // homomorphic mapped type with a non-homomorphic naive inlining
+                        // wrap it with a conditional like `SomeModifiersType extends infer U ? {..the mapped type...} : never` to ensure the resulting
+                        // type stays homomorphic
+                        return factory.createConditionalTypeNode(
+                            typeToTypeNodeHelper(getModifiersTypeFromMappedType(type), context),
+                            factory.createInferTypeNode(factory.createTypeParameterDeclaration(factory.cloneNode(newTypeVariable!.typeName) as Identifier)),
+                            result,
+                            factory.createKeywordTypeNode(SyntaxKind.NeverKeyword)
+                        );
+                    }
+                    return result;
                 }
 
                 function createAnonymousTypeNode(type: ObjectType): TypeNode {
@@ -6994,9 +7014,13 @@ namespace ts {
                             else {
                                 // A Class + Property merge is made for a `module.exports.Member = class {}`, and it doesn't serialize well as either a class _or_ a property symbol - in fact, _it behaves like an alias!_
                                 // `var` is `FunctionScopedVariable`, `const` and `let` are `BlockScopedVariable`, and `module.exports.thing =` is `Property`
-                                const flags = !(symbol.flags & SymbolFlags.BlockScopedVariable) ? undefined
-                                    : isConstVariable(symbol) ? NodeFlags.Const
-                                    : NodeFlags.Let;
+                                const flags = !(symbol.flags & SymbolFlags.BlockScopedVariable)
+                                    ? symbol.parent?.valueDeclaration && isSourceFile(symbol.parent?.valueDeclaration)
+                                        ? NodeFlags.Const // exports are immutable in es6, which is what we emulate and check; so it's safe to mark all exports as `const` (there's no difference to consumers, but it allows unique symbol type declarations)
+                                        : undefined
+                                    : isConstVariable(symbol)
+                                        ? NodeFlags.Const
+                                        : NodeFlags.Let;
                                 const name = (needsPostExportDefault || !(symbol.flags & SymbolFlags.Property)) ? localName : getUnusedName(localName, symbol);
                                 let textRange: Node | undefined = symbol.declarations && find(symbol.declarations, d => isVariableDeclaration(d));
                                 if (textRange && isVariableDeclarationList(textRange.parent) && textRange.parent.declarations.length === 1) {
@@ -9160,7 +9184,10 @@ namespace ts {
             if (containsSameNamedThisProperty(expression.left, expression.right)) {
                 return anyType;
             }
-            const type = resolvedSymbol ? getTypeOfSymbol(resolvedSymbol) : getWidenedLiteralType(checkExpressionCached(expression.right));
+            const isDirectExport = kind === AssignmentDeclarationKind.ExportsProperty && (isPropertyAccessExpression(expression.left) || isElementAccessExpression(expression.left)) && (isModuleExportsAccessExpression(expression.left.expression) || (isIdentifier(expression.left.expression) && isExportsIdentifier(expression.left.expression)));
+            const type = resolvedSymbol ? getTypeOfSymbol(resolvedSymbol)
+                : isDirectExport ? getRegularTypeOfLiteralType(checkExpressionCached(expression.right))
+                : getWidenedLiteralType(checkExpressionCached(expression.right));
             if (type.flags & TypeFlags.Object &&
                 kind === AssignmentDeclarationKind.ModuleExports &&
                 symbol.escapedName === InternalSymbolName.ExportEquals) {
@@ -9963,7 +9990,7 @@ namespace ts {
                             node = paramSymbol.valueDeclaration!;
                         }
                         break;
-                    case SyntaxKind.JSDocComment: {
+                    case SyntaxKind.JSDoc: {
                         const outerTypeParameters = getOuterTypeParameters(node, includeThisTypes);
                         return (node as JSDoc).tags
                             ? appendTypeParameters(outerTypeParameters, flatMap((node as JSDoc).tags, t => isJSDocTemplateTag(t) ? t.typeParameters : undefined))
@@ -12349,10 +12376,10 @@ namespace ts {
                 else if (type !== firstType) {
                     checkFlags |= CheckFlags.HasNonUniformType;
                 }
-                if (isLiteralType(type) || isPatternLiteralType(type)) {
+                if (isLiteralType(type) || isPatternLiteralType(type) || type === uniqueLiteralType) {
                     checkFlags |= CheckFlags.HasLiteralType;
                 }
-                if (type.flags & TypeFlags.Never) {
+                if (type.flags & TypeFlags.Never && type !== uniqueLiteralType) {
                     checkFlags |= CheckFlags.HasNeverType;
                 }
                 propTypes.push(type);
@@ -13660,7 +13687,7 @@ namespace ts {
         function getConditionalFlowTypeOfType(type: Type, node: Node) {
             let constraints: Type[] | undefined;
             let covariant = true;
-            while (node && !isStatement(node) && node.kind !== SyntaxKind.JSDocComment) {
+            while (node && !isStatement(node) && node.kind !== SyntaxKind.JSDoc) {
                 const parent = node.parent;
                 // only consider variance flipped by parameter locations - `keyof` types would usually be considered variance inverting, but
                 // often get used in indexed accesses where they behave sortof invariantly, but our checking is lax
@@ -14393,11 +14420,17 @@ namespace ts {
         }
 
         function removeSubtypes(types: Type[], hasObjectTypes: boolean): Type[] | undefined {
+            // [] and [T] immediately reduce to [] and [T] respectively
+            if (types.length < 2) {
+                return types;
+            }
+
             const id = getTypeListId(types);
             const match = subtypeReductionCache.get(id);
             if (match) {
                 return match;
             }
+
             // We assume that redundant primitive types have already been removed from the types array and that there
             // are no any and unknown types in the array. Thus, the only possible supertypes for primitive types are empty
             // object types, and if none of those are present we can exclude primitive types from the subtype check.
@@ -15100,9 +15133,24 @@ namespace ts {
                 /*aliasSymbol*/ undefined, /*aliasTypeArguments*/ undefined, origin);
         }
 
+        /**
+         * A union type which is reducible upon instantiation (meaning some members are removed under certain instantiations)
+         * must be kept generic, as that instantiation information needs to flow through the type system. By replacing all
+         * type parameters in the union with a special never type that is treated as a literal in `getReducedType`, we can cause the `getReducedType` logic
+         * to reduce the resulting type if possible (since only intersections with conflicting literal-typed properties are reducible).
+         */
+        function isPossiblyReducibleByInstantiation(type: UnionType): boolean {
+            return some(type.types, t => {
+                const uniqueFilled = getUniqueLiteralFilledInstantiation(t);
+                return getReducedType(uniqueFilled) !== uniqueFilled;
+            });
+        }
+
         function getIndexType(type: Type, stringsOnly = keyofStringsOnly, noIndexSignatures?: boolean): Type {
             type = getReducedType(type);
-            return type.flags & TypeFlags.Union ? getIntersectionType(map((type as UnionType).types, t => getIndexType(t, stringsOnly, noIndexSignatures))) :
+            return type.flags & TypeFlags.Union ? isPossiblyReducibleByInstantiation(type as UnionType)
+                    ? getIndexTypeForGenericType(type as InstantiableType | UnionOrIntersectionType, stringsOnly)
+                    : getIntersectionType(map((type as UnionType).types, t => getIndexType(t, stringsOnly, noIndexSignatures))) :
                 type.flags & TypeFlags.Intersection ? getUnionType(map((type as IntersectionType).types, t => getIndexType(t, stringsOnly, noIndexSignatures))) :
                 type.flags & TypeFlags.InstantiableNonPrimitive || isGenericTupleType(type) || isGenericMappedType(type) && !hasDistributiveNameType(type) ? getIndexTypeForGenericType(type as InstantiableType | UnionOrIntersectionType, stringsOnly) :
                 getObjectFlags(type) & ObjectFlags.Mapped ? getIndexTypeForMappedType(type as MappedType, stringsOnly, noIndexSignatures) :
@@ -15776,6 +15824,11 @@ namespace ts {
             return type;
         }
 
+        function maybeCloneTypeParameter(p: TypeParameter) {
+            const constraint = getConstraintOfTypeParameter(p);
+            return constraint && (isGenericObjectType(constraint) || isGenericIndexType(constraint)) ? cloneTypeParameter(p) : p;
+        }
+
         function isTypicalNondistributiveConditional(root: ConditionalRoot) {
             return !root.isDistributive && isSingletonTupleType(root.node.checkType) && isSingletonTupleType(root.node.extendsType);
         }
@@ -15817,17 +15870,49 @@ namespace ts {
                 }
                 let combinedMapper: TypeMapper | undefined;
                 if (root.inferTypeParameters) {
-                    const context = createInferenceContext(root.inferTypeParameters, /*signature*/ undefined, InferenceFlags.None);
-                    if (!checkTypeInstantiable) {
+                    // When we're looking at making an inference for an infer type, when we get its constraint, it'll automagically be
+                    // instantiated with the context, so it doesn't need the mapper for the inference contex - however the constraint
+                    // may refer to another _root_, _uncloned_ `infer` type parameter [1], or to something mapped by `mapper` [2].
+                    // [1] Eg, if we have `Foo<T, U extends T>` and `Foo<number, infer B>` - `B` is constrained to `T`, which, in turn, has been instantiated
+                    // as `number`
+                    // Conversely, if we have `Foo<infer A, infer B>`, `B` is still constrained to `T` and `T` is instantiated as `A`
+                    // [2] Eg, if we have `Foo<T, U extends T>` and `Foo<Q, infer B>` where `Q` is mapped by `mapper` into `number` - `B` is constrained to `T`
+                    // which is in turn instantiated as `Q`, which is in turn instantiated as `number`.
+                    // So we need to:
+                    //    * Clone the type parameters so their constraints can be instantiated in the context of `mapper` (otherwise theyd only get inference context information)
+                    //    * Set the clones to both map the conditional's enclosing `mapper` and the original params
+                    //    * instantiate the extends type with the clones
+                    //    * incorporate all of the component mappers into the combined mapper for the true and false members
+                    // This means we have three mappers that need applying:
+                    //    * The original `mapper` used to create this conditional
+                    //    * The mapper that maps the old root type parameter to the clone (`freshMapper`)
+                    //    * The mapper that maps the clone to its inference result (`context.mapper`)
+                    const freshParams = sameMap(root.inferTypeParameters, maybeCloneTypeParameter);
+                    const freshMapper = freshParams !== root.inferTypeParameters ? createTypeMapper(root.inferTypeParameters, freshParams) : undefined;
+                    const context = createInferenceContext(freshParams, /*signature*/ undefined, InferenceFlags.None);
+                    if (freshMapper) {
+                        const freshCombinedMapper = combineTypeMappers(mapper, freshMapper);
+                        for (const p of freshParams) {
+                            if (root.inferTypeParameters.indexOf(p) === -1) {
+                                p.mapper = freshCombinedMapper;
+                            }
+                        }
+                    }
+                    // We skip inference of the possible `infer` types unles the `extendsType` _is_ an infer type
+                    // if it was, it's trivial to say that extendsType = checkType, however such a pattern is used to
+                    // "reset" the type being build up during constraint calculation and avoid making an apparently "infinite" constraint
+                    // so in those cases we refain from performing inference and retain the uninfered type parameter
+                    if (!checkTypeInstantiable || !some(root.inferTypeParameters, t => t === extendsType)) {
                         // We don't want inferences from constraints as they may cause us to eagerly resolve the
                         // conditional type instead of deferring resolution. Also, we always want strict function
                         // types rules (i.e. proper contravariance) for inferences.
-                        inferTypes(context.inferences, checkType, extendsType, InferencePriority.NoConstraints | InferencePriority.AlwaysStrict);
+                        inferTypes(context.inferences, checkType, instantiateType(extendsType, freshMapper), InferencePriority.NoConstraints | InferencePriority.AlwaysStrict);
                     }
+                    const innerMapper = combineTypeMappers(freshMapper, context.mapper);
                     // It's possible for 'infer T' type paramteters to be given uninstantiated constraints when the
                     // those type parameters are used in type references (see getInferredTypeParameterConstraint). For
                     // that reason we need context.mapper to be first in the combined mapper. See #42636 for examples.
-                    combinedMapper = mapper ? combineTypeMappers(context.mapper, mapper) : context.mapper;
+                    combinedMapper = mapper ? combineTypeMappers(innerMapper, mapper) : innerMapper;
                 }
                 // Instantiate the extends type including inferences for 'infer T' type parameters
                 const inferredExtendsType = combinedMapper ? instantiateType(unwrapNondistributiveConditionalTuple(root, root.extendsType), combinedMapper) : extendsType;
@@ -16340,9 +16425,11 @@ namespace ts {
 
         function getESSymbolLikeTypeForNode(node: Node) {
             if (isValidESSymbolDeclaration(node)) {
-                const symbol = getSymbolOfNode(node);
-                const links = getSymbolLinks(symbol);
-                return links.uniqueESSymbolType || (links.uniqueESSymbolType = createUniqueESSymbolType(symbol));
+                const symbol = isCommonJsExportPropertyAssignment(node) ? getSymbolOfNode((node as BinaryExpression).left) : getSymbolOfNode(node);
+                if (symbol) {
+                    const links = getSymbolLinks(symbol);
+                    return links.uniqueESSymbolType || (links.uniqueESSymbolType = createUniqueESSymbolType(symbol));
+                }
             }
             return esSymbolType;
         }
@@ -17044,6 +17131,11 @@ namespace ts {
                 return instantiated;
             }
             return type; // Nested invocation of `inferTypeForHomomorphicMappedType` or the `source` instantiated into something unmappable
+        }
+
+        function getUniqueLiteralFilledInstantiation(type: Type) {
+            return type.flags & (TypeFlags.Primitive | TypeFlags.AnyOrUnknown | TypeFlags.Never) ? type :
+                type.uniqueLiteralFilledInstantiation || (type.uniqueLiteralFilledInstantiation = instantiateType(type, uniqueLiteralMapper));
         }
 
         function getPermissiveInstantiation(type: Type) {
@@ -34126,7 +34218,7 @@ namespace ts {
 
         function checkExpressionForMutableLocation(node: Expression, checkMode: CheckMode | undefined, contextualType?: Type, forceTuple?: boolean): Type {
             const type = checkExpression(node, checkMode, forceTuple);
-            return isConstContext(node) ? getRegularTypeOfLiteralType(type) :
+            return isConstContext(node) || isCommonJsExportedExpression(node) ? getRegularTypeOfLiteralType(type) :
                 isTypeAssertion(node) ? type :
                 getWidenedLiteralLikeTypeForContextualType(type, instantiateContextualType(arguments.length === 2 ? getContextualType(node) : contextualType, node));
         }

@@ -378,6 +378,7 @@ namespace ts {
         JSDocFunctionType,
         JSDocVariadicType,
         JSDocNamepathType, // https://jsdoc.app/about-namepaths.html
+        /** @deprecated Use SyntaxKind.JSDoc */
         JSDocComment,
         JSDocText,
         JSDocTypeLiteral,
@@ -455,6 +456,7 @@ namespace ts {
         LastJSDocTagNode = JSDocPropertyTag,
         /* @internal */ FirstContextualKeyword = AbstractKeyword,
         /* @internal */ LastContextualKeyword = OfKeyword,
+        JSDoc = JSDocComment,
     }
 
     export type TriviaSyntaxKind =
@@ -3256,7 +3258,7 @@ namespace ts {
         ;
 
     export interface JSDoc extends Node {
-        readonly kind: SyntaxKind.JSDocComment;
+        readonly kind: SyntaxKind.JSDoc;
         readonly parent: HasJSDoc;
         readonly tags?: NodeArray<JSDocTag>;
         readonly comment?: string | NodeArray<JSDocComment>;
@@ -5241,6 +5243,8 @@ namespace ts {
         permissiveInstantiation?: Type;  // Instantiation with type parameters mapped to wildcard type
         /* @internal */
         restrictiveInstantiation?: Type; // Instantiation with type parameters mapped to unconstrained form
+        /* @internal */
+        uniqueLiteralFilledInstantiation?: Type;  // Instantiation with type parameters mapped to never type
         /* @internal */
         immediateBaseConstraint?: Type;  // Immediate base constraint cache
         /* @internal */

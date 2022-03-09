@@ -1,7 +1,7 @@
-tests/cases/conformance/salsa/a.js(4,17): error TS2339: Property 'toFixed' does not exist on type 'string | number'.
-  Property 'toFixed' does not exist on type 'string'.
-tests/cases/conformance/salsa/a.js(5,16): error TS2339: Property 'toFixed' does not exist on type 'string | number'.
-  Property 'toFixed' does not exist on type 'string'.
+tests/cases/conformance/salsa/a.js(4,17): error TS2339: Property 'toFixed' does not exist on type 'number | "string"'.
+  Property 'toFixed' does not exist on type '"string"'.
+tests/cases/conformance/salsa/a.js(5,16): error TS2339: Property 'toFixed' does not exist on type 'number | "string"'.
+  Property 'toFixed' does not exist on type '"string"'.
 tests/cases/conformance/salsa/mod1.js(2,1): error TS2323: Cannot redeclare exported variable 'bothBefore'.
 tests/cases/conformance/salsa/mod1.js(4,1): error TS2323: Cannot redeclare exported variable 'bothBefore'.
 tests/cases/conformance/salsa/mod1.js(5,1): error TS2323: Cannot redeclare exported variable 'bothAfter'.
@@ -14,12 +14,12 @@ tests/cases/conformance/salsa/mod1.js(10,1): error TS2323: Cannot redeclare expo
     mod1.justExport.toFixed()
     mod1.bothBefore.toFixed() // error
                     ~~~~~~~
-!!! error TS2339: Property 'toFixed' does not exist on type 'string | number'.
-!!! error TS2339:   Property 'toFixed' does not exist on type 'string'.
+!!! error TS2339: Property 'toFixed' does not exist on type 'number | "string"'.
+!!! error TS2339:   Property 'toFixed' does not exist on type '"string"'.
     mod1.bothAfter.toFixed()
                    ~~~~~~~
-!!! error TS2339: Property 'toFixed' does not exist on type 'string | number'.
-!!! error TS2339:   Property 'toFixed' does not exist on type 'string'.
+!!! error TS2339: Property 'toFixed' does not exist on type 'number | "string"'.
+!!! error TS2339:   Property 'toFixed' does not exist on type '"string"'.
     mod1.justProperty.length
     
 ==== tests/cases/conformance/salsa/requires.d.ts (0 errors) ====

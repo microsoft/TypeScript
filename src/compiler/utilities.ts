@@ -1520,10 +1520,21 @@ namespace ts {
             && node.parent.parent.kind === SyntaxKind.VariableStatement;
     }
 
-    export function isValidESSymbolDeclaration(node: Node): node is VariableDeclaration | PropertyDeclaration | SignatureDeclaration {
-        return isVariableDeclaration(node) ? isVarConst(node) && isIdentifier(node.name) && isVariableDeclarationInVariableStatement(node) :
+    export function isCommonJsExportedExpression(node: Node) {
+        if (!isInJSFile(node)) return false;
+        return (isObjectLiteralExpression(node.parent) && isBinaryExpression(node.parent.parent) && getAssignmentDeclarationKind(node.parent.parent) === AssignmentDeclarationKind.ModuleExports) ||
+            isCommonJsExportPropertyAssignment(node.parent);
+    }
+
+    export function isCommonJsExportPropertyAssignment(node: Node) {
+        if (!isInJSFile(node)) return false;
+        return (isBinaryExpression(node) && getAssignmentDeclarationKind(node) === AssignmentDeclarationKind.ExportsProperty);
+    }
+
+    export function isValidESSymbolDeclaration(node: Node): boolean {
+        return (isVariableDeclaration(node) ? isVarConst(node) && isIdentifier(node.name) && isVariableDeclarationInVariableStatement(node) :
             isPropertyDeclaration(node) ? hasEffectiveReadonlyModifier(node) && hasStaticModifier(node) :
-            isPropertySignature(node) && hasEffectiveReadonlyModifier(node);
+            isPropertySignature(node) && hasEffectiveReadonlyModifier(node)) || isCommonJsExportPropertyAssignment(node);
     }
 
     export function introducesArgumentsExoticObject(node: Node) {
@@ -4610,7 +4621,7 @@ namespace ts {
 
     /** template tags are only available when a typedef isn't already using them */
     function isNonTypeAliasTemplate(tag: JSDocTag): tag is JSDocTemplateTag {
-        return isJSDocTemplateTag(tag) && !(tag.parent.kind === SyntaxKind.JSDocComment && tag.parent.tags!.some(isJSDocTypeAlias));
+        return isJSDocTemplateTag(tag) && !(tag.parent.kind === SyntaxKind.JSDoc && tag.parent.tags!.some(isJSDocTypeAlias));
     }
 
     /**

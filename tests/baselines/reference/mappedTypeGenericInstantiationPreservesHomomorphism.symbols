@@ -1,0 +1,29 @@
+=== tests/cases/compiler/internal.ts ===
+export declare function usePrivateType<T extends unknown[]>(...args: T): PrivateMapped<T[any]>;
+>usePrivateType : Symbol(usePrivateType, Decl(internal.ts, 0, 0))
+>T : Symbol(T, Decl(internal.ts, 0, 39))
+>args : Symbol(args, Decl(internal.ts, 0, 60))
+>T : Symbol(T, Decl(internal.ts, 0, 39))
+>PrivateMapped : Symbol(PrivateMapped, Decl(internal.ts, 0, 95))
+>T : Symbol(T, Decl(internal.ts, 0, 39))
+
+type PrivateMapped<Obj> = {[K in keyof Obj]: Obj[K]};
+>PrivateMapped : Symbol(PrivateMapped, Decl(internal.ts, 0, 95))
+>Obj : Symbol(Obj, Decl(internal.ts, 2, 19))
+>K : Symbol(K, Decl(internal.ts, 2, 28))
+>Obj : Symbol(Obj, Decl(internal.ts, 2, 19))
+>Obj : Symbol(Obj, Decl(internal.ts, 2, 19))
+>K : Symbol(K, Decl(internal.ts, 2, 28))
+
+=== tests/cases/compiler/api.ts ===
+import {usePrivateType} from './internal';
+>usePrivateType : Symbol(usePrivateType, Decl(api.ts, 0, 8))
+
+export const mappedUnionWithPrivateType = <T extends unknown[]>(...args: T) => usePrivateType(...args);
+>mappedUnionWithPrivateType : Symbol(mappedUnionWithPrivateType, Decl(api.ts, 1, 12))
+>T : Symbol(T, Decl(api.ts, 1, 43))
+>args : Symbol(args, Decl(api.ts, 1, 64))
+>T : Symbol(T, Decl(api.ts, 1, 43))
+>usePrivateType : Symbol(usePrivateType, Decl(api.ts, 0, 8))
+>args : Symbol(args, Decl(api.ts, 1, 64))
+
