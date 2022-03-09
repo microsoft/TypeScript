@@ -200,7 +200,7 @@ namespace ts {
             case SyntaxKind.ImportType:
                 return !(node.parent as ImportTypeNode).isTypeOf;
             case SyntaxKind.ExpressionWithTypeArguments:
-                return !isExpressionWithTypeArgumentsInClassExtendsClause(node.parent as ExpressionWithTypeArguments);
+                return isPartOfTypeNode(node.parent);
         }
 
         return false;
@@ -2307,13 +2307,15 @@ namespace ts {
             : "linkplain";
         const parts = [linkPart(`{@${prefix} `)];
         if (!link.name) {
-            if (link.text) parts.push(linkTextPart(link.text));
+            if (link.text) {
+                parts.push(linkTextPart(link.text));
+            }
         }
         else {
             const symbol = checker?.getSymbolAtLocation(link.name);
             const suffix = findLinkNameEnd(link.text);
             const name = getTextOfNode(link.name) + link.text.slice(0, suffix);
-            const text = link.text.slice(suffix);
+            const text = skipSeparatorFromLinkText(link.text.slice(suffix));
             const decl = symbol?.valueDeclaration || symbol?.declarations?.[0];
             if (decl) {
                 parts.push(linkNamePart(name, decl));
@@ -2325,6 +2327,15 @@ namespace ts {
         }
         parts.push(linkPart("}"));
         return parts;
+    }
+
+    function skipSeparatorFromLinkText(text: string) {
+        let pos = 0;
+        if (text.charCodeAt(pos++) === CharacterCodes.bar) {
+            while (pos < text.length && text.charCodeAt(pos) === CharacterCodes.space) pos++;
+            return text.slice(pos);
+        }
+        return text;
     }
 
     function findLinkNameEnd(text: string) {

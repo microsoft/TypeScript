@@ -18,7 +18,6 @@ tests/cases/conformance/types/conditional/inferTypes1.ts(84,43): error TS4081: E
 tests/cases/conformance/types/conditional/inferTypes1.ts(91,44): error TS2344: Type 'U' does not satisfy the constraint 'string'.
   Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/types/conditional/inferTypes1.ts(153,40): error TS2322: Type 'T' is not assignable to type 'string | number | symbol'.
-  Type 'T' is not assignable to type 'symbol'.
 
 
 ==== tests/cases/conformance/types/conditional/inferTypes1.ts (16 errors) ====
@@ -211,7 +210,6 @@ tests/cases/conformance/types/conditional/inferTypes1.ts(153,40): error TS2322: 
     type B<T> = string extends T ? { [P in T]: void; } : T;  // Error
                                            ~
 !!! error TS2322: Type 'T' is not assignable to type 'string | number | symbol'.
-!!! error TS2322:   Type 'T' is not assignable to type 'symbol'.
     
     // Repro from #22302
     

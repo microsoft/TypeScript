@@ -62,7 +62,7 @@ Print the final configuration instead of building.
 [1mCOMMON COMPILER OPTIONS[22m
 
 [94m--pretty[39m
-Enable color and formatting in TypeScript's output to make compiler errors easier to read
+Enable color and formatting in TypeScript's output to make compiler errors easier to read.
 type: boolean
 default: true
 
@@ -78,11 +78,11 @@ default: undefined
 
 [94m--lib[39m
 Specify a set of bundled library declaration files that describe the target runtime environment.
-one or more: es5, es6/es2015, es7/es2016, es2017, es2018, es2019, es2020, es2021, es2022, esnext, dom, dom.iterable, webworker, webworker.importscripts, webworker.iterable, scripthost, es2015.core, es2015.collection, es2015.generator, es2015.iterable, es2015.promise, es2015.proxy, es2015.reflect, es2015.symbol, es2015.symbol.wellknown, es2016.array.include, es2017.object, es2017.sharedmemory, es2017.string, es2017.intl, es2017.typedarrays, es2018.asyncgenerator, es2018.asynciterable/esnext.asynciterable, es2018.intl, es2018.promise, es2018.regexp, es2019.array, es2019.object, es2019.string, es2019.symbol/esnext.symbol, es2020.bigint/esnext.bigint, es2020.promise, es2020.sharedmemory, es2020.string, es2020.symbol.wellknown, es2020.intl, es2021.promise/esnext.promise, es2021.string, es2021.weakref/esnext.weakref, es2021.intl, es2022.array/esnext.array, es2022.error, es2022.object, es2022.string/esnext.string, esnext.intl
+one or more: es5, es6/es2015, es7/es2016, es2017, es2018, es2019, es2020, es2021, es2022, esnext, dom, dom.iterable, webworker, webworker.importscripts, webworker.iterable, scripthost, es2015.core, es2015.collection, es2015.generator, es2015.iterable, es2015.promise, es2015.proxy, es2015.reflect, es2015.symbol, es2015.symbol.wellknown, es2016.array.include, es2017.object, es2017.sharedmemory, es2017.string, es2017.intl, es2017.typedarrays, es2018.asyncgenerator, es2018.asynciterable/esnext.asynciterable, es2018.intl, es2018.promise, es2018.regexp, es2019.array, es2019.object, es2019.string, es2019.symbol/esnext.symbol, es2020.bigint/esnext.bigint, es2020.date, es2020.promise, es2020.sharedmemory, es2020.string, es2020.symbol.wellknown, es2020.intl, es2020.number, es2021.promise/esnext.promise, es2021.string, es2021.weakref/esnext.weakref, es2021.intl, es2022.array/esnext.array, es2022.error, es2022.object, es2022.string/esnext.string, esnext.intl
 default: undefined
 
 [94m--allowJs[39m
-Allow JavaScript files to be a part of your program. Use the `checkJS` option to get errors from these files.
+Allow JavaScript files to be a part of your program. Use the 'checkJS' option to get errors from these files.
 type: boolean
 default: false
 
@@ -117,7 +117,7 @@ type: boolean
 default: false
 
 [94m--outFile[39m
-Specify a file that bundles all outputs into one JavaScript file. If `declaration` is true, also designates a file that bundles all .d.ts output.
+Specify a file that bundles all outputs into one JavaScript file. If 'declaration' is true, also designates a file that bundles all .d.ts output.
 
 [94m--outDir[39m
 Specify an output folder for all emitted files.
@@ -141,11 +141,11 @@ default: false
 Specify type package names to be included without being referenced in a source file.
 
 [94m--esModuleInterop[39m
-Emit additional JavaScript to ease support for importing CommonJS modules. This enables `allowSyntheticDefaultImports` for type compatibility.
+Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility.
 type: boolean
 default: false
 
-You can learn about all of the compiler options at https://aka.ms/tsconfig-reference
+You can learn about all of the compiler options at https://aka.ms/tsc
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 

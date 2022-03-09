@@ -250,22 +250,22 @@ import m25 = require("./index");
 >m25 : typeof m1
 
 import m26 = require("./subfolder");
->m26 : typeof m4
+>m26 : typeof m26
 
 import m27 = require("./subfolder/");
->m27 : typeof m4
+>m27 : typeof m26
 
 import m28 = require("./subfolder/index");
->m28 : typeof m4
+>m28 : typeof m26
 
 import m29 = require("./subfolder2");
->m29 : typeof m7
+>m29 : typeof m29
 
 import m30 = require("./subfolder2/");
->m30 : typeof m7
+>m30 : typeof m29
 
 import m31 = require("./subfolder2/index");
->m31 : typeof m7
+>m31 : typeof m29
 
 import m32 = require("./subfolder2/another");
 >m32 : typeof m10
@@ -286,27 +286,27 @@ void m25;
 
 void m26;
 >void m26 : undefined
->m26 : typeof m4
+>m26 : typeof m26
 
 void m27;
 >void m27 : undefined
->m27 : typeof m4
+>m27 : typeof m26
 
 void m28;
 >void m28 : undefined
->m28 : typeof m4
+>m28 : typeof m26
 
 void m29;
 >void m29 : undefined
->m29 : typeof m7
+>m29 : typeof m29
 
 void m30;
 >void m30 : undefined
->m30 : typeof m7
+>m30 : typeof m29
 
 void m31;
 >void m31 : undefined
->m31 : typeof m7
+>m31 : typeof m29
 
 void m32;
 >void m32 : undefined
@@ -861,22 +861,22 @@ import m25 = require("./index");
 >m25 : typeof m1
 
 import m26 = require("./subfolder");
->m26 : typeof m4
+>m26 : typeof m26
 
 import m27 = require("./subfolder/");
->m27 : typeof m4
+>m27 : typeof m26
 
 import m28 = require("./subfolder/index");
->m28 : typeof m4
+>m28 : typeof m26
 
 import m29 = require("./subfolder2");
->m29 : typeof m7
+>m29 : typeof m29
 
 import m30 = require("./subfolder2/");
->m30 : typeof m7
+>m30 : typeof m29
 
 import m31 = require("./subfolder2/index");
->m31 : typeof m7
+>m31 : typeof m29
 
 import m32 = require("./subfolder2/another");
 >m32 : typeof m10
@@ -897,27 +897,27 @@ void m25;
 
 void m26;
 >void m26 : undefined
->m26 : typeof m4
+>m26 : typeof m26
 
 void m27;
 >void m27 : undefined
->m27 : typeof m4
+>m27 : typeof m26
 
 void m28;
 >void m28 : undefined
->m28 : typeof m4
+>m28 : typeof m26
 
 void m29;
 >void m29 : undefined
->m29 : typeof m7
+>m29 : typeof m29
 
 void m30;
 >void m30 : undefined
->m30 : typeof m7
+>m30 : typeof m29
 
 void m31;
 >void m31 : undefined
->m31 : typeof m7
+>m31 : typeof m29
 
 void m32;
 >void m32 : undefined

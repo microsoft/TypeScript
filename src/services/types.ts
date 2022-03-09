@@ -283,7 +283,7 @@ namespace ts {
          */
         resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile?: SourceFile): (ResolvedModule | undefined)[];
         getResolvedModuleWithFailedLookupLocationsFromCache?(modulename: string, containingFile: string, resolutionMode?: ModuleKind.CommonJS | ModuleKind.ESNext): ResolvedModuleWithFailedLookupLocations | undefined;
-        resolveTypeReferenceDirectives?(typeDirectiveNames: string[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions): (ResolvedTypeReferenceDirective | undefined)[];
+        resolveTypeReferenceDirectives?(typeDirectiveNames: string[] | FileReference[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingFileMode?: SourceFile["impliedNodeFormat"] | undefined): (ResolvedTypeReferenceDirective | undefined)[];
         /* @internal */ hasInvalidatedResolution?: HasInvalidatedResolution;
         /* @internal */ hasChangedAutomaticTypeDirectiveNames?: HasChangedAutomaticTypeDirectiveNames;
         /* @internal */ getGlobalTypingsCacheLocation?(): string | undefined;
@@ -585,16 +585,6 @@ namespace ts {
         includeExternalModuleExports?: boolean;
         /** @deprecated Use includeCompletionsWithInsertText */
         includeInsertTextCompletions?: boolean;
-    }
-
-    export interface InlayHintsOptions extends UserPreferences {
-        readonly includeInlayParameterNameHints?: "none" | "literals" | "all";
-        readonly includeInlayParameterNameHintsWhenArgumentMatchesName?: boolean;
-        readonly includeInlayFunctionParameterTypeHints?: boolean,
-        readonly includeInlayVariableTypeHints?: boolean;
-        readonly includeInlayPropertyDeclarationTypeHints?: boolean;
-        readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
-        readonly includeInlayEnumMemberValueHints?: boolean;
     }
 
     export type SignatureHelpTriggerCharacter = "," | "(" | "<";
@@ -1622,6 +1612,6 @@ namespace ts {
         cancellationToken: CancellationToken;
         host: LanguageServiceHost;
         span: TextSpan;
-        preferences: InlayHintsOptions;
+        preferences: UserPreferences;
     }
 }

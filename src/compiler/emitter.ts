@@ -1596,7 +1596,7 @@ namespace ts {
                         return emitRestOrJSDocVariadicType(node as RestTypeNode | JSDocVariadicType);
                     case SyntaxKind.JSDocNamepathType:
                         return;
-                    case SyntaxKind.JSDocComment:
+                    case SyntaxKind.JSDoc:
                         return emitJSDoc(node as JSDoc);
                     case SyntaxKind.JSDocTypeLiteral:
                         return emitJSDocTypeLiteral(node as JSDocTypeLiteral);
@@ -1727,6 +1727,8 @@ namespace ts {
                         return emitAsExpression(node as AsExpression);
                     case SyntaxKind.NonNullExpression:
                         return emitNonNullExpression(node as NonNullExpression);
+                    case SyntaxKind.ExpressionWithTypeArguments:
+                        return emitExpressionWithTypeArguments(node as ExpressionWithTypeArguments);
                     case SyntaxKind.MetaProperty:
                         return emitMetaProperty(node as MetaProperty);
                     case SyntaxKind.SyntheticExpression:
@@ -2227,6 +2229,7 @@ namespace ts {
             writeKeyword("typeof");
             writeSpace();
             emit(node.exprName);
+            emitTypeArguments(node, node.typeArguments);
         }
 
         function emitTypeLiteral(node: TypeLiteralNode) {
@@ -2386,6 +2389,19 @@ namespace ts {
             writeKeyword("import");
             writePunctuation("(");
             emit(node.argument);
+            if (node.assertions) {
+                writePunctuation(",");
+                writeSpace();
+                writePunctuation("{");
+                writeSpace();
+                writeKeyword("assert");
+                writePunctuation(":");
+                writeSpace();
+                const elements = node.assertions.assertClause.elements;
+                emitList(node.assertions.assertClause, elements, ListFormat.ImportClauseEntries);
+                writeSpace();
+                writePunctuation("}");
+            }
             writePunctuation(")");
             if (node.qualifier) {
                 writePunctuation(".");
@@ -3102,7 +3118,7 @@ namespace ts {
             emit(node.name);
             emit(node.exclamationToken);
             emitTypeAnnotation(node.type);
-            emitInitializer(node.initializer, node.type ? node.type.end : node.name.end, node, parenthesizer.parenthesizeExpressionForDisallowedComma);
+            emitInitializer(node.initializer, node.type?.end ?? node.name.emitNode?.typeNode?.end ?? node.name.end, node, parenthesizer.parenthesizeExpressionForDisallowedComma);
         }
 
         function emitVariableDeclarationList(node: VariableDeclarationList) {
@@ -3993,8 +4009,11 @@ namespace ts {
             }
             for (const directive of types) {
                 const pos = writer.getTextPos();
-                writeComment(`/// <reference types="${directive.fileName}" />`);
-                if (bundleFileInfo) bundleFileInfo.sections.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.Type, data: directive.fileName });
+                const resolutionMode = directive.resolutionMode && directive.resolutionMode !== currentSourceFile?.impliedNodeFormat
+                    ? `resolution-mode="${directive.resolutionMode === ModuleKind.ESNext ? "import" : "require"}"`
+                    : "";
+                writeComment(`/// <reference types="${directive.fileName}" ${resolutionMode}/>`);
+                if (bundleFileInfo) bundleFileInfo.sections.push({ pos, end: writer.getTextPos(), kind: !directive.resolutionMode ? BundleFileSectionKind.Type : directive.resolutionMode === ModuleKind.ESNext ? BundleFileSectionKind.TypeResolutionModeImport : BundleFileSectionKind.TypeResolutionModeRequire, data: directive.fileName });
                 writeLine();
             }
             for (const directive of libs) {
@@ -5325,6 +5344,10 @@ namespace ts {
                 commentsDisabled = false;
             }
             emitTrailingCommentsOfNode(node, emitFlags, commentRange.pos, commentRange.end, savedContainerPos, savedContainerEnd, savedDeclarationListContainerEnd);
+            const typeNode = getTypeNode(node);
+            if (typeNode) {
+                emitTrailingCommentsOfNode(node, emitFlags, typeNode.pos, typeNode.end, savedContainerPos, savedContainerEnd, savedDeclarationListContainerEnd);
+            }
         }
 
         function emitLeadingCommentsOfNode(node: Node, emitFlags: EmitFlags, pos: number, end: number) {

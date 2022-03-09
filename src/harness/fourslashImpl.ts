@@ -841,7 +841,7 @@ namespace FourSlash {
             });
         }
 
-        public verifyInlayHints(expected: readonly FourSlashInterface.VerifyInlayHintsOptions[], span: ts.TextSpan = { start: 0, length: this.activeFile.content.length }, preference?: ts.InlayHintsOptions) {
+        public verifyInlayHints(expected: readonly FourSlashInterface.VerifyInlayHintsOptions[], span: ts.TextSpan = { start: 0, length: this.activeFile.content.length }, preference?: ts.UserPreferences) {
             const hints = this.languageService.provideInlayHints(this.activeFile.fileName, span, preference);
             assert.equal(hints.length, expected.length, "Number of hints");
 
