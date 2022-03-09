@@ -455,6 +455,8 @@ namespace ts {
         LastJSDocTagNode = JSDocPropertyTag,
         /* @internal */ FirstContextualKeyword = AbstractKeyword,
         /* @internal */ LastContextualKeyword = OfKeyword,
+        /** @deprecated Use SyntaxKind.JSDoc */
+        JSDocComment = JSDoc,
     }
 
     export type TriviaSyntaxKind =
