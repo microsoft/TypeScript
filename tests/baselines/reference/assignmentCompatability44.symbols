@@ -1,0 +1,13 @@
+=== tests/cases/compiler/assignmentCompatability44.ts ===
+class Foo {
+>Foo : Symbol(Foo, Decl(assignmentCompatability44.ts, 0, 0))
+
+    constructor(x: number) {}
+>x : Symbol(x, Decl(assignmentCompatability44.ts, 1, 16))
+}
+
+const foo: { new(): Foo } = Foo;
+>foo : Symbol(foo, Decl(assignmentCompatability44.ts, 4, 5))
+>Foo : Symbol(Foo, Decl(assignmentCompatability44.ts, 0, 0))
+>Foo : Symbol(Foo, Decl(assignmentCompatability44.ts, 0, 0))
+

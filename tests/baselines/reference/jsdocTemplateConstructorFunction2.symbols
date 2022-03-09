@@ -9,7 +9,13 @@ function Zet(t) {
 
     /** @type {T} */
     this.u
+>this.u : Symbol(Zet.u, Decl(templateTagWithNestedTypeLiteral.js, 4, 17), Decl(templateTagWithNestedTypeLiteral.js, 14, 36))
+>this : Symbol(Zet, Decl(templateTagWithNestedTypeLiteral.js, 0, 0))
+>u : Symbol(Zet.u, Decl(templateTagWithNestedTypeLiteral.js, 4, 17), Decl(templateTagWithNestedTypeLiteral.js, 14, 36))
+
     this.t = t
+>this.t : Symbol(Zet.t, Decl(templateTagWithNestedTypeLiteral.js, 6, 10))
+>this : Symbol(Zet, Decl(templateTagWithNestedTypeLiteral.js, 0, 0))
 >t : Symbol(Zet.t, Decl(templateTagWithNestedTypeLiteral.js, 6, 10))
 >t : Symbol(t, Decl(templateTagWithNestedTypeLiteral.js, 4, 13))
 }

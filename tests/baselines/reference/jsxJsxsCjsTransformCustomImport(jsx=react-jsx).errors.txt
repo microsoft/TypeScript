@@ -1,0 +1,14 @@
+tests/cases/conformance/jsx/jsxs/jsxJsxsCjsTransformCustomImport.tsx(2,11): error TS2307: Cannot find module 'preact/jsx-runtime' or its corresponding type declarations.
+
+
+==== tests/cases/conformance/jsx/jsxs/jsxJsxsCjsTransformCustomImport.tsx (1 errors) ====
+    /// <reference path="/.lib/react16.d.ts" />
+    const a = <>
+              ~~
+!!! error TS2307: Cannot find module 'preact/jsx-runtime' or its corresponding type declarations.
+      <p></p>
+      text
+      <div className="foo"></div>
+    </>
+    
+    export {};

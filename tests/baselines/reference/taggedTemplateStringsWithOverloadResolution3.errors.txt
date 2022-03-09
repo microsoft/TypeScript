@@ -7,14 +7,14 @@ tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolutio
 tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution3.ts(44,1): error TS2554: Expected 2-4 arguments, but got 1.
 tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution3.ts(62,9): error TS2769: No overload matches this call.
   Overload 1 of 3, '(strs: TemplateStringsArray, n: string, m: any): any', gave the following error.
-    Argument of type 'true' is not assignable to parameter of type 'string'.
+    Argument of type 'boolean' is not assignable to parameter of type 'string'.
   Overload 2 of 3, '(strs: TemplateStringsArray, n: number, m: any): any', gave the following error.
-    Argument of type 'true' is not assignable to parameter of type 'number'.
+    Argument of type 'boolean' is not assignable to parameter of type 'number'.
 tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution3.ts(63,18): error TS2769: No overload matches this call.
   Overload 1 of 3, '(strs: TemplateStringsArray, n: any, m: number): any', gave the following error.
-    Argument of type 'true' is not assignable to parameter of type 'number'.
+    Argument of type 'boolean' is not assignable to parameter of type 'number'.
   Overload 2 of 3, '(strs: TemplateStringsArray, n: any, m: string): any', gave the following error.
-    Argument of type 'true' is not assignable to parameter of type 'string'.
+    Argument of type 'boolean' is not assignable to parameter of type 'string'.
 tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution3.ts(69,18): error TS2339: Property 'toFixed' does not exist on type 'string'.
 
 
@@ -95,16 +95,16 @@ tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolutio
             ~~~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 3, '(strs: TemplateStringsArray, n: string, m: any): any', gave the following error.
-!!! error TS2769:     Argument of type 'true' is not assignable to parameter of type 'string'.
+!!! error TS2769:     Argument of type 'boolean' is not assignable to parameter of type 'string'.
 !!! error TS2769:   Overload 2 of 3, '(strs: TemplateStringsArray, n: number, m: any): any', gave the following error.
-!!! error TS2769:     Argument of type 'true' is not assignable to parameter of type 'number'.
+!!! error TS2769:     Argument of type 'boolean' is not assignable to parameter of type 'number'.
     fn4 `${ null }${ true }`;
                      ~~~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 3, '(strs: TemplateStringsArray, n: any, m: number): any', gave the following error.
-!!! error TS2769:     Argument of type 'true' is not assignable to parameter of type 'number'.
+!!! error TS2769:     Argument of type 'boolean' is not assignable to parameter of type 'number'.
 !!! error TS2769:   Overload 2 of 3, '(strs: TemplateStringsArray, n: any, m: string): any', gave the following error.
-!!! error TS2769:     Argument of type 'true' is not assignable to parameter of type 'string'.
+!!! error TS2769:     Argument of type 'boolean' is not assignable to parameter of type 'string'.
     
     // Non - generic overloads where contextual typing of function arguments has errors
     function fn5(strs: TemplateStringsArray, f: (n: string) => void): string;

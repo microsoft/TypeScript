@@ -1,0 +1,29 @@
+=== tests/cases/conformance/classes/classDeclarations/classDeclarationLoop.ts ===
+const arr = [];
+>arr : any[]
+>[] : undefined[]
+
+for (let i = 0; i < 10; ++i) {
+>i : number
+>0 : 0
+>i < 10 : boolean
+>i : number
+>10 : 10
+>++i : number
+>i : number
+
+    class C {
+>C : C
+
+        prop = i;
+>prop : number
+>i : number
+    }
+    arr.push(C);
+>arr.push(C) : number
+>arr.push : (...items: any[]) => number
+>arr : any[]
+>push : (...items: any[]) => number
+>C : typeof C
+}
+

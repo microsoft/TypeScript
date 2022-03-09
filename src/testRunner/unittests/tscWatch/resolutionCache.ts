@@ -15,8 +15,8 @@ namespace ts.tscWatch {
             const host = createWatchedSystem(files);
             const watch = createWatchOfFilesAndCompilerOptions([root.path], host, { module: ModuleKind.AMD });
 
-            const f1IsNotModule = getDiagnosticOfFileFromProgram(watch(), root.path, root.content.indexOf('"f1"'), '"f1"'.length, Diagnostics.File_0_is_not_a_module, imported.path);
-            const cannotFindFoo = getDiagnosticOfFileFromProgram(watch(), imported.path, imported.content.indexOf("foo"), "foo".length, Diagnostics.Cannot_find_name_0, "foo");
+            const f1IsNotModule = getDiagnosticOfFileFromProgram(watch.getCurrentProgram().getProgram(), root.path, root.content.indexOf('"f1"'), '"f1"'.length, Diagnostics.File_0_is_not_a_module, imported.path);
+            const cannotFindFoo = getDiagnosticOfFileFromProgram(watch.getCurrentProgram().getProgram(), imported.path, imported.content.indexOf("foo"), "foo".length, Diagnostics.Cannot_find_name_0, "foo");
 
             // ensure that imported file was found
             checkOutputErrorsInitial(host, [f1IsNotModule, cannotFindFoo]);
@@ -26,7 +26,7 @@ namespace ts.tscWatch {
                 const newContent = `import {x} from "f1"
                 var x: string = 1;`;
                 root.content = newContent;
-                host.reloadFS(files);
+                host.writeFile(root.path, root.content);
 
                 // patch fileExists to make sure that disk is not touched
                 host.fileExists = notImplemented;
@@ -37,7 +37,7 @@ namespace ts.tscWatch {
                 // ensure file has correct number of errors after edit
                 checkOutputErrorsIncremental(host, [
                     f1IsNotModule,
-                    getDiagnosticOfFileFromProgram(watch(), root.path, newContent.indexOf("var x") + "var ".length, "x".length, Diagnostics.Type_0_is_not_assignable_to_type_1, 1, "string"),
+                    getDiagnosticOfFileFromProgram(watch.getCurrentProgram().getProgram(), root.path, newContent.indexOf("var x") + "var ".length, "x".length, Diagnostics.Type_0_is_not_assignable_to_type_1, "number", "string"),
                     cannotFindFoo
                 ]);
             }
@@ -53,14 +53,14 @@ namespace ts.tscWatch {
                 };
 
                 root.content = `import {x} from "f2"`;
-                host.reloadFS(files);
+                host.writeFile(root.path, root.content);
 
                 // trigger synchronization to make sure that system will try to find 'f2' module on disk
                 host.runQueuedTimeoutCallbacks();
 
                 // ensure file has correct number of errors after edit
                 checkOutputErrorsIncremental(host, [
-                    getDiagnosticModuleNotFoundOfFile(watch(), root, "f2")
+                    getDiagnosticModuleNotFoundOfFile(watch.getCurrentProgram().getProgram(), root, "f2")
                 ]);
 
                 assert.isTrue(fileExistsIsCalled);
@@ -79,7 +79,7 @@ namespace ts.tscWatch {
                 const newContent = `import {x} from "f1"`;
                 root.content = newContent;
 
-                host.reloadFS(files);
+                host.writeFile(root.path, root.content);
                 host.runQueuedTimeoutCallbacks();
 
                 checkOutputErrorsIncremental(host, [f1IsNotModule, cannotFindFoo]);
@@ -118,12 +118,13 @@ namespace ts.tscWatch {
 
             assert.isTrue(fileExistsCalledForBar, "'fileExists' should be called");
             checkOutputErrorsInitial(host, [
-                getDiagnosticModuleNotFoundOfFile(watch(), root, "bar")
+                getDiagnosticModuleNotFoundOfFile(watch.getCurrentProgram().getProgram(), root, "bar")
             ]);
 
             fileExistsCalledForBar = false;
             root.content = `import {y} from "bar"`;
-            host.reloadFS(files.concat(imported));
+            host.writeFile(root.path, root.content);
+            host.writeFile(imported.path, imported.content);
 
             host.runQueuedTimeoutCallbacks();
             checkOutputErrorsIncremental(host, emptyArray);
@@ -141,9 +142,7 @@ namespace ts.tscWatch {
                 content: `export const y = 1;export const x = 10;`
             };
 
-            const files = [root, libFile];
-            const filesWithImported = files.concat(imported);
-            const host = createWatchedSystem(filesWithImported);
+            const host = createWatchedSystem([root, libFile, imported]);
             const originalFileExists = host.fileExists;
             let fileExistsCalledForBar = false;
             host.fileExists = fileName => {
@@ -162,16 +161,17 @@ namespace ts.tscWatch {
             checkOutputErrorsInitial(host, emptyArray);
 
             fileExistsCalledForBar = false;
-            host.reloadFS(files);
+            host.deleteFile(imported.path);
             host.runQueuedTimeoutCallbacks();
             assert.isTrue(fileExistsCalledForBar, "'fileExists' should be called.");
             checkOutputErrorsIncremental(host, [
-                getDiagnosticModuleNotFoundOfFile(watch(), root, "bar")
+                getDiagnosticModuleNotFoundOfFile(watch.getCurrentProgram().getProgram(), root, "bar")
             ]);
 
             fileExistsCalledForBar = false;
-            host.reloadFS(filesWithImported);
-            host.checkTimeoutQueueLengthAndRun(1);
+            host.writeFile(imported.path, imported.content);
+            host.checkTimeoutQueueLengthAndRun(1); // Scheduled invalidation of resolutions
+            host.checkTimeoutQueueLengthAndRun(1); // Actual update
             checkOutputErrorsIncremental(host, emptyArray);
             assert.isTrue(fileExistsCalledForBar, "'fileExists' should be called.");
         });
@@ -185,26 +185,28 @@ namespace ts.tscWatch {
                 content: `import * as fs from "fs";`
             }, libFile], { currentDirectory: "/a/b" }),
             changes: [
-                sys => {
-                    sys.ensureFileOrFolder({
-                        path: "/a/b/node_modules/@types/node/package.json",
-                        content: `
+                {
+                    caption: "npm install node types",
+                    change: sys => {
+                        sys.ensureFileOrFolder({
+                            path: "/a/b/node_modules/@types/node/package.json",
+                            content: `
 {
   "main": ""
 }
 `
-                    });
-                    sys.ensureFileOrFolder({
-                        path: "/a/b/node_modules/@types/node/index.d.ts",
-                        content: `
+                        });
+                        sys.ensureFileOrFolder({
+                            path: "/a/b/node_modules/@types/node/index.d.ts",
+                            content: `
 declare module "fs" {
     export interface Stats {
         isFile(): boolean;
     }
 }`
-                    });
-                    sys.runQueuedTimeoutCallbacks();
-                    return "npm install node types";
+                        });
+                    },
+                    timeouts: runQueuedTimeoutCallbacks,
                 }
             ]
         });
@@ -235,16 +237,16 @@ declare module "url" {
                 return createWatchedSystem([root, file, libFile], { currentDirectory: "/a/b" });
             },
             changes: [
-                sys => {
-                    sys.appendFile("/a/b/bar.d.ts", `
+                {
+                    caption: "Add fs definition",
+                    change: sys => sys.appendFile("/a/b/bar.d.ts", `
 declare module "fs" {
     export interface Stats {
         isFile(): boolean;
     }
 }
-`);
-                    sys.runQueuedTimeoutCallbacks();
-                    return "Add fs definition";
+`),
+                    timeouts: runQueuedTimeoutCallbacks,
                 }
             ]
         });
@@ -282,10 +284,10 @@ declare module "fs" {
                 return createWatchedSystem([file1, file2, module1, libFile, configFile], { currentDirectory: "/a/b/projects/myProject/" });
             },
             changes: [
-                sys => {
-                    sys.appendFile("/a/b/projects/myProject/src/file1.ts", "\n;");
-                    sys.runQueuedTimeoutCallbacks();
-                    return "Add new line to file1";
+                {
+                    caption: "Add new line to file1",
+                    change: sys => sys.appendFile("/a/b/projects/myProject/src/file1.ts", "\n;"),
+                    timeouts: runQueuedTimeoutCallbacks,
                 }
             ]
         });
@@ -306,10 +308,10 @@ declare module "fs" {
                 return createWatchedSystem([file, libFile, module], { currentDirectory: projectRoot });
             },
             changes: [
-                sys => {
-                    sys.renameFolder(`${projectRoot}/node_modules2`, `${projectRoot}/node_modules`);
-                    sys.runQueuedTimeoutCallbacks();
-                    return "npm install";
+                {
+                    caption: "npm install",
+                    change: sys => sys.renameFolder(`${projectRoot}/node_modules2`, `${projectRoot}/node_modules`),
+                    timeouts: runQueuedTimeoutCallbacks,
                 }
             ]
         });
@@ -320,7 +322,6 @@ declare module "fs" {
                     scenario,
                     subScenario: `ignores changes in node_modules that start with dot/${subScenario}`,
                     commandLineArgs,
-                    maxNumberOfFilesToIterateForInvalidation: 1,
                     sys: () => {
                         const file1: File = {
                             path: `${projectRoot}/test.ts`,
@@ -337,14 +338,13 @@ declare module "fs" {
                         return createWatchedSystem([libFile, file1, file2, config]);
                     },
                     changes: [
-                        sys => {
-                            const npmCacheFile: File = {
+                        {
+                            caption: "npm install file and folder that start with '.'",
+                            change: sys => sys.ensureFileOrFolder({
                                 path: `${projectRoot}/node_modules/.cache/babel-loader/89c02171edab901b9926470ba6d5677e.ts`,
                                 content: JSON.stringify({ something: 10 })
-                            };
-                            sys.ensureFileOrFolder(npmCacheFile);
-                            sys.checkTimeoutQueueLength(0);
-                            return "npm install file and folder that start with '.'";
+                            }),
+                            timeouts: sys => sys.checkTimeoutQueueLength(0),
                         }
                     ]
                 });
@@ -374,23 +374,38 @@ declare module "fs" {
                 return createWatchedSystem([app, tsconfig, libFile]);
             },
             changes: [
-                sys => {
-                    sys.ensureFileOrFolder({
-                        path: `${projectRoot}/node_modules/@myapp/ts-types/package.json`,
-                        content: JSON.stringify({
-                            version: "1.65.1",
-                            types: "types/somefile.define.d.ts"
-                        })
-                    });
-                    sys.ensureFileOrFolder({
-                        path: `${projectRoot}/node_modules/@myapp/ts-types/types/somefile.define.d.ts`,
-                        content: `
+                {
+                    caption: "npm install ts-types",
+                    change: sys => {
+                        sys.ensureFileOrFolder({
+                            path: `${projectRoot}/node_modules/@myapp/ts-types/package.json`,
+                            content: JSON.stringify({
+                                version: "1.65.1",
+                                types: "types/somefile.define.d.ts"
+                            })
+                        });
+                        sys.ensureFileOrFolder({
+                            path: `${projectRoot}/node_modules/@myapp/ts-types/types/somefile.define.d.ts`,
+                            content: `
 declare namespace myapp {
     function component(str: string): number;
 }`
-                    });
-                    sys.checkTimeoutQueueLengthAndRun(1);
-                    return "npm install ts-types";
+                        });
+                    },
+                    timeouts: sys => {
+                        sys.checkTimeoutQueueLengthAndRun(2); // Scheduled invalidation of resolutions, update that gets cancelled and rescheduled by actual invalidation of resolution
+                        sys.checkTimeoutQueueLengthAndRun(1); // Actual update
+                    },
+                },
+                {
+                    caption: "No change, just check program",
+                    change: noop,
+                    timeouts: (sys, [[oldProgram, oldBuilderProgram]], watchorSolution) => {
+                        sys.checkTimeoutQueueLength(0);
+                        const newProgram = (watchorSolution as Watch).getProgram();
+                        assert.strictEqual(newProgram, oldBuilderProgram, "No change so builder program should be same");
+                        assert.strictEqual(newProgram.getProgram(), oldProgram, "No change so program should be same");
+                    }
                 }
             ]
         });
@@ -433,6 +448,85 @@ declare namespace myapp {
                 return createWatchedSystem(files, { currentDirectory: mainPackageRoot });
             },
             changes: emptyArray
+        });
+
+        describe("works when installing something in node_modules or @types when there is no notification from fs for index file", () => {
+            function getNodeAtTypes() {
+                const nodeAtTypesIndex: File = {
+                    path: `${projectRoot}/node_modules/@types/node/index.d.ts`,
+                    content: `/// <reference path="base.d.ts" />`
+                };
+                const nodeAtTypesBase: File = {
+                    path: `${projectRoot}/node_modules/@types/node/base.d.ts`,
+                    content: `// Base definitions for all NodeJS modules that are not specific to any version of TypeScript:
+/// <reference path="ts3.6/base.d.ts" />`
+                };
+                const nodeAtTypes36Base: File = {
+                    path: `${projectRoot}/node_modules/@types/node/ts3.6/base.d.ts`,
+                    content: `/// <reference path="../globals.d.ts" />`
+                };
+                const nodeAtTypesGlobals: File = {
+                    path: `${projectRoot}/node_modules/@types/node/globals.d.ts`,
+                    content: `declare var process: NodeJS.Process;
+declare namespace NodeJS {
+    interface Process {
+        on(msg: string): void;
+    }
+}`
+                };
+                return { nodeAtTypesIndex, nodeAtTypesBase, nodeAtTypes36Base, nodeAtTypesGlobals };
+            }
+            verifyTscWatch({
+                scenario,
+                subScenario: "works when installing something in node_modules or @types when there is no notification from fs for index file",
+                commandLineArgs: ["--w", `--extendedDiagnostics`],
+                sys: () => {
+                    const file: File = {
+                        path: `${projectRoot}/worker.ts`,
+                        content: `process.on("uncaughtException");`
+                    };
+                    const tsconfig: File = {
+                        path: `${projectRoot}/tsconfig.json`,
+                        content: "{}"
+                    };
+                    const { nodeAtTypesIndex, nodeAtTypesBase, nodeAtTypes36Base, nodeAtTypesGlobals } = getNodeAtTypes();
+                    return createWatchedSystem([file, libFile, tsconfig, nodeAtTypesIndex, nodeAtTypesBase, nodeAtTypes36Base, nodeAtTypesGlobals], { currentDirectory: projectRoot });
+                },
+                changes: [
+                    {
+                        caption: "npm ci step one: remove all node_modules files",
+                        change: sys => sys.deleteFolder(`${projectRoot}/node_modules/@types`, /*recursive*/ true),
+                        timeouts: runQueuedTimeoutCallbacks,
+                    },
+                    {
+                        caption: `npm ci step two: create atTypes but something else in the @types folder`,
+                        change: sys => sys.ensureFileOrFolder({
+                            path: `${projectRoot}/node_modules/@types/mocha/index.d.ts`,
+                            content: `export const foo = 10;`
+                        }),
+                        timeouts: runQueuedTimeoutCallbacks
+                    },
+                    {
+                        caption: `npm ci step three: create atTypes node folder`,
+                        change: sys => sys.ensureFileOrFolder({ path: `${projectRoot}/node_modules/@types/node` }),
+                        timeouts: runQueuedTimeoutCallbacks
+                    },
+                    {
+                        caption: `npm ci step four: create atTypes write all the files but dont invoke watcher for index.d.ts`,
+                        change: sys => {
+                            const { nodeAtTypesIndex, nodeAtTypesBase, nodeAtTypes36Base, nodeAtTypesGlobals } = getNodeAtTypes();
+                            sys.ensureFileOrFolder(nodeAtTypesBase);
+                            sys.ensureFileOrFolder(nodeAtTypesIndex, /*ignoreWatchInvokedWithTriggerAsFileCreate*/ true);
+                            sys.ensureFileOrFolder(nodeAtTypes36Base, /*ignoreWatchInvokedWithTriggerAsFileCreate*/ true);
+                            sys.ensureFileOrFolder(nodeAtTypesGlobals, /*ignoreWatchInvokedWithTriggerAsFileCreate*/ true);
+                        },
+                        timeouts: sys => {
+                            sys.runQueuedTimeoutCallbacks(); // update failed lookups
+                            sys.runQueuedTimeoutCallbacks(); // actual program update
+                        },
+                    },
+                ]
+            });
         });
     });
 }

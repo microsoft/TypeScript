@@ -21,6 +21,7 @@ var x = new Services.UserServices().getUserName();
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    exports.App = void 0;
     var App;
     (function (App) {
         var Services;

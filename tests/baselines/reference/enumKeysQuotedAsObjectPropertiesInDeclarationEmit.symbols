@@ -1,0 +1,63 @@
+=== tests/cases/compiler/enumKeysQuotedAsObjectPropertiesInDeclarationEmit.ts ===
+export enum MouseButton {
+>MouseButton : Symbol(MouseButton, Decl(enumKeysQuotedAsObjectPropertiesInDeclarationEmit.ts, 0, 0))
+
+	LEFT_BUTTON = 1,
+>LEFT_BUTTON : Symbol(MouseButton.LEFT_BUTTON, Decl(enumKeysQuotedAsObjectPropertiesInDeclarationEmit.ts, 0, 25))
+
+	RIGHT_BUTTON = 2,
+>RIGHT_BUTTON : Symbol(MouseButton.RIGHT_BUTTON, Decl(enumKeysQuotedAsObjectPropertiesInDeclarationEmit.ts, 1, 17))
+
+	MIDDLE_BUTTON = 4,
+>MIDDLE_BUTTON : Symbol(MouseButton.MIDDLE_BUTTON, Decl(enumKeysQuotedAsObjectPropertiesInDeclarationEmit.ts, 2, 18))
+
+	XBUTTON1_BUTTON = 5,
+>XBUTTON1_BUTTON : Symbol(MouseButton.XBUTTON1_BUTTON, Decl(enumKeysQuotedAsObjectPropertiesInDeclarationEmit.ts, 3, 19))
+
+	XBUTTON2_BUTTON = 6,
+>XBUTTON2_BUTTON : Symbol(MouseButton.XBUTTON2_BUTTON, Decl(enumKeysQuotedAsObjectPropertiesInDeclarationEmit.ts, 4, 21))
+
+	NO_BUTTON = 0,
+>NO_BUTTON : Symbol(MouseButton.NO_BUTTON, Decl(enumKeysQuotedAsObjectPropertiesInDeclarationEmit.ts, 5, 21))
+}
+
+export const DOMMouseButton = {
+>DOMMouseButton : Symbol(DOMMouseButton, Decl(enumKeysQuotedAsObjectPropertiesInDeclarationEmit.ts, 9, 12))
+
+	'-1': MouseButton.NO_BUTTON,
+>'-1' : Symbol('-1', Decl(enumKeysQuotedAsObjectPropertiesInDeclarationEmit.ts, 9, 31))
+>MouseButton.NO_BUTTON : Symbol(MouseButton.NO_BUTTON, Decl(enumKeysQuotedAsObjectPropertiesInDeclarationEmit.ts, 5, 21))
+>MouseButton : Symbol(MouseButton, Decl(enumKeysQuotedAsObjectPropertiesInDeclarationEmit.ts, 0, 0))
+>NO_BUTTON : Symbol(MouseButton.NO_BUTTON, Decl(enumKeysQuotedAsObjectPropertiesInDeclarationEmit.ts, 5, 21))
+
+	"0": MouseButton.LEFT_BUTTON,
+>"0" : Symbol("0", Decl(enumKeysQuotedAsObjectPropertiesInDeclarationEmit.ts, 10, 29))
+>MouseButton.LEFT_BUTTON : Symbol(MouseButton.LEFT_BUTTON, Decl(enumKeysQuotedAsObjectPropertiesInDeclarationEmit.ts, 0, 25))
+>MouseButton : Symbol(MouseButton, Decl(enumKeysQuotedAsObjectPropertiesInDeclarationEmit.ts, 0, 0))
+>LEFT_BUTTON : Symbol(MouseButton.LEFT_BUTTON, Decl(enumKeysQuotedAsObjectPropertiesInDeclarationEmit.ts, 0, 25))
+
+	"1": MouseButton.MIDDLE_BUTTON,
+>"1" : Symbol("1", Decl(enumKeysQuotedAsObjectPropertiesInDeclarationEmit.ts, 11, 30))
+>MouseButton.MIDDLE_BUTTON : Symbol(MouseButton.MIDDLE_BUTTON, Decl(enumKeysQuotedAsObjectPropertiesInDeclarationEmit.ts, 2, 18))
+>MouseButton : Symbol(MouseButton, Decl(enumKeysQuotedAsObjectPropertiesInDeclarationEmit.ts, 0, 0))
+>MIDDLE_BUTTON : Symbol(MouseButton.MIDDLE_BUTTON, Decl(enumKeysQuotedAsObjectPropertiesInDeclarationEmit.ts, 2, 18))
+
+	"2": MouseButton.RIGHT_BUTTON,
+>"2" : Symbol("2", Decl(enumKeysQuotedAsObjectPropertiesInDeclarationEmit.ts, 12, 32))
+>MouseButton.RIGHT_BUTTON : Symbol(MouseButton.RIGHT_BUTTON, Decl(enumKeysQuotedAsObjectPropertiesInDeclarationEmit.ts, 1, 17))
+>MouseButton : Symbol(MouseButton, Decl(enumKeysQuotedAsObjectPropertiesInDeclarationEmit.ts, 0, 0))
+>RIGHT_BUTTON : Symbol(MouseButton.RIGHT_BUTTON, Decl(enumKeysQuotedAsObjectPropertiesInDeclarationEmit.ts, 1, 17))
+
+	"3": MouseButton.XBUTTON1_BUTTON,
+>"3" : Symbol("3", Decl(enumKeysQuotedAsObjectPropertiesInDeclarationEmit.ts, 13, 31))
+>MouseButton.XBUTTON1_BUTTON : Symbol(MouseButton.XBUTTON1_BUTTON, Decl(enumKeysQuotedAsObjectPropertiesInDeclarationEmit.ts, 3, 19))
+>MouseButton : Symbol(MouseButton, Decl(enumKeysQuotedAsObjectPropertiesInDeclarationEmit.ts, 0, 0))
+>XBUTTON1_BUTTON : Symbol(MouseButton.XBUTTON1_BUTTON, Decl(enumKeysQuotedAsObjectPropertiesInDeclarationEmit.ts, 3, 19))
+
+	"4": MouseButton.XBUTTON2_BUTTON,
+>"4" : Symbol("4", Decl(enumKeysQuotedAsObjectPropertiesInDeclarationEmit.ts, 14, 34))
+>MouseButton.XBUTTON2_BUTTON : Symbol(MouseButton.XBUTTON2_BUTTON, Decl(enumKeysQuotedAsObjectPropertiesInDeclarationEmit.ts, 4, 21))
+>MouseButton : Symbol(MouseButton, Decl(enumKeysQuotedAsObjectPropertiesInDeclarationEmit.ts, 0, 0))
+>XBUTTON2_BUTTON : Symbol(MouseButton.XBUTTON2_BUTTON, Decl(enumKeysQuotedAsObjectPropertiesInDeclarationEmit.ts, 4, 21))
+
+};

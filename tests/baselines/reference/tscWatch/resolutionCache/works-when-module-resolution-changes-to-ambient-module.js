@@ -1,4 +1,4 @@
-/a/lib/tsc.js -w /a/b/foo.ts
+Input::
 //// [/a/b/foo.ts]
 import * as fs from "fs";
 
@@ -15,25 +15,24 @@ interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
-//// [/a/b/foo.js]
-"use strict";
-exports.__esModule = true;
 
-
-
+/a/lib/tsc.js -w /a/b/foo.ts
 Output::
 >> Screen clear
-12:00:13 AM - Starting compilation in watch mode...
+[[90m12:00:13 AM[0m] Starting compilation in watch mode...
 
+[96mfoo.ts[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS2307: [0mCannot find module 'fs' or its corresponding type declarations.
 
-foo.ts(1,21): error TS2307: Cannot find module 'fs'.
+[7m1[0m import * as fs from "fs";
+[7m [0m [91m                    ~~~~[0m
 
+[[90m12:00:16 AM[0m] Found 1 error. Watching for file changes.
 
-12:00:16 AM - Found 1 error. Watching for file changes.
 
 
 Program root files: ["/a/b/foo.ts"]
 Program options: {"watch":true}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /a/b/foo.ts
@@ -41,6 +40,10 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 /a/b/foo.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/a/b/foo.ts (used version)
 
 WatchedFiles::
 /a/b/foo.ts:
@@ -58,9 +61,15 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+//// [/a/b/foo.js]
+"use strict";
+exports.__esModule = true;
+
+
+
 Change:: npm install node types
 
-//// [/a/b/foo.js] file written with same contents
+Input::
 //// [/a/b/node_modules/@types/node/package.json]
 
 {
@@ -79,15 +88,15 @@ declare module "fs" {
 
 Output::
 >> Screen clear
-12:00:27 AM - File change detected. Starting incremental compilation...
+[[90m12:00:27 AM[0m] File change detected. Starting incremental compilation...
 
+[[90m12:00:31 AM[0m] Found 0 errors. Watching for file changes.
 
-
-12:00:31 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/a/b/foo.ts"]
 Program options: {"watch":true}
+Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts
 /a/b/foo.ts
@@ -97,6 +106,10 @@ Semantic diagnostics in builder refreshed for::
 /a/b/foo.ts
 /a/b/node_modules/@types/node/index.d.ts
 
+Shape signatures in builder refreshed for::
+/a/b/foo.ts (computed .d.ts)
+/a/b/node_modules/@types/node/index.d.ts (used version)
+
 WatchedFiles::
 /a/b/foo.ts:
   {"fileName":"/a/b/foo.ts","pollingInterval":250}
@@ -104,6 +117,12 @@ WatchedFiles::
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 /a/b/node_modules/@types/node/index.d.ts:
   {"fileName":"/a/b/node_modules/@types/node/index.d.ts","pollingInterval":250}
+/a/b/node_modules/fs/package.json:
+  {"fileName":"/a/b/node_modules/fs/package.json","pollingInterval":250}
+/a/b/node_modules/@types/fs/package.json:
+  {"fileName":"/a/b/node_modules/@types/fs/package.json","pollingInterval":250}
+/a/b/node_modules/@types/node/package.json:
+  {"fileName":"/a/b/node_modules/@types/node/package.json","pollingInterval":250}
 
 FsWatches::
 
@@ -112,3 +131,5 @@ FsWatchesRecursive::
   {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
+
+//// [/a/b/foo.js] file written with same contents

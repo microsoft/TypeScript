@@ -39,15 +39,15 @@ var strRepresentation4 = MyEmusEnum["emu"];
 
 // Should report an implicit 'any'.
 var x = {}["hi"];
->x : any
->{}["hi"] : any
+>x : undefined
+>{}["hi"] : undefined
 >{} : {}
 >"hi" : "hi"
 
 // Should report an implicit 'any'.
 var y = {}[10];
->y : any
->{}[10] : any
+>y : undefined
+>{}[10] : undefined
 >{} : {}
 >10 : 10
 
@@ -82,7 +82,7 @@ interface MyMap<T> {
 
 var m: MyMap<number> = {
 >m : MyMap<number>
->{    "0": 0,    "1": 1,    "2": 2,    "Okay that's enough for today.": NaN} : { 0: number; 1: number; 2: number; "Okay that's enough for today.": number; }
+>{    "0": 0,    "1": 1,    "2": 2,    "Okay that's enough for today.": NaN} : { "0": number; "1": number; "2": number; "Okay that's enough for today.": number; }
 
     "0": 0,
 >"0" : number

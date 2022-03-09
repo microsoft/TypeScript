@@ -28,14 +28,17 @@ export var z1 = 1;
 //// [file1.js]
 "use strict";
 exports.__esModule = true;
+exports.x = void 0;
 exports.x = 1;
 //// [file2.js]
 "use strict";
 exports.__esModule = true;
+exports.y = void 0;
 exports.y = 1;
 //// [file4.js]
 "use strict";
 exports.__esModule = true;
+exports.z1 = void 0;
 exports.z1 = 1;
 //// [file1.js]
 "use strict";

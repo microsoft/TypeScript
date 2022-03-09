@@ -5,6 +5,8 @@ function C(x) {
 >x : Symbol(x, Decl(a.js, 1, 11))
 
     this.x = x
+>this.x : Symbol(C.x, Decl(a.js, 1, 15))
+>this : Symbol(C, Decl(a.js, 0, 0))
 >x : Symbol(C.x, Decl(a.js, 1, 15))
 >x : Symbol(x, Decl(a.js, 1, 11))
 }
@@ -41,6 +43,7 @@ function A(x) {
 >x : Symbol(x, Decl(a.js, 12, 11))
 
     if (!(this instanceof A)) {
+>this : Symbol(A, Decl(a.js, 9, 15))
 >A : Symbol(A, Decl(a.js, 9, 15))
 
         return new A(x)
@@ -48,6 +51,8 @@ function A(x) {
 >x : Symbol(x, Decl(a.js, 12, 11))
     }
     this.x = x
+>this.x : Symbol(A.x, Decl(a.js, 15, 5))
+>this : Symbol(A, Decl(a.js, 9, 15))
 >x : Symbol(A.x, Decl(a.js, 15, 5))
 >x : Symbol(x, Decl(a.js, 12, 11))
 }

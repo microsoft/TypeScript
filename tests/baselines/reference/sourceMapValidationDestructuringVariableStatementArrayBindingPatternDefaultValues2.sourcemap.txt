@@ -106,189 +106,399 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPatternD
 >>>var _a = multiRobotA[1], skillA = _a === void 0 ? ["noSkill", "noSkill"] : _a;
 1->
 2 >^^^^
-3 >    ^^^^^^^^^^^^^^^^^^^
-4 >                       ^^
-5 >                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-6 >                                                                             ^
+3 >    ^^^^^
+4 >         ^^^^^^^^^^^
+5 >                    ^^^
+6 >                       ^^
+7 >                         ^^^^^^
+8 >                               ^^^^^^^^^^^^^^^^^^^
+9 >                                                  ^
+10>                                                   ^^^^^^^^^
+11>                                                            ^^
+12>                                                              ^^^^^^^^^
+13>                                                                       ^
+14>                                                                        ^^^^^
+15>                                                                             ^
 1->
   >
   >let [, 
 2 >
-3 >    skillA = ["noSkill", "noSkill"]
-4 >                       
-5 >                         skillA = ["noSkill", "noSkill"]
-6 >                                                                             ] = multiRobotA;
+3 >    skillA = ["noSkill", "noSkill"]] = 
+4 >         multiRobotA
+5 >                    
+6 >                       
+7 >                         skillA
+8 >                                = 
+9 >                                                  [
+10>                                                   "noSkill"
+11>                                                            , 
+12>                                                              "noSkill"
+13>                                                                       ]
+14>                                                                        
+15>                                                                             ] = multiRobotA;
 1->Emitted(3, 1) Source(8, 8) + SourceIndex(0)
 2 >Emitted(3, 5) Source(8, 8) + SourceIndex(0)
-3 >Emitted(3, 24) Source(8, 39) + SourceIndex(0)
-4 >Emitted(3, 26) Source(8, 8) + SourceIndex(0)
-5 >Emitted(3, 78) Source(8, 39) + SourceIndex(0)
-6 >Emitted(3, 79) Source(8, 55) + SourceIndex(0)
+3 >Emitted(3, 10) Source(8, 43) + SourceIndex(0)
+4 >Emitted(3, 21) Source(8, 54) + SourceIndex(0)
+5 >Emitted(3, 24) Source(8, 39) + SourceIndex(0)
+6 >Emitted(3, 26) Source(8, 8) + SourceIndex(0)
+7 >Emitted(3, 32) Source(8, 14) + SourceIndex(0)
+8 >Emitted(3, 51) Source(8, 17) + SourceIndex(0)
+9 >Emitted(3, 52) Source(8, 18) + SourceIndex(0)
+10>Emitted(3, 61) Source(8, 27) + SourceIndex(0)
+11>Emitted(3, 63) Source(8, 29) + SourceIndex(0)
+12>Emitted(3, 72) Source(8, 38) + SourceIndex(0)
+13>Emitted(3, 73) Source(8, 39) + SourceIndex(0)
+14>Emitted(3, 78) Source(8, 39) + SourceIndex(0)
+15>Emitted(3, 79) Source(8, 55) + SourceIndex(0)
 ---
 >>>var _b = multiRobotB[0], nameMB = _b === void 0 ? "noName" : _b;
 1 >
 2 >^^^^
-3 >    ^^^^^^^^^^^^^^^^^^^
-4 >                       ^^
-5 >                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-6 >                                                               ^
-7 >                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >    ^^^^^
+4 >         ^^^^^^^^^^^
+5 >                    ^^^
+6 >                       ^^
+7 >                         ^^^^^^
+8 >                               ^^^^^^^^^^^^^^^^^^^
+9 >                                                  ^^^^^^^^
+10>                                                          ^^^^^
+11>                                                               ^
+12>                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >let [
 2 >
-3 >    nameMB = "noName"
-4 >                       
-5 >                         nameMB = "noName"
-6 >                                                                ] = multiRobotB;
+3 >    nameMB = "noName" ] = 
+4 >         multiRobotB
+5 >                    
+6 >                       
+7 >                         nameMB
+8 >                                = 
+9 >                                                  "noName"
+10>                                                          
+11>                                                                ] = multiRobotB;
 1 >Emitted(4, 1) Source(9, 6) + SourceIndex(0)
 2 >Emitted(4, 5) Source(9, 6) + SourceIndex(0)
-3 >Emitted(4, 24) Source(9, 23) + SourceIndex(0)
-4 >Emitted(4, 26) Source(9, 6) + SourceIndex(0)
-5 >Emitted(4, 64) Source(9, 23) + SourceIndex(0)
-6 >Emitted(4, 65) Source(9, 40) + SourceIndex(0)
+3 >Emitted(4, 10) Source(9, 28) + SourceIndex(0)
+4 >Emitted(4, 21) Source(9, 39) + SourceIndex(0)
+5 >Emitted(4, 24) Source(9, 23) + SourceIndex(0)
+6 >Emitted(4, 26) Source(9, 6) + SourceIndex(0)
+7 >Emitted(4, 32) Source(9, 12) + SourceIndex(0)
+8 >Emitted(4, 51) Source(9, 15) + SourceIndex(0)
+9 >Emitted(4, 59) Source(9, 23) + SourceIndex(0)
+10>Emitted(4, 64) Source(9, 23) + SourceIndex(0)
+11>Emitted(4, 65) Source(9, 40) + SourceIndex(0)
 ---
 >>>var _c = multiRobotA[0], nameMA = _c === void 0 ? "noName" : _c, _d = multiRobotA[1], _e = _d === void 0 ? ["noSkill", "noSkill"] : _d, _f = _e[0], primarySkillA = _f === void 0 ? "noSkill" : _f, _g = _e[1], secondarySkillA = _g === void 0 ? "noSkill" : _g;
 1->
 2 >^^^^
-3 >    ^^^^^^^^^^^^^^^^^^^
-4 >                       ^^
-5 >                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-6 >                                                               ^^
-7 >                                                                 ^^^^^^^^^^^^^^^^^^^
-8 >                                                                                    ^^
-9 >                                                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-10>                                                                                                                                      ^^
-11>                                                                                                                                        ^^^^^^^^^^
-12>                                                                                                                                                  ^^
-13>                                                                                                                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-14>                                                                                                                                                                                                  ^^
-15>                                                                                                                                                                                                    ^^^^^^^^^^
-16>                                                                                                                                                                                                              ^^
-17>                                                                                                                                                                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-18>                                                                                                                                                                                                                                                                ^
+3 >    ^^^^^
+4 >         ^^^^^^^^^^^
+5 >                    ^^^
+6 >                       ^^
+7 >                         ^^^^^^
+8 >                               ^^^^^^^^^^^^^^^^^^^
+9 >                                                  ^^^^^^^^
+10>                                                          ^^^^^
+11>                                                               ^^
+12>                                                                 ^^^^^
+13>                                                                      ^^^^^^^^^^^
+14>                                                                                 ^^^
+15>                                                                                    ^^
+16>                                                                                      ^^^^^^^^^^^^^^^^^^^^^
+17>                                                                                                           ^
+18>                                                                                                            ^^^^^^^^^
+19>                                                                                                                     ^^
+20>                                                                                                                       ^^^^^^^^^
+21>                                                                                                                                ^
+22>                                                                                                                                 ^^^^^
+23>                                                                                                                                      ^^
+24>                                                                                                                                        ^^^^^^^^^^
+25>                                                                                                                                                  ^^
+26>                                                                                                                                                    ^^^^^^^^^^^^^
+27>                                                                                                                                                                 ^^^^^^^^^^^^^^^^^^^
+28>                                                                                                                                                                                    ^^^^^^^^^
+29>                                                                                                                                                                                             ^^^^^
+30>                                                                                                                                                                                                  ^^
+31>                                                                                                                                                                                                    ^^^^^^^^^^
+32>                                                                                                                                                                                                              ^^
+33>                                                                                                                                                                                                                ^^^^^^^^^^^^^^^
+34>                                                                                                                                                                                                                               ^^^^^^^^^^^^^^^^^^^
+35>                                                                                                                                                                                                                                                  ^^^^^^^^^
+36>                                                                                                                                                                                                                                                           ^^^^^
+37>                                                                                                                                                                                                                                                                ^
 1->
   >let [
 2 >
-3 >    nameMA = "noName"
-4 >                       
-5 >                         nameMA = "noName"
-6 >                                                               , 
-7 >                                                                 [primarySkillA = "noSkill", secondarySkillA = "noSkill"] = ["noSkill", "noSkill"]
-8 >                                                                                    
-9 >                                                                                      [primarySkillA = "noSkill", secondarySkillA = "noSkill"] = ["noSkill", "noSkill"]
-10>                                                                                                                                      
-11>                                                                                                                                        primarySkillA = "noSkill"
-12>                                                                                                                                                  
-13>                                                                                                                                                    primarySkillA = "noSkill"
-14>                                                                                                                                                                                                  , 
-15>                                                                                                                                                                                                    secondarySkillA = "noSkill"
-16>                                                                                                                                                                                                              
-17>                                                                                                                                                                                                                secondarySkillA = "noSkill"] = ["noSkill", "noSkill"]
-18>                                                                                                                                                                                                                                                                ] = multiRobotA;
+3 >    nameMA = "noName", [primarySkillA = "noSkill", secondarySkillA = "noSkill"] = ["noSkill", "noSkill"]] = 
+4 >         multiRobotA
+5 >                    
+6 >                       
+7 >                         nameMA
+8 >                                = 
+9 >                                                  "noName"
+10>                                                          
+11>                                                               , 
+12>                                                                 [primarySkillA = "noSkill", secondarySkillA = "noSkill"] = ["noSkill", "noSkill"]] = 
+13>                                                                      multiRobotA
+14>                                                                                 
+15>                                                                                    
+16>                                                                                      [primarySkillA = "noSkill", secondarySkillA = "noSkill"] = 
+17>                                                                                                           [
+18>                                                                                                            "noSkill"
+19>                                                                                                                     , 
+20>                                                                                                                       "noSkill"
+21>                                                                                                                                ]
+22>                                                                                                                                 
+23>                                                                                                                                      
+24>                                                                                                                                        primarySkillA = "noSkill"
+25>                                                                                                                                                  
+26>                                                                                                                                                    primarySkillA
+27>                                                                                                                                                                  = 
+28>                                                                                                                                                                                    "noSkill"
+29>                                                                                                                                                                                             
+30>                                                                                                                                                                                                  , 
+31>                                                                                                                                                                                                    secondarySkillA = "noSkill"
+32>                                                                                                                                                                                                              
+33>                                                                                                                                                                                                                secondarySkillA
+34>                                                                                                                                                                                                                                = 
+35>                                                                                                                                                                                                                                                  "noSkill"
+36>                                                                                                                                                                                                                                                           ] = ["noSkill", "noSkill"]
+37>                                                                                                                                                                                                                                                                ] = multiRobotA;
 1->Emitted(5, 1) Source(10, 6) + SourceIndex(0)
 2 >Emitted(5, 5) Source(10, 6) + SourceIndex(0)
-3 >Emitted(5, 24) Source(10, 23) + SourceIndex(0)
-4 >Emitted(5, 26) Source(10, 6) + SourceIndex(0)
-5 >Emitted(5, 64) Source(10, 23) + SourceIndex(0)
-6 >Emitted(5, 66) Source(10, 25) + SourceIndex(0)
-7 >Emitted(5, 85) Source(10, 106) + SourceIndex(0)
-8 >Emitted(5, 87) Source(10, 25) + SourceIndex(0)
-9 >Emitted(5, 135) Source(10, 106) + SourceIndex(0)
-10>Emitted(5, 137) Source(10, 26) + SourceIndex(0)
-11>Emitted(5, 147) Source(10, 51) + SourceIndex(0)
-12>Emitted(5, 149) Source(10, 26) + SourceIndex(0)
-13>Emitted(5, 195) Source(10, 51) + SourceIndex(0)
-14>Emitted(5, 197) Source(10, 53) + SourceIndex(0)
-15>Emitted(5, 207) Source(10, 80) + SourceIndex(0)
-16>Emitted(5, 209) Source(10, 53) + SourceIndex(0)
-17>Emitted(5, 257) Source(10, 106) + SourceIndex(0)
-18>Emitted(5, 258) Source(10, 122) + SourceIndex(0)
+3 >Emitted(5, 10) Source(10, 110) + SourceIndex(0)
+4 >Emitted(5, 21) Source(10, 121) + SourceIndex(0)
+5 >Emitted(5, 24) Source(10, 23) + SourceIndex(0)
+6 >Emitted(5, 26) Source(10, 6) + SourceIndex(0)
+7 >Emitted(5, 32) Source(10, 12) + SourceIndex(0)
+8 >Emitted(5, 51) Source(10, 15) + SourceIndex(0)
+9 >Emitted(5, 59) Source(10, 23) + SourceIndex(0)
+10>Emitted(5, 64) Source(10, 23) + SourceIndex(0)
+11>Emitted(5, 66) Source(10, 25) + SourceIndex(0)
+12>Emitted(5, 71) Source(10, 110) + SourceIndex(0)
+13>Emitted(5, 82) Source(10, 121) + SourceIndex(0)
+14>Emitted(5, 85) Source(10, 106) + SourceIndex(0)
+15>Emitted(5, 87) Source(10, 25) + SourceIndex(0)
+16>Emitted(5, 108) Source(10, 84) + SourceIndex(0)
+17>Emitted(5, 109) Source(10, 85) + SourceIndex(0)
+18>Emitted(5, 118) Source(10, 94) + SourceIndex(0)
+19>Emitted(5, 120) Source(10, 96) + SourceIndex(0)
+20>Emitted(5, 129) Source(10, 105) + SourceIndex(0)
+21>Emitted(5, 130) Source(10, 106) + SourceIndex(0)
+22>Emitted(5, 135) Source(10, 106) + SourceIndex(0)
+23>Emitted(5, 137) Source(10, 26) + SourceIndex(0)
+24>Emitted(5, 147) Source(10, 51) + SourceIndex(0)
+25>Emitted(5, 149) Source(10, 26) + SourceIndex(0)
+26>Emitted(5, 162) Source(10, 39) + SourceIndex(0)
+27>Emitted(5, 181) Source(10, 42) + SourceIndex(0)
+28>Emitted(5, 190) Source(10, 51) + SourceIndex(0)
+29>Emitted(5, 195) Source(10, 51) + SourceIndex(0)
+30>Emitted(5, 197) Source(10, 53) + SourceIndex(0)
+31>Emitted(5, 207) Source(10, 80) + SourceIndex(0)
+32>Emitted(5, 209) Source(10, 53) + SourceIndex(0)
+33>Emitted(5, 224) Source(10, 68) + SourceIndex(0)
+34>Emitted(5, 243) Source(10, 71) + SourceIndex(0)
+35>Emitted(5, 252) Source(10, 80) + SourceIndex(0)
+36>Emitted(5, 257) Source(10, 106) + SourceIndex(0)
+37>Emitted(5, 258) Source(10, 122) + SourceIndex(0)
 ---
 >>>var _h = ["roomba", ["vacuum", "mopping"]][0], nameMC = _h === void 0 ? "noName" : _h;
 1 >
 2 >^^^^
-3 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-4 >                                             ^^
-5 >                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-6 >                                                                                     ^
-7 >                                                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >    ^^^^^
+4 >         ^
+5 >          ^^^^^^^^
+6 >                  ^^
+7 >                    ^
+8 >                     ^^^^^^^^
+9 >                             ^^
+10>                               ^^^^^^^^^
+11>                                        ^
+12>                                         ^
+13>                                          ^^^
+14>                                             ^^
+15>                                               ^^^^^^
+16>                                                     ^^^^^^^^^^^^^^^^^^^
+17>                                                                        ^^^^^^^^
+18>                                                                                ^^^^^
+19>                                                                                     ^
+20>                                                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >
   >let [
 2 >
-3 >    nameMC = "noName"
-4 >                                             
-5 >                                               nameMC = "noName"
-6 >                                                                                      ] = ["roomba", ["vacuum", "mopping"]];
+3 >    nameMC = "noName" ] = 
+4 >         [
+5 >          "roomba"
+6 >                  , 
+7 >                    [
+8 >                     "vacuum"
+9 >                             , 
+10>                               "mopping"
+11>                                        ]
+12>                                         ]
+13>                                          
+14>                                             
+15>                                               nameMC
+16>                                                      = 
+17>                                                                        "noName"
+18>                                                                                
+19>                                                                                      ] = ["roomba", ["vacuum", "mopping"]];
 1 >Emitted(6, 1) Source(12, 6) + SourceIndex(0)
 2 >Emitted(6, 5) Source(12, 6) + SourceIndex(0)
-3 >Emitted(6, 46) Source(12, 23) + SourceIndex(0)
-4 >Emitted(6, 48) Source(12, 6) + SourceIndex(0)
-5 >Emitted(6, 86) Source(12, 23) + SourceIndex(0)
-6 >Emitted(6, 87) Source(12, 62) + SourceIndex(0)
+3 >Emitted(6, 10) Source(12, 28) + SourceIndex(0)
+4 >Emitted(6, 11) Source(12, 29) + SourceIndex(0)
+5 >Emitted(6, 19) Source(12, 37) + SourceIndex(0)
+6 >Emitted(6, 21) Source(12, 39) + SourceIndex(0)
+7 >Emitted(6, 22) Source(12, 40) + SourceIndex(0)
+8 >Emitted(6, 30) Source(12, 48) + SourceIndex(0)
+9 >Emitted(6, 32) Source(12, 50) + SourceIndex(0)
+10>Emitted(6, 41) Source(12, 59) + SourceIndex(0)
+11>Emitted(6, 42) Source(12, 60) + SourceIndex(0)
+12>Emitted(6, 43) Source(12, 61) + SourceIndex(0)
+13>Emitted(6, 46) Source(12, 23) + SourceIndex(0)
+14>Emitted(6, 48) Source(12, 6) + SourceIndex(0)
+15>Emitted(6, 54) Source(12, 12) + SourceIndex(0)
+16>Emitted(6, 73) Source(12, 15) + SourceIndex(0)
+17>Emitted(6, 81) Source(12, 23) + SourceIndex(0)
+18>Emitted(6, 86) Source(12, 23) + SourceIndex(0)
+19>Emitted(6, 87) Source(12, 62) + SourceIndex(0)
 ---
 >>>var _j = ["roomba", ["vacuum", "mopping"]], _k = _j[0], nameMC2 = _k === void 0 ? "noName" : _k, _l = _j[1], _m = _l === void 0 ? ["noSkill", "noSkill"] : _l, _o = _m[0], primarySkillC = _o === void 0 ? "noSkill" : _o, _p = _m[1], secondarySkillC = _p === void 0 ? "noSkill" : _p;
 1->
 2 >^^^^
-3 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-4 >                                          ^^
-5 >                                            ^^^^^^^^^^
-6 >                                                      ^^
-7 >                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-8 >                                                                                               ^^
-9 >                                                                                                 ^^^^^^^^^^
-10>                                                                                                           ^^
-11>                                                                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-12>                                                                                                                                                             ^^
-13>                                                                                                                                                               ^^^^^^^^^^
-14>                                                                                                                                                                         ^^
-15>                                                                                                                                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-16>                                                                                                                                                                                                                         ^^
-17>                                                                                                                                                                                                                           ^^^^^^^^^^
-18>                                                                                                                                                                                                                                     ^^
-19>                                                                                                                                                                                                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-20>                                                                                                                                                                                                                                                                                       ^
+3 >    ^^^^^
+4 >         ^
+5 >          ^^^^^^^^
+6 >                  ^^
+7 >                    ^
+8 >                     ^^^^^^^^
+9 >                             ^^
+10>                               ^^^^^^^^^
+11>                                        ^
+12>                                         ^
+13>                                          ^^
+14>                                            ^^^^^^^^^^
+15>                                                      ^^
+16>                                                        ^^^^^^^
+17>                                                               ^^^^^^^^^^^^^^^^^^^
+18>                                                                                  ^^^^^^^^
+19>                                                                                          ^^^^^
+20>                                                                                               ^^
+21>                                                                                                 ^^^^^^^^^^
+22>                                                                                                           ^^
+23>                                                                                                             ^^^^^^^^^^^^^^^^^^^^^
+24>                                                                                                                                  ^
+25>                                                                                                                                   ^^^^^^^^^
+26>                                                                                                                                            ^^
+27>                                                                                                                                              ^^^^^^^^^
+28>                                                                                                                                                       ^
+29>                                                                                                                                                        ^^^^^
+30>                                                                                                                                                             ^^
+31>                                                                                                                                                               ^^^^^^^^^^
+32>                                                                                                                                                                         ^^
+33>                                                                                                                                                                           ^^^^^^^^^^^^^
+34>                                                                                                                                                                                        ^^^^^^^^^^^^^^^^^^^
+35>                                                                                                                                                                                                           ^^^^^^^^^
+36>                                                                                                                                                                                                                    ^^^^^
+37>                                                                                                                                                                                                                         ^^
+38>                                                                                                                                                                                                                           ^^^^^^^^^^
+39>                                                                                                                                                                                                                                     ^^
+40>                                                                                                                                                                                                                                       ^^^^^^^^^^^^^^^
+41>                                                                                                                                                                                                                                                      ^^^^^^^^^^^^^^^^^^^
+42>                                                                                                                                                                                                                                                                         ^^^^^^^^^
+43>                                                                                                                                                                                                                                                                                  ^^^^^
+44>                                                                                                                                                                                                                                                                                       ^
 1->
   >let 
 2 >
-3 >    [nameMC2 = "noName", [primarySkillC = "noSkill", secondarySkillC = "noSkill"] = ["noSkill", "noSkill"]] = ["roomba", ["vacuum", "mopping"]]
-4 >                                          
-5 >                                            nameMC2 = "noName"
-6 >                                                      
-7 >                                                        nameMC2 = "noName"
-8 >                                                                                               , 
-9 >                                                                                                 [primarySkillC = "noSkill", secondarySkillC = "noSkill"] = ["noSkill", "noSkill"]
-10>                                                                                                           
-11>                                                                                                             [primarySkillC = "noSkill", secondarySkillC = "noSkill"] = ["noSkill", "noSkill"]
-12>                                                                                                                                                             
-13>                                                                                                                                                               primarySkillC = "noSkill"
-14>                                                                                                                                                                         
-15>                                                                                                                                                                           primarySkillC = "noSkill"
-16>                                                                                                                                                                                                                         , 
-17>                                                                                                                                                                                                                           secondarySkillC = "noSkill"
-18>                                                                                                                                                                                                                                     
-19>                                                                                                                                                                                                                                       secondarySkillC = "noSkill"] = ["noSkill", "noSkill"]] = ["roomba", ["vacuum", "mopping"]]
-20>                                                                                                                                                                                                                                                                                       ;
+3 >    [nameMC2 = "noName", [primarySkillC = "noSkill", secondarySkillC = "noSkill"] = ["noSkill", "noSkill"]] = 
+4 >         [
+5 >          "roomba"
+6 >                  , 
+7 >                    [
+8 >                     "vacuum"
+9 >                             , 
+10>                               "mopping"
+11>                                        ]
+12>                                         ]
+13>                                          
+14>                                            nameMC2 = "noName"
+15>                                                      
+16>                                                        nameMC2
+17>                                                                = 
+18>                                                                                  "noName"
+19>                                                                                          
+20>                                                                                               , 
+21>                                                                                                 [primarySkillC = "noSkill", secondarySkillC = "noSkill"] = ["noSkill", "noSkill"]
+22>                                                                                                           
+23>                                                                                                             [primarySkillC = "noSkill", secondarySkillC = "noSkill"] = 
+24>                                                                                                                                  [
+25>                                                                                                                                   "noSkill"
+26>                                                                                                                                            , 
+27>                                                                                                                                              "noSkill"
+28>                                                                                                                                                       ]
+29>                                                                                                                                                        
+30>                                                                                                                                                             
+31>                                                                                                                                                               primarySkillC = "noSkill"
+32>                                                                                                                                                                         
+33>                                                                                                                                                                           primarySkillC
+34>                                                                                                                                                                                         = 
+35>                                                                                                                                                                                                           "noSkill"
+36>                                                                                                                                                                                                                    
+37>                                                                                                                                                                                                                         , 
+38>                                                                                                                                                                                                                           secondarySkillC = "noSkill"
+39>                                                                                                                                                                                                                                     
+40>                                                                                                                                                                                                                                       secondarySkillC
+41>                                                                                                                                                                                                                                                       = 
+42>                                                                                                                                                                                                                                                                         "noSkill"
+43>                                                                                                                                                                                                                                                                                  ] = ["noSkill", "noSkill"]] = ["roomba", ["vacuum", "mopping"]]
+44>                                                                                                                                                                                                                                                                                       ;
 1->Emitted(7, 1) Source(13, 5) + SourceIndex(0)
 2 >Emitted(7, 5) Source(13, 5) + SourceIndex(0)
-3 >Emitted(7, 43) Source(13, 144) + SourceIndex(0)
-4 >Emitted(7, 45) Source(13, 6) + SourceIndex(0)
-5 >Emitted(7, 55) Source(13, 24) + SourceIndex(0)
-6 >Emitted(7, 57) Source(13, 6) + SourceIndex(0)
-7 >Emitted(7, 96) Source(13, 24) + SourceIndex(0)
-8 >Emitted(7, 98) Source(13, 26) + SourceIndex(0)
-9 >Emitted(7, 108) Source(13, 107) + SourceIndex(0)
-10>Emitted(7, 110) Source(13, 26) + SourceIndex(0)
-11>Emitted(7, 158) Source(13, 107) + SourceIndex(0)
-12>Emitted(7, 160) Source(13, 27) + SourceIndex(0)
-13>Emitted(7, 170) Source(13, 52) + SourceIndex(0)
-14>Emitted(7, 172) Source(13, 27) + SourceIndex(0)
-15>Emitted(7, 218) Source(13, 52) + SourceIndex(0)
-16>Emitted(7, 220) Source(13, 54) + SourceIndex(0)
-17>Emitted(7, 230) Source(13, 81) + SourceIndex(0)
-18>Emitted(7, 232) Source(13, 54) + SourceIndex(0)
-19>Emitted(7, 280) Source(13, 144) + SourceIndex(0)
-20>Emitted(7, 281) Source(13, 145) + SourceIndex(0)
+3 >Emitted(7, 10) Source(13, 111) + SourceIndex(0)
+4 >Emitted(7, 11) Source(13, 112) + SourceIndex(0)
+5 >Emitted(7, 19) Source(13, 120) + SourceIndex(0)
+6 >Emitted(7, 21) Source(13, 122) + SourceIndex(0)
+7 >Emitted(7, 22) Source(13, 123) + SourceIndex(0)
+8 >Emitted(7, 30) Source(13, 131) + SourceIndex(0)
+9 >Emitted(7, 32) Source(13, 133) + SourceIndex(0)
+10>Emitted(7, 41) Source(13, 142) + SourceIndex(0)
+11>Emitted(7, 42) Source(13, 143) + SourceIndex(0)
+12>Emitted(7, 43) Source(13, 144) + SourceIndex(0)
+13>Emitted(7, 45) Source(13, 6) + SourceIndex(0)
+14>Emitted(7, 55) Source(13, 24) + SourceIndex(0)
+15>Emitted(7, 57) Source(13, 6) + SourceIndex(0)
+16>Emitted(7, 64) Source(13, 13) + SourceIndex(0)
+17>Emitted(7, 83) Source(13, 16) + SourceIndex(0)
+18>Emitted(7, 91) Source(13, 24) + SourceIndex(0)
+19>Emitted(7, 96) Source(13, 24) + SourceIndex(0)
+20>Emitted(7, 98) Source(13, 26) + SourceIndex(0)
+21>Emitted(7, 108) Source(13, 107) + SourceIndex(0)
+22>Emitted(7, 110) Source(13, 26) + SourceIndex(0)
+23>Emitted(7, 131) Source(13, 85) + SourceIndex(0)
+24>Emitted(7, 132) Source(13, 86) + SourceIndex(0)
+25>Emitted(7, 141) Source(13, 95) + SourceIndex(0)
+26>Emitted(7, 143) Source(13, 97) + SourceIndex(0)
+27>Emitted(7, 152) Source(13, 106) + SourceIndex(0)
+28>Emitted(7, 153) Source(13, 107) + SourceIndex(0)
+29>Emitted(7, 158) Source(13, 107) + SourceIndex(0)
+30>Emitted(7, 160) Source(13, 27) + SourceIndex(0)
+31>Emitted(7, 170) Source(13, 52) + SourceIndex(0)
+32>Emitted(7, 172) Source(13, 27) + SourceIndex(0)
+33>Emitted(7, 185) Source(13, 40) + SourceIndex(0)
+34>Emitted(7, 204) Source(13, 43) + SourceIndex(0)
+35>Emitted(7, 213) Source(13, 52) + SourceIndex(0)
+36>Emitted(7, 218) Source(13, 52) + SourceIndex(0)
+37>Emitted(7, 220) Source(13, 54) + SourceIndex(0)
+38>Emitted(7, 230) Source(13, 81) + SourceIndex(0)
+39>Emitted(7, 232) Source(13, 54) + SourceIndex(0)
+40>Emitted(7, 247) Source(13, 69) + SourceIndex(0)
+41>Emitted(7, 266) Source(13, 72) + SourceIndex(0)
+42>Emitted(7, 275) Source(13, 81) + SourceIndex(0)
+43>Emitted(7, 280) Source(13, 144) + SourceIndex(0)
+44>Emitted(7, 281) Source(13, 145) + SourceIndex(0)
 ---
 >>>if (nameMB == nameMA) {
 1 >

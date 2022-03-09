@@ -33,6 +33,10 @@ function f01(x: unknown) {
         x[0].length;
     }
     if (!!true) {
+        assertIsArrayOfStrings(false);
+        x;
+    }
+    if (!!true) {
         assert(x === undefined || typeof x === "string");
         x;  // string | undefined
         assertDefined(x);
@@ -142,6 +146,16 @@ class Derived extends Test {
     }
 }
 
+function f11(items: Test[]) {
+    for (let item of items) {
+        if (item.isTest2()) {
+            item.z;
+        }
+        item.assertIsTest2();
+        item.z;
+    }
+}
+
 // Invalid constructs
 
 declare let Q1: new (x: unknown) => x is string;
@@ -164,4 +178,22 @@ function f20(x: unknown) {
     t1.assert(typeof x === "string");  // Error
     const t2: Test = new Test();
     t2.assert(typeof x === "string");
+}
+
+// Repro from #35940
+
+interface Thing {
+    good: boolean;
+    isGood(): asserts this is GoodThing;
+}
+
+interface GoodThing {
+    good: true;
+}
+
+function example1(things: Thing[]) {
+    for (let thing of things) {
+        thing.isGood();
+        thing.good;
+    }
 }

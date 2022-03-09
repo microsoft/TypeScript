@@ -130,7 +130,7 @@ function foo1(x: RuntimeValue & { type: 'number' }) {
         x.value;  // number
     }
     else {
-        x.value;  // Error, x is never
+        x.value;  // number
     }
 }
 
@@ -226,7 +226,7 @@ function foo1(x) {
         x.value; // number
     }
     else {
-        x.value; // Error, x is never
+        x.value; // number
     }
 }
 function foo2(x) {

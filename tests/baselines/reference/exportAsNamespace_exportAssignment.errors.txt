@@ -1,0 +1,11 @@
+tests/cases/conformance/es2020/modules/b.ts(1,21): error TS2498: Module '"tests/cases/conformance/es2020/modules/a"' uses 'export =' and cannot be used with 'export *'.
+
+
+==== tests/cases/conformance/es2020/modules/a.ts (0 errors) ====
+    export = {}
+    
+==== tests/cases/conformance/es2020/modules/b.ts (1 errors) ====
+    export * as ns from './a';
+                        ~~~~~
+!!! error TS2498: Module '"tests/cases/conformance/es2020/modules/a"' uses 'export =' and cannot be used with 'export *'.
+    

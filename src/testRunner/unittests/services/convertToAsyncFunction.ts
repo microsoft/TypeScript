@@ -53,6 +53,13 @@ interface Promise<T> {
      * @returns A Promise for the completion of the callback.
      */
     catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): Promise<T>
 }
 interface PromiseConstructor {
     /**
@@ -255,7 +262,52 @@ interface String { charAt: any; }
 interface Array<T> {}`
     };
 
-    function testConvertToAsyncFunction(caption: string, text: string, baselineFolder: string, includeLib?: boolean, expectFailure = false, onlyProvideAction = false) {
+    const moduleFile: TestFSWithWatch.File = {
+        path: "/module.ts",
+        content:
+`export function fn(res: any): any {
+    return res;
+}`
+    };
+
+    type WithSkipAndOnly<T extends any[]> = ((...args: T) => void) & {
+        skip: (...args: T) => void;
+        only: (...args: T) => void;
+    };
+
+    function createTestWrapper<T extends any[]>(fn: (it: Mocha.PendingTestFunction, ...args: T) => void): WithSkipAndOnly<T> {
+        wrapped.skip = (...args: T) => fn(it.skip, ...args);
+        wrapped.only = (...args: T) => fn(it.only, ...args);
+        return wrapped;
+        function wrapped(...args: T) {
+            return fn(it, ...args);
+        }
+    }
+
+    const enum ConvertToAsyncTestFlags {
+        None,
+        IncludeLib = 1 << 0,
+        IncludeModule = 1 << 1,
+        ExpectSuggestionDiagnostic = 1 << 2,
+        ExpectNoSuggestionDiagnostic = 1 << 3,
+        ExpectAction = 1 << 4,
+        ExpectNoAction = 1 << 5,
+
+        ExpectSuccess = ExpectSuggestionDiagnostic | ExpectAction,
+        ExpectFailed = ExpectNoSuggestionDiagnostic | ExpectNoAction,
+    }
+
+    function testConvertToAsyncFunction(it: Mocha.PendingTestFunction, caption: string, text: string, baselineFolder: string, flags: ConvertToAsyncTestFlags) {
+        const includeLib = !!(flags & ConvertToAsyncTestFlags.IncludeLib);
+        const includeModule = !!(flags & ConvertToAsyncTestFlags.IncludeModule);
+        const expectSuggestionDiagnostic = !!(flags & ConvertToAsyncTestFlags.ExpectSuggestionDiagnostic);
+        const expectNoSuggestionDiagnostic = !!(flags & ConvertToAsyncTestFlags.ExpectNoSuggestionDiagnostic);
+        const expectAction = !!(flags & ConvertToAsyncTestFlags.ExpectAction);
+        const expectNoAction = !!(flags & ConvertToAsyncTestFlags.ExpectNoAction);
+        const expectFailure = expectNoSuggestionDiagnostic || expectNoAction;
+        Debug.assert(!(expectSuggestionDiagnostic && expectNoSuggestionDiagnostic), "Cannot combine both 'ExpectSuggestionDiagnostic' and 'ExpectNoSuggestionDiagnostic'");
+        Debug.assert(!(expectAction && expectNoAction), "Cannot combine both 'ExpectAction' and 'ExpectNoAction'");
+
         const t = extractTest(text);
         const selectionRange = t.ranges.get("selection")!;
         if (!selectionRange) {
@@ -269,7 +321,7 @@ interface Array<T> {}`
 
         function runBaseline(extension: Extension) {
             const path = "/a" + extension;
-            const languageService = makeLanguageService({ path, content: t.source }, includeLib);
+            const languageService = makeLanguageService({ path, content: t.source }, includeLib, includeModule);
             const program = languageService.getProgram()!;
 
             if (hasSyntacticDiagnostics(program)) {
@@ -292,49 +344,67 @@ interface Array<T> {}`
                 cancellationToken: { throwIfCancellationRequested: noop, isCancellationRequested: returnFalse },
                 preferences: emptyOptions,
                 host: notImplementedHost,
-                formatContext: formatting.getFormatContext(testFormatSettings)
+                formatContext: formatting.getFormatContext(testFormatSettings, notImplementedHost)
             };
 
             const diagnostics = languageService.getSuggestionDiagnostics(f.path);
             const diagnostic = find(diagnostics, diagnostic => diagnostic.messageText === Diagnostics.This_may_be_converted_to_an_async_function.message &&
                 diagnostic.start === context.span.start && diagnostic.length === context.span.length);
-            if (expectFailure) {
-                assert.isUndefined(diagnostic);
-            }
-            else {
-                assert.exists(diagnostic);
-            }
-
             const actions = codefix.getFixes(context);
             const action = find(actions, action => action.description === Diagnostics.Convert_to_async_function.message);
-            if (expectFailure && !onlyProvideAction) {
-                assert.isNotTrue(action && action.changes.length > 0);
-                return;
+
+            let outputText: string | null;
+            if (action?.changes.length) {
+                const data: string[] = [];
+                data.push(`// ==ORIGINAL==`);
+                data.push(text.replace("[#|", "/*[#|*/").replace("|]", "/*|]*/"));
+                const changes = action.changes;
+                assert.lengthOf(changes, 1);
+
+                data.push(`// ==ASYNC FUNCTION::${action.description}==`);
+                const newText = textChanges.applyChanges(sourceFile.text, changes[0].textChanges);
+                data.push(newText);
+
+                const diagProgram = makeLanguageService({ path, content: newText }, includeLib, includeModule).getProgram()!;
+                assert.isFalse(hasSyntacticDiagnostics(diagProgram));
+                outputText = data.join(newLineCharacter);
+            }
+            else {
+                // eslint-disable-next-line no-null/no-null
+                outputText = null;
             }
 
-            assert.isTrue(action && action.changes.length > 0);
+            Harness.Baseline.runBaseline(`${baselineFolder}/${caption}${extension}`, outputText);
 
-            const data: string[] = [];
-            data.push(`// ==ORIGINAL==`);
-            data.push(text.replace("[#|", "/*[#|*/").replace("|]", "/*|]*/"));
-            const changes = action!.changes;
-            assert.lengthOf(changes, 1);
+            if (expectNoSuggestionDiagnostic) {
+                assert.isUndefined(diagnostic, "Expected code fix to not provide a suggestion diagnostic");
+            }
+            else if (expectSuggestionDiagnostic) {
+                assert.exists(diagnostic, "Expected code fix to provide a suggestion diagnostic");
+            }
 
-            data.push(`// ==ASYNC FUNCTION::${action!.description}==`);
-            const newText = textChanges.applyChanges(sourceFile.text, changes[0].textChanges);
-            data.push(newText);
-
-            const diagProgram = makeLanguageService({ path, content: newText }, includeLib).getProgram()!;
-            assert.isFalse(hasSyntacticDiagnostics(diagProgram));
-            Harness.Baseline.runBaseline(`${baselineFolder}/${caption}${extension}`, data.join(newLineCharacter));
+            if (expectNoAction) {
+                assert.isNotTrue(!!action?.changes.length, "Expected code fix to not provide an action");
+                assert.isNotTrue(typeof outputText === "string", "Expected code fix to not apply changes");
+            }
+            else if (expectAction) {
+                assert.isTrue(!!action?.changes.length, "Expected code fix to provide an action");
+                assert.isTrue(typeof outputText === "string", "Expected code fix to apply changes");
+            }
         }
 
-        function makeLanguageService(f: { path: string, content: string }, includeLib?: boolean) {
-
-            const host = projectSystem.createServerHost(includeLib ? [f, libFile] : [f]); // libFile is expensive to parse repeatedly - only test when required
+        function makeLanguageService(file: TestFSWithWatch.File, includeLib?: boolean, includeModule?: boolean) {
+            const files = [file];
+            if (includeLib) {
+                files.push(libFile); // libFile is expensive to parse repeatedly - only test when required
+            }
+            if (includeModule) {
+                files.push(moduleFile);
+            }
+            const host = projectSystem.createServerHost(files);
             const projectService = projectSystem.createProjectService(host);
-            projectService.openClientFile(f.path);
-            return projectService.inferredProjects[0].getLanguageService();
+            projectService.openClientFile(file.path);
+            return first(projectService.inferredProjects).getLanguageService();
         }
 
         function hasSyntacticDiagnostics(program: Program) {
@@ -343,7 +413,27 @@ interface Array<T> {}`
         }
     }
 
-    describe("unittests:: services:: convertToAsyncFunctions", () => {
+    const _testConvertToAsyncFunction = createTestWrapper((it, caption: string, text: string) => {
+        testConvertToAsyncFunction(it, caption, text, "convertToAsyncFunction", ConvertToAsyncTestFlags.IncludeLib | ConvertToAsyncTestFlags.ExpectSuccess);
+    });
+
+    const _testConvertToAsyncFunctionFailed = createTestWrapper((it, caption: string, text: string) => {
+        testConvertToAsyncFunction(it, caption, text, "convertToAsyncFunction", ConvertToAsyncTestFlags.IncludeLib | ConvertToAsyncTestFlags.ExpectFailed);
+    });
+
+    const _testConvertToAsyncFunctionFailedSuggestion = createTestWrapper((it, caption: string, text: string) => {
+        testConvertToAsyncFunction(it, caption, text, "convertToAsyncFunction", ConvertToAsyncTestFlags.IncludeLib | ConvertToAsyncTestFlags.ExpectNoSuggestionDiagnostic | ConvertToAsyncTestFlags.ExpectAction);
+    });
+
+    const _testConvertToAsyncFunctionFailedAction = createTestWrapper((it, caption: string, text: string) => {
+        testConvertToAsyncFunction(it, caption, text, "convertToAsyncFunction", ConvertToAsyncTestFlags.IncludeLib | ConvertToAsyncTestFlags.ExpectSuggestionDiagnostic | ConvertToAsyncTestFlags.ExpectNoAction);
+    });
+
+    const _testConvertToAsyncFunctionWithModule = createTestWrapper((it, caption: string, text: string) => {
+        testConvertToAsyncFunction(it, caption, text, "convertToAsyncFunction", ConvertToAsyncTestFlags.IncludeLib | ConvertToAsyncTestFlags.IncludeModule | ConvertToAsyncTestFlags.ExpectSuccess);
+    });
+
+    describe("unittests:: services:: convertToAsyncFunction", () => {
         _testConvertToAsyncFunction("convertToAsyncFunction_basic", `
 function [#|f|](): Promise<void>{
     return fetch('https://typescriptlang.org').then(result => { console.log(result) });
@@ -391,11 +481,11 @@ function [#|f|](): Promise<void>{
 function [#|f|]():Promise<void> {
     return fetch('https://typescriptlang.org').then(result => { console.log(result); }).catch(err => { console.log(err); });
 }`);
-        _testConvertToAsyncFunction("convertToAsyncFunction_CatchAndRej", `
+        _testConvertToAsyncFunctionFailed("convertToAsyncFunction_CatchAndRej", `
 function [#|f|]():Promise<void> {
     return fetch('https://typescriptlang.org').then(result => { console.log(result); }, rejection => { console.log("rejected:", rejection); }).catch(err => { console.log(err) });
 }`);
-        _testConvertToAsyncFunction("convertToAsyncFunction_CatchAndRejRef", `
+        _testConvertToAsyncFunctionFailed("convertToAsyncFunction_CatchAndRejRef", `
 function [#|f|]():Promise<void> {
     return fetch('https://typescriptlang.org').then(res, rej).catch(catch_err)
 }
@@ -495,6 +585,7 @@ function [#|f|]():Promise<void | Response> {
 }
 `
         );
+
         _testConvertToAsyncFunction("convertToAsyncFunction_NoRes3", `
 function [#|f|]():Promise<void | Response> {
     return fetch('https://typescriptlang.org').catch(rej => console.log(rej));
@@ -532,13 +623,13 @@ function [#|f|]():void{
 }
 `
         );
-        _testConvertToAsyncFunction("convertToAsyncFunction_Rej", `
+        _testConvertToAsyncFunctionFailed("convertToAsyncFunction_Rej", `
 function [#|f|]():Promise<void> {
     return fetch('https://typescriptlang.org').then(result => { console.log(result); }, rejection => { console.log("rejected:", rejection); });
 }
 `
         );
-        _testConvertToAsyncFunction("convertToAsyncFunction_RejRef", `
+        _testConvertToAsyncFunctionFailed("convertToAsyncFunction_RejRef", `
 function [#|f|]():Promise<void> {
     return fetch('https://typescriptlang.org').then(res, rej);
 }
@@ -550,12 +641,13 @@ function rej(err){
 }
 `
         );
-        _testConvertToAsyncFunction("convertToAsyncFunction_RejNoBrackets", `
+        _testConvertToAsyncFunctionFailed("convertToAsyncFunction_RejNoBrackets", `
 function [#|f|]():Promise<void> {
     return fetch('https://typescriptlang.org').then(result => console.log(result), rejection => console.log("rejected:", rejection));
 }
 `
         );
+
         _testConvertToAsyncFunction("convertToAsyncFunction_ResRef", `
 function [#|f|]():Promise<boolean> {
     return fetch('https://typescriptlang.org').then(res);
@@ -565,6 +657,75 @@ function res(result){
 }
 `
         );
+
+        _testConvertToAsyncFunction("convertToAsyncFunction_ResRef1", `
+class Foo {
+    public [#|method|](): Promise<boolean> {
+        return fetch('a').then(this.foo);
+    }
+
+    private foo(res) {
+        return res.ok;
+    }
+}
+        `);
+
+        _testConvertToAsyncFunction("convertToAsyncFunction_ResRef2", `
+class Foo {
+    public [#|method|](): Promise<Response> {
+        return fetch('a').then(this.foo);
+    }
+
+    private foo = res => res;
+}
+        `);
+
+        _testConvertToAsyncFunction("convertToAsyncFunction_ResRef3", `
+const res = (result) => {
+    return result.ok;
+}
+function [#|f|](): Promise<boolean> {
+    return fetch('https://typescriptlang.org').then(res);
+}
+        `
+        );
+
+        _testConvertToAsyncFunctionFailed("convertToAsyncFunction_NoSuggestionResRef1", `
+const res = 1;
+function [#|f|]() {
+    return fetch('https://typescriptlang.org').then(res);
+}
+`
+        );
+
+        _testConvertToAsyncFunctionFailed("convertToAsyncFunction_NoSuggestionResRef2", `
+class Foo {
+    private foo = 1;
+    public [#|method|](): Promise<boolean> {
+        return fetch('a').then(this.foo);
+    }
+}
+`
+        );
+
+        _testConvertToAsyncFunctionFailed("convertToAsyncFunction_NoSuggestionResRef3", `
+const res = undefined;
+function [#|f|]() {
+    return fetch('https://typescriptlang.org').then(res);
+}
+`
+        );
+
+        _testConvertToAsyncFunctionFailed("convertToAsyncFunction_NoSuggestionResRef4", `
+class Foo {
+    private foo = undefined;
+    public [#|method|](): Promise<boolean> {
+        return fetch('a').then(this.foo);
+    }
+}
+`
+        );
+
         _testConvertToAsyncFunction("convertToAsyncFunction_ResRefNoReturnVal", `
 function [#|f|]():Promise<void> {
     return fetch('https://typescriptlang.org').then(res);
@@ -574,6 +735,19 @@ function res(result){
 }
 `
         );
+
+        _testConvertToAsyncFunction("convertToAsyncFunction_ResRefNoReturnVal1", `
+class Foo {
+    public [#|method|](): Promise<void> {
+        return fetch('a').then(this.foo);
+    }
+
+    private foo(res) {
+        console.log(res);
+    }
+}
+        `);
+
         _testConvertToAsyncFunction("convertToAsyncFunction_NoBrackets", `
 function [#|f|]():Promise<void> {
     return fetch('https://typescriptlang.org').then(result => console.log(result));
@@ -876,7 +1050,7 @@ function [#|f|](): Promise<string> {
 }
 `
         );
-        _testConvertToAsyncFunction("convertToAsyncFunction_PromiseAllAndThen", `
+        _testConvertToAsyncFunction("convertToAsyncFunction_PromiseAllAndThen1", `
 function [#|f|]() {
     return Promise.resolve().then(function () {
         return Promise.all([fetch("https://typescriptlang.org"), fetch("https://microsoft.com"), Promise.resolve().then(function () {
@@ -894,6 +1068,26 @@ function [#|f|]() {
                 return fetch("https://github.com");
               })]).then(res => res.toString());
     });
+}
+`
+        );
+
+        _testConvertToAsyncFunction("convertToAsyncFunction_PromiseAllAndThen3", `
+function [#|f|]() {
+    return Promise.resolve().then(() =>
+        Promise.all([fetch("https://typescriptlang.org"), fetch("https://microsoft.com"), Promise.resolve().then(function () {
+            return fetch("https://github.com");
+        }).then(res => res.toString())]));
+}
+`
+        );
+
+        _testConvertToAsyncFunction("convertToAsyncFunction_PromiseAllAndThen4", `
+function [#|f|]() {
+    return Promise.resolve().then(() =>
+        Promise.all([fetch("https://typescriptlang.org"), fetch("https://microsoft.com"), Promise.resolve().then(function () {
+            return fetch("https://github.com");
+        })]).then(res => res.toString()));
 }
 `
         );
@@ -1087,8 +1281,38 @@ function rej(reject): a{
 `
         );
 
+        _testConvertToAsyncFunction("convertToAsyncFunction_ParameterNameCollision", `
+async function foo<T>(x: T): Promise<T> {
+    return x;
+}
 
+function [#|bar|]<T>(x: T): Promise<T> {
+    return foo(x).then(foo)
+}
+`
+        );
 
+        _testConvertToAsyncFunction("convertToAsyncFunction_Return1", `
+function [#|f|](p: Promise<unknown>) {
+    return p.catch((error: Error) => {
+        return Promise.reject(error);
+    });
+}`
+        );
+
+        _testConvertToAsyncFunction("convertToAsyncFunction_Return2", `
+function [#|f|](p: Promise<unknown>) {
+    return p.catch((error: Error) => Promise.reject(error));
+}`
+        );
+
+        _testConvertToAsyncFunction("convertToAsyncFunction_Return3", `
+function [#|f|](p: Promise<unknown>) {
+    return p.catch(function (error: Error) {
+        return Promise.reject(error);
+    });
+}`
+        );
 
         _testConvertToAsyncFunction("convertToAsyncFunction_LocalReturn", `
 function [#|f|]() {
@@ -1203,7 +1427,7 @@ function [#|f|]() {
 }
 `);
 
-        _testConvertToAsyncFunction("convertToAsyncFunction_ResRejNoArgsArrow", `
+        _testConvertToAsyncFunctionFailed("convertToAsyncFunction_ResRejNoArgsArrow", `
     function [#|f|]() {
         return Promise.resolve().then(() => 1, () => "a");
     }
@@ -1317,7 +1541,7 @@ function [#|f|]() {
 }
 `);
 
-        _testConvertToAsyncFunction("convertToAsyncFunction_noArgs", `
+        _testConvertToAsyncFunction("convertToAsyncFunction_noArgs1", `
 function delay(millis: number): Promise<void> {
     throw "no"
 }
@@ -1329,7 +1553,21 @@ function [#|main2|]() {
         .then(() => { console.log("."); return delay(500); })
         .then(() => { console.log("."); return delay(500); })
 }
-`);
+        `);
+
+        _testConvertToAsyncFunction("convertToAsyncFunction_noArgs2", `
+function delay(millis: number): Promise<void> {
+    throw "no"
+}
+
+function [#|main2|]() {
+    console.log("Please wait. Loading.");
+    return delay(500)
+        .then(() => delay(500))
+        .then(() => delay(500))
+        .then(() => delay(500))
+}
+        `);
 
         _testConvertToAsyncFunction("convertToAsyncFunction_exportModifier", `
 export function [#|foo|]() {
@@ -1344,6 +1582,57 @@ function [#|foo|]() {
     })
 }
 `);
+        _testConvertToAsyncFunction("convertToAsyncFunction_decoratedMethod", `
+function decorator() {
+    return (target: any, key: any, descriptor: PropertyDescriptor) => descriptor;
+}
+class Foo {
+    @decorator()
+    [#|method|]() {
+        return fetch('a').then(x => x);
+    }
+}
+`);
+
+        _testConvertToAsyncFunction("convertToAsyncFunction_decoratedMethodWithSingleLineComment", `
+function decorator() {
+    return (target: any, key: any, descriptor: PropertyDescriptor) => descriptor;
+}
+class Foo {
+    @decorator()
+    // comment
+    [#|method|]() {
+        return fetch('a').then(x => x);
+    }
+}
+`);
+
+        _testConvertToAsyncFunction("convertToAsyncFunction_decoratedMethodWithMultipleLineComment", `
+function decorator() {
+    return (target: any, key: any, descriptor: PropertyDescriptor) => descriptor;
+}
+class Foo {
+    @decorator()
+    /**
+     * comment
+     */
+    [#|method|]() {
+        return fetch('a').then(x => x);
+    }
+}
+`);
+
+        _testConvertToAsyncFunction("convertToAsyncFunction_decoratedMethodWithModifier", `
+function decorator() {
+    return (target: any, key: any, descriptor: PropertyDescriptor) => descriptor;
+}
+class Foo {
+    @decorator()
+    public [#|method|]() {
+        return fetch('a').then(x => x);
+    }
+}
+`);
 
         _testConvertToAsyncFunctionFailedSuggestion("convertToAsyncFunction_OutermostOnlyFailure", `
 function foo() {
@@ -1352,17 +1641,199 @@ function foo() {
     })
 }
 `);
+
+        _testConvertToAsyncFunction("convertToAsyncFunction_thenTypeArgument1", `
+type APIResponse<T> = { success: true, data: T } | { success: false };
+
+function wrapResponse<T>(response: T): APIResponse<T> {
+    return { success: true, data: response };
+}
+
+function [#|get|]() {
+    return Promise.resolve(undefined!).then<APIResponse<{ email: string }>>(wrapResponse);
+}
+`);
+
+        _testConvertToAsyncFunction("convertToAsyncFunction_thenTypeArgument2", `
+type APIResponse<T> = { success: true, data: T } | { success: false };
+
+function wrapResponse<T>(response: T): APIResponse<T> {
+    return { success: true, data: response };
+}
+
+function [#|get|]() {
+    return Promise.resolve(undefined!).then<APIResponse<{ email: string }>>(d => wrapResponse(d));
+}
+`);
+
+        _testConvertToAsyncFunction("convertToAsyncFunction_thenTypeArgument3", `
+type APIResponse<T> = { success: true, data: T } | { success: false };
+
+function wrapResponse<T>(response: T): APIResponse<T> {
+    return { success: true, data: response };
+}
+
+function [#|get|]() {
+    return Promise.resolve(undefined!).then<APIResponse<{ email: string }>>(d => {
+        console.log(d);
+        return wrapResponse(d);
     });
+}
+`);
 
-    function _testConvertToAsyncFunction(caption: string, text: string) {
-        testConvertToAsyncFunction(caption, text, "convertToAsyncFunction", /*includeLib*/ true);
-    }
+        _testConvertToAsyncFunction("convertToAsyncFunction_catchTypeArgument1", `
+type APIResponse<T> = { success: true, data: T } | { success: false };
 
-    function _testConvertToAsyncFunctionFailed(caption: string, text: string) {
-        testConvertToAsyncFunction(caption, text, "convertToAsyncFunction", /*includeLib*/ true, /*expectFailure*/ true);
-    }
+function [#|get|]() {
+    return Promise
+        .resolve<APIResponse<{ email: string }>>({ success: true, data: { email: "" } })
+        .catch<APIResponse<{ email: string }>>(() => ({ success: false }));
+}
+`);
 
-    function _testConvertToAsyncFunctionFailedSuggestion(caption: string, text: string) {
-        testConvertToAsyncFunction(caption, text, "convertToAsyncFunction", /*includeLib*/ true, /*expectFailure*/ true, /*onlyProvideAction*/ true);
+        _testConvertToAsyncFunctionFailed("convertToAsyncFunction_threeArguments", `
+function [#|f|]() {
+    return Promise.resolve().then(undefined, undefined, () => 1);
+}`);
+
+        _testConvertToAsyncFunction("convertToAsyncFunction_callbackArgument", `
+function foo(props: any): void {
+    return props;
+}
+
+const fn = (): Promise<(message: string) => void> =>
+    new Promise(resolve => resolve((message: string) => foo(message)));
+
+function [#|f|]() {
+    return fn().then(res => res("test"));
+}
+`);
+
+        _testConvertToAsyncFunction("convertToAsyncFunction_emptyCatch1", `
+function [#|f|]() {
+    return Promise.resolve().catch();
+}
+`);
+
+        _testConvertToAsyncFunction("convertToAsyncFunction_emptyCatch2", `
+function [#|f|]() {
+    return Promise.resolve(0).then(x => x).catch();
+}
+`);
+
+        _testConvertToAsyncFunctionWithModule("convertToAsyncFunction_importedFunction", `
+import { fn } from "./module";
+function [#|f|]() {
+    return Promise.resolve(0).then(fn);
+}
+`);
+
+        _testConvertToAsyncFunctionFailed("convertToAsyncFunction__NoSuggestionInFunctionsWithNonFixableReturnStatements1", `
+function f(x: number): Promise<void>;
+function f(): void;
+function [#|f|](x?: number): Promise<void> | void {
+    if (!x) return;
+    return fetch('').then(() => {});
+}
+`);
+
+        _testConvertToAsyncFunctionFailed("convertToAsyncFunction__NoSuggestionInFunctionsWithNonFixableReturnStatements2", `
+function f(x: number): Promise<void>;
+function f(): number;
+function [#|f|](x?: number): Promise<void> | number {
+    if (x) return x;
+    return fetch('').then(() => {});
+}
+`);
+
+        _testConvertToAsyncFunctionFailed("convertToAsyncFunction__NoSuggestionInGetters", `
+class Foo {
+    get [#|m|](): Promise<number> {
+        return Promise.resolve(1).then(n => n);
     }
+}
+`);
+
+        _testConvertToAsyncFunctionFailed("convertToAsyncFunction__NoSuggestionForGeneratorCallbacks", `
+function [#|foo|](p: Promise<string[]>) {
+    return p.then(function* (strings) {
+        for (const s of strings) {
+            yield s.toUpperCase();
+        }
+    });
+}
+`);
+
+        _testConvertToAsyncFunction("convertToAsyncFunction_thenNoArguments", `
+declare function foo(): Promise<number>;
+function [#|f|](): Promise<number> {
+    return foo().then();
+}`);
+        _testConvertToAsyncFunction("convertToAsyncFunction_catchNoArguments", `
+declare function foo(): Promise<number>;
+function [#|f|](): Promise<number> {
+    return foo().catch();
+}`);
+        _testConvertToAsyncFunction("convertToAsyncFunction_chainedThenCatchThen", `
+declare function foo(): Promise<number>;
+function [#|f|](): Promise<number> {
+    return foo().then(x => Promise.resolve(x + 1)).catch(() => 1).then(y => y + 2);
+}`);
+        _testConvertToAsyncFunction("convertToAsyncFunction_finally", `
+declare function foo(): Promise<number>;
+function [#|f|](): Promise<number> {
+    return foo().finally(() => console.log("done"));
+}`);
+        _testConvertToAsyncFunction("convertToAsyncFunction_finallyNoArguments", `
+declare function foo(): Promise<number>;
+function [#|f|](): Promise<number> {
+    return foo().finally();
+}`);
+        _testConvertToAsyncFunction("convertToAsyncFunction_finallyNull", `
+declare function foo(): Promise<number>;
+function [#|f|](): Promise<number> {
+    return foo().finally(null);
+}`);
+        _testConvertToAsyncFunction("convertToAsyncFunction_finallyUndefined", `
+declare function foo(): Promise<number>;
+function [#|f|](): Promise<number> {
+    return foo().finally(undefined);
+}`);
+        _testConvertToAsyncFunction("convertToAsyncFunction_thenFinally", `
+declare function foo(): Promise<number>;
+function [#|f|](): Promise<number> {
+    return foo().then(x => x + 1).finally(() => console.log("done"));
+}`);
+        _testConvertToAsyncFunction("convertToAsyncFunction_thenFinallyThen", `
+declare function foo(): Promise<number>;
+function [#|f|](): Promise<number> {
+    return foo().then(x => Promise.resolve(x + 1)).finally(() => console.log("done")).then(y => y + 2);
+}`);
+        _testConvertToAsyncFunctionFailedAction("convertToAsyncFunction_returnInBranch", `
+declare function foo(): Promise<number>;
+function [#|f|](): Promise<number> {
+    return foo().then(() => {
+        if (Math.random()) {
+            return 1;
+        }
+        return 2;
+    }).then(a => {
+        return a + 1;
+    });
+}
+`);
+        _testConvertToAsyncFunctionFailedAction("convertToAsyncFunction_partialReturnInBranch", `
+declare function foo(): Promise<number>;
+function [#|f|](): Promise<number> {
+    return foo().then(() => {
+        if (Math.random()) {
+            return 1;
+        }
+        console.log("foo");
+    }).then(a => {
+        return a + 1;
+    });
+}
+`);
+    });
 }

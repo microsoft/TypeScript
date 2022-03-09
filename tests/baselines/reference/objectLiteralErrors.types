@@ -228,8 +228,8 @@ var f10 = { "a": 0, get 'a'() { return 0; } };
 >0 : 0
 
 var f11 = { 1.0: 0, get '1'() { return 0; } };
->f11 : { readonly 1: number; }
->{ 1.0: 0, get '1'() { return 0; } } : { readonly 1: number; }
+>f11 : { readonly '1': number; }
+>{ 1.0: 0, get '1'() { return 0; } } : { readonly '1': number; }
 >1.0 : number
 >0 : 0
 >'1' : number
@@ -317,4 +317,22 @@ var g3 = { get a(): number { return undefined; }, set a(n: string) { } };
 >undefined : undefined
 >a : number
 >n : string
+
+// did you mean colon errors
+var h1 = {
+>h1 : { x: number; y: number; }
+>{    x = 1,    y = 2,    #z: 3} : { x: number; y: number; }
+
+    x = 1,
+>x : any
+>1 : 1
+
+    y = 2,
+>y : any
+>2 : 2
+
+    #z: 3
+>#z : number
+>3 : 3
+}
 

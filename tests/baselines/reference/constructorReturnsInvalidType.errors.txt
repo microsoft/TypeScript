@@ -1,4 +1,4 @@
-tests/cases/compiler/constructorReturnsInvalidType.ts(3,9): error TS2322: Type '1' is not assignable to type 'X'.
+tests/cases/compiler/constructorReturnsInvalidType.ts(3,9): error TS2322: Type 'number' is not assignable to type 'X'.
 tests/cases/compiler/constructorReturnsInvalidType.ts(3,9): error TS2409: Return type of constructor signature must be assignable to the instance type of the class.
 
 
@@ -7,7 +7,7 @@ tests/cases/compiler/constructorReturnsInvalidType.ts(3,9): error TS2409: Return
         constructor() {
             return 1;
             ~~~~~~~~~
-!!! error TS2322: Type '1' is not assignable to type 'X'.
+!!! error TS2322: Type 'number' is not assignable to type 'X'.
             ~~~~~~~~~
 !!! error TS2409: Return type of constructor signature must be assignable to the instance type of the class.
         }

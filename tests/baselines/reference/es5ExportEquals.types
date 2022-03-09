@@ -3,5 +3,5 @@ export function f() { }
 >f : typeof f
 
 export = f;
->f : { (): void; f: typeof import("tests/cases/compiler/es5ExportEquals"); }
+>f : typeof f
 

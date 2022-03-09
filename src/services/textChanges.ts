@@ -6,25 +6,25 @@ namespace ts.textChanges {
      * It can be changed to side-table later if we decide that current design is too invasive.
      */
     function getPos(n: TextRange): number {
-        const result = (<any>n).__pos;
+        const result = (n as any).__pos;
         Debug.assert(typeof result === "number");
         return result;
     }
 
     function setPos(n: TextRange, pos: number): void {
         Debug.assert(typeof pos === "number");
-        (<any>n).__pos = pos;
+        (n as any).__pos = pos;
     }
 
     function getEnd(n: TextRange): number {
-        const result = (<any>n).__end;
+        const result = (n as any).__end;
         Debug.assert(typeof result === "number");
         return result;
     }
 
     function setEnd(n: TextRange, end: number): void {
         Debug.assert(typeof end === "number");
-        (<any>n).__end = end;
+        (n as any).__end = end;
     }
 
     export interface ConfigurableStart {
@@ -42,11 +42,22 @@ namespace ts.textChanges {
          * include all trivia between the node and the previous token
          */
         IncludeAll,
+        /**
+         * Include attached JSDoc comments
+         */
+        JSDoc,
+        /**
+         * Only delete trivia on the same line as getStart().
+         * Used to avoid deleting leading comments
+         */
+        StartLine,
     }
 
     export enum TrailingTriviaOption {
         /** Exclude all trailing trivia (use getEnd()) */
         Exclude,
+        /** Doesn't include whitespace, but does strip comments */
+        ExcludeWhitespace,
         /** Include trailing trivia */
         Include,
     }
@@ -157,10 +168,21 @@ namespace ts.textChanges {
         return { pos: getAdjustedStartPosition(sourceFile, startNode, options), end: getAdjustedEndPosition(sourceFile, endNode, options) };
     }
 
-    function getAdjustedStartPosition(sourceFile: SourceFile, node: Node, options: ConfigurableStart) {
+    function getAdjustedStartPosition(sourceFile: SourceFile, node: Node, options: ConfigurableStartEnd, hasTrailingComment = false) {
         const { leadingTriviaOption } = options;
         if (leadingTriviaOption === LeadingTriviaOption.Exclude) {
             return node.getStart(sourceFile);
+        }
+        if (leadingTriviaOption === LeadingTriviaOption.StartLine) {
+            const startPos = node.getStart(sourceFile);
+            const pos = getLineStartPositionForPosition(startPos, sourceFile);
+            return rangeContainsPosition(node, pos) ? pos : startPos;
+        }
+        if (leadingTriviaOption === LeadingTriviaOption.JSDoc) {
+            const JSDocComments = getJSDocCommentRanges(node, sourceFile.text);
+            if (JSDocComments?.length) {
+                return getLineStartPositionForPosition(JSDocComments[0].pos, sourceFile);
+            }
         }
         const fullStart = node.getFullStart();
         const start = node.getStart(sourceFile);
@@ -179,6 +201,17 @@ namespace ts.textChanges {
             // when b is deleted - we delete it
             return leadingTriviaOption === LeadingTriviaOption.IncludeAll ? fullStart : start;
         }
+
+        // if node has a trailing comments, use comment end position as the text has already been included.
+        if (hasTrailingComment) {
+            // Check first for leading comments as if the node is the first import, we want to exclude the trivia;
+            // otherwise we get the trailing comments.
+            const comment = getLeadingCommentRanges(sourceFile.text, fullStart)?.[0] || getTrailingCommentRanges(sourceFile.text, fullStart)?.[0];
+            if (comment) {
+                return skipTrivia(sourceFile.text, comment.end, /*stopAfterLineBreak*/ true, /*stopAtComments*/ true);
+            }
+        }
+
         // get start position of the line following the line that contains fullstart position
         // (but only if the fullstart isn't the very beginning of the file)
         const nextLineStart = fullStart > 0 ? 1 : 0;
@@ -188,13 +221,59 @@ namespace ts.textChanges {
         return getStartPositionOfLine(getLineOfLocalPosition(sourceFile, adjustedStartPosition), sourceFile);
     }
 
-    function getAdjustedEndPosition(sourceFile: SourceFile, node: Node, options: ConfigurableEnd) {
+    /** Return the end position of a multiline comment of it is on another line; otherwise returns `undefined`; */
+    function getEndPositionOfMultilineTrailingComment(sourceFile: SourceFile, node: Node, options: ConfigurableEnd): number | undefined {
         const { end } = node;
         const { trailingTriviaOption } = options;
-        if (trailingTriviaOption === TrailingTriviaOption.Exclude || (isExpression(node) && trailingTriviaOption !== TrailingTriviaOption.Include)) {
+        if (trailingTriviaOption === TrailingTriviaOption.Include) {
+            // If the trailing comment is a multiline comment that extends to the next lines,
+            // return the end of the comment and track it for the next nodes to adjust.
+            const comments = getTrailingCommentRanges(sourceFile.text, end);
+            if (comments) {
+                const nodeEndLine = getLineOfLocalPosition(sourceFile, node.end);
+                for (const comment of comments) {
+                    // Single line can break the loop as trivia will only be this line.
+                    // Comments on subsequest lines are also ignored.
+                    if (comment.kind === SyntaxKind.SingleLineCommentTrivia || getLineOfLocalPosition(sourceFile, comment.pos) > nodeEndLine) {
+                        break;
+                    }
+
+                    // Get the end line of the comment and compare against the end line of the node.
+                    // If the comment end line position and the multiline comment extends to multiple lines,
+                    // then is safe to return the end position.
+                    const commentEndLine = getLineOfLocalPosition(sourceFile, comment.end);
+                    if (commentEndLine > nodeEndLine) {
+                        return skipTrivia(sourceFile.text, comment.end, /*stopAfterLineBreak*/ true, /*stopAtComments*/ true);
+                    }
+                }
+            }
+        }
+
+        return undefined;
+    }
+
+    function getAdjustedEndPosition(sourceFile: SourceFile, node: Node, options: ConfigurableEnd): number {
+        const { end } = node;
+        const { trailingTriviaOption } = options;
+        if (trailingTriviaOption === TrailingTriviaOption.Exclude) {
             return end;
         }
+        if (trailingTriviaOption === TrailingTriviaOption.ExcludeWhitespace) {
+            const comments = concatenate(getTrailingCommentRanges(sourceFile.text, end), getLeadingCommentRanges(sourceFile.text, end));
+            const realEnd = comments?.[comments.length - 1]?.end;
+            if (realEnd) {
+                return realEnd;
+            }
+            return end;
+        }
+
+        const multilineEndPosition = getEndPositionOfMultilineTrailingComment(sourceFile, node, options);
+        if (multilineEndPosition) {
+            return multilineEndPosition;
+        }
+
         const newEnd = skipTrivia(sourceFile.text, end, /*stopAfterLineBreak*/ true);
+
         return newEnd !== end && (trailingTriviaOption === TrailingTriviaOption.Include || isLineBreak(sourceFile.text.charCodeAt(newEnd - 1)))
             ? newEnd
             : end;
@@ -207,14 +286,6 @@ namespace ts.textChanges {
         return !!candidate && !!node.parent && (candidate.kind === SyntaxKind.CommaToken || (candidate.kind === SyntaxKind.SemicolonToken && node.parent.kind === SyntaxKind.ObjectLiteralExpression));
     }
 
-    function spaces(count: number) {
-        let s = "";
-        for (let i = 0; i < count; i++) {
-            s += " ";
-        }
-        return s;
-    }
-
     export interface TextChangesContext {
         host: LanguageServiceHost;
         formatContext: formatting.FormatContext;
@@ -225,14 +296,14 @@ namespace ts.textChanges {
 
     export type ThisTypeAnnotatable = FunctionDeclaration | FunctionExpression;
 
-    export function isThisTypeAnnotatable(containingFunction: FunctionLike): containingFunction is ThisTypeAnnotatable {
+    export function isThisTypeAnnotatable(containingFunction: SignatureDeclaration): containingFunction is ThisTypeAnnotatable {
         return isFunctionExpression(containingFunction) || isFunctionDeclaration(containingFunction);
     }
 
     export class ChangeTracker {
         private readonly changes: Change[] = [];
-        private readonly newFiles: { readonly oldFile: SourceFile | undefined, readonly fileName: string, readonly statements: readonly Statement[] }[] = [];
-        private readonly classesWithNodesInsertedAtStart = createMap<{ readonly node: ClassDeclaration | InterfaceDeclaration | ObjectLiteralExpression, readonly sourceFile: SourceFile }>(); // Set<ClassDeclaration> implemented as Map<node id, ClassDeclaration>
+        private readonly newFiles: { readonly oldFile: SourceFile | undefined, readonly fileName: string, readonly statements: readonly (Statement | SyntaxKind.NewLineTrivia)[] }[] = [];
+        private readonly classesWithNodesInsertedAtStart = new Map<number, { readonly node: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression, readonly sourceFile: SourceFile }>(); // Set<ClassDeclaration> implemented as Map<node id, ClassDeclaration>
         private readonly deletedNodes: { readonly sourceFile: SourceFile, readonly node: Node | NodeArray<TypeParameterDeclaration> }[] = [];
 
         public static fromContext(context: TextChangesContext): ChangeTracker {
@@ -266,6 +337,23 @@ namespace ts.textChanges {
 
         delete(sourceFile: SourceFile, node: Node | NodeArray<TypeParameterDeclaration>): void {
             this.deletedNodes.push({ sourceFile, node });
+        }
+
+        /** Stop! Consider using `delete` instead, which has logic for deleting nodes from delimited lists. */
+        public deleteNode(sourceFile: SourceFile, node: Node, options: ConfigurableStartEnd = { leadingTriviaOption: LeadingTriviaOption.IncludeAll }): void {
+            this.deleteRange(sourceFile, getAdjustedRange(sourceFile, node, node, options));
+        }
+
+        public deleteNodes(sourceFile: SourceFile, nodes: readonly Node[], options: ConfigurableStartEnd = { leadingTriviaOption: LeadingTriviaOption.IncludeAll }, hasTrailingComment: boolean): void {
+            // When deleting multiple nodes we need to track if the end position is including multiline trailing comments.
+            for (const node of nodes) {
+                const pos = getAdjustedStartPosition(sourceFile, node, options, hasTrailingComment);
+                const end = getAdjustedEndPosition(sourceFile, node, options);
+
+                this.deleteRange(sourceFile, { pos, end });
+
+                hasTrailingComment = !!getEndPositionOfMultilineTrailingComment(sourceFile, node, options);
+            }
         }
 
         public deleteModifier(sourceFile: SourceFile, modifier: Modifier): void {
@@ -312,6 +400,10 @@ namespace ts.textChanges {
             this.replaceRangeWithNodes(sourceFile, getAdjustedRange(sourceFile, startNode, endNode, options), newNodes, options);
         }
 
+        public nodeHasTrailingComment(sourceFile: SourceFile, oldNode: Node, configurableEnd: ConfigurableEnd = useNonAdjustedPositions): boolean {
+            return !!getEndPositionOfMultilineTrailingComment(sourceFile, oldNode, configurableEnd);
+        }
+
         private nextCommaToken(sourceFile: SourceFile, node: Node): Node | undefined {
             const next = findNextToken(node, node.parent, sourceFile);
             return next && next.kind === SyntaxKind.CommaToken ? next : undefined;
@@ -331,30 +423,47 @@ namespace ts.textChanges {
         }
 
         public insertNodeAtTopOfFile(sourceFile: SourceFile, newNode: Statement, blankLineBetween: boolean): void {
-            const pos = getInsertionPositionAtSourceFileTop(sourceFile);
-            this.insertNodeAt(sourceFile, pos, newNode, {
-                prefix: pos === 0 ? undefined : this.newLineCharacter,
-                suffix: (isLineBreak(sourceFile.text.charCodeAt(pos)) ? "" : this.newLineCharacter) + (blankLineBetween ? this.newLineCharacter : ""),
-            });
+            this.insertAtTopOfFile(sourceFile, newNode, blankLineBetween);
         }
 
-        public insertNodeBefore(sourceFile: SourceFile, before: Node, newNode: Node, blankLineBetween = false): void {
-            this.insertNodeAt(sourceFile, getAdjustedStartPosition(sourceFile, before, {}), newNode, this.getOptionsForInsertNodeBefore(before, blankLineBetween));
+        public insertNodesAtTopOfFile(sourceFile: SourceFile, newNodes: readonly Statement[], blankLineBetween: boolean): void {
+            this.insertAtTopOfFile(sourceFile, newNodes, blankLineBetween);
+        }
+
+        private insertAtTopOfFile(sourceFile: SourceFile, insert: Statement | readonly Statement[], blankLineBetween: boolean): void {
+            const pos = getInsertionPositionAtSourceFileTop(sourceFile);
+            const options = {
+                prefix: pos === 0 ? undefined : this.newLineCharacter,
+                suffix: (isLineBreak(sourceFile.text.charCodeAt(pos)) ? "" : this.newLineCharacter) + (blankLineBetween ? this.newLineCharacter : ""),
+            };
+            if (isArray(insert)) {
+                this.insertNodesAt(sourceFile, pos, insert, options);
+            }
+            else {
+                this.insertNodeAt(sourceFile, pos, insert, options);
+            }
+        }
+
+        public insertFirstParameter(sourceFile: SourceFile, parameters: NodeArray<ParameterDeclaration>, newParam: ParameterDeclaration): void {
+            const p0 = firstOrUndefined(parameters);
+            if (p0) {
+                this.insertNodeBefore(sourceFile, p0, newParam);
+            }
+            else {
+                this.insertNodeAt(sourceFile, parameters.pos, newParam);
+            }
+        }
+
+        public insertNodeBefore(sourceFile: SourceFile, before: Node, newNode: Node, blankLineBetween = false, options: ConfigurableStartEnd = {}): void {
+            this.insertNodeAt(sourceFile, getAdjustedStartPosition(sourceFile, before, options), newNode, this.getOptionsForInsertNodeBefore(before, newNode, blankLineBetween));
+        }
+
+        public insertModifierAt(sourceFile: SourceFile, pos: number, modifier: SyntaxKind, options: InsertNodeOptions = {}): void {
+            this.insertNodeAt(sourceFile, pos, factory.createToken(modifier), options);
         }
 
         public insertModifierBefore(sourceFile: SourceFile, modifier: SyntaxKind, before: Node): void {
-            const pos = before.getStart(sourceFile);
-            this.insertNodeAt(sourceFile, pos, createToken(modifier), { suffix: " " });
-        }
-
-        public insertLastModifierBefore(sourceFile: SourceFile, modifier: SyntaxKind, before: Node): void {
-            if (!before.modifiers) {
-                this.insertModifierBefore(sourceFile, modifier, before);
-                return;
-            }
-
-            const pos = before.modifiers.end;
-            this.insertNodeAt(sourceFile, pos, createToken(modifier), { prefix: " " });
+            return this.insertModifierAt(sourceFile, before.getStart(sourceFile), modifier, { suffix: " " });
         }
 
         public insertCommentBeforeLine(sourceFile: SourceFile, lineNumber: number, position: number, commentText: string): void {
@@ -386,6 +495,32 @@ namespace ts.textChanges {
             this.insertNodeAt(sourceFile, fnStart, tag, { preserveLeadingWhitespace: false, suffix: this.newLineCharacter + indent });
         }
 
+        private createJSDocText(sourceFile: SourceFile, node: HasJSDoc) {
+            const comments = flatMap(node.jsDoc, jsDoc =>
+                isString(jsDoc.comment) ? factory.createJSDocText(jsDoc.comment) : jsDoc.comment) as JSDocComment[];
+            const jsDoc = singleOrUndefined(node.jsDoc);
+            return jsDoc && positionsAreOnSameLine(jsDoc.pos, jsDoc.end, sourceFile) && length(comments) === 0 ? undefined :
+                factory.createNodeArray(intersperse(comments, factory.createJSDocText("\n")));
+        }
+
+        public replaceJSDocComment(sourceFile: SourceFile, node: HasJSDoc, tags: readonly JSDocTag[]) {
+            this.insertJsdocCommentBefore(sourceFile, updateJSDocHost(node), factory.createJSDocComment(this.createJSDocText(sourceFile, node), factory.createNodeArray(tags)));
+        }
+
+        public addJSDocTags(sourceFile: SourceFile, parent: HasJSDoc, newTags: readonly JSDocTag[]): void {
+            const oldTags = flatMapToMutable(parent.jsDoc, j => j.tags);
+            const unmergedNewTags = newTags.filter(newTag => !oldTags.some((tag, i) => {
+                const merged = tryMergeJsdocTags(tag, newTag);
+                if (merged) oldTags[i] = merged;
+                return !!merged;
+            }));
+            this.replaceJSDocComment(sourceFile, parent, [...oldTags, ...unmergedNewTags]);
+        }
+
+        public filterJSDocTags(sourceFile: SourceFile, parent: HasJSDoc, predicate: (tag: JSDocTag) => boolean): void {
+            this.replaceJSDocComment(sourceFile, parent, filter(flatMapToMutable(parent.jsDoc, j => j.tags), predicate));
+        }
+
         public replaceRangeWithText(sourceFile: SourceFile, range: TextRange, text: string): void {
             this.changes.push({ kind: ChangeKind.Text, sourceFile, range, text });
         }
@@ -406,7 +541,7 @@ namespace ts.textChanges {
                 }
             }
             else {
-                endNode = node.kind !== SyntaxKind.VariableDeclaration && node.questionToken ? node.questionToken : node.name;
+                endNode = (node.kind === SyntaxKind.VariableDeclaration ? node.exclamationToken : node.questionToken) ?? node.name;
             }
 
             this.insertNodeAt(sourceFile, endNode.end, type, { prefix: ": " });
@@ -423,21 +558,24 @@ namespace ts.textChanges {
         public insertTypeParameters(sourceFile: SourceFile, node: SignatureDeclaration, typeParameters: readonly TypeParameterDeclaration[]): void {
             // If no `(`, is an arrow function `x => x`, so use the pos of the first parameter
             const start = (findChildOfKind(node, SyntaxKind.OpenParenToken, sourceFile) || first(node.parameters)).getStart(sourceFile);
-            this.insertNodesAt(sourceFile, start, typeParameters, { prefix: "<", suffix: ">" });
+            this.insertNodesAt(sourceFile, start, typeParameters, { prefix: "<", suffix: ">", joiner: ", " });
         }
 
-        private getOptionsForInsertNodeBefore(before: Node, doubleNewlines: boolean): InsertNodeOptions {
+        private getOptionsForInsertNodeBefore(before: Node, inserted: Node, blankLineBetween: boolean): InsertNodeOptions {
             if (isStatement(before) || isClassElement(before)) {
-                return { suffix: doubleNewlines ? this.newLineCharacter + this.newLineCharacter : this.newLineCharacter };
+                return { suffix: blankLineBetween ? this.newLineCharacter + this.newLineCharacter : this.newLineCharacter };
             }
             else if (isVariableDeclaration(before)) { // insert `x = 1, ` into `const x = 1, y = 2;
                 return { suffix: ", " };
             }
             else if (isParameter(before)) {
-                return {};
+                return isParameter(inserted) ? { suffix: ", " } : {};
             }
             else if (isStringLiteral(before) && isImportDeclaration(before.parent) || isNamedImports(before)) {
                 return { suffix: ", " };
+            }
+            else if (isImportSpecifier(before)) {
+                return { suffix: "," + (blankLineBetween ? this.newLineCharacter : " ") };
             }
             return Debug.failBadSyntaxKind(before); // We haven't handled this kind of node yet -- add it
         }
@@ -452,6 +590,16 @@ namespace ts.textChanges {
             }
         }
 
+        public insertNodeAtConstructorStartAfterSuperCall(sourceFile: SourceFile, ctr: ConstructorDeclaration, newStatement: Statement): void {
+            const superCallStatement = find(ctr.body!.statements, stmt => isExpressionStatement(stmt) && isSuperCall(stmt.expression));
+            if (!superCallStatement || !ctr.body!.multiLine) {
+                this.replaceConstructorBody(sourceFile, ctr, [...ctr.body!.statements, newStatement]);
+            }
+            else {
+                this.insertNodeAfter(sourceFile, superCallStatement, newStatement);
+            }
+        }
+
         public insertNodeAtConstructorEnd(sourceFile: SourceFile, ctr: ConstructorDeclaration, newStatement: Statement): void {
             const lastStatement = lastOrUndefined(ctr.body!.statements);
             if (!lastStatement || !ctr.body!.multiLine) {
@@ -463,7 +611,7 @@ namespace ts.textChanges {
         }
 
         private replaceConstructorBody(sourceFile: SourceFile, ctr: ConstructorDeclaration, statements: readonly Statement[]): void {
-            this.replaceNode(sourceFile, ctr.body!, createBlock(statements, /*multiLine*/ true));
+            this.replaceNode(sourceFile, ctr.body!, factory.createBlock(statements, /*multiLine*/ true));
         }
 
         public insertNodeAtEndOfScope(sourceFile: SourceFile, scope: Node, newNode: Node): void {
@@ -566,7 +714,7 @@ namespace ts.textChanges {
                 // check if previous statement ends with semicolon
                 // if not - insert semicolon to preserve the code from changing the meaning due to ASI
                 if (sourceFile.text.charCodeAt(after.end - 1) !== CharacterCodes.semicolon) {
-                    this.replaceRange(sourceFile, createRange(after.end), createToken(SyntaxKind.SemicolonToken));
+                    this.replaceRange(sourceFile, createRange(after.end), factory.createToken(SyntaxKind.SemicolonToken));
                 }
             }
             const endPosition = getAdjustedEndPosition(sourceFile, after, {});
@@ -614,30 +762,44 @@ namespace ts.textChanges {
                 const lparen = findChildOfKind(node, SyntaxKind.OpenParenToken, sourceFile);
                 if (lparen) {
                     // `() => {}` --> `function f() {}`
-                    this.insertNodesAt(sourceFile, lparen.getStart(sourceFile), [createToken(SyntaxKind.FunctionKeyword), createIdentifier(name)], { joiner: " " });
+                    this.insertNodesAt(sourceFile, lparen.getStart(sourceFile), [factory.createToken(SyntaxKind.FunctionKeyword), factory.createIdentifier(name)], { joiner: " " });
                     deleteNode(this, sourceFile, arrow);
                 }
                 else {
                     // `x => {}` -> `function f(x) {}`
                     this.insertText(sourceFile, first(node.parameters).getStart(sourceFile), `function ${name}(`);
                     // Replacing full range of arrow to get rid of the leading space -- replace ` =>` with `)`
-                    this.replaceRange(sourceFile, arrow, createToken(SyntaxKind.CloseParenToken));
+                    this.replaceRange(sourceFile, arrow, factory.createToken(SyntaxKind.CloseParenToken));
                 }
 
                 if (node.body.kind !== SyntaxKind.Block) {
                     // `() => 0` => `function f() { return 0; }`
-                    this.insertNodesAt(sourceFile, node.body.getStart(sourceFile), [createToken(SyntaxKind.OpenBraceToken), createToken(SyntaxKind.ReturnKeyword)], { joiner: " ", suffix: " " });
-                    this.insertNodesAt(sourceFile, node.body.end, [createToken(SyntaxKind.SemicolonToken), createToken(SyntaxKind.CloseBraceToken)], { joiner: " " });
+                    this.insertNodesAt(sourceFile, node.body.getStart(sourceFile), [factory.createToken(SyntaxKind.OpenBraceToken), factory.createToken(SyntaxKind.ReturnKeyword)], { joiner: " ", suffix: " " });
+                    this.insertNodesAt(sourceFile, node.body.end, [factory.createToken(SyntaxKind.SemicolonToken), factory.createToken(SyntaxKind.CloseBraceToken)], { joiner: " " });
                 }
             }
             else {
                 const pos = findChildOfKind(node, node.kind === SyntaxKind.FunctionExpression ? SyntaxKind.FunctionKeyword : SyntaxKind.ClassKeyword, sourceFile)!.end;
-                this.insertNodeAt(sourceFile, pos, createIdentifier(name), { prefix: " " });
+                this.insertNodeAt(sourceFile, pos, factory.createIdentifier(name), { prefix: " " });
             }
         }
 
         public insertExportModifier(sourceFile: SourceFile, node: DeclarationStatement | VariableStatement): void {
             this.insertText(sourceFile, node.getStart(sourceFile), "export ");
+        }
+
+        public insertImportSpecifierAtIndex(sourceFile: SourceFile, importSpecifier: ImportSpecifier, namedImports: NamedImports, index: number) {
+            const prevSpecifier = namedImports.elements[index - 1];
+            if (prevSpecifier) {
+                this.insertNodeInListAfter(sourceFile, prevSpecifier, importSpecifier);
+            }
+            else {
+                this.insertNodeBefore(
+                    sourceFile,
+                    namedImports.elements[0],
+                    importSpecifier,
+                    !positionsAreOnSameLine(namedImports.elements[0].getStart(), namedImports.parent.parent.getStart(), sourceFile));
+            }
         }
 
         /**
@@ -664,49 +826,24 @@ namespace ts.textChanges {
                     // a, b, c
                     // create change for adding 'e' after 'a' as
                     // - find start of next element after a (it is b)
-                    // - use this start as start and end position in final change
-                    // - build text of change by formatting the text of node + separator + whitespace trivia of b
+                    // - use next element start as start and end position in final change
+                    // - build text of change by formatting the text of node + whitespace trivia of b
 
                     // in multiline case it will work as
                     //   a,
                     //   b,
                     //   c,
                     // result - '*' denotes leading trivia that will be inserted after new text (displayed as '#')
-                    //   a,*
-                    // ***insertedtext<separator>#
+                    //   a,
+                    //   insertedtext<separator>#
                     // ###b,
                     //   c,
-                    // find line and character of the next element
-                    const lineAndCharOfNextElement = getLineAndCharacterOfPosition(sourceFile, skipWhitespacesAndLineBreaks(sourceFile.text, containingList[index + 1].getFullStart()));
-                    // find line and character of the token that precedes next element (usually it is separator)
-                    const lineAndCharOfNextToken = getLineAndCharacterOfPosition(sourceFile, nextToken.end);
-                    let prefix: string | undefined;
-                    let startPos: number;
-                    if (lineAndCharOfNextToken.line === lineAndCharOfNextElement.line) {
-                        // next element is located on the same line with separator:
-                        // a,$$$$b
-                        //  ^    ^
-                        //  |    |-next element
-                        //  |-separator
-                        // where $$$ is some leading trivia
-                        // for a newly inserted node we'll maintain the same relative position comparing to separator and replace leading trivia with spaces
-                        // a,    x,$$$$b
-                        //  ^    ^     ^
-                        //  |    |     |-next element
-                        //  |    |-new inserted node padded with spaces
-                        //  |-separator
-                        startPos = nextToken.end;
-                        prefix = spaces(lineAndCharOfNextElement.character - lineAndCharOfNextToken.character);
-                    }
-                    else {
-                        // next element is located on different line that separator
-                        // let insert position be the beginning of the line that contains next element
-                        startPos = getStartPositionOfLine(lineAndCharOfNextElement.line, sourceFile);
-                    }
+                    const nextNode = containingList[index + 1];
+                    const startPos = skipWhitespacesAndLineBreaks(sourceFile.text, nextNode.getFullStart());
 
                     // write separator and leading trivia of the next element as suffix
-                    const suffix = `${tokenToString(nextToken.kind)}${sourceFile.text.substring(nextToken.end, containingList[index + 1].getStart(sourceFile))}`;
-                    this.replaceRange(sourceFile, createRange(startPos, containingList[index + 1].getStart(sourceFile)), newNode, { prefix, suffix });
+                    const suffix = `${tokenToString(nextToken.kind)}${sourceFile.text.substring(nextToken.end, startPos)}`;
+                    this.insertNodesAt(sourceFile, startPos, [newNode], { suffix });
                 }
             }
             else {
@@ -740,12 +877,13 @@ namespace ts.textChanges {
                 }
                 if (multilineList) {
                     // insert separator immediately following the 'after' node to preserve comments in trailing trivia
-                    this.replaceRange(sourceFile, createRange(end), createToken(separator));
+                    this.replaceRange(sourceFile, createRange(end), factory.createToken(separator));
                     // use the same indentation as 'after' item
                     const indentation = formatting.SmartIndenter.findFirstNonWhitespaceColumn(afterStartLinePosition, afterStart, sourceFile, this.formatContext.options);
                     // insert element before the line break on the line that contains 'after' element
                     let insertPos = skipTrivia(sourceFile.text, end, /*stopAfterLineBreak*/ true, /*stopAtComments*/ false);
-                    if (insertPos !== end && isLineBreak(sourceFile.text.charCodeAt(insertPos - 1))) {
+                    // find position before "\n" or "\r\n"
+                    while (insertPos !== end && isLineBreak(sourceFile.text.charCodeAt(insertPos - 1))) {
                         insertPos--;
                     }
                     this.replaceRange(sourceFile, createRange(insertPos), newNode, { indentation, prefix: this.newLineCharacter });
@@ -757,7 +895,7 @@ namespace ts.textChanges {
         }
 
         public parenthesizeExpression(sourceFile: SourceFile, expression: Expression) {
-            this.replaceRange(sourceFile, rangeOfNode(expression), createParen(expression));
+            this.replaceRange(sourceFile, rangeOfNode(expression), factory.createParenthesizedExpression(expression));
         }
 
         private finishClassesWithNodesInsertedAtStart(): void {
@@ -778,11 +916,11 @@ namespace ts.textChanges {
         }
 
         private finishDeleteDeclarations(): void {
-            const deletedNodesInLists = new NodeSet(); // Stores nodes in lists that we already deleted. Used to avoid deleting `, ` twice in `a, b`.
+            const deletedNodesInLists = new Set<Node>(); // Stores nodes in lists that we already deleted. Used to avoid deleting `, ` twice in `a, b`.
             for (const { sourceFile, node } of this.deletedNodes) {
                 if (!this.deletedNodes.some(d => d.sourceFile === sourceFile && rangeContainsRangeExclusive(d.node, node))) {
                     if (isArray(node)) {
-                        this.deleteRange(sourceFile, rangeOfTypeParameters(node));
+                        this.deleteRange(sourceFile, rangeOfTypeParameters(sourceFile, node));
                     }
                     else {
                         deleteDeclaration.deleteDeclaration(this, deletedNodesInLists, sourceFile, node);
@@ -818,8 +956,39 @@ namespace ts.textChanges {
             return changes;
         }
 
-        public createNewFile(oldFile: SourceFile | undefined, fileName: string, statements: readonly Statement[]): void {
+        public createNewFile(oldFile: SourceFile | undefined, fileName: string, statements: readonly (Statement | SyntaxKind.NewLineTrivia)[]): void {
             this.newFiles.push({ oldFile, fileName, statements });
+        }
+    }
+
+    function updateJSDocHost(parent: HasJSDoc): HasJSDoc {
+        if (parent.kind !== SyntaxKind.ArrowFunction) {
+            return parent;
+        }
+        const jsDocNode = parent.parent.kind === SyntaxKind.PropertyDeclaration ?
+            parent.parent as HasJSDoc :
+            parent.parent.parent as HasJSDoc;
+        jsDocNode.jsDoc = parent.jsDoc;
+        jsDocNode.jsDocCache = parent.jsDocCache;
+        return jsDocNode;
+    }
+
+    function tryMergeJsdocTags(oldTag: JSDocTag, newTag: JSDocTag): JSDocTag | undefined {
+        if (oldTag.kind !== newTag.kind) {
+            return undefined;
+        }
+        switch (oldTag.kind) {
+            case SyntaxKind.JSDocParameterTag: {
+                const oldParam = oldTag as JSDocParameterTag;
+                const newParam = newTag as JSDocParameterTag;
+                return isIdentifier(oldParam.name) && isIdentifier(newParam.name) && oldParam.name.escapedText === newParam.name.escapedText
+                    ? factory.createJSDocParameterTag(/*tagName*/ undefined, newParam.name, /*isBracketed*/ false, newParam.typeExpression, newParam.isNameFirst, oldParam.comment)
+                    : undefined;
+            }
+            case SyntaxKind.JSDocReturnTag:
+                return factory.createJSDocReturnTag(/*tagName*/ undefined, (newTag as JSDocReturnTag).typeExpression, oldTag.comment);
+            case SyntaxKind.JSDocTypeTag:
+                return factory.createJSDocTypeTag(/*tagName*/ undefined, (newTag as JSDocTypeTag).typeExpression, oldTag.comment);
         }
     }
 
@@ -845,7 +1014,7 @@ namespace ts.textChanges {
 
     namespace changesToText {
         export function getTextChangesFromChanges(changes: readonly Change[], newLineCharacter: string, formatContext: formatting.FormatContext, validate: ValidateNonFormattedText | undefined): FileTextChanges[] {
-            return group(changes, c => c.sourceFile.path).map(changesInFile => {
+            return mapDefined(group(changes, c => c.sourceFile.path), changesInFile => {
                 const sourceFile = changesInFile[0].sourceFile;
                 // order changes by start position
                 // If the start position is the same, put the shorter range first, since an empty range (x, x) may precede (x, y) but not vice-versa.
@@ -855,20 +1024,31 @@ namespace ts.textChanges {
                     Debug.assert(normalized[i].range.end <= normalized[i + 1].range.pos, "Changes overlap", () =>
                         `${JSON.stringify(normalized[i].range)} and ${JSON.stringify(normalized[i + 1].range)}`);
                 }
-                const textChanges = normalized.map(c =>
-                    createTextChange(createTextSpanFromRange(c.range), computeNewText(c, sourceFile, newLineCharacter, formatContext, validate)));
-                return { fileName: sourceFile.fileName, textChanges };
+
+                const textChanges = mapDefined(normalized, c => {
+                    const span = createTextSpanFromRange(c.range);
+                    const newText = computeNewText(c, sourceFile, newLineCharacter, formatContext, validate);
+
+                    // Filter out redundant changes.
+                    if (span.length === newText.length && stringContainsAt(sourceFile.text, newText, span.start)) {
+                        return undefined;
+                    }
+
+                    return createTextChange(span, newText);
+                });
+
+                return textChanges.length > 0 ? { fileName: sourceFile.fileName, textChanges } : undefined;
             });
         }
 
-        export function newFileChanges(oldFile: SourceFile | undefined, fileName: string, statements: readonly Statement[], newLineCharacter: string, formatContext: formatting.FormatContext): FileTextChanges {
+        export function newFileChanges(oldFile: SourceFile | undefined, fileName: string, statements: readonly (Statement | SyntaxKind.NewLineTrivia)[], newLineCharacter: string, formatContext: formatting.FormatContext): FileTextChanges {
             const text = newFileChangesWorker(oldFile, getScriptKindFromFileName(fileName), statements, newLineCharacter, formatContext);
             return { fileName, textChanges: [createTextChange(createTextSpan(0, 0), text)], isNewFile: true };
         }
 
-        export function newFileChangesWorker(oldFile: SourceFile | undefined, scriptKind: ScriptKind, statements: readonly Statement[], newLineCharacter: string, formatContext: formatting.FormatContext): string {
+        export function newFileChangesWorker(oldFile: SourceFile | undefined, scriptKind: ScriptKind, statements: readonly (Statement | SyntaxKind.NewLineTrivia)[], newLineCharacter: string, formatContext: formatting.FormatContext): string {
             // TODO: this emits the file, parses it back, then formats it that -- may be a less roundabout way to do this
-            const nonFormattedText = statements.map(s => getNonformattedText(s, oldFile, newLineCharacter).text).join(newLineCharacter);
+            const nonFormattedText = statements.map(s => s === SyntaxKind.NewLineTrivia ? "" : getNonformattedText(s, oldFile, newLineCharacter).text).join(newLineCharacter);
             const sourceFile = createSourceFile("any file name", nonFormattedText, ScriptTarget.ESNext, /*setParentNodes*/ true, scriptKind);
             const changes = formatting.formatDocument(sourceFile, formatContext);
             return applyChanges(nonFormattedText, changes) + newLineCharacter;
@@ -885,20 +1065,13 @@ namespace ts.textChanges {
             const { options = {}, range: { pos } } = change;
             const format = (n: Node) => getFormattedTextOfNode(n, sourceFile, pos, options, newLineCharacter, formatContext, validate);
             const text = change.kind === ChangeKind.ReplaceWithMultipleNodes
-                ? change.nodes.map(n => removeSuffix(format(n), newLineCharacter)).join(change.options!.joiner || newLineCharacter) // TODO: GH#18217
+                ? change.nodes.map(n => removeSuffix(format(n), newLineCharacter)).join(change.options?.joiner || newLineCharacter)
                 : format(change.node);
             // strip initial indentation (spaces or tabs) if text will be inserted in the middle of the line
             const noIndent = (options.preserveLeadingWhitespace || options.indentation !== undefined || getLineStartPositionForPosition(pos, sourceFile) === pos) ? text : text.replace(/^\s+/, "");
-            return (options.prefix || "") + noIndent + (options.suffix || "");
-        }
-
-        function getFormatCodeSettingsForWriting({ options }: formatting.FormatContext, sourceFile: SourceFile): FormatCodeSettings {
-            const shouldAutoDetectSemicolonPreference = !options.semicolons || options.semicolons === SemicolonPreference.Ignore;
-            const shouldRemoveSemicolons = options.semicolons === SemicolonPreference.Remove || shouldAutoDetectSemicolonPreference && !probablyUsesSemicolons(sourceFile);
-            return {
-                ...options,
-                semicolons: shouldRemoveSemicolons ? SemicolonPreference.Remove : SemicolonPreference.Ignore,
-            };
+            return (options.prefix || "") + noIndent
+                 + ((!options.suffix || endsWith(noIndent, options.suffix))
+                    ? "" : options.suffix);
         }
 
         /** Note: this may mutate `nodeIn`. */
@@ -914,7 +1087,12 @@ namespace ts.textChanges {
                 delta = formatting.SmartIndenter.shouldIndentChildNode(formatOptions, nodeIn) ? (formatOptions.indentSize || 0) : 0;
             }
 
-            const file: SourceFileLike = { text, getLineAndCharacterOfPosition(pos) { return getLineAndCharacterOfPosition(this, pos); } };
+            const file: SourceFileLike = {
+                text,
+                getLineAndCharacterOfPosition(pos) {
+                    return getLineAndCharacterOfPosition(this, pos);
+                }
+            };
             const changes = formatting.formatNodeGivenIndentation(node, file, sourceFile.languageVariant, initialIndentation, delta, { ...formatContext, options: formatOptions });
             return applyChanges(text, changes);
         }
@@ -922,8 +1100,13 @@ namespace ts.textChanges {
         /** Note: output node may be mutated input node. */
         export function getNonformattedText(node: Node, sourceFile: SourceFile | undefined, newLineCharacter: string): { text: string, node: Node } {
             const writer = createWriter(newLineCharacter);
-            const newLine = newLineCharacter === "\n" ? NewLineKind.LineFeed : NewLineKind.CarriageReturnLineFeed;
-            createPrinter({ newLine, neverAsciiEscape: true }, writer).writeNode(EmitHint.Unspecified, node, sourceFile, writer);
+            const newLine = getNewLineKind(newLineCharacter);
+            createPrinter({
+                newLine,
+                neverAsciiEscape: true,
+                preserveSourceNewlines: true,
+                terminateUnterminatedLiterals: true
+            }, writer).writeNode(EmitHint.Unspecified, node, sourceFile, writer);
             return { text: writer.getText(), node: assignPositionsToNode(node) };
         }
     }
@@ -940,12 +1123,11 @@ namespace ts.textChanges {
         return skipTrivia(s, 0) === s.length;
     }
 
-    function assignPositionsToNode(node: Node): Node {
-        const visited = visitEachChild(node, assignPositionsToNode, nullTransformationContext, assignPositionsToNodeArray, assignPositionsToNode)!; // TODO: GH#18217
+    export function assignPositionsToNode(node: Node): Node {
+        const visited = visitEachChild(node, assignPositionsToNode, nullTransformationContext, assignPositionsToNodeArray, assignPositionsToNode);
         // create proxy node for non synthesized nodes
         const newNode = nodeIsSynthesized(visited) ? visited : Object.create(visited) as Node;
-        newNode.pos = getPos(node);
-        newNode.end = getEnd(node);
+        setTextRangePosEnd(newNode, getPos(node), getEnd(node));
         return newNode;
     }
 
@@ -955,24 +1137,23 @@ namespace ts.textChanges {
             return visited;
         }
         // clone nodearray if necessary
-        const nodeArray = visited === nodes ? createNodeArray(visited.slice(0)) : visited;
-        nodeArray.pos = getPos(nodes);
-        nodeArray.end = getEnd(nodes);
+        const nodeArray = visited === nodes ? factory.createNodeArray(visited.slice(0)) : visited;
+        setTextRangePosEnd(nodeArray, getPos(nodes), getEnd(nodes));
         return nodeArray;
     }
 
     interface TextChangesWriter extends EmitTextWriter, PrintHandlers {}
 
-    function createWriter(newLine: string): TextChangesWriter {
+    export function createWriter(newLine: string): TextChangesWriter {
         let lastNonTriviaPosition = 0;
 
-
         const writer = createTextWriter(newLine);
-        const onEmitNode: PrintHandlers["onEmitNode"] = (hint, node, printCallback) => {
+        const onBeforeEmitNode: PrintHandlers["onBeforeEmitNode"] = node => {
             if (node) {
                 setPos(node, lastNonTriviaPosition);
             }
-            printCallback(hint, node);
+        };
+        const onAfterEmitNode: PrintHandlers["onAfterEmitNode"] = node => {
             if (node) {
                 setEnd(node, lastNonTriviaPosition);
             }
@@ -1053,8 +1234,8 @@ namespace ts.textChanges {
             writer.writeSymbol(s, sym);
             setLastNonTriviaPosition(s, /*force*/ false);
         }
-        function writeLine(): void {
-            writer.writeLine();
+        function writeLine(force?: boolean): void {
+            writer.writeLine(force);
         }
         function increaseIndent(): void {
             writer.increaseIndent();
@@ -1094,7 +1275,8 @@ namespace ts.textChanges {
         }
 
         return {
-            onEmitNode,
+            onBeforeEmitNode,
+            onAfterEmitNode,
             onBeforeEmitNodeArray,
             onAfterEmitNodeArray,
             onBeforeEmitToken,
@@ -1219,7 +1401,7 @@ namespace ts.textChanges {
     }
 
     namespace deleteDeclaration {
-        export function deleteDeclaration(changes: ChangeTracker, deletedNodesInLists: NodeSet<Node>, sourceFile: SourceFile, node: Node): void {
+        export function deleteDeclaration(changes: ChangeTracker, deletedNodesInLists: Set<Node>, sourceFile: SourceFile, node: Node): void {
             switch (node.kind) {
                 case SyntaxKind.Parameter: {
                     const oldFunction = node.parent;
@@ -1238,9 +1420,12 @@ namespace ts.textChanges {
                 }
 
                 case SyntaxKind.ImportDeclaration:
-                    deleteNode(changes, sourceFile, node,
-                        // For first import, leave header comment in place
-                        node === sourceFile.imports[0].parent ? { leadingTriviaOption: LeadingTriviaOption.Exclude } : undefined);
+                case SyntaxKind.ImportEqualsDeclaration:
+                    const isFirstImport = sourceFile.imports.length && node === first(sourceFile.imports).parent || node === find(sourceFile.statements, isAnyImportSyntax);
+                    // For first import, leave header comment in place, otherwise only delete JSDoc comments
+                    deleteNode(changes, sourceFile, node, {
+                        leadingTriviaOption: isFirstImport ? LeadingTriviaOption.Exclude : hasJSDocNodes(node) ? LeadingTriviaOption.JSDoc : LeadingTriviaOption.StartLine,
+                    });
                     break;
 
                 case SyntaxKind.BindingElement:
@@ -1276,15 +1461,32 @@ namespace ts.textChanges {
                     deleteImportBinding(changes, sourceFile, node as NamespaceImport);
                     break;
 
+                case SyntaxKind.SemicolonToken:
+                    deleteNode(changes, sourceFile, node, { trailingTriviaOption: TrailingTriviaOption.Exclude });
+                    break;
+
+                case SyntaxKind.FunctionKeyword:
+                    deleteNode(changes, sourceFile, node, { leadingTriviaOption: LeadingTriviaOption.Exclude });
+                    break;
+
+                case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.FunctionDeclaration:
+                    deleteNode(changes, sourceFile, node, { leadingTriviaOption: hasJSDocNodes(node) ? LeadingTriviaOption.JSDoc : LeadingTriviaOption.StartLine });
+                    break;
+
                 default:
-                    if (isImportClause(node.parent) && node.parent.name === node) {
+                    if (!node.parent) {
+                        // a misbehaving client can reach here with the SourceFile node
+                        deleteNode(changes, sourceFile, node);
+                    }
+                    else if (isImportClause(node.parent) && node.parent.name === node) {
                         deleteDefaultImport(changes, sourceFile, node.parent);
                     }
-                    else if (isCallLikeExpression(node.parent)) {
+                    else if (isCallExpression(node.parent) && contains(node.parent.arguments, node)) {
                         deleteNodeInList(changes, deletedNodesInLists, sourceFile, node);
                     }
                     else {
-                        deleteNode(changes, sourceFile, node, node.kind === SyntaxKind.SemicolonToken ? { trailingTriviaOption: TrailingTriviaOption.Exclude } : undefined);
+                        deleteNode(changes, sourceFile, node);
                     }
             }
         }
@@ -1314,7 +1516,7 @@ namespace ts.textChanges {
                 // Delete named imports while preserving the default import
                 // import d|, * as ns| from './file'
                 // import d|, { a }| from './file'
-                const previousToken = Debug.assertDefined(getTokenAtPosition(sourceFile, node.pos - 1));
+                const previousToken = Debug.checkDefined(getTokenAtPosition(sourceFile, node.pos - 1));
                 changes.deleteRange(sourceFile, { pos: previousToken.getStart(sourceFile), end: node.end });
             }
             else {
@@ -1326,7 +1528,7 @@ namespace ts.textChanges {
             }
         }
 
-        function deleteVariableDeclaration(changes: ChangeTracker, deletedNodesInLists: NodeSet<Node>, sourceFile: SourceFile, node: VariableDeclaration): void {
+        function deleteVariableDeclaration(changes: ChangeTracker, deletedNodesInLists: Set<Node>, sourceFile: SourceFile, node: VariableDeclaration): void {
             const { parent } = node;
 
             if (parent.kind === SyntaxKind.CatchClause) {
@@ -1344,7 +1546,7 @@ namespace ts.textChanges {
             switch (gp.kind) {
                 case SyntaxKind.ForOfStatement:
                 case SyntaxKind.ForInStatement:
-                    changes.replaceNode(sourceFile, node, createObjectLiteral());
+                    changes.replaceNode(sourceFile, node, factory.createObjectLiteralExpression());
                     break;
 
                 case SyntaxKind.ForStatement:
@@ -1352,7 +1554,7 @@ namespace ts.textChanges {
                     break;
 
                 case SyntaxKind.VariableStatement:
-                    deleteNode(changes, sourceFile, gp);
+                    deleteNode(changes, sourceFile, gp, { leadingTriviaOption: hasJSDocNodes(gp) ? LeadingTriviaOption.JSDoc : LeadingTriviaOption.StartLine });
                     break;
 
                 default:
@@ -1369,8 +1571,8 @@ namespace ts.textChanges {
         changes.deleteRange(sourceFile, { pos: startPosition, end: endPosition });
     }
 
-    function deleteNodeInList(changes: ChangeTracker, deletedNodesInLists: NodeSet<Node>, sourceFile: SourceFile, node: Node): void {
-        const containingList = Debug.assertDefined(formatting.SmartIndenter.getContainingList(node, sourceFile));
+    function deleteNodeInList(changes: ChangeTracker, deletedNodesInLists: Set<Node>, sourceFile: SourceFile, node: Node): void {
+        const containingList = Debug.checkDefined(formatting.SmartIndenter.getContainingList(node, sourceFile));
         const index = indexOfNode(containingList, node);
         Debug.assert(index !== -1);
         if (containingList.length === 1) {

@@ -11,6 +11,7 @@ var x = foo.foo + 42;
 //// [foo_0.js]
 "use strict";
 exports.__esModule = true;
+exports.foo = void 0;
 exports.foo = 42;
 //// [foo_1.js]
 "use strict";

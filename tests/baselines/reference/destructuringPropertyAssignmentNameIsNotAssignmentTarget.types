@@ -1,7 +1,7 @@
 === tests/cases/compiler/destructuringPropertyAssignmentNameIsNotAssignmentTarget.ts ===
 // test for #10668
 function qux(bar: { value: number }) {
->qux : (bar: { value: number; }) => void
+>qux : (bar: {    value: number;}) => void
 >bar : { value: number; }
 >value : number
 

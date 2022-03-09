@@ -60,16 +60,16 @@ namespace ts.server {
     export type NormalizedPath = string & { __normalizedPathTag: any };
 
     export function toNormalizedPath(fileName: string): NormalizedPath {
-        return <NormalizedPath>normalizePath(fileName);
+        return normalizePath(fileName) as NormalizedPath;
     }
 
     export function normalizedPathToPath(normalizedPath: NormalizedPath, currentDirectory: string, getCanonicalFileName: (f: string) => string): Path {
         const f = isRootedDiskPath(normalizedPath) ? normalizedPath : getNormalizedAbsolutePath(normalizedPath, currentDirectory);
-        return <Path>getCanonicalFileName(f);
+        return getCanonicalFileName(f) as Path;
     }
 
     export function asNormalizedPath(fileName: string): NormalizedPath {
-        return <NormalizedPath>fileName;
+        return fileName as NormalizedPath;
     }
 
     export interface NormalizedPathMap<T> {
@@ -80,7 +80,7 @@ namespace ts.server {
     }
 
     export function createNormalizedPathMap<T>(): NormalizedPathMap<T> {
-        const map = createMap<T>();
+        const map = new Map<string, T>();
         return {
             get(path) {
                 return map.get(path);
@@ -113,8 +113,13 @@ namespace ts.server {
         return /dev\/null\/inferredProject\d+\*/.test(name);
     }
 
-    export function makeInferredProjectName(counter: number) {
+    export function makeInferredProjectName(counter: number): string {
         return `/dev/null/inferredProject${counter}*`;
+    }
+
+    /*@internal*/
+    export function makeAutoImportProviderProjectName(counter: number): string {
+        return `/dev/null/autoImportProviderProject${counter}*`;
     }
 
     export function createSortedArray<T>(): SortedArray<T> {

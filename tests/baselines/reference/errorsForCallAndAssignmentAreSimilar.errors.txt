@@ -1,0 +1,29 @@
+tests/cases/compiler/errorsForCallAndAssignmentAreSimilar.ts(11,11): error TS2820: Type '"hdpvd"' is not assignable to type '"hddvd" | "bluray"'. Did you mean '"hddvd"'?
+tests/cases/compiler/errorsForCallAndAssignmentAreSimilar.ts(16,11): error TS2820: Type '"hdpvd"' is not assignable to type '"hddvd" | "bluray"'. Did you mean '"hddvd"'?
+
+
+==== tests/cases/compiler/errorsForCallAndAssignmentAreSimilar.ts (2 errors) ====
+    function minimalExample1() {
+        type Disc =
+            | { kind: "hddvd" }
+            | { kind: "bluray" }
+    
+        function foo(x: Disc[]) {
+        }
+    
+        foo([
+            { kind: "bluray", },
+            { kind: "hdpvd", }
+              ~~~~
+!!! error TS2820: Type '"hdpvd"' is not assignable to type '"hddvd" | "bluray"'. Did you mean '"hddvd"'?
+!!! related TS6500 tests/cases/compiler/errorsForCallAndAssignmentAreSimilar.ts:3:13: The expected type comes from property 'kind' which is declared here on type 'Disc'
+        ]);
+    
+        const ds: Disc[] = [
+            { kind: "bluray", },
+            { kind: "hdpvd", }
+              ~~~~
+!!! error TS2820: Type '"hdpvd"' is not assignable to type '"hddvd" | "bluray"'. Did you mean '"hddvd"'?
+!!! related TS6500 tests/cases/compiler/errorsForCallAndAssignmentAreSimilar.ts:3:13: The expected type comes from property 'kind' which is declared here on type 'Disc'
+        ];
+    }

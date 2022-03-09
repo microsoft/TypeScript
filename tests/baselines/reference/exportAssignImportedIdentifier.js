@@ -17,6 +17,7 @@ var x = foo2(); // should be boolean
 //// [foo1.js]
 "use strict";
 exports.__esModule = true;
+exports.x = void 0;
 function x() {
     return true;
 }

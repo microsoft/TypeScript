@@ -11,6 +11,7 @@ export class Bar {}
 define("mynamespace::SomeModuleA", ["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    exports.Foo = void 0;
     /// <amd-module name="mynamespace::SomeModuleA" />
     var Foo = /** @class */ (function () {
         function Foo() {
@@ -22,6 +23,7 @@ define("mynamespace::SomeModuleA", ["require", "exports"], function (require, ex
 define("mynamespace::SomeModuleB", ["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    exports.Bar = void 0;
     /// <amd-module name="mynamespace::SomeModuleB" />
     var Bar = /** @class */ (function () {
         function Bar() {

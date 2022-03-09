@@ -183,8 +183,8 @@ export type ValueComponentType<TValue = OptionValues> =  React.ComponentType<Val
 
 export type HandlerRendererResult = JSX.Element | null | false;
 >HandlerRendererResult : Symbol(HandlerRendererResult, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 53, 106))
->JSX : Symbol(JSX, Decl(react16.d.ts, 2367, 12))
->Element : Symbol(JSX.Element, Decl(react16.d.ts, 2368, 23))
+>JSX : Symbol(JSX, Decl(react16.d.ts, 2493, 12))
+>Element : Symbol(JSX.Element, Decl(react16.d.ts, 2494, 23))
 
 // Handlers
 export type FocusOptionHandler<TValue = OptionValues> = (option: Option<TValue>) => void;
@@ -1005,8 +1005,8 @@ export interface ReactSelectProps<TValue = OptionValues> extends React.Props<Rea
      */
     noResultsText?: string | JSX.Element;
 >noResultsText : Symbol(ReactSelectProps.noResultsText, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 438, 18))
->JSX : Symbol(JSX, Decl(react16.d.ts, 2367, 12))
->Element : Symbol(JSX.Element, Decl(react16.d.ts, 2368, 23))
+>JSX : Symbol(JSX, Decl(react16.d.ts, 2493, 12))
+>Element : Symbol(JSX.Element, Decl(react16.d.ts, 2494, 23))
 
     /**
      * onBlur handler: function (event) {}
@@ -1146,8 +1146,8 @@ export interface ReactSelectProps<TValue = OptionValues> extends React.Props<Rea
      */
     placeholder?: string | JSX.Element;
 >placeholder : Symbol(ReactSelectProps.placeholder, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 524, 22))
->JSX : Symbol(JSX, Decl(react16.d.ts, 2367, 12))
->Element : Symbol(JSX.Element, Decl(react16.d.ts, 2368, 23))
+>JSX : Symbol(JSX, Decl(react16.d.ts, 2493, 12))
+>Element : Symbol(JSX.Element, Decl(react16.d.ts, 2494, 23))
 
     /**
      * whether the selected option is removed from the dropdown on multi selects

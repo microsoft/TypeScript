@@ -1,11 +1,11 @@
 tests/cases/compiler/genericCallbackInvokedInsideItsContainingFunction1.ts(2,16): error TS2558: Expected 0 type arguments, but got 1.
-tests/cases/compiler/genericCallbackInvokedInsideItsContainingFunction1.ts(3,16): error TS2345: Argument of type '1' is not assignable to parameter of type 'T'.
-  '1' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+tests/cases/compiler/genericCallbackInvokedInsideItsContainingFunction1.ts(3,16): error TS2345: Argument of type 'number' is not assignable to parameter of type 'T'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to 'number'.
 tests/cases/compiler/genericCallbackInvokedInsideItsContainingFunction1.ts(4,16): error TS2558: Expected 0 type arguments, but got 1.
 tests/cases/compiler/genericCallbackInvokedInsideItsContainingFunction1.ts(8,17): error TS2558: Expected 0 type arguments, but got 1.
 tests/cases/compiler/genericCallbackInvokedInsideItsContainingFunction1.ts(9,17): error TS2558: Expected 0 type arguments, but got 1.
 tests/cases/compiler/genericCallbackInvokedInsideItsContainingFunction1.ts(12,17): error TS2345: Argument of type 'U' is not assignable to parameter of type 'T'.
-  'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
 tests/cases/compiler/genericCallbackInvokedInsideItsContainingFunction1.ts(13,17): error TS2558: Expected 0 type arguments, but got 1.
 tests/cases/compiler/genericCallbackInvokedInsideItsContainingFunction1.ts(14,17): error TS2558: Expected 0 type arguments, but got 1.
 
@@ -17,8 +17,8 @@ tests/cases/compiler/genericCallbackInvokedInsideItsContainingFunction1.ts(14,17
 !!! error TS2558: Expected 0 type arguments, but got 1.
         var r2 = f(1);
                    ~
-!!! error TS2345: Argument of type '1' is not assignable to parameter of type 'T'.
-!!! error TS2345:   '1' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'T'.
+!!! error TS2345:   'T' could be instantiated with an arbitrary type which could be unrelated to 'number'.
         var r3 = f<any>(null);
                    ~~~
 !!! error TS2558: Expected 0 type arguments, but got 1.
@@ -36,7 +36,7 @@ tests/cases/compiler/genericCallbackInvokedInsideItsContainingFunction1.ts(14,17
         var r12 = f(y);
                     ~
 !!! error TS2345: Argument of type 'U' is not assignable to parameter of type 'T'.
-!!! error TS2345:   'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2345:   'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
         var r22 = f<number>(y);
                     ~~~~~~
 !!! error TS2558: Expected 0 type arguments, but got 1.

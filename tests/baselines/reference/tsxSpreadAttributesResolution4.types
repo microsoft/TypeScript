@@ -89,7 +89,7 @@ let e3 = <EmptyProp {...{ ref: (input) => { this.textInput = input; } }} />
 >input : EmptyProp
 >this.textInput = input : EmptyProp
 >this.textInput : any
->this : typeof globalThis
+>this : undefined
 >textInput : any
 >input : EmptyProp
 

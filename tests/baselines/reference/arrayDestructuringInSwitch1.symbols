@@ -1,0 +1,55 @@
+=== tests/cases/compiler/arrayDestructuringInSwitch1.ts ===
+export type Expression = BooleanLogicExpression | 'true' | 'false';
+>Expression : Symbol(Expression, Decl(arrayDestructuringInSwitch1.ts, 0, 0))
+>BooleanLogicExpression : Symbol(BooleanLogicExpression, Decl(arrayDestructuringInSwitch1.ts, 0, 67))
+
+export type BooleanLogicExpression = ['and', ...Expression[]] | ['not', Expression];
+>BooleanLogicExpression : Symbol(BooleanLogicExpression, Decl(arrayDestructuringInSwitch1.ts, 0, 67))
+>Expression : Symbol(Expression, Decl(arrayDestructuringInSwitch1.ts, 0, 0))
+>Expression : Symbol(Expression, Decl(arrayDestructuringInSwitch1.ts, 0, 0))
+
+export function evaluate(expression: Expression): boolean {
+>evaluate : Symbol(evaluate, Decl(arrayDestructuringInSwitch1.ts, 1, 84))
+>expression : Symbol(expression, Decl(arrayDestructuringInSwitch1.ts, 3, 25))
+>Expression : Symbol(Expression, Decl(arrayDestructuringInSwitch1.ts, 0, 0))
+
+  if (Array.isArray(expression)) {
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>expression : Symbol(expression, Decl(arrayDestructuringInSwitch1.ts, 3, 25))
+
+    const [operator, ...operands] = expression;
+>operator : Symbol(operator, Decl(arrayDestructuringInSwitch1.ts, 5, 11))
+>operands : Symbol(operands, Decl(arrayDestructuringInSwitch1.ts, 5, 20))
+>expression : Symbol(expression, Decl(arrayDestructuringInSwitch1.ts, 3, 25))
+
+    switch (operator) {
+>operator : Symbol(operator, Decl(arrayDestructuringInSwitch1.ts, 5, 11))
+
+      case 'and': {
+        return operands.every((child) => evaluate(child));
+>operands.every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>operands : Symbol(operands, Decl(arrayDestructuringInSwitch1.ts, 5, 20))
+>every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>child : Symbol(child, Decl(arrayDestructuringInSwitch1.ts, 8, 31))
+>evaluate : Symbol(evaluate, Decl(arrayDestructuringInSwitch1.ts, 1, 84))
+>child : Symbol(child, Decl(arrayDestructuringInSwitch1.ts, 8, 31))
+      }
+      case 'not': {
+        return !evaluate(operands[0]);
+>evaluate : Symbol(evaluate, Decl(arrayDestructuringInSwitch1.ts, 1, 84))
+>operands : Symbol(operands, Decl(arrayDestructuringInSwitch1.ts, 5, 20))
+>0 : Symbol(0)
+      }
+      default: {
+        throw new Error(`${operator} is not a supported operator`);
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>operator : Symbol(operator, Decl(arrayDestructuringInSwitch1.ts, 5, 11))
+      }
+    }
+  } else {
+    return expression === 'true';
+>expression : Symbol(expression, Decl(arrayDestructuringInSwitch1.ts, 3, 25))
+  }
+}

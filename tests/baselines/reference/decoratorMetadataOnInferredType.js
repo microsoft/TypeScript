@@ -19,6 +19,7 @@ export class B {
 //// [decoratorMetadataOnInferredType.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.B = void 0;
 var A = /** @class */ (function () {
     function A() {
         console.log('new A');

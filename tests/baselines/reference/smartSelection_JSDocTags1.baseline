@@ -1,0 +1,31 @@
+/**
+ * @returns {Array<{ value: /**/string }>}
+ */
+function foo() { return [] }
+
+
+                            string    
+
+
+                     value: string    
+
+
+                   { value: string }  
+
+
+             Array<{ value: string }> 
+
+
+   @returns {Array<{ value: string }>}↲
+•  
+
+
+/**
+ * @returns {Array<{ value: string }>}
+ */
+
+
+/**
+ * @returns {Array<{ value: string }>}
+ */
+function foo() { return [] }

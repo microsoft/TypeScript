@@ -1,0 +1,15 @@
+=== tests/cases/conformance/generators/generatorReturnTypeIndirectReferenceToGlobalType.ts ===
+interface I1 extends Iterator<0, 1, 2> {}
+>I1 : Symbol(I1, Decl(generatorReturnTypeIndirectReferenceToGlobalType.ts, 0, 0))
+>Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+
+function* f1(): I1 {
+>f1 : Symbol(f1, Decl(generatorReturnTypeIndirectReferenceToGlobalType.ts, 0, 41))
+>I1 : Symbol(I1, Decl(generatorReturnTypeIndirectReferenceToGlobalType.ts, 0, 0))
+
+  const a = yield 0;
+>a : Symbol(a, Decl(generatorReturnTypeIndirectReferenceToGlobalType.ts, 3, 7))
+
+  return 1;
+}
+

@@ -28,14 +28,16 @@ export const useCsvParser = () => {
 //// [index.js]
 "use strict";
 exports.__esModule = true;
+exports.useCsvParser = exports.useRef = void 0;
 function useRef(current) {
     return { current: current };
 }
 exports.useRef = useRef;
-exports.useCsvParser = function () {
+var useCsvParser = function () {
     var parserRef = useRef(null);
     return parserRef;
 };
+exports.useCsvParser = useCsvParser;
 
 
 //// [index.d.ts]
@@ -43,4 +45,4 @@ export interface MutableRefObject<T> {
     current: T;
 }
 export declare function useRef<T>(current: T): MutableRefObject<T>;
-export declare const useCsvParser: () => MutableRefObject<typeof import("csv-parse/lib")>;
+export declare const useCsvParser: () => MutableRefObject<typeof import("csv-parse")>;

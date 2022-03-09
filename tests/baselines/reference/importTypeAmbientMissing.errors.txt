@@ -1,4 +1,4 @@
-tests/cases/conformance/types/import/importTypeAmbientMissing.ts(8,17): error TS2307: Cannot find module 'fo'.
+tests/cases/conformance/types/import/importTypeAmbientMissing.ts(8,17): error TS2307: Cannot find module 'fo' or its corresponding type declarations.
 
 
 ==== tests/cases/conformance/types/import/importTypeAmbientMissing.ts (1 errors) ====
@@ -11,6 +11,6 @@ tests/cases/conformance/types/import/importTypeAmbientMissing.ts(8,17): error TS
     }
     const x: import("fo") = { x: 0, y: 0 }; // typo, error
                     ~~~~
-!!! error TS2307: Cannot find module 'fo'.
+!!! error TS2307: Cannot find module 'fo' or its corresponding type declarations.
     
     

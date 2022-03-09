@@ -20,4 +20,4 @@ declare type Foo<T, Y> = {
     foo<U, J>(): Foo<U, J>;
 };
 declare type SubFoo<R> = Foo<string, R>;
-declare function foo(): Foo<string, number>;
+declare function foo(): SubFoo<number>;

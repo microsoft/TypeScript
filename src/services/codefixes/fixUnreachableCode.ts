@@ -5,6 +5,8 @@ namespace ts.codefix {
     registerCodeFix({
         errorCodes,
         getCodeActions(context) {
+            const syntacticDiagnostics = context.program.getSyntacticDiagnostics(context.sourceFile, context.cancellationToken);
+            if (syntacticDiagnostics.length) return;
             const changes = textChanges.ChangeTracker.with(context, t => doChange(t, context.sourceFile, context.span.start, context.span.length, context.errorCode));
             return [createCodeFixAction(fixId, changes, Diagnostics.Remove_unreachable_code, fixId, Diagnostics.Remove_all_unreachable_code)];
         },
@@ -35,7 +37,7 @@ namespace ts.codefix {
                             break;
                         }
                         else {
-                            changes.replaceNode(sourceFile, statement, createBlock(emptyArray));
+                            changes.replaceNode(sourceFile, statement, factory.createBlock(emptyArray));
                         }
                         return;
                     }
@@ -49,7 +51,7 @@ namespace ts.codefix {
 
         if (isBlock(statement.parent)) {
             const end = start + length;
-            const lastStatement = Debug.assertDefined(lastWhere(sliceAfter(statement.parent.statements, statement), s => s.pos < end), "Some statement should be last");
+            const lastStatement = Debug.checkDefined(lastWhere(sliceAfter(statement.parent.statements, statement), s => s.pos < end), "Some statement should be last");
             changes.deleteNodeRange(sourceFile, statement, lastStatement);
         }
         else {

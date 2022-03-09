@@ -352,6 +352,11 @@ function parsePrimaryExpression(): any {
             `function F() {
     [#|function G() { }|]
 }`);
+        // Arrow function
+        testExtractFunction("extractFunction34",
+            `const F = () => {
+    [#|function G() { }|]
+};`);
 
         testExtractFunction("extractFunction_RepeatedSubstitution",
             `namespace X {

@@ -1,0 +1,108 @@
+/a.ts(4,1): error TS1361: 'as' cannot be used as a value because it was imported using 'import type'.
+/b.ts(2,1): error TS2304: Cannot find name 'type'.
+/c.ts(2,1): error TS2304: Cannot find name 'type'.
+/c.ts(3,1): error TS1361: 'as' cannot be used as a value because it was imported using 'import type'.
+/d.ts(1,21): error TS2300: Duplicate identifier 'as'.
+/d.ts(1,24): error TS1005: ',' expected.
+/d.ts(1,24): error TS2300: Duplicate identifier 'as'.
+/e.ts(4,1): error TS1361: 'as' cannot be used as a value because it was imported using 'import type'.
+/f.ts(1,15): error TS1003: Identifier expected.
+/f.ts(1,15): error TS2305: Module '"./mod.js"' has no exported member 'import'.
+/f.ts(2,18): error TS1003: Identifier expected.
+/f.ts(2,18): error TS2300: Duplicate identifier 'export'.
+/f.ts(3,21): error TS1003: Identifier expected.
+/f.ts(3,21): error TS2300: Duplicate identifier 'export'.
+/f.ts(6,1): error TS2304: Cannot find name 'type'.
+/f.ts(7,1): error TS2304: Cannot find name 'as'.
+/f.ts(8,1): error TS1361: 'something' cannot be used as a value because it was imported using 'import type'.
+/f.ts(9,1): error TS1361: 's' cannot be used as a value because it was imported using 'import type'.
+/g.ts(1,15): error TS2206: The 'type' modifier cannot be used on a named import when 'import type' is used on its import statement.
+
+
+==== /mod.ts (0 errors) ====
+    export const as = 0;
+    export const type = 0;
+    export const something = 0;
+    
+==== /a.ts (1 errors) ====
+    import { type } from "./mod.js";
+    import { type as } from "./mod.js";
+    type;
+    as; // Error (used in emitting position)
+    ~~
+!!! error TS1361: 'as' cannot be used as a value because it was imported using 'import type'.
+!!! related TS1376 /a.ts:2:10: 'as' was imported here.
+    
+==== /b.ts (1 errors) ====
+    import { type as as } from "./mod.js";
+    type; // Error (cannot resolve name)
+    ~~~~
+!!! error TS2304: Cannot find name 'type'.
+    as;
+    
+==== /c.ts (2 errors) ====
+    import { type as as as } from "./mod.js";
+    type; // Error (cannot resolve name)
+    ~~~~
+!!! error TS2304: Cannot find name 'type'.
+    as; // Error (used in emitting position)
+    ~~
+!!! error TS1361: 'as' cannot be used as a value because it was imported using 'import type'.
+!!! related TS1376 /c.ts:1:10: 'as' was imported here.
+    
+==== /d.ts (3 errors) ====
+    import { type as as as as } from "./mod.js"; // Error
+                        ~~
+!!! error TS2300: Duplicate identifier 'as'.
+                           ~~
+!!! error TS1005: ',' expected.
+                           ~~
+!!! error TS2300: Duplicate identifier 'as'.
+    
+==== /e.ts (1 errors) ====
+    import { type type as as } from "./mod.js";
+    import { type as type } from "./mod.js";
+    type;
+    as; // Error (used in emitting position)
+    ~~
+!!! error TS1361: 'as' cannot be used as a value because it was imported using 'import type'.
+!!! related TS1376 /e.ts:1:10: 'as' was imported here.
+    
+==== /f.ts (10 errors) ====
+    import { type import } from "./mod.js"; // Error
+                  ~~~~~~
+!!! error TS1003: Identifier expected.
+                  ~~~~~~
+!!! error TS2305: Module '"./mod.js"' has no exported member 'import'.
+    import { type as export } from "./mod.js"; // Error
+                     ~~~~~~
+!!! error TS1003: Identifier expected.
+                     ~~~~~~
+!!! error TS2300: Duplicate identifier 'export'.
+    import { type as as export } from "./mod.js"; // Error
+                        ~~~~~~
+!!! error TS1003: Identifier expected.
+                        ~~~~~~
+!!! error TS2300: Duplicate identifier 'export'.
+    import { type something } from "./mod.js";
+    import { type something as s } from "./mod.js";
+    type; // Error (cannot resolve name)
+    ~~~~
+!!! error TS2304: Cannot find name 'type'.
+    as; // Error (cannot resolve name)
+    ~~
+!!! error TS2304: Cannot find name 'as'.
+    something; // Error (used in emitting position)
+    ~~~~~~~~~
+!!! error TS1361: 'something' cannot be used as a value because it was imported using 'import type'.
+!!! related TS1376 /f.ts:4:10: 'something' was imported here.
+    s; // Error (used in emitting position)
+    ~
+!!! error TS1361: 's' cannot be used as a value because it was imported using 'import type'.
+!!! related TS1376 /f.ts:5:10: 's' was imported here.
+    
+==== /g.ts (1 errors) ====
+    import type { type something } from "./mod.js"; // Error
+                  ~~~~
+!!! error TS2206: The 'type' modifier cannot be used on a named import when 'import type' is used on its import statement.
+    

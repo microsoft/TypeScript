@@ -1,0 +1,56 @@
+=== tests/cases/conformance/controlFlow/controlFlowAliasingCatchVariables.ts ===
+try {}
+catch (e) {
+>e : Symbol(e, Decl(controlFlowAliasingCatchVariables.ts, 1, 7))
+
+    const isString = typeof e === 'string';
+>isString : Symbol(isString, Decl(controlFlowAliasingCatchVariables.ts, 2, 9))
+>e : Symbol(e, Decl(controlFlowAliasingCatchVariables.ts, 1, 7))
+
+    if (isString) {
+>isString : Symbol(isString, Decl(controlFlowAliasingCatchVariables.ts, 2, 9))
+
+        e.toUpperCase(); // e string
+>e.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>e : Symbol(e, Decl(controlFlowAliasingCatchVariables.ts, 1, 7))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+    }
+
+    if (typeof e === 'string') {
+>e : Symbol(e, Decl(controlFlowAliasingCatchVariables.ts, 1, 7))
+
+        e.toUpperCase(); // e string
+>e.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>e : Symbol(e, Decl(controlFlowAliasingCatchVariables.ts, 1, 7))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+    }
+}
+
+try {}
+catch (e) {
+>e : Symbol(e, Decl(controlFlowAliasingCatchVariables.ts, 13, 7))
+
+    const isString = typeof e === 'string';
+>isString : Symbol(isString, Decl(controlFlowAliasingCatchVariables.ts, 14, 9))
+>e : Symbol(e, Decl(controlFlowAliasingCatchVariables.ts, 13, 7))
+
+    e = 1;
+>e : Symbol(e, Decl(controlFlowAliasingCatchVariables.ts, 13, 7))
+
+    if (isString) {
+>isString : Symbol(isString, Decl(controlFlowAliasingCatchVariables.ts, 14, 9))
+
+        e.toUpperCase(); // e any/unknown
+>e : Symbol(e, Decl(controlFlowAliasingCatchVariables.ts, 13, 7))
+    }
+
+    if (typeof e === 'string') {
+>e : Symbol(e, Decl(controlFlowAliasingCatchVariables.ts, 13, 7))
+
+        e.toUpperCase(); // e string
+>e.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>e : Symbol(e, Decl(controlFlowAliasingCatchVariables.ts, 13, 7))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+    }
+}
+

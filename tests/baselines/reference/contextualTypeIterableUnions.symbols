@@ -1,0 +1,33 @@
+=== tests/cases/compiler/contextualTypeIterableUnions.ts ===
+declare class DMap<K, V>  {
+>DMap : Symbol(DMap, Decl(contextualTypeIterableUnions.ts, 0, 0))
+>K : Symbol(K, Decl(contextualTypeIterableUnions.ts, 0, 19))
+>V : Symbol(V, Decl(contextualTypeIterableUnions.ts, 0, 21))
+
+  constructor(iterable: Iterable<[K, V]> | undefined);
+>iterable : Symbol(iterable, Decl(contextualTypeIterableUnions.ts, 1, 14))
+>Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+>K : Symbol(K, Decl(contextualTypeIterableUnions.ts, 0, 19))
+>V : Symbol(V, Decl(contextualTypeIterableUnions.ts, 0, 21))
+}
+new DMap([["1", 2]]);
+>DMap : Symbol(DMap, Decl(contextualTypeIterableUnions.ts, 0, 0))
+
+const i1: Iterable<{ a: true }> | undefined = [{ a: true }];
+>i1 : Symbol(i1, Decl(contextualTypeIterableUnions.ts, 5, 5))
+>Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+>a : Symbol(a, Decl(contextualTypeIterableUnions.ts, 5, 20))
+>a : Symbol(a, Decl(contextualTypeIterableUnions.ts, 5, 48))
+
+const i2: Iterable<{ a: true }> | Iterable<{ b: false }> = [{ b: false }];
+>i2 : Symbol(i2, Decl(contextualTypeIterableUnions.ts, 6, 5))
+>Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+>a : Symbol(a, Decl(contextualTypeIterableUnions.ts, 6, 20))
+>Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+>b : Symbol(b, Decl(contextualTypeIterableUnions.ts, 6, 44))
+>b : Symbol(b, Decl(contextualTypeIterableUnions.ts, 6, 61))
+
+const i3: Iterable<number> | 1[] = [2];
+>i3 : Symbol(i3, Decl(contextualTypeIterableUnions.ts, 7, 5))
+>Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+

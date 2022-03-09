@@ -10,7 +10,7 @@ declare function getNum(): number;
 >getNum : () => number
 
 declare function foo(arg: { x: Bar, y: Date }, item: number, items?: [number, number, number]): void;
->foo : (arg: { x: Bar; y: Date; }, item: number, items?: [number, number, number]) => void
+>foo : (arg: {    x: Bar;    y: Date;}, item: number, items?: [number, number, number]) => void
 >arg : { x: Bar; y: Date; }
 >x : Bar
 >y : Date

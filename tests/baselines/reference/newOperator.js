@@ -99,7 +99,7 @@ var S = /** @class */ (function () {
         get: function () {
             return new M.T[];
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return S;

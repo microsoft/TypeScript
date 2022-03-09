@@ -1,0 +1,16 @@
+=== tests/cases/compiler/exportDefaultTypeClassAndValue.ts ===
+const foo = 1
+>foo : Symbol(foo, Decl(exportDefaultTypeClassAndValue.ts, 0, 5))
+
+export default foo
+>foo : Symbol(foo, Decl(exportDefaultTypeClassAndValue.ts, 0, 5))
+
+export default class Foo {}
+>Foo : Symbol(foo, Decl(exportDefaultTypeClassAndValue.ts, 0, 13), Decl(exportDefaultTypeClassAndValue.ts, 1, 18))
+
+type Bar = {}
+>Bar : Symbol(Bar, Decl(exportDefaultTypeClassAndValue.ts, 2, 27))
+
+export default Bar
+>Bar : Symbol(Bar, Decl(exportDefaultTypeClassAndValue.ts, 2, 27))
+

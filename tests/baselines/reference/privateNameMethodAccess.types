@@ -1,0 +1,66 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameMethodAccess.ts ===
+class A2 {
+>A2 : A2
+
+    #method() { return "" }
+>#method : () => string
+>"" : ""
+
+    constructor() {
+        console.log(this.#method);
+>console.log(this.#method) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>this.#method : () => string
+>this : this
+
+        let a: A2 = this;
+>a : A2
+>this : this
+
+        a.#method();
+>a.#method() : string
+>a.#method : () => string
+>a : A2
+
+        function  foo (){
+>foo : () => void
+
+            a.#method();
+>a.#method() : string
+>a.#method : () => string
+>a : A2
+        }
+    }
+}
+new A2().#method(); // Error
+>new A2().#method() : any
+>new A2().#method : any
+>new A2() : A2
+>A2 : typeof A2
+
+function  foo (){
+>foo : () => void
+
+    new A2().#method(); // Error
+>new A2().#method() : any
+>new A2().#method : any
+>new A2() : A2
+>A2 : typeof A2
+}
+
+class B2 {
+>B2 : B2
+
+    m() {
+>m : () => void
+
+        new A2().#method();
+>new A2().#method() : any
+>new A2().#method : any
+>new A2() : A2
+>A2 : typeof A2
+    }
+}
+

@@ -1,14 +1,8 @@
-tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration5_es6.ts(1,14): error TS1138: Parameter declaration expected.
-tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration5_es6.ts(1,14): error TS2304: Cannot find name 'yield'.
-tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration5_es6.ts(1,19): error TS1005: ';' expected.
+tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration5_es6.ts(1,14): error TS1359: Identifier expected. 'yield' is a reserved word that cannot be used here.
 
 
-==== tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration5_es6.ts (3 errors) ====
+==== tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration5_es6.ts (1 errors) ====
     function*foo(yield) {
                  ~~~~~
-!!! error TS1138: Parameter declaration expected.
-                 ~~~~~
-!!! error TS2304: Cannot find name 'yield'.
-                      ~
-!!! error TS1005: ';' expected.
+!!! error TS1359: Identifier expected. 'yield' is a reserved word that cannot be used here.
     }

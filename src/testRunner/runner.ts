@@ -6,8 +6,27 @@ namespace Harness {
 
     function runTests(runners: RunnerBase[]) {
         for (let i = iterations; i > 0; i--) {
+            const seen = new Map<string, string>();
+            const dupes: [string, string][] = [];
             for (const runner of runners) {
+                if (runner instanceof CompilerBaselineRunner || runner instanceof FourSlashRunner) {
+                    for (const sf of runner.enumerateTestFiles()) {
+                        const full = typeof sf === "string" ? sf : sf.file;
+                        const base = vpath.basename(full).toLowerCase();
+                        // allow existing dupes in fourslash/shims and fourslash/server
+                        if (seen.has(base) && !/fourslash\/(shim|server)/.test(full)) {
+                            dupes.push([seen.get(base)!, full]);
+                        }
+                        else {
+                            seen.set(base, full);
+                        }
+                    }
+                }
                 runner.initializeTests();
+            }
+            if (dupes.length) {
+                throw new Error(`${dupes.length} Tests with duplicate baseline names:
+${JSON.stringify(dupes, undefined, 2)}`);
             }
         }
     }
@@ -94,7 +113,7 @@ namespace Harness {
     export let globalTimeout: number;
     function handleTestConfig() {
         if (testConfigContent !== "") {
-            const testConfig = <TestConfig>JSON.parse(testConfigContent);
+            const testConfig = JSON.parse(testConfigContent) as TestConfig;
             if (testConfig.light) {
                 setLightMode(true);
             }
@@ -122,11 +141,11 @@ namespace Harness {
             }
 
             if (testConfig.stackTraceLimit === "full") {
-                (<any>Error).stackTraceLimit = Infinity;
+                (Error as any).stackTraceLimit = Infinity;
                 stackTraceLimit = testConfig.stackTraceLimit;
             }
             else if ((+testConfig.stackTraceLimit! | 0) > 0) {
-                (<any>Error).stackTraceLimit = +testConfig.stackTraceLimit! | 0;
+                (Error as any).stackTraceLimit = +testConfig.stackTraceLimit! | 0;
                 stackTraceLimit = +testConfig.stackTraceLimit! | 0;
             }
             if (testConfig.listenForWork) {
@@ -223,6 +242,12 @@ namespace Harness {
     }
 
     function beginTests() {
+        ts.Debug.loggingHost = {
+            log(_level, s) {
+                console.log(s || "");
+            }
+        };
+
         if (ts.Debug.isDebugging) {
             ts.Debug.enableDebugInfo();
         }

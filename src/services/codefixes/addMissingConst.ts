@@ -8,7 +8,7 @@ namespace ts.codefix {
 
     registerCodeFix({
         errorCodes,
-        getCodeActions: (context) => {
+        getCodeActions: function getCodeActionsToAddMissingConst(context) {
             const changes = textChanges.ChangeTracker.with(context, t => makeChange(t, context.sourceFile, context.span.start, context.program));
             if (changes.length > 0) {
                 return [createCodeFixAction(fixId, changes, Diagnostics.Add_const_to_unresolved_variable, fixId, Diagnostics.Add_const_to_all_unresolved_variables)];
@@ -16,12 +16,12 @@ namespace ts.codefix {
         },
         fixIds: [fixId],
         getAllCodeActions: context => {
-            const fixedNodes = new NodeSet();
+            const fixedNodes = new Set<Node>();
             return codeFixAll(context, errorCodes, (changes, diag) => makeChange(changes, diag.file, diag.start, context.program, fixedNodes));
         },
     });
 
-    function makeChange(changeTracker: textChanges.ChangeTracker, sourceFile: SourceFile, pos: number, program: Program, fixedNodes?: NodeSet<Node>) {
+    function makeChange(changeTracker: textChanges.ChangeTracker, sourceFile: SourceFile, pos: number, program: Program, fixedNodes?: Set<Node>) {
         const token = getTokenAtPosition(sourceFile, pos);
         const forInitializer = findAncestor(token, node =>
             isForInOrOfStatement(node.parent) ? node.parent.initializer === node :
@@ -57,8 +57,8 @@ namespace ts.codefix {
         }
     }
 
-    function applyChange(changeTracker: textChanges.ChangeTracker, initializer: Node, sourceFile: SourceFile, fixedNodes?: NodeSet<Node>) {
-        if (!fixedNodes || fixedNodes.tryAdd(initializer)) {
+    function applyChange(changeTracker: textChanges.ChangeTracker, initializer: Node, sourceFile: SourceFile, fixedNodes?: Set<Node>) {
+        if (!fixedNodes || tryAddToSet(fixedNodes, initializer)) {
             changeTracker.insertModifierBefore(sourceFile, SyntaxKind.ConstKeyword, initializer);
         }
     }

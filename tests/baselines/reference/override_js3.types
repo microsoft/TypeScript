@@ -1,0 +1,27 @@
+=== tests/cases/conformance/override/a.js ===
+class B {
+>B : B
+
+    foo (v) {}
+>foo : (v: any) => void
+>v : any
+
+    fooo (v) {}
+>fooo : (v: any) => void
+>v : any
+}
+
+class D extends B {
+>D : D
+>B : B
+
+    override foo (v) {}
+>foo : (v: any) => void
+>v : any
+
+    /** @override */
+    fooo (v) {}
+>fooo : (v: any) => void
+>v : any
+}
+

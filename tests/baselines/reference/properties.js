@@ -23,7 +23,7 @@ var MyClass = /** @class */ (function () {
         set: function (value) {
             //
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return MyClass;

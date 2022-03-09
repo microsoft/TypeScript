@@ -1,0 +1,23 @@
+tests/cases/compiler/circularConstraintYieldsAppropriateError.ts(10,7): error TS2310: Type 'Foo' recursively references itself as a base type.
+
+
+==== tests/cases/compiler/circularConstraintYieldsAppropriateError.ts (1 errors) ====
+    // https://github.com/Microsoft/TypeScript/issues/16861
+    class BaseType<T> {
+        bar: T
+    }
+    
+    class NextType<C extends { someProp: any }, T = C['someProp']> extends BaseType<T> {
+        baz: string;
+    }
+    
+    class Foo extends NextType<Foo> {
+          ~~~
+!!! error TS2310: Type 'Foo' recursively references itself as a base type.
+        someProp: {
+            test: true
+        }
+    }
+    
+    const foo = new Foo();
+    foo.bar.test

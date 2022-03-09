@@ -1,6 +1,6 @@
 tests/cases/conformance/jsdoc/validate.ts(14,3): error TS2540: Cannot assign to 'lastName' because it is a read-only property.
 tests/cases/conformance/jsdoc/validate.ts(15,3): error TS2540: Cannot assign to 'houseNumber' because it is a read-only property.
-tests/cases/conformance/jsdoc/validate.ts(16,1): error TS2322: Type '12' is not assignable to type 'string'.
+tests/cases/conformance/jsdoc/validate.ts(16,1): error TS2322: Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/jsdoc/validate.ts(17,3): error TS2540: Cannot assign to 'middleInit' because it is a read-only property.
 
 
@@ -26,7 +26,7 @@ tests/cases/conformance/jsdoc/validate.ts(17,3): error TS2540: Cannot assign to 
 !!! error TS2540: Cannot assign to 'houseNumber' because it is a read-only property.
     x.zipStr = 12; // should fail
     ~~~~~~~~
-!!! error TS2322: Type '12' is not assignable to type 'string'.
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
     x.middleInit = "R"; // should also fail
       ~~~~~~~~~~
 !!! error TS2540: Cannot assign to 'middleInit' because it is a read-only property.

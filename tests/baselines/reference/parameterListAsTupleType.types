@@ -8,7 +8,7 @@ function foo(a: number, b: string) {
 >true : true
 }
 type Foops = Parameters<typeof foo>;
->Foops : [number, string]
+>Foops : [a: number, b: string]
 >foo : (a: number, b: string) => boolean
 
 const x = (a: number) => 5;
@@ -18,17 +18,17 @@ const x = (a: number) => 5;
 >5 : 5
 
 type Xps = Parameters<typeof x>;
->Xps : [number]
+>Xps : [a: number]
 >x : (a: number) => number
 
 const a: Xps = ['should-not-work']; // works, but shouldn't
->a : [number]
+>a : [a: number]
 >['should-not-work'] : [string]
 >'should-not-work' : "should-not-work"
 
 function t(...args: Xps) {} // should work
 >t : (a: number) => void
->args : [number]
+>args : [a: number]
 
 class C {
 >C : C
@@ -44,7 +44,7 @@ type Cps = Parameters<typeof C>; // should not work
 >C : typeof C
 
 type Ccps = ConstructorParameters<typeof C>; // should be [number, string]
->Ccps : [number, string]
+>Ccps : [a: number, b: string]
 >C : typeof C
 
 class D {
@@ -56,6 +56,6 @@ class D {
     }
 }
 type Dcps = ConstructorParameters<typeof D>; // should be [number, ...string[]]
->Dcps : [number, ...string[]]
+>Dcps : [a: number, ...rest: string[]]
 >D : typeof D
 

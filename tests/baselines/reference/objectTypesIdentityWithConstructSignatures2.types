@@ -75,12 +75,12 @@ function foo2(x: any) { }
 >x : any
 
 function foo3(x: typeof a);
->foo3 : { (x: new (x: Date) => string): any; (x: new (x: Date) => string): any; }
+>foo3 : { (x: typeof a): any; (x: new (x: Date) => string): any; }
 >x : new (x: Date) => string
 >a : new (x: Date) => string
 
 function foo3(x: typeof a); // error
->foo3 : { (x: new (x: Date) => string): any; (x: new (x: Date) => string): any; }
+>foo3 : { (x: new (x: Date) => string): any; (x: typeof a): any; }
 >x : new (x: Date) => string
 >a : new (x: Date) => string
 
@@ -89,12 +89,12 @@ function foo3(x: any) { }
 >x : any
 
 function foo4(x: typeof b);
->foo4 : { (x: { new(x: RegExp): string; }): any; (x: { new(x: RegExp): string; }): any; }
+>foo4 : { (x: typeof b): any; (x: { new(x: RegExp): string; }): any; }
 >x : { new(x: RegExp): string; }
 >b : { new(x: RegExp): string; }
 
 function foo4(x: typeof b); // error
->foo4 : { (x: { new(x: RegExp): string; }): any; (x: { new(x: RegExp): string; }): any; }
+>foo4 : { (x: { new(x: RegExp): string; }): any; (x: typeof b): any; }
 >x : { new(x: RegExp): string; }
 >b : { new(x: RegExp): string; }
 
@@ -131,7 +131,7 @@ function foo10(x: B);
 >x : B
 
 function foo10(x: typeof a); // ok
->foo10 : { (x: B): any; (x: new (x: Date) => string): any; }
+>foo10 : { (x: B): any; (x: typeof a): any; }
 >x : new (x: Date) => string
 >a : new (x: Date) => string
 
@@ -144,7 +144,7 @@ function foo11(x: B);
 >x : B
 
 function foo11(x: typeof b); // ok
->foo11 : { (x: B): any; (x: { new(x: RegExp): string; }): any; }
+>foo11 : { (x: B): any; (x: typeof b): any; }
 >x : { new(x: RegExp): string; }
 >b : { new(x: RegExp): string; }
 
@@ -181,7 +181,7 @@ function foo13(x: I);
 >x : I
 
 function foo13(x: typeof a); // ok
->foo13 : { (x: I): any; (x: new (x: Date) => string): any; }
+>foo13 : { (x: I): any; (x: typeof a): any; }
 >x : new (x: Date) => string
 >a : new (x: Date) => string
 
@@ -194,7 +194,7 @@ function foo14(x: I);
 >x : I
 
 function foo14(x: typeof b); // ok
->foo14 : { (x: I): any; (x: { new(x: RegExp): string; }): any; }
+>foo14 : { (x: I): any; (x: typeof b): any; }
 >x : { new(x: RegExp): string; }
 >b : { new(x: RegExp): string; }
 

@@ -756,19 +756,19 @@ function append<T>(a: T[], x: T): T[] {
 }
 
 type Bit = 0 | 1;
->Bit : 0 | 1
+>Bit : Bit
 
 let aa = makeArray<Bit>(0);
->aa : (0 | 1)[]
->makeArray<Bit>(0) : (0 | 1)[]
+>aa : Bit[]
+>makeArray<Bit>(0) : Bit[]
 >makeArray : <T>(x: T) => T[]
 >0 : 0
 
 aa = append(aa, 1);
->aa = append(aa, 1) : (0 | 1)[]
->aa : (0 | 1)[]
->append(aa, 1) : (0 | 1)[]
+>aa = append(aa, 1) : Bit[]
+>aa : Bit[]
+>append(aa, 1) : Bit[]
 >append : <T>(a: T[], x: T) => T[]
->aa : (0 | 1)[]
+>aa : Bit[]
 >1 : 1
 

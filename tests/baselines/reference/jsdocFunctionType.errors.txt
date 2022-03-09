@@ -73,3 +73,15 @@ tests/cases/conformance/jsdoc/functions.js(65,14): error TS2345: Argument of typ
 !!! error TS2345:   Property 'length' is missing in type 'E' but required in type '{ length: number; }'.
 !!! related TS2728 tests/cases/conformance/jsdoc/functions.js:12:28: 'length' is declared here.
     
+    // Repro from #39229
+    
+    /**
+     * @type {(...args: [string, string] | [number, string, string]) => void}
+     */
+    function foo(...args) {
+      args;
+    }
+    
+    foo('abc', 'def');
+    foo(42, 'abc', 'def');
+    

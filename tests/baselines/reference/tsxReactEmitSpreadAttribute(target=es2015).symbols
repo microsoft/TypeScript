@@ -1,0 +1,99 @@
+=== tests/cases/conformance/jsx/test.tsx ===
+/// <reference path="react16.d.ts" />
+
+export function T1(a: any) {
+>T1 : Symbol(T1, Decl(test.tsx, 0, 0))
+>a : Symbol(a, Decl(test.tsx, 2, 19))
+
+    return <div className={"T1"} { ...a }>T1</div>;
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+>className : Symbol(className, Decl(test.tsx, 3, 15))
+>a : Symbol(a, Decl(test.tsx, 2, 19))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+}
+
+export function T2(a: any, b: any) {
+>T2 : Symbol(T2, Decl(test.tsx, 4, 1))
+>a : Symbol(a, Decl(test.tsx, 6, 19))
+>b : Symbol(b, Decl(test.tsx, 6, 26))
+
+    return <div className={"T2"} { ...a } { ...b }>T2</div>;
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+>className : Symbol(className, Decl(test.tsx, 7, 15))
+>a : Symbol(a, Decl(test.tsx, 6, 19))
+>b : Symbol(b, Decl(test.tsx, 6, 26))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+}
+
+export function T3(a: any, b: any) {
+>T3 : Symbol(T3, Decl(test.tsx, 8, 1))
+>a : Symbol(a, Decl(test.tsx, 10, 19))
+>b : Symbol(b, Decl(test.tsx, 10, 26))
+
+    return <div { ...a } className={"T3"} { ...b }>T3</div>;
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+>a : Symbol(a, Decl(test.tsx, 10, 19))
+>className : Symbol(className, Decl(test.tsx, 11, 24))
+>b : Symbol(b, Decl(test.tsx, 10, 26))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+}
+
+export function T4(a: any, b: any) {
+>T4 : Symbol(T4, Decl(test.tsx, 12, 1))
+>a : Symbol(a, Decl(test.tsx, 14, 19))
+>b : Symbol(b, Decl(test.tsx, 14, 26))
+
+    return <div className={"T4"} { ...{ ...a, ...b } }>T4</div>;
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+>className : Symbol(className, Decl(test.tsx, 15, 15))
+>a : Symbol(a, Decl(test.tsx, 14, 19))
+>b : Symbol(b, Decl(test.tsx, 14, 26))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+}
+
+export function T5(a: any, b: any, c: any, d: any) {
+>T5 : Symbol(T5, Decl(test.tsx, 16, 1))
+>a : Symbol(a, Decl(test.tsx, 18, 19))
+>b : Symbol(b, Decl(test.tsx, 18, 26))
+>c : Symbol(c, Decl(test.tsx, 18, 34))
+>d : Symbol(d, Decl(test.tsx, 18, 42))
+
+    return <div className={"T5"} { ...{ ...a, ...b, ...{ c, d } } }>T5</div>;
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+>className : Symbol(className, Decl(test.tsx, 19, 15))
+>a : Symbol(a, Decl(test.tsx, 18, 19))
+>b : Symbol(b, Decl(test.tsx, 18, 26))
+>c : Symbol(c, Decl(test.tsx, 19, 56))
+>d : Symbol(d, Decl(test.tsx, 19, 59))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+}
+
+export function T6(a: any, b: any, c: any, d: any) {
+>T6 : Symbol(T6, Decl(test.tsx, 20, 1))
+>a : Symbol(a, Decl(test.tsx, 22, 19))
+>b : Symbol(b, Decl(test.tsx, 22, 26))
+>c : Symbol(c, Decl(test.tsx, 22, 34))
+>d : Symbol(d, Decl(test.tsx, 22, 42))
+
+    return <div className={"T6"} { ...{ ...a, ...b, ...{ ...c, ...d } } }>T6</div>;
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+>className : Symbol(className, Decl(test.tsx, 23, 15))
+>a : Symbol(a, Decl(test.tsx, 22, 19))
+>b : Symbol(b, Decl(test.tsx, 22, 26))
+>c : Symbol(c, Decl(test.tsx, 22, 34))
+>d : Symbol(d, Decl(test.tsx, 22, 42))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+}
+
+export function T7(a: any, b: any, c: any, d: any) {
+>T7 : Symbol(T7, Decl(test.tsx, 24, 1))
+>a : Symbol(a, Decl(test.tsx, 26, 19))
+>b : Symbol(b, Decl(test.tsx, 26, 26))
+>c : Symbol(c, Decl(test.tsx, 26, 34))
+>d : Symbol(d, Decl(test.tsx, 26, 42))
+
+    return <div>T7</div>;
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+}
+

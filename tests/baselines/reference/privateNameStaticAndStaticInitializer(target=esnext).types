@@ -1,0 +1,14 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameStaticAndStaticInitializer.ts ===
+class A {
+>A : A
+
+  static #foo = 1;
+>#foo : number
+>1 : 1
+
+  static #prop = 2;
+>#prop : number
+>2 : 2
+}
+
+

@@ -357,7 +357,7 @@ x<string, string, string>(null, null, null); // Error
 
 // Generic call with multiple parameters of generic type passed arguments with no best common type
 function someGenerics9<T extends any>(a: T, b: T, c: T): T {
->someGenerics9 : <T extends any>(a: T, b: T, c: T) => T
+>someGenerics9 : <T extends unknown>(a: T, b: T, c: T) => T
 >a : T
 >b : T
 >c : T
@@ -368,7 +368,7 @@ function someGenerics9<T extends any>(a: T, b: T, c: T): T {
 var a9a = someGenerics9('', 0, []);
 >a9a : string
 >someGenerics9('', 0, []) : ""
->someGenerics9 : <T extends any>(a: T, b: T, c: T) => T
+>someGenerics9 : <T extends unknown>(a: T, b: T, c: T) => T
 >'' : ""
 >0 : 0
 >[] : undefined[]
@@ -379,7 +379,7 @@ var a9a: {};
 var a9b = someGenerics9<{ a?: number; b?: string; }>({ a: 0 }, { b: '' }, null);
 >a9b : { a?: number; b?: string; }
 >someGenerics9<{ a?: number; b?: string; }>({ a: 0 }, { b: '' }, null) : { a?: number; b?: string; }
->someGenerics9 : <T extends any>(a: T, b: T, c: T) => T
+>someGenerics9 : <T extends unknown>(a: T, b: T, c: T) => T
 >a : number
 >b : string
 >{ a: 0 } : { a: number; }
@@ -413,7 +413,7 @@ interface A92 {
 var a9e = someGenerics9(undefined, { x: 6, z: window }, { x: 6, y: '' });
 >a9e : { x: number; z: Window & typeof globalThis; y?: undefined; } | { x: number; y: string; z?: undefined; }
 >someGenerics9(undefined, { x: 6, z: window }, { x: 6, y: '' }) : { x: number; z: Window & typeof globalThis; y?: undefined; } | { x: number; y: string; z?: undefined; }
->someGenerics9 : <T extends any>(a: T, b: T, c: T) => T
+>someGenerics9 : <T extends unknown>(a: T, b: T, c: T) => T
 >undefined : undefined
 >{ x: 6, z: window } : { x: number; z: Window & typeof globalThis; }
 >x : number
@@ -432,7 +432,7 @@ var a9e: {};
 var a9f = someGenerics9<A92>(undefined, { x: 6, z: window }, { x: 6, y: '' });
 >a9f : A92
 >someGenerics9<A92>(undefined, { x: 6, z: window }, { x: 6, y: '' }) : A92
->someGenerics9 : <T extends any>(a: T, b: T, c: T) => T
+>someGenerics9 : <T extends unknown>(a: T, b: T, c: T) => T
 >undefined : undefined
 >{ x: 6, z: window } : { x: number; z: Window & typeof globalThis; }
 >x : number
@@ -452,7 +452,7 @@ var a9f: A92;
 var a9d = someGenerics9({ x: 3 }, { x: 6 }, { x: 6 });
 >a9d : { x: number; }
 >someGenerics9({ x: 3 }, { x: 6 }, { x: 6 }) : { x: number; }
->someGenerics9 : <T extends any>(a: T, b: T, c: T) => T
+>someGenerics9 : <T extends unknown>(a: T, b: T, c: T) => T
 >{ x: 3 } : { x: number; }
 >x : number
 >3 : 3
@@ -474,7 +474,7 @@ var anyVar: any;
 var a = someGenerics9(7, anyVar, 4);
 >a : any
 >someGenerics9(7, anyVar, 4) : any
->someGenerics9 : <T extends any>(a: T, b: T, c: T) => T
+>someGenerics9 : <T extends unknown>(a: T, b: T, c: T) => T
 >7 : 7
 >anyVar : any
 >4 : 4
@@ -486,7 +486,7 @@ var a: any;
 var arr = someGenerics9([], null, undefined);
 >arr : any[]
 >someGenerics9([], null, undefined) : any[]
->someGenerics9 : <T extends any>(a: T, b: T, c: T) => T
+>someGenerics9 : <T extends unknown>(a: T, b: T, c: T) => T
 >[] : undefined[]
 >null : null
 >undefined : undefined

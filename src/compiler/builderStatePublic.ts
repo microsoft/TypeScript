@@ -2,6 +2,7 @@ namespace ts {
     export interface EmitOutput {
         outputFiles: OutputFile[];
         emitSkipped: boolean;
+        /* @internal */ diagnostics: readonly Diagnostic[];
         /* @internal */ exportedModulesFromDeclarationEmit?: ExportedModulesFromDeclarationEmit;
     }
 

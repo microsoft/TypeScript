@@ -1,6 +1,6 @@
 // @ts-check
 /// <reference lib="esnext.asynciterable" />
-const Octokit = require("@octokit/rest");
+const { Octokit } = require("@octokit/rest");
 const { runSequence } = require("./run-sequence");
 
 // The first is used by bot-based kickoffs, the second by automatic triggers
@@ -34,8 +34,8 @@ async function main() {
     // Forcibly cleanup workspace
     runSequence([
         ["git", ["checkout", "."]],
-        ["git", ["fetch", "-fu", "origin", "master:master"]],
-        ["git", ["checkout", "master"]],
+        ["git", ["fetch", "-fu", "origin", "main:main"]],
+        ["git", ["checkout", "main"]],
         ["git", ["remote", "add", "fork", remoteUrl]], // Add the remote fork
     ]);
 
@@ -51,15 +51,15 @@ async function main() {
                         owner: "Microsoft",
                         repo: "TypeScript",
                         issue_number: num,
-                        body: `This PR is configured as an experiment, and currently has rebase conflicts with master - please rebase onto master and fix the conflicts.`
+                        body: `This PR is configured as an experiment, and currently has rebase conflicts with main - please rebase onto main and fix the conflicts.`
                     });
                 }
-                throw new Error(`Rebase conflict detected in PR ${num} with master`); // A PR is currently in conflict, give up
+                throw new Error(`Rebase conflict detected in PR ${num} with main`); // A PR is currently in conflict, give up
             }
             runSequence([
                 ["git", ["fetch", "origin", `pull/${num}/head:${num}`]],
                 ["git", ["checkout", `${num}`]],
-                ["git", ["rebase", "master"]],
+                ["git", ["rebase", "main"]],
                 ["git", ["push", "-f", "-u", "fork", `${num}`]], // Keep a rebased copy of this branch in our fork
             ]);
 
@@ -71,12 +71,13 @@ async function main() {
 
     // Return to `master` and make a new `experimental` branch
     runSequence([
-        ["git", ["checkout", "master"]],
+        ["git", ["checkout", "main"]],
         ["git", ["checkout", "-b", "experimental"]],
     ]);
 
     // Merge each branch into `experimental` (which, if there is a conflict, we now know is from inter-experiment conflict)
-    for (const branch of prnums) {
+    for (const branchnum of prnums) {
+        const branch = "" + branchnum;
         // Find the merge base
         const mergeBase = runSequence([
             ["git", ["merge-base", branch, "experimental"]],

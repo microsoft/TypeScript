@@ -1,8 +1,9 @@
 tests/cases/compiler/inheritanceMemberPropertyOverridingAccessor.ts(3,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/inheritanceMemberPropertyOverridingAccessor.ts(6,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/inheritanceMemberPropertyOverridingAccessor.ts(12,5): error TS2610: 'x' is defined as an accessor in class 'a', but is overridden here in 'b' as an instance property.
 
 
-==== tests/cases/compiler/inheritanceMemberPropertyOverridingAccessor.ts (2 errors) ====
+==== tests/cases/compiler/inheritanceMemberPropertyOverridingAccessor.ts (3 errors) ====
     class a {
         private __x: () => string;
         get x() {
@@ -19,4 +20,6 @@ tests/cases/compiler/inheritanceMemberPropertyOverridingAccessor.ts(6,9): error 
     
     class b extends a {
         x: () => string;
+        ~
+!!! error TS2610: 'x' is defined as an accessor in class 'a', but is overridden here in 'b' as an instance property.
     }

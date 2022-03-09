@@ -5,7 +5,7 @@ type Fn<T extends object> = <U extends T>(subj: U) => U
 >subj : U
 
 function doStuff<T extends object, T1 extends T>(a: Array<Fn<T>>, b: Array<Fn<T1>>) {
->doStuff : <T extends object, T1 extends T>(a: Fn<T>[], b: Fn<T1>[]) => void
+>doStuff : <T extends object, T1 extends T>(a: Array<Fn<T>>, b: Array<Fn<T1>>) => void
 >a : Fn<T>[]
 >b : Fn<T1>[]
 

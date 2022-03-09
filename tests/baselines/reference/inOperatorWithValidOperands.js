@@ -5,12 +5,16 @@ var x: any;
 // the left operand is required to be of type Any, the String primitive type, or the Number primitive type
 var a1: string;
 var a2: number;
+var a3: string | number | symbol;
+var a4: any;
 
 var ra1 = x in x;
 var ra2 = a1 in x;
 var ra3 = a2 in x;
 var ra4 = '' in x;
 var ra5 = 0 in x;
+var ra6 = a3 in x;
+var ra7 = a4 in x;
 
 // valid right operands
 // the right operand is required to be of type Any, an object type, or a type parameter type
@@ -48,11 +52,15 @@ var x;
 // the left operand is required to be of type Any, the String primitive type, or the Number primitive type
 var a1;
 var a2;
+var a3;
+var a4;
 var ra1 = x in x;
 var ra2 = a1 in x;
 var ra3 = a2 in x;
 var ra4 = '' in x;
 var ra5 = 0 in x;
+var ra6 = a3 in x;
+var ra7 = a4 in x;
 // valid right operands
 // the right operand is required to be of type Any, an object type, or a type parameter type
 var b1;

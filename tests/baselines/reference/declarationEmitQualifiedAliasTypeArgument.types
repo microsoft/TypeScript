@@ -24,10 +24,10 @@ export enum E {
 }
 
 export type T = G<E>;
->T : G<E>
+>T : T
 
 export type Q = G<E.A>;
->Q : G<E.A>
+>Q : Q
 >E : any
 
 === tests/cases/compiler/index.ts ===
@@ -39,12 +39,12 @@ import { create } from "./bbb";
 >create : <T>() => () => import("tests/cases/compiler/bbb").INode<T>
 
 export const fun = create<T>();
->fun : () => import("tests/cases/compiler/bbb").INode<import("tests/cases/compiler/lib").G<import("tests/cases/compiler/lib").E>>
->create<T>() : () => import("tests/cases/compiler/bbb").INode<import("tests/cases/compiler/lib").G<import("tests/cases/compiler/lib").E>>
+>fun : () => import("tests/cases/compiler/bbb").INode<T>
+>create<T>() : () => import("tests/cases/compiler/bbb").INode<T>
 >create : <T>() => () => import("tests/cases/compiler/bbb").INode<T>
 
 export const fun2 = create<Q>();
->fun2 : () => import("tests/cases/compiler/bbb").INode<import("tests/cases/compiler/lib").G<import("tests/cases/compiler/lib").E.A>>
->create<Q>() : () => import("tests/cases/compiler/bbb").INode<import("tests/cases/compiler/lib").G<import("tests/cases/compiler/lib").E.A>>
+>fun2 : () => import("tests/cases/compiler/bbb").INode<Q>
+>create<Q>() : () => import("tests/cases/compiler/bbb").INode<Q>
 >create : <T>() => () => import("tests/cases/compiler/bbb").INode<T>
 

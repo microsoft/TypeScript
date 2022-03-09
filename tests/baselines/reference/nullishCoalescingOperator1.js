@@ -67,7 +67,6 @@ else {
 
 //// [nullishCoalescingOperator1.js]
 "use strict";
-var _a;
 var aa1 = a1 !== null && a1 !== void 0 ? a1 : 'whatever';
 var aa2 = a2 !== null && a2 !== void 0 ? a2 : 'whatever';
 var aa3 = a3 !== null && a3 !== void 0 ? a3 : 'whatever';
@@ -94,7 +93,7 @@ if (maybeBool !== null && maybeBool !== void 0 ? maybeBool : true) {
 else {
     foo();
 }
-if ((_a = false) !== null && _a !== void 0 ? _a : true) {
+if (false !== null && false !== void 0 ? false : true) {
     foo();
 }
 else {

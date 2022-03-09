@@ -70,7 +70,7 @@ f1(ns[0], ns[1], true);
 >ns : Symbol(ns, Decl(genericRestParameters1.ts, 11, 13))
 >1 : Symbol(1)
 
-f1(...ns, true);  // Error, tuple spread only expanded when last
+f1(...ns, true);  // FIXME: Error, since ...ns is considered as string|number here
 >f1 : Symbol(f1, Decl(genericRestParameters1.ts, 0, 11))
 >ns : Symbol(ns, Decl(genericRestParameters1.ts, 11, 13))
 
@@ -109,7 +109,7 @@ f2(ns[0], ns[1], true);
 >ns : Symbol(ns, Decl(genericRestParameters1.ts, 11, 13))
 >1 : Symbol(1)
 
-f2(...ns, true);  // Error, tuple spread only expanded when last
+f2(...ns, true);  // FIXME: Error, since ...ns is considered as string|number here
 >f2 : Symbol(f2, Decl(genericRestParameters1.ts, 1, 11))
 >ns : Symbol(ns, Decl(genericRestParameters1.ts, 11, 13))
 

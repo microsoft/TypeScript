@@ -30,6 +30,7 @@ namespace ts.CallHierarchy {
         | ModuleDeclaration & { name: Identifier }
         | FunctionDeclaration
         | ClassDeclaration
+        | ClassStaticBlockDeclaration
         | MethodDeclaration
         | GetAccessorDeclaration
         | SetAccessorDeclaration
@@ -49,6 +50,7 @@ namespace ts.CallHierarchy {
             || isFunctionExpression(node)
             || isClassDeclaration(node)
             || isClassExpression(node)
+            || isClassStaticBlockDeclaration(node)
             || isMethodDeclaration(node)
             || isMethodSignature(node)
             || isGetAccessorDeclaration(node)
@@ -65,6 +67,7 @@ namespace ts.CallHierarchy {
             || isModuleDeclaration(node) && isIdentifier(node.name)
             || isFunctionDeclaration(node)
             || isClassDeclaration(node)
+            || isClassStaticBlockDeclaration(node)
             || isMethodDeclaration(node)
             || isMethodSignature(node)
             || isGetAccessorDeclaration(node)
@@ -78,7 +81,7 @@ namespace ts.CallHierarchy {
         if (isSourceFile(node)) return node;
         if (isNamedDeclaration(node)) return node.name;
         if (isConstNamedExpression(node)) return node.parent.name;
-        return Debug.assertDefined(node.modifiers && find(node.modifiers, isDefaultModifier));
+        return Debug.checkDefined(node.modifiers && find(node.modifiers, isDefaultModifier));
     }
 
     function isDefaultModifier(node: Node) {
@@ -104,8 +107,18 @@ namespace ts.CallHierarchy {
             }
         }
 
+        if (isClassStaticBlockDeclaration(node)) {
+            const sourceFile = node.getSourceFile();
+            const pos = skipTrivia(sourceFile.text, moveRangePastModifiers(node).pos);
+            const end = pos + 6; /* "static".length */
+            const typeChecker = program.getTypeChecker();
+            const symbol = typeChecker.getSymbolAtLocation(node.parent);
+            const prefix = symbol ? `${typeChecker.symbolToString(symbol, node.parent)} ` : "";
+            return { text: `${prefix}static {}`, pos, end };
+        }
+
         const declName = isConstNamedExpression(node) ? node.parent.name :
-            Debug.assertDefined(getNameOfDeclaration(node), "Expected call hierarchy item to have a name");
+            Debug.checkDefined(getNameOfDeclaration(node), "Expected call hierarchy item to have a name");
 
         let text =
             isIdentifier(declName) ? idText(declName) :
@@ -127,6 +140,31 @@ namespace ts.CallHierarchy {
             text = usingSingleLineStringWriter(writer => printer.writeNode(EmitHint.Unspecified, node, node.getSourceFile(), writer));
         }
         return { text, pos: declName.getStart(), end: declName.getEnd() };
+    }
+
+    function getCallHierarchItemContainerName(node: CallHierarchyDeclaration): string | undefined {
+        if (isConstNamedExpression(node)) {
+            if (isModuleBlock(node.parent.parent.parent.parent) && isIdentifier(node.parent.parent.parent.parent.parent.name)) {
+                return node.parent.parent.parent.parent.parent.name.getText();
+            }
+            return;
+        }
+
+        switch (node.kind) {
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor:
+            case SyntaxKind.MethodDeclaration:
+                if (node.parent.kind === SyntaxKind.ObjectLiteralExpression) {
+                    return getAssignedName(node.parent)?.getText();
+                }
+                return getNameOfDeclaration(node.parent)?.getText();
+            case SyntaxKind.FunctionDeclaration:
+            case SyntaxKind.ClassDeclaration:
+            case SyntaxKind.ModuleDeclaration:
+                if (isModuleBlock(node.parent) && isIdentifier(node.parent.parent.name)) {
+                    return node.parent.parent.name.getText();
+                }
+        }
     }
 
     /** Finds the implementation of a function-like declaration, if one exists. */
@@ -156,7 +194,7 @@ namespace ts.CallHierarchy {
             const indices = indicesOf(symbol.declarations);
             const keys = map(symbol.declarations, decl => ({ file: decl.getSourceFile().fileName, pos: decl.pos }));
             indices.sort((a, b) => compareStringsCaseSensitive(keys[a].file, keys[b].file) || keys[a].pos - keys[b].pos);
-            const sortedDeclarations = map(indices, i => symbol.declarations[i]);
+            const sortedDeclarations = map(indices, i => symbol.declarations![i]);
             let lastDecl: CallHierarchyDeclaration | undefined;
             for (const decl of sortedDeclarations) {
                 if (isValidCallHierarchyDeclaration(decl)) {
@@ -172,6 +210,9 @@ namespace ts.CallHierarchy {
 
     /** Find the implementation or the first declaration for a call hierarchy declaration. */
     function findImplementationOrAllInitialDeclarations(typeChecker: TypeChecker, node: CallHierarchyDeclaration): CallHierarchyDeclaration | CallHierarchyDeclaration[] {
+        if (isClassStaticBlockDeclaration(node)) {
+            return node;
+        }
         if (isFunctionLikeDeclaration(node)) {
             return findImplementation(typeChecker, node) ??
                 findAllInitialDeclarations(typeChecker, node) ??
@@ -182,13 +223,14 @@ namespace ts.CallHierarchy {
 
     /** Resolves the call hierarchy declaration for a node. */
     export function resolveCallHierarchyDeclaration(program: Program, location: Node): CallHierarchyDeclaration | CallHierarchyDeclaration[] | undefined {
-        // A call hierarchy item must refer to either a SourceFile, Module Declaration, or something intrinsically callable that has a name:
+        // A call hierarchy item must refer to either a SourceFile, Module Declaration, Class Static Block, or something intrinsically callable that has a name:
         // - Class Declarations
         // - Class Expressions (with a name)
         // - Function Declarations
         // - Function Expressions (with a name or assigned to a const variable)
         // - Arrow Functions (assigned to a const variable)
         // - Constructors
+        // - Class `static {}` initializer blocks
         // - Methods
         // - Accessors
         //
@@ -224,6 +266,14 @@ namespace ts.CallHierarchy {
                 }
                 return undefined;
             }
+            if (location.kind === SyntaxKind.StaticKeyword && isClassStaticBlockDeclaration(location.parent)) {
+                location = location.parent;
+                continue;
+            }
+            // #39453
+            if (isVariableDeclaration(location) && location.initializer && isConstNamedExpression(location.initializer)) {
+                return location.initializer;
+            }
             if (!followingSymbol) {
                 let symbol = typeChecker.getSymbolAtLocation(location);
                 if (symbol) {
@@ -245,10 +295,12 @@ namespace ts.CallHierarchy {
     export function createCallHierarchyItem(program: Program, node: CallHierarchyDeclaration): CallHierarchyItem {
         const sourceFile = node.getSourceFile();
         const name = getCallHierarchyItemName(program, node);
+        const containerName = getCallHierarchItemContainerName(node);
         const kind = getNodeKind(node);
+        const kindModifiers = getNodeModifiers(node);
         const span = createTextSpanFromBounds(skipTrivia(sourceFile.text, node.getFullStart(), /*stopAfterLineBreak*/ false, /*stopAtComments*/ true), node.getEnd());
         const selectionSpan = createTextSpanFromBounds(name.pos, name.end);
-        return { file: sourceFile.fileName, kind, name: name.text, span, selectionSpan };
+        return { file: sourceFile.fileName, kind, kindModifiers, name: name.text, containerName, span, selectionSpan };
     }
 
     function isDefined<T>(x: T): x is NonNullable<T> {
@@ -277,7 +329,7 @@ namespace ts.CallHierarchy {
     }
 
     function getCallSiteGroupKey(entry: CallSite) {
-        return "" + getNodeId(entry.declaration);
+        return getNodeId(entry.declaration);
     }
 
     function createCallHierarchyIncomingCall(from: CallHierarchyItem, fromSpans: TextSpan[]): CallHierarchyIncomingCall {
@@ -291,7 +343,7 @@ namespace ts.CallHierarchy {
     /** Gets the call sites that call into the provided call hierarchy declaration. */
     export function getIncomingCalls(program: Program, declaration: CallHierarchyDeclaration, cancellationToken: CancellationToken): CallHierarchyIncomingCall[] {
         // Source files and modules have no incoming calls.
-        if (isSourceFile(declaration) || isModuleDeclaration(declaration)) {
+        if (isSourceFile(declaration) || isModuleDeclaration(declaration) || isClassStaticBlockDeclaration(declaration)) {
             return [];
         }
         const location = getCallHierarchyDeclarationReferenceNode(declaration);
@@ -300,11 +352,12 @@ namespace ts.CallHierarchy {
     }
 
     function createCallSiteCollector(program: Program, callSites: CallSite[]): (node: Node | undefined) => void {
-        function recordCallSite(node: CallExpression | NewExpression | TaggedTemplateExpression | PropertyAccessExpression | ElementAccessExpression | Decorator | JsxOpeningLikeElement) {
+        function recordCallSite(node: CallExpression | NewExpression | TaggedTemplateExpression | PropertyAccessExpression | ElementAccessExpression | Decorator | JsxOpeningLikeElement | ClassStaticBlockDeclaration) {
             const target =
                 isTaggedTemplateExpression(node) ? node.tag :
                 isJsxOpeningLikeElement(node) ? node.tagName :
                 isAccessExpression(node) ? node :
+                isClassStaticBlockDeclaration(node) ? node :
                 node.expression;
             const declaration = resolveCallHierarchyDeclaration(program, target);
             if (declaration) {
@@ -347,6 +400,9 @@ namespace ts.CallHierarchy {
                 case SyntaxKind.InterfaceDeclaration:
                 case SyntaxKind.TypeAliasDeclaration:
                     // do not descend into nodes that cannot contain callable nodes
+                    return;
+                case SyntaxKind.ClassStaticBlockDeclaration:
+                    recordCallSite(node as ClassStaticBlockDeclaration);
                     return;
                 case SyntaxKind.TypeAssertionExpression:
                 case SyntaxKind.AsExpression:
@@ -410,7 +466,7 @@ namespace ts.CallHierarchy {
     }
 
     function collectCallSitesOfModuleDeclaration(node: ModuleDeclaration, collect: (node: Node | undefined) => void) {
-        if (!hasModifier(node, ModifierFlags.Ambient) && node.body && isModuleBlock(node.body)) {
+        if (!hasSyntacticModifier(node, ModifierFlags.Ambient) && node.body && isModuleBlock(node.body)) {
             forEach(node.body.statements, collect);
         }
     }
@@ -421,6 +477,10 @@ namespace ts.CallHierarchy {
             forEach(implementation.parameters, collect);
             collect(implementation.body);
         }
+    }
+
+    function collectCallSitesOfClassStaticBlockDeclaration(node: ClassStaticBlockDeclaration, collect: (node: Node | undefined) => void) {
+        collect(node.body);
     }
 
     function collectCallSitesOfClassLikeDeclaration(node: ClassLikeDeclaration, collect: (node: Node | undefined) => void) {
@@ -437,6 +497,9 @@ namespace ts.CallHierarchy {
             else if (isConstructorDeclaration(member) && member.body) {
                 forEach(member.parameters, collect);
                 collect(member.body);
+            }
+            else if (isClassStaticBlockDeclaration(member)) {
+                collect(member);
             }
         }
     }
@@ -462,6 +525,9 @@ namespace ts.CallHierarchy {
             case SyntaxKind.ClassDeclaration:
             case SyntaxKind.ClassExpression:
                 collectCallSitesOfClassLikeDeclaration(node, collect);
+                break;
+            case SyntaxKind.ClassStaticBlockDeclaration:
+                collectCallSitesOfClassStaticBlockDeclaration(node, collect);
                 break;
             default:
                 Debug.assertNever(node);

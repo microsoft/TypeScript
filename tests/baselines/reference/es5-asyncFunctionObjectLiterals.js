@@ -146,8 +146,8 @@ function objectLiteral5() {
             switch (_b.label) {
                 case 0:
                     _a = {
-                            a: y
-                        };
+                        a: y
+                    };
                     return [4 /*yield*/, b];
                 case 1:
                     x = (_a[_b.sent()] = z,
@@ -165,8 +165,8 @@ function objectLiteral6() {
             switch (_c.label) {
                 case 0:
                     _b = {
-                            a: y
-                        };
+                        a: y
+                    };
                     _a = b;
                     return [4 /*yield*/, z];
                 case 1:

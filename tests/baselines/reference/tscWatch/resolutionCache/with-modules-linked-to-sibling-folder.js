@@ -1,4 +1,4 @@
-/a/lib/tsc.js -w
+Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -28,23 +28,19 @@ export * from './other';
 //// [/user/username/projects/myproject/linked-package/dist/other.d.ts]
 export declare const Foo = "BAR";
 
-//// [/user/username/projects/myproject/main/index.js]
-"use strict";
-exports.__esModule = true;
 
-
-
+/a/lib/tsc.js -w
 Output::
 >> Screen clear
-12:00:39 AM - Starting compilation in watch mode...
+[[90m12:00:39 AM[0m] Starting compilation in watch mode...
 
+[[90m12:00:42 AM[0m] Found 0 errors. Watching for file changes.
 
-
-12:00:42 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/user/username/projects/myproject/main/index.ts"]
 Program options: {"module":1,"moduleResolution":2,"baseUrl":"/user/username/projects/myproject/main","rootDir":"/user/username/projects/myproject/main","watch":true,"configFilePath":"/user/username/projects/myproject/main/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/linked-package/dist/other.d.ts
@@ -57,6 +53,12 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/myproject/linked-package/dist/index.d.ts
 /user/username/projects/myproject/main/index.ts
 
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/myproject/linked-package/dist/other.d.ts (used version)
+/user/username/projects/myproject/linked-package/dist/index.d.ts (used version)
+/user/username/projects/myproject/main/index.ts (used version)
+
 WatchedFiles::
 /user/username/projects/myproject/main/tsconfig.json:
   {"fileName":"/user/username/projects/myproject/main/tsconfig.json","pollingInterval":250}
@@ -68,6 +70,8 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/linked-package/dist/other.d.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/user/username/projects/myproject/linked-package/package.json:
+  {"fileName":"/user/username/projects/myproject/linked-package/package.json","pollingInterval":250}
 
 FsWatches::
 
@@ -84,3 +88,9 @@ FsWatchesRecursive::
   {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
+
+//// [/user/username/projects/myproject/main/index.js]
+"use strict";
+exports.__esModule = true;
+
+

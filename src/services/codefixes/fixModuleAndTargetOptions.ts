@@ -1,8 +1,11 @@
 /* @internal */
 namespace ts.codefix {
     registerCodeFix({
-        errorCodes: [Diagnostics.Top_level_await_expressions_are_only_allowed_when_the_module_option_is_set_to_esnext_or_system_and_the_target_option_is_set_to_es2017_or_higher.code],
-        getCodeActions: context => {
+        errorCodes: [
+            Diagnostics.Top_level_await_expressions_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_or_nodenext_and_the_target_option_is_set_to_es2017_or_higher.code,
+            Diagnostics.Top_level_for_await_loops_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_or_nodenext_and_the_target_option_is_set_to_es2017_or_higher.code,
+        ],
+        getCodeActions: function getCodeActionsToFixModuleAndTarget(context) {
             const compilerOptions = context.program.getCompilerOptions();
             const { configFile } = compilerOptions;
             if (configFile === undefined) {
@@ -14,7 +17,7 @@ namespace ts.codefix {
             const moduleOutOfRange = moduleKind >= ModuleKind.ES2015 && moduleKind < ModuleKind.ESNext;
             if (moduleOutOfRange) {
                 const changes = textChanges.ChangeTracker.with(context, changes => {
-                    setJsonCompilerOptionValue(changes, configFile, "module", createStringLiteral("esnext"));
+                    setJsonCompilerOptionValue(changes, configFile, "module", factory.createStringLiteral("esnext"));
                 });
                 codeFixes.push(createCodeFixActionWithoutFixAll("fixModuleOption", changes, [Diagnostics.Set_the_module_option_in_your_configuration_file_to_0, "esnext"]));
             }
@@ -26,10 +29,10 @@ namespace ts.codefix {
                     const configObject = getTsConfigObjectLiteralExpression(configFile);
                     if (!configObject) return;
 
-                    const options: [string, Expression][] = [["target", createStringLiteral("es2017")]];
+                    const options: [string, Expression][] = [["target", factory.createStringLiteral("es2017")]];
                     if (moduleKind === ModuleKind.CommonJS) {
                         // Ensure we preserve the default module kind (commonjs), as targets >= ES2015 have a default module kind of es2015.
-                        options.push(["module", createStringLiteral("commonjs")]);
+                        options.push(["module", factory.createStringLiteral("commonjs")]);
                     }
 
                     setJsonCompilerOptionValues(tracker, configFile, options);

@@ -21,6 +21,7 @@ React.foo;
 
 //// [some_module.js]
 React.foo;
+export {};
 //// [emits.js]
 "use strict";
 console.log("hello");

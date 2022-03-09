@@ -1,0 +1,23 @@
+name: Twoslash Code Sample Repros
+
+on:
+  push:
+    branches:
+      - orta-twoslash-repros
+  schedule:
+    - cron:  '0 8 * * *'
+  repository_dispatch:
+    types: run-twoslash-repros
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Use node
+      uses: actions/setup-node@v1
+    - run: |
+       npm init -y
+       npm install --save typescript@next
+    - uses: microsoft/TypeScript-Twoslash-Repro-Action@master
+      with: 
+        github-token: ${{ secrets.TS_BOT_GITHUB_TOKEN }}

@@ -33,6 +33,7 @@ module.exports = Conn;
 //// [usage.js]
 "use strict";
 exports.__esModule = true;
+exports.Wrap = void 0;
 var Wrap = /** @class */ (function () {
     function Wrap(c) {
         if (c === void 0) { c = x; }

@@ -5,7 +5,7 @@ function Instance() {
     this.i = 'simple'
 >this.i = 'simple' : "simple"
 >this.i : any
->this : any
+>this : this
 >i : any
 >'simple' : "simple"
 }
@@ -26,7 +26,7 @@ function StaticToo() {
     this.i = 'more complex'
 >this.i = 'more complex' : "more complex"
 >this.i : any
->this : any
+>this : this
 >i : any
 >'more complex' : "more complex"
 }
@@ -55,16 +55,16 @@ function A () {
     this.x = 1
 >this.x = 1 : 1
 >this.x : any
->this : any
+>this : this
 >x : any
 >1 : 1
 
     /** @type {1} */
     this.second = 1
 >this.second = 1 : 1
->this.second : any
->this : any
->second : any
+>this.second : 1
+>this : this
+>second : 1
 >1 : 1
 }
 /** @param {number} n */

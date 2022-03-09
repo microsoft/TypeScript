@@ -10,7 +10,7 @@ declare function fn(x: number): string;
 >x : number
 
 declare function fn(x: 'foo'): number;
->fn : { (x: number): string; (x: "foo"): number; }
+>fn : { (x: number): string; (x: 'foo'): number; }
 >x : "foo"
 
 // Ambient functions with duplicate signatures

@@ -127,7 +127,6 @@ export const MySFC = (props: {x: number, y: number, children?: predom.JSX.Elemen
 >props.y : Symbol(y, Decl(component.tsx, 3, 40))
 >props : Symbol(props, Decl(component.tsx, 3, 22))
 >y : Symbol(y, Decl(component.tsx, 3, 40))
->this : Symbol(globalThis)
 >p : Symbol(predom.JSX.IntrinsicElements, Decl(renderer2.d.ts, 1, 19))
 
 export class MyClass implements predom.JSX.Element {

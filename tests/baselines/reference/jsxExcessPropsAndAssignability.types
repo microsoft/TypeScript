@@ -1,0 +1,48 @@
+=== tests/cases/compiler/jsxExcessPropsAndAssignability.tsx ===
+/// <reference path="react16.d.ts" />
+
+import * as React from 'react';
+>React : typeof React
+
+const myHoc = <ComposedComponentProps extends any>(
+>myHoc : <ComposedComponentProps extends unknown>(ComposedComponent: React.ComponentClass<ComposedComponentProps, any>) => void
+><ComposedComponentProps extends any>(    ComposedComponent: React.ComponentClass<ComposedComponentProps>,) => {    type WrapperComponentProps = ComposedComponentProps & { myProp: string };    const WrapperComponent: React.ComponentClass<WrapperComponentProps> = null as any;    const props: ComposedComponentProps = null as any;    // Expected no error, got none - good    <WrapperComponent {...props} myProp={'1000000'} />;    // Expected error, but got none - bad!    <WrapperComponent {...props} myProp={1000000} />;} : <ComposedComponentProps extends unknown>(ComposedComponent: React.ComponentClass<ComposedComponentProps, any>) => void
+
+    ComposedComponent: React.ComponentClass<ComposedComponentProps>,
+>ComposedComponent : React.ComponentClass<ComposedComponentProps, any>
+>React : any
+
+) => {
+    type WrapperComponentProps = ComposedComponentProps & { myProp: string };
+>WrapperComponentProps : ComposedComponentProps & { myProp: string; }
+>myProp : string
+
+    const WrapperComponent: React.ComponentClass<WrapperComponentProps> = null as any;
+>WrapperComponent : React.ComponentClass<ComposedComponentProps & { myProp: string; }, any>
+>React : any
+>null as any : any
+>null : null
+
+    const props: ComposedComponentProps = null as any;
+>props : ComposedComponentProps
+>null as any : any
+>null : null
+
+    // Expected no error, got none - good
+    <WrapperComponent {...props} myProp={'1000000'} />;
+><WrapperComponent {...props} myProp={'1000000'} /> : JSX.Element
+>WrapperComponent : React.ComponentClass<ComposedComponentProps & { myProp: string; }, any>
+>props : ComposedComponentProps
+>myProp : "1000000"
+>'1000000' : "1000000"
+
+    // Expected error, but got none - bad!
+    <WrapperComponent {...props} myProp={1000000} />;
+><WrapperComponent {...props} myProp={1000000} /> : JSX.Element
+>WrapperComponent : React.ComponentClass<ComposedComponentProps & { myProp: string; }, any>
+>props : ComposedComponentProps
+>myProp : number
+>1000000 : 1000000
+
+};
+

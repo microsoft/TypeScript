@@ -22,7 +22,7 @@ module editor {
 }
 
 var m : _modes;
->m : any
+>m : _modes
 
 
 

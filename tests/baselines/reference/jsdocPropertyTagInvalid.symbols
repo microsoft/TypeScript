@@ -1,0 +1,19 @@
+=== /a.js ===
+/**
+ * @typedef MyType
+ * @property {sting} [x]
+ */
+
+/** @param {MyType} p  */
+export function f(p) { }
+>f : Symbol(f, Decl(a.js, 0, 0))
+>p : Symbol(p, Decl(a.js, 6, 18))
+
+=== /b.js ===
+import { f } from "./a.js"
+>f : Symbol(f, Decl(b.js, 0, 8))
+
+f({ x: 42 })
+>f : Symbol(f, Decl(b.js, 0, 8))
+>x : Symbol(x, Decl(b.js, 1, 3))
+

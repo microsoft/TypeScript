@@ -47,7 +47,7 @@ namespace RWC {
                 caseSensitive = false;
             });
 
-            it("can compile", function (this: Mocha.ITestCallbackContext) {
+            it("can compile", function (this: Mocha.Context) {
                 this.timeout(800_000); // Allow long timeouts for RWC compilations
                 let opts!: ts.ParsedCommandLine;
 
@@ -83,7 +83,7 @@ namespace RWC {
                     }
 
                     // Deduplicate files so they are only printed once in baselines (they are deduplicated within the compiler already)
-                    const uniqueNames = ts.createMap<true>();
+                    const uniqueNames = new ts.Map<string, true>();
                     for (const fileName of fileNames) {
                         // Must maintain order, build result list while checking map
                         const normalized = ts.normalizeSlashes(Harness.IO.resolvePath(fileName)!);
@@ -145,7 +145,7 @@ namespace RWC {
             });
 
 
-            it("has the expected emitted code", function (this: Mocha.ITestCallbackContext) {
+            it("has the expected emitted code", function (this: Mocha.Context) {
                 this.timeout(100_000); // Allow longer timeouts for RWC js verification
                 Harness.Baseline.runMultifileBaseline(baseName, "", () => {
                     return Harness.Compiler.iterateOutputs(compilerResult.js.values());

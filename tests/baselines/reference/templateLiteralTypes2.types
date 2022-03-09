@@ -1,0 +1,415 @@
+=== tests/cases/conformance/types/literal/templateLiteralTypes2.ts ===
+function ft1<T extends string>(s: string, n: number, u: 'foo' | 'bar' | 'baz', t: T) {
+>ft1 : <T extends string>(s: string, n: number, u: 'foo' | 'bar' | 'baz', t: T) => void
+>s : string
+>n : number
+>u : "foo" | "bar" | "baz"
+>t : T
+
+    const c1 = `abc${s}`;  // `abc${string}`
+>c1 : string
+>`abc${s}` : string
+>s : string
+
+    const c2 = `abc${n}`;  // `abc${number}`
+>c2 : string
+>`abc${n}` : string
+>n : number
+
+    const c3 = `abc${u}`;  // "abcfoo" | "abcbar" | "abcbaz"
+>c3 : string
+>`abc${u}` : string
+>u : "foo" | "bar" | "baz"
+
+    const c4 = `abc${t}`;  // `abc${T}
+>c4 : string
+>`abc${t}` : string
+>t : T
+
+    const d1: `abc${string}` = `abc${s}`;
+>d1 : `abc${string}`
+>`abc${s}` : `abc${string}`
+>s : string
+
+    const d2: `abc${number}` = `abc${n}`;
+>d2 : `abc${number}`
+>`abc${n}` : `abc${number}`
+>n : number
+
+    const d3: `abc${'foo' | 'bar' | 'baz'}` = `abc${u}`;
+>d3 : "abcfoo" | "abcbar" | "abcbaz"
+>`abc${u}` : "abcfoo" | "abcbar" | "abcbaz"
+>u : "foo" | "bar" | "baz"
+
+    const d4: `abc${T}` = `abc${t}`;
+>d4 : `abc${T}`
+>`abc${t}` : `abc${T}`
+>t : T
+}
+
+function ft2(s: string) {
+>ft2 : (s: string) => string
+>s : string
+
+    return `abc${s}`;
+>`abc${s}` : string
+>s : string
+}
+
+function ft10(s: string) {
+>ft10 : (s: string) => void
+>s : string
+
+    const c1 = `abc${s}`;  // Widening type `abc${string}`
+>c1 : string
+>`abc${s}` : string
+>s : string
+
+    let v1 = c1;  // Type string
+>v1 : string
+>c1 : string
+
+    const c2 = c1;  // Widening type `abc${string}`
+>c2 : string
+>c1 : string
+
+    let v2 = c2;  // Type string
+>v2 : string
+>c2 : string
+
+    const c3: `abc${string}` = `abc${s}`;
+>c3 : `abc${string}`
+>`abc${s}` : `abc${string}`
+>s : string
+
+    let v3 = c3;  // Type `abc${string}`
+>v3 : `abc${string}`
+>c3 : `abc${string}`
+
+    const c4: `abc${string}` = c1;  // Type `abc${string}`
+>c4 : `abc${string}`
+>c1 : string
+
+    let v4 = c4;  // Type `abc${string}`
+>v4 : `abc${string}`
+>c4 : `abc${string}`
+}
+
+function ft11(s: string, cond: boolean) {
+>ft11 : (s: string, cond: boolean) => void
+>s : string
+>cond : boolean
+
+    const c1 = cond ? `foo${s}` : `bar${s}`;  // widening `foo${string}` | widening `bar${string}`
+>c1 : string
+>cond ? `foo${s}` : `bar${s}` : string
+>cond : boolean
+>`foo${s}` : string
+>s : string
+>`bar${s}` : string
+>s : string
+
+    const c2: `foo${string}` | `bar${string}` = c1;  // `foo${string}` | `bar${string}`
+>c2 : `foo${string}` | `bar${string}`
+>c1 : string
+
+    const c3 = cond ? c1 : c2;  // `foo${string}` | `bar${string}`
+>c3 : string
+>cond ? c1 : c2 : string
+>cond : boolean
+>c1 : string
+>c2 : `foo${string}` | `bar${string}`
+
+    const c4 = cond ? c3 : `baz${s}`;  // `foo${string}` | `bar${string}` | widening `baz${string}`
+>c4 : string
+>cond ? c3 : `baz${s}` : string
+>cond : boolean
+>c3 : string
+>`baz${s}` : string
+>s : string
+
+    const c5: `foo${string}` | `bar${string}` | `baz${string}` = c4; // `foo${string}` | `bar${string}` | `baz${string}`
+>c5 : `foo${string}` | `bar${string}` | `baz${string}`
+>c4 : string
+
+    let v1 = c1;  // string
+>v1 : string
+>c1 : string
+
+    let v2 = c2;  // `foo${string}` | `bar${string}`
+>v2 : `foo${string}` | `bar${string}`
+>c2 : `foo${string}` | `bar${string}`
+
+    let v3 = c3;  // `foo${string}` | `bar${string}`
+>v3 : string
+>c3 : string
+
+    let v4 = c4;  // string
+>v4 : string
+>c4 : string
+
+    let v5 = c5;  // `foo${string}` | `bar${string}` | `baz${string}`
+>v5 : `foo${string}` | `bar${string}` | `baz${string}`
+>c5 : `foo${string}` | `bar${string}` | `baz${string}`
+}
+
+function ft12(s: string) {
+>ft12 : (s: string) => void
+>s : string
+
+    const c1 = `foo${s}`;
+>c1 : string
+>`foo${s}` : string
+>s : string
+
+    let v1 = c1;
+>v1 : string
+>c1 : string
+
+    const c2: `foo${string}` = `foo${s}`;
+>c2 : `foo${string}`
+>`foo${s}` : `foo${string}`
+>s : string
+
+    let v2 = c2;
+>v2 : `foo${string}`
+>c2 : `foo${string}`
+
+    const c3 = `foo${s}` as `foo${string}`;
+>c3 : `foo${string}`
+>`foo${s}` as `foo${string}` : `foo${string}`
+>`foo${s}` : `foo${string}`
+>s : string
+
+    let v3 = c3;
+>v3 : `foo${string}`
+>c3 : `foo${string}`
+
+    const c4 = <`foo${string}`>`foo${s}`;
+>c4 : `foo${string}`
+><`foo${string}`>`foo${s}` : `foo${string}`
+>`foo${s}` : `foo${string}`
+>s : string
+
+    let v4 = c4;
+>v4 : `foo${string}`
+>c4 : `foo${string}`
+
+    const c5 = `foo${s}` as const;
+>c5 : `foo${string}`
+>`foo${s}` as const : `foo${string}`
+>`foo${s}` : `foo${string}`
+>s : string
+
+    let v5 = c5;
+>v5 : `foo${string}`
+>c5 : `foo${string}`
+}
+
+declare function widening<T>(x: T): T;
+>widening : <T>(x: T) => T
+>x : T
+
+declare function nonWidening<T extends string | number | symbol>(x: T): T;
+>nonWidening : <T extends string | number | symbol>(x: T) => T
+>x : T
+
+function ft13(s: string, cond: boolean) {
+>ft13 : (s: string, cond: boolean) => void
+>s : string
+>cond : boolean
+
+    let x1 = widening(`foo${s}`);
+>x1 : string
+>widening(`foo${s}`) : string
+>widening : <T>(x: T) => T
+>`foo${s}` : string
+>s : string
+
+    let x2 = widening(cond ? 'a' : `foo${s}`);
+>x2 : string
+>widening(cond ? 'a' : `foo${s}`) : string
+>widening : <T>(x: T) => T
+>cond ? 'a' : `foo${s}` : string
+>cond : boolean
+>'a' : "a"
+>`foo${s}` : string
+>s : string
+
+    let y1 = nonWidening(`foo${s}`);
+>y1 : `foo${string}`
+>nonWidening(`foo${s}`) : `foo${string}`
+>nonWidening : <T extends string | number | symbol>(x: T) => T
+>`foo${s}` : `foo${string}`
+>s : string
+
+    let y2 = nonWidening(cond ? 'a' : `foo${s}`);
+>y2 : `foo${string}` | "a"
+>nonWidening(cond ? 'a' : `foo${s}`) : `foo${string}` | "a"
+>nonWidening : <T extends string | number | symbol>(x: T) => T
+>cond ? 'a' : `foo${s}` : `foo${string}` | "a"
+>cond : boolean
+>'a' : "a"
+>`foo${s}` : `foo${string}`
+>s : string
+}
+
+type T0 = string | `${number}px`;
+>T0 : string
+
+function ft14(t: `foo${number}`) {
+>ft14 : (t: `foo${number}`) => void
+>t : `foo${number}`
+
+    let x1: string = t;
+>x1 : string
+>t : `foo${number}`
+
+    let x2: String = t;
+>x2 : String
+>t : `foo${number}`
+
+    let x3: Object = t;
+>x3 : Object
+>t : `foo${number}`
+
+    let x4: {} = t;
+>x4 : {}
+>t : `foo${number}`
+
+    let x6: { length: number } = t;
+>x6 : { length: number; }
+>length : number
+>t : `foo${number}`
+}
+
+declare function g1<T>(x: T): T;
+>g1 : <T>(x: T) => T
+>x : T
+
+declare function g2<T extends string>(x: T): T;
+>g2 : <T extends string>(x: T) => T
+>x : T
+
+function ft20(s: string) {
+>ft20 : (s: string) => void
+>s : string
+
+    let x1 = g1(`xyz-${s}`);  // string
+>x1 : string
+>g1(`xyz-${s}`) : string
+>g1 : <T>(x: T) => T
+>`xyz-${s}` : string
+>s : string
+
+    let x2 = g2(`xyz-${s}`);  // `xyz-${string}`
+>x2 : `xyz-${string}`
+>g2(`xyz-${s}`) : `xyz-${string}`
+>g2 : <T extends string>(x: T) => T
+>`xyz-${s}` : `xyz-${string}`
+>s : string
+}
+
+// Repro from #41631
+
+declare function takesLiteral<T extends string>(literal: T): T extends `foo.bar.${infer R}` ? R : unknown;
+>takesLiteral : <T extends string>(literal: T) => T extends `foo.bar.${infer R}` ? R : unknown
+>literal : T
+
+const t1 = takesLiteral("foo.bar.baz"); // "baz"
+>t1 : "baz"
+>takesLiteral("foo.bar.baz") : "baz"
+>takesLiteral : <T extends string>(literal: T) => T extends `foo.bar.${infer R}` ? R : unknown
+>"foo.bar.baz" : "foo.bar.baz"
+
+const id2 = "foo.bar.baz";
+>id2 : "foo.bar.baz"
+>"foo.bar.baz" : "foo.bar.baz"
+
+const t2 = takesLiteral(id2); // "baz"
+>t2 : "baz"
+>takesLiteral(id2) : "baz"
+>takesLiteral : <T extends string>(literal: T) => T extends `foo.bar.${infer R}` ? R : unknown
+>id2 : "foo.bar.baz"
+
+declare const someString: string;
+>someString : string
+
+const t3 = takesLiteral(`foo.bar.${someString}`);  // string
+>t3 : string
+>takesLiteral(`foo.bar.${someString}`) : string
+>takesLiteral : <T extends string>(literal: T) => T extends `foo.bar.${infer R}` ? R : unknown
+>`foo.bar.${someString}` : `foo.bar.${string}`
+>someString : string
+
+const id4 = `foo.bar.${someString}`;
+>id4 : string
+>`foo.bar.${someString}` : string
+>someString : string
+
+const t4 = takesLiteral(id4);  // string
+>t4 : unknown
+>takesLiteral(id4) : unknown
+>takesLiteral : <T extends string>(literal: T) => T extends `foo.bar.${infer R}` ? R : unknown
+>id4 : string
+
+declare const someUnion: 'abc' | 'def' | 'ghi';
+>someUnion : "abc" | "def" | "ghi"
+
+const t5 = takesLiteral(`foo.bar.${someUnion}`);  // "abc" | "def" | "ghi"
+>t5 : "abc" | "def" | "ghi"
+>takesLiteral(`foo.bar.${someUnion}`) : "abc" | "def" | "ghi"
+>takesLiteral : <T extends string>(literal: T) => T extends `foo.bar.${infer R}` ? R : unknown
+>`foo.bar.${someUnion}` : "foo.bar.abc" | "foo.bar.def" | "foo.bar.ghi"
+>someUnion : "abc" | "def" | "ghi"
+
+// Repro from #41732
+
+const pixelValue: number = 22;
+>pixelValue : number
+>22 : 22
+
+type PixelValueType = `${number}px`;
+>PixelValueType : `${number}px`
+
+const pixelString: PixelValueType = `22px`;
+>pixelString : `${number}px`
+>`22px` : "22px"
+
+const pixelStringWithTemplate: PixelValueType = `${pixelValue}px`;
+>pixelStringWithTemplate : `${number}px`
+>`${pixelValue}px` : `${number}px`
+>pixelValue : number
+
+// Repro from #43143
+
+function getCardTitle(title: string): `test-${string}` {
+>getCardTitle : (title: string) => `test-${string}`
+>title : string
+
+    return `test-${title}`;
+>`test-${title}` : `test-${string}`
+>title : string
+}
+
+// Repro from #43424
+
+const interpolatedStyle = { rotate: 12 };
+>interpolatedStyle : { rotate: number; }
+>{ rotate: 12 } : { rotate: number; }
+>rotate : number
+>12 : 12
+
+function C2(transform: "-moz-initial" | (string & {})) { return 12; }
+>C2 : (transform: "-moz-initial" | (string & {})) => number
+>transform : (string & {}) | "-moz-initial"
+>12 : 12
+
+C2(`rotate(${interpolatedStyle.rotate}dig)`);
+>C2(`rotate(${interpolatedStyle.rotate}dig)`) : number
+>C2 : (transform: (string & {}) | "-moz-initial") => number
+>`rotate(${interpolatedStyle.rotate}dig)` : `rotate(${number}dig)`
+>interpolatedStyle.rotate : number
+>interpolatedStyle : { rotate: number; }
+>rotate : number
+

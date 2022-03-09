@@ -9,13 +9,13 @@ var _a;
 var v = (_a = {},
     Object.defineProperty(_a, 0 + 1, {
         get: function () { return 0; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     }),
     Object.defineProperty(_a, 0 + 1, {
         set: function (v) { } //No error
         ,
-        enumerable: true,
+        enumerable: false,
         configurable: true
     }),
     _a);

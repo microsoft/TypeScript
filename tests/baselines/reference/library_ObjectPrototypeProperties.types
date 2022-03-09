@@ -34,11 +34,11 @@ Object.prototype.valueOf();
 
 Object.prototype.hasOwnProperty("string");
 >Object.prototype.hasOwnProperty("string") : boolean
->Object.prototype.hasOwnProperty : (v: string | number | symbol) => boolean
+>Object.prototype.hasOwnProperty : (v: PropertyKey) => boolean
 >Object.prototype : Object
 >Object : ObjectConstructor
 >prototype : Object
->hasOwnProperty : (v: string | number | symbol) => boolean
+>hasOwnProperty : (v: PropertyKey) => boolean
 >"string" : "string"
 
 Object.prototype.isPrototypeOf(Object);
@@ -52,10 +52,10 @@ Object.prototype.isPrototypeOf(Object);
 
 Object.prototype.propertyIsEnumerable("string");
 >Object.prototype.propertyIsEnumerable("string") : boolean
->Object.prototype.propertyIsEnumerable : (v: string | number | symbol) => boolean
+>Object.prototype.propertyIsEnumerable : (v: PropertyKey) => boolean
 >Object.prototype : Object
 >Object : ObjectConstructor
 >prototype : Object
->propertyIsEnumerable : (v: string | number | symbol) => boolean
+>propertyIsEnumerable : (v: PropertyKey) => boolean
 >"string" : "string"
 

@@ -24,7 +24,7 @@ exports.x;
         this.x = 0;
 >this.x = 0 : 0
 >this.x : any
->this : any
+>this : this
 >x : any
 >0 : 0
     }

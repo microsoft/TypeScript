@@ -77,32 +77,32 @@ class Public2 {
 
 function f1(x: Private & Private2) {
 >f1 : (x: Private & Private2) => void
->x : Private & Private2
+>x : never
 
 	x.p;  // Error, private constituent makes property inaccessible
->x.p : string
->x : Private & Private2
->p : string
+>x.p : any
+>x : never
+>p : any
 }
 
 function f2(x: Private & Protected) {
 >f2 : (x: Private & Protected) => void
->x : Private & Protected
+>x : never
 
 	x.p;  // Error, private constituent makes property inaccessible
->x.p : string
->x : Private & Protected
->p : string
+>x.p : any
+>x : never
+>p : any
 }
 
 function f3(x: Private & Public) {
 >f3 : (x: Private & Public) => void
->x : Private & Public
+>x : never
 
 	x.p;  // Error, private constituent makes property inaccessible
->x.p : string
->x : Private & Public
->p : string
+>x.p : any
+>x : never
+>p : any
 }
 
 function f4(x: Protected & Protected2) {
@@ -144,21 +144,21 @@ declare function Mix<T, U>(c1: T, c2: U): T & U;
 
 class C1 extends Mix(Private, Private2) {}
 >C1 : C1
->Mix(Private, Private2) : Private & Private2
+>Mix(Private, Private2) : typeof Private & typeof Private2
 >Mix : <T, U>(c1: T, c2: U) => T & U
 >Private : typeof Private
 >Private2 : typeof Private2
 
 class C2 extends Mix(Private, Protected) {}
 >C2 : C2
->Mix(Private, Protected) : Private & Protected
+>Mix(Private, Protected) : typeof Private & typeof Protected
 >Mix : <T, U>(c1: T, c2: U) => T & U
 >Private : typeof Private
 >Protected : typeof Protected
 
 class C3 extends Mix(Private, Public) {}
 >C3 : C3
->Mix(Private, Public) : Private & Public
+>Mix(Private, Public) : typeof Private & typeof Public
 >Mix : <T, U>(c1: T, c2: U) => T & U
 >Private : typeof Private
 >Public : typeof Public
@@ -328,7 +328,7 @@ class ProtectedGeneric2<T> {
 }
 
 function f7(x: ProtectedGeneric<{}> & ProtectedGeneric<{}>) {
->f7 : (x: ProtectedGeneric<{}>) => void
+>f7 : (x: ProtectedGeneric<{}> & ProtectedGeneric<{}>) => void
 >x : ProtectedGeneric<{}>
 
 	x.privateMethod(); // Error, private constituent makes method inaccessible
@@ -345,27 +345,27 @@ function f7(x: ProtectedGeneric<{}> & ProtectedGeneric<{}>) {
 }
 
 function f8(x: ProtectedGeneric<{a: void;}> & ProtectedGeneric2<{a:void;b:void;}>) {
->f8 : (x: ProtectedGeneric<{ a: void; }> & ProtectedGeneric2<{ a: void; b: void; }>) => void
->x : ProtectedGeneric<{ a: void; }> & ProtectedGeneric2<{ a: void; b: void; }>
+>f8 : (x: ProtectedGeneric<{    a: void;}> & ProtectedGeneric2<{    a: void;    b: void;}>) => void
+>x : never
 >a : void
 >a : void
 >b : void
 
 	x.privateMethod(); // Error, private constituent makes method inaccessible
->x.privateMethod() : void
->x.privateMethod : (() => void) & (() => void)
->x : ProtectedGeneric<{ a: void; }> & ProtectedGeneric2<{ a: void; b: void; }>
->privateMethod : (() => void) & (() => void)
+>x.privateMethod() : any
+>x.privateMethod : any
+>x : never
+>privateMethod : any
 
 	x.protectedMethod(); // Error, protected when all constituents are protected
->x.protectedMethod() : void
->x.protectedMethod : (() => void) & (() => void)
->x : ProtectedGeneric<{ a: void; }> & ProtectedGeneric2<{ a: void; b: void; }>
->protectedMethod : (() => void) & (() => void)
+>x.protectedMethod() : any
+>x.protectedMethod : any
+>x : never
+>protectedMethod : any
 }
 
 function f9(x: ProtectedGeneric<{a: void;}> & ProtectedGeneric<{a:void;b:void;}>) {
->f9 : (x: ProtectedGeneric<{ a: void; }> & ProtectedGeneric<{ a: void; b: void; }>) => void
+>f9 : (x: ProtectedGeneric<{    a: void;}> & ProtectedGeneric<{    a: void;    b: void;}>) => void
 >x : ProtectedGeneric<{ a: void; }> & ProtectedGeneric<{ a: void; b: void; }>
 >a : void
 >a : void

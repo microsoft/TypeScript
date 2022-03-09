@@ -1,0 +1,34 @@
+tests/cases/conformance/es6/destructuring/destructuringSpread.ts(16,21): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
+
+
+==== tests/cases/conformance/es6/destructuring/destructuringSpread.ts (1 errors) ====
+    const { x } = {
+      ...{},
+      x: 0
+    };
+    
+    const { y } = {
+      y: 0,
+      ...{}
+    };
+    
+    const { z, a, b } = {
+      z: 0,
+      ...{ a: 0, b: 0 }
+    };
+    
+    const { c, d, e, f, g } = {
+                        ~
+!!! error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
+      ...{
+        ...{
+          ...{
+            c: 0,
+          },
+          d: 0
+        },
+        e: 0
+      },
+      f: 0
+    };
+    

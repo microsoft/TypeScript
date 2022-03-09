@@ -11,6 +11,9 @@ declare let s: string;
 declare let b: boolean;
 >b : boolean
 
+declare let xUnknown: unknown;
+>xUnknown : unknown
+
 if (x == n) {
 >x == n : boolean
 >x : string | number | boolean
@@ -110,7 +113,7 @@ if (x == xAndObj) {
 // Repro from #24991
 
 function test(level: number | string):number {
->test : (level: string | number) => number
+>test : (level: number | string) => number
 >level : string | number
 
     if (level == +level) {
@@ -129,4 +132,32 @@ function test(level: number | string):number {
     return 0;
 >0 : 0
 }
+
+// From issue #32798
+if (xUnknown == null) {
+>xUnknown == null : boolean
+>xUnknown : unknown
+>null : null
+
+    xUnknown;
+>xUnknown : null | undefined
+
+} else {
+    xUnknown
+>xUnknown : unknown
+}
+
+if (xUnknown != null) {
+>xUnknown != null : boolean
+>xUnknown : unknown
+>null : null
+
+    xUnknown;
+>xUnknown : unknown
+
+} else {
+    xUnknown;
+>xUnknown : null | undefined
+}
+
 

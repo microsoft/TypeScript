@@ -3,6 +3,9 @@
 ////function foo(x: "bla"): void;
 ////function foo(x: "bla"): void;
 ////function foo(x: string) {}
-////foo("/**/")
+////foo("[|/**/|]")
 
-verify.completions({ marker: "", exact: "bla" });
+verify.completions({ marker: "", exact: {
+    name: "bla",
+    replacementSpan: test.ranges()[0]
+} });

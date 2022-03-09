@@ -1,0 +1,120 @@
+=== tests/cases/conformance/node/index.ts ===
+// esm format file
+import * as cjsi from "inner/cjs/index.cjs";
+>cjsi : any
+
+import * as mjsi from "inner/mjs/index.mjs";
+>mjsi : any
+
+import * as typei from "inner/js/index.js";
+>typei : any
+
+cjsi;
+>cjsi : any
+
+mjsi;
+>mjsi : any
+
+typei;
+>typei : any
+
+=== tests/cases/conformance/node/index.mts ===
+// esm format file
+import * as cjsi from "inner/cjs/index.cjs";
+>cjsi : any
+
+import * as mjsi from "inner/mjs/index.mjs";
+>mjsi : any
+
+import * as typei from "inner/js/index.js";
+>typei : any
+
+cjsi;
+>cjsi : any
+
+mjsi;
+>mjsi : any
+
+typei;
+>typei : any
+
+=== tests/cases/conformance/node/index.cts ===
+// cjs format file
+import * as cjsi from "inner/cjs/index.cjs";
+>cjsi : any
+
+import * as mjsi from "inner/mjs/index.mjs";
+>mjsi : any
+
+import * as typei from "inner/js/index.js";
+>typei : any
+
+cjsi;
+>cjsi : any
+
+mjsi;
+>mjsi : any
+
+typei;
+>typei : any
+
+=== tests/cases/conformance/node/node_modules/inner/index.d.ts ===
+// cjs format file
+import * as cjs from "inner/cjs/index.cjs";
+>cjs : any
+
+import * as mjs from "inner/mjs/index.mjs";
+>mjs : any
+
+import * as type from "inner/js/index.js";
+>type : any
+
+export { cjs };
+>cjs : any
+
+export { mjs };
+>mjs : any
+
+export { type };
+>type : any
+
+=== tests/cases/conformance/node/node_modules/inner/index.d.mts ===
+// esm format file
+import * as cjs from "inner/cjs/index.cjs";
+>cjs : any
+
+import * as mjs from "inner/mjs/index.mjs";
+>mjs : any
+
+import * as type from "inner/js/index.js";
+>type : any
+
+export { cjs };
+>cjs : any
+
+export { mjs };
+>mjs : any
+
+export { type };
+>type : any
+
+=== tests/cases/conformance/node/node_modules/inner/index.d.cts ===
+// cjs format file
+import * as cjs from "inner/cjs/index.cjs";
+>cjs : any
+
+import * as mjs from "inner/mjs/index.mjs";
+>mjs : any
+
+import * as type from "inner/js/index.js";
+>type : any
+
+export { cjs };
+>cjs : any
+
+export { mjs };
+>mjs : any
+
+export { type };
+>type : any
+

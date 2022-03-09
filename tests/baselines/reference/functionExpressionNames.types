@@ -9,7 +9,7 @@ exports.E = function() {
     this.e = 'exported'
 >this.e = 'exported' : "exported"
 >this.e : any
->this : any
+>this : this
 >e : any
 >'exported' : "exported"
 }
@@ -31,7 +31,7 @@ var o = {
         this.c = 'nested object'
 >this.c = 'nested object' : "nested object"
 >this.c : any
->this : { C: typeof C; }
+>this : this
 >c : any
 >'nested object' : "nested object"
     }
@@ -50,7 +50,7 @@ var V = function () {
     this.v = 'simple'
 >this.v = 'simple' : "simple"
 >this.v : any
->this : any
+>this : this
 >v : any
 >'simple' : "simple"
 }
@@ -70,7 +70,7 @@ A = function () {
     this.a = 'assignment'
 >this.a = 'assignment' : "assignment"
 >this.a : any
->this : any
+>this : this
 >a : any
 >'assignment' : "assignment"
 }
@@ -87,7 +87,7 @@ const {
         this.b = 'binding pattern'
 >this.b = 'binding pattern' : "binding pattern"
 >this.b : any
->this : any
+>this : this
 >b : any
 >'binding pattern' : "binding pattern"
     }

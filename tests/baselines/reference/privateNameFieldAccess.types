@@ -9,9 +9,9 @@ class A {
     constructor() {
         console.log(this.#myField);
 >console.log(this.#myField) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >this.#myField : string
 >this : this
     }

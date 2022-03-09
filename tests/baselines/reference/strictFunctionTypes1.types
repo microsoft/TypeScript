@@ -97,7 +97,7 @@ const x11 = f3(never, fo, fx);  // "def"
 // Repro from #21112
 
 declare function foo<T>(a: ReadonlyArray<T>): T;
->foo : <T>(a: readonly T[]) => T
+>foo : <T>(a: ReadonlyArray<T>) => T
 >a : readonly T[]
 
 let x = foo([]);  // never
@@ -115,7 +115,7 @@ interface B extends A { b: string }
 >b : string
 
 declare function acceptUnion(x: A | number): void;
->acceptUnion : (x: number | A) => void
+>acceptUnion : (x: A | number) => void
 >x : number | A
 
 declare function acceptA(x: A): void;

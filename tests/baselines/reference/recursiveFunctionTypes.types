@@ -13,12 +13,12 @@ var y: () => number = fn; // ok
 >fn : () => typeof fn
 
 var f: () => typeof g;
->f : () => () => any
->g : () => () => any
+>f : () => typeof g
+>g : () => () => typeof g
 
 var g: () => typeof f;
->g : () => () => any
->f : () => () => any
+>g : () => typeof f
+>f : () => () => typeof f
 
 function f1(d: typeof f1) { }
 >f1 : (d: typeof f1) => void
@@ -26,11 +26,11 @@ function f1(d: typeof f1) { }
 >f1 : (d: typeof f1) => void
 
 function f2(): typeof g2 { } 
->f2 : () => () => typeof f2
+>f2 : () => typeof g2
 >g2 : () => () => typeof g2
 
 function g2(): typeof f2 { } 
->g2 : () => () => typeof g2
+>g2 : () => typeof f2
 >f2 : () => () => typeof f2
 
 interface I<T> { }
@@ -61,8 +61,8 @@ C.g(3); // error
 >3 : 3
 
 var f4: () => typeof f4;
->f4 : () => any
->f4 : () => any
+>f4 : () => typeof f4
+>f4 : () => typeof f4
 
 f4 = 3; // error
 >f4 = 3 : 3

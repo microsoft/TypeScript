@@ -27,18 +27,18 @@ function returnNotAnyArray(arr) {
 var notAnyPromise = Promise.resolve(5);
 >notAnyPromise : Promise<any>
 >Promise.resolve(5) : Promise<number>
->Promise.resolve : { <T>(value: T | PromiseLike<T>): Promise<T>; (): Promise<void>; }
+>Promise.resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
 >Promise : PromiseConstructor
->resolve : { <T>(value: T | PromiseLike<T>): Promise<T>; (): Promise<void>; }
+>resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
 >5 : 5
 
 /** @type {Promise<number>} */
 var numberPromise = Promise.resolve(5);
 >numberPromise : Promise<number>
 >Promise.resolve(5) : Promise<number>
->Promise.resolve : { <T>(value: T | PromiseLike<T>): Promise<T>; (): Promise<void>; }
+>Promise.resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
 >Promise : PromiseConstructor
->resolve : { <T>(value: T | PromiseLike<T>): Promise<T>; (): Promise<void>; }
+>resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
 >5 : 5
 
 /**

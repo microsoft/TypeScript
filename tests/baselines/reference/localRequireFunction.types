@@ -8,15 +8,15 @@ function require(a) {
 }
 
 const fs = require("fs");
->fs : any
+>fs : error
 >require("fs") : any
 >require : (a: any) => any
 >"fs" : "fs"
 
 const text = fs.readFileSync("/a/b/c");
->text : any
->fs.readFileSync("/a/b/c") : any
->fs.readFileSync : any
+>text : error
+>fs.readFileSync("/a/b/c") : error
+>fs.readFileSync : error
 >fs : any
 >readFileSync : any
 >"/a/b/c" : "/a/b/c"

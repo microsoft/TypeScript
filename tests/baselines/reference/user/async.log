@@ -1,4 +1,4 @@
-Exit Code: 1
+Exit Code: 2
 Standard output:
 node_modules/async/all.js(32,12): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/all.js(49,20): error TS2695: Left side of comma operator is unused and has no side effects.
@@ -85,17 +85,16 @@ node_modules/async/dist/async.js(3,10): error TS2304: Cannot find name 'define'.
 node_modules/async/dist/async.js(3,35): error TS2304: Cannot find name 'define'.
 node_modules/async/dist/async.js(3,48): error TS2304: Cannot find name 'define'.
 node_modules/async/dist/async.js(4,20): error TS2339: Property 'async' does not exist on type 'typeof import("/async/node_modules/async/dist/async")'.
-node_modules/async/dist/async.js(31,18): error TS8029: JSDoc '@param' tag has name '', but there is no parameter with that name. It would match 'arguments' if it had an array type.
 node_modules/async/dist/async.js(31,28): error TS1003: Identifier expected.
 node_modules/async/dist/async.js(31,29): error TS1003: Identifier expected.
 node_modules/async/dist/async.js(31,30): error TS1003: Identifier expected.
 node_modules/async/dist/async.js(298,7): error TS2454: Variable 'unmasked' is used before being assigned.
 node_modules/async/dist/async.js(622,80): error TS2339: Property 'nodeType' does not exist on type 'NodeModule'.
 node_modules/async/dist/async.js(748,84): error TS2339: Property 'nodeType' does not exist on type 'NodeModule'.
-node_modules/async/dist/async.js(754,49): error TS2339: Property 'process' does not exist on type 'false | Global'.
+node_modules/async/dist/async.js(754,49): error TS2339: Property 'process' does not exist on type 'false | typeof globalThis'.
   Property 'process' does not exist on type 'false'.
-node_modules/async/dist/async.js(810,45): error TS2554: Expected 0 arguments, but got 1.
 node_modules/async/dist/async.js(923,32): error TS2554: Expected 2 arguments, but got 1.
+node_modules/async/dist/async.js(1294,27): error TS1016: A required parameter cannot follow an optional parameter.
 node_modules/async/dist/async.js(1299,18): error TS2532: Object is possibly 'undefined'.
 node_modules/async/dist/async.js(1303,3): error TS2322: Type 'any[] | undefined' is not assignable to type 'any[]'.
   Type 'undefined' is not assignable to type 'any[]'.
@@ -103,6 +102,7 @@ node_modules/async/dist/async.js(1509,9): error TS2322: Type 'null' is not assig
 node_modules/async/dist/async.js(1578,20): error TS2722: Cannot invoke an object which is possibly 'undefined'.
 node_modules/async/dist/async.js(1580,51): error TS2532: Object is possibly 'undefined'.
 node_modules/async/dist/async.js(1622,17): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+node_modules/async/dist/async.js(1681,26): error TS1016: A required parameter cannot follow an optional parameter.
 node_modules/async/dist/async.js(1687,30): error TS2532: Object is possibly 'undefined'.
 node_modules/async/dist/async.js(1761,7): error TS2532: Object is possibly 'undefined'.
 node_modules/async/dist/async.js(1762,14): error TS2532: Object is possibly 'undefined'.
@@ -116,13 +116,14 @@ node_modules/async/dist/async.js(1768,32): error TS2532: Object is possibly 'und
 node_modules/async/dist/async.js(1768,38): error TS2532: Object is possibly 'undefined'.
 node_modules/async/dist/async.js(1769,3): error TS2532: Object is possibly 'undefined'.
 node_modules/async/dist/async.js(1773,35): error TS2532: Object is possibly 'undefined'.
+node_modules/async/dist/async.js(1964,30): error TS1016: A required parameter cannot follow an optional parameter.
 node_modules/async/dist/async.js(1990,16): error TS2554: Expected 3 arguments, but got 1.
 node_modules/async/dist/async.js(2116,20): error TS2345: Argument of type 'Function | undefined' is not assignable to parameter of type 'number | undefined'.
   Type 'Function' is not assignable to type 'number'.
 node_modules/async/dist/async.js(2274,29): error TS2554: Expected 0 arguments, but got 2.
 node_modules/async/dist/async.js(2521,9): error TS2722: Cannot invoke an object which is possibly 'undefined'.
 node_modules/async/dist/async.js(2564,31): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'any[]'.
-  Type 'IArguments' is missing the following properties from type 'any[]': pop, push, concat, join, and 26 more.
+  Type 'IArguments' is missing the following properties from type 'any[]': pop, push, concat, join, and 27 more.
 node_modules/async/dist/async.js(2663,16): error TS2722: Cannot invoke an object which is possibly 'undefined'.
 node_modules/async/dist/async.js(2682,31): error TS1005: ']' expected.
 node_modules/async/dist/async.js(2707,31): error TS1005: ']' expected.
@@ -153,12 +154,15 @@ node_modules/async/dist/async.js(3848,23): error TS1003: Identifier expected.
 node_modules/async/dist/async.js(3848,24): error TS1003: Identifier expected.
 node_modules/async/dist/async.js(3848,25): error TS1003: Identifier expected.
 node_modules/async/dist/async.js(4381,5): error TS2322: Type 'any[] | {}' is not assignable to type 'any[]'.
-  Type '{}' is missing the following properties from type 'any[]': length, pop, push, concat, and 28 more.
+  Type '{}' is missing the following properties from type 'any[]': length, pop, push, concat, and 29 more.
+node_modules/async/dist/async.js(4570,22): error TS1016: A required parameter cannot follow an optional parameter.
 node_modules/async/dist/async.js(4617,17): error TS2532: Object is possibly 'undefined'.
 node_modules/async/dist/async.js(4617,17): error TS2684: The 'this' context of type 'Function | undefined' is not assignable to method's 'this' of type 'Function'.
   Type 'undefined' is not assignable to type 'Function'.
+node_modules/async/dist/async.js(4653,33): error TS1016: A required parameter cannot follow an optional parameter.
 node_modules/async/dist/async.js(4931,19): error TS2339: Property 'code' does not exist on type 'Error'.
 node_modules/async/dist/async.js(4933,23): error TS2339: Property 'info' does not exist on type 'Error'.
+node_modules/async/dist/async.js(5092,40): error TS1016: A required parameter cannot follow an optional parameter.
 node_modules/async/dist/async.js(5104,9): error TS2722: Cannot invoke an object which is possibly 'undefined'.
 node_modules/async/dist/async.js(5160,9): error TS2722: Cannot invoke an object which is possibly 'undefined'.
 node_modules/async/dist/async.js(5179,20): error TS2339: Property 'unmemoized' does not exist on type 'Function'.
@@ -283,204 +287,6 @@ node_modules/async/groupByLimit.js(10,6): error TS2695: Left side of comma opera
 node_modules/async/groupByLimit.js(63,12): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/groupBySeries.js(28,12): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/groupBySeries.js(36,20): error TS2695: Left side of comma operator is unused and has no side effects.
-node_modules/async/index.js(6,1): error TS2323: Cannot redeclare exported variable 'wrapSync'.
-node_modules/async/index.js(6,20): error TS2323: Cannot redeclare exported variable 'selectSeries'.
-node_modules/async/index.js(6,43): error TS2323: Cannot redeclare exported variable 'selectLimit'.
-node_modules/async/index.js(6,65): error TS2323: Cannot redeclare exported variable 'select'.
-node_modules/async/index.js(6,82): error TS2323: Cannot redeclare exported variable 'foldr'.
-node_modules/async/index.js(6,98): error TS2323: Cannot redeclare exported variable 'foldl'.
-node_modules/async/index.js(6,114): error TS2323: Cannot redeclare exported variable 'inject'.
-node_modules/async/index.js(6,131): error TS2323: Cannot redeclare exported variable 'forEachOfLimit'.
-node_modules/async/index.js(6,156): error TS2323: Cannot redeclare exported variable 'forEachOfSeries'.
-node_modules/async/index.js(6,182): error TS2323: Cannot redeclare exported variable 'forEachOf'.
-node_modules/async/index.js(6,202): error TS2323: Cannot redeclare exported variable 'forEachLimit'.
-node_modules/async/index.js(6,225): error TS2323: Cannot redeclare exported variable 'forEachSeries'.
-node_modules/async/index.js(6,249): error TS2323: Cannot redeclare exported variable 'forEach'.
-node_modules/async/index.js(6,267): error TS2323: Cannot redeclare exported variable 'findSeries'.
-node_modules/async/index.js(6,288): error TS2323: Cannot redeclare exported variable 'findLimit'.
-node_modules/async/index.js(6,308): error TS2323: Cannot redeclare exported variable 'find'.
-node_modules/async/index.js(6,323): error TS2323: Cannot redeclare exported variable 'anySeries'.
-node_modules/async/index.js(6,343): error TS2323: Cannot redeclare exported variable 'anyLimit'.
-node_modules/async/index.js(6,362): error TS2323: Cannot redeclare exported variable 'any'.
-node_modules/async/index.js(6,376): error TS2323: Cannot redeclare exported variable 'allSeries'.
-node_modules/async/index.js(6,396): error TS2323: Cannot redeclare exported variable 'allLimit'.
-node_modules/async/index.js(6,415): error TS2323: Cannot redeclare exported variable 'all'.
-node_modules/async/index.js(6,429): error TS2323: Cannot redeclare exported variable 'whilst'.
-node_modules/async/index.js(6,446): error TS2323: Cannot redeclare exported variable 'waterfall'.
-node_modules/async/index.js(6,466): error TS2323: Cannot redeclare exported variable 'until'.
-node_modules/async/index.js(6,482): error TS2323: Cannot redeclare exported variable 'unmemoize'.
-node_modules/async/index.js(6,502): error TS2323: Cannot redeclare exported variable 'tryEach'.
-node_modules/async/index.js(6,520): error TS2323: Cannot redeclare exported variable 'transform'.
-node_modules/async/index.js(6,540): error TS2323: Cannot redeclare exported variable 'timesSeries'.
-node_modules/async/index.js(6,562): error TS2323: Cannot redeclare exported variable 'timesLimit'.
-node_modules/async/index.js(6,583): error TS2323: Cannot redeclare exported variable 'times'.
-node_modules/async/index.js(6,599): error TS2323: Cannot redeclare exported variable 'timeout'.
-node_modules/async/index.js(6,617): error TS2323: Cannot redeclare exported variable 'sortBy'.
-node_modules/async/index.js(6,634): error TS2323: Cannot redeclare exported variable 'someSeries'.
-node_modules/async/index.js(6,655): error TS2323: Cannot redeclare exported variable 'someLimit'.
-node_modules/async/index.js(6,675): error TS2323: Cannot redeclare exported variable 'some'.
-node_modules/async/index.js(6,690): error TS2323: Cannot redeclare exported variable 'setImmediate'.
-node_modules/async/index.js(6,713): error TS2323: Cannot redeclare exported variable 'series'.
-node_modules/async/index.js(6,730): error TS2323: Cannot redeclare exported variable 'seq'.
-node_modules/async/index.js(6,744): error TS2323: Cannot redeclare exported variable 'retryable'.
-node_modules/async/index.js(6,764): error TS2323: Cannot redeclare exported variable 'retry'.
-node_modules/async/index.js(6,780): error TS2323: Cannot redeclare exported variable 'rejectSeries'.
-node_modules/async/index.js(6,803): error TS2323: Cannot redeclare exported variable 'rejectLimit'.
-node_modules/async/index.js(6,825): error TS2323: Cannot redeclare exported variable 'reject'.
-node_modules/async/index.js(6,842): error TS2323: Cannot redeclare exported variable 'reflectAll'.
-node_modules/async/index.js(6,863): error TS2323: Cannot redeclare exported variable 'reflect'.
-node_modules/async/index.js(6,881): error TS2323: Cannot redeclare exported variable 'reduceRight'.
-node_modules/async/index.js(6,903): error TS2323: Cannot redeclare exported variable 'reduce'.
-node_modules/async/index.js(6,920): error TS2323: Cannot redeclare exported variable 'race'.
-node_modules/async/index.js(6,935): error TS2323: Cannot redeclare exported variable 'queue'.
-node_modules/async/index.js(6,951): error TS2323: Cannot redeclare exported variable 'priorityQueue'.
-node_modules/async/index.js(6,975): error TS2323: Cannot redeclare exported variable 'parallelLimit'.
-node_modules/async/index.js(6,999): error TS2323: Cannot redeclare exported variable 'parallel'.
-node_modules/async/index.js(6,1018): error TS2323: Cannot redeclare exported variable 'nextTick'.
-node_modules/async/index.js(6,1037): error TS2323: Cannot redeclare exported variable 'memoize'.
-node_modules/async/index.js(6,1055): error TS2323: Cannot redeclare exported variable 'mapValuesSeries'.
-node_modules/async/index.js(6,1081): error TS2323: Cannot redeclare exported variable 'mapValuesLimit'.
-node_modules/async/index.js(6,1106): error TS2323: Cannot redeclare exported variable 'mapValues'.
-node_modules/async/index.js(6,1126): error TS2323: Cannot redeclare exported variable 'mapSeries'.
-node_modules/async/index.js(6,1146): error TS2323: Cannot redeclare exported variable 'mapLimit'.
-node_modules/async/index.js(6,1165): error TS2323: Cannot redeclare exported variable 'map'.
-node_modules/async/index.js(6,1179): error TS2323: Cannot redeclare exported variable 'log'.
-node_modules/async/index.js(6,1193): error TS2323: Cannot redeclare exported variable 'groupBySeries'.
-node_modules/async/index.js(6,1217): error TS2323: Cannot redeclare exported variable 'groupByLimit'.
-node_modules/async/index.js(6,1240): error TS2323: Cannot redeclare exported variable 'groupBy'.
-node_modules/async/index.js(6,1258): error TS2323: Cannot redeclare exported variable 'forever'.
-node_modules/async/index.js(6,1276): error TS2323: Cannot redeclare exported variable 'filterSeries'.
-node_modules/async/index.js(6,1299): error TS2323: Cannot redeclare exported variable 'filterLimit'.
-node_modules/async/index.js(6,1321): error TS2323: Cannot redeclare exported variable 'filter'.
-node_modules/async/index.js(6,1338): error TS2323: Cannot redeclare exported variable 'everySeries'.
-node_modules/async/index.js(6,1360): error TS2323: Cannot redeclare exported variable 'everyLimit'.
-node_modules/async/index.js(6,1381): error TS2323: Cannot redeclare exported variable 'every'.
-node_modules/async/index.js(6,1397): error TS2323: Cannot redeclare exported variable 'ensureAsync'.
-node_modules/async/index.js(6,1419): error TS2323: Cannot redeclare exported variable 'eachSeries'.
-node_modules/async/index.js(6,1440): error TS2323: Cannot redeclare exported variable 'eachOfSeries'.
-node_modules/async/index.js(6,1463): error TS2323: Cannot redeclare exported variable 'eachOfLimit'.
-node_modules/async/index.js(6,1485): error TS2323: Cannot redeclare exported variable 'eachOf'.
-node_modules/async/index.js(6,1502): error TS2323: Cannot redeclare exported variable 'eachLimit'.
-node_modules/async/index.js(6,1522): error TS2323: Cannot redeclare exported variable 'each'.
-node_modules/async/index.js(6,1537): error TS2323: Cannot redeclare exported variable 'during'.
-node_modules/async/index.js(6,1554): error TS2323: Cannot redeclare exported variable 'doWhilst'.
-node_modules/async/index.js(6,1573): error TS2323: Cannot redeclare exported variable 'doUntil'.
-node_modules/async/index.js(6,1591): error TS2323: Cannot redeclare exported variable 'doDuring'.
-node_modules/async/index.js(6,1610): error TS2323: Cannot redeclare exported variable 'dir'.
-node_modules/async/index.js(6,1624): error TS2323: Cannot redeclare exported variable 'detectSeries'.
-node_modules/async/index.js(6,1647): error TS2323: Cannot redeclare exported variable 'detectLimit'.
-node_modules/async/index.js(6,1669): error TS2323: Cannot redeclare exported variable 'detect'.
-node_modules/async/index.js(6,1686): error TS2323: Cannot redeclare exported variable 'constant'.
-node_modules/async/index.js(6,1705): error TS2323: Cannot redeclare exported variable 'concatSeries'.
-node_modules/async/index.js(6,1728): error TS2323: Cannot redeclare exported variable 'concatLimit'.
-node_modules/async/index.js(6,1750): error TS2323: Cannot redeclare exported variable 'concat'.
-node_modules/async/index.js(6,1767): error TS2323: Cannot redeclare exported variable 'compose'.
-node_modules/async/index.js(6,1785): error TS2323: Cannot redeclare exported variable 'cargo'.
-node_modules/async/index.js(6,1801): error TS2323: Cannot redeclare exported variable 'autoInject'.
-node_modules/async/index.js(6,1822): error TS2323: Cannot redeclare exported variable 'auto'.
-node_modules/async/index.js(6,1837): error TS2323: Cannot redeclare exported variable 'asyncify'.
-node_modules/async/index.js(6,1856): error TS2323: Cannot redeclare exported variable 'applyEachSeries'.
-node_modules/async/index.js(6,1882): error TS2323: Cannot redeclare exported variable 'applyEach'.
-node_modules/async/index.js(6,1902): error TS2323: Cannot redeclare exported variable 'apply'.
-node_modules/async/index.js(484,1): error TS2323: Cannot redeclare exported variable 'apply'.
-node_modules/async/index.js(485,1): error TS2323: Cannot redeclare exported variable 'applyEach'.
-node_modules/async/index.js(486,1): error TS2323: Cannot redeclare exported variable 'applyEachSeries'.
-node_modules/async/index.js(487,1): error TS2323: Cannot redeclare exported variable 'asyncify'.
-node_modules/async/index.js(488,1): error TS2323: Cannot redeclare exported variable 'auto'.
-node_modules/async/index.js(489,1): error TS2323: Cannot redeclare exported variable 'autoInject'.
-node_modules/async/index.js(490,1): error TS2323: Cannot redeclare exported variable 'cargo'.
-node_modules/async/index.js(491,1): error TS2323: Cannot redeclare exported variable 'compose'.
-node_modules/async/index.js(492,1): error TS2323: Cannot redeclare exported variable 'concat'.
-node_modules/async/index.js(493,1): error TS2323: Cannot redeclare exported variable 'concatLimit'.
-node_modules/async/index.js(494,1): error TS2323: Cannot redeclare exported variable 'concatSeries'.
-node_modules/async/index.js(495,1): error TS2323: Cannot redeclare exported variable 'constant'.
-node_modules/async/index.js(496,1): error TS2323: Cannot redeclare exported variable 'detect'.
-node_modules/async/index.js(497,1): error TS2323: Cannot redeclare exported variable 'detectLimit'.
-node_modules/async/index.js(498,1): error TS2323: Cannot redeclare exported variable 'detectSeries'.
-node_modules/async/index.js(499,1): error TS2323: Cannot redeclare exported variable 'dir'.
-node_modules/async/index.js(500,1): error TS2323: Cannot redeclare exported variable 'doDuring'.
-node_modules/async/index.js(501,1): error TS2323: Cannot redeclare exported variable 'doUntil'.
-node_modules/async/index.js(502,1): error TS2323: Cannot redeclare exported variable 'doWhilst'.
-node_modules/async/index.js(503,1): error TS2323: Cannot redeclare exported variable 'during'.
-node_modules/async/index.js(504,1): error TS2323: Cannot redeclare exported variable 'each'.
-node_modules/async/index.js(505,1): error TS2323: Cannot redeclare exported variable 'eachLimit'.
-node_modules/async/index.js(506,1): error TS2323: Cannot redeclare exported variable 'eachOf'.
-node_modules/async/index.js(507,1): error TS2323: Cannot redeclare exported variable 'eachOfLimit'.
-node_modules/async/index.js(508,1): error TS2323: Cannot redeclare exported variable 'eachOfSeries'.
-node_modules/async/index.js(509,1): error TS2323: Cannot redeclare exported variable 'eachSeries'.
-node_modules/async/index.js(510,1): error TS2323: Cannot redeclare exported variable 'ensureAsync'.
-node_modules/async/index.js(511,1): error TS2323: Cannot redeclare exported variable 'every'.
-node_modules/async/index.js(512,1): error TS2323: Cannot redeclare exported variable 'everyLimit'.
-node_modules/async/index.js(513,1): error TS2323: Cannot redeclare exported variable 'everySeries'.
-node_modules/async/index.js(514,1): error TS2323: Cannot redeclare exported variable 'filter'.
-node_modules/async/index.js(515,1): error TS2323: Cannot redeclare exported variable 'filterLimit'.
-node_modules/async/index.js(516,1): error TS2323: Cannot redeclare exported variable 'filterSeries'.
-node_modules/async/index.js(517,1): error TS2323: Cannot redeclare exported variable 'forever'.
-node_modules/async/index.js(518,1): error TS2323: Cannot redeclare exported variable 'groupBy'.
-node_modules/async/index.js(519,1): error TS2323: Cannot redeclare exported variable 'groupByLimit'.
-node_modules/async/index.js(520,1): error TS2323: Cannot redeclare exported variable 'groupBySeries'.
-node_modules/async/index.js(521,1): error TS2323: Cannot redeclare exported variable 'log'.
-node_modules/async/index.js(522,1): error TS2323: Cannot redeclare exported variable 'map'.
-node_modules/async/index.js(523,1): error TS2323: Cannot redeclare exported variable 'mapLimit'.
-node_modules/async/index.js(524,1): error TS2323: Cannot redeclare exported variable 'mapSeries'.
-node_modules/async/index.js(525,1): error TS2323: Cannot redeclare exported variable 'mapValues'.
-node_modules/async/index.js(526,1): error TS2323: Cannot redeclare exported variable 'mapValuesLimit'.
-node_modules/async/index.js(527,1): error TS2323: Cannot redeclare exported variable 'mapValuesSeries'.
-node_modules/async/index.js(528,1): error TS2323: Cannot redeclare exported variable 'memoize'.
-node_modules/async/index.js(529,1): error TS2323: Cannot redeclare exported variable 'nextTick'.
-node_modules/async/index.js(530,1): error TS2323: Cannot redeclare exported variable 'parallel'.
-node_modules/async/index.js(531,1): error TS2323: Cannot redeclare exported variable 'parallelLimit'.
-node_modules/async/index.js(532,1): error TS2323: Cannot redeclare exported variable 'priorityQueue'.
-node_modules/async/index.js(533,1): error TS2323: Cannot redeclare exported variable 'queue'.
-node_modules/async/index.js(534,1): error TS2323: Cannot redeclare exported variable 'race'.
-node_modules/async/index.js(535,1): error TS2323: Cannot redeclare exported variable 'reduce'.
-node_modules/async/index.js(536,1): error TS2323: Cannot redeclare exported variable 'reduceRight'.
-node_modules/async/index.js(537,1): error TS2323: Cannot redeclare exported variable 'reflect'.
-node_modules/async/index.js(538,1): error TS2323: Cannot redeclare exported variable 'reflectAll'.
-node_modules/async/index.js(539,1): error TS2323: Cannot redeclare exported variable 'reject'.
-node_modules/async/index.js(540,1): error TS2323: Cannot redeclare exported variable 'rejectLimit'.
-node_modules/async/index.js(541,1): error TS2323: Cannot redeclare exported variable 'rejectSeries'.
-node_modules/async/index.js(542,1): error TS2323: Cannot redeclare exported variable 'retry'.
-node_modules/async/index.js(543,1): error TS2323: Cannot redeclare exported variable 'retryable'.
-node_modules/async/index.js(544,1): error TS2323: Cannot redeclare exported variable 'seq'.
-node_modules/async/index.js(545,1): error TS2323: Cannot redeclare exported variable 'series'.
-node_modules/async/index.js(546,1): error TS2323: Cannot redeclare exported variable 'setImmediate'.
-node_modules/async/index.js(547,1): error TS2323: Cannot redeclare exported variable 'some'.
-node_modules/async/index.js(548,1): error TS2323: Cannot redeclare exported variable 'someLimit'.
-node_modules/async/index.js(549,1): error TS2323: Cannot redeclare exported variable 'someSeries'.
-node_modules/async/index.js(550,1): error TS2323: Cannot redeclare exported variable 'sortBy'.
-node_modules/async/index.js(551,1): error TS2323: Cannot redeclare exported variable 'timeout'.
-node_modules/async/index.js(552,1): error TS2323: Cannot redeclare exported variable 'times'.
-node_modules/async/index.js(553,1): error TS2323: Cannot redeclare exported variable 'timesLimit'.
-node_modules/async/index.js(554,1): error TS2323: Cannot redeclare exported variable 'timesSeries'.
-node_modules/async/index.js(555,1): error TS2323: Cannot redeclare exported variable 'transform'.
-node_modules/async/index.js(556,1): error TS2323: Cannot redeclare exported variable 'tryEach'.
-node_modules/async/index.js(557,1): error TS2323: Cannot redeclare exported variable 'unmemoize'.
-node_modules/async/index.js(558,1): error TS2323: Cannot redeclare exported variable 'until'.
-node_modules/async/index.js(559,1): error TS2323: Cannot redeclare exported variable 'waterfall'.
-node_modules/async/index.js(560,1): error TS2323: Cannot redeclare exported variable 'whilst'.
-node_modules/async/index.js(561,1): error TS2323: Cannot redeclare exported variable 'all'.
-node_modules/async/index.js(562,1): error TS2323: Cannot redeclare exported variable 'allLimit'.
-node_modules/async/index.js(563,1): error TS2323: Cannot redeclare exported variable 'allSeries'.
-node_modules/async/index.js(564,1): error TS2323: Cannot redeclare exported variable 'any'.
-node_modules/async/index.js(565,1): error TS2323: Cannot redeclare exported variable 'anyLimit'.
-node_modules/async/index.js(566,1): error TS2323: Cannot redeclare exported variable 'anySeries'.
-node_modules/async/index.js(567,1): error TS2323: Cannot redeclare exported variable 'find'.
-node_modules/async/index.js(568,1): error TS2323: Cannot redeclare exported variable 'findLimit'.
-node_modules/async/index.js(569,1): error TS2323: Cannot redeclare exported variable 'findSeries'.
-node_modules/async/index.js(570,1): error TS2323: Cannot redeclare exported variable 'forEach'.
-node_modules/async/index.js(571,1): error TS2323: Cannot redeclare exported variable 'forEachSeries'.
-node_modules/async/index.js(572,1): error TS2323: Cannot redeclare exported variable 'forEachLimit'.
-node_modules/async/index.js(573,1): error TS2323: Cannot redeclare exported variable 'forEachOf'.
-node_modules/async/index.js(574,1): error TS2323: Cannot redeclare exported variable 'forEachOfSeries'.
-node_modules/async/index.js(575,1): error TS2323: Cannot redeclare exported variable 'forEachOfLimit'.
-node_modules/async/index.js(576,1): error TS2323: Cannot redeclare exported variable 'inject'.
-node_modules/async/index.js(577,1): error TS2323: Cannot redeclare exported variable 'foldl'.
-node_modules/async/index.js(578,1): error TS2323: Cannot redeclare exported variable 'foldr'.
-node_modules/async/index.js(579,1): error TS2323: Cannot redeclare exported variable 'select'.
-node_modules/async/index.js(580,1): error TS2323: Cannot redeclare exported variable 'selectLimit'.
-node_modules/async/index.js(581,1): error TS2323: Cannot redeclare exported variable 'selectSeries'.
-node_modules/async/index.js(582,1): error TS2323: Cannot redeclare exported variable 'wrapSync'.
 node_modules/async/inject.js(46,12): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/inject.js(67,17): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/inject.js(68,22): error TS2695: Left side of comma operator is unused and has no side effects.
@@ -519,14 +325,8 @@ node_modules/async/internal/queue.js(94,30): error TS2695: Left side of comma op
 node_modules/async/internal/queue.js(174,27): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/internal/queue.js(199,14): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/internal/reject.js(15,6): error TS2695: Left side of comma operator is unused and has no side effects.
-node_modules/async/internal/setImmediate.js(6,1): error TS2323: Cannot redeclare exported variable 'hasNextTick'.
-node_modules/async/internal/setImmediate.js(6,23): error TS2323: Cannot redeclare exported variable 'hasSetImmediate'.
-node_modules/async/internal/setImmediate.js(16,23): error TS2323: Cannot redeclare exported variable 'hasSetImmediate'.
-node_modules/async/internal/setImmediate.js(17,19): error TS2323: Cannot redeclare exported variable 'hasNextTick'.
 node_modules/async/internal/setImmediate.js(25,21): error TS2695: Left side of comma operator is unused and has no side effects.
-node_modules/async/internal/wrapAsync.js(6,1): error TS2323: Cannot redeclare exported variable 'isAsync'.
 node_modules/async/internal/wrapAsync.js(21,32): error TS2695: Left side of comma operator is unused and has no side effects.
-node_modules/async/internal/wrapAsync.js(25,1): error TS2323: Cannot redeclare exported variable 'isAsync'.
 node_modules/async/log.js(24,12): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/log.js(26,28): error TS1003: Identifier expected.
 node_modules/async/log.js(26,29): error TS1003: Identifier expected.
@@ -590,6 +390,7 @@ node_modules/async/reject.js(44,20): error TS2695: Left side of comma operator i
 node_modules/async/rejectLimit.js(36,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/rejectSeries.js(34,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/retry.js(48,12): error TS2304: Cannot find name 'AsyncFunction'.
+node_modules/async/retry.js(106,22): error TS1016: A required parameter cannot follow an optional parameter.
 node_modules/async/retry.js(112,24): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/retry.js(119,81): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/retry.js(141,18): error TS2695: Left side of comma operator is unused and has no side effects.
@@ -641,6 +442,7 @@ node_modules/async/timesLimit.js(40,28): error TS2695: Left side of comma operat
 node_modules/async/timesSeries.js(27,12): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/timesSeries.js(31,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/transform.js(43,12): error TS2304: Cannot find name 'AsyncFunction'.
+node_modules/async/transform.js(72,39): error TS1016: A required parameter cannot follow an optional parameter.
 node_modules/async/transform.js(76,24): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/transform.js(78,17): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/transform.js(79,22): error TS2695: Left side of comma operator is unused and has no side effects.

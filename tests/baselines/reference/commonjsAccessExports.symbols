@@ -18,6 +18,8 @@ exports.x;
 >Cls : Symbol(Cls, Decl(a.js, 4, 1))
 
         this.x = 0;
+>this.x : Symbol(Cls.x, Decl(a.js, 6, 30))
+>this : Symbol(Cls, Decl(a.js, 6, 17))
 >x : Symbol(Cls.x, Decl(a.js, 6, 30))
     }
 }

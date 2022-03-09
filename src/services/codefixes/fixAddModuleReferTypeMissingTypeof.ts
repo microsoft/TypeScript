@@ -6,7 +6,7 @@ namespace ts.codefix {
 
     registerCodeFix({
         errorCodes,
-        getCodeActions: context => {
+        getCodeActions: function getCodeActionsToAddMissingTypeof(context) {
             const { sourceFile, span } = context;
             const importType = getImportTypeNode(sourceFile, span.start);
             const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, importType));
@@ -21,11 +21,11 @@ namespace ts.codefix {
         const token = getTokenAtPosition(sourceFile, pos);
         Debug.assert(token.kind === SyntaxKind.ImportKeyword, "This token should be an ImportKeyword");
         Debug.assert(token.parent.kind === SyntaxKind.ImportType, "Token parent should be an ImportType");
-        return <ImportTypeNode>token.parent;
+        return token.parent as ImportTypeNode;
     }
 
     function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, importType: ImportTypeNode) {
-        const newTypeNode = updateImportTypeNode(importType, importType.argument, importType.qualifier, importType.typeArguments, /* isTypeOf */ true);
+        const newTypeNode = factory.updateImportTypeNode(importType, importType.argument, importType.qualifier, importType.typeArguments, /* isTypeOf */ true);
         changes.replaceNode(sourceFile, importType, newTypeNode);
     }
 }

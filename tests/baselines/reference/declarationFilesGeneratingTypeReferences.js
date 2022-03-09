@@ -11,6 +11,7 @@ namespace Test {
     export var x: JQuery;
 }
 
+
 //// [out.js]
 /// <reference types="jquery"/>
 var Test;

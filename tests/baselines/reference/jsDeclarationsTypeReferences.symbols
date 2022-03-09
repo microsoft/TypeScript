@@ -13,14 +13,15 @@ const thing = new Something();
 >Something : Symbol(Something, Decl(index.js, 2, 5))
 
 module.exports = {
->module.exports : Symbol("tests/cases/conformance/jsdoc/declarations/index", Decl(index.js, 0, 0))
->module : Symbol(export=, Decl(index.js, 4, 30))
->exports : Symbol(export=, Decl(index.js, 4, 30))
+>module.exports : Symbol(module.exports, Decl(index.js, 0, 0))
+>module : Symbol(module, Decl(index.js, 4, 30))
+>exports : Symbol(module.exports, Decl(index.js, 0, 0))
 
     thing
 >thing : Symbol(thing, Decl(index.js, 6, 18))
 
 };
+
 === tests/cases/conformance/jsdoc/declarations/node_modules/@types/node/index.d.ts ===
 declare module "fs" {
 >"fs" : Symbol("fs", Decl(index.d.ts, 0, 0))

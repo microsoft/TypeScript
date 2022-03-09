@@ -187,3 +187,4 @@ __decorate([
 G = __decorate([
     anyDec
 ], G);
+export {};

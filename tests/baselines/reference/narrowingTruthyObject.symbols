@@ -1,0 +1,92 @@
+=== tests/cases/compiler/narrowingTruthyObject.ts ===
+function foo(x: unknown, b: boolean) {
+>foo : Symbol(foo, Decl(narrowingTruthyObject.ts, 0, 0))
+>x : Symbol(x, Decl(narrowingTruthyObject.ts, 0, 13))
+>b : Symbol(b, Decl(narrowingTruthyObject.ts, 0, 24))
+
+    if (typeof x === 'object') {
+>x : Symbol(x, Decl(narrowingTruthyObject.ts, 0, 13))
+
+        x.toString();
+>x.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(narrowingTruthyObject.ts, 0, 13))
+>toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+    }
+    if (typeof x === 'object' && x) {
+>x : Symbol(x, Decl(narrowingTruthyObject.ts, 0, 13))
+>x : Symbol(x, Decl(narrowingTruthyObject.ts, 0, 13))
+
+        x.toString();
+>x.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(narrowingTruthyObject.ts, 0, 13))
+>toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+    }
+    if (x && typeof x === 'object') {
+>x : Symbol(x, Decl(narrowingTruthyObject.ts, 0, 13))
+>x : Symbol(x, Decl(narrowingTruthyObject.ts, 0, 13))
+
+        x.toString();
+>x.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(narrowingTruthyObject.ts, 0, 13))
+>toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+    }
+    if (b && x && typeof x === 'object') {
+>b : Symbol(b, Decl(narrowingTruthyObject.ts, 0, 24))
+>x : Symbol(x, Decl(narrowingTruthyObject.ts, 0, 13))
+>x : Symbol(x, Decl(narrowingTruthyObject.ts, 0, 13))
+
+        x.toString();
+>x.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(narrowingTruthyObject.ts, 0, 13))
+>toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+    }
+    if (x && b && typeof x === 'object') {
+>x : Symbol(x, Decl(narrowingTruthyObject.ts, 0, 13))
+>b : Symbol(b, Decl(narrowingTruthyObject.ts, 0, 24))
+>x : Symbol(x, Decl(narrowingTruthyObject.ts, 0, 13))
+
+        x.toString();
+>x.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(narrowingTruthyObject.ts, 0, 13))
+>toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+    }
+    if (x && b && b && typeof x === 'object') {
+>x : Symbol(x, Decl(narrowingTruthyObject.ts, 0, 13))
+>b : Symbol(b, Decl(narrowingTruthyObject.ts, 0, 24))
+>b : Symbol(b, Decl(narrowingTruthyObject.ts, 0, 24))
+>x : Symbol(x, Decl(narrowingTruthyObject.ts, 0, 13))
+
+        x.toString();
+>x.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(narrowingTruthyObject.ts, 0, 13))
+>toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+    }
+    if (b && b && x && b && b && typeof x === 'object') {
+>b : Symbol(b, Decl(narrowingTruthyObject.ts, 0, 24))
+>b : Symbol(b, Decl(narrowingTruthyObject.ts, 0, 24))
+>x : Symbol(x, Decl(narrowingTruthyObject.ts, 0, 13))
+>b : Symbol(b, Decl(narrowingTruthyObject.ts, 0, 24))
+>b : Symbol(b, Decl(narrowingTruthyObject.ts, 0, 24))
+>x : Symbol(x, Decl(narrowingTruthyObject.ts, 0, 13))
+
+        x.toString();
+>x.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(narrowingTruthyObject.ts, 0, 13))
+>toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+    }
+}
+
+// Repro from #36870
+
+function f1(x: unknown): any {
+>f1 : Symbol(f1, Decl(narrowingTruthyObject.ts, 22, 1))
+>x : Symbol(x, Decl(narrowingTruthyObject.ts, 26, 12))
+
+    return x && typeof x === 'object' && x.hasOwnProperty('x');
+>x : Symbol(x, Decl(narrowingTruthyObject.ts, 26, 12))
+>x : Symbol(x, Decl(narrowingTruthyObject.ts, 26, 12))
+>x.hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(narrowingTruthyObject.ts, 26, 12))
+>hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es5.d.ts, --, --))
+}
+

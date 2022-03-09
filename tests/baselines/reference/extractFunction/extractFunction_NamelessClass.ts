@@ -5,6 +5,17 @@ export default class {
         /*[#|*/1 + 1/*|]*/;
     }
 }
+// ==SCOPE::Extract to inner function in method 'M'==
+
+export default class {
+    M() {
+        /*RENAME*/newFunction();
+
+        function newFunction() {
+            1 + 1;
+        }
+    }
+}
 // ==SCOPE::Extract to method in anonymous class declaration==
 
 export default class {

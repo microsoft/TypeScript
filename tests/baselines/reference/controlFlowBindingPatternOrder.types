@@ -1,0 +1,92 @@
+=== tests/cases/conformance/controlFlow/controlFlowBindingPatternOrder.ts ===
+// https://github.com/microsoft/TypeScript/pull/41094#issuecomment-716044363
+{
+    let a: 0 | 1 = 0;
+>a : 0 | 1
+>0 : 0
+
+    const [{ [(a = 1)]: b } = [9, a] as const] = [];
+>(a = 1) : 1
+>a = 1 : 1
+>a : 0 | 1
+>1 : 1
+>b : 0
+>[9, a] as const : readonly [9, 0]
+>[9, a] : readonly [9, 0]
+>9 : 9
+>a : 0
+>[] : []
+
+    const bb: 0 = b;
+>bb : 0
+>b : 0
+}
+{
+    let a: 0 | 1 = 1;
+>a : 0 | 1
+>1 : 1
+
+    const [{ [a]: b } = [9, a = 0] as const] = [];
+>a : 0
+>b : 9
+>[9, a = 0] as const : readonly [9, 0]
+>[9, a = 0] : readonly [9, 0]
+>9 : 9
+>a = 0 : 0
+>a : 0 | 1
+>0 : 0
+>[] : []
+
+    const bb: 9 = b;
+>bb : 9
+>b : 9
+}
+{
+    let a: 0 | 1 = 0;
+>a : 0 | 1
+>0 : 0
+
+    const [{ [(a = 1)]: b } = [9, a] as const] = [[9, 8] as const];
+>(a = 1) : 1
+>a = 1 : 1
+>a : 0 | 1
+>1 : 1
+>b : 0 | 8
+>[9, a] as const : readonly [9, 0]
+>[9, a] : readonly [9, 0]
+>9 : 9
+>a : 0
+>[[9, 8] as const] : [readonly [9, 8]]
+>[9, 8] as const : readonly [9, 8]
+>[9, 8] : readonly [9, 8]
+>9 : 9
+>8 : 8
+
+    const bb: 0 | 8 = b;
+>bb : 0 | 8
+>b : 0 | 8
+}
+{
+    let a: 0 | 1 = 1;
+>a : 0 | 1
+>1 : 1
+
+    const [{ [a]: b } = [a = 0, 9] as const] = [[8, 9] as const];
+>a : 0
+>b : 0 | 8
+>[a = 0, 9] as const : readonly [0, 9]
+>[a = 0, 9] : readonly [0, 9]
+>a = 0 : 0
+>a : 0 | 1
+>0 : 0
+>9 : 9
+>[[8, 9] as const] : [readonly [8, 9]]
+>[8, 9] as const : readonly [8, 9]
+>[8, 9] : readonly [8, 9]
+>8 : 8
+>9 : 9
+
+    const bb: 0 | 8 = b;
+>bb : 0 | 8
+>b : 0 | 8
+}

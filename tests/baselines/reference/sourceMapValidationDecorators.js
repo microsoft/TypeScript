@@ -85,7 +85,7 @@ var Greeter = /** @class */ (function () {
         set: function (greetings) {
             this.greeting = greetings;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Greeter.x1 = 10;

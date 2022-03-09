@@ -18,8 +18,10 @@ export let y = () => x
 "use strict";
 /// <reference types="lib"/>
 exports.__esModule = true;
+exports.y = exports.x = exports.$ = void 0;
 exports.$ = 1;
-exports.y = function () { return exports.x; };
+var y = function () { return exports.x; };
+exports.y = y;
 
 
 //// [app.d.ts]

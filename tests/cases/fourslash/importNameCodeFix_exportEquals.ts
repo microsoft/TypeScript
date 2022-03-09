@@ -17,7 +17,6 @@ verify.codeFixAll({
     fixAllDescription: "Add all missing imports",
     newFileContent:
 `import { b } from "./a";
-
 import a = require("./a");
 
 a;

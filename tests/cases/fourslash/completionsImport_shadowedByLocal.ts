@@ -11,14 +11,11 @@
 
 verify.completions({
     marker: "",
-    exact: [
-        completion.globalThisEntry,
+    exact: completion.globalsPlus([
         {
             name: "foo",
             text: "const foo: 1",
         },
-        completion.undefinedVarEntry,
-        ...completion.statementKeywordsWithTypes
-    ],
+    ], { noLib: true }),
     preferences: { includeCompletionsForModuleExports: true },
 });

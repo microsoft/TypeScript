@@ -2,6 +2,7 @@ tests/cases/conformance/types/typeParameters/typeParameterLists/propertyAccessOn
 tests/cases/conformance/types/typeParameters/typeParameterLists/propertyAccessOnTypeParameterWithConstraints5.ts(25,16): error TS2339: Property 'notHere' does not exist on type 'B'.
 tests/cases/conformance/types/typeParameters/typeParameterLists/propertyAccessOnTypeParameterWithConstraints5.ts(32,22): error TS2339: Property 'notHere' does not exist on type 'A'.
 tests/cases/conformance/types/typeParameters/typeParameterLists/propertyAccessOnTypeParameterWithConstraints5.ts(38,9): error TS2322: Type 'string' is not assignable to type 'U'.
+  'U' could be instantiated with an arbitrary type which could be unrelated to 'string'.
 tests/cases/conformance/types/typeParameters/typeParameterLists/propertyAccessOnTypeParameterWithConstraints5.ts(38,22): error TS2339: Property 'notHere' does not exist on type 'U'.
 
 
@@ -52,6 +53,7 @@ tests/cases/conformance/types/typeParameters/typeParameterLists/propertyAccessOn
             return a + x.notHere();
             ~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2322: Type 'string' is not assignable to type 'U'.
+!!! error TS2322:   'U' could be instantiated with an arbitrary type which could be unrelated to 'string'.
                          ~~~~~~~
 !!! error TS2339: Property 'notHere' does not exist on type 'U'.
         },

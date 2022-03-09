@@ -1,0 +1,4 @@
+=== tests/cases/compiler/declarationEmitExpressionInExtends7.ts ===
+export default class extends SomeUndefinedFunction {}
+No type information for this code.
+No type information for this code.

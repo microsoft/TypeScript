@@ -22,9 +22,9 @@ nestedArray.forEach(([[a, b]]) => {
 
   console.log(a, b);
 >console.log(a, b) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >a : number
 >b : number
 

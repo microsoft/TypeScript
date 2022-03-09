@@ -1,4 +1,4 @@
-tests/cases/conformance/jsx/file.tsx(32,17): error TS2322: Type 'true' is not assignable to type 'never'.
+tests/cases/conformance/jsx/file.tsx(32,17): error TS2322: Type 'boolean' is not assignable to type 'never'.
 tests/cases/conformance/jsx/file.tsx(33,21): error TS2322: Type '{ x: number; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<RC4> & { children?: ReactNode; }'.
   Property 'x' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<RC4> & { children?: ReactNode; }'.
 tests/cases/conformance/jsx/file.tsx(34,22): error TS2322: Type '{ prop: true; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<RC3> & { children?: ReactNode; }'.
@@ -39,7 +39,7 @@ tests/cases/conformance/jsx/file.tsx(34,22): error TS2322: Type '{ prop: true; }
     // Error
     let a = <RCComp x />;
                     ~
-!!! error TS2322: Type 'true' is not assignable to type 'never'.
+!!! error TS2322: Type 'boolean' is not assignable to type 'never'.
 !!! related TS6500 tests/cases/conformance/jsx/file.tsx:3:36: The expected type comes from property 'x' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<RC1 | RC2> & { x: number; } & { children?: ReactNode; } & { x: string; } & { children?: ReactNode; }'
     let b = <PartRCComp x={10} />
                         ~

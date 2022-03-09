@@ -37,7 +37,7 @@ var GetAndSet = /** @class */ (function () {
         set: function (value) {
             this.getAndSet = value;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return GetAndSet;
@@ -48,7 +48,7 @@ var SetterOnly = /** @class */ (function () {
     Object.defineProperty(SetterOnly.prototype, "haveOnlySet", {
         set: function (newXValue) {
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return SetterOnly;
@@ -60,7 +60,7 @@ var GetterOnly = /** @class */ (function () {
         get: function () {
             return null;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return GetterOnly;

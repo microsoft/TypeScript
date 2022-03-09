@@ -14,6 +14,7 @@ y.m.foo();
 //// [chainedImportAlias_file0.js]
 "use strict";
 exports.__esModule = true;
+exports.m = void 0;
 var m;
 (function (m) {
     function foo() { }
