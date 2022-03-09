@@ -889,8 +889,9 @@ namespace ts {
             type: "list",
             element: {
                 name: "suffix",
-                type: "string"
+                type: "string",
             },
+            listPreserveFalsyValues: true,
             affectsModuleResolution: true,
             category: Diagnostics.Modules,
             description: Diagnostics.List_of_file_name_suffixes_to_search_when_resolving_a_module,
@@ -1448,7 +1449,7 @@ namespace ts {
             case "number":
                 return mapDefined(values, v => validateJsonOptionValue(opt.element, parseInt(v), errors));
             case "string":
-                return mapDefined(values, v => validateJsonOptionValue(opt.element, v || "", errors));
+                return mapDefined(values, v => validateJsonOptionValue(opt.element, opt.listPreserveFalsyValues ? v : (v || ""), errors));
             default:
                 return mapDefined(values, v => parseCustomTypeOption(opt.element as CommandLineOptionOfCustomType, v, errors));
         }
@@ -3188,7 +3189,7 @@ namespace ts {
         if (option.type === "list") {
             const listOption = option;
             if (listOption.element.isFilePath || !isString(listOption.element.type)) {
-                return filter(map(value, v => normalizeOptionValue(listOption.element, basePath, v)), v => !!v) as CompilerOptionsValue;
+                return filter(map(value, v => normalizeOptionValue(listOption.element, basePath, v)), v => listOption.listPreserveFalsyValues ? true : !!v) as CompilerOptionsValue;
             }
             return value;
         }
@@ -3229,7 +3230,7 @@ namespace ts {
     }
 
     function convertJsonOptionOfListType(option: CommandLineOptionOfListType, values: readonly any[], basePath: string, errors: Push<Diagnostic>): any[] {
-        return filter(map(values, v => convertJsonOption(option.element, v, basePath, errors)), v => !!v);
+        return filter(map(values, v => convertJsonOption(option.element, v, basePath, errors)), v => option.listPreserveFalsyValues ? true : !!v);
     }
 
     /**
