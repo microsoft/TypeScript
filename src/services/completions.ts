@@ -782,8 +782,7 @@ namespace ts.Completions {
             }
         }
 
-        if (preferences.includeCompletionsWithObjectLiteralMethodSnippets
-            && preferences.includeCompletionsWithInsertText
+        if (preferences.includeCompletionsWithInsertText
             && origin && originIsObjectLiteralMethod(origin)) {
             const objectLiteral = cast(tryGetObjectLikeCompletionContainer(contextToken), isObjectLiteralExpression);
             let importAdder;
@@ -3043,8 +3042,7 @@ namespace ts.Completions {
                 // Add filtered items to the completion list
                 const filteredMembers = filterObjectMembersList(typeMembers, Debug.checkDefined(existingMembers));
                 symbols = concatenate(symbols, filteredMembers);
-                if (preferences.includeCompletionsWithObjectLiteralMethodSnippets
-                    && objectLikeContainer.kind === SyntaxKind.ObjectLiteralExpression) {
+                if (objectLikeContainer.kind === SyntaxKind.ObjectLiteralExpression) {
                     collectObjectLiteralMethodSymbols(filteredMembers);
                 }
             }

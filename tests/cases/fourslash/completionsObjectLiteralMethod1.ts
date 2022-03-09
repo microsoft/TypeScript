@@ -37,7 +37,6 @@ verify.completions({
     preferences: {
         includeCompletionsWithInsertText: true,
         includeCompletionsWithSnippetText: false,
-        includeCompletionsWithObjectLiteralMethodSnippets: true,
     },
     includes: [
         {
@@ -58,7 +57,6 @@ verify.completions({
     preferences: {
         includeCompletionsWithInsertText: true,
         includeCompletionsWithSnippetText: false,
-        includeCompletionsWithObjectLiteralMethodSnippets: true,
     },
     includes: [
         {
@@ -90,7 +88,6 @@ verify.completions({
     preferences: {
         includeCompletionsWithInsertText: true,
         includeCompletionsWithSnippetText: false,
-        includeCompletionsWithObjectLiteralMethodSnippets: true,
     },
     exact: [
         {
@@ -106,7 +103,6 @@ verify.completions({
     preferences: {
         includeCompletionsWithInsertText: true,
         includeCompletionsWithSnippetText: false,
-        includeCompletionsWithObjectLiteralMethodSnippets: true,
     },
     includes: [
         {
@@ -127,7 +123,6 @@ verify.completions({
     preferences: {
         includeCompletionsWithInsertText: true,
         includeCompletionsWithSnippetText: true,
-        includeCompletionsWithObjectLiteralMethodSnippets: true,
     },
     includes: [
         {
