@@ -1453,7 +1453,7 @@
         "category": "Message",
         "code": 1475
     },
-    "\"auto\": Assume jsx-containing (under react-jsx) or esm mode (under module: node12+) files are modules, along with files with imports, exports, or import.meta.": {
+    "\"auto\": Treat files with imports, exports, imporpt.meta, jsx (with jsx: react-jsx), or esm format (with module: node12+) as modules.": {
         "category": "Message",
         "code": 1476
     },

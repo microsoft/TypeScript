@@ -1251,7 +1251,7 @@ namespace ts {
             affectsModuleResolution: true,
             description: Diagnostics.Control_what_method_is_used_to_detect_module_format_JS_files,
             category: Diagnostics.Language_and_Environment,
-            defaultValueDescription: Diagnostics.auto_Colon_Assume_jsx_containing_under_react_jsx_or_esm_mode_under_module_Colon_node12_files_are_modules_along_with_files_with_imports_exports_or_import_meta,
+            defaultValueDescription: Diagnostics.auto_Colon_Treat_files_with_imports_exports_imporpt_meta_jsx_with_jsx_Colon_react_jsx_or_esm_format_with_module_Colon_node12_as_modules,
         }
     ];
 
