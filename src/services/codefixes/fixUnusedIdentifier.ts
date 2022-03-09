@@ -316,6 +316,10 @@ namespace ts.codefix {
                 // Setter must have a parameter
                 return false;
 
+            case SyntaxKind.GetAccessor:
+                // Getter cannot have parameters
+                return true;
+
             default:
                 return Debug.failBadSyntaxKind(parent);
         }

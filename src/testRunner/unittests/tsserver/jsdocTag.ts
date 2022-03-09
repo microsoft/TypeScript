@@ -386,11 +386,11 @@ x(1)`
                 displayPartsForJSDoc: false,
                 tags: [{
                     name: "param",
-                    text: "y - {@link C}"
+                    text: "y {@link C}"
                 }],
                 documentation: [{
                     kind: "text",
-                    text: "- "
+                    text: ""
                 }, {
                     kind: "link",
                     text: "{@link "
@@ -425,7 +425,7 @@ x(1)`
                     text: " "
                 }, {
                     kind: "text",
-                    text: "- "
+                    text: ""
                 }, {
                     kind: "link",
                     text: "{@link "
@@ -461,11 +461,11 @@ x(1)`
                 displayPartsForJSDoc: false,
                 tags: [{
                     name: "param",
-                    text: "y - {@link C}"
+                    text: "y {@link C}"
                 }],
                 documentation: [{
                     kind: "text",
-                    text: "- "
+                    text: ""
                 }, {
                     kind: "link",
                     text: "{@link "
@@ -496,7 +496,7 @@ x(1)`
                     text: " "
                 }, {
                     kind: "text",
-                    text: "- "
+                    text: ""
                 }, {
                     kind: "link",
                     text: "{@link "
@@ -610,7 +610,7 @@ foo`
                         text: " "
                     }, {
                         kind: "text",
-                        text: "- see "
+                        text: "see "
                     }, {
                         kind: "link",
                         text: "{@link "
@@ -641,7 +641,7 @@ foo`
                 displayPartsForJSDoc: false,
                 tags: [{
                     name: "param",
-                    text: "x - see {@link C}",
+                    text: "x see {@link C}",
                 }],
             });
         });
@@ -659,7 +659,7 @@ foo`
                         text: " "
                     }, {
                         kind: "text",
-                        text: "- see "
+                        text: "see "
                     }, {
                         kind: "link",
                         text: "{@link "
@@ -686,7 +686,7 @@ foo`
                 displayPartsForJSDoc: false,
                 tags: [{
                     name: "param",
-                    text: "x - see {@link C}",
+                    text: "x see {@link C}",
                 }],
             });
         });

@@ -19,5 +19,5 @@
 
 verify.completions(
     { marker: "1", includes: "point", isNewIdentifierLocation: true },
-    { marker: ["2", "3"], exact: ["equals", "origin", ...completion.functionMembersWithPrototype] },
+    { marker: ["2", "3"], exact: completion.functionMembersWithPrototypePlus(["equals", "origin"]) },
 );

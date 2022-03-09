@@ -165,3 +165,18 @@ tests/cases/conformance/classes/propertyMemberDeclarations/strictPropertyInitial
         }
     }
     
+    const a = 'a';
+    const b = Symbol();
+    
+    class C12 {
+        [a]: number;
+        [b]: number;
+        ['c']: number;
+    
+        constructor() {
+            this[a] = 1;
+            this[b] = 1;
+            this['c'] = 1;
+        }
+    }
+    

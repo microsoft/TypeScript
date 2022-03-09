@@ -103,7 +103,7 @@ namespace ts {
         /** If provided, used to resolve the module names, otherwise typescript's default module resolution */
         resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile?: SourceFile): (ResolvedModule | undefined)[];
         /** If provided, used to resolve type reference directives, otherwise typescript's default resolution */
-        resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions): (ResolvedTypeReferenceDirective | undefined)[];
+        resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[] | readonly FileReference[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingFileMode?: SourceFile["impliedNodeFormat"] | undefined): (ResolvedTypeReferenceDirective | undefined)[];
     }
     /** Internal interface used to wire emit through same host */
 
@@ -273,6 +273,7 @@ namespace ts {
         let sharedExtendedConfigFileWatchers: ESMap<Path, SharedExtendedConfigFileWatcher<Path>>; // Map of file watchers for extended files, shared between different referenced projects
         let extendedConfigCache = host.extendedConfigCache;                 // Cache for extended config evaluation
         let changesAffectResolution = false;                                // Flag for indicating non-config changes affect module resolution
+        let reportFileChangeDetectedOnCreateProgram = false;                // True if synchronizeProgram should report "File change detected..." when a new program is created
 
         const sourceFilesCache = new Map<string, HostFileInfo>();           // Cache that stores the source file and version info
         let missingFilePathsRequestedForRelease: Path[] | undefined;        // These paths are held temporarily so that we can remove the entry from source file cache if the file is not tracked by missing files
@@ -352,7 +353,7 @@ namespace ts {
             ((moduleNames, containingFile, reusedNames, redirectedReference, _options, sourceFile) => resolutionCache.resolveModuleNames(moduleNames, containingFile, reusedNames, redirectedReference, sourceFile));
         compilerHost.resolveTypeReferenceDirectives = host.resolveTypeReferenceDirectives ?
             ((...args) => host.resolveTypeReferenceDirectives!(...args)) :
-            ((typeDirectiveNames, containingFile, redirectedReference) => resolutionCache.resolveTypeReferenceDirectives(typeDirectiveNames, containingFile, redirectedReference));
+            ((typeDirectiveNames, containingFile, redirectedReference, _options, containingFileMode) => resolutionCache.resolveTypeReferenceDirectives(typeDirectiveNames, containingFile, redirectedReference, containingFileMode));
         const userProvidedResolution = !!host.resolveModuleNames || !!host.resolveTypeReferenceDirectives;
 
         builderProgram = readBuilderProgram(compilerOptions, compilerHost) as any as T;
@@ -434,15 +435,22 @@ namespace ts {
             const hasInvalidatedResolution = resolutionCache.createHasInvalidatedResolution(userProvidedResolution || changesAffectResolution);
             if (isProgramUptoDate(getCurrentProgram(), rootFileNames, compilerOptions, getSourceVersion, fileExists, hasInvalidatedResolution, hasChangedAutomaticTypeDirectiveNames, getParsedCommandLine, projectReferences)) {
                 if (hasChangedConfigFileParsingErrors) {
+                    if (reportFileChangeDetectedOnCreateProgram) {
+                        reportWatchDiagnostic(Diagnostics.File_change_detected_Starting_incremental_compilation);
+                    }
                     builderProgram = createProgram(/*rootNames*/ undefined, /*options*/ undefined, compilerHost, builderProgram, configFileParsingDiagnostics, projectReferences);
                     hasChangedConfigFileParsingErrors = false;
                 }
             }
             else {
+                if (reportFileChangeDetectedOnCreateProgram) {
+                    reportWatchDiagnostic(Diagnostics.File_change_detected_Starting_incremental_compilation);
+                }
                 createNewProgram(hasInvalidatedResolution);
             }
 
             changesAffectResolution = false; // reset for next sync
+            reportFileChangeDetectedOnCreateProgram = false;
 
             if (host.afterProgramCreate && program !== builderProgram) {
                 host.afterProgramCreate(builderProgram);
@@ -665,7 +673,7 @@ namespace ts {
 
         function updateProgramWithWatchStatus() {
             timerToUpdateProgram = undefined;
-            reportWatchDiagnostic(Diagnostics.File_change_detected_Starting_incremental_compilation);
+            reportFileChangeDetectedOnCreateProgram = true;
             updateProgram();
         }
 

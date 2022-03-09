@@ -20,7 +20,7 @@ Some search tips:
 ## 3. Do you have a question?
 
 The issue tracker is for **issues**, in other words, bugs and suggestions.
-If you have a *question*, please use [Stack Overflow](http://stackoverflow.com/questions/tagged/typescript), [Gitter](https://gitter.im/Microsoft/TypeScript), your favorite search engine, or other resources.
+If you have a *question*, please use [Stack Overflow](https://stackoverflow.com/questions/tagged/typescript), [Gitter](https://gitter.im/Microsoft/TypeScript), your favorite search engine, or other resources.
 Due to increased traffic, we can no longer answer questions in the issue tracker.
 
 ## 4. Did you find a bug?
@@ -80,6 +80,10 @@ If you prefer to develop using containers, this repository includes a [developme
 ### Faster clones
 
 The TypeScript repository is relatively large. To save some time, you might want to clone it without the repo's full history using `git clone --depth=1`.
+
+### Filename too long on Windows
+
+You might need to run `git config --global core.longpaths true` before cloning TypeScript on Windows.
 
 ### Using local builds
 

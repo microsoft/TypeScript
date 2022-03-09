@@ -510,7 +510,7 @@ namespace ts {
     }
 
     /* @internal */
-    export function loadWithLocalCache<T>(names: string[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, loader: (name: string, containingFile: string, redirectedReference: ResolvedProjectReference | undefined) => T): T[] {
+    export function loadWithTypeDirectiveCache<T>(names: string[] | readonly FileReference[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, containingFileMode: SourceFile["impliedNodeFormat"], loader: (name: string, containingFile: string, redirectedReference: ResolvedProjectReference | undefined, resolutionMode: SourceFile["impliedNodeFormat"]) => T): T[] {
         if (names.length === 0) {
             return [];
         }
@@ -518,11 +518,15 @@ namespace ts {
         const cache = new Map<string, T>();
         for (const name of names) {
             let result: T;
-            if (cache.has(name)) {
-                result = cache.get(name)!;
+            const mode = getModeForFileReference(name, containingFileMode);
+            // We lower-case all type references because npm automatically lowercases all packages. See GH#9824.
+            const strName = isString(name) ? name : name.fileName.toLowerCase();
+            const cacheKey = mode !== undefined ? `${mode}|${strName}` : strName;
+            if (cache.has(cacheKey)) {
+                result = cache.get(cacheKey)!;
             }
             else {
-                cache.set(name, result = loader(name, containingFile, redirectedReference));
+                cache.set(cacheKey, result = loader(strName, containingFile, redirectedReference, mode));
             }
             resolutions.push(result);
         }
@@ -537,6 +541,11 @@ namespace ts {
     };
 
     /* @internal */
+    export function getModeForFileReference(ref: FileReference | string, containingFileMode: SourceFile["impliedNodeFormat"]) {
+        return (isString(ref) ? containingFileMode : ref.resolutionMode) || containingFileMode;
+    }
+
+    /* @internal */
     export function getModeForResolutionAtIndex(file: SourceFileImportsList, index: number) {
         if (file.impliedNodeFormat === undefined) return undefined;
         // we ensure all elements of file.imports and file.moduleAugmentations have the relevant parent pointers set during program setup,
@@ -545,8 +554,34 @@ namespace ts {
     }
 
     /* @internal */
+    export function isExclusivelyTypeOnlyImportOrExport(decl: ImportDeclaration | ExportDeclaration) {
+        if (isExportDeclaration(decl)) {
+            return decl.isTypeOnly;
+        }
+        if (decl.importClause?.isTypeOnly) {
+            return true;
+        }
+        return false;
+    }
+
+    /* @internal */
     export function getModeForUsageLocation(file: {impliedNodeFormat?: SourceFile["impliedNodeFormat"]}, usage: StringLiteralLike) {
         if (file.impliedNodeFormat === undefined) return undefined;
+        if ((isImportDeclaration(usage.parent) || isExportDeclaration(usage.parent))) {
+            const isTypeOnly = isExclusivelyTypeOnlyImportOrExport(usage.parent);
+            if (isTypeOnly) {
+                const override = getResolutionModeOverrideForClause(usage.parent.assertClause);
+                if (override) {
+                    return override;
+                }
+            }
+        }
+        if (usage.parent.parent && isImportTypeNode(usage.parent.parent)) {
+            const override = getResolutionModeOverrideForClause(usage.parent.parent.assertions?.assertClause);
+            if (override) {
+                return override;
+            }
+        }
         if (file.impliedNodeFormat !== ModuleKind.ESNext) {
             // in cjs files, import call expressions are esm format, otherwise everything is cjs
             return isImportCall(walkUpParenthesizedExpressions(usage.parent)) ? ModuleKind.ESNext : ModuleKind.CommonJS;
@@ -555,6 +590,27 @@ namespace ts {
         // imports are only parent'd up to their containing declaration/expression, so access farther parents with care
         const exprParentParent = walkUpParenthesizedExpressions(usage.parent)?.parent;
         return exprParentParent && isImportEqualsDeclaration(exprParentParent) ? ModuleKind.CommonJS : ModuleKind.ESNext;
+    }
+
+    /* @internal */
+    export function getResolutionModeOverrideForClause(clause: AssertClause | undefined, grammarErrorOnNode?: (node: Node, diagnostic: DiagnosticMessage) => boolean) {
+        if (!clause) return undefined;
+        if (length(clause.elements) !== 1) {
+            grammarErrorOnNode?.(clause, Diagnostics.Type_import_assertions_should_have_exactly_one_key_resolution_mode_with_value_import_or_require);
+            return undefined;
+        }
+        const elem = clause.elements[0];
+        if (!isStringLiteralLike(elem.name)) return undefined;
+        if (elem.name.text !== "resolution-mode") {
+            grammarErrorOnNode?.(elem.name, Diagnostics.resolution_mode_is_the_only_valid_key_for_type_import_assertions);
+            return undefined;
+        }
+        if (!isStringLiteralLike(elem.value)) return undefined;
+        if (elem.value.text !== "import" && elem.value.text !== "require") {
+            grammarErrorOnNode?.(elem.value, Diagnostics.resolution_mode_should_be_either_require_or_import);
+            return undefined;
+        }
+        return elem.value.text === "import" ? ModuleKind.ESNext : ModuleKind.CommonJS;
     }
 
     /* @internal */
@@ -671,7 +727,7 @@ namespace ts {
     export function getReferencedFileLocation(getSourceFileByPath: (path: Path) => SourceFile | undefined, ref: ReferencedFile): ReferenceFileLocation | SyntheticReferenceFileLocation {
         const file = Debug.checkDefined(getSourceFileByPath(ref.file));
         const { kind, index } = ref;
-        let pos: number | undefined, end: number | undefined, packageId: PackageId | undefined;
+        let pos: number | undefined, end: number | undefined, packageId: PackageId | undefined, resolutionMode: FileReference["resolutionMode"] | undefined;
         switch (kind) {
             case FileIncludeKind.Import:
                 const importLiteral = getModuleNameStringLiteralAt(file, index);
@@ -684,8 +740,8 @@ namespace ts {
                 ({ pos, end } = file.referencedFiles[index]);
                 break;
             case FileIncludeKind.TypeReferenceDirective:
-                ({ pos, end } = file.typeReferenceDirectives[index]);
-                packageId = file.resolvedTypeReferenceDirectiveNames?.get(toFileNameLowerCase(file.typeReferenceDirectives[index].fileName), file.impliedNodeFormat)?.packageId;
+                ({ pos, end, resolutionMode } = file.typeReferenceDirectives[index]);
+                packageId = file.resolvedTypeReferenceDirectiveNames?.get(toFileNameLowerCase(file.typeReferenceDirectives[index].fileName), resolutionMode || file.impliedNodeFormat)?.packageId;
                 break;
             case FileIncludeKind.LibReferenceDirective:
                 ({ pos, end } = file.libReferenceDirectives[index]);
@@ -818,6 +874,101 @@ namespace ts {
         }
     }
 
+    /** @internal */
+    export const plainJSErrors: Set<number> = new Set([
+        // binder errors
+        Diagnostics.Cannot_redeclare_block_scoped_variable_0.code,
+        Diagnostics.A_module_cannot_have_multiple_default_exports.code,
+        Diagnostics.Another_export_default_is_here.code,
+        Diagnostics.The_first_export_default_is_here.code,
+        Diagnostics.Identifier_expected_0_is_a_reserved_word_at_the_top_level_of_a_module.code,
+        Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode_Modules_are_automatically_in_strict_mode.code,
+        Diagnostics.Identifier_expected_0_is_a_reserved_word_that_cannot_be_used_here.code,
+        Diagnostics.constructor_is_a_reserved_word.code,
+        Diagnostics.delete_cannot_be_called_on_an_identifier_in_strict_mode.code,
+        Diagnostics.Code_contained_in_a_class_is_evaluated_in_JavaScript_s_strict_mode_which_does_not_allow_this_use_of_0_For_more_information_see_https_Colon_Slash_Slashdeveloper_mozilla_org_Slashen_US_Slashdocs_SlashWeb_SlashJavaScript_SlashReference_SlashStrict_mode.code,
+        Diagnostics.Invalid_use_of_0_Modules_are_automatically_in_strict_mode.code,
+        Diagnostics.Invalid_use_of_0_in_strict_mode.code,
+        Diagnostics.A_label_is_not_allowed_here.code,
+        Diagnostics.Octal_literals_are_not_allowed_in_strict_mode.code,
+        Diagnostics.with_statements_are_not_allowed_in_strict_mode.code,
+        // grammar errors
+        Diagnostics.A_break_statement_can_only_be_used_within_an_enclosing_iteration_or_switch_statement.code,
+        Diagnostics.A_break_statement_can_only_jump_to_a_label_of_an_enclosing_statement.code,
+        Diagnostics.A_class_declaration_without_the_default_modifier_must_have_a_name.code,
+        Diagnostics.A_class_member_cannot_have_the_0_keyword.code,
+        Diagnostics.A_comma_expression_is_not_allowed_in_a_computed_property_name.code,
+        Diagnostics.A_continue_statement_can_only_be_used_within_an_enclosing_iteration_statement.code,
+        Diagnostics.A_continue_statement_can_only_jump_to_a_label_of_an_enclosing_iteration_statement.code,
+        Diagnostics.A_continue_statement_can_only_jump_to_a_label_of_an_enclosing_iteration_statement.code,
+        Diagnostics.A_default_clause_cannot_appear_more_than_once_in_a_switch_statement.code,
+        Diagnostics.A_default_export_must_be_at_the_top_level_of_a_file_or_module_declaration.code,
+        Diagnostics.A_definite_assignment_assertion_is_not_permitted_in_this_context.code,
+        Diagnostics.A_destructuring_declaration_must_have_an_initializer.code,
+        Diagnostics.A_get_accessor_cannot_have_parameters.code,
+        Diagnostics.A_rest_element_cannot_contain_a_binding_pattern.code,
+        Diagnostics.A_rest_element_cannot_have_a_property_name.code,
+        Diagnostics.A_rest_element_cannot_have_an_initializer.code,
+        Diagnostics.A_rest_element_must_be_last_in_a_destructuring_pattern.code,
+        Diagnostics.A_rest_parameter_cannot_have_an_initializer.code,
+        Diagnostics.A_rest_parameter_must_be_last_in_a_parameter_list.code,
+        Diagnostics.A_rest_parameter_or_binding_pattern_may_not_have_a_trailing_comma.code,
+        Diagnostics.A_return_statement_can_only_be_used_within_a_function_body.code,
+        Diagnostics.A_return_statement_cannot_be_used_inside_a_class_static_block.code,
+        Diagnostics.A_set_accessor_cannot_have_rest_parameter.code,
+        Diagnostics.A_set_accessor_must_have_exactly_one_parameter.code,
+        Diagnostics.An_export_declaration_can_only_be_used_at_the_top_level_of_a_module.code,
+        Diagnostics.An_export_declaration_cannot_have_modifiers.code,
+        Diagnostics.An_import_declaration_can_only_be_used_at_the_top_level_of_a_module.code,
+        Diagnostics.An_import_declaration_cannot_have_modifiers.code,
+        Diagnostics.An_object_member_cannot_be_declared_optional.code,
+        Diagnostics.Argument_of_dynamic_import_cannot_be_spread_element.code,
+        Diagnostics.Cannot_assign_to_private_method_0_Private_methods_are_not_writable.code,
+        Diagnostics.Cannot_redeclare_identifier_0_in_catch_clause.code,
+        Diagnostics.Catch_clause_variable_cannot_have_an_initializer.code,
+        Diagnostics.Class_decorators_can_t_be_used_with_static_private_identifier_Consider_removing_the_experimental_decorator.code,
+        Diagnostics.Classes_can_only_extend_a_single_class.code,
+        Diagnostics.Classes_may_not_have_a_field_named_constructor.code,
+        Diagnostics.Did_you_mean_to_use_a_Colon_An_can_only_follow_a_property_name_when_the_containing_object_literal_is_part_of_a_destructuring_pattern.code,
+        Diagnostics.Duplicate_label_0.code,
+        Diagnostics.Dynamic_imports_can_only_accept_a_module_specifier_and_an_optional_assertion_as_arguments.code,
+        Diagnostics.For_await_loops_cannot_be_used_inside_a_class_static_block.code,
+        Diagnostics.JSX_attributes_must_only_be_assigned_a_non_empty_expression.code,
+        Diagnostics.JSX_elements_cannot_have_multiple_attributes_with_the_same_name.code,
+        Diagnostics.JSX_expressions_may_not_use_the_comma_operator_Did_you_mean_to_write_an_array.code,
+        Diagnostics.JSX_property_access_expressions_cannot_include_JSX_namespace_names.code,
+        Diagnostics.Jump_target_cannot_cross_function_boundary.code,
+        Diagnostics.Line_terminator_not_permitted_before_arrow.code,
+        Diagnostics.Modifiers_cannot_appear_here.code,
+        Diagnostics.Only_a_single_variable_declaration_is_allowed_in_a_for_in_statement.code,
+        Diagnostics.Only_a_single_variable_declaration_is_allowed_in_a_for_of_statement.code,
+        Diagnostics.Private_identifiers_are_not_allowed_outside_class_bodies.code,
+        Diagnostics.Private_identifiers_are_only_allowed_in_class_bodies_and_may_only_be_used_as_part_of_a_class_member_declaration_property_access_or_on_the_left_hand_side_of_an_in_expression.code,
+        Diagnostics.Property_0_is_not_accessible_outside_class_1_because_it_has_a_private_identifier.code,
+        Diagnostics.Tagged_template_expressions_are_not_permitted_in_an_optional_chain.code,
+        Diagnostics.The_left_hand_side_of_a_for_of_statement_may_not_be_async.code,
+        Diagnostics.The_variable_declaration_of_a_for_in_statement_cannot_have_an_initializer.code,
+        Diagnostics.The_variable_declaration_of_a_for_of_statement_cannot_have_an_initializer.code,
+        Diagnostics.Trailing_comma_not_allowed.code,
+        Diagnostics.Variable_declaration_list_cannot_be_empty.code,
+        Diagnostics._0_and_1_operations_cannot_be_mixed_without_parentheses.code,
+        Diagnostics._0_expected.code,
+        Diagnostics._0_is_not_a_valid_meta_property_for_keyword_1_Did_you_mean_2.code,
+        Diagnostics._0_list_cannot_be_empty.code,
+        Diagnostics._0_modifier_already_seen.code,
+        Diagnostics._0_modifier_cannot_appear_on_a_constructor_declaration.code,
+        Diagnostics._0_modifier_cannot_appear_on_a_module_or_namespace_element.code,
+        Diagnostics._0_modifier_cannot_appear_on_a_parameter.code,
+        Diagnostics._0_modifier_cannot_appear_on_class_elements_of_this_kind.code,
+        Diagnostics._0_modifier_cannot_be_used_here.code,
+        Diagnostics._0_modifier_must_precede_1_modifier.code,
+        Diagnostics.const_declarations_can_only_be_declared_inside_a_block.code,
+        Diagnostics.const_declarations_must_be_initialized.code,
+        Diagnostics.extends_clause_already_seen.code,
+        Diagnostics.let_declarations_can_only_be_declared_inside_a_block.code,
+        Diagnostics.let_is_not_allowed_to_be_used_as_a_name_in_let_or_const_declarations.code,
+    ]);
+
     /**
      * Determine if source file needs to be re-created even if its text hasn't changed
      */
@@ -882,7 +1033,7 @@ namespace ts {
         const cachedBindAndCheckDiagnosticsForFile: DiagnosticCache<Diagnostic> = {};
         const cachedDeclarationDiagnosticsForFile: DiagnosticCache<DiagnosticWithLocation> = {};
 
-        let resolvedTypeReferenceDirectives = new Map<string, ResolvedTypeReferenceDirective | undefined>();
+        let resolvedTypeReferenceDirectives = createModeAwareCache<ResolvedTypeReferenceDirective | undefined>();
         let fileProcessingDiagnostics: FilePreprocessingDiagnostics[] | undefined;
 
         // The below settings are to track if a .js file should be add to the program if loaded via searching under node_modules.
@@ -942,21 +1093,22 @@ namespace ts {
             actualResolveModuleNamesWorker = (moduleNames, containingFile, containingFileName, _reusedNames, redirectedReference) => loadWithModeAwareCache<ResolvedModuleFull>(Debug.checkEachDefined(moduleNames), containingFile, containingFileName, redirectedReference, loader);
         }
 
-        let actualResolveTypeReferenceDirectiveNamesWorker: (typeDirectiveNames: string[], containingFile: string, redirectedReference?: ResolvedProjectReference) => (ResolvedTypeReferenceDirective | undefined)[];
+        let actualResolveTypeReferenceDirectiveNamesWorker: (typeDirectiveNames: string[] | readonly FileReference[], containingFile: string, redirectedReference?: ResolvedProjectReference, containingFileMode?: SourceFile["impliedNodeFormat"] | undefined) => (ResolvedTypeReferenceDirective | undefined)[];
         if (host.resolveTypeReferenceDirectives) {
-            actualResolveTypeReferenceDirectiveNamesWorker = (typeDirectiveNames, containingFile, redirectedReference) => host.resolveTypeReferenceDirectives!(Debug.checkEachDefined(typeDirectiveNames), containingFile, redirectedReference, options);
+            actualResolveTypeReferenceDirectiveNamesWorker = (typeDirectiveNames, containingFile, redirectedReference, containingFileMode) => host.resolveTypeReferenceDirectives!(Debug.checkEachDefined(typeDirectiveNames), containingFile, redirectedReference, options, containingFileMode);
         }
         else {
             typeReferenceDirectiveResolutionCache = createTypeReferenceDirectiveResolutionCache(currentDirectory, getCanonicalFileName, /*options*/ undefined, moduleResolutionCache?.getPackageJsonInfoCache());
-            const loader = (typesRef: string, containingFile: string, redirectedReference: ResolvedProjectReference | undefined) => resolveTypeReferenceDirective(
+            const loader = (typesRef: string, containingFile: string, redirectedReference: ResolvedProjectReference | undefined, resolutionMode: SourceFile["impliedNodeFormat"] | undefined) => resolveTypeReferenceDirective(
                 typesRef,
                 containingFile,
                 options,
                 host,
                 redirectedReference,
                 typeReferenceDirectiveResolutionCache,
+                resolutionMode,
             ).resolvedTypeReferenceDirective!; // TODO: GH#18217
-            actualResolveTypeReferenceDirectiveNamesWorker = (typeReferenceDirectiveNames, containingFile, redirectedReference) => loadWithLocalCache<ResolvedTypeReferenceDirective>(Debug.checkEachDefined(typeReferenceDirectiveNames), containingFile, redirectedReference, loader);
+            actualResolveTypeReferenceDirectiveNamesWorker = (typeReferenceDirectiveNames, containingFile, redirectedReference, containingFileMode) => loadWithTypeDirectiveCache<ResolvedTypeReferenceDirective>(Debug.checkEachDefined(typeReferenceDirectiveNames), containingFile, redirectedReference, containingFileMode, loader);
         }
 
         // Map from a stringified PackageId to the source file with that id.
@@ -1059,7 +1211,8 @@ namespace ts {
                 const containingFilename = combinePaths(containingDirectory, inferredTypesContainingFile);
                 const resolutions = resolveTypeReferenceDirectiveNamesWorker(typeReferences, containingFilename);
                 for (let i = 0; i < typeReferences.length; i++) {
-                    processTypeReferenceDirective(typeReferences[i], resolutions[i], { kind: FileIncludeKind.AutomaticTypeDirectiveFile, typeReference: typeReferences[i], packageId: resolutions[i]?.packageId });
+                    // under node12/nodenext module resolution, load `types`/ata include names as cjs resolution results by passing an `undefined` mode
+                    processTypeReferenceDirective(typeReferences[i], /*mode*/ undefined, resolutions[i], { kind: FileIncludeKind.AutomaticTypeDirectiveFile, typeReference: typeReferences[i], packageId: resolutions[i]?.packageId });
                 }
                 tracing?.pop();
             }
@@ -1227,13 +1380,14 @@ namespace ts {
             return result;
         }
 
-        function resolveTypeReferenceDirectiveNamesWorker(typeDirectiveNames: string[], containingFile: string | SourceFile): readonly (ResolvedTypeReferenceDirective | undefined)[] {
+        function resolveTypeReferenceDirectiveNamesWorker(typeDirectiveNames: string[] | readonly FileReference[], containingFile: string | SourceFile): readonly (ResolvedTypeReferenceDirective | undefined)[] {
             if (!typeDirectiveNames.length) return [];
             const containingFileName = !isString(containingFile) ? getNormalizedAbsolutePath(containingFile.originalFileName, currentDirectory) : containingFile;
             const redirectedReference = !isString(containingFile) ? getRedirectReferenceForResolution(containingFile) : undefined;
+            const containingFileMode = !isString(containingFile) ? containingFile.impliedNodeFormat : undefined;
             tracing?.push(tracing.Phase.Program, "resolveTypeReferenceDirectiveNamesWorker", { containingFileName });
             performance.mark("beforeResolveTypeReference");
-            const result = actualResolveTypeReferenceDirectiveNamesWorker(typeDirectiveNames, containingFileName, redirectedReference);
+            const result = actualResolveTypeReferenceDirectiveNamesWorker(typeDirectiveNames, containingFileName, redirectedReference, containingFileMode);
             performance.mark("afterResolveTypeReference");
             performance.measure("ResolveTypeReference", "beforeResolveTypeReference", "afterResolveTypeReference");
             tracing?.pop();
@@ -1577,6 +1731,7 @@ namespace ts {
                 newSourceFile.originalFileName = oldSourceFile.originalFileName;
                 newSourceFile.resolvedPath = oldSourceFile.resolvedPath;
                 newSourceFile.fileName = oldSourceFile.fileName;
+                newSourceFile.impliedNodeFormat = oldSourceFile.impliedNodeFormat;
 
                 const packageName = oldProgram.sourceFileToPackageName.get(oldSourceFile.path);
                 if (packageName !== undefined) {
@@ -1670,8 +1825,7 @@ namespace ts {
                 else {
                     newSourceFile.resolvedModules = oldSourceFile.resolvedModules;
                 }
-                // We lower-case all type references because npm automatically lowercases all packages. See GH#9824.
-                const typesReferenceDirectives = map(newSourceFile.typeReferenceDirectives, ref => toFileNameLowerCase(ref.fileName));
+                const typesReferenceDirectives = newSourceFile.typeReferenceDirectives;
                 const typeReferenceResolutions = resolveTypeReferenceDirectiveNamesWorker(typesReferenceDirectives, newSourceFile);
                 // ensure that types resolutions are still correct
                 const typeReferenceResolutionsChanged = hasChangesInResolutions(typesReferenceDirectives, typeReferenceResolutions, oldSourceFile.resolvedTypeReferenceDirectiveNames, oldSourceFile, typeDirectiveIsEqualTo);
@@ -2004,15 +2158,25 @@ namespace ts {
 
                 Debug.assert(!!sourceFile.bindDiagnostics);
 
-                const isCheckJs = isCheckJsEnabledForFile(sourceFile, options);
+                const isJs = sourceFile.scriptKind === ScriptKind.JS || sourceFile.scriptKind === ScriptKind.JSX;
+                const isCheckJs = isJs && isCheckJsEnabledForFile(sourceFile, options);
+                const isPlainJs = isPlainJsFile(sourceFile, options.checkJs);
                 const isTsNoCheck = !!sourceFile.checkJsDirective && sourceFile.checkJsDirective.enabled === false;
-                // By default, only type-check .ts, .tsx, 'Deferred' and 'External' files (external files are added by plugins)
-                const includeBindAndCheckDiagnostics = !isTsNoCheck && (sourceFile.scriptKind === ScriptKind.TS || sourceFile.scriptKind === ScriptKind.TSX
-                    || sourceFile.scriptKind === ScriptKind.External || isCheckJs || sourceFile.scriptKind === ScriptKind.Deferred);
-                const bindDiagnostics: readonly Diagnostic[] = includeBindAndCheckDiagnostics ? sourceFile.bindDiagnostics : emptyArray;
-                const checkDiagnostics = includeBindAndCheckDiagnostics ? typeChecker.getDiagnostics(sourceFile, cancellationToken) : emptyArray;
 
-                return getMergedBindAndCheckDiagnostics(sourceFile, includeBindAndCheckDiagnostics, bindDiagnostics, checkDiagnostics, isCheckJs ? sourceFile.jsDocDiagnostics : undefined);
+                // By default, only type-check .ts, .tsx, Deferred, plain JS, checked JS and External
+                // - plain JS: .js files with no // ts-check and checkJs: undefined
+                // - check JS: .js files with either // ts-check or checkJs: true
+                // - external: files that are added by plugins
+                const includeBindAndCheckDiagnostics = !isTsNoCheck && (sourceFile.scriptKind === ScriptKind.TS || sourceFile.scriptKind === ScriptKind.TSX
+                        || sourceFile.scriptKind === ScriptKind.External || isPlainJs || isCheckJs || sourceFile.scriptKind === ScriptKind.Deferred);
+                let bindDiagnostics: readonly Diagnostic[] = includeBindAndCheckDiagnostics ? sourceFile.bindDiagnostics : emptyArray;
+                let checkDiagnostics = includeBindAndCheckDiagnostics ? typeChecker.getDiagnostics(sourceFile, cancellationToken) : emptyArray;
+                if (isPlainJs) {
+                    bindDiagnostics = filter(bindDiagnostics, d => plainJSErrors.has(d.code));
+                    checkDiagnostics = filter(checkDiagnostics, d => plainJSErrors.has(d.code));
+                }
+                // skip ts-expect-error errors in plain JS files, and skip JSDoc errors except in checked JS
+                return getMergedBindAndCheckDiagnostics(sourceFile, includeBindAndCheckDiagnostics && !isPlainJs, bindDiagnostics, checkDiagnostics, isCheckJs ? sourceFile.jsDocDiagnostics : undefined);
             });
         }
 
@@ -2723,14 +2887,14 @@ namespace ts {
                     redirectTargetsMap.add(fileFromPackageId.path, fileName);
                     addFileToFilesByName(dupFile, path, redirectedPath);
                     addFileIncludeReason(dupFile, reason);
-                    sourceFileToPackageName.set(path, packageId.name);
+                    sourceFileToPackageName.set(path, packageIdToPackageName(packageId));
                     processingOtherFiles!.push(dupFile);
                     return dupFile;
                 }
                 else if (file) {
                     // This is the first source file to have this packageId.
                     packageIdToSourceFile.set(packageIdKey, file);
-                    sourceFileToPackageName.set(path, packageId.name);
+                    sourceFileToPackageName.set(path, packageIdToPackageName(packageId));
                 }
             }
             addFileToFilesByName(file, path, redirectedPath);
@@ -2896,8 +3060,7 @@ namespace ts {
         }
 
         function processTypeReferenceDirectives(file: SourceFile) {
-            // We lower-case all type references because npm automatically lowercases all packages. See GH#9824.
-            const typeDirectives = map(file.typeReferenceDirectives, ref => toFileNameLowerCase(ref.fileName));
+            const typeDirectives = file.typeReferenceDirectives;
             if (!typeDirectives) {
                 return;
             }
@@ -2909,28 +3072,34 @@ namespace ts {
                 // store resolved type directive on the file
                 const fileName = toFileNameLowerCase(ref.fileName);
                 setResolvedTypeReferenceDirective(file, fileName, resolvedTypeReferenceDirective);
-                processTypeReferenceDirective(fileName, resolvedTypeReferenceDirective, { kind: FileIncludeKind.TypeReferenceDirective, file: file.path, index, });
+                const mode = ref.resolutionMode || file.impliedNodeFormat;
+                if (mode && getEmitModuleResolutionKind(options) !== ModuleResolutionKind.Node12 && getEmitModuleResolutionKind(options) !== ModuleResolutionKind.NodeNext) {
+                    programDiagnostics.add(createDiagnosticForRange(file, ref, Diagnostics.Resolution_modes_are_only_supported_when_moduleResolution_is_node12_or_nodenext));
+                }
+                processTypeReferenceDirective(fileName, mode, resolvedTypeReferenceDirective, { kind: FileIncludeKind.TypeReferenceDirective, file: file.path, index, });
             }
         }
 
         function processTypeReferenceDirective(
             typeReferenceDirective: string,
+            mode: SourceFile["impliedNodeFormat"] | undefined,
             resolvedTypeReferenceDirective: ResolvedTypeReferenceDirective | undefined,
             reason: FileIncludeReason
         ): void {
             tracing?.push(tracing.Phase.Program, "processTypeReferenceDirective", { directive: typeReferenceDirective, hasResolved: !!resolveModuleNamesReusingOldState, refKind: reason.kind, refPath: isReferencedFile(reason) ? reason.file : undefined });
-            processTypeReferenceDirectiveWorker(typeReferenceDirective, resolvedTypeReferenceDirective, reason);
+            processTypeReferenceDirectiveWorker(typeReferenceDirective, mode, resolvedTypeReferenceDirective, reason);
             tracing?.pop();
         }
 
         function processTypeReferenceDirectiveWorker(
             typeReferenceDirective: string,
+            mode: SourceFile["impliedNodeFormat"] | undefined,
             resolvedTypeReferenceDirective: ResolvedTypeReferenceDirective | undefined,
             reason: FileIncludeReason
         ): void {
 
             // If we already found this library as a primary reference - nothing to do
-            const previousResolution = resolvedTypeReferenceDirectives.get(typeReferenceDirective);
+            const previousResolution = resolvedTypeReferenceDirectives.get(typeReferenceDirective, mode);
             if (previousResolution && previousResolution.primary) {
                 return;
             }
@@ -2975,7 +3144,7 @@ namespace ts {
             }
 
             if (saveResolution) {
-                resolvedTypeReferenceDirectives.set(typeReferenceDirective, resolvedTypeReferenceDirective);
+                resolvedTypeReferenceDirectives.set(typeReferenceDirective, mode, resolvedTypeReferenceDirective);
             }
         }
 
@@ -3160,7 +3329,7 @@ namespace ts {
         }
 
         function verifyCompilerOptions() {
-            const isNightly = stringContains(version, "-dev");
+            const isNightly = stringContains(version, "-dev") || stringContains(version, "-insiders");
             if (!isNightly) {
                 if (getEmitModuleKind(options) === ModuleKind.Node12) {
                     createOptionValueDiagnostic("module", Diagnostics.Compiler_option_0_of_value_1_is_unstable_Use_nightly_TypeScript_to_silence_this_error_Try_updating_with_npm_install_D_typescript_next, "module", "node12");

@@ -234,7 +234,7 @@ namespace ts {
             });
             assert.equal(program2.structureIsReused, StructureIsReused.Completely);
             const program1Diagnostics = program1.getSemanticDiagnostics(program1.getSourceFile("a.ts"));
-            const program2Diagnostics = program2.getSemanticDiagnostics(program1.getSourceFile("a.ts"));
+            const program2Diagnostics = program2.getSemanticDiagnostics(program2.getSourceFile("a.ts"));
             assert.equal(program1Diagnostics.length, program2Diagnostics.length);
         });
 
@@ -245,7 +245,26 @@ namespace ts {
             });
             assert.equal(program2.structureIsReused, StructureIsReused.Completely);
             const program1Diagnostics = program1.getSemanticDiagnostics(program1.getSourceFile("a.ts"));
-            const program2Diagnostics = program2.getSemanticDiagnostics(program1.getSourceFile("a.ts"));
+            const program2Diagnostics = program2.getSemanticDiagnostics(program2.getSourceFile("a.ts"));
+            assert.equal(program1Diagnostics.length, program2Diagnostics.length);
+        });
+
+        it("successful if change affects a single module of a package", () => {
+            const files = [
+                { name: "/a.ts", text: SourceText.New("", "import {b} from 'b'", "var a = b;") },
+                { name: "/node_modules/b/index.d.ts", text: SourceText.New("", "export * from './internal';", "") },
+                { name: "/node_modules/b/internal.d.ts", text: SourceText.New("", "", "export const b = 1;") },
+                { name: "/node_modules/b/package.json", text: SourceText.New("", "", JSON.stringify({ name: "b", version: "1.2.3" })) },
+            ];
+
+            const options: CompilerOptions = { target, moduleResolution: ModuleResolutionKind.NodeJs };
+            const program1 = newProgram(files, ["/a.ts"], options);
+            const program2 = updateProgram(program1, ["/a.ts"], options, files => {
+                files[2].text = files[2].text.updateProgram("export const b = 2;");
+            });
+            assert.equal(program2.structureIsReused, StructureIsReused.Completely);
+            const program1Diagnostics = program1.getSemanticDiagnostics(program1.getSourceFile("a.ts"));
+            const program2Diagnostics = program2.getSemanticDiagnostics(program2.getSourceFile("a.ts"));
             assert.equal(program1Diagnostics.length, program2Diagnostics.length);
         });
 

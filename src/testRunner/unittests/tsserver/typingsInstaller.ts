@@ -834,14 +834,100 @@ namespace ts.projectSystem {
             checkProjectActualFiles(p2, [file3.path, grunt.path, gulp.path]);
         });
 
+        it("configured scoped name projects discover from node_modules", () => {
+            const app = {
+                path: "/app.js",
+                content: ""
+            };
+            const pkgJson = {
+                path: "/package.json",
+                content: JSON.stringify({
+                    dependencies: {
+                        "@zkat/cacache": "1.0.0"
+                    }
+                })
+            };
+            const jsconfig = {
+                path: "/jsconfig.json",
+                content: JSON.stringify({})
+            };
+            // Should only accept direct dependencies.
+            const commander = {
+                path: "/node_modules/commander/index.js",
+                content: ""
+            };
+            const commanderPackage = {
+                path: "/node_modules/commander/package.json",
+                content: JSON.stringify({
+                    name: "commander",
+                })
+            };
+            const cacache = {
+                path: "/node_modules/@zkat/cacache/index.js",
+                content: ""
+            };
+            const cacachePackage = {
+                path: "/node_modules/@zkat/cacache/package.json",
+                content: JSON.stringify({ name: "@zkat/cacache" })
+            };
+            const cacacheDTS = {
+                path: "/tmp/node_modules/@types/zkat__cacache/index.d.ts",
+                content: ""
+            };
+            const host = createServerHost([app, jsconfig, pkgJson, commander, commanderPackage, cacache, cacachePackage]);
+            const installer = new (class extends Installer {
+                constructor() {
+                    super(host, { globalTypingsCacheLocation: "/tmp", typesRegistry: createTypesRegistry("zkat__cacache", "nested", "commander") });
+                }
+                installWorker(_requestId: number, args: string[], _cwd: string, cb: TI.RequestCompletedAction) {
+                    assert.deepEqual(args, [`@types/zkat__cacache@ts${versionMajorMinor}`]);
+                    const installedTypings = ["@types/zkat__cacache"];
+                    const typingFiles = [cacacheDTS];
+                    executeCommand(this, host, installedTypings, typingFiles, cb);
+                }
+            })();
+
+            const projectService = createProjectService(host, { useSingleInferredProject: true, typingsInstaller: installer });
+            projectService.openClientFile(app.path);
+
+            checkNumberOfProjects(projectService, { configuredProjects: 1 });
+            const p = configuredProjectAt(projectService, 0);
+            checkProjectActualFiles(p, [app.path, jsconfig.path]);
+
+            installer.installAll(/*expectedCount*/ 1);
+
+            checkNumberOfProjects(projectService, { configuredProjects: 1 });
+            host.checkTimeoutQueueLengthAndRun(2);
+            checkProjectActualFiles(p, [app.path, cacacheDTS.path, jsconfig.path]);
+        });
+
         it("configured projects discover from node_modules", () => {
             const app = {
                 path: "/app.js",
                 content: ""
             };
+            const pkgJson = {
+                path: "/package.json",
+                content: JSON.stringify({
+                    dependencies: {
+                        jquery: "1.0.0"
+                    }
+                })
+            };
             const jsconfig = {
                 path: "/jsconfig.json",
                 content: JSON.stringify({})
+            };
+            // Should only accept direct dependencies.
+            const commander = {
+                path: "/node_modules/commander/index.js",
+                content: ""
+            };
+            const commanderPackage = {
+                path: "/node_modules/commander/package.json",
+                content: JSON.stringify({
+                    name: "commander",
+                })
             };
             const jquery = {
                 path: "/node_modules/jquery/index.js",
@@ -860,10 +946,10 @@ namespace ts.projectSystem {
                 path: "/tmp/node_modules/@types/jquery/index.d.ts",
                 content: ""
             };
-            const host = createServerHost([app, jsconfig, jquery, jqueryPackage, nestedPackage]);
+            const host = createServerHost([app, jsconfig, pkgJson, commander, commanderPackage, jquery, jqueryPackage, nestedPackage]);
             const installer = new (class extends Installer {
                 constructor() {
-                    super(host, { globalTypingsCacheLocation: "/tmp", typesRegistry: createTypesRegistry("jquery", "nested") });
+                    super(host, { globalTypingsCacheLocation: "/tmp", typesRegistry: createTypesRegistry("jquery", "nested", "commander") });
                 }
                 installWorker(_requestId: number, args: string[], _cwd: string, cb: TI.RequestCompletedAction) {
                     assert.deepEqual(args, [`@types/jquery@ts${versionMajorMinor}`]);
@@ -901,7 +987,7 @@ namespace ts.projectSystem {
                 content: ""
             };
             const jqueryPackage = {
-                path: "/bower_components/jquery/package.json",
+                path: "/bower_components/jquery/bower.json",
                 content: JSON.stringify({ name: "jquery" })
             };
             const jqueryDTS = {
@@ -1556,6 +1642,31 @@ namespace ts.projectSystem {
             });
         });
 
+        it("should support scoped packages", () => {
+            const app = {
+                path: "/app.js",
+                content: "",
+            };
+            const a = {
+                path: "/node_modules/@a/b/package.json",
+                content: JSON.stringify({ name: "@a/b" }),
+            };
+            const host = createServerHost([app, a]);
+            const cache = new Map<string, JsTyping.CachedTyping>();
+            const logger = trackingLogger();
+            const result = JsTyping.discoverTypings(host, logger.log, [app.path], getDirectoryPath(app.path as Path), emptySafeList, cache, { enable: true }, /*unresolvedImports*/ [], emptyMap);
+            assert.deepEqual(logger.finish(), [
+                'Searching for typing names in /node_modules; all files: ["/node_modules/@a/b/package.json"]',
+                '    Found package names: ["@a/b"]',
+                "Inferred typings from unresolved imports: []",
+                'Result: {"cachedTypingPaths":[],"newTypingNames":["@a/b"],"filesToWatch":["/bower_components","/node_modules"]}',
+            ]);
+            assert.deepEqual(result, {
+                cachedTypingPaths: [],
+                newTypingNames: ["@a/b"],
+                filesToWatch: ["/bower_components", "/node_modules"],
+            });
+        });
         it("should install expired typings", () => {
             const app = {
                 path: "/a/app.js",

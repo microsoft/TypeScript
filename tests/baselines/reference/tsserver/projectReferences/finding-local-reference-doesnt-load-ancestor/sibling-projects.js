@@ -58,8 +58,10 @@ Open files:
 		Projects: /user/username/projects/solution/compiler/tsconfig.json
 response:{"responseRequired":false}
 request:{"command":"references","arguments":{"file":"/user/username/projects/solution/compiler/program.ts","line":4,"offset":48},"seq":1,"type":"request"}
+Finding references to /user/username/projects/solution/compiler/program.ts position 133 in project /user/username/projects/solution/compiler/tsconfig.json
 response:{"response":{"refs":[{"file":"/user/username/projects/solution/compiler/program.ts","start":{"line":4,"offset":48},"end":{"line":4,"offset":61},"lineText":"                        getSourceFiles: () => [getSourceFile()]","isWriteAccess":false,"isDefinition":false},{"file":"/user/username/projects/solution/compiler/program.ts","start":{"line":6,"offset":30},"end":{"line":6,"offset":43},"contextStart":{"line":6,"offset":21},"contextEnd":{"line":6,"offset":69},"lineText":"                    function getSourceFile() { return \"something\"; }","isWriteAccess":true,"isDefinition":true}],"symbolName":"getSourceFile","symbolStartOffset":48,"symbolDisplayString":"function getSourceFile(): string"},"responseRequired":true}
 request:{"command":"references","arguments":{"file":"/user/username/projects/solution/compiler/program.ts","line":4,"offset":25},"seq":2,"type":"request"}
+Finding references to /user/username/projects/solution/compiler/program.ts position 110 in project /user/username/projects/solution/compiler/tsconfig.json
 Loading configured project /user/username/projects/solution/tsconfig.json
 Config: /user/username/projects/solution/tsconfig.json : {
  "rootNames": [],
@@ -127,6 +129,7 @@ Project '/user/username/projects/solution/services/tsconfig.json' (Configured)
 
 -----------------------------------------------
 FileWatcher:: Added:: WatchInfo: /user/username/projects/solution/compiler/types.d.ts 2000 undefined Project: /user/username/projects/solution/compiler/tsconfig.json WatchType: Missing generated file
+Finding references to /user/username/projects/solution/compiler/types.ts position 103 in project /user/username/projects/solution/services/tsconfig.json
 Search path: /user/username/projects/solution/compiler
 For info: /user/username/projects/solution/compiler/types.ts :: Config file name: /user/username/projects/solution/compiler/tsconfig.json
 response:{"response":{"refs":[{"file":"/user/username/projects/solution/compiler/types.ts","start":{"line":4,"offset":25},"end":{"line":4,"offset":39},"contextStart":{"line":4,"offset":25},"contextEnd":{"line":4,"offset":52},"lineText":"                        getSourceFiles(): string[];","isWriteAccess":false,"isDefinition":false},{"file":"/user/username/projects/solution/compiler/program.ts","start":{"line":4,"offset":25},"end":{"line":4,"offset":39},"contextStart":{"line":4,"offset":25},"contextEnd":{"line":4,"offset":64},"lineText":"                        getSourceFiles: () => [getSourceFile()]","isWriteAccess":true,"isDefinition":true},{"file":"/user/username/projects/solution/services/services.ts","start":{"line":3,"offset":44},"end":{"line":3,"offset":58},"lineText":"                    const result = program.getSourceFiles();","isWriteAccess":false,"isDefinition":false}],"symbolName":"getSourceFiles","symbolStartOffset":25,"symbolDisplayString":"(method) ts.Program.getSourceFiles(): string[]"},"responseRequired":true}

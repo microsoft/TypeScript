@@ -7,7 +7,7 @@ namespace ts {
     } : undefined;
 
     /**
-     * Create a function that reports error by writing to the system and handles the formating of the diagnostic
+     * Create a function that reports error by writing to the system and handles the formatting of the diagnostic
      */
     export function createDiagnosticReporter(system: System, pretty?: boolean): DiagnosticReporter {
         const host: FormatDiagnosticsHost = system === sys && sysFormatDiagnosticsHost ? sysFormatDiagnosticsHost : {
@@ -64,7 +64,7 @@ namespace ts {
     }
 
     /**
-     * Create a function that reports watch status by writing to the system and handles the formating of the diagnostic
+     * Create a function that reports watch status by writing to the system and handles the formatting of the diagnostic
      */
     export function createWatchStatusReporter(system: System, pretty?: boolean): WatchStatusReporter {
         return pretty ?
@@ -101,16 +101,104 @@ namespace ts {
         return countWhere(diagnostics, diagnostic => diagnostic.category === DiagnosticCategory.Error);
     }
 
+    export function getFilesInErrorForSummary(diagnostics: readonly Diagnostic[]): (ReportFileInError | undefined)[] {
+        const filesInError =
+            filter(diagnostics, diagnostic => diagnostic.category === DiagnosticCategory.Error)
+            .map(
+                errorDiagnostic => {
+                    if(errorDiagnostic.file === undefined) return;
+                    return `${errorDiagnostic.file.fileName}`;
+            });
+        return filesInError.map((fileName: string) => {
+            const diagnosticForFileName = find(diagnostics, diagnostic =>
+                diagnostic.file !== undefined && diagnostic.file.fileName === fileName
+            );
+
+            if(diagnosticForFileName !== undefined) {
+                const { line } = getLineAndCharacterOfPosition(diagnosticForFileName.file!, diagnosticForFileName.start!);
+                return {
+                    fileName,
+                    line: line + 1,
+                };
+            }
+        });
+    }
+
     export function getWatchErrorSummaryDiagnosticMessage(errorCount: number) {
         return errorCount === 1 ?
             Diagnostics.Found_1_error_Watching_for_file_changes :
             Diagnostics.Found_0_errors_Watching_for_file_changes;
     }
 
-    export function getErrorSummaryText(errorCount: number, newLine: string) {
+    function prettyPathForFileError(error: ReportFileInError, cwd: string) {
+        const line = formatColorAndReset(":" + error.line, ForegroundColorEscapeSequences.Grey);
+        if (pathIsAbsolute(error.fileName) && pathIsAbsolute(cwd)) {
+            return getRelativePathFromDirectory(cwd, error.fileName, /* ignoreCase */ false) + line;
+        }
+
+        return error.fileName + line;
+    }
+
+    export function getErrorSummaryText(
+        errorCount: number,
+        filesInError: readonly (ReportFileInError | undefined)[],
+        newLine: string,
+        host: HasCurrentDirectory
+    ) {
         if (errorCount === 0) return "";
-        const d = createCompilerDiagnostic(errorCount === 1 ? Diagnostics.Found_1_error : Diagnostics.Found_0_errors, errorCount);
-        return `${newLine}${flattenDiagnosticMessageText(d.messageText, newLine)}${newLine}${newLine}`;
+        const nonNilFiles = filesInError.filter(fileInError => fileInError !== undefined);
+        const distinctFileNamesWithLines = nonNilFiles.map(fileInError => `${fileInError!.fileName}:${fileInError!.line}`)
+            .filter((value, index, self) => self.indexOf(value) === index);
+
+        const firstFileReference = nonNilFiles[0] && prettyPathForFileError(nonNilFiles[0], host.getCurrentDirectory());
+
+        const d = errorCount === 1 ?
+            createCompilerDiagnostic(
+                filesInError[0] !== undefined ?
+                    Diagnostics.Found_1_error_in_1 :
+                    Diagnostics.Found_1_error,
+                errorCount,
+                firstFileReference) :
+            createCompilerDiagnostic(
+                distinctFileNamesWithLines.length === 0 ?
+                    Diagnostics.Found_0_errors :
+                    distinctFileNamesWithLines.length === 1 ?
+                        Diagnostics.Found_0_errors_in_the_same_file_starting_at_Colon_1 :
+                        Diagnostics.Found_0_errors_in_1_files,
+                errorCount,
+                distinctFileNamesWithLines.length === 1 ? firstFileReference : distinctFileNamesWithLines.length);
+
+        const suffix = distinctFileNamesWithLines.length > 1 ? createTabularErrorsDisplay(nonNilFiles, host) : "";
+        return `${newLine}${flattenDiagnosticMessageText(d.messageText, newLine)}${newLine}${newLine}${suffix}`;
+    }
+
+    function createTabularErrorsDisplay(filesInError: (ReportFileInError | undefined)[], host: HasCurrentDirectory) {
+        const distinctFiles = filesInError.filter((value, index, self) => index === self.findIndex(file => file?.fileName === value?.fileName));
+        if (distinctFiles.length === 0) return "";
+
+        const numberLength = (num: number) => Math.log(num) * Math.LOG10E + 1;
+        const fileToErrorCount = distinctFiles.map(file => ([file, countWhere(filesInError, fileInError => fileInError!.fileName === file!.fileName)] as const));
+        const maxErrors = fileToErrorCount.reduce((acc, value) => Math.max(acc, value[1] || 0), 0);
+
+        const headerRow = Diagnostics.Errors_Files.message;
+        const leftColumnHeadingLength = headerRow.split(" ")[0].length;
+        const leftPaddingGoal = Math.max(leftColumnHeadingLength, numberLength(maxErrors));
+        const headerPadding = Math.max(numberLength(maxErrors) - leftColumnHeadingLength, 0);
+
+        let tabularData = "";
+        tabularData += " ".repeat(headerPadding) + headerRow + "\n";
+        fileToErrorCount.forEach((row) => {
+            const [file, errorCount] = row;
+            const errorCountDigitsLength = Math.log(errorCount) * Math.LOG10E + 1 | 0;
+            const leftPadding = errorCountDigitsLength < leftPaddingGoal ?
+                " ".repeat(leftPaddingGoal - errorCountDigitsLength)
+                : "";
+
+            const fileRef = prettyPathForFileError(file!, host.getCurrentDirectory());
+            tabularData += `${leftPadding}${errorCount}  ${fileRef}\n`;
+        });
+
+        return tabularData;
     }
 
     export function isBuilderProgram(program: Program | BuilderProgram): program is BuilderProgram {
@@ -350,7 +438,7 @@ namespace ts {
         }
 
         if (reportSummary) {
-            reportSummary(getErrorCountForSummary(diagnostics));
+            reportSummary(getErrorCountForSummary(diagnostics), getFilesInErrorForSummary(diagnostics));
         }
 
         return {
@@ -656,7 +744,7 @@ namespace ts {
             builderProgram,
             input.reportDiagnostic || createDiagnosticReporter(system),
             s => host.trace && host.trace(s),
-            input.reportErrorSummary || input.options.pretty ? errorCount => system.write(getErrorSummaryText(errorCount, system.newLine)) : undefined
+            input.reportErrorSummary || input.options.pretty ? (errorCount, filesInError) => system.write(getErrorSummaryText(errorCount, filesInError, system.newLine, host)) : undefined
         );
         if (input.afterProgramEmitAndDiagnostics) input.afterProgramEmitAndDiagnostics(builderProgram);
         return exitStatus;

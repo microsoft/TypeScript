@@ -18,7 +18,7 @@ verify.codeFix({
 class C implements I {
     f(i: any): i is I;
     f(): this is I;
-    f(i?: any): boolean {
+    f(i?: unknown): boolean {
         throw new Error("Method not implemented.");
     }
 }`,

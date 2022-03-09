@@ -1,5 +1,5 @@
 // @strict: true
-// @target: esnext
+// @target: esnext, es2022
 // @useDefineForClassFields: true
 
 class Foo {

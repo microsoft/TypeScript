@@ -9,6 +9,7 @@ class Test {
         var copy: typeof this.data = {};
 >copy : Symbol(copy, Decl(typeofThis.ts, 3, 11))
 >this.data : Symbol(Test.data, Decl(typeofThis.ts, 0, 12))
+>this : Symbol(Test, Decl(typeofThis.ts, 0, 0))
 >data : Symbol(Test.data, Decl(typeofThis.ts, 0, 12))
     }
 }
@@ -28,6 +29,7 @@ class Test1 {
         var copy: typeof this.data = { foo: '' };
 >copy : Symbol(copy, Decl(typeofThis.ts, 11, 11))
 >this.data : Symbol(Test1.data, Decl(typeofThis.ts, 7, 13))
+>this : Symbol(Test1, Decl(typeofThis.ts, 5, 1))
 >data : Symbol(Test1.data, Decl(typeofThis.ts, 7, 13))
 >foo : Symbol(foo, Decl(typeofThis.ts, 11, 38))
 
@@ -35,11 +37,13 @@ class Test1 {
 >foo : Symbol(foo, Decl(typeofThis.ts, 12, 11))
 >this.data.foo : Symbol(foo, Decl(typeofThis.ts, 8, 12))
 >this.data : Symbol(Test1.data, Decl(typeofThis.ts, 7, 13))
+>this : Symbol(Test1, Decl(typeofThis.ts, 5, 1))
 >data : Symbol(Test1.data, Decl(typeofThis.ts, 7, 13))
 >foo : Symbol(foo, Decl(typeofThis.ts, 8, 12))
 
         var self: typeof this = this;
 >self : Symbol(self, Decl(typeofThis.ts, 14, 11))
+>this : Symbol(Test1, Decl(typeofThis.ts, 5, 1))
 >this : Symbol(Test1, Decl(typeofThis.ts, 5, 1))
 
         self.data;
@@ -50,6 +54,7 @@ class Test1 {
         var str: typeof this.this = '';
 >str : Symbol(str, Decl(typeofThis.ts, 17, 11))
 >this.this : Symbol(Test1['this'], Decl(typeofThis.ts, 8, 23))
+>this : Symbol(Test1, Decl(typeofThis.ts, 5, 1))
 >this : Symbol(Test1['this'], Decl(typeofThis.ts, 8, 23))
     }
 }
@@ -99,6 +104,7 @@ class Test5 {
         let x: typeof this.no = 1;
 >x : Symbol(x, Decl(typeofThis.ts, 39, 11))
 >this.no : Symbol(Test5.no, Decl(typeofThis.ts, 34, 13))
+>this : Symbol(Test5, Decl(typeofThis.ts, 32, 1))
 >no : Symbol(Test5.no, Decl(typeofThis.ts, 34, 13))
     }
 }
@@ -130,6 +136,7 @@ const Test8 = () => {
 
     let x: typeof this.no = 1;
 >x : Symbol(x, Decl(typeofThis.ts, 56, 7))
+>this : Symbol(globalThis)
 }
 
 class Test9 {
@@ -150,6 +157,7 @@ class Test9 {
 
             const d1: typeof this = this;
 >d1 : Symbol(d1, Decl(typeofThis.ts, 65, 17))
+>this : Symbol(Test9, Decl(typeofThis.ts, 57, 1))
 
             d1.f1();
 >d1.f1 : Symbol(Test9D1.f1, Decl(typeofThis.ts, 86, 15))
@@ -163,6 +171,7 @@ class Test9 {
 
             const d2: typeof this = this;
 >d2 : Symbol(d2, Decl(typeofThis.ts, 70, 17))
+>this : Symbol(Test9, Decl(typeofThis.ts, 57, 1))
 
             d2.f2();
 >d2.f2 : Symbol(Test9D2.f2, Decl(typeofThis.ts, 90, 15))
@@ -182,6 +191,7 @@ class Test9 {
             const no: typeof this.no = this.no;
 >no : Symbol(no, Decl(typeofThis.ts, 77, 17))
 >this.no : Symbol(Test9.no, Decl(typeofThis.ts, 59, 13))
+>this : Symbol(Test9, Decl(typeofThis.ts, 57, 1))
 >no : Symbol(Test9.no, Decl(typeofThis.ts, 59, 13))
 >this.no : Symbol(Test9.no, Decl(typeofThis.ts, 59, 13))
 >this : Symbol(Test9, Decl(typeofThis.ts, 57, 1))
@@ -196,6 +206,7 @@ class Test9 {
             const no: typeof this.this = this.this;
 >no : Symbol(no, Decl(typeofThis.ts, 81, 17))
 >this.this : Symbol(Test9.this, Decl(typeofThis.ts, 60, 11))
+>this : Symbol(Test9, Decl(typeofThis.ts, 57, 1))
 >this : Symbol(Test9.this, Decl(typeofThis.ts, 60, 11))
 >this.this : Symbol(Test9.this, Decl(typeofThis.ts, 60, 11))
 >this : Symbol(Test9, Decl(typeofThis.ts, 57, 1))
@@ -231,6 +242,7 @@ class Test10 {
         let a: typeof this.a = undefined as any;
 >a : Symbol(a, Decl(typeofThis.ts, 98, 11))
 >this.a : Symbol(Test10.a, Decl(typeofThis.ts, 94, 14))
+>this : Symbol(Test10, Decl(typeofThis.ts, 92, 1))
 >a : Symbol(Test10.a, Decl(typeofThis.ts, 94, 14))
 >undefined : Symbol(undefined)
 
@@ -242,6 +254,7 @@ class Test10 {
             let a: typeof this.a = undefined as any;    // should narrow to { b?: string }
 >a : Symbol(a, Decl(typeofThis.ts, 100, 15))
 >this.a : Symbol(Test10.a, Decl(typeofThis.ts, 94, 14))
+>this : Symbol(Test10, Decl(typeofThis.ts, 92, 1))
 >a : Symbol(Test10.a, Decl(typeofThis.ts, 94, 14))
 >undefined : Symbol(undefined)
 
@@ -249,6 +262,7 @@ class Test10 {
 >b : Symbol(b, Decl(typeofThis.ts, 101, 15))
 >this.a.b : Symbol(b, Decl(typeofThis.ts, 95, 9))
 >this.a : Symbol(Test10.a, Decl(typeofThis.ts, 94, 14))
+>this : Symbol(Test10, Decl(typeofThis.ts, 92, 1))
 >a : Symbol(Test10.a, Decl(typeofThis.ts, 94, 14))
 >b : Symbol(b, Decl(typeofThis.ts, 95, 9))
 >undefined : Symbol(undefined)
@@ -264,6 +278,7 @@ class Test10 {
 >b : Symbol(b, Decl(typeofThis.ts, 104, 19))
 >this.a.b : Symbol(b, Decl(typeofThis.ts, 95, 9))
 >this.a : Symbol(Test10.a, Decl(typeofThis.ts, 94, 14))
+>this : Symbol(Test10, Decl(typeofThis.ts, 92, 1))
 >a : Symbol(Test10.a, Decl(typeofThis.ts, 94, 14))
 >b : Symbol(b, Decl(typeofThis.ts, 95, 9))
 >undefined : Symbol(undefined)
@@ -321,6 +336,7 @@ class Tests12 {
 
         type Test = typeof this;
 >Test : Symbol(Test, Decl(typeofThis.ts, 124, 13))
+>this : Symbol(Tests12, Decl(typeofThis.ts, 121, 1))
     }
 
     test2() { // OK
@@ -329,6 +345,7 @@ class Tests12 {
         for (;;) {}
         type Test = typeof this;
 >Test : Symbol(Test, Decl(typeofThis.ts, 129, 19))
+>this : Symbol(Tests12, Decl(typeofThis.ts, 121, 1))
     }
 
     test3() { // expected no compile errors
@@ -339,6 +356,7 @@ class Tests12 {
 
         type Test = typeof this;
 >Test : Symbol(Test, Decl(typeofThis.ts, 134, 34))
+>this : Symbol(Tests12, Decl(typeofThis.ts, 121, 1))
     }
 
     test4() { // expected no compile errors
@@ -349,5 +367,6 @@ class Tests12 {
 
         type Test = typeof this;
 >Test : Symbol(Test, Decl(typeofThis.ts, 139, 34))
+>this : Symbol(Tests12, Decl(typeofThis.ts, 121, 1))
     }
 }

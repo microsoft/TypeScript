@@ -4,6 +4,7 @@ namespace ts.codefix {
     const errorCodes = [
         Diagnostics.await_expressions_are_only_allowed_within_async_functions_and_at_the_top_levels_of_modules.code,
         Diagnostics.for_await_loops_are_only_allowed_within_async_functions_and_at_the_top_levels_of_modules.code,
+        Diagnostics.Cannot_find_name_0_Did_you_mean_to_write_this_in_an_async_function.code
     ];
     registerCodeFix({
         errorCodes,
@@ -15,7 +16,7 @@ namespace ts.codefix {
             return [createCodeFixAction(fixId, changes, Diagnostics.Add_async_modifier_to_containing_function, fixId, Diagnostics.Add_all_missing_async_modifiers)];
         },
         fixIds: [fixId],
-        getAllCodeActions: context => {
+        getAllCodeActions: function getAllCodeActionsToFixAwaitInSyncFunction(context) {
             const seen = new Map<number, true>();
             return codeFixAll(context, errorCodes, (changes, diag) => {
                 const nodes = getNodes(diag.file, diag.start);

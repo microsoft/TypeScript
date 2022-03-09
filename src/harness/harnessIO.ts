@@ -304,21 +304,21 @@ namespace Harness {
 
         // Additional options not already in ts.optionDeclarations
         const harnessOptionDeclarations: ts.CommandLineOption[] = [
-            { name: "allowNonTsExtensions", type: "boolean", defaultValueDescription: "false" },
-            { name: "useCaseSensitiveFileNames", type: "boolean", defaultValueDescription: "false" },
+            { name: "allowNonTsExtensions", type: "boolean", defaultValueDescription: false },
+            { name: "useCaseSensitiveFileNames", type: "boolean", defaultValueDescription: false },
             { name: "baselineFile", type: "string" },
             { name: "includeBuiltFile", type: "string" },
             { name: "fileName", type: "string" },
             { name: "libFiles", type: "string" },
-            { name: "noErrorTruncation", type: "boolean", defaultValueDescription: "false" },
-            { name: "suppressOutputPathCheck", type: "boolean", defaultValueDescription: "false" },
-            { name: "noImplicitReferences", type: "boolean", defaultValueDescription: "false" },
+            { name: "noErrorTruncation", type: "boolean", defaultValueDescription: false },
+            { name: "suppressOutputPathCheck", type: "boolean", defaultValueDescription: false },
+            { name: "noImplicitReferences", type: "boolean", defaultValueDescription: false },
             { name: "currentDirectory", type: "string" },
             { name: "symlink", type: "string" },
             { name: "link", type: "string" },
-            { name: "noTypesAndSymbols", type: "boolean", defaultValueDescription: "false" },
+            { name: "noTypesAndSymbols", type: "boolean", defaultValueDescription: false },
             // Emitted js baseline will print full paths for every output file
-            { name: "fullEmitPaths", type: "boolean", defaultValueDescription: "false" }
+            { name: "fullEmitPaths", type: "boolean", defaultValueDescription: false },
         ];
 
         let optionsIndex: ts.ESMap<string, ts.CommandLineOption>;
@@ -537,7 +537,7 @@ namespace Harness {
                 outputLines += content;
             }
             if (pretty) {
-                outputLines += ts.getErrorSummaryText(ts.getErrorCountForSummary(diagnostics), IO.newLine());
+                outputLines += ts.getErrorSummaryText(ts.getErrorCountForSummary(diagnostics), ts.getFilesInErrorForSummary(diagnostics), IO.newLine(), { getCurrentDirectory: () => "" });
             }
             return outputLines;
         }
@@ -1438,15 +1438,14 @@ namespace Harness {
             }
 
             const referenceDir = referencePath(relativeFileBase, opts && opts.Baselinefolder, opts && opts.Subfolder);
-            let existing = IO.readDirectory(referenceDir, referencedExtensions || [extension]); // always an _absolute_ path
+            let existing = IO.readDirectory(referenceDir, referencedExtensions || [extension]);
             if (extension === ".ts" || referencedExtensions && referencedExtensions.indexOf(".ts") > -1 && referencedExtensions.indexOf(".d.ts") === -1) {
                 // special-case and filter .d.ts out of .ts results
                 existing = existing.filter(f => !ts.endsWith(f, ".d.ts"));
             }
             const missing: string[] = [];
-            const absoluteTestDir = `${process.cwd()}/${referenceDir}`;
             for (const name of existing) {
-                const localCopy = name.substring(absoluteTestDir.length - relativeFileBase.length);
+                const localCopy = name.substring(referenceDir.length - relativeFileBase.length);
                 if (!writtenFiles.has(localCopy)) {
                     missing.push(localCopy);
                 }

@@ -905,9 +905,16 @@ namespace ts {
     /** Gets the text of a jsdoc comment, flattening links to their text. */
     export function getTextOfJSDocComment(comment?: string | NodeArray<JSDocComment>) {
         return typeof comment === "string" ? comment
-            : comment?.map(c =>
-                // TODO: Other kinds here
-                c.kind === SyntaxKind.JSDocText ? c.text : `{@link ${c.name ? entityNameToString(c.name) + " " : ""}${c.text}}`).join("");
+            : comment?.map(c => c.kind === SyntaxKind.JSDocText ? c.text : formatJSDocLink(c)).join("");
+    }
+
+    function formatJSDocLink(link: JSDocLink | JSDocLinkCode | JSDocLinkPlain) {
+        const kind = link.kind === SyntaxKind.JSDocLink ? "link"
+            : link.kind === SyntaxKind.JSDocLinkCode ? "linkcode"
+            : "linkplain";
+        const name = link.name ? entityNameToString(link.name) : "";
+        const space = link.name && link.text.startsWith("://") ? "" : " ";
+        return `{@${kind} ${name}${space}${link.text}}`;
     }
 
     /**
@@ -919,7 +926,7 @@ namespace ts {
             return emptyArray;
         }
         if (isJSDocTypeAlias(node)) {
-            Debug.assert(node.parent.kind === SyntaxKind.JSDocComment);
+            Debug.assert(node.parent.kind === SyntaxKind.JSDoc);
             return flatMap(node.parent.tags, tag => isJSDocTemplateTag(tag) ? tag.typeParameters : undefined);
         }
         if (node.typeParameters) {
@@ -1531,6 +1538,7 @@ namespace ts {
             case SyntaxKind.TrueKeyword:
             case SyntaxKind.SuperKeyword:
             case SyntaxKind.NonNullExpression:
+            case SyntaxKind.ExpressionWithTypeArguments:
             case SyntaxKind.MetaProperty:
             case SyntaxKind.ImportKeyword: // technically this is only an Expression if it's in a CallExpression
                 return true;
@@ -1904,7 +1912,7 @@ namespace ts {
 
     /** True if node is of a kind that may contain comment text. */
     export function isJSDocCommentContainingNode(node: Node): boolean {
-        return node.kind === SyntaxKind.JSDocComment
+        return node.kind === SyntaxKind.JSDoc
             || node.kind === SyntaxKind.JSDocNamepathType
             || node.kind === SyntaxKind.JSDocText
             || isJSDocLinkLike(node)

@@ -528,7 +528,7 @@ namespace ts {
                     inHasLexicalThisContext(),
                     hasLexicalArguments,
                     promiseConstructor,
-                    transformAsyncFunctionBodyWorker(node.body!)
+                    transformAsyncFunctionBodyWorker(node.body)
                 );
 
                 const declarations = endLexicalEnvironment();

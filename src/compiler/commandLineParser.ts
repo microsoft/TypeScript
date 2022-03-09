@@ -1,6 +1,10 @@
 namespace ts {
     /* @internal */
-    export const compileOnSaveCommandLineOption: CommandLineOption = { name: "compileOnSave", type: "boolean", defaultValueDescription: "false" };
+    export const compileOnSaveCommandLineOption: CommandLineOption = {
+        name: "compileOnSave",
+        type: "boolean",
+        defaultValueDescription: false,
+    };
 
     const jsxOptionMap = new Map(getEntries({
         "preserve": JsxEmit.Preserve,
@@ -64,11 +68,13 @@ namespace ts {
         ["es2019.string", "lib.es2019.string.d.ts"],
         ["es2019.symbol", "lib.es2019.symbol.d.ts"],
         ["es2020.bigint", "lib.es2020.bigint.d.ts"],
+        ["es2020.date", "lib.es2020.date.d.ts"],
         ["es2020.promise", "lib.es2020.promise.d.ts"],
         ["es2020.sharedmemory", "lib.es2020.sharedmemory.d.ts"],
         ["es2020.string", "lib.es2020.string.d.ts"],
         ["es2020.symbol.wellknown", "lib.es2020.symbol.wellknown.d.ts"],
         ["es2020.intl", "lib.es2020.intl.d.ts"],
+        ["es2020.number", "lib.es2020.number.d.ts"],
         ["es2021.promise", "lib.es2021.promise.d.ts"],
         ["es2021.string", "lib.es2021.string.d.ts"],
         ["es2021.weakref", "lib.es2021.weakref.d.ts"],
@@ -117,6 +123,7 @@ namespace ts {
             })),
             category: Diagnostics.Watch_and_Build_Modes,
             description: Diagnostics.Specify_how_the_TypeScript_watch_mode_works,
+            defaultValueDescription: WatchFileKind.UseFsEvents,
         },
         {
             name: "watchDirectory",
@@ -128,6 +135,7 @@ namespace ts {
             })),
             category: Diagnostics.Watch_and_Build_Modes,
             description: Diagnostics.Specify_how_directories_are_watched_on_systems_that_lack_recursive_file_watching_functionality,
+            defaultValueDescription: WatchDirectoryKind.UseFsEvents,
         },
         {
             name: "fallbackPolling",
@@ -139,13 +147,14 @@ namespace ts {
             })),
             category: Diagnostics.Watch_and_Build_Modes,
             description: Diagnostics.Specify_what_approach_the_watcher_should_use_if_the_system_runs_out_of_native_file_watchers,
+            defaultValueDescription: PollingWatchKind.PriorityInterval,
         },
         {
             name: "synchronousWatchDirectory",
             type: "boolean",
             category: Diagnostics.Watch_and_Build_Modes,
             description: Diagnostics.Synchronously_call_callbacks_and_update_the_state_of_directory_watchers_on_platforms_that_don_t_support_recursive_watching_natively,
-            defaultValueDescription: "false",
+            defaultValueDescription: false,
         },
         {
             name: "excludeDirectories",
@@ -182,13 +191,13 @@ namespace ts {
             showInSimplifiedHelpView: true,
             category: Diagnostics.Command_line_Options,
             description: Diagnostics.Print_this_message,
-            defaultValueDescription: "false",
+            defaultValueDescription: false,
         },
         {
             name: "help",
             shortName: "?",
             type: "boolean",
-            defaultValueDescription: "false",
+            defaultValueDescription: false,
         },
         {
             name: "watch",
@@ -198,7 +207,7 @@ namespace ts {
             isCommandLineOnly: true,
             category: Diagnostics.Command_line_Options,
             description: Diagnostics.Watch_input_files,
-            defaultValueDescription: "false",
+            defaultValueDescription: false,
         },
         {
             name: "preserveWatchOutput",
@@ -206,28 +215,28 @@ namespace ts {
             showInSimplifiedHelpView: false,
             category: Diagnostics.Output_Formatting,
             description: Diagnostics.Disable_wiping_the_console_in_watch_mode,
-            defaultValueDescription: "false",
+            defaultValueDescription: false,
         },
         {
             name: "listFiles",
             type: "boolean",
             category: Diagnostics.Compiler_Diagnostics,
             description: Diagnostics.Print_all_of_the_files_read_during_the_compilation,
-            defaultValueDescription: "false"
+            defaultValueDescription: false,
         },
         {
             name: "explainFiles",
             type: "boolean",
             category: Diagnostics.Compiler_Diagnostics,
             description: Diagnostics.Print_files_read_during_the_compilation_including_why_it_was_included,
-            defaultValueDescription: "false",
+            defaultValueDescription: false,
         },
         {
             name: "listEmittedFiles",
             type: "boolean",
             category: Diagnostics.Compiler_Diagnostics,
             description: Diagnostics.Print_the_names_of_emitted_files_after_a_compilation,
-            defaultValueDescription: "false"
+            defaultValueDescription: false,
         },
         {
             name: "pretty",
@@ -235,28 +244,28 @@ namespace ts {
             showInSimplifiedHelpView: true,
             category: Diagnostics.Output_Formatting,
             description: Diagnostics.Enable_color_and_formatting_in_TypeScript_s_output_to_make_compiler_errors_easier_to_read,
-            defaultValueDescription: "true"
+            defaultValueDescription: true,
         },
         {
             name: "traceResolution",
             type: "boolean",
             category: Diagnostics.Compiler_Diagnostics,
             description: Diagnostics.Log_paths_used_during_the_moduleResolution_process,
-            defaultValueDescription: "false"
+            defaultValueDescription: false,
         },
         {
             name: "diagnostics",
             type: "boolean",
             category: Diagnostics.Compiler_Diagnostics,
             description: Diagnostics.Output_compiler_performance_information_after_building,
-            defaultValueDescription: "false"
+            defaultValueDescription: false,
         },
         {
             name: "extendedDiagnostics",
             type: "boolean",
             category: Diagnostics.Compiler_Diagnostics,
             description: Diagnostics.Output_more_detailed_compiler_performance_information_after_building,
-            defaultValueDescription: "false"
+            defaultValueDescription: false,
         },
         {
             name: "generateCpuProfile",
@@ -281,7 +290,7 @@ namespace ts {
             shortName: "i",
             type: "boolean",
             category: Diagnostics.Projects,
-            description: Diagnostics.Enable_incremental_compilation,
+            description: Diagnostics.Save_tsbuildinfo_files_to_allow_for_incremental_compilation_of_projects,
             transpileOptionValue: undefined,
             defaultValueDescription: Diagnostics.false_unless_composite_is_set
         },
@@ -292,7 +301,7 @@ namespace ts {
             affectsEmit: true,
             category: Diagnostics.Watch_and_Build_Modes,
             description: Diagnostics.Have_recompiles_in_projects_that_use_incremental_and_watch_mode_assume_that_changes_within_a_file_will_only_affect_files_directly_depending_on_it,
-            defaultValueDescription: "false",
+            defaultValueDescription: false,
         },
         {
             name: "locale",
@@ -329,7 +338,7 @@ namespace ts {
         showInSimplifiedHelpView: true,
         category: Diagnostics.Language_and_Environment,
         description: Diagnostics.Set_the_JavaScript_language_version_for_emitted_JavaScript_and_include_compatible_library_declarations,
-        defaultValueDescription: "ES3"
+        defaultValueDescription: ScriptTarget.ES3,
     };
 
     const commandOptionsWithoutBuild: CommandLineOption[] = [
@@ -340,7 +349,7 @@ namespace ts {
             showInSimplifiedHelpView: true,
             category: Diagnostics.Command_line_Options,
             description: Diagnostics.Show_all_compiler_options,
-            defaultValueDescription: "false",
+            defaultValueDescription: false,
         },
         {
             name: "version",
@@ -349,7 +358,7 @@ namespace ts {
             showInSimplifiedHelpView: true,
             category: Diagnostics.Command_line_Options,
             description: Diagnostics.Print_the_compiler_s_version,
-            defaultValueDescription: "false",
+            defaultValueDescription: false,
         },
         {
             name: "init",
@@ -357,7 +366,7 @@ namespace ts {
             showInSimplifiedHelpView: true,
             category: Diagnostics.Command_line_Options,
             description: Diagnostics.Initializes_a_TypeScript_project_and_creates_a_tsconfig_json_file,
-            defaultValueDescription: "false",
+            defaultValueDescription: false,
         },
         {
             name: "project",
@@ -376,7 +385,7 @@ namespace ts {
             showInSimplifiedHelpView: true,
             category: Diagnostics.Command_line_Options,
             description: Diagnostics.Build_one_or_more_projects_and_their_dependencies_if_out_of_date,
-            defaultValueDescription: "false",
+            defaultValueDescription: false,
         },
         {
             name: "showConfig",
@@ -385,7 +394,7 @@ namespace ts {
             category: Diagnostics.Command_line_Options,
             isCommandLineOnly: true,
             description: Diagnostics.Print_the_final_configuration_instead_of_building,
-            defaultValueDescription: "false",
+            defaultValueDescription: false,
         },
         {
             name: "listFilesOnly",
@@ -395,7 +404,7 @@ namespace ts {
             affectsEmit: true,
             isCommandLineOnly: true,
             description: Diagnostics.Print_names_of_files_that_are_part_of_the_compilation_and_then_stop_processing,
-            defaultValueDescription: "false",
+            defaultValueDescription: false,
         },
 
         // Basic
@@ -423,13 +432,15 @@ namespace ts {
             showInSimplifiedHelpView: true,
             category: Diagnostics.Modules,
             description: Diagnostics.Specify_what_module_code_is_generated,
+            defaultValueDescription: undefined,
         },
         {
             name: "lib",
             type: "list",
             element: {
                 name: "lib",
-                type: libMap
+                type: libMap,
+                defaultValueDescription: undefined,
             },
             affectsProgramStructure: true,
             showInSimplifiedHelpView: true,
@@ -444,7 +455,7 @@ namespace ts {
             showInSimplifiedHelpView: true,
             category: Diagnostics.JavaScript_Support,
             description: Diagnostics.Allow_JavaScript_files_to_be_a_part_of_your_program_Use_the_checkJS_option_to_get_errors_from_these_files,
-            defaultValueDescription: "false"
+            defaultValueDescription: false,
         },
         {
             name: "checkJs",
@@ -452,7 +463,7 @@ namespace ts {
             showInSimplifiedHelpView: true,
             category: Diagnostics.JavaScript_Support,
             description: Diagnostics.Enable_error_reporting_in_type_checked_JavaScript_files,
-            defaultValueDescription: "false"
+            defaultValueDescription: false,
         },
         {
             name: "jsx",
@@ -464,7 +475,7 @@ namespace ts {
             showInSimplifiedHelpView: true,
             category: Diagnostics.Language_and_Environment,
             description: Diagnostics.Specify_what_JSX_code_is_generated,
-            defaultValueDescription: "undefined"
+            defaultValueDescription: undefined,
         },
         {
             name: "declaration",
@@ -484,7 +495,7 @@ namespace ts {
             showInSimplifiedHelpView: true,
             category: Diagnostics.Emit,
             transpileOptionValue: undefined,
-            defaultValueDescription: "false",
+            defaultValueDescription: false,
             description: Diagnostics.Create_sourcemaps_for_d_ts_files
         },
         {
@@ -496,7 +507,7 @@ namespace ts {
             category: Diagnostics.Emit,
             description: Diagnostics.Only_output_d_ts_files_and_not_JavaScript_files,
             transpileOptionValue: undefined,
-            defaultValueDescription: "false",
+            defaultValueDescription: false,
         },
         {
             name: "sourceMap",
@@ -504,7 +515,7 @@ namespace ts {
             affectsEmit: true,
             showInSimplifiedHelpView: true,
             category: Diagnostics.Emit,
-            defaultValueDescription: "false",
+            defaultValueDescription: false,
             description: Diagnostics.Create_source_map_files_for_emitted_JavaScript_files,
         },
         {
@@ -545,7 +556,7 @@ namespace ts {
             isTSConfigOnly: true,
             category: Diagnostics.Projects,
             transpileOptionValue: undefined,
-            defaultValueDescription: "false",
+            defaultValueDescription: false,
             description: Diagnostics.Enable_constraints_that_allow_a_TypeScript_project_to_be_used_with_project_references,
         },
         {
@@ -565,7 +576,7 @@ namespace ts {
             affectsEmit: true,
             showInSimplifiedHelpView: true,
             category: Diagnostics.Emit,
-            defaultValueDescription: "false",
+            defaultValueDescription: false,
             description: Diagnostics.Disable_emitting_comments,
         },
         {
@@ -575,7 +586,7 @@ namespace ts {
             category: Diagnostics.Emit,
             description: Diagnostics.Disable_emitting_files_from_a_compilation,
             transpileOptionValue: undefined,
-            defaultValueDescription: "false"
+            defaultValueDescription: false,
         },
         {
             name: "importHelpers",
@@ -583,7 +594,7 @@ namespace ts {
             affectsEmit: true,
             category: Diagnostics.Emit,
             description: Diagnostics.Allow_importing_helper_functions_from_tslib_once_per_project_instead_of_including_them_per_file,
-            defaultValueDescription: "false"
+            defaultValueDescription: false,
         },
         {
             name: "importsNotUsedAsValues",
@@ -595,7 +606,8 @@ namespace ts {
             affectsEmit: true,
             affectsSemanticDiagnostics: true,
             category: Diagnostics.Emit,
-            description: Diagnostics.Specify_emit_Slashchecking_behavior_for_imports_that_are_only_used_for_types
+            description: Diagnostics.Specify_emit_Slashchecking_behavior_for_imports_that_are_only_used_for_types,
+            defaultValueDescription: ImportsNotUsedAsValues.Remove,
         },
         {
             name: "downlevelIteration",
@@ -603,7 +615,7 @@ namespace ts {
             affectsEmit: true,
             category: Diagnostics.Emit,
             description: Diagnostics.Emit_more_compliant_but_verbose_and_less_performant_JavaScript_for_iteration,
-            defaultValueDescription: "false"
+            defaultValueDescription: false,
         },
         {
             name: "isolatedModules",
@@ -611,7 +623,7 @@ namespace ts {
             category: Diagnostics.Interop_Constraints,
             description: Diagnostics.Ensure_that_each_file_can_be_safely_transpiled_without_relying_on_other_imports,
             transpileOptionValue: true,
-            defaultValueDescription: "false"
+            defaultValueDescription: false,
         },
 
         // Strict Type Checks
@@ -623,7 +635,7 @@ namespace ts {
             showInSimplifiedHelpView: true,
             category: Diagnostics.Type_Checking,
             description: Diagnostics.Enable_all_strict_type_checking_options,
-            defaultValueDescription: "false"
+            defaultValueDescription: false,
         },
         {
             name: "noImplicitAny",
@@ -683,8 +695,8 @@ namespace ts {
             affectsSemanticDiagnostics: true,
             strictFlag: true,
             category: Diagnostics.Type_Checking,
-            description: Diagnostics.Type_catch_clause_variables_as_unknown_instead_of_any,
-            defaultValueDescription: "false",
+            description: Diagnostics.Default_catch_clause_variables_as_unknown_instead_of_any,
+            defaultValueDescription: false,
         },
         {
             name: "alwaysStrict",
@@ -702,8 +714,8 @@ namespace ts {
             type: "boolean",
             affectsSemanticDiagnostics: true,
             category: Diagnostics.Type_Checking,
-            description: Diagnostics.Enable_error_reporting_when_a_local_variables_aren_t_read,
-            defaultValueDescription: "false"
+            description: Diagnostics.Enable_error_reporting_when_local_variables_aren_t_read,
+            defaultValueDescription: false,
         },
         {
             name: "noUnusedParameters",
@@ -711,7 +723,7 @@ namespace ts {
             affectsSemanticDiagnostics: true,
             category: Diagnostics.Type_Checking,
             description: Diagnostics.Raise_an_error_when_a_function_parameter_isn_t_read,
-            defaultValueDescription: "false"
+            defaultValueDescription: false,
         },
         {
             name: "exactOptionalPropertyTypes",
@@ -719,7 +731,7 @@ namespace ts {
             affectsSemanticDiagnostics: true,
             category: Diagnostics.Type_Checking,
             description: Diagnostics.Interpret_optional_property_types_as_written_rather_than_adding_undefined,
-            defaultValueDescription: "false",
+            defaultValueDescription: false,
         },
         {
             name: "noImplicitReturns",
@@ -727,7 +739,7 @@ namespace ts {
             affectsSemanticDiagnostics: true,
             category: Diagnostics.Type_Checking,
             description: Diagnostics.Enable_error_reporting_for_codepaths_that_do_not_explicitly_return_in_a_function,
-            defaultValueDescription: "false"
+            defaultValueDescription: false,
         },
         {
             name: "noFallthroughCasesInSwitch",
@@ -736,15 +748,15 @@ namespace ts {
             affectsSemanticDiagnostics: true,
             category: Diagnostics.Type_Checking,
             description: Diagnostics.Enable_error_reporting_for_fallthrough_cases_in_switch_statements,
-            defaultValueDescription: "false",
+            defaultValueDescription: false,
         },
         {
             name: "noUncheckedIndexedAccess",
             type: "boolean",
             affectsSemanticDiagnostics: true,
             category: Diagnostics.Type_Checking,
-            description: Diagnostics.Include_undefined_in_index_signature_results,
-            defaultValueDescription: "false",
+            description: Diagnostics.Add_undefined_to_a_type_when_accessed_using_an_index,
+            defaultValueDescription: false,
         },
         {
             name: "noImplicitOverride",
@@ -752,7 +764,7 @@ namespace ts {
             affectsSemanticDiagnostics: true,
             category: Diagnostics.Type_Checking,
             description: Diagnostics.Ensure_overriding_members_in_derived_classes_are_marked_with_an_override_modifier,
-            defaultValueDescription: "false",
+            defaultValueDescription: false,
         },
         {
             name: "noPropertyAccessFromIndexSignature",
@@ -760,7 +772,7 @@ namespace ts {
             showInSimplifiedHelpView: false,
             category: Diagnostics.Type_Checking,
             description: Diagnostics.Enforces_using_indexed_accessors_for_keys_declared_using_an_indexed_type,
-            defaultValueDescription: "false"
+            defaultValueDescription: false,
         },
 
         // Module Resolution
@@ -855,14 +867,14 @@ namespace ts {
             showInSimplifiedHelpView: true,
             category: Diagnostics.Interop_Constraints,
             description: Diagnostics.Emit_additional_JavaScript_to_ease_support_for_importing_CommonJS_modules_This_enables_allowSyntheticDefaultImports_for_type_compatibility,
-            defaultValueDescription: "false"
+            defaultValueDescription: false,
         },
         {
             name: "preserveSymlinks",
             type: "boolean",
             category: Diagnostics.Interop_Constraints,
             description: Diagnostics.Disable_resolving_symlinks_to_their_realpath_This_correlates_to_the_same_flag_in_node,
-            defaultValueDescription: "false",
+            defaultValueDescription: false,
         },
         {
             name: "allowUmdGlobalAccess",
@@ -870,7 +882,7 @@ namespace ts {
             affectsSemanticDiagnostics: true,
             category: Diagnostics.Modules,
             description: Diagnostics.Allow_accessing_UMD_globals_from_modules,
-            defaultValueDescription: "false"
+            defaultValueDescription: false,
         },
 
         // Source Maps
@@ -896,7 +908,7 @@ namespace ts {
             affectsEmit: true,
             category: Diagnostics.Emit,
             description: Diagnostics.Include_sourcemap_files_inside_the_emitted_JavaScript,
-            defaultValueDescription: "false"
+            defaultValueDescription: false,
         },
         {
             name: "inlineSources",
@@ -904,7 +916,7 @@ namespace ts {
             affectsEmit: true,
             category: Diagnostics.Emit,
             description: Diagnostics.Include_source_code_in_the_sourcemaps_inside_the_emitted_JavaScript,
-            defaultValueDescription: "false"
+            defaultValueDescription: false,
         },
 
         // Experimental
@@ -914,7 +926,7 @@ namespace ts {
             affectsSemanticDiagnostics: true,
             category: Diagnostics.Language_and_Environment,
             description: Diagnostics.Enable_experimental_support_for_TC39_stage_2_draft_decorators,
-            defaultValueDescription: "false",
+            defaultValueDescription: false,
         },
         {
             name: "emitDecoratorMetadata",
@@ -923,7 +935,7 @@ namespace ts {
             affectsEmit: true,
             category: Diagnostics.Language_and_Environment,
             description: Diagnostics.Emit_design_type_metadata_for_decorated_declarations_in_source_files,
-            defaultValueDescription: "false",
+            defaultValueDescription: false,
         },
 
         // Advanced
@@ -938,7 +950,8 @@ namespace ts {
             name: "jsxFragmentFactory",
             type: "string",
             category: Diagnostics.Language_and_Environment,
-            description: Diagnostics.Specify_the_JSX_Fragment_reference_used_for_fragments_when_targeting_React_JSX_emit_e_g_React_Fragment_or_Fragment
+            description: Diagnostics.Specify_the_JSX_Fragment_reference_used_for_fragments_when_targeting_React_JSX_emit_e_g_React_Fragment_or_Fragment,
+            defaultValueDescription: "React.Fragment",
         },
         {
             name: "jsxImportSource",
@@ -956,7 +969,7 @@ namespace ts {
             affectsModuleResolution: true,
             category: Diagnostics.Modules,
             description: Diagnostics.Enable_importing_json_files,
-            defaultValueDescription: "false"
+            defaultValueDescription: false,
         },
 
         {
@@ -983,7 +996,7 @@ namespace ts {
             type: "boolean",
             category: Diagnostics.Completeness,
             description: Diagnostics.Skip_type_checking_d_ts_files_that_are_included_with_TypeScript,
-            defaultValueDescription: "false",
+            defaultValueDescription: false,
         },
         {
             name: "charset",
@@ -998,7 +1011,7 @@ namespace ts {
             affectsEmit: true,
             category: Diagnostics.Emit,
             description: Diagnostics.Emit_a_UTF_8_Byte_Order_Mark_BOM_in_the_beginning_of_output_files,
-            defaultValueDescription: "false"
+            defaultValueDescription: false,
         },
         {
             name: "newLine",
@@ -1018,7 +1031,7 @@ namespace ts {
             affectsSemanticDiagnostics: true,
             category: Diagnostics.Output_Formatting,
             description: Diagnostics.Disable_truncating_types_in_error_messages,
-            defaultValueDescription: "false"
+            defaultValueDescription: false,
         },
         {
             name: "noLib",
@@ -1029,7 +1042,7 @@ namespace ts {
             // We are not returning a sourceFile for lib file when asked by the program,
             // so pass --noLib to avoid reporting a file not found error.
             transpileOptionValue: true,
-            defaultValueDescription: "false"
+            defaultValueDescription: false,
         },
         {
             name: "noResolve",
@@ -1040,7 +1053,7 @@ namespace ts {
             // We are not doing a full typecheck, we are not resolving the whole context,
             // so pass --noResolve to avoid reporting missing file errors.
             transpileOptionValue: true,
-            defaultValueDescription: "false"
+            defaultValueDescription: false,
         },
         {
             name: "stripInternal",
@@ -1048,7 +1061,7 @@ namespace ts {
             affectsEmit: true,
             category: Diagnostics.Emit,
             description: Diagnostics.Disable_emitting_declarations_that_have_internal_in_their_JSDoc_comments,
-            defaultValueDescription: "false",
+            defaultValueDescription: false,
         },
         {
             name: "disableSizeLimit",
@@ -1056,7 +1069,7 @@ namespace ts {
             affectsProgramStructure: true,
             category: Diagnostics.Editor_Support,
             description: Diagnostics.Remove_the_20mb_cap_on_total_source_code_size_for_JavaScript_files_in_the_TypeScript_language_server,
-            defaultValueDescription: "false"
+            defaultValueDescription: false,
         },
         {
             name: "disableSourceOfProjectReferenceRedirect",
@@ -1064,7 +1077,7 @@ namespace ts {
             isTSConfigOnly: true,
             category: Diagnostics.Projects,
             description: Diagnostics.Disable_preferring_source_files_instead_of_declaration_files_when_referencing_composite_projects,
-            defaultValueDescription: "false",
+            defaultValueDescription: false,
         },
         {
             name: "disableSolutionSearching",
@@ -1072,7 +1085,7 @@ namespace ts {
             isTSConfigOnly: true,
             category: Diagnostics.Projects,
             description: Diagnostics.Opt_a_project_out_of_multi_project_reference_checking_when_editing,
-            defaultValueDescription: "false",
+            defaultValueDescription: false,
         },
         {
             name: "disableReferencedProjectLoad",
@@ -1080,7 +1093,7 @@ namespace ts {
             isTSConfigOnly: true,
             category: Diagnostics.Projects,
             description: Diagnostics.Reduce_the_number_of_projects_loaded_automatically_by_TypeScript,
-            defaultValueDescription: "false",
+            defaultValueDescription: false,
         },
         {
             name: "noImplicitUseStrict",
@@ -1088,7 +1101,7 @@ namespace ts {
             affectsSemanticDiagnostics: true,
             category: Diagnostics.Backwards_Compatibility,
             description: Diagnostics.Disable_adding_use_strict_directives_in_emitted_JavaScript_files,
-            defaultValueDescription: "false"
+            defaultValueDescription: false,
         },
         {
             name: "noEmitHelpers",
@@ -1096,7 +1109,7 @@ namespace ts {
             affectsEmit: true,
             category: Diagnostics.Emit,
             description: Diagnostics.Disable_generating_custom_helper_functions_like_extends_in_compiled_output,
-            defaultValueDescription: "false"
+            defaultValueDescription: false,
         },
         {
             name: "noEmitOnError",
@@ -1105,7 +1118,7 @@ namespace ts {
             category: Diagnostics.Emit,
             transpileOptionValue: undefined,
             description: Diagnostics.Disable_emitting_files_if_any_type_checking_errors_are_reported,
-            defaultValueDescription: "false"
+            defaultValueDescription: false,
         },
         {
             name: "preserveConstEnums",
@@ -1113,7 +1126,7 @@ namespace ts {
             affectsEmit: true,
             category: Diagnostics.Emit,
             description: Diagnostics.Disable_erasing_const_enum_declarations_in_generated_code,
-            defaultValueDescription: "false",
+            defaultValueDescription: false,
         },
         {
             name: "declarationDir",
@@ -1130,7 +1143,7 @@ namespace ts {
             type: "boolean",
             category: Diagnostics.Completeness,
             description: Diagnostics.Skip_type_checking_all_d_ts_files,
-            defaultValueDescription: "false"
+            defaultValueDescription: false,
         },
         {
             name: "allowUnusedLabels",
@@ -1139,7 +1152,7 @@ namespace ts {
             affectsSemanticDiagnostics: true,
             category: Diagnostics.Type_Checking,
             description: Diagnostics.Disable_error_reporting_for_unused_labels,
-            defaultValueDescription: "undefined"
+            defaultValueDescription: undefined,
         },
         {
             name: "allowUnreachableCode",
@@ -1148,7 +1161,7 @@ namespace ts {
             affectsSemanticDiagnostics: true,
             category: Diagnostics.Type_Checking,
             description: Diagnostics.Disable_error_reporting_for_unreachable_code,
-            defaultValueDescription: "undefined"
+            defaultValueDescription: undefined,
         },
         {
             name: "suppressExcessPropertyErrors",
@@ -1156,7 +1169,7 @@ namespace ts {
             affectsSemanticDiagnostics: true,
             category: Diagnostics.Backwards_Compatibility,
             description: Diagnostics.Disable_reporting_of_excess_property_errors_during_the_creation_of_object_literals,
-            defaultValueDescription: "false"
+            defaultValueDescription: false,
         },
         {
             name: "suppressImplicitAnyIndexErrors",
@@ -1164,7 +1177,7 @@ namespace ts {
             affectsSemanticDiagnostics: true,
             category: Diagnostics.Backwards_Compatibility,
             description: Diagnostics.Suppress_noImplicitAny_errors_when_indexing_objects_that_lack_index_signatures,
-            defaultValueDescription: "false"
+            defaultValueDescription: false,
         },
         {
             name: "forceConsistentCasingInFileNames",
@@ -1172,7 +1185,7 @@ namespace ts {
             affectsModuleResolution: true,
             category: Diagnostics.Interop_Constraints,
             description: Diagnostics.Ensure_that_casing_is_correct_in_imports,
-            defaultValueDescription: "false"
+            defaultValueDescription: false,
         },
         {
             name: "maxNodeModuleJsDepth",
@@ -1180,7 +1193,7 @@ namespace ts {
             affectsModuleResolution: true,
             category: Diagnostics.JavaScript_Support,
             description: Diagnostics.Specify_the_maximum_folder_depth_used_for_checking_JavaScript_files_from_node_modules_Only_applicable_with_allowJs,
-            defaultValueDescription: "0"
+            defaultValueDescription: 0,
         },
         {
             name: "noStrictGenericChecks",
@@ -1188,7 +1201,7 @@ namespace ts {
             affectsSemanticDiagnostics: true,
             category: Diagnostics.Backwards_Compatibility,
             description: Diagnostics.Disable_strict_checking_of_generic_signatures_in_function_types,
-            defaultValueDescription: "false"
+            defaultValueDescription: false,
         },
         {
             name: "useDefineForClassFields",
@@ -1205,7 +1218,7 @@ namespace ts {
             affectsEmit: true,
             category: Diagnostics.Emit,
             description: Diagnostics.Preserve_unused_imported_values_in_the_JavaScript_output_that_would_otherwise_be_removed,
-            defaultValueDescription: "false",
+            defaultValueDescription: false,
         },
 
         {
@@ -1213,7 +1226,7 @@ namespace ts {
             type: "boolean",
             category: Diagnostics.Backwards_Compatibility,
             description: Diagnostics.Make_keyof_only_return_strings_instead_of_string_numbers_or_symbols_Legacy_option,
-            defaultValueDescription: "false"
+            defaultValueDescription: false,
         },
         {
             // A list of plugins to load in the language service
@@ -1224,7 +1237,7 @@ namespace ts {
                 name: "plugin",
                 type: "object"
             },
-            description: Diagnostics.List_of_language_service_plugins,
+            description: Diagnostics.Specify_a_list_of_language_service_plugins_to_include,
             category: Diagnostics.Editor_Support,
 
         },
@@ -1269,7 +1282,7 @@ namespace ts {
             category: Diagnostics.Command_line_Options,
             description: Diagnostics.Enable_verbose_logging,
             type: "boolean",
-            defaultValueDescription: "false",
+            defaultValueDescription: false,
         },
         {
             name: "dry",
@@ -1277,7 +1290,7 @@ namespace ts {
             category: Diagnostics.Command_line_Options,
             description: Diagnostics.Show_what_would_be_built_or_deleted_if_specified_with_clean,
             type: "boolean",
-            defaultValueDescription: "false",
+            defaultValueDescription: false,
         },
         {
             name: "force",
@@ -1285,14 +1298,14 @@ namespace ts {
             category: Diagnostics.Command_line_Options,
             description: Diagnostics.Build_all_projects_including_those_that_appear_to_be_up_to_date,
             type: "boolean",
-            defaultValueDescription: "false",
+            defaultValueDescription: false,
         },
         {
             name: "clean",
             category: Diagnostics.Command_line_Options,
             description: Diagnostics.Delete_the_outputs_of_all_projects,
             type: "boolean",
-            defaultValueDescription: "false",
+            defaultValueDescription: false,
         }
     ];
 
@@ -1310,12 +1323,12 @@ namespace ts {
              */
             name: "enableAutoDiscovery",
             type: "boolean",
-            defaultValueDescription: "false",
+            defaultValueDescription: false,
         },
         {
             name: "enable",
             type: "boolean",
-            defaultValueDescription: "false",
+            defaultValueDescription: false,
         },
         {
             name: "include",
@@ -1336,7 +1349,7 @@ namespace ts {
         {
             name: "disableFilenameBasedTypeAcquisition",
             type: "boolean",
-            defaultValueDescription: "false",
+            defaultValueDescription: false,
         },
     ];
 
@@ -2488,7 +2501,7 @@ namespace ts {
             const result: string[] = [];
             result.push(`{`);
             result.push(`${tab}"compilerOptions": {`);
-            result.push(`${tab}${tab}/* ${getLocaleSpecificMessage(Diagnostics.Visit_https_Colon_Slash_Slashaka_ms_Slashtsconfig_json_to_read_more_about_this_file)} */`);
+            result.push(`${tab}${tab}/* ${getLocaleSpecificMessage(Diagnostics.Visit_https_Colon_Slash_Slashaka_ms_Slashtsconfig_to_read_more_about_this_file)} */`);
             result.push("");
             // Print out each row, aligning all the descriptions on the same column.
             for (const entry of entries) {
@@ -2743,7 +2756,7 @@ namespace ts {
         function getPropFromRaw<T>(prop: "files" | "include" | "exclude" | "references", validateElement: (value: unknown) => boolean, elementTypeName: string): PropOfRaw<T> {
             if (hasProperty(raw, prop) && !isNullOrUndefined(raw[prop])) {
                 if (isArray(raw[prop])) {
-                    const result = raw[prop];
+                    const result = raw[prop] as T[];
                     if (!sourceFile && !every(result, validateElement)) {
                         errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, prop, elementTypeName));
                     }
@@ -3146,7 +3159,7 @@ namespace ts {
         if (isCompilerOptionsValue(opt, value)) {
             const optType = opt.type;
             if (optType === "list" && isArray(value)) {
-                return convertJsonOptionOfListType(opt as CommandLineOptionOfListType, value, basePath, errors);
+                return convertJsonOptionOfListType(opt , value, basePath, errors);
             }
             else if (!isString(optType)) {
                 return convertJsonOptionOfCustomType(opt as CommandLineOptionOfCustomType, value as string, errors);
@@ -3499,7 +3512,7 @@ namespace ts {
                     ? WatchDirectoryFlags.Recursive : WatchDirectoryFlags.None
             };
         }
-        if (isImplicitGlob(spec)) {
+        if (isImplicitGlob(spec.substring(spec.lastIndexOf(directorySeparator) + 1))) {
             return {
                 key: useCaseSensitiveFileNames ? spec : toFileNameLowerCase(spec),
                 flags: WatchDirectoryFlags.Recursive

@@ -43,7 +43,7 @@ class E {
     b: typeof this.x; // ok
 >b : any
 >this.x : any
->this : any
+>this : this
 >x : any
 
     constructor(public x) { }

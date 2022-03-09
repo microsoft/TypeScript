@@ -23,34 +23,6 @@ namespace ts {
     export const emptyMap: ReadonlyESMap<never, never> = new Map<never, never>();
     export const emptySet: ReadonlySet<never> = new Set<never>();
 
-    /**
-     * Create a new map.
-     * @deprecated Use `new Map()` instead.
-     */
-    export function createMap<K, V>(): ESMap<K, V>;
-    export function createMap<T>(): ESMap<string, T>;
-    export function createMap<K, V>(): ESMap<K, V> {
-        return new Map<K, V>();
-    }
-
-    /**
-     * Create a new map from a template object is provided, the map will copy entries from it.
-     * @deprecated Use `new Map(getEntries(template))` instead.
-     */
-    export function createMapFromTemplate<T>(template: MapLike<T>): ESMap<string, T> {
-        const map: ESMap<string, T> = new Map<string, T>();
-
-        // Copies keys/values from template. Note that for..in will not throw if
-        // template is undefined, and instead will just exit the loop.
-        for (const key in template) {
-            if (hasOwnProperty.call(template, key)) {
-                map.set(key, template[key]);
-            }
-        }
-
-        return map;
-    }
-
     export function length(array: readonly any[] | undefined): number {
         return array ? array.length : 0;
     }
@@ -798,7 +770,11 @@ namespace ts {
         return deduplicated as any as SortedReadonlyArray<T>;
     }
 
-    export function insertSorted<T>(array: SortedArray<T>, insert: T, compare: Comparer<T>): void {
+    export function createSortedArray<T>(): SortedArray<T> {
+        return [] as any as SortedArray<T>; // TODO: GH#19873
+    }
+
+    export function insertSorted<T>(array: SortedArray<T>, insert: T, compare: Comparer<T>, allowDuplicates?: boolean): void {
         if (array.length === 0) {
             array.push(insert);
             return;
@@ -807,6 +783,9 @@ namespace ts {
         const insertIndex = binarySearch(array, insert, identity, compare);
         if (insertIndex < 0) {
             array.splice(~insertIndex, 0, insert);
+        }
+        else if (allowDuplicates) {
+            array.splice(insertIndex, 0, insert);
         }
     }
 
@@ -1273,11 +1252,11 @@ namespace ts {
         return result;
     }
 
-    export function getOwnValues<T>(sparseArray: T[]): T[] {
+    export function getOwnValues<T>(collection: MapLike<T> | T[]): T[] {
         const values: T[] = [];
-        for (const key in sparseArray) {
-            if (hasOwnProperty.call(sparseArray, key)) {
-                values.push(sparseArray[key]);
+        for (const key in collection) {
+            if (hasOwnProperty.call(collection, key)) {
+                values.push((collection as MapLike<T>)[key]);
             }
         }
 
