@@ -7014,9 +7014,13 @@ namespace ts {
                             else {
                                 // A Class + Property merge is made for a `module.exports.Member = class {}`, and it doesn't serialize well as either a class _or_ a property symbol - in fact, _it behaves like an alias!_
                                 // `var` is `FunctionScopedVariable`, `const` and `let` are `BlockScopedVariable`, and `module.exports.thing =` is `Property`
-                                const flags = !(symbol.flags & SymbolFlags.BlockScopedVariable) ? undefined
-                                    : isConstVariable(symbol) ? NodeFlags.Const
-                                    : NodeFlags.Let;
+                                const flags = !(symbol.flags & SymbolFlags.BlockScopedVariable)
+                                    ? symbol.parent?.valueDeclaration && isSourceFile(symbol.parent?.valueDeclaration)
+                                        ? NodeFlags.Const // exports are immutable in es6, which is what we emulate and check; so it's safe to mark all exports as `const` (there's no difference to consumers, but it allows unique symbol type declarations)
+                                        : undefined
+                                    : isConstVariable(symbol)
+                                        ? NodeFlags.Const
+                                        : NodeFlags.Let;
                                 const name = (needsPostExportDefault || !(symbol.flags & SymbolFlags.Property)) ? localName : getUnusedName(localName, symbol);
                                 let textRange: Node | undefined = symbol.declarations && find(symbol.declarations, d => isVariableDeclaration(d));
                                 if (textRange && isVariableDeclarationList(textRange.parent) && textRange.parent.declarations.length === 1) {
@@ -9180,7 +9184,10 @@ namespace ts {
             if (containsSameNamedThisProperty(expression.left, expression.right)) {
                 return anyType;
             }
-            const type = resolvedSymbol ? getTypeOfSymbol(resolvedSymbol) : getWidenedLiteralType(checkExpressionCached(expression.right));
+            const isDirectExport = kind === AssignmentDeclarationKind.ExportsProperty && (isPropertyAccessExpression(expression.left) || isElementAccessExpression(expression.left)) && (isModuleExportsAccessExpression(expression.left.expression) || (isIdentifier(expression.left.expression) && isExportsIdentifier(expression.left.expression)));
+            const type = resolvedSymbol ? getTypeOfSymbol(resolvedSymbol)
+                : isDirectExport ? getRegularTypeOfLiteralType(checkExpressionCached(expression.right))
+                : getWidenedLiteralType(checkExpressionCached(expression.right));
             if (type.flags & TypeFlags.Object &&
                 kind === AssignmentDeclarationKind.ModuleExports &&
                 symbol.escapedName === InternalSymbolName.ExportEquals) {
@@ -16418,9 +16425,11 @@ namespace ts {
 
         function getESSymbolLikeTypeForNode(node: Node) {
             if (isValidESSymbolDeclaration(node)) {
-                const symbol = getSymbolOfNode(node);
-                const links = getSymbolLinks(symbol);
-                return links.uniqueESSymbolType || (links.uniqueESSymbolType = createUniqueESSymbolType(symbol));
+                const symbol = isCommonJsExportPropertyAssignment(node) ? getSymbolOfNode((node as BinaryExpression).left) : getSymbolOfNode(node);
+                if (symbol) {
+                    const links = getSymbolLinks(symbol);
+                    return links.uniqueESSymbolType || (links.uniqueESSymbolType = createUniqueESSymbolType(symbol));
+                }
             }
             return esSymbolType;
         }
@@ -34209,7 +34218,7 @@ namespace ts {
 
         function checkExpressionForMutableLocation(node: Expression, checkMode: CheckMode | undefined, contextualType?: Type, forceTuple?: boolean): Type {
             const type = checkExpression(node, checkMode, forceTuple);
-            return isConstContext(node) ? getRegularTypeOfLiteralType(type) :
+            return isConstContext(node) || isCommonJsExportedExpression(node) ? getRegularTypeOfLiteralType(type) :
                 isTypeAssertion(node) ? type :
                 getWidenedLiteralLikeTypeForContextualType(type, instantiateContextualType(arguments.length === 2 ? getContextualType(node) : contextualType, node));
         }
