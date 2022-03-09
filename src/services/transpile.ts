@@ -73,7 +73,15 @@ namespace ts {
 
         // if jsx is specified then treat file as .tsx
         const inputFileName = transpileOptions.fileName || (transpileOptions.compilerOptions && transpileOptions.compilerOptions.jsx ? "module.tsx" : "module.ts");
-        const sourceFile = createSourceFile(inputFileName, input, { languageVersion: getEmitScriptTarget(options), impliedNodeFormat: getImpliedNodeFormatForFile(toPath(inputFileName, "", compilerHost.getCanonicalFileName), /*cache*/ undefined, compilerHost, options), setExternalModuleIndicator: getSetExternalModuleIndicator(options) });
+        const sourceFile = createSourceFile(
+            inputFileName,
+            input,
+            {
+                languageVersion: getEmitScriptTarget(options),
+                impliedNodeFormat: getImpliedNodeFormatForFile(toPath(inputFileName, "", compilerHost.getCanonicalFileName), /*cache*/ undefined, compilerHost, options),
+                setExternalModuleIndicator: getSetExternalModuleIndicator(options)
+            }
+        );
         if (transpileOptions.moduleName) {
             sourceFile.moduleName = transpileOptions.moduleName;
         }

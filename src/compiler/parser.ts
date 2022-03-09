@@ -703,14 +703,19 @@ namespace ts {
         let result: SourceFile;
 
         perfLogger.logStartParseSourceFile(fileName);
-        const languageVersion = typeof languageVersionOrOptions === "object" ? languageVersionOrOptions.languageVersion : languageVersionOrOptions;
+        const {
+            languageVersion,
+            setExternalModuleIndicator: overrideSetExternalModuleIndicator,
+            impliedNodeFormat: format
+        } = typeof languageVersionOrOptions === "object" ? languageVersionOrOptions : ({ languageVersion: languageVersionOrOptions } as CreateSourceFileOptions);
         if (languageVersion === ScriptTarget.JSON) {
             result = Parser.parseSourceFile(fileName, sourceText, languageVersion, /*syntaxCursor*/ undefined, setParentNodes, ScriptKind.JSON, noop);
         }
         else {
-            const overrideSetExternalModuleIndicator = typeof languageVersionOrOptions === "object" ? languageVersionOrOptions.setExternalModuleIndicator : undefined;
-            const format = typeof languageVersionOrOptions === "object" ? languageVersionOrOptions.impliedNodeFormat : undefined;
-            const setIndicator = format !== undefined ? (file: SourceFile) => (file.impliedNodeFormat = format, void (overrideSetExternalModuleIndicator || setExternalModuleIndicator)(file)) : overrideSetExternalModuleIndicator;
+            const setIndicator = format === undefined ? overrideSetExternalModuleIndicator : (file: SourceFile) => {
+                file.impliedNodeFormat = format;
+                return (overrideSetExternalModuleIndicator || setExternalModuleIndicator)(file);
+            };
             result = Parser.parseSourceFile(fileName, sourceText, languageVersion, /*syntaxCursor*/ undefined, setParentNodes, scriptKind, setIndicator);
         }
         perfLogger.logStopParseSourceFile();

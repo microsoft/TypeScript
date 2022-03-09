@@ -6211,12 +6211,13 @@ namespace ts {
      * Unfortunately, there's no `NodeFlag` space to do the same for JSX.
      */
     function walkTreeForJSXTags(node: Node): Node | undefined {
+        if (!(node.transformFlags & TransformFlags.ContainsJsx)) return undefined;
         return isJsxOpeningLikeElement(node) || isJsxFragment(node) ? node : forEachChild(node, walkTreeForJSXTags);
     }
 
     function isFileModuleFromUsingJSXTag(file: SourceFile): Node | undefined {
         // Excludes declaration files - they still require an explicit `export {}` or the like
-        // for back compat purposes. (not that declaration files should contian JSX tags!)
+        // for back compat purposes. (not that declaration files should contain JSX tags!)
         return !file.isDeclarationFile ? walkTreeForJSXTags(file) : undefined;
     }
 
@@ -6235,10 +6236,10 @@ namespace ts {
         switch (getEmitModuleDetectionKind(options)) {
             case ModuleDetectionKind.Force:
                 // All non-declaration files are modules, declaration files still do the usual isFileProbablyExternalModule
-                return (file: SourceFile) => void (file.externalModuleIndicator = !file.isDeclarationFile || isFileProbablyExternalModule(file));
+                return (file: SourceFile) => { file.externalModuleIndicator = !file.isDeclarationFile || isFileProbablyExternalModule(file); };
             case ModuleDetectionKind.Legacy:
                 // Files are modules if they have imports, exports, or import.meta
-                return (file: SourceFile) => void (file.externalModuleIndicator = isFileProbablyExternalModule(file));
+                return (file: SourceFile) => { file.externalModuleIndicator = isFileProbablyExternalModule(file); };
             case ModuleDetectionKind.Auto:
                 // If module is nodenext or node12, all esm format files are modules
                 // If jsx is react-jsx or react-jsxdev then jsx tags force module-ness
