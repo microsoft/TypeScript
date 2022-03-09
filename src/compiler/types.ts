@@ -6156,6 +6156,7 @@ namespace ts {
         project?: string;
         /* @internal */ pretty?: boolean;
         reactNamespace?: string;
+        resolveFromOutDir?: boolean;
         jsxFactory?: string;
         jsxFragmentFactory?: string;
         jsxImportSource?: string;

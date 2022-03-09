@@ -839,6 +839,14 @@ namespace ts {
             description: Diagnostics.Specify_multiple_folders_that_act_like_Slashnode_modules_Slash_types
         },
         {
+            name: "resolveFromOutDir",
+            type: "boolean",
+            affectsModuleResolution: true,
+            category: Diagnostics.Modules,
+            description: Diagnostics.Allow_resolving_files_relative_to_the_output_directory,
+            defaultValueDescription: false
+        },
+        {
             name: "types",
             type: "list",
             element: {

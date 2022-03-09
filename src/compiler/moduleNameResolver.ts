@@ -1026,12 +1026,13 @@ namespace ts {
     type ResolutionKindSpecificLoader = (extensions: Extensions, candidate: string, onlyRecordFailures: boolean, state: ModuleResolutionState) => Resolved | undefined;
 
     /**
-     * Any module resolution kind can be augmented with optional settings: 'baseUrl', 'paths' and 'rootDirs' - they are used to
+     * Any module resolution kind can be augmented with optional settings: 'baseUrl', 'resolveFromOutDir', 'paths' and 'rootDirs' - they are used to
      * mitigate differences between design time structure of the project and its runtime counterpart so the same import name
      * can be resolved successfully by TypeScript compiler and runtime module loader.
      * If these settings are set then loading procedure will try to use them to resolve module name and it can of failure it will
      * fallback to standard resolution routine.
      *
+     * 'resolveFromOutDir': TODO document the semantics
      * - baseUrl - this setting controls how non-relative module names are resolved. If this setting is specified then non-relative
      * names will be resolved relative to baseUrl: i.e. if baseUrl is '/a/b' then candidate location to resolve module name 'c/d' will
      * be '/a/b/c/d'
@@ -1088,6 +1089,9 @@ namespace ts {
     function tryLoadModuleUsingOptionalResolutionSettings(extensions: Extensions, moduleName: string, containingDirectory: string, loader: ResolutionKindSpecificLoader,
         state: ModuleResolutionState): Resolved | undefined {
 
+        const resolvedFromOutDir = tryLoadModuleUsingOutDirIfEligible(extensions, moduleName, containingDirectory, loader, state);
+        if (resolvedFromOutDir) return resolvedFromOutDir;
+
         const resolved = tryLoadModuleUsingPathsIfEligible(extensions, moduleName, loader, state);
         if (resolved) return resolved.value;
 
@@ -1112,6 +1116,51 @@ namespace ts {
             const pathPatterns = configFile?.configFileSpecs ? configFile.configFileSpecs.pathPatterns ||= tryParsePatterns(paths) : undefined;
             return tryLoadModuleUsingPaths(extensions, moduleName, baseDirectory, paths, pathPatterns, loader, /*onlyRecordFailures*/ false, state);
         }
+    }
+
+    function tryLoadModuleUsingOutDirIfEligible(extensions: Extensions, moduleName: string, containingDirectory: string, loader: ResolutionKindSpecificLoader, state: ModuleResolutionState): Resolved | undefined {
+        const { baseUrl, resolveFromOutDir, outDir, rootDir } = state.compilerOptions;
+        if (!resolveFromOutDir) {
+            return undefined;
+        }
+        if (!outDir) {
+            return undefined;
+        }
+        if (state.traceEnabled) {
+            trace(state.host, Diagnostics.resolveFromOutDir_option_is_set_using_it_to_resolve_relative_module_name_0, moduleName);
+        }
+
+        // COMMENT FOR REVIEWER: Is there a more robust way to determine the base directory here?
+        var baseDirectory = baseUrl;
+        if (!baseDirectory && state.host.getCurrentDirectory) {
+            baseDirectory = state.host.getCurrentDirectory();
+        }
+        if (!baseDirectory) {
+            return undefined;
+        }
+
+        // COMMENT FOR REVIEWER: I've seen rootDir be relative path and and absolute path so
+        // handling both cases here to come up with an absolute normalizedPrefix path
+        var normalizedPrefix = rootDir && ts.startsWith(rootDir, ts.directorySeparator) ?
+            ts.normalizePath(rootDir) :
+            ts.normalizePath(ts.combinePaths(baseDirectory, rootDir));
+        var candidate = ts.normalizePath(ts.combinePaths(containingDirectory, moduleName));
+
+        // COMMENT FOR REVIEWER: No ts.relativePath() function that I could find. Is there one
+        // somewhere that I'm not aware of?
+        var suffix = require("path").relative(normalizedPrefix, candidate);
+        candidate = ts.normalizePath(ts.combinePaths(baseDirectory, outDir, suffix))
+        if (state.traceEnabled) {
+            trace(state.host, Diagnostics.Loading_0_from_the_out_dir_1_candidate_location_2, suffix, outDir, candidate);
+        }
+        const resolvedFileName = loader(extensions, candidate, !directoryProbablyExists(containingDirectory, state.host), state);
+        if (resolvedFileName) {
+            return resolvedFileName;
+        }
+        if (state.traceEnabled) {
+            trace(state.host, Diagnostics.Module_resolution_using_outDir_has_failed);
+        }
+        return undefined;
     }
 
     function tryLoadModuleUsingRootDirs(extensions: Extensions, moduleName: string, containingDirectory: string, loader: ResolutionKindSpecificLoader,
