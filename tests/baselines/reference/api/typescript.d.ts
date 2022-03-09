@@ -424,7 +424,8 @@ declare namespace ts {
         JSDocFunctionType = 316,
         JSDocVariadicType = 317,
         JSDocNamepathType = 318,
-        JSDoc = 319,
+        /** @deprecated Use SyntaxKind.JSDoc */
+        JSDocComment = 319,
         JSDocText = 320,
         JSDocTypeLiteral = 321,
         JSDocSignature = 322,
@@ -491,6 +492,7 @@ declare namespace ts {
         LastJSDocNode = 346,
         FirstJSDocTagNode = 326,
         LastJSDocTagNode = 346,
+        JSDoc = 319
     }
     export type TriviaSyntaxKind = SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia | SyntaxKind.NewLineTrivia | SyntaxKind.WhitespaceTrivia | SyntaxKind.ShebangTrivia | SyntaxKind.ConflictMarkerTrivia;
     export type LiteralSyntaxKind = SyntaxKind.NumericLiteral | SyntaxKind.BigIntLiteral | SyntaxKind.StringLiteral | SyntaxKind.JsxText | SyntaxKind.JsxTextAllWhiteSpaces | SyntaxKind.RegularExpressionLiteral | SyntaxKind.NoSubstitutionTemplateLiteral;
