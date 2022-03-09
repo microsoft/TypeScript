@@ -215,6 +215,39 @@ namespace fakes {
     }
 
     /**
+     * @implements {server.ServerHost} but that would create a circular dependency
+     */
+    export class FakeServerHost extends System {
+        watchFile(/*path: string, callback: ts.FileWatcherCallback, pollingInterval?: number, options?: ts.WatchOptions*/): ts.FileWatcher {
+            throw new Error("Not implemented: Still need to steal implementation from virtualFileSystemWithWatch.ts")
+            return {
+                close() {
+                }
+            }
+        }
+        watchDirectory(/*path: string, callback: ts.DirectoryWatcherCallback, recursive?: boolean, options?: ts.WatchOptions*/): ts.FileWatcher {
+            throw new Error("Not implemented: Still need to steal implementation from virtualFileSystemWithWatch.ts")
+            return {
+                close() {
+                }
+            }
+        }
+        setTimeout(callback: (...args: any[]) => void, ms: number, ...args: any[]): any {
+            // TODO: Probably want to do a fake thing, actually (or parametrised by the constructor)
+            return setTimeout(callback, ms, ...args)
+        }
+        clearTimeout(timeoutId: any): void {
+            clearTimeout(timeoutId)
+        }
+        setImmediate(callback: (...args: any[]) => void, ...args: any[]): any {
+            return setImmediate(callback, ...args)
+        }
+        clearImmediate(timeoutId: any): void {
+            clearImmediate(timeoutId)
+        }
+    }
+
+    /**
      * A fake `ts.CompilerHost` that leverages a virtual file system.
      */
     export class FakeCompilerHost implements ts.CompilerHost {

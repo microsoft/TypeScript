@@ -757,7 +757,7 @@ namespace ts.server {
         readonly currentDirectory: NormalizedPath;
         readonly toCanonicalFileName: (f: string) => string;
 
-        public readonly host: ServerHost;
+        public host: ServerHost;
         public fs: vfs.FileSystem | undefined;
         public readonly logger: Logger;
         public readonly cancellationToken: HostCancellationToken;
@@ -3704,7 +3704,8 @@ namespace ts.server {
                     cwd: "/", // maybe not needed
                     meta: { } // probably not needed
                 })
-                ;(this.session as any).host = new fakes.FakeCompilerHost(this.fs, {}) // TODO: Grab the real current options
+                ;(this as any).host = new fakes.FakeServerHost(this.fs, { executingFilePath: "TEST" })
+                ;(this.session as any).host = this.host
             }
             if (createdFiles) {
                 let it
