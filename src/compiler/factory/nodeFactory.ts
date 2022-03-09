@@ -4740,7 +4740,7 @@ namespace ts {
 
         // @api
         function createJSDocComment(comment?: string | NodeArray<JSDocComment> | undefined, tags?: readonly JSDocTag[] | undefined) {
-            const node = createBaseNode<JSDoc>(SyntaxKind.JSDocComment);
+            const node = createBaseNode<JSDoc>(SyntaxKind.JSDoc);
             node.comment = comment;
             node.tags = asNodeArray(tags);
             return node;

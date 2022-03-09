@@ -495,7 +495,7 @@ namespace ts {
             case SyntaxKind.JSDocFunctionType:
                 return visitNodes(cbNode, cbNodes, (node as JSDocFunctionType).parameters) ||
                     visitNode(cbNode, (node as JSDocFunctionType).type);
-            case SyntaxKind.JSDocComment:
+            case SyntaxKind.JSDoc:
                 return (typeof (node as JSDoc).comment === "string" ? undefined : visitNodes(cbNode, cbNodes, (node as JSDoc).comment as NodeArray<JSDocComment> | undefined))
                     || visitNodes(cbNode, cbNodes, (node as JSDoc).tags);
             case SyntaxKind.JSDocSeeTag:

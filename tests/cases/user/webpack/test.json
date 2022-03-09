@@ -1,4 +1,5 @@
 {
     "cloneUrl": "https://github.com/webpack/webpack.git",
+    "branch": "main",
     "types": []
 }

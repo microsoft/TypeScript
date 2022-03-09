@@ -290,7 +290,7 @@ namespace ts {
             shortName: "i",
             type: "boolean",
             category: Diagnostics.Projects,
-            description: Diagnostics.Enable_incremental_compilation,
+            description: Diagnostics.Save_tsbuildinfo_files_to_allow_for_incremental_compilation_of_projects,
             transpileOptionValue: undefined,
             defaultValueDescription: Diagnostics.false_unless_composite_is_set
         },
@@ -695,7 +695,7 @@ namespace ts {
             affectsSemanticDiagnostics: true,
             strictFlag: true,
             category: Diagnostics.Type_Checking,
-            description: Diagnostics.Type_catch_clause_variables_as_unknown_instead_of_any,
+            description: Diagnostics.Default_catch_clause_variables_as_unknown_instead_of_any,
             defaultValueDescription: false,
         },
         {
@@ -714,7 +714,7 @@ namespace ts {
             type: "boolean",
             affectsSemanticDiagnostics: true,
             category: Diagnostics.Type_Checking,
-            description: Diagnostics.Enable_error_reporting_when_a_local_variables_aren_t_read,
+            description: Diagnostics.Enable_error_reporting_when_local_variables_aren_t_read,
             defaultValueDescription: false,
         },
         {
@@ -755,7 +755,7 @@ namespace ts {
             type: "boolean",
             affectsSemanticDiagnostics: true,
             category: Diagnostics.Type_Checking,
-            description: Diagnostics.Include_undefined_in_index_signature_results,
+            description: Diagnostics.Add_undefined_to_a_type_when_accessed_using_an_index,
             defaultValueDescription: false,
         },
         {
@@ -1237,7 +1237,7 @@ namespace ts {
                 name: "plugin",
                 type: "object"
             },
-            description: Diagnostics.List_of_language_service_plugins,
+            description: Diagnostics.Specify_a_list_of_language_service_plugins_to_include,
             category: Diagnostics.Editor_Support,
 
         },

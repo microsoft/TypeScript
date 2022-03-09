@@ -1596,7 +1596,7 @@ namespace ts {
                         return emitRestOrJSDocVariadicType(node as RestTypeNode | JSDocVariadicType);
                     case SyntaxKind.JSDocNamepathType:
                         return;
-                    case SyntaxKind.JSDocComment:
+                    case SyntaxKind.JSDoc:
                         return emitJSDoc(node as JSDoc);
                     case SyntaxKind.JSDocTypeLiteral:
                         return emitJSDocTypeLiteral(node as JSDocTypeLiteral);
