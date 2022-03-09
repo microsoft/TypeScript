@@ -6236,10 +6236,14 @@ namespace ts {
         switch (getEmitModuleDetectionKind(options)) {
             case ModuleDetectionKind.Force:
                 // All non-declaration files are modules, declaration files still do the usual isFileProbablyExternalModule
-                return (file: SourceFile) => { file.externalModuleIndicator = !file.isDeclarationFile || isFileProbablyExternalModule(file); };
+                return (file: SourceFile) => {
+                    file.externalModuleIndicator = !file.isDeclarationFile || isFileProbablyExternalModule(file);
+                };
             case ModuleDetectionKind.Legacy:
                 // Files are modules if they have imports, exports, or import.meta
-                return (file: SourceFile) => { file.externalModuleIndicator = isFileProbablyExternalModule(file); };
+                return (file: SourceFile) => {
+                    file.externalModuleIndicator = isFileProbablyExternalModule(file);
+                };
             case ModuleDetectionKind.Auto:
                 // If module is nodenext or node12, all esm format files are modules
                 // If jsx is react-jsx or react-jsxdev then jsx tags force module-ness
