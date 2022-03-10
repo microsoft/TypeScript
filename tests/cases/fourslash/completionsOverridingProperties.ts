@@ -25,12 +25,7 @@ verify.completions({
     includes: [
         {
             name: "foo",
-            sortText: completion.SortText.LocationPriority,
-            replacementSpan: {
-                fileName: "",
-                pos: 0,
-                end: 0,
-            },
+            sortText: completion.SortText.AutoImportSuggestions,
             insertText: "protected foo: string;",
         }
     ],
