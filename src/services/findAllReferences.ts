@@ -427,7 +427,7 @@ namespace ts.FindAllReferences {
             isWriteAccess: isWriteAccessForReference(node),
             isDefinition: isDefinitionForReference(node),
             isInString: kind === EntryKind.StringLiteral ? true : undefined,
-            isStartingPoint: (adjustedStartingNode && !!findAncestor(node, n => n === adjustedStartingNode)) ? true : undefined, // TODO (acasey): depth limit
+            isStartingPoint: (adjustedStartingNode && (adjustedStartingNode === node || adjustedStartingNode === node?.parent || adjustedStartingNode === node?.parent?.parent)) || undefined,
         };
     }
 
