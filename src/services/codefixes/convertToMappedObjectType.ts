@@ -42,7 +42,7 @@ namespace ts.codefix {
         const members = isInterfaceDeclaration(container) ? container.members : (container.type as TypeLiteralNode).members;
         const otherMembers = members.filter(member => !isIndexSignatureDeclaration(member));
         const parameter = first(indexSignature.parameters);
-        const mappedTypeParameter = factory.createTypeParameterDeclaration(cast(parameter.name, isIdentifier), parameter.type);
+        const mappedTypeParameter = factory.createTypeParameterDeclaration(/*modifiers*/ undefined, cast(parameter.name, isIdentifier), parameter.type);
         const mappedIntersectionType = factory.createMappedTypeNode(
             hasEffectiveReadonlyModifier(indexSignature) ? factory.createModifier(SyntaxKind.ReadonlyKeyword) : undefined,
             mappedTypeParameter,

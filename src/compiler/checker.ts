@@ -5108,7 +5108,7 @@ namespace ts {
                         // type stays homomorphic
                         return factory.createConditionalTypeNode(
                             typeToTypeNodeHelper(getModifiersTypeFromMappedType(type), context),
-                            factory.createInferTypeNode(factory.createTypeParameterDeclaration(factory.cloneNode(newTypeVariable!.typeName) as Identifier)),
+                            factory.createInferTypeNode(factory.createTypeParameterDeclaration(/*modifiers*/ undefined, factory.cloneNode(newTypeVariable!.typeName) as Identifier)),
                             result,
                             factory.createKeywordTypeNode(SyntaxKind.NeverKeyword)
                         );
@@ -5800,7 +5800,7 @@ namespace ts {
                 const defaultParameter = getDefaultFromTypeParameter(type);
                 const defaultParameterNode = defaultParameter && typeToTypeNodeHelper(defaultParameter, context);
                 context.flags = savedContextFlags;
-                return factory.createTypeParameterDeclaration(name, constraintNode, defaultParameterNode);
+                return factory.createTypeParameterDeclaration(/*modifiers*/ undefined, name, constraintNode, defaultParameterNode);
             }
 
             function typeParameterToDeclaration(type: TypeParameter, context: NodeBuilderContext, constraint = getConstraintOfTypeParameter(type)): TypeParameterDeclaration {

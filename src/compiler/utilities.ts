@@ -5003,6 +5003,8 @@ namespace ts {
             case SyntaxKind.AsyncKeyword: return ModifierFlags.Async;
             case SyntaxKind.ReadonlyKeyword: return ModifierFlags.Readonly;
             case SyntaxKind.OverrideKeyword: return ModifierFlags.Override;
+            case SyntaxKind.InKeyword: return ModifierFlags.In;
+            case SyntaxKind.OutKeyword: return ModifierFlags.Out;
         }
         return ModifierFlags.None;
     }

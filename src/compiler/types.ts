@@ -176,6 +176,7 @@ namespace ts {
         ModuleKeyword,
         NamespaceKeyword,
         NeverKeyword,
+        OutKeyword,
         ReadonlyKeyword,
         RequireKeyword,
         NumberKeyword,
@@ -602,6 +603,7 @@ namespace ts {
         | SyntaxKind.ProtectedKeyword
         | SyntaxKind.PublicKeyword
         | SyntaxKind.ReadonlyKeyword
+        | SyntaxKind.OutKeyword
         | SyntaxKind.OverrideKeyword
         | SyntaxKind.RequireKeyword
         | SyntaxKind.ReturnKeyword
@@ -634,10 +636,12 @@ namespace ts {
         | SyntaxKind.DeclareKeyword
         | SyntaxKind.DefaultKeyword
         | SyntaxKind.ExportKeyword
+        | SyntaxKind.InKeyword
         | SyntaxKind.PrivateKeyword
         | SyntaxKind.ProtectedKeyword
         | SyntaxKind.PublicKeyword
         | SyntaxKind.ReadonlyKeyword
+        | SyntaxKind.OutKeyword
         | SyntaxKind.OverrideKeyword
         | SyntaxKind.StaticKeyword
         ;
@@ -817,6 +821,8 @@ namespace ts {
 
         Deprecated =         1 << 13, // Deprecated tag.
         Override =           1 << 14, // Override method.
+        In =                 1 << 15, // Contravariance modifier
+        Out =                1 << 16, // Covariance modifier
         HasComputedFlags =   1 << 29, // Modifier flags have been computed
 
         AccessibilityModifier = Public | Private | Protected,
@@ -824,9 +830,9 @@ namespace ts {
         ParameterPropertyModifier = AccessibilityModifier | Readonly | Override,
         NonPublicAccessibilityModifier = Private | Protected,
 
-        TypeScriptModifier = Ambient | Public | Private | Protected | Readonly | Abstract | Const | Override,
+        TypeScriptModifier = Ambient | Public | Private | Protected | Readonly | Abstract | Const | Override | In | Out,
         ExportDefault = Export | Default,
-        All = Export | Ambient | Public | Private | Protected | Static | Readonly | Abstract | Async | Default | Const | Deprecated | Override
+        All = Export | Ambient | Public | Private | Protected | Static | Readonly | Abstract | Async | Default | Const | Deprecated | Override | In | Out
     }
 
     export const enum JsxFlags {
@@ -1066,10 +1072,12 @@ namespace ts {
     export type DeclareKeyword = ModifierToken<SyntaxKind.DeclareKeyword>;
     export type DefaultKeyword = ModifierToken<SyntaxKind.DefaultKeyword>;
     export type ExportKeyword = ModifierToken<SyntaxKind.ExportKeyword>;
+    export type InKeyword = ModifierToken<SyntaxKind.InKeyword>;
     export type PrivateKeyword = ModifierToken<SyntaxKind.PrivateKeyword>;
     export type ProtectedKeyword = ModifierToken<SyntaxKind.ProtectedKeyword>;
     export type PublicKeyword = ModifierToken<SyntaxKind.PublicKeyword>;
     export type ReadonlyKeyword = ModifierToken<SyntaxKind.ReadonlyKeyword>;
+    export type OutKeyword = ModifierToken<SyntaxKind.OutKeyword>;
     export type OverrideKeyword = ModifierToken<SyntaxKind.OverrideKeyword>;
     export type StaticKeyword = ModifierToken<SyntaxKind.StaticKeyword>;
 
@@ -1083,9 +1091,11 @@ namespace ts {
         | DeclareKeyword
         | DefaultKeyword
         | ExportKeyword
+        | InKeyword
         | PrivateKeyword
         | ProtectedKeyword
         | PublicKeyword
+        | OutKeyword
         | OverrideKeyword
         | ReadonlyKeyword
         | StaticKeyword
@@ -7208,8 +7218,8 @@ namespace ts {
         // Signature elements
         //
 
-        createTypeParameterDeclaration(name: string | Identifier, constraint?: TypeNode, defaultType?: TypeNode): TypeParameterDeclaration;
-        updateTypeParameterDeclaration(node: TypeParameterDeclaration, name: Identifier, constraint: TypeNode | undefined, defaultType: TypeNode | undefined): TypeParameterDeclaration;
+        createTypeParameterDeclaration(modifiers: readonly Modifier[] | undefined, name: string | Identifier, constraint?: TypeNode, defaultType?: TypeNode): TypeParameterDeclaration;
+        updateTypeParameterDeclaration(node: TypeParameterDeclaration, modifiers: readonly Modifier[] | undefined, name: Identifier, constraint: TypeNode | undefined, defaultType: TypeNode | undefined): TypeParameterDeclaration;
         createParameterDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, dotDotDotToken: DotDotDotToken | undefined, name: string | BindingName, questionToken?: QuestionToken, type?: TypeNode, initializer?: Expression): ParameterDeclaration;
         updateParameterDeclaration(node: ParameterDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, dotDotDotToken: DotDotDotToken | undefined, name: string | BindingName, questionToken: QuestionToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined): ParameterDeclaration;
         createDecorator(expression: Expression): Decorator;

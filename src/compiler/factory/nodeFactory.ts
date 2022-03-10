@@ -998,6 +998,8 @@ namespace ts {
                 case SyntaxKind.BigIntKeyword:
                 case SyntaxKind.NeverKeyword:
                 case SyntaxKind.ObjectKeyword:
+                case SyntaxKind.InKeyword:
+                case SyntaxKind.OutKeyword:
                 case SyntaxKind.OverrideKeyword:
                 case SyntaxKind.StringKeyword:
                 case SyntaxKind.BooleanKeyword:
@@ -1077,6 +1079,8 @@ namespace ts {
             if (flags & ModifierFlags.Override) result.push(createModifier(SyntaxKind.OverrideKeyword));
             if (flags & ModifierFlags.Readonly) result.push(createModifier(SyntaxKind.ReadonlyKeyword));
             if (flags & ModifierFlags.Async) result.push(createModifier(SyntaxKind.AsyncKeyword));
+            if (flags & ModifierFlags.In) result.push(createModifier(SyntaxKind.InKeyword));
+            if (flags & ModifierFlags.Out) result.push(createModifier(SyntaxKind.OutKeyword));
             return result.length ? result : undefined;
         }
 
@@ -1126,11 +1130,11 @@ namespace ts {
         //
 
         // @api
-        function createTypeParameterDeclaration(name: string | Identifier, constraint?: TypeNode, defaultType?: TypeNode) {
+        function createTypeParameterDeclaration(modifiers: readonly Modifier[] | undefined, name: string | Identifier, constraint?: TypeNode, defaultType?: TypeNode) {
             const node = createBaseNamedDeclaration<TypeParameterDeclaration>(
                 SyntaxKind.TypeParameter,
                 /*decorators*/ undefined,
-                /*modifiers*/ undefined,
+                modifiers,
                 name
             );
             node.constraint = constraint;
@@ -1140,11 +1144,12 @@ namespace ts {
         }
 
         // @api
-        function updateTypeParameterDeclaration(node: TypeParameterDeclaration, name: Identifier, constraint: TypeNode | undefined, defaultType: TypeNode | undefined) {
-            return node.name !== name
+        function updateTypeParameterDeclaration(node: TypeParameterDeclaration, modifiers: readonly Modifier[] | undefined, name: Identifier, constraint: TypeNode | undefined, defaultType: TypeNode | undefined) {
+            return node.modifiers !== modifiers
+                || node.name !== name
                 || node.constraint !== constraint
                 || node.default !== defaultType
-                ? update(createTypeParameterDeclaration(name, constraint, defaultType), node)
+                ? update(createTypeParameterDeclaration(modifiers, name, constraint, defaultType), node)
                 : node;
         }
 
