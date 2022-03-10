@@ -437,6 +437,8 @@ namespace ts.server {
         // We need to de-duplicate and aggregate the results by choosing an authoritative version
         // of each definition and merging references from all the projects where they appear.
 
+        // TODO (acasey): this work is redundant when giving simplified results
+
         const results: ReferencedSymbol[] = [];
 
         for (const [project, projectResults] of arrayFrom(perProjectResults.entries())) {
@@ -1649,7 +1651,7 @@ namespace ts.server {
             const symbolStartOffset = nameSpan ? scriptInfo.positionToLineOffset(nameSpan.start).offset : 0;
             const symbolName = nameSpan ? scriptInfo.getSnapshot().getText(nameSpan.start, textSpanEnd(nameSpan)) : "";
             const refs: readonly protocol.ReferencesResponseItem[] = flatMap(references, referencedSymbol => {
-                return referencedSymbol.references.map(entry => referenceEntryToReferencesResponseItem(this.projectService, entry));
+                return referencedSymbol.references.map(entry => referenceEntryToReferencesResponseItem(this.projectService, entry)); // TODO (acasey): these should be de-dup'd
             });
             return { refs, symbolName, symbolStartOffset, symbolDisplayString };
         }
