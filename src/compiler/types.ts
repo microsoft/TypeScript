@@ -5238,7 +5238,6 @@ namespace ts {
         pattern?: DestructuringPattern;  // Destructuring pattern represented by type (if any)
         aliasSymbol?: Symbol;            // Alias associated with type
         aliasTypeArguments?: readonly Type[]; // Alias type arguments (if any)
-        /* @internal */ aliasTypeArgumentsContainsMarker?: boolean; // Alias type arguments (if any)
         /* @internal */
         permissiveInstantiation?: Type;  // Instantiation with type parameters mapped to wildcard type
         /* @internal */
@@ -5319,22 +5318,21 @@ namespace ts {
         ObjectLiteralPatternWithComputedProperties = 1 << 9,  // Object literal pattern with computed properties
         ReverseMapped    = 1 << 10, // Object contains a property from a reverse-mapped type
         JsxAttributes    = 1 << 11, // Jsx attributes type
-        MarkerType       = 1 << 12, // Marker type used for variance probing
-        JSLiteral        = 1 << 13, // Object type declared in JS - disables errors on read/write of nonexisting members
-        FreshLiteral     = 1 << 14, // Fresh object literal
-        ArrayLiteral     = 1 << 15, // Originates in an array literal
+        JSLiteral        = 1 << 12, // Object type declared in JS - disables errors on read/write of nonexisting members
+        FreshLiteral     = 1 << 13, // Fresh object literal
+        ArrayLiteral     = 1 << 14, // Originates in an array literal
         /* @internal */
-        PrimitiveUnion   = 1 << 16, // Union of only primitive types
+        PrimitiveUnion   = 1 << 15, // Union of only primitive types
         /* @internal */
-        ContainsWideningType = 1 << 17, // Type is or contains undefined or null widening type
+        ContainsWideningType = 1 << 16, // Type is or contains undefined or null widening type
         /* @internal */
-        ContainsObjectOrArrayLiteral = 1 << 18, // Type is or contains object literal type
+        ContainsObjectOrArrayLiteral = 1 << 17, // Type is or contains object literal type
         /* @internal */
-        NonInferrableType = 1 << 19, // Type is or contains anyFunctionType or silentNeverType
+        NonInferrableType = 1 << 18, // Type is or contains anyFunctionType or silentNeverType
         /* @internal */
-        CouldContainTypeVariablesComputed = 1 << 20, // CouldContainTypeVariables flag has been computed
+        CouldContainTypeVariablesComputed = 1 << 19, // CouldContainTypeVariables flag has been computed
         /* @internal */
-        CouldContainTypeVariables = 1 << 21, // Type could contain a type variable
+        CouldContainTypeVariables = 1 << 20, // Type could contain a type variable
 
         ClassOrInterface = Class | Interface,
         /* @internal */
@@ -5346,36 +5344,36 @@ namespace ts {
         ObjectTypeKindMask = ClassOrInterface | Reference | Tuple | Anonymous | Mapped | ReverseMapped | EvolvingArray,
 
         // Flags that require TypeFlags.Object
-        ContainsSpread   = 1 << 22,  // Object literal contains spread operation
-        ObjectRestType   = 1 << 23,  // Originates in object rest declaration
-        InstantiationExpressionType = 1 << 24,  // Originates in instantiation expression
+        ContainsSpread   = 1 << 21,  // Object literal contains spread operation
+        ObjectRestType   = 1 << 22,  // Originates in object rest declaration
+        InstantiationExpressionType = 1 << 23,  // Originates in instantiation expression
         /* @internal */
-        IsClassInstanceClone = 1 << 25, // Type is a clone of a class instance type
+        IsClassInstanceClone = 1 << 24, // Type is a clone of a class instance type
         // Flags that require TypeFlags.Object and ObjectFlags.Reference
         /* @internal */
-        IdenticalBaseTypeCalculated = 1 << 26, // has had `getSingleBaseForNonAugmentingSubtype` invoked on it already
+        IdenticalBaseTypeCalculated = 1 << 25, // has had `getSingleBaseForNonAugmentingSubtype` invoked on it already
         /* @internal */
-        IdenticalBaseTypeExists = 1 << 27, // has a defined cachedEquivalentBaseType member
+        IdenticalBaseTypeExists = 1 << 26, // has a defined cachedEquivalentBaseType member
 
         // Flags that require TypeFlags.UnionOrIntersection or TypeFlags.Substitution
         /* @internal */
-        IsGenericTypeComputed = 1 << 22, // IsGenericObjectType flag has been computed
+        IsGenericTypeComputed = 1 << 21, // IsGenericObjectType flag has been computed
         /* @internal */
-        IsGenericObjectType = 1 << 23, // Union or intersection contains generic object type
+        IsGenericObjectType = 1 << 22, // Union or intersection contains generic object type
         /* @internal */
-        IsGenericIndexType = 1 << 24, // Union or intersection contains generic index type
+        IsGenericIndexType = 1 << 23, // Union or intersection contains generic index type
         /* @internal */
         IsGenericType = IsGenericObjectType | IsGenericIndexType,
 
         // Flags that require TypeFlags.Union
         /* @internal */
-        ContainsIntersections = 1 << 25, // Union contains intersections
+        ContainsIntersections = 1 << 24, // Union contains intersections
 
         // Flags that require TypeFlags.Intersection
         /* @internal */
-        IsNeverIntersectionComputed = 1 << 25, // IsNeverLike flag has been computed
+        IsNeverIntersectionComputed = 1 << 24, // IsNeverLike flag has been computed
         /* @internal */
-        IsNeverIntersection = 1 << 26, // Intersection reduces to never
+        IsNeverIntersection = 1 << 25, // Intersection reduces to never
     }
 
     /* @internal */
