@@ -5,7 +5,7 @@ class Foo {}
 module.exports = new Foo();
 >module.exports = new Foo() : Foo
 >module.exports : Foo
->module : { "\"tests/cases/conformance/jsdoc/declarations/index\"": Foo; }
+>module : { exports: Foo; }
 >exports : Foo
 >new Foo() : Foo
 >Foo : typeof Foo

@@ -452,7 +452,7 @@ function fn<T extends {elements: Array<string>} | {elements: Array<number>}>(par
 >cb : (element: T["elements"][number]) => void
 >param.elements[0] : string | number
 >param.elements : string[] | number[]
->param : T
+>param : { elements: string[]; } | { elements: number[]; }
 >elements : string[] | number[]
 >0 : 0
 }

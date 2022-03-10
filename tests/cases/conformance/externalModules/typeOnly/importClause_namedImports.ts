@@ -9,3 +9,4 @@ new A();
 declare let a: A;
 declare let b: B;
 b.b;
+const c = { A };

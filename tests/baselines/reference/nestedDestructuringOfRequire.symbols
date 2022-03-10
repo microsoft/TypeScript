@@ -25,7 +25,7 @@ module.exports.chalk = chalk
 >module.exports.chalk : Symbol(chalk, Decl(mod1.js, 2, 2))
 >module.exports : Symbol(chalk, Decl(mod1.js, 2, 2))
 >module : Symbol(module, Decl(mod1.js, 2, 2))
->exports : Symbol("tests/cases/conformance/salsa/mod1", Decl(mod1.js, 0, 0))
+>exports : Symbol(module.exports, Decl(mod1.js, 0, 0))
 >chalk : Symbol(chalk, Decl(mod1.js, 2, 2))
 >chalk : Symbol(chalk, Decl(mod1.js, 0, 5))
 

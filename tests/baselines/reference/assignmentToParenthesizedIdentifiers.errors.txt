@@ -3,14 +3,14 @@ tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesize
 tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(13,1): error TS2322: Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(14,1): error TS2322: Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(15,1): error TS2322: Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(17,1): error TS2539: Cannot assign to 'M' because it is not a variable.
-tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(18,2): error TS2539: Cannot assign to 'M' because it is not a variable.
-tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(25,5): error TS2539: Cannot assign to 'M3' because it is not a variable.
+tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(17,1): error TS2631: Cannot assign to 'M' because it is a namespace.
+tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(18,2): error TS2631: Cannot assign to 'M' because it is a namespace.
+tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(25,5): error TS2631: Cannot assign to 'M3' because it is a namespace.
 tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(31,11): error TS2322: Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(32,13): error TS2322: Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(33,13): error TS2322: Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(37,1): error TS2539: Cannot assign to 'fn' because it is not a variable.
-tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(38,2): error TS2539: Cannot assign to 'fn' because it is not a variable.
+tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(37,1): error TS2630: Cannot assign to 'fn' because it is a function.
+tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(38,2): error TS2630: Cannot assign to 'fn' because it is a function.
 tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(43,5): error TS2322: Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(44,5): error TS2322: Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(48,5): error TS2322: Type 'string' is not assignable to type 'number'.
@@ -18,10 +18,10 @@ tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesize
 tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(54,5): error TS2322: Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(55,5): error TS2322: Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(56,5): error TS2322: Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(62,1): error TS2539: Cannot assign to 'E' because it is not a variable.
-tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(63,2): error TS2539: Cannot assign to 'E' because it is not a variable.
-tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(69,1): error TS2539: Cannot assign to 'C' because it is not a variable.
-tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(70,2): error TS2539: Cannot assign to 'C' because it is not a variable.
+tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(62,1): error TS2628: Cannot assign to 'E' because it is an enum.
+tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(63,2): error TS2628: Cannot assign to 'E' because it is an enum.
+tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(69,1): error TS2629: Cannot assign to 'C' because it is a class.
+tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(70,2): error TS2629: Cannot assign to 'C' because it is a class.
 
 
 ==== tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts (24 errors) ====
@@ -53,10 +53,10 @@ tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesize
     
     M = { y: 3 }; // Error
     ~
-!!! error TS2539: Cannot assign to 'M' because it is not a variable.
+!!! error TS2631: Cannot assign to 'M' because it is a namespace.
     (M) = { y: 3 }; // Error
      ~
-!!! error TS2539: Cannot assign to 'M' because it is not a variable.
+!!! error TS2631: Cannot assign to 'M' because it is a namespace.
     
     module M2 {
         export module M3 {
@@ -65,7 +65,7 @@ tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesize
     
         M3 = { x: 3 }; // Error
         ~~
-!!! error TS2539: Cannot assign to 'M3' because it is not a variable.
+!!! error TS2631: Cannot assign to 'M3' because it is a namespace.
     }
     M2.M3 = { x: 3 }; // OK
     (M2).M3 = { x: 3 }; // OK
@@ -88,10 +88,10 @@ tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesize
     function fn() { }
     fn = () => 3; // Bug 823548: Should be error (fn is not a reference)
     ~~
-!!! error TS2539: Cannot assign to 'fn' because it is not a variable.
+!!! error TS2630: Cannot assign to 'fn' because it is a function.
     (fn) = () => 3; // Should be error
      ~~
-!!! error TS2539: Cannot assign to 'fn' because it is not a variable.
+!!! error TS2630: Cannot assign to 'fn' because it is a function.
     
     function fn2(x: number, y: { t: number }) {
         x = 3;
@@ -131,10 +131,10 @@ tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesize
     }
     E = undefined; // Error
     ~
-!!! error TS2539: Cannot assign to 'E' because it is not a variable.
+!!! error TS2628: Cannot assign to 'E' because it is an enum.
     (E) = undefined; // Error
      ~
-!!! error TS2539: Cannot assign to 'E' because it is not a variable.
+!!! error TS2628: Cannot assign to 'E' because it is an enum.
     
     class C {
     
@@ -142,8 +142,8 @@ tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesize
     
     C = undefined; // Error
     ~
-!!! error TS2539: Cannot assign to 'C' because it is not a variable.
+!!! error TS2629: Cannot assign to 'C' because it is a class.
     (C) = undefined; // Error
      ~
-!!! error TS2539: Cannot assign to 'C' because it is not a variable.
+!!! error TS2629: Cannot assign to 'C' because it is a class.
     

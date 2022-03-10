@@ -1,7 +1,7 @@
 tests/cases/compiler/extension.ts(10,18): error TS2300: Duplicate identifier 'C'.
 tests/cases/compiler/extension.ts(16,5): error TS1128: Declaration or statement expected.
+tests/cases/compiler/extension.ts(16,12): error TS1434: Unexpected keyword or identifier.
 tests/cases/compiler/extension.ts(16,12): error TS2304: Cannot find name 'extension'.
-tests/cases/compiler/extension.ts(16,22): error TS1005: ';' expected.
 tests/cases/compiler/extension.ts(16,28): error TS2300: Duplicate identifier 'C'.
 tests/cases/compiler/extension.ts(22,3): error TS2339: Property 'pe' does not exist on type 'C'.
 
@@ -28,9 +28,9 @@ tests/cases/compiler/extension.ts(22,3): error TS2339: Property 'pe' does not ex
         ~~~~~~
 !!! error TS1128: Declaration or statement expected.
                ~~~~~~~~~
+!!! error TS1434: Unexpected keyword or identifier.
+               ~~~~~~~~~
 !!! error TS2304: Cannot find name 'extension'.
-                         ~~~~~
-!!! error TS1005: ';' expected.
                                ~
 !!! error TS2300: Duplicate identifier 'C'.
             public pe:string;

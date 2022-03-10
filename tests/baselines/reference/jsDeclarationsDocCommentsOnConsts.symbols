@@ -19,9 +19,9 @@ function b() {
 }
 
 module.exports = {x, b}
->module.exports : Symbol("tests/cases/conformance/jsdoc/declarations/index1", Decl(index1.js, 0, 0))
+>module.exports : Symbol(module.exports, Decl(index1.js, 0, 0))
 >module : Symbol(module, Decl(index1.js, 12, 1))
->exports : Symbol("tests/cases/conformance/jsdoc/declarations/index1", Decl(index1.js, 0, 0))
+>exports : Symbol(module.exports, Decl(index1.js, 0, 0))
 >x : Symbol(x, Decl(index1.js, 14, 18))
 >b : Symbol(b, Decl(index1.js, 14, 20))
 

@@ -1,0 +1,24 @@
+=== tests/cases/conformance/es6/templates/templateStringWithCommentsInArrowFunction.ts ===
+const a = 1;
+>a : Symbol(a, Decl(templateStringWithCommentsInArrowFunction.ts, 0, 5))
+
+const f1 = () =>
+>f1 : Symbol(f1, Decl(templateStringWithCommentsInArrowFunction.ts, 1, 5))
+
+    `${
+      // a
+      a
+>a : Symbol(a, Decl(templateStringWithCommentsInArrowFunction.ts, 0, 5))
+
+    }a`;
+
+const f2 = () =>
+>f2 : Symbol(f2, Decl(templateStringWithCommentsInArrowFunction.ts, 7, 5))
+
+    `${
+      // a
+      a
+>a : Symbol(a, Decl(templateStringWithCommentsInArrowFunction.ts, 0, 5))
+
+    }`;
+

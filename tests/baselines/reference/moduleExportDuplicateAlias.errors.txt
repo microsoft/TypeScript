@@ -1,16 +1,16 @@
-tests/cases/conformance/salsa/moduleExportAliasDuplicateAlias.js(1,1): error TS2323: Cannot redeclare exported variable 'apply'.
-tests/cases/conformance/salsa/moduleExportAliasDuplicateAlias.js(3,1): error TS2322: Type '() => void' is not assignable to type 'undefined'.
-tests/cases/conformance/salsa/moduleExportAliasDuplicateAlias.js(3,1): error TS2323: Cannot redeclare exported variable 'apply'.
+tests/cases/conformance/salsa/moduleExportAliasDuplicateAlias.js(3,1): error TS2722: Cannot invoke an object which is possibly 'undefined'.
 
 
-==== tests/cases/conformance/salsa/moduleExportAliasDuplicateAlias.js (3 errors) ====
+==== tests/cases/conformance/salsa/test.js (0 errors) ====
+    const { apply } = require('./moduleExportAliasDuplicateAlias')
+    apply()
+    
+==== tests/cases/conformance/salsa/moduleExportAliasDuplicateAlias.js (1 errors) ====
     exports.apply = undefined;
-    ~~~~~~~~~~~~~
-!!! error TS2323: Cannot redeclare exported variable 'apply'.
     function a() { }
+    exports.apply()
+    ~~~~~~~~~~~~~
+!!! error TS2722: Cannot invoke an object which is possibly 'undefined'.
     exports.apply = a;
-    ~~~~~~~~~~~~~
-!!! error TS2322: Type '() => void' is not assignable to type 'undefined'.
-    ~~~~~~~~~~~~~
-!!! error TS2323: Cannot redeclare exported variable 'apply'.
+    exports.apply()
     

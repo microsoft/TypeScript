@@ -1,0 +1,4539 @@
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
+      "position": 58,
+      "name": "1q"
+    },
+    "quickInfo": {
+      "kind": "function",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 55,
+        "length": 6
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "simple",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
+      "position": 190,
+      "name": "2q"
+    },
+    "quickInfo": {
+      "kind": "function",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 187,
+        "length": 9
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "multiLine",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
+      "position": 291,
+      "name": "3q"
+    },
+    "quickInfo": {
+      "kind": "function",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 286,
+        "length": 15
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "jsDocSingleLine",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "this is eg of single line jsdoc style comment",
+          "kind": "text"
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
+      "position": 413,
+      "name": "4q"
+    },
+    "quickInfo": {
+      "kind": "function",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 407,
+        "length": 14
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "jsDocMultiLine",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "this is multiple line jsdoc stule comment\nNew line1\nNew Line2",
+          "kind": "text"
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
+      "position": 618,
+      "name": "5q"
+    },
+    "quickInfo": {
+      "kind": "function",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 611,
+        "length": 19
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "jsDocMultiLineMerge",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "Another this one too",
+          "kind": "text"
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
+      "position": 725,
+      "name": "6q"
+    },
+    "quickInfo": {
+      "kind": "function",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 717,
+        "length": 19
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "jsDocMixedComments1",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "jsdoc comment",
+          "kind": "text"
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
+      "position": 856,
+      "name": "7q"
+    },
+    "quickInfo": {
+      "kind": "function",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 849,
+        "length": 19
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "jsDocMixedComments2",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "another jsDocComment",
+          "kind": "text"
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
+      "position": 994,
+      "name": "8q"
+    },
+    "quickInfo": {
+      "kind": "function",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 985,
+        "length": 19
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "jsDocMixedComments3",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "* triplestar jsDocComment",
+          "kind": "text"
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
+      "position": 1154,
+      "name": "9q"
+    },
+    "quickInfo": {
+      "kind": "function",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 1144,
+        "length": 19
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "jsDocMixedComments4",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "another jsDocComment",
+          "kind": "text"
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
+      "position": 1336,
+      "name": "10q"
+    },
+    "quickInfo": {
+      "kind": "function",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 1330,
+        "length": 19
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "jsDocMixedComments5",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "another jsDocComment",
+          "kind": "text"
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
+      "position": 1524,
+      "name": "11q"
+    },
+    "quickInfo": {
+      "kind": "function",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 1516,
+        "length": 19
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "jsDocMixedComments6",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "jsdoc comment",
+          "kind": "text"
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
+      "position": 1608,
+      "name": "12q"
+    },
+    "quickInfo": {
+      "kind": "function",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 1603,
+        "length": 14
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "noHelpComment1",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
+      "position": 1695,
+      "name": "13q"
+    },
+    "quickInfo": {
+      "kind": "function",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 1688,
+        "length": 14
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "noHelpComment2",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
+      "position": 1744,
+      "name": "14q"
+    },
+    "quickInfo": {
+      "kind": "function",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 1737,
+        "length": 14
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "noHelpComment3",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
+      "position": 1880,
+      "name": "16aq"
+    },
+    "quickInfo": {
+      "kind": "parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 1880,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "first number",
+          "kind": "text"
+        }
+      ],
+      "tags": [
+        {
+          "name": "param",
+          "text": [
+            {
+              "text": "a",
+              "kind": "parameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "first number",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
+      "position": 1891,
+      "name": "17aq"
+    },
+    "quickInfo": {
+      "kind": "parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 1891,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "b",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "second number",
+          "kind": "text"
+        }
+      ],
+      "tags": [
+        {
+          "name": "param",
+          "text": [
+            {
+              "text": "b",
+              "kind": "parameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "second number",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
+      "position": 1925,
+      "name": "16q"
+    },
+    "quickInfo": {
+      "kind": "function",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 1924,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "sum",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        },
+        {
+          "text": ",",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "b",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "Adds two integers and returns the result",
+          "kind": "text"
+        }
+      ],
+      "tags": [
+        {
+          "name": "param",
+          "text": [
+            {
+              "text": "a",
+              "kind": "parameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "first number",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "param",
+          "text": [
+            {
+              "text": "b",
+              "kind": "parameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "second number",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
+      "position": 2111,
+      "name": "19aq"
+    },
+    "quickInfo": {
+      "kind": "parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 2111,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "first number",
+          "kind": "text"
+        }
+      ],
+      "tags": [
+        {
+          "name": "param",
+          "text": [
+            {
+              "text": "a",
+              "kind": "parameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "first number",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
+      "position": 2122,
+      "name": "20aq"
+    },
+    "quickInfo": {
+      "kind": "parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 2122,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "b",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [],
+      "tags": [
+        {
+          "name": "param",
+          "text": [
+            {
+              "text": "b",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
+      "position": 2133,
+      "name": "21aq"
+    },
+    "quickInfo": {
+      "kind": "parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 2133,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [],
+      "tags": [
+        {
+          "name": "param",
+          "text": [
+            {
+              "text": "c",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
+      "position": 2145,
+      "name": "22aq"
+    },
+    "quickInfo": {
+      "kind": "parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 2145,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "d",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [],
+      "tags": [
+        {
+          "name": "param",
+          "text": [
+            {
+              "text": "d",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
+      "position": 2149,
+      "name": "23aq"
+    },
+    "quickInfo": {
+      "kind": "parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 2149,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "e",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "LastParam",
+          "kind": "text"
+        }
+      ],
+      "tags": [
+        {
+          "name": "param",
+          "text": [
+            {
+              "text": "e",
+              "kind": "parameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "LastParam",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
+      "position": 2161,
+      "name": "19q"
+    },
+    "quickInfo": {
+      "kind": "function",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 2157,
+        "length": 8
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "multiply",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        },
+        {
+          "text": ",",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "b",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        },
+        {
+          "text": ",",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "parameterName"
+        },
+        {
+          "text": "?",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        },
+        {
+          "text": ",",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "d",
+          "kind": "parameterName"
+        },
+        {
+          "text": "?",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        },
+        {
+          "text": ",",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "e",
+          "kind": "parameterName"
+        },
+        {
+          "text": "?",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "This is multiplication function",
+          "kind": "text"
+        }
+      ],
+      "tags": [
+        {
+          "name": "param",
+          "text": [
+            {
+              "text": "",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "param",
+          "text": [
+            {
+              "text": "a",
+              "kind": "parameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "first number",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "param",
+          "text": [
+            {
+              "text": "b",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "param",
+          "text": [
+            {
+              "text": "c",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "param",
+          "text": [
+            {
+              "text": "d",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "anotherTag"
+        },
+        {
+          "name": "param",
+          "text": [
+            {
+              "text": "e",
+              "kind": "parameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "LastParam",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "anotherTag"
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
+      "position": 2253,
+      "name": "25aq"
+    },
+    "quickInfo": {
+      "kind": "parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 2253,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
+      "position": 2277,
+      "name": "26aq"
+    },
+    "quickInfo": {
+      "kind": "parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 2277,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "b",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
+      "position": 2370,
+      "name": "25q"
+    },
+    "quickInfo": {
+      "kind": "function",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 2369,
+        "length": 2
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "f1",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "+",
+          "kind": "operator"
+        },
+        {
+          "text": "1",
+          "kind": "numericLiteral"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "overload",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "fn f1 with number",
+          "kind": "text"
+        }
+      ],
+      "tags": [
+        {
+          "name": "param",
+          "text": [
+            {
+              "text": "b",
+              "kind": "parameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "about b",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
+      "position": 2378,
+      "name": "26q"
+    },
+    "quickInfo": {
+      "kind": "function",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 2377,
+        "length": 2
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "f1",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "b",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "+",
+          "kind": "operator"
+        },
+        {
+          "text": "1",
+          "kind": "numericLiteral"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "overload",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "fn f1 with number",
+          "kind": "text"
+        }
+      ],
+      "tags": [
+        {
+          "name": "param",
+          "text": [
+            {
+              "text": "b",
+              "kind": "parameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "about b",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
+      "position": 2716,
+      "name": "28aq"
+    },
+    "quickInfo": {
+      "kind": "parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 2716,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
+      "position": 2727,
+      "name": "29aq"
+    },
+    "quickInfo": {
+      "kind": "parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 2727,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "b",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "this is about b",
+          "kind": "text"
+        }
+      ],
+      "tags": [
+        {
+          "name": "param",
+          "text": [
+            {
+              "text": "b",
+              "kind": "parameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "this is about b",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
+      "position": 2738,
+      "name": "30aq"
+    },
+    "quickInfo": {
+      "kind": "parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 2738,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=>",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "this is optional param c",
+          "kind": "text"
+        }
+      ],
+      "tags": [
+        {
+          "name": "param",
+          "text": [
+            {
+              "text": "c",
+              "kind": "parameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "this is optional param c",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
+      "position": 2756,
+      "name": "31aq"
+    },
+    "quickInfo": {
+      "kind": "parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 2756,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "d",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=>",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "this is optional param d",
+          "kind": "text"
+        }
+      ],
+      "tags": [
+        {
+          "name": "param",
+          "text": [
+            {
+              "text": "d",
+              "kind": "parameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "this is optional param d",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
+      "position": 2774,
+      "name": "32aq"
+    },
+    "quickInfo": {
+      "kind": "parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 2774,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "e",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=>",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "this is optional param e",
+          "kind": "text"
+        }
+      ],
+      "tags": [
+        {
+          "name": "param",
+          "text": [
+            {
+              "text": "e",
+              "kind": "parameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "this is optional param e",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
+      "position": 2792,
+      "name": "33aq"
+    },
+    "quickInfo": {
+      "kind": "parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 2792,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "f",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=>",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
+      "position": 2818,
+      "name": "28q"
+    },
+    "quickInfo": {
+      "kind": "function",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 2814,
+        "length": 8
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "subtract",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        },
+        {
+          "text": ",",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "b",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        },
+        {
+          "text": ",",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "parameterName"
+        },
+        {
+          "text": "?",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=>",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ",",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "d",
+          "kind": "parameterName"
+        },
+        {
+          "text": "?",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=>",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ",",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "e",
+          "kind": "parameterName"
+        },
+        {
+          "text": "?",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=>",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ",",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "f",
+          "kind": "parameterName"
+        },
+        {
+          "text": "?",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=>",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "This is subtract function",
+          "kind": "text"
+        }
+      ],
+      "tags": [
+        {
+          "name": "param",
+          "text": [
+            {
+              "text": "",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "param",
+          "text": [
+            {
+              "text": "b",
+              "kind": "parameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "this is about b",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "param",
+          "text": [
+            {
+              "text": "c",
+              "kind": "parameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "this is optional param c",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "param",
+          "text": [
+            {
+              "text": "d",
+              "kind": "parameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "this is optional param d",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "param",
+          "text": [
+            {
+              "text": "e",
+              "kind": "parameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "this is optional param e",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "param",
+          "text": [
+            {
+              "text": "",
+              "kind": "parameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "{ () => string; } } f this is optional param f",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
+      "position": 3045,
+      "name": "34aq"
+    },
+    "quickInfo": {
+      "kind": "parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 3045,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "this is input number",
+          "kind": "text"
+        }
+      ],
+      "tags": [
+        {
+          "name": "param",
+          "text": [
+            {
+              "text": "a",
+              "kind": "parameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "this is input number",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
+      "position": 3081,
+      "name": "34q"
+    },
+    "quickInfo": {
+      "kind": "function",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 3078,
+        "length": 6
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "square",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "this is square function",
+          "kind": "text"
+        }
+      ],
+      "tags": [
+        {
+          "name": "paramTag",
+          "text": [
+            {
+              "text": "{ number } a this is input number of paramTag",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "param",
+          "text": [
+            {
+              "text": "a",
+              "kind": "parameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "this is input number",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "returnType",
+          "text": [
+            {
+              "text": "{ number } it is return type",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
+      "position": 3243,
+      "name": "35aq"
+    },
+    "quickInfo": {
+      "kind": "parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 3243,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "this is a",
+          "kind": "text"
+        }
+      ],
+      "tags": [
+        {
+          "name": "param",
+          "text": [
+            {
+              "text": "a",
+              "kind": "parameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "this is a",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
+      "position": 3254,
+      "name": "36aq"
+    },
+    "quickInfo": {
+      "kind": "parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 3254,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "b",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "this is b",
+          "kind": "text"
+        }
+      ],
+      "tags": [
+        {
+          "name": "param",
+          "text": [
+            {
+              "text": "b",
+              "kind": "parameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "this is b",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
+      "position": 3272,
+      "name": "35q"
+    },
+    "quickInfo": {
+      "kind": "function",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 3269,
+        "length": 6
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "divide",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        },
+        {
+          "text": ",",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "b",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "this is divide function",
+          "kind": "text"
+        }
+      ],
+      "tags": [
+        {
+          "name": "param",
+          "text": [
+            {
+              "text": "a",
+              "kind": "parameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "this is a",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "paramTag",
+          "text": [
+            {
+              "text": "{ number } g this is optional param g",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "param",
+          "text": [
+            {
+              "text": "b",
+              "kind": "parameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "this is b",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
+      "position": 3432,
+      "name": "37aq"
+    },
+    "quickInfo": {
+      "kind": "parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 3432,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "foo",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "is string",
+          "kind": "text"
+        }
+      ],
+      "tags": [
+        {
+          "name": "param",
+          "text": [
+            {
+              "text": "foo",
+              "kind": "parameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "is string",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
+      "position": 3445,
+      "name": "38aq"
+    },
+    "quickInfo": {
+      "kind": "parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 3445,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "bar",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "is second string",
+          "kind": "text"
+        }
+      ],
+      "tags": [
+        {
+          "name": "param",
+          "text": [
+            {
+              "text": "bar",
+              "kind": "parameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "is second string",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
+      "position": 3486,
+      "name": "37q"
+    },
+    "quickInfo": {
+      "kind": "function",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 3484,
+        "length": 6
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "fooBar",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "foo",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ",",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "bar",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "Function returns string concat of foo and bar",
+          "kind": "text"
+        }
+      ],
+      "tags": [
+        {
+          "name": "param",
+          "text": [
+            {
+              "text": "foo",
+              "kind": "parameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "is string",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "param",
+          "text": [
+            {
+              "text": "bar",
+              "kind": "parameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "is second string",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
+      "position": 3782,
+      "name": "40aq"
+    },
+    "quickInfo": {
+      "kind": "parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 3782,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "this is inline comment for a",
+          "kind": "text"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "it is first parameter",
+          "kind": "text"
+        }
+      ],
+      "tags": [
+        {
+          "name": "param",
+          "text": [
+            {
+              "text": "a",
+              "kind": "parameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "it is first parameter",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
+      "position": 3828,
+      "name": "41aq"
+    },
+    "quickInfo": {
+      "kind": "parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 3828,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "b",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "this is inline comment for b",
+          "kind": "text"
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
+      "position": 3839,
+      "name": "42aq"
+    },
+    "quickInfo": {
+      "kind": "parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 3839,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "it is third parameter",
+          "kind": "text"
+        }
+      ],
+      "tags": [
+        {
+          "name": "param",
+          "text": [
+            {
+              "text": "c",
+              "kind": "parameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "it is third parameter",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
+      "position": 3850,
+      "name": "43aq"
+    },
+    "quickInfo": {
+      "kind": "parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 3850,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "d",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
+      "position": 3894,
+      "name": "40q"
+    },
+    "quickInfo": {
+      "kind": "function",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 3891,
+        "length": 14
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "jsDocParamTest",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        },
+        {
+          "text": ",",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "b",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        },
+        {
+          "text": ",",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        },
+        {
+          "text": ",",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "d",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "this is jsdoc style function with param tag as well as inline parameter help",
+          "kind": "text"
+        }
+      ],
+      "tags": [
+        {
+          "name": "param",
+          "text": [
+            {
+              "text": "a",
+              "kind": "parameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "it is first parameter",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "param",
+          "text": [
+            {
+              "text": "c",
+              "kind": "parameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "it is third parameter",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
+      "position": 4040,
+      "name": "45q"
+    },
+    "quickInfo": {
+      "kind": "function",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 4032,
+        "length": 26
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "jsDocCommentAlignmentTest1",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "This is function comment\nAnd properly aligned comment",
+          "kind": "text"
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
+      "position": 4193,
+      "name": "46q"
+    },
+    "quickInfo": {
+      "kind": "function",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 4183,
+        "length": 26
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "jsDocCommentAlignmentTest2",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "This is function comment\n    And aligned with 4 space char margin",
+          "kind": "text"
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
+      "position": 4778,
+      "name": "47aq"
+    },
+    "quickInfo": {
+      "kind": "parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 4778,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "this is info about a\nspanning on two lines and aligned perfectly",
+          "kind": "text"
+        }
+      ],
+      "tags": [
+        {
+          "name": "param",
+          "text": [
+            {
+              "text": "a",
+              "kind": "parameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "this is info about a\nspanning on two lines and aligned perfectly",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
+      "position": 4789,
+      "name": "48aq"
+    },
+    "quickInfo": {
+      "kind": "parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 4789,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "b",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "this is info about b\nspanning on two lines and aligned perfectly\nspanning one more line alined perfectly\n    spanning another line with more margin",
+          "kind": "text"
+        }
+      ],
+      "tags": [
+        {
+          "name": "param",
+          "text": [
+            {
+              "text": "b",
+              "kind": "parameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "this is info about b\nspanning on two lines and aligned perfectly\nspanning one more line alined perfectly\n    spanning another line with more margin",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
+      "position": 4792,
+      "name": "49aq"
+    },
+    "quickInfo": {
+      "kind": "parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 4792,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "this is info about b\nnot aligned text about parameter will eat only one space",
+          "kind": "text"
+        }
+      ],
+      "tags": [
+        {
+          "name": "param",
+          "text": [
+            {
+              "text": "c",
+              "kind": "parameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "this is info about b\nnot aligned text about parameter will eat only one space",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
+      "position": 4809,
+      "name": "47q"
+    },
+    "quickInfo": {
+      "kind": "function",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 4799,
+        "length": 26
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "jsDocCommentAlignmentTest3",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ",",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "b",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        },
+        {
+          "text": ",",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "c",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "This is function comment\n    And aligned with 4 space char margin",
+          "kind": "text"
+        }
+      ],
+      "tags": [
+        {
+          "name": "param",
+          "text": [
+            {
+              "text": "a",
+              "kind": "parameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "this is info about a\nspanning on two lines and aligned perfectly",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "param",
+          "text": [
+            {
+              "text": "b",
+              "kind": "parameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "this is info about b\nspanning on two lines and aligned perfectly\nspanning one more line alined perfectly\n    spanning another line with more margin",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "param",
+          "text": [
+            {
+              "text": "c",
+              "kind": "parameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "this is info about b\nnot aligned text about parameter will eat only one space",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
+      "position": 4841,
+      "name": ""
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
+      "position": 4854,
+      "name": "50q"
+    },
+    "quickInfo": {
+      "kind": "class",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 4848,
+        "length": 16
+      },
+      "displayParts": [
+        {
+          "text": "class",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "NoQuickInfoClass",
+          "kind": "className"
+        }
+      ],
+      "documentation": []
+    }
+  }
+]

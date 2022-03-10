@@ -1,0 +1,13 @@
+=== tests/cases/compiler/node_modules/pkg/index.d.ts ===
+interface GlobalThing { a: number }
+>GlobalThing : Symbol(GlobalThing, Decl(index.d.ts, 0, 0))
+>a : Symbol(GlobalThing.a, Decl(index.d.ts, 0, 23))
+
+=== tests/cases/compiler/usage.ts ===
+/// <reference types="pkg" />
+
+const a: GlobalThing = { a: 0 };
+>a : Symbol(a, Decl(usage.ts, 2, 5))
+>GlobalThing : Symbol(GlobalThing, Decl(index.d.ts, 0, 0))
+>a : Symbol(a, Decl(usage.ts, 2, 24))
+

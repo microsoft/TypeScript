@@ -1,0 +1,66 @@
+=== tests/cases/conformance/types/spread/spreadDuplicate.ts ===
+// Repro from #44438
+
+declare let a: { a: string };
+>a : Symbol(a, Decl(spreadDuplicate.ts, 2, 11))
+>a : Symbol(a, Decl(spreadDuplicate.ts, 2, 16))
+
+declare let b: { a?: string };
+>b : Symbol(b, Decl(spreadDuplicate.ts, 3, 11))
+>a : Symbol(a, Decl(spreadDuplicate.ts, 3, 16))
+
+declare let c: { a: string | undefined };
+>c : Symbol(c, Decl(spreadDuplicate.ts, 4, 11))
+>a : Symbol(a, Decl(spreadDuplicate.ts, 4, 16))
+
+declare let d: { a?: string | undefined };
+>d : Symbol(d, Decl(spreadDuplicate.ts, 5, 11))
+>a : Symbol(a, Decl(spreadDuplicate.ts, 5, 16))
+
+declare let t: boolean;
+>t : Symbol(t, Decl(spreadDuplicate.ts, 7, 11))
+
+let a1 = { a: 123, ...a };  // string (Error)
+>a1 : Symbol(a1, Decl(spreadDuplicate.ts, 9, 3))
+>a : Symbol(a, Decl(spreadDuplicate.ts, 9, 10))
+>a : Symbol(a, Decl(spreadDuplicate.ts, 2, 11))
+
+let b1 = { a: 123, ...b };  // string | number
+>b1 : Symbol(b1, Decl(spreadDuplicate.ts, 10, 3))
+>a : Symbol(a, Decl(spreadDuplicate.ts, 10, 10))
+>b : Symbol(b, Decl(spreadDuplicate.ts, 3, 11))
+
+let c1 = { a: 123, ...c };  // string | undefined (Error)
+>c1 : Symbol(c1, Decl(spreadDuplicate.ts, 11, 3))
+>a : Symbol(a, Decl(spreadDuplicate.ts, 11, 10))
+>c : Symbol(c, Decl(spreadDuplicate.ts, 4, 11))
+
+let d1 = { a: 123, ...d };  // string | number
+>d1 : Symbol(d1, Decl(spreadDuplicate.ts, 12, 3))
+>a : Symbol(a, Decl(spreadDuplicate.ts, 12, 10))
+>d : Symbol(d, Decl(spreadDuplicate.ts, 5, 11))
+
+let a2 = { a: 123, ...(t ? a : {}) };  // string | number
+>a2 : Symbol(a2, Decl(spreadDuplicate.ts, 14, 3))
+>a : Symbol(a, Decl(spreadDuplicate.ts, 14, 10))
+>t : Symbol(t, Decl(spreadDuplicate.ts, 7, 11))
+>a : Symbol(a, Decl(spreadDuplicate.ts, 2, 11))
+
+let b2 = { a: 123, ...(t ? b : {}) };  // string | number
+>b2 : Symbol(b2, Decl(spreadDuplicate.ts, 15, 3))
+>a : Symbol(a, Decl(spreadDuplicate.ts, 15, 10))
+>t : Symbol(t, Decl(spreadDuplicate.ts, 7, 11))
+>b : Symbol(b, Decl(spreadDuplicate.ts, 3, 11))
+
+let c2 = { a: 123, ...(t ? c : {}) };  // string | number
+>c2 : Symbol(c2, Decl(spreadDuplicate.ts, 16, 3))
+>a : Symbol(a, Decl(spreadDuplicate.ts, 16, 10))
+>t : Symbol(t, Decl(spreadDuplicate.ts, 7, 11))
+>c : Symbol(c, Decl(spreadDuplicate.ts, 4, 11))
+
+let d2 = { a: 123, ...(t ? d : {}) };  // string | number
+>d2 : Symbol(d2, Decl(spreadDuplicate.ts, 17, 3))
+>a : Symbol(a, Decl(spreadDuplicate.ts, 17, 10))
+>t : Symbol(t, Decl(spreadDuplicate.ts, 7, 11))
+>d : Symbol(d, Decl(spreadDuplicate.ts, 5, 11))
+

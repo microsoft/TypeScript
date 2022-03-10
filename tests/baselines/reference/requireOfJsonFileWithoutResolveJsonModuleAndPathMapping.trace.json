@@ -29,7 +29,7 @@
     "Trying substitution 'src/types', candidate module location: 'src/types'.",
     "Loading module as file / folder, candidate module location '/src/types', target file type 'JavaScript'.",
     "Loading module 'foo/bar/foobar.json' from 'node_modules' folder, target file type 'JavaScript'.",
-    "File '/node_modules/foo/package.json' does not exist.",
+    "File '/node_modules/foo/package.json' does not exist according to earlier cached lookups.",
     "File '/node_modules/foo/bar/foobar.json.js' does not exist.",
     "File '/node_modules/foo/bar/foobar.json.jsx' does not exist.",
     "======== Module name 'foo/bar/foobar.json' was not resolved. ========"

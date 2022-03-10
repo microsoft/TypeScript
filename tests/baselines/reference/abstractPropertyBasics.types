@@ -1,0 +1,59 @@
+=== tests/cases/compiler/abstractPropertyBasics.ts ===
+interface A {
+    prop: string;
+>prop : string
+
+    raw: string;
+>raw : string
+
+    m(): void;
+>m : () => void
+}
+abstract class B implements A {
+>B : B
+
+    abstract prop: string;
+>prop : string
+
+    abstract raw: string;
+>raw : string
+
+    abstract readonly ro: string;
+>ro : string
+
+    abstract get readonlyProp(): string;
+>readonlyProp : string
+
+    abstract set readonlyProp(val: string);
+>readonlyProp : string
+>val : string
+
+    abstract m(): void;
+>m : () => void
+}
+class C extends B {
+>C : C
+>B : B
+
+    get prop() { return "foo"; }
+>prop : string
+>"foo" : "foo"
+
+    set prop(v) { }
+>prop : string
+>v : string
+
+    raw = "edge";
+>raw : string
+>"edge" : "edge"
+
+    readonly ro = "readonly please";
+>ro : "readonly please"
+>"readonly please" : "readonly please"
+
+    readonlyProp: string; // don't have to give a value, in fact
+>readonlyProp : string
+
+    m() { }
+>m : () => void
+}

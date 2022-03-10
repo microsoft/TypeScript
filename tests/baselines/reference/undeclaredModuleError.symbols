@@ -8,7 +8,7 @@ function readdir(path: string, accept: (stat: fs.Stats, name: string) => boolean
 >accept : Symbol(accept, Decl(undeclaredModuleError.ts, 1, 30))
 >stat : Symbol(stat, Decl(undeclaredModuleError.ts, 1, 40))
 >fs : Symbol(fs, Decl(undeclaredModuleError.ts, 0, 0))
->Stats : Symbol(fs)
+>Stats : Symbol(fs.Stats)
 >name : Symbol(name, Decl(undeclaredModuleError.ts, 1, 55))
 >callback : Symbol(callback, Decl(undeclaredModuleError.ts, 1, 81))
 >error : Symbol(error, Decl(undeclaredModuleError.ts, 1, 93))
@@ -17,7 +17,7 @@ function readdir(path: string, accept: (stat: fs.Stats, name: string) => boolean
 >name : Symbol(name, Decl(undeclaredModuleError.ts, 1, 117))
 >stat : Symbol(stat, Decl(undeclaredModuleError.ts, 1, 131))
 >fs : Symbol(fs, Decl(undeclaredModuleError.ts, 0, 0))
->Stats : Symbol(fs)
+>Stats : Symbol(fs.Stats)
 
 function join(...paths: string[]) {}
 >join : Symbol(join, Decl(undeclaredModuleError.ts, 1, 165))

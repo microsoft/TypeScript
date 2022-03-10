@@ -1,0 +1,10 @@
+=== tests/cases/conformance/externalModules/index.d.ts ===
+// await keyword allowed as identifier in a declaration file
+export {};
+declare const await: any;
+>await : Symbol(await, Decl(index.d.ts, 2, 13))
+
+declare class C extends await {}
+>C : Symbol(C, Decl(index.d.ts, 2, 25))
+>await : Symbol(await, Decl(index.d.ts, 2, 13))
+

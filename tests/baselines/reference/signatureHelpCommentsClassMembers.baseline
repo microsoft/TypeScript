@@ -1,0 +1,1541 @@
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/signatureHelpCommentsClassMembers.ts",
+      "position": 275,
+      "name": "8"
+    },
+    "signatureHelp": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "p2",
+              "kind": "methodName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "number",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "b",
+              "documentation": [
+                {
+                  "text": "number to add",
+                  "kind": "text"
+                }
+              ],
+              "displayParts": [
+                {
+                  "text": "b",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [
+            {
+              "text": "sum with property",
+              "kind": "text"
+            }
+          ],
+          "tags": []
+        }
+      ],
+      "applicableSpan": {
+        "start": 275,
+        "length": 7
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 0,
+      "argumentCount": 1
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/signatureHelpCommentsClassMembers.ts",
+      "position": 399,
+      "name": "13"
+    },
+    "signatureHelp": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "p2",
+              "kind": "methodName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "number",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "b",
+              "documentation": [
+                {
+                  "text": "number to add",
+                  "kind": "text"
+                }
+              ],
+              "displayParts": [
+                {
+                  "text": "b",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [
+            {
+              "text": "sum with property",
+              "kind": "text"
+            }
+          ],
+          "tags": []
+        }
+      ],
+      "applicableSpan": {
+        "start": 399,
+        "length": 5
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 0,
+      "argumentCount": 1
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/signatureHelpCommentsClassMembers.ts",
+      "position": 656,
+      "name": "20"
+    },
+    "signatureHelp": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "pp2",
+              "kind": "methodName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "number",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "b",
+              "documentation": [
+                {
+                  "text": "number to add",
+                  "kind": "text"
+                }
+              ],
+              "displayParts": [
+                {
+                  "text": "b",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [
+            {
+              "text": "sum with property",
+              "kind": "text"
+            }
+          ],
+          "tags": []
+        }
+      ],
+      "applicableSpan": {
+        "start": 656,
+        "length": 8
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 0,
+      "argumentCount": 1
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/signatureHelpCommentsClassMembers.ts",
+      "position": 786,
+      "name": "25"
+    },
+    "signatureHelp": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "pp2",
+              "kind": "methodName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "number",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "b",
+              "documentation": [
+                {
+                  "text": "number to add",
+                  "kind": "text"
+                }
+              ],
+              "displayParts": [
+                {
+                  "text": "b",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [
+            {
+              "text": "sum with property",
+              "kind": "text"
+            }
+          ],
+          "tags": []
+        }
+      ],
+      "applicableSpan": {
+        "start": 786,
+        "length": 5
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 0,
+      "argumentCount": 1
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/signatureHelpCommentsClassMembers.ts",
+      "position": 1105,
+      "name": "35"
+    },
+    "signatureHelp": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "s2",
+              "kind": "methodName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "number",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "b",
+              "documentation": [
+                {
+                  "text": "number to add",
+                  "kind": "text"
+                }
+              ],
+              "displayParts": [
+                {
+                  "text": "b",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [
+            {
+              "text": "static sum with property",
+              "kind": "text"
+            }
+          ],
+          "tags": []
+        }
+      ],
+      "applicableSpan": {
+        "start": 1105,
+        "length": 5
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 0,
+      "argumentCount": 1
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/signatureHelpCommentsClassMembers.ts",
+      "position": 1224,
+      "name": "42"
+    },
+    "signatureHelp": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "s2",
+              "kind": "methodName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "number",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "b",
+              "documentation": [
+                {
+                  "text": "number to add",
+                  "kind": "text"
+                }
+              ],
+              "displayParts": [
+                {
+                  "text": "b",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [
+            {
+              "text": "static sum with property",
+              "kind": "text"
+            }
+          ],
+          "tags": []
+        }
+      ],
+      "applicableSpan": {
+        "start": 1224,
+        "length": 5
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 0,
+      "argumentCount": 1
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/signatureHelpCommentsClassMembers.ts",
+      "position": 1382,
+      "name": "47"
+    },
+    "signatureHelp": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "nc_p2",
+              "kind": "methodName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "number",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "b",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "b",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        }
+      ],
+      "applicableSpan": {
+        "start": 1382,
+        "length": 10
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 0,
+      "argumentCount": 1
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/signatureHelpCommentsClassMembers.ts",
+      "position": 1471,
+      "name": "49"
+    },
+    "signatureHelp": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "nc_p2",
+              "kind": "methodName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "number",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "b",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "b",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        }
+      ],
+      "applicableSpan": {
+        "start": 1471,
+        "length": 5
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 0,
+      "argumentCount": 1
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/signatureHelpCommentsClassMembers.ts",
+      "position": 1637,
+      "name": "54"
+    },
+    "signatureHelp": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "nc_pp2",
+              "kind": "methodName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "number",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "b",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "b",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        }
+      ],
+      "applicableSpan": {
+        "start": 1637,
+        "length": 11
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 0,
+      "argumentCount": 1
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/signatureHelpCommentsClassMembers.ts",
+      "position": 1731,
+      "name": "56"
+    },
+    "signatureHelp": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "nc_pp2",
+              "kind": "methodName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "number",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "b",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "b",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        }
+      ],
+      "applicableSpan": {
+        "start": 1731,
+        "length": 5
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 0,
+      "argumentCount": 1
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/signatureHelpCommentsClassMembers.ts",
+      "position": 1885,
+      "name": "61"
+    },
+    "signatureHelp": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "nc_s2",
+              "kind": "methodName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "number",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "b",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "b",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        }
+      ],
+      "applicableSpan": {
+        "start": 1885,
+        "length": 8
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 0,
+      "argumentCount": 1
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/signatureHelpCommentsClassMembers.ts",
+      "position": 1968,
+      "name": "63"
+    },
+    "signatureHelp": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "nc_s2",
+              "kind": "methodName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "number",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "b",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "b",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        }
+      ],
+      "applicableSpan": {
+        "start": 1968,
+        "length": 5
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 0,
+      "argumentCount": 1
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/signatureHelpCommentsClassMembers.ts",
+      "position": 2000,
+      "name": "65"
+    },
+    "signatureHelp": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "c1",
+              "kind": "className"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "c1",
+              "kind": "className"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [],
+          "documentation": [
+            {
+              "text": "Constructor method",
+              "kind": "text"
+            }
+          ],
+          "tags": []
+        }
+      ],
+      "applicableSpan": {
+        "start": 2000,
+        "length": 0
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 0,
+      "argumentCount": 0
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/signatureHelpCommentsClassMembers.ts",
+      "position": 2056,
+      "name": "71"
+    },
+    "signatureHelp": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "p2",
+              "kind": "methodName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "number",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "b",
+              "documentation": [
+                {
+                  "text": "number to add",
+                  "kind": "text"
+                }
+              ],
+              "displayParts": [
+                {
+                  "text": "b",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [
+            {
+              "text": "sum with property",
+              "kind": "text"
+            }
+          ],
+          "tags": []
+        }
+      ],
+      "applicableSpan": {
+        "start": 2056,
+        "length": 2
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 0,
+      "argumentCount": 1
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/signatureHelpCommentsClassMembers.ts",
+      "position": 2168,
+      "name": "81"
+    },
+    "signatureHelp": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "nc_p2",
+              "kind": "methodName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "number",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "b",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "b",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        }
+      ],
+      "applicableSpan": {
+        "start": 2168,
+        "length": 2
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 0,
+      "argumentCount": 1
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/signatureHelpCommentsClassMembers.ts",
+      "position": 2280,
+      "name": "92"
+    },
+    "signatureHelp": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "s2",
+              "kind": "methodName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "number",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "b",
+              "documentation": [
+                {
+                  "text": "number to add",
+                  "kind": "text"
+                }
+              ],
+              "displayParts": [
+                {
+                  "text": "b",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [
+            {
+              "text": "static sum with property",
+              "kind": "text"
+            }
+          ],
+          "tags": []
+        }
+      ],
+      "applicableSpan": {
+        "start": 2280,
+        "length": 2
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 0,
+      "argumentCount": 1
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/signatureHelpCommentsClassMembers.ts",
+      "position": 2402,
+      "name": "102"
+    },
+    "signatureHelp": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "nc_s2",
+              "kind": "methodName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "number",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "b",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "b",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        }
+      ],
+      "applicableSpan": {
+        "start": 2402,
+        "length": 2
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 0,
+      "argumentCount": 1
+    }
+  }
+]

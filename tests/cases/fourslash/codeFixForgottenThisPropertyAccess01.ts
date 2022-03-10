@@ -14,7 +14,7 @@
 
 goTo.file("/b.ts");
 verify.codeFixAvailable([
-    { description: `Import 'foo' from module "./a"` },
+    { description: `Add import from "./a"` },
     { description: "Change spelling to 'fooo'" },
     { description: "Add 'this.' to unresolved variable" },
 ]);

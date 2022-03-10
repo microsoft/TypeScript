@@ -1,14 +1,13 @@
 /* @internal */
 namespace ts.codefix {
-    const fixIdAddMissingTypeof = "fixConvertToMappedObjectType";
-    const fixId = fixIdAddMissingTypeof;
-    const errorCodes = [Diagnostics.An_index_signature_parameter_type_cannot_be_a_union_type_Consider_using_a_mapped_object_type_instead.code];
+    const fixId = "fixConvertToMappedObjectType";
+    const errorCodes = [Diagnostics.An_index_signature_parameter_type_cannot_be_a_literal_type_or_generic_type_Consider_using_a_mapped_object_type_instead.code];
 
     type FixableDeclaration = InterfaceDeclaration | TypeAliasDeclaration;
 
     registerCodeFix({
         errorCodes,
-        getCodeActions: context => {
+        getCodeActions: function getCodeActionsToConvertToMappedTypeObject(context) {
             const { sourceFile, span } = context;
             const info = getInfo(sourceFile, span.start);
             if (!info) return undefined;
@@ -26,9 +25,12 @@ namespace ts.codefix {
     interface Info { readonly indexSignature: IndexSignatureDeclaration; readonly container: FixableDeclaration; }
     function getInfo(sourceFile: SourceFile, pos: number): Info | undefined {
         const token = getTokenAtPosition(sourceFile, pos);
-        const indexSignature = cast(token.parent.parent, isIndexSignatureDeclaration);
-        if (isClassDeclaration(indexSignature.parent)) return undefined;
-        const container = isInterfaceDeclaration(indexSignature.parent) ? indexSignature.parent : cast(indexSignature.parent.parent, isTypeAliasDeclaration);
+        const indexSignature = tryCast(token.parent.parent, isIndexSignatureDeclaration);
+        if (!indexSignature) return undefined;
+
+        const container = isInterfaceDeclaration(indexSignature.parent) ? indexSignature.parent : tryCast(indexSignature.parent.parent, isTypeAliasDeclaration);
+        if (!container) return undefined;
+
         return { indexSignature, container };
     }
 
@@ -37,7 +39,7 @@ namespace ts.codefix {
     }
 
     function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, { indexSignature, container }: Info): void {
-        const members = isInterfaceDeclaration(container) ? container.members : (<TypeLiteralNode>container.type).members;
+        const members = isInterfaceDeclaration(container) ? container.members : (container.type as TypeLiteralNode).members;
         const otherMembers = members.filter(member => !isIndexSignatureDeclaration(member));
         const parameter = first(indexSignature.parameters);
         const mappedTypeParameter = factory.createTypeParameterDeclaration(cast(parameter.name, isIdentifier), parameter.type);
@@ -46,7 +48,8 @@ namespace ts.codefix {
             mappedTypeParameter,
             /*nameType*/ undefined,
             indexSignature.questionToken,
-            indexSignature.type);
+            indexSignature.type,
+            /*members*/ undefined);
         const intersectionType = factory.createIntersectionTypeNode([
             ...getAllSuperTypeNodes(container),
             mappedIntersectionType,

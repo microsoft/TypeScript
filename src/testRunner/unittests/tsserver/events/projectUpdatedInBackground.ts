@@ -12,12 +12,12 @@ namespace ts.projectSystem {
 
         function createVerifyInitialOpen(session: TestSession, verifyProjectsUpdatedInBackgroundEventHandler: (events: server.ProjectsUpdatedInBackgroundEvent[]) => void) {
             return (file: File) => {
-                session.executeCommandSeq(<protocol.OpenRequest>{
+                session.executeCommandSeq({
                     command: server.CommandNames.Open,
                     arguments: {
                         file: file.path
                     }
-                });
+                } as protocol.OpenRequest);
                 verifyProjectsUpdatedInBackgroundEventHandler([]);
             };
         }

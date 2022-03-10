@@ -154,6 +154,7 @@ namespace ts.server.protocol {
         PrepareCallHierarchy = "prepareCallHierarchy",
         ProvideCallHierarchyIncomingCalls = "provideCallHierarchyIncomingCalls",
         ProvideCallHierarchyOutgoingCalls = "provideCallHierarchyOutgoingCalls",
+        ProvideInlayHints = "provideInlayHints"
 
         // NOTE: If updating this, be sure to also update `allCommandNames` in `testRunner/unittests/tsserver/session.ts`.
     }
@@ -681,6 +682,7 @@ namespace ts.server.protocol {
 
     export interface OrganizeImportsRequestArgs {
         scope: OrganizeImportsScope;
+        skipDestructiveCodeActions?: boolean;
     }
 
     export interface OrganizeImportsResponse extends Response {
@@ -843,7 +845,6 @@ namespace ts.server.protocol {
     /**
      * A request to get encoded semantic classifications for a span in the file
      */
-    /** @internal */
     export interface EncodedSemanticClassificationsRequest extends FileRequest {
         arguments: EncodedSemanticClassificationsRequestArgs;
     }
@@ -851,7 +852,6 @@ namespace ts.server.protocol {
     /**
      * Arguments for EncodedSemanticClassificationsRequest request.
      */
-    /** @internal */
     export interface EncodedSemanticClassificationsRequestArgs extends FileRequestArgs {
         /**
          * Start position of the span.
@@ -868,6 +868,18 @@ namespace ts.server.protocol {
         format?: "original" | "2020"
     }
 
+    /** The response for a EncodedSemanticClassificationsRequest */
+    export interface EncodedSemanticClassificationsResponse extends Response {
+        body?: EncodedSemanticClassificationsResponseBody
+    }
+
+    /**
+     * Implementation response message. Gives series of text spans depending on the format ar.
+     */
+    export interface EncodedSemanticClassificationsResponseBody {
+        endOfLineState: EndOfLineState;
+        spans: number[];
+    }
     /**
      * Arguments in document highlight request; include: filesToSearch, file,
      * line, offset.
@@ -969,6 +981,16 @@ namespace ts.server.protocol {
         file: string;
     }
 
+    export interface JSDocTagInfo {
+        /** Name of the JSDoc tag */
+        name: string;
+        /**
+         * Comment text after the JSDoc tag -- the text after the tag name until the next tag or end of comment
+         * Display parts when UserPreferences.displayPartsForJSDoc is true, flattened to string otherwise.
+         */
+        text?: string | SymbolDisplayPart[];
+    }
+
     export interface TextSpanWithContext extends TextSpan {
         contextStart?: Location;
         contextEnd?: Location;
@@ -977,8 +999,15 @@ namespace ts.server.protocol {
     export interface FileSpanWithContext extends FileSpan, TextSpanWithContext {
     }
 
+    export interface DefinitionInfo extends FileSpanWithContext {
+        /**
+         * When true, the file may or may not exist.
+         */
+        unverified?: boolean;
+    }
+
     export interface DefinitionInfoAndBoundSpan {
-        definitions: readonly FileSpanWithContext[];
+        definitions: readonly DefinitionInfo[];
         textSpan: TextSpan;
     }
 
@@ -986,7 +1015,7 @@ namespace ts.server.protocol {
      * Definition response message.  Gives text range for definition.
      */
     export interface DefinitionResponse extends Response {
-        body?: FileSpanWithContext[];
+        body?: DefinitionInfo[];
     }
 
     export interface DefinitionInfoAndBoundSpanResponse extends Response {
@@ -1521,6 +1550,7 @@ namespace ts.server.protocol {
         FixedPollingInterval = "FixedPollingInterval",
         PriorityPollingInterval = "PriorityPollingInterval",
         DynamicPriorityPolling = "DynamicPriorityPolling",
+        FixedChunkSizePolling = "FixedChunkSizePolling",
         UseFsEvents = "UseFsEvents",
         UseFsEventsOnParentDirectory = "UseFsEventsOnParentDirectory",
     }
@@ -1529,12 +1559,14 @@ namespace ts.server.protocol {
         UseFsEvents = "UseFsEvents",
         FixedPollingInterval = "FixedPollingInterval",
         DynamicPriorityPolling = "DynamicPriorityPolling",
+        FixedChunkSizePolling = "FixedChunkSizePolling",
     }
 
     export const enum PollingWatchKind {
         FixedInterval = "FixedInterval",
         PriorityInterval = "PriorityInterval",
         DynamicPriority = "DynamicPriority",
+        FixedChunkSize = "FixedChunkSize",
     }
 
     export interface WatchOptions {
@@ -1931,6 +1963,7 @@ namespace ts.server.protocol {
      */
     export interface QuickInfoRequest extends FileLocationRequest {
         command: CommandTypes.Quickinfo;
+        arguments: FileLocationRequestArgs;
     }
 
     /**
@@ -1964,8 +1997,9 @@ namespace ts.server.protocol {
 
         /**
          * Documentation associated with symbol.
+         * Display parts when UserPreferences.displayPartsForJSDoc is true, flattened to string otherwise.
          */
-        documentation: string;
+        documentation: string | SymbolDisplayPart[];
 
         /**
          * JSDoc tags associated with symbol.
@@ -2110,7 +2144,18 @@ namespace ts.server.protocol {
         arguments: FormatOnKeyRequestArgs;
     }
 
-    export type CompletionsTriggerCharacter = "." | '"' | "'" | "`" | "/" | "@" | "<" | "#";
+    export type CompletionsTriggerCharacter = "." | '"' | "'" | "`" | "/" | "@" | "<" | "#" | " ";
+
+    export const enum CompletionTriggerKind {
+        /** Completion was triggered by typing an identifier, manual invocation (e.g Ctrl+Space) or via API. */
+        Invoked = 1,
+
+        /** Completion was triggered by a trigger character. */
+        TriggerCharacter = 2,
+
+        /** Completion was re-triggered as the current completion list is incomplete. */
+        TriggerForIncompleteCompletions = 3,
+    }
 
     /**
      * Arguments for completions messages.
@@ -2125,6 +2170,7 @@ namespace ts.server.protocol {
          * Should be `undefined` if a user manually requested completion.
          */
         triggerCharacter?: CompletionsTriggerCharacter;
+        triggerKind?: CompletionTriggerKind;
         /**
          * @deprecated Use UserPreferences.includeCompletionsForModuleExports
          */
@@ -2159,6 +2205,7 @@ namespace ts.server.protocol {
     export interface CompletionEntryIdentifier {
         name: string;
         source?: string;
+        data?: unknown;
     }
 
     /**
@@ -2185,6 +2232,12 @@ namespace ts.server.protocol {
          * The symbol's kind (such as 'className' or 'parameterName' or plain 'text').
          */
         kind: string;
+    }
+
+    /** A part of a symbol description that links from a jsdoc @link tag to a declaration */
+    export interface JSDocLinkDisplayPart extends SymbolDisplayPart {
+        /** The location of the declaration that the @link tag links to. */
+        target: FileSpan;
     }
 
     /**
@@ -2215,6 +2268,10 @@ namespace ts.server.protocol {
          */
         insertText?: string;
         /**
+         * `insertText` should be interpreted as a snippet if true.
+         */
+        isSnippet?: true;
+        /**
          * An optional span that indicates the text to be replaced by this completion item.
          * If present, this span should be used instead of the default one.
          * It will be set if the required span differs from the one generated by the default replacement behavior.
@@ -2230,6 +2287,10 @@ namespace ts.server.protocol {
          */
         source?: string;
         /**
+         * Human-readable description of the `source`.
+         */
+        sourceDisplay?: SymbolDisplayPart[];
+        /**
          * If true, this completion should be highlighted as recommended. There will only be one of these.
          * This will be set when we know the user should write an expression with a certain type and that type is an enum or constructable class.
          * Then either that enum/class or a namespace containing it will be the recommended symbol.
@@ -2242,9 +2303,20 @@ namespace ts.server.protocol {
         isFromUncheckedFile?: true;
         /**
          * If true, this completion was for an auto-import of a module not yet in the program, but listed
-         * in the project package.json.
+         * in the project package.json. Used for telemetry reporting.
          */
         isPackageJsonImport?: true;
+        /**
+         * If true, this completion was an auto-import-style completion of an import statement (i.e., the
+         * module specifier was inserted along with the imported identifier). Used for telemetry reporting.
+         */
+        isImportStatementCompletion?: true;
+        /**
+         * A property to be sent back to TS Server in the CompletionDetailsRequest, along with `name`,
+         * that allows TS Server to look up the symbol represented by the completion item, disambiguating
+         * items with the same name.
+         */
+        data?: unknown;
     }
 
     /**
@@ -2284,9 +2356,14 @@ namespace ts.server.protocol {
         codeActions?: CodeAction[];
 
         /**
-         * Human-readable description of the `source` from the CompletionEntry.
+         * @deprecated Use `sourceDisplay` instead.
          */
         source?: SymbolDisplayPart[];
+
+        /**
+         * Human-readable description of the `source` from the CompletionEntry.
+         */
+         sourceDisplay?: SymbolDisplayPart[];
     }
 
     /** @deprecated Prefer CompletionInfoResponse, which supports several top-level fields in addition to the array of entries. */
@@ -2308,6 +2385,7 @@ namespace ts.server.protocol {
          * must be used to commit that completion entry.
          */
         readonly optionalReplacementSpan?: TextSpan;
+        readonly isIncomplete?: boolean;
         readonly entries: readonly CompletionEntry[];
     }
 
@@ -2482,6 +2560,36 @@ namespace ts.server.protocol {
      */
     export interface SignatureHelpResponse extends Response {
         body?: SignatureHelpItems;
+    }
+
+    export type InlayHintKind = "Type" | "Parameter" | "Enum";
+
+    export interface InlayHintsRequestArgs extends FileRequestArgs {
+        /**
+         * Start position of the span.
+         */
+        start: number;
+        /**
+         * Length of the span.
+         */
+        length: number;
+    }
+
+    export interface InlayHintsRequest extends Request {
+        command: CommandTypes.ProvideInlayHints;
+        arguments: InlayHintsRequestArgs;
+    }
+
+    export interface InlayHintItem {
+        text: string;
+        position: Location;
+        kind: InlayHintKind;
+        whitespaceBefore?: boolean;
+        whitespaceAfter?: boolean;
+    }
+
+    export interface InlayHintsResponse extends Response {
+        body?: InlayHintItem[];
     }
 
     /**
@@ -3091,14 +3199,32 @@ namespace ts.server.protocol {
         payload: TypingsInstalledTelemetryEventPayload;
     }
 
-    /*
-     * __GDPR__
-     * "typingsinstalled" : {
-     *     "${include}": ["${TypeScriptCommonProperties}"],
-     *     "installedPackages": { "classification": "PublicNonPersonalData", "purpose": "FeatureInsight" },
-     *     "installSuccess": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
-     *     "typingsInstallerVersion": { "classification": "SystemMetaData", "purpose": "FeatureInsight" }
-     * }
+    // A __GDPR__FRAGMENT__ has no meaning until it is ${include}d by a __GDPR__ comment, at which point
+    // the included properties are effectively inlined into the __GDPR__ declaration.  In this case, for
+    // example, any __GDPR__ comment including the TypeScriptCommonProperties will be updated with an
+    // additional version property with the classification below.  Obviously, the purpose of such a construct
+    // is to reduce duplication and keep multiple use sites consistent (e.g. by making sure that all reflect
+    // any newly added TypeScriptCommonProperties).  Unfortunately, the system has limits - in particular,
+    // these reusable __GDPR__FRAGMENT__s are not accessible across repo boundaries.  Therefore, even though
+    // the code for adding the common properties (i.e. version), along with the corresponding __GDPR__FRAGMENT__,
+    // lives in the VS Code repo (see https://github.com/microsoft/vscode/blob/main/extensions/typescript-language-features/src/utils/telemetry.ts)
+    // we have to duplicate it here.  It would be nice to keep them in sync, but the only likely failure mode
+    // is adding a property to the VS Code repro but not here and the only consequence would be having that
+    // property suppressed on the events (i.e. __GDPT__ comments) in this repo that reference the out-of-date
+    // local __GDPR__FRAGMENT__.
+    /* __GDPR__FRAGMENT__
+        "TypeScriptCommonProperties" : {
+            "version" : { "classification": "SystemMetaData", "purpose": "FeatureInsight" }
+        }
+    */
+
+    /* __GDPR__
+        "typingsinstalled" : {
+            "${include}": ["${TypeScriptCommonProperties}"],
+            "installedPackages": { "classification": "PublicNonPersonalData", "purpose": "FeatureInsight" },
+            "installSuccess": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
+            "typingsInstallerVersion": { "classification": "SystemMetaData", "purpose": "FeatureInsight" }
+        }
      */
     export interface TypingsInstalledTelemetryEventPayload {
         /**
@@ -3254,6 +3380,15 @@ namespace ts.server.protocol {
          */
         readonly includeCompletionsForModuleExports?: boolean;
         /**
+         * Enables auto-import-style completions on partially-typed import statements. E.g., allows
+         * `import write|` to be completed to `import { writeFile } from "fs"`.
+         */
+        readonly includeCompletionsForImportStatements?: boolean;
+        /**
+         * Allows completions to be formatted with snippet text, indicated by `CompletionItem["isSnippet"]`.
+         */
+         readonly includeCompletionsWithSnippetText?: boolean;
+        /**
          * If enabled, the completion list will include completions with invalid identifier names.
          * For those entries, The `insertText` and `replacementSpan` properties will be set to change from `.x` property access to `["x"]`.
          */
@@ -3264,6 +3399,14 @@ namespace ts.server.protocol {
          * values, with insertion text to replace preceding `.` tokens with `?.`.
          */
         readonly includeAutomaticOptionalChainCompletions?: boolean;
+        /**
+         * If enabled, completions for class members (e.g. methods and properties) will include
+         * a whole declaration for the member.
+         * E.g., `class A { f| }` could be completed to `class A { foo(): number {} }`, instead of
+         * `class A { foo }`.
+         */
+        readonly includeCompletionsWithClassMemberSnippets?: boolean;
+        readonly allowIncompleteCompletions?: boolean;
         readonly importModuleSpecifierPreference?: "shortest" | "project-relative" | "relative" | "non-relative";
         /** Determines whether we import `foo/index.ts` as "foo", "foo/index", or "foo/index.js" */
         readonly importModuleSpecifierEnding?: "auto" | "minimal" | "index" | "js";
@@ -3273,6 +3416,18 @@ namespace ts.server.protocol {
         readonly provideRefactorNotApplicableReason?: boolean;
         readonly allowRenameOfImportPath?: boolean;
         readonly includePackageJsonAutoImports?: "auto" | "on" | "off";
+        readonly jsxAttributeCompletionStyle?: "auto" | "braces" | "none";
+
+        readonly displayPartsForJSDoc?: boolean;
+        readonly generateReturnInDocTemplate?: boolean;
+
+        readonly includeInlayParameterNameHints?: "none" | "literals" | "all";
+        readonly includeInlayParameterNameHintsWhenArgumentMatchesName?: boolean;
+        readonly includeInlayFunctionParameterTypeHints?: boolean,
+        readonly includeInlayVariableTypeHints?: boolean;
+        readonly includeInlayPropertyDeclarationTypeHints?: boolean;
+        readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
+        readonly includeInlayEnumMemberValueHints?: boolean;
     }
 
     export interface CompilerOptions {
@@ -3386,6 +3541,36 @@ namespace ts.server.protocol {
         ES2018 = "ES2018",
         ES2019 = "ES2019",
         ES2020 = "ES2020",
+        ES2021 = "ES2021",
+        ES2022 = "ES2022",
         ESNext = "ESNext"
+    }
+
+    export const enum ClassificationType {
+        comment = 1,
+        identifier = 2,
+        keyword = 3,
+        numericLiteral = 4,
+        operator = 5,
+        stringLiteral = 6,
+        regularExpressionLiteral = 7,
+        whiteSpace = 8,
+        text = 9,
+        punctuation = 10,
+        className = 11,
+        enumName = 12,
+        interfaceName = 13,
+        moduleName = 14,
+        typeParameterName = 15,
+        typeAliasName = 16,
+        parameterName = 17,
+        docCommentTagName = 18,
+        jsxOpenTagName = 19,
+        jsxCloseTagName = 20,
+        jsxSelfClosingTagName = 21,
+        jsxAttribute = 22,
+        jsxText = 23,
+        jsxAttributeStringLiteralValue = 24,
+        bigintLiteral = 25,
     }
 }

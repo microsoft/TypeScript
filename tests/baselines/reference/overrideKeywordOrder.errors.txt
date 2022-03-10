@@ -1,0 +1,53 @@
+tests/cases/conformance/override/overrideKeywordOrder.ts(12,9): error TS1029: 'override' modifier must precede 'async' modifier.
+tests/cases/conformance/override/overrideKeywordOrder.ts(15,12): error TS1029: 'static' modifier must precede 'override' modifier.
+tests/cases/conformance/override/overrideKeywordOrder.ts(21,12): error TS1029: 'public' modifier must precede 'override' modifier.
+tests/cases/conformance/override/overrideKeywordOrder.ts(26,12): error TS1029: 'override' modifier must precede 'readonly' modifier.
+tests/cases/conformance/override/overrideKeywordOrder.ts(32,12): error TS1029: 'abstract' modifier must precede 'override' modifier.
+
+
+==== tests/cases/conformance/override/overrideKeywordOrder.ts (5 errors) ====
+    abstract class Base {
+      static s1() {}
+      static s2() {}
+      abstract m1(): void;
+      abstract m2(): void;
+      p1: any;
+      p2: any;
+    }
+    
+    class Test1 extends Base {
+      override async m1() {}
+      async override m2() {} // error
+            ~~~~~~~~
+!!! error TS1029: 'override' modifier must precede 'async' modifier.
+    }
+    class Test2 extends Base {
+      override static s1() {} // error
+               ~~~~~~
+!!! error TS1029: 'static' modifier must precede 'override' modifier.
+      static override s2() {}
+      m1() {}
+      m2() {}
+    }
+    class Test3 extends Base {
+      override public m1() {} // error
+               ~~~~~~
+!!! error TS1029: 'public' modifier must precede 'override' modifier.
+      public override m2() {}
+    }
+    class Test4 extends Base {
+      override readonly p1: any;
+      readonly override p2: any; // error
+               ~~~~~~~~
+!!! error TS1029: 'override' modifier must precede 'readonly' modifier.
+      m1() {}
+      m2() {}
+    }
+    
+    abstract class Test5 extends Base {
+      override abstract m1(): void; // error
+               ~~~~~~~~
+!!! error TS1029: 'abstract' modifier must precede 'override' modifier.
+      abstract override m2(): void;
+    }
+    

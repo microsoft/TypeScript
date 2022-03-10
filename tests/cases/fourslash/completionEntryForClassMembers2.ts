@@ -398,6 +398,6 @@ const tests: ReadonlyArray<{ readonly marker: string | ReadonlyArray<string>, re
 
 verify.completions(...tests.map(({ marker, members }): FourSlashInterface.CompletionsOptions => ({
     marker,
-    exact: [...members.map(m => ({ ...m, kind: "method" })), ...completion.classElementKeywords],
+    unsorted: [...members.map(m => ({ ...m, kind: "method" })), ...completion.classElementKeywords],
     isNewIdentifierLocation: true,
 })));

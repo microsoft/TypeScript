@@ -17,9 +17,9 @@ const hardline = { type: "hard" }
 >type : Symbol(type, Decl(first.js, 2, 18))
 
 module.exports = {
->module.exports : Symbol("tests/cases/conformance/salsa/first", Decl(first.js, 0, 0))
+>module.exports : Symbol(module.exports, Decl(first.js, 0, 0))
 >module : Symbol(module, Decl(first.js, 2, 33))
->exports : Symbol("tests/cases/conformance/salsa/first", Decl(first.js, 0, 0))
+>exports : Symbol(module.exports, Decl(first.js, 0, 0))
 
   hardline
 >hardline : Symbol(hardline, Decl(first.js, 3, 18))
@@ -28,7 +28,7 @@ module.exports = {
 
 === tests/cases/conformance/salsa/second.js ===
 module.exports = {
->module.exports : Symbol("tests/cases/conformance/salsa/second", Decl(second.js, 0, 0))
+>module.exports : Symbol(module.exports, Decl(second.js, 0, 0))
 >module : Symbol(export=, Decl(second.js, 0, 0))
 >exports : Symbol(export=, Decl(second.js, 0, 0))
 

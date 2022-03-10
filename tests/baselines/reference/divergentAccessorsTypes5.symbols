@@ -1,0 +1,83 @@
+=== tests/cases/compiler/divergentAccessorsTypes5.ts ===
+// Not really different from divergentAccessorsTypes4.ts,
+// but goes through the deferred type code
+
+class One {
+>One : Symbol(One, Decl(divergentAccessorsTypes5.ts, 0, 0))
+
+  get prop1(): string { return ""; }
+>prop1 : Symbol(One.prop1, Decl(divergentAccessorsTypes5.ts, 3, 11), Decl(divergentAccessorsTypes5.ts, 4, 36))
+
+  set prop1(s: string | number) { }
+>prop1 : Symbol(One.prop1, Decl(divergentAccessorsTypes5.ts, 3, 11), Decl(divergentAccessorsTypes5.ts, 4, 36))
+>s : Symbol(s, Decl(divergentAccessorsTypes5.ts, 5, 12))
+
+  prop2: number;
+>prop2 : Symbol(One.prop2, Decl(divergentAccessorsTypes5.ts, 5, 35))
+}
+
+class Two {
+>Two : Symbol(Two, Decl(divergentAccessorsTypes5.ts, 8, 1))
+
+  get prop1(): "hello" { return "hello"; }
+>prop1 : Symbol(Two.prop1, Decl(divergentAccessorsTypes5.ts, 10, 11), Decl(divergentAccessorsTypes5.ts, 11, 42))
+
+  set prop1(s: "hello" | number) { }
+>prop1 : Symbol(Two.prop1, Decl(divergentAccessorsTypes5.ts, 10, 11), Decl(divergentAccessorsTypes5.ts, 11, 42))
+>s : Symbol(s, Decl(divergentAccessorsTypes5.ts, 12, 12))
+
+  get prop2(): string { return ""; }
+>prop2 : Symbol(Two.prop2, Decl(divergentAccessorsTypes5.ts, 12, 36), Decl(divergentAccessorsTypes5.ts, 14, 36))
+
+  set prop2(s: string | 42) { }
+>prop2 : Symbol(Two.prop2, Decl(divergentAccessorsTypes5.ts, 12, 36), Decl(divergentAccessorsTypes5.ts, 14, 36))
+>s : Symbol(s, Decl(divergentAccessorsTypes5.ts, 15, 12))
+
+}
+
+class Three {
+>Three : Symbol(Three, Decl(divergentAccessorsTypes5.ts, 17, 1))
+
+  get prop1(): "hello" { return "hello"; }
+>prop1 : Symbol(Three.prop1, Decl(divergentAccessorsTypes5.ts, 19, 13), Decl(divergentAccessorsTypes5.ts, 20, 42))
+
+  set prop1(s: "hello" | boolean) { }
+>prop1 : Symbol(Three.prop1, Decl(divergentAccessorsTypes5.ts, 19, 13), Decl(divergentAccessorsTypes5.ts, 20, 42))
+>s : Symbol(s, Decl(divergentAccessorsTypes5.ts, 21, 12))
+
+  get prop2(): string { return ""; }
+>prop2 : Symbol(Three.prop2, Decl(divergentAccessorsTypes5.ts, 21, 37), Decl(divergentAccessorsTypes5.ts, 23, 36))
+
+  set prop2(s: string | number | boolean) { }
+>prop2 : Symbol(Three.prop2, Decl(divergentAccessorsTypes5.ts, 21, 37), Decl(divergentAccessorsTypes5.ts, 23, 36))
+>s : Symbol(s, Decl(divergentAccessorsTypes5.ts, 24, 12))
+}
+
+declare const i: One & Two & Three;
+>i : Symbol(i, Decl(divergentAccessorsTypes5.ts, 27, 13))
+>One : Symbol(One, Decl(divergentAccessorsTypes5.ts, 0, 0))
+>Two : Symbol(Two, Decl(divergentAccessorsTypes5.ts, 8, 1))
+>Three : Symbol(Three, Decl(divergentAccessorsTypes5.ts, 17, 1))
+
+// "hello"
+i.prop1 = 42; // error
+>i.prop1 : Symbol(prop1, Decl(divergentAccessorsTypes5.ts, 3, 11), Decl(divergentAccessorsTypes5.ts, 4, 36), Decl(divergentAccessorsTypes5.ts, 10, 11), Decl(divergentAccessorsTypes5.ts, 11, 42), Decl(divergentAccessorsTypes5.ts, 19, 13) ... and 1 more)
+>i : Symbol(i, Decl(divergentAccessorsTypes5.ts, 27, 13))
+>prop1 : Symbol(prop1, Decl(divergentAccessorsTypes5.ts, 3, 11), Decl(divergentAccessorsTypes5.ts, 4, 36), Decl(divergentAccessorsTypes5.ts, 10, 11), Decl(divergentAccessorsTypes5.ts, 11, 42), Decl(divergentAccessorsTypes5.ts, 19, 13) ... and 1 more)
+
+i.prop1 = "hello";
+>i.prop1 : Symbol(prop1, Decl(divergentAccessorsTypes5.ts, 3, 11), Decl(divergentAccessorsTypes5.ts, 4, 36), Decl(divergentAccessorsTypes5.ts, 10, 11), Decl(divergentAccessorsTypes5.ts, 11, 42), Decl(divergentAccessorsTypes5.ts, 19, 13) ... and 1 more)
+>i : Symbol(i, Decl(divergentAccessorsTypes5.ts, 27, 13))
+>prop1 : Symbol(prop1, Decl(divergentAccessorsTypes5.ts, 3, 11), Decl(divergentAccessorsTypes5.ts, 4, 36), Decl(divergentAccessorsTypes5.ts, 10, 11), Decl(divergentAccessorsTypes5.ts, 11, 42), Decl(divergentAccessorsTypes5.ts, 19, 13) ... and 1 more)
+
+// 42
+i.prop2 = 42;
+>i.prop2 : Symbol(prop2, Decl(divergentAccessorsTypes5.ts, 5, 35), Decl(divergentAccessorsTypes5.ts, 12, 36), Decl(divergentAccessorsTypes5.ts, 14, 36), Decl(divergentAccessorsTypes5.ts, 21, 37), Decl(divergentAccessorsTypes5.ts, 23, 36))
+>i : Symbol(i, Decl(divergentAccessorsTypes5.ts, 27, 13))
+>prop2 : Symbol(prop2, Decl(divergentAccessorsTypes5.ts, 5, 35), Decl(divergentAccessorsTypes5.ts, 12, 36), Decl(divergentAccessorsTypes5.ts, 14, 36), Decl(divergentAccessorsTypes5.ts, 21, 37), Decl(divergentAccessorsTypes5.ts, 23, 36))
+
+i.prop2 = "hello"; // error
+>i.prop2 : Symbol(prop2, Decl(divergentAccessorsTypes5.ts, 5, 35), Decl(divergentAccessorsTypes5.ts, 12, 36), Decl(divergentAccessorsTypes5.ts, 14, 36), Decl(divergentAccessorsTypes5.ts, 21, 37), Decl(divergentAccessorsTypes5.ts, 23, 36))
+>i : Symbol(i, Decl(divergentAccessorsTypes5.ts, 27, 13))
+>prop2 : Symbol(prop2, Decl(divergentAccessorsTypes5.ts, 5, 35), Decl(divergentAccessorsTypes5.ts, 12, 36), Decl(divergentAccessorsTypes5.ts, 14, 36), Decl(divergentAccessorsTypes5.ts, 21, 37), Decl(divergentAccessorsTypes5.ts, 23, 36))
+

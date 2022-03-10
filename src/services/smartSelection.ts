@@ -13,8 +13,14 @@ namespace ts.SmartSelectionRange {
                 const prevNode: Node | undefined = children[i - 1];
                 const node: Node = children[i];
                 const nextNode: Node | undefined = children[i + 1];
+
                 if (getTokenPosOfNode(node, sourceFile, /*includeJsDoc*/ true) > pos) {
                     break outer;
+                }
+
+                const comment = singleOrUndefined(getTrailingCommentRanges(sourceFile.text, node.end));
+                if (comment && comment.kind === SyntaxKind.SingleLineCommentTrivia) {
+                    pushSelectionCommentRange(comment.pos, comment.end);
                 }
 
                 if (positionShouldSnapToNode(sourceFile, pos, node)) {
@@ -88,6 +94,16 @@ namespace ts.SmartSelectionRange {
                     selectionRange = { textSpan, ...selectionRange && { parent: selectionRange } };
                 }
             }
+        }
+
+        function pushSelectionCommentRange(start: number, end: number): void {
+            pushSelectionRange(start, end);
+
+            let pos = start;
+            while (sourceFile.text.charCodeAt(pos) === CharacterCodes.slash) {
+                pos++;
+            }
+            pushSelectionRange(pos, end);
         }
     }
 

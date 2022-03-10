@@ -1,0 +1,31 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameClassExpressionLoop.ts ===
+const array = [];
+>array : Symbol(array, Decl(privateNameClassExpressionLoop.ts, 0, 5))
+
+for (let i = 0; i < 10; ++i) {
+>i : Symbol(i, Decl(privateNameClassExpressionLoop.ts, 1, 8))
+>i : Symbol(i, Decl(privateNameClassExpressionLoop.ts, 1, 8))
+>i : Symbol(i, Decl(privateNameClassExpressionLoop.ts, 1, 8))
+
+    array.push(class C {
+>array.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>array : Symbol(array, Decl(privateNameClassExpressionLoop.ts, 0, 5))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>C : Symbol(C, Decl(privateNameClassExpressionLoop.ts, 2, 15))
+
+        #myField = "hello";
+>#myField : Symbol(C.#myField, Decl(privateNameClassExpressionLoop.ts, 2, 24))
+
+        #method() {}
+>#method : Symbol(C.#method, Decl(privateNameClassExpressionLoop.ts, 3, 27))
+
+        get #accessor() { return 42; }
+>#accessor : Symbol(C.#accessor, Decl(privateNameClassExpressionLoop.ts, 4, 20), Decl(privateNameClassExpressionLoop.ts, 5, 38))
+
+        set #accessor(val) { }
+>#accessor : Symbol(C.#accessor, Decl(privateNameClassExpressionLoop.ts, 4, 20), Decl(privateNameClassExpressionLoop.ts, 5, 38))
+>val : Symbol(val, Decl(privateNameClassExpressionLoop.ts, 6, 22))
+
+    });
+}
+

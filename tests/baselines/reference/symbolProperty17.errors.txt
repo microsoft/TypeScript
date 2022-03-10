@@ -1,12 +1,12 @@
-tests/cases/conformance/es6/Symbols/symbolProperty17.ts(3,6): error TS1023: An index signature parameter type must be either 'string' or 'number'.
+tests/cases/conformance/es6/Symbols/symbolProperty17.ts(2,5): error TS2411: Property '[Symbol.iterator]' of type 'number' is not assignable to 'symbol' index type 'string'.
 
 
 ==== tests/cases/conformance/es6/Symbols/symbolProperty17.ts (1 errors) ====
     interface I {
         [Symbol.iterator]: number;
+        ~~~~~~~~~~~~~~~~~
+!!! error TS2411: Property '[Symbol.iterator]' of type 'number' is not assignable to 'symbol' index type 'string'.
         [s: symbol]: string;
-         ~
-!!! error TS1023: An index signature parameter type must be either 'string' or 'number'.
         "__@iterator": string;
     }
     

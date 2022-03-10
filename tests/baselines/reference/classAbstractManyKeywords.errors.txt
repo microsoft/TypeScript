@@ -1,4 +1,4 @@
-tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractManyKeywords.ts(3,1): error TS1128: Declaration or statement expected.
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractManyKeywords.ts(3,1): error TS1005: 'export' expected.
 tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractManyKeywords.ts(4,17): error TS1005: '=' expected.
 
 
@@ -7,7 +7,7 @@ tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbst
     export abstract class B {}
     default abstract class C {}
     ~~~~~~~
-!!! error TS1128: Declaration or statement expected.
+!!! error TS1005: 'export' expected.
     import abstract class D {}
                     ~~~~~
 !!! error TS1005: '=' expected.

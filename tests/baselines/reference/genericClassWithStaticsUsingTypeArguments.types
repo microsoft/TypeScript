@@ -4,15 +4,15 @@ class Foo<T> {
 >Foo : Foo<T>
 
     static a = (n: T) => { };
->a : (n: any) => void
->(n: T) => { } : (n: any) => void
->n : any
+>a : (n: T) => void
+>(n: T) => { } : (n: T) => void
+>n : T
 
     static b: T;
->b : any
+>b : T
 
     static c: T[] = [];
->c : any[]
+>c : T[]
 >[] : undefined[]
 
     static d = false || ((x: T) => x || undefined)(null)
@@ -20,29 +20,29 @@ class Foo<T> {
 >false || ((x: T) => x || undefined)(null) : any
 >false : false
 >((x: T) => x || undefined)(null) : any
->((x: T) => x || undefined) : (x: any) => any
->(x: T) => x || undefined : (x: any) => any
->x : any
+>((x: T) => x || undefined) : (x: T) => any
+>(x: T) => x || undefined : (x: T) => any
+>x : T
 >x || undefined : any
->x : any
+>x : T
 >undefined : undefined
 >null : null
 
     static e = function (x: T) { return null; }
->e : (x: any) => any
->function (x: T) { return null; } : (x: any) => any
->x : any
+>e : (x: T) => any
+>function (x: T) { return null; } : (x: T) => any
+>x : T
 >null : null
 
     static f(xs: T[]): T[] {
 >f : (xs: T[]) => T[]
->xs : any[]
+>xs : T[]
 
         return xs.reverse();
->xs.reverse() : any[]
->xs.reverse : () => any[]
->xs : any[]
->reverse : () => any[]
+>xs.reverse() : T[]
+>xs.reverse : () => T[]
+>xs : T[]
+>reverse : () => T[]
     }
 }
 

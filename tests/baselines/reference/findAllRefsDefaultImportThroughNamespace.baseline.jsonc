@@ -1,0 +1,433 @@
+// === /a.ts ===
+// export /*FIND ALL REFS*/[|default|] function f() {}
+
+// === /c.ts ===
+// import { a } from "./b";
+// a.[|default|]();
+// 
+// declare const x: { default: number };
+// x.default;
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/a.ts",
+      "kind": "function",
+      "name": "function f(): void",
+      "textSpan": {
+        "start": 24,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "f",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 30
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 7,
+          "length": 7
+        },
+        "fileName": "/a.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 30
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 27,
+          "length": 7
+        },
+        "fileName": "/c.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /a.ts ===
+// export default function /*FIND ALL REFS*/[|f|]() {}
+
+// === /c.ts ===
+// import { a } from "./b";
+// a.[|default|]();
+// 
+// declare const x: { default: number };
+// x.default;
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/a.ts",
+      "kind": "function",
+      "name": "function f(): void",
+      "textSpan": {
+        "start": 24,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "f",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 30
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 24,
+          "length": 1
+        },
+        "fileName": "/a.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 30
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 27,
+          "length": 7
+        },
+        "fileName": "/c.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /a.ts ===
+// export default function [|f|]() {}
+
+// === /c.ts ===
+// import { a } from "./b";
+// a./*FIND ALL REFS*/[|default|]();
+// 
+// declare const x: { default: number };
+// x.default;
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/a.ts",
+      "kind": "function",
+      "name": "function f(): void",
+      "textSpan": {
+        "start": 24,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "f",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 30
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 24,
+          "length": 1
+        },
+        "fileName": "/a.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 30
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 27,
+          "length": 7
+        },
+        "fileName": "/c.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /c.ts ===
+// import { a } from "./b";
+// a.default();
+// 
+// declare const x: { /*FIND ALL REFS*/[|default|]: number };
+// x.[|default|];
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/c.ts",
+      "kind": "property",
+      "name": "(property) default: number",
+      "textSpan": {
+        "start": 58,
+        "length": 7
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "default",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 58,
+        "length": 15
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 58,
+          "length": 7
+        },
+        "fileName": "/c.ts",
+        "contextSpan": {
+          "start": 58,
+          "length": 15
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 79,
+          "length": 7
+        },
+        "fileName": "/c.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /c.ts ===
+// import { a } from "./b";
+// a.default();
+// 
+// declare const x: { [|default|]: number };
+// x./*FIND ALL REFS*/[|default|];
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/c.ts",
+      "kind": "property",
+      "name": "(property) default: number",
+      "textSpan": {
+        "start": 58,
+        "length": 7
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "default",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 58,
+        "length": 15
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 58,
+          "length": 7
+        },
+        "fileName": "/c.ts",
+        "contextSpan": {
+          "start": 58,
+          "length": 15
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 79,
+          "length": 7
+        },
+        "fileName": "/c.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]

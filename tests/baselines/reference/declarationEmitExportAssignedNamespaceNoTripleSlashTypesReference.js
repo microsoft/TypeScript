@@ -53,13 +53,17 @@ var get_comp_1 = require("./get-comp");
 // this shouldn't need any triple-slash references - it should have a direct import to `react` and that's it
 // This issue (#35343) _only_ reproduces in the test harness when the file in question is in a subfolder
 exports.obj = {
-    comp: get_comp_1.getComp()
+    comp: (0, get_comp_1.getComp)()
 };
 //// [some-other-file.js]
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];

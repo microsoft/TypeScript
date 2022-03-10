@@ -1,0 +1,255 @@
+=== tests/cases/compiler/narrowingOfQualifiedNames.ts ===
+// Repro from #43411
+
+interface IProperties {
+>IProperties : Symbol(IProperties, Decl(narrowingOfQualifiedNames.ts, 0, 0))
+
+    foo?: {
+>foo : Symbol(IProperties.foo, Decl(narrowingOfQualifiedNames.ts, 2, 23))
+
+        aaa: string
+>aaa : Symbol(aaa, Decl(narrowingOfQualifiedNames.ts, 3, 11))
+
+        bbb: string
+>bbb : Symbol(bbb, Decl(narrowingOfQualifiedNames.ts, 4, 19))
+    }
+}
+
+function init(properties: IProperties) {
+>init : Symbol(init, Decl(narrowingOfQualifiedNames.ts, 7, 1))
+>properties : Symbol(properties, Decl(narrowingOfQualifiedNames.ts, 9, 14))
+>IProperties : Symbol(IProperties, Decl(narrowingOfQualifiedNames.ts, 0, 0))
+
+    if (properties.foo) {
+>properties.foo : Symbol(IProperties.foo, Decl(narrowingOfQualifiedNames.ts, 2, 23))
+>properties : Symbol(properties, Decl(narrowingOfQualifiedNames.ts, 9, 14))
+>foo : Symbol(IProperties.foo, Decl(narrowingOfQualifiedNames.ts, 2, 23))
+
+        type FooOK = typeof properties.foo;
+>FooOK : Symbol(FooOK, Decl(narrowingOfQualifiedNames.ts, 10, 25))
+>properties.foo : Symbol(IProperties.foo, Decl(narrowingOfQualifiedNames.ts, 2, 23))
+>properties : Symbol(properties, Decl(narrowingOfQualifiedNames.ts, 9, 14))
+>foo : Symbol(IProperties.foo, Decl(narrowingOfQualifiedNames.ts, 2, 23))
+
+        properties.foo; // type is { aaa: string; bbb: string; }
+>properties.foo : Symbol(IProperties.foo, Decl(narrowingOfQualifiedNames.ts, 2, 23))
+>properties : Symbol(properties, Decl(narrowingOfQualifiedNames.ts, 9, 14))
+>foo : Symbol(IProperties.foo, Decl(narrowingOfQualifiedNames.ts, 2, 23))
+
+        for (const x of [1, 2, 3]) {
+>x : Symbol(x, Decl(narrowingOfQualifiedNames.ts, 13, 18))
+
+          properties.foo; // type is { aaa: string; bbb: string; }
+>properties.foo : Symbol(IProperties.foo, Decl(narrowingOfQualifiedNames.ts, 2, 23))
+>properties : Symbol(properties, Decl(narrowingOfQualifiedNames.ts, 9, 14))
+>foo : Symbol(IProperties.foo, Decl(narrowingOfQualifiedNames.ts, 2, 23))
+
+          type FooOrUndefined = typeof properties.foo; // type should be { aaa: string; bbb: string; }
+>FooOrUndefined : Symbol(FooOrUndefined, Decl(narrowingOfQualifiedNames.ts, 14, 25))
+>properties.foo : Symbol(IProperties.foo, Decl(narrowingOfQualifiedNames.ts, 2, 23))
+>properties : Symbol(properties, Decl(narrowingOfQualifiedNames.ts, 9, 14))
+>foo : Symbol(IProperties.foo, Decl(narrowingOfQualifiedNames.ts, 2, 23))
+        }
+    }
+}
+
+interface DeepOptional {
+>DeepOptional : Symbol(DeepOptional, Decl(narrowingOfQualifiedNames.ts, 18, 1))
+
+    a?: {
+>a : Symbol(DeepOptional.a, Decl(narrowingOfQualifiedNames.ts, 20, 24))
+
+        b?: {
+>b : Symbol(b, Decl(narrowingOfQualifiedNames.ts, 21, 9))
+
+            c?: string
+>c : Symbol(c, Decl(narrowingOfQualifiedNames.ts, 22, 13))
+        }
+    }
+}
+
+function init2(foo: DeepOptional) {
+>init2 : Symbol(init2, Decl(narrowingOfQualifiedNames.ts, 26, 1))
+>foo : Symbol(foo, Decl(narrowingOfQualifiedNames.ts, 28, 15))
+>DeepOptional : Symbol(DeepOptional, Decl(narrowingOfQualifiedNames.ts, 18, 1))
+
+    if (foo.a) {
+>foo.a : Symbol(DeepOptional.a, Decl(narrowingOfQualifiedNames.ts, 20, 24))
+>foo : Symbol(foo, Decl(narrowingOfQualifiedNames.ts, 28, 15))
+>a : Symbol(DeepOptional.a, Decl(narrowingOfQualifiedNames.ts, 20, 24))
+
+        type A = typeof foo.a;
+>A : Symbol(A, Decl(narrowingOfQualifiedNames.ts, 29, 16))
+>foo.a : Symbol(DeepOptional.a, Decl(narrowingOfQualifiedNames.ts, 20, 24))
+>foo : Symbol(foo, Decl(narrowingOfQualifiedNames.ts, 28, 15))
+>a : Symbol(DeepOptional.a, Decl(narrowingOfQualifiedNames.ts, 20, 24))
+
+        type B = typeof foo.a.b;
+>B : Symbol(B, Decl(narrowingOfQualifiedNames.ts, 30, 30))
+>foo.a.b : Symbol(b, Decl(narrowingOfQualifiedNames.ts, 21, 9))
+>foo.a : Symbol(DeepOptional.a, Decl(narrowingOfQualifiedNames.ts, 20, 24))
+>foo : Symbol(foo, Decl(narrowingOfQualifiedNames.ts, 28, 15))
+>a : Symbol(DeepOptional.a, Decl(narrowingOfQualifiedNames.ts, 20, 24))
+>b : Symbol(b, Decl(narrowingOfQualifiedNames.ts, 21, 9))
+
+        type C = typeof foo.a.b.c;
+>C : Symbol(C, Decl(narrowingOfQualifiedNames.ts, 31, 32))
+>foo.a.b.c : Symbol(c, Decl(narrowingOfQualifiedNames.ts, 22, 13))
+>foo.a.b : Symbol(b, Decl(narrowingOfQualifiedNames.ts, 21, 9))
+>foo.a : Symbol(DeepOptional.a, Decl(narrowingOfQualifiedNames.ts, 20, 24))
+>foo : Symbol(foo, Decl(narrowingOfQualifiedNames.ts, 28, 15))
+>a : Symbol(DeepOptional.a, Decl(narrowingOfQualifiedNames.ts, 20, 24))
+>b : Symbol(b, Decl(narrowingOfQualifiedNames.ts, 21, 9))
+>c : Symbol(c, Decl(narrowingOfQualifiedNames.ts, 22, 13))
+
+        for(const _ of [1]) {
+>_ : Symbol(_, Decl(narrowingOfQualifiedNames.ts, 34, 17))
+
+            type A = typeof foo.a;
+>A : Symbol(A, Decl(narrowingOfQualifiedNames.ts, 34, 29))
+>foo.a : Symbol(DeepOptional.a, Decl(narrowingOfQualifiedNames.ts, 20, 24))
+>foo : Symbol(foo, Decl(narrowingOfQualifiedNames.ts, 28, 15))
+>a : Symbol(DeepOptional.a, Decl(narrowingOfQualifiedNames.ts, 20, 24))
+
+            type B = typeof foo.a.b;
+>B : Symbol(B, Decl(narrowingOfQualifiedNames.ts, 35, 34))
+>foo.a.b : Symbol(b, Decl(narrowingOfQualifiedNames.ts, 21, 9))
+>foo.a : Symbol(DeepOptional.a, Decl(narrowingOfQualifiedNames.ts, 20, 24))
+>foo : Symbol(foo, Decl(narrowingOfQualifiedNames.ts, 28, 15))
+>a : Symbol(DeepOptional.a, Decl(narrowingOfQualifiedNames.ts, 20, 24))
+>b : Symbol(b, Decl(narrowingOfQualifiedNames.ts, 21, 9))
+
+            type C = typeof foo.a.b.c;
+>C : Symbol(C, Decl(narrowingOfQualifiedNames.ts, 36, 36))
+>foo.a.b.c : Symbol(c, Decl(narrowingOfQualifiedNames.ts, 22, 13))
+>foo.a.b : Symbol(b, Decl(narrowingOfQualifiedNames.ts, 21, 9))
+>foo.a : Symbol(DeepOptional.a, Decl(narrowingOfQualifiedNames.ts, 20, 24))
+>foo : Symbol(foo, Decl(narrowingOfQualifiedNames.ts, 28, 15))
+>a : Symbol(DeepOptional.a, Decl(narrowingOfQualifiedNames.ts, 20, 24))
+>b : Symbol(b, Decl(narrowingOfQualifiedNames.ts, 21, 9))
+>c : Symbol(c, Decl(narrowingOfQualifiedNames.ts, 22, 13))
+
+            if (foo.a.b) {
+>foo.a.b : Symbol(b, Decl(narrowingOfQualifiedNames.ts, 21, 9))
+>foo.a : Symbol(DeepOptional.a, Decl(narrowingOfQualifiedNames.ts, 20, 24))
+>foo : Symbol(foo, Decl(narrowingOfQualifiedNames.ts, 28, 15))
+>a : Symbol(DeepOptional.a, Decl(narrowingOfQualifiedNames.ts, 20, 24))
+>b : Symbol(b, Decl(narrowingOfQualifiedNames.ts, 21, 9))
+
+                type A = typeof foo.a;
+>A : Symbol(A, Decl(narrowingOfQualifiedNames.ts, 39, 26))
+>foo.a : Symbol(DeepOptional.a, Decl(narrowingOfQualifiedNames.ts, 20, 24))
+>foo : Symbol(foo, Decl(narrowingOfQualifiedNames.ts, 28, 15))
+>a : Symbol(DeepOptional.a, Decl(narrowingOfQualifiedNames.ts, 20, 24))
+
+                type B = typeof foo.a.b;
+>B : Symbol(B, Decl(narrowingOfQualifiedNames.ts, 40, 38))
+>foo.a.b : Symbol(b, Decl(narrowingOfQualifiedNames.ts, 21, 9))
+>foo.a : Symbol(DeepOptional.a, Decl(narrowingOfQualifiedNames.ts, 20, 24))
+>foo : Symbol(foo, Decl(narrowingOfQualifiedNames.ts, 28, 15))
+>a : Symbol(DeepOptional.a, Decl(narrowingOfQualifiedNames.ts, 20, 24))
+>b : Symbol(b, Decl(narrowingOfQualifiedNames.ts, 21, 9))
+
+                type C = typeof foo.a.b.c;
+>C : Symbol(C, Decl(narrowingOfQualifiedNames.ts, 41, 40))
+>foo.a.b.c : Symbol(c, Decl(narrowingOfQualifiedNames.ts, 22, 13))
+>foo.a.b : Symbol(b, Decl(narrowingOfQualifiedNames.ts, 21, 9))
+>foo.a : Symbol(DeepOptional.a, Decl(narrowingOfQualifiedNames.ts, 20, 24))
+>foo : Symbol(foo, Decl(narrowingOfQualifiedNames.ts, 28, 15))
+>a : Symbol(DeepOptional.a, Decl(narrowingOfQualifiedNames.ts, 20, 24))
+>b : Symbol(b, Decl(narrowingOfQualifiedNames.ts, 21, 9))
+>c : Symbol(c, Decl(narrowingOfQualifiedNames.ts, 22, 13))
+
+                for(const _ of [1]) {
+>_ : Symbol(_, Decl(narrowingOfQualifiedNames.ts, 44, 25))
+
+                    type A = typeof foo.a;
+>A : Symbol(A, Decl(narrowingOfQualifiedNames.ts, 44, 37))
+>foo.a : Symbol(DeepOptional.a, Decl(narrowingOfQualifiedNames.ts, 20, 24))
+>foo : Symbol(foo, Decl(narrowingOfQualifiedNames.ts, 28, 15))
+>a : Symbol(DeepOptional.a, Decl(narrowingOfQualifiedNames.ts, 20, 24))
+
+                    type B = typeof foo.a.b;
+>B : Symbol(B, Decl(narrowingOfQualifiedNames.ts, 45, 42))
+>foo.a.b : Symbol(b, Decl(narrowingOfQualifiedNames.ts, 21, 9))
+>foo.a : Symbol(DeepOptional.a, Decl(narrowingOfQualifiedNames.ts, 20, 24))
+>foo : Symbol(foo, Decl(narrowingOfQualifiedNames.ts, 28, 15))
+>a : Symbol(DeepOptional.a, Decl(narrowingOfQualifiedNames.ts, 20, 24))
+>b : Symbol(b, Decl(narrowingOfQualifiedNames.ts, 21, 9))
+
+                    type C = typeof foo.a.b.c;
+>C : Symbol(C, Decl(narrowingOfQualifiedNames.ts, 46, 44))
+>foo.a.b.c : Symbol(c, Decl(narrowingOfQualifiedNames.ts, 22, 13))
+>foo.a.b : Symbol(b, Decl(narrowingOfQualifiedNames.ts, 21, 9))
+>foo.a : Symbol(DeepOptional.a, Decl(narrowingOfQualifiedNames.ts, 20, 24))
+>foo : Symbol(foo, Decl(narrowingOfQualifiedNames.ts, 28, 15))
+>a : Symbol(DeepOptional.a, Decl(narrowingOfQualifiedNames.ts, 20, 24))
+>b : Symbol(b, Decl(narrowingOfQualifiedNames.ts, 21, 9))
+>c : Symbol(c, Decl(narrowingOfQualifiedNames.ts, 22, 13))
+
+                    if (foo.a.b.c) {
+>foo.a.b.c : Symbol(c, Decl(narrowingOfQualifiedNames.ts, 22, 13))
+>foo.a.b : Symbol(b, Decl(narrowingOfQualifiedNames.ts, 21, 9))
+>foo.a : Symbol(DeepOptional.a, Decl(narrowingOfQualifiedNames.ts, 20, 24))
+>foo : Symbol(foo, Decl(narrowingOfQualifiedNames.ts, 28, 15))
+>a : Symbol(DeepOptional.a, Decl(narrowingOfQualifiedNames.ts, 20, 24))
+>b : Symbol(b, Decl(narrowingOfQualifiedNames.ts, 21, 9))
+>c : Symbol(c, Decl(narrowingOfQualifiedNames.ts, 22, 13))
+
+                        type A = typeof foo.a;
+>A : Symbol(A, Decl(narrowingOfQualifiedNames.ts, 49, 36))
+>foo.a : Symbol(DeepOptional.a, Decl(narrowingOfQualifiedNames.ts, 20, 24))
+>foo : Symbol(foo, Decl(narrowingOfQualifiedNames.ts, 28, 15))
+>a : Symbol(DeepOptional.a, Decl(narrowingOfQualifiedNames.ts, 20, 24))
+
+                        type B = typeof foo.a.b;
+>B : Symbol(B, Decl(narrowingOfQualifiedNames.ts, 50, 46))
+>foo.a.b : Symbol(b, Decl(narrowingOfQualifiedNames.ts, 21, 9))
+>foo.a : Symbol(DeepOptional.a, Decl(narrowingOfQualifiedNames.ts, 20, 24))
+>foo : Symbol(foo, Decl(narrowingOfQualifiedNames.ts, 28, 15))
+>a : Symbol(DeepOptional.a, Decl(narrowingOfQualifiedNames.ts, 20, 24))
+>b : Symbol(b, Decl(narrowingOfQualifiedNames.ts, 21, 9))
+
+                        type C = typeof foo.a.b.c;
+>C : Symbol(C, Decl(narrowingOfQualifiedNames.ts, 51, 48))
+>foo.a.b.c : Symbol(c, Decl(narrowingOfQualifiedNames.ts, 22, 13))
+>foo.a.b : Symbol(b, Decl(narrowingOfQualifiedNames.ts, 21, 9))
+>foo.a : Symbol(DeepOptional.a, Decl(narrowingOfQualifiedNames.ts, 20, 24))
+>foo : Symbol(foo, Decl(narrowingOfQualifiedNames.ts, 28, 15))
+>a : Symbol(DeepOptional.a, Decl(narrowingOfQualifiedNames.ts, 20, 24))
+>b : Symbol(b, Decl(narrowingOfQualifiedNames.ts, 21, 9))
+>c : Symbol(c, Decl(narrowingOfQualifiedNames.ts, 22, 13))
+
+                        for(const _ of [1]) {
+>_ : Symbol(_, Decl(narrowingOfQualifiedNames.ts, 54, 33))
+
+                            type A = typeof foo.a;
+>A : Symbol(A, Decl(narrowingOfQualifiedNames.ts, 54, 45))
+>foo.a : Symbol(DeepOptional.a, Decl(narrowingOfQualifiedNames.ts, 20, 24))
+>foo : Symbol(foo, Decl(narrowingOfQualifiedNames.ts, 28, 15))
+>a : Symbol(DeepOptional.a, Decl(narrowingOfQualifiedNames.ts, 20, 24))
+
+                            type B = typeof foo.a.b;
+>B : Symbol(B, Decl(narrowingOfQualifiedNames.ts, 55, 50))
+>foo.a.b : Symbol(b, Decl(narrowingOfQualifiedNames.ts, 21, 9))
+>foo.a : Symbol(DeepOptional.a, Decl(narrowingOfQualifiedNames.ts, 20, 24))
+>foo : Symbol(foo, Decl(narrowingOfQualifiedNames.ts, 28, 15))
+>a : Symbol(DeepOptional.a, Decl(narrowingOfQualifiedNames.ts, 20, 24))
+>b : Symbol(b, Decl(narrowingOfQualifiedNames.ts, 21, 9))
+
+                            type C = typeof foo.a.b.c;
+>C : Symbol(C, Decl(narrowingOfQualifiedNames.ts, 56, 52))
+>foo.a.b.c : Symbol(c, Decl(narrowingOfQualifiedNames.ts, 22, 13))
+>foo.a.b : Symbol(b, Decl(narrowingOfQualifiedNames.ts, 21, 9))
+>foo.a : Symbol(DeepOptional.a, Decl(narrowingOfQualifiedNames.ts, 20, 24))
+>foo : Symbol(foo, Decl(narrowingOfQualifiedNames.ts, 28, 15))
+>a : Symbol(DeepOptional.a, Decl(narrowingOfQualifiedNames.ts, 20, 24))
+>b : Symbol(b, Decl(narrowingOfQualifiedNames.ts, 21, 9))
+>c : Symbol(c, Decl(narrowingOfQualifiedNames.ts, 22, 13))
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

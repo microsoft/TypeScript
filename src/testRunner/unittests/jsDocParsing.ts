@@ -312,8 +312,23 @@ namespace ts {
 */`);
                 parsesCorrectly("@link tags",
                     `/**
- * {@link first link}
+ * {@link first }
  * Inside {@link link text} thing
+ * @param foo See also {@link A.Reference}
+ * @param bar Or see {@link http://www.zombocom.com }
+ * {@link Standalone.Complex }
+ * This empty one: {@link} is OK.
+ * This double-space one: {@link  doubled  } is OK too.
+ * This should work, despite being badly formatted: {@link
+oh.no
+}
+ * Forgot to close this one {@link https://typescriptlang.org
+ * But it's still OK.
+ * Although it skips the newline so parses the asterisks in the wrong state.
+ * This shouldn't work: {@link
+ * nope
+ * }, because of the intermediate asterisks.
+ * @author Alfa Romero <a@parsing.com> See my home page: {@link https://example.com}
  */`);
                 parsesCorrectly("authorTag",
                     `/**
@@ -378,9 +393,17 @@ namespace ts {
                 assert.equal(last!.kind, SyntaxKind.EndOfFileToken);
             });
         });
-        describe("getStart of node with JSDoc but no parent pointers", () => {
-            const root = createSourceFile("foo.ts", "/** */var a = true;", ScriptTarget.ES5, /*setParentNodes*/ false);
-            root.statements[0].getStart(root, /*includeJsdocComment*/ true);
+        describe("getStart", () => {
+            it("runs when node with JSDoc but no parent pointers", () => {
+                const root = createSourceFile("foo.ts", "/** */var a = true;", ScriptTarget.ES5, /*setParentNodes*/ false);
+                root.statements[0].getStart(root, /*includeJsdocComment*/ true);
+            });
+        });
+        describe("parseIsolatedJSDocComment", () => {
+            it("doesn't create a 1-element array with missing type parameter in jsDoc", () => {
+                const doc = parseIsolatedJSDocComment("/**\n    @template\n*/");
+                assert.equal((doc?.jsDoc.tags?.[0] as JSDocTemplateTag).typeParameters.length, 0);
+            });
         });
     });
 }

@@ -10,5 +10,6 @@
 verify.completions({
     marker: "",
     exact: completion.globalsPlus(["foo"]),
+    isNewIdentifierLocation: true,
     preferences: { includeCompletionsForModuleExports: true },
 });
