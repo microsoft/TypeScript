@@ -42,12 +42,12 @@ verify.completions({
     includes: [
         {
             name: "hint",
-            sortText: completion.SortText.LocationPriority,
+            sortText: completion.SortText.AutoImportSuggestions,
             insertText: "protected hint(): string {\n}",
         },
         {
             name: "refuse",
-            sortText: completion.SortText.LocationPriority,
+            sortText: completion.SortText.AutoImportSuggestions,
             insertText: "public refuse(): string {\n}",
         }
     ],

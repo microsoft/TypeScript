@@ -2,32 +2,30 @@
 
 // @Filename: a.ts
 // @newline: LF
-// Case: abstract overloads
-////abstract class Base {
-////    abstract M<T>(t: T): void;
-////    abstract M<T>(t: T, x: number): void;
+
+////class A {
+////    protected foo(): void {
+////        return;
+////    }
 ////}
-////
-////abstract class Derived extends Base {
-////    [|abstract|] /*a*/
+////class B extends A {
+////    /**/
 ////}
 
 verify.completions({
-    marker: "a",
+    marker: "",
     isNewIdentifierLocation: true,
     preferences: {
         includeCompletionsWithInsertText: true,
         includeCompletionsWithSnippetText: false,
         includeCompletionsWithClassMemberSnippets: true,
     },
-    includes: [
+    exact: [
+        ...completion.classElementKeywords,
         {
-            name: "M",
+            name: "foo",
             sortText: completion.SortText.AutoImportSuggestions,
-            replacementSpan: test.ranges()[0],
-            insertText:
-`abstract M<T>(t: T): void;
-abstract M<T>(t: T, x: number): void;`,
+            insertText: "protected foo(): void {\n}",
         },
     ],
 });

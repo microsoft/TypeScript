@@ -23,7 +23,7 @@ verify.completions({
     includes: [
         {
             name: "boo",
-            sortText: completion.SortText.LocationPriority,
+            sortText: completion.SortText.AutoImportSuggestions,
             insertText: "boo(): string;",
         }
     ],

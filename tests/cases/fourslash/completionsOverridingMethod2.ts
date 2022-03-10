@@ -22,7 +22,7 @@ verify.completions({
     includes: [
         {
             name: "$usd",
-            sortText: completion.SortText.LocationPriority,
+            sortText: completion.SortText.AutoImportSuggestions,
             isSnippet: true,
             insertText: "\"\\$usd\"(a: number): number {\n    $0\n}",
         }
