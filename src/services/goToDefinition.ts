@@ -44,7 +44,7 @@ namespace ts.GoToDefinition {
         const { symbol, isAliasTarget, failedAliasResolution } = getSymbol(node, typeChecker);
         if (!symbol && isModuleSpecifierLike(node)) {
             // We couldn't resolve the symbol as an external module, but it could
-            // that module resolution succeeded but the target was not a module.
+            // be that module resolution succeeded but the target was not a module.
             const ref = sourceFile.resolvedModules?.get(node.text, getModeForUsageLocation(sourceFile, node));
             if (ref) {
                 return [{
@@ -379,7 +379,7 @@ namespace ts.GoToDefinition {
     }
 
     /** Creates a DefinitionInfo from a Declaration, using the declaration's name if possible. */
-    function createDefinitionInfo(declaration: Declaration, checker: TypeChecker, symbol: Symbol, node: Node, isAliasTarget?: boolean, failedAliasResolution?: boolean): DefinitionInfo {
+    export function createDefinitionInfo(declaration: Declaration, checker: TypeChecker, symbol: Symbol, node: Node, isAliasTarget?: boolean, failedAliasResolution?: boolean): DefinitionInfo {
         const symbolName = checker.symbolToString(symbol); // Do not get scoped name, just the name of the symbol
         const symbolKind = SymbolDisplay.getSymbolKind(checker, symbol, node);
         const containerName = symbol.parent ? checker.symbolToString(symbol.parent, node) : "";

@@ -1333,6 +1333,30 @@ namespace ts.FindAllReferences {
             }
         }
 
+        export function getTopMostDeclarationsInFile(declarationName: string, sourceFile: SourceFile): readonly Declaration[] {
+            const candidates = mapDefined(getPossibleSymbolReferenceNodes(sourceFile, declarationName), getDeclarationFromName);
+            return candidates.reduce((topMost, decl) => {
+                const depth = getDepth(decl);
+                if (!some(topMost.declarations) || depth === topMost.depth) {
+                    topMost.declarations.push(decl);
+                }
+                else if (depth < topMost.depth) {
+                    topMost.declarations = [decl];
+                }
+                topMost.depth = depth;
+                return topMost;
+            }, { depth: Infinity, declarations: [] as Declaration[] }).declarations;
+
+            function getDepth(declaration: Declaration | undefined) {
+                let depth = 0;
+                while (declaration) {
+                    declaration = getContainerNode(declaration);
+                    depth++;
+                }
+                return depth;
+            }
+        }
+
         export function someSignatureUsage(
             signature: SignatureDeclaration,
             sourceFiles: readonly SourceFile[],
