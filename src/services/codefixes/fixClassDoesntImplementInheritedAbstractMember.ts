@@ -7,15 +7,15 @@ namespace ts.codefix {
     const fixId = "fixClassDoesntImplementInheritedAbstractMember";
     registerCodeFix({
         errorCodes,
-        getCodeActions(context) {
+        getCodeActions: function getCodeActionsToFixClassNotImplementingInheritedMembers(context) {
             const { sourceFile, span } = context;
             const changes = textChanges.ChangeTracker.with(context, t =>
                 addMissingMembers(getClass(sourceFile, span.start), sourceFile, context, t, context.preferences));
             return changes.length === 0 ? undefined : [createCodeFixAction(fixId, changes, Diagnostics.Implement_inherited_abstract_class, fixId, Diagnostics.Implement_all_inherited_abstract_classes)];
         },
         fixIds: [fixId],
-        getAllCodeActions: context => {
-            const seenClassDeclarations = createMap<true>();
+        getAllCodeActions: function getAllCodeActionsToFixClassDoesntImplementInheritedAbstractMember(context) {
+            const seenClassDeclarations = new Map<number, true>();
             return codeFixAll(context, errorCodes, (changes, diag) => {
                 const classDeclaration = getClass(diag.file, diag.start);
                 if (addToSeen(seenClassDeclarations, getNodeId(classDeclaration))) {
@@ -42,14 +42,14 @@ namespace ts.codefix {
         const abstractAndNonPrivateExtendsSymbols = checker.getPropertiesOfType(instantiatedExtendsType).filter(symbolPointsToNonPrivateAndAbstractMember);
 
         const importAdder = createImportAdder(sourceFile, context.program, preferences, context.host);
-        createMissingMemberNodes(classDeclaration, abstractAndNonPrivateExtendsSymbols, context, preferences, importAdder, member => changeTracker.insertNodeAtClassStart(sourceFile, classDeclaration, member));
+        createMissingMemberNodes(classDeclaration, abstractAndNonPrivateExtendsSymbols, sourceFile, context, preferences, importAdder, member => changeTracker.insertNodeAtClassStart(sourceFile, classDeclaration, member as ClassElement));
         importAdder.writeFixes(changeTracker);
     }
 
     function symbolPointsToNonPrivateAndAbstractMember(symbol: Symbol): boolean {
         // See `codeFixClassExtendAbstractProtectedProperty.ts` in https://github.com/Microsoft/TypeScript/pull/11547/files
         // (now named `codeFixClassExtendAbstractPrivateProperty.ts`)
-        const flags = getModifierFlags(first(symbol.getDeclarations()!));
+        const flags = getSyntacticModifierFlags(first(symbol.getDeclarations()!));
         return !(flags & ModifierFlags.Private) && !!(flags & ModifierFlags.Abstract);
     }
 }

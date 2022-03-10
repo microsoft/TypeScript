@@ -34,6 +34,7 @@ export const bar = Cls.bar();
 //// [main.js]
 "use strict";
 exports.__esModule = true;
+exports.Cls = void 0;
 var Cls = /** @class */ (function () {
     function Cls() {
     }
@@ -49,6 +50,7 @@ main_1.Cls.prototype.foo = function () { return undefined; };
 //// [mod2.js]
 "use strict";
 exports.__esModule = true;
+exports.bar = exports.foo = exports.cls = void 0;
 var main_1 = require("./main");
 require("./mod1");
 exports.cls = main_1.Cls;

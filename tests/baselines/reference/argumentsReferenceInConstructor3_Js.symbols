@@ -1,0 +1,49 @@
+=== /a.js ===
+class A {
+>A : Symbol(A, Decl(a.js, 0, 0))
+
+	get arguments() {
+>arguments : Symbol(A.arguments, Decl(a.js, 0, 9))
+
+		return { bar: {} };
+>bar : Symbol(bar, Decl(a.js, 2, 10))
+	}
+}
+
+class B extends A {
+>B : Symbol(B, Decl(a.js, 4, 1))
+>A : Symbol(A, Decl(a.js, 0, 0))
+
+	/**
+	 * Constructor
+	 *
+	 * @param {object} [foo={}]
+	 */
+	constructor(foo = {}) {
+>foo : Symbol(foo, Decl(a.js, 12, 13))
+
+		super();
+>super : Symbol(A, Decl(a.js, 0, 0))
+
+		/**
+		 * @type object
+		 */
+		this.foo = foo;
+>this.foo : Symbol(B.foo, Decl(a.js, 13, 10))
+>this : Symbol(B, Decl(a.js, 4, 1))
+>foo : Symbol(B.foo, Decl(a.js, 13, 10))
+>foo : Symbol(foo, Decl(a.js, 12, 13))
+
+		/**
+		 * @type object
+		 */
+		this.bar = super.arguments.foo;
+>this.bar : Symbol(B.bar, Decl(a.js, 18, 17))
+>this : Symbol(B, Decl(a.js, 4, 1))
+>bar : Symbol(B.bar, Decl(a.js, 18, 17))
+>super.arguments : Symbol(A.arguments, Decl(a.js, 0, 9))
+>super : Symbol(A, Decl(a.js, 0, 0))
+>arguments : Symbol(A.arguments, Decl(a.js, 0, 9))
+	}
+}
+

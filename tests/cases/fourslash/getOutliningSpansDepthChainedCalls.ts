@@ -4,113 +4,113 @@
 
 ////declare var router: any;
 ////router
-////    .get("/", async(ctx) =>[|{
+////    .get[|("/", async(ctx) =>[|{
 ////        ctx.body = "base";
-////    }|])
-////    .post("/a", async(ctx) =>[|{
+////    }|])|]
+////    .post[|("/a", async(ctx) =>[|{
 ////        //a
-////    }|])
-////    .get("/", async(ctx) =>[|{
+////    }|])|]
+////    .get[|("/", async(ctx) =>[|{
 ////        ctx.body = "base";
-////    }|])
-////    .post("/a", async(ctx) =>[|{
+////    }|])|]
+////    .post[|("/a", async(ctx) =>[|{
 ////        //a
-////    }|])
-////    .get("/", async(ctx) =>[|{
+////    }|])|]
+////    .get[|("/", async(ctx) =>[|{
 ////        ctx.body = "base";
-////    }|])
-////    .post("/a", async(ctx) =>[|{
+////    }|])|]
+////    .post[|("/a", async(ctx) =>[|{
 ////        //a
-////    }|])
-////    .get("/", async(ctx) =>[|{
+////    }|])|]
+////    .get[|("/", async(ctx) =>[|{
 ////        ctx.body = "base";
-////    }|])
-////    .post("/a", async(ctx) =>[|{
+////    }|])|]
+////    .post[|("/a", async(ctx) =>[|{
 ////        //a
-////    }|])
-////    .get("/", async(ctx) =>[|{
+////    }|])|]
+////    .get[|("/", async(ctx) =>[|{
 ////        ctx.body = "base";
-////    }|])
-////    .post("/a", async(ctx) =>[|{
+////    }|])|]
+////    .post[|("/a", async(ctx) =>[|{
 ////        //a
-////    }|])
-////    .get("/", async(ctx) =>[|{
+////    }|])|]
+////    .get[|("/", async(ctx) =>[|{
 ////        ctx.body = "base";
-////    }|])
-////    .post("/a", async(ctx) =>[|{
+////    }|])|]
+////    .post[|("/a", async(ctx) =>[|{
 ////        //a
-////    }|])
-////    .get("/", async(ctx) =>[|{
+////    }|])|]
+////    .get[|("/", async(ctx) =>[|{
 ////        ctx.body = "base";
-////    }|])
-////    .post("/a", async(ctx) =>[|{
+////    }|])|]
+////    .post[|("/a", async(ctx) =>[|{
 ////        //a
-////    }|])
-////    .get("/", async(ctx) =>[|{
+////    }|])|]
+////    .get[|("/", async(ctx) =>[|{
 ////        ctx.body = "base";
-////    }|])
-////    .post("/a", async(ctx) =>[|{
+////    }|])|]
+////    .post[|("/a", async(ctx) =>[|{
 ////        //a
-////    }|])
-////    .get("/", async(ctx) =>[|{
+////    }|])|]
+////    .get[|("/", async(ctx) =>[|{
 ////        ctx.body = "base";
-////    }|])
-////    .post("/a", async(ctx) =>[|{
+////    }|])|]
+////    .post[|("/a", async(ctx) =>[|{
 ////        //a
-////    }|])
-////    .get("/", async(ctx) =>[|{
+////    }|])|]
+////    .get[|("/", async(ctx) =>[|{
 ////        ctx.body = "base";
-////    }|])
-////    .post("/a", async(ctx) =>[|{
+////    }|])|]
+////    .post[|("/a", async(ctx) =>[|{
 ////        //a
-////    }|])
-////    .get("/", async(ctx) =>[|{
+////    }|])|]
+////    .get[|("/", async(ctx) =>[|{
 ////        ctx.body = "base";
-////    }|])
-////    .post("/a", async(ctx) =>[|{
+////    }|])|]
+////    .post[|("/a", async(ctx) =>[|{
 ////        //a
-////    }|])
-////    .get("/", async(ctx) =>[|{
+////    }|])|]
+////    .get[|("/", async(ctx) =>[|{
 ////        ctx.body = "base";
-////    }|])
-////    .post("/a", async(ctx) =>[|{
+////    }|])|]
+////    .post[|("/a", async(ctx) =>[|{
 ////        //a
-////    }|])
-////    .get("/", async(ctx) =>[|{
+////    }|])|]
+////    .get[|("/", async(ctx) =>[|{
 ////        ctx.body = "base";
-////    }|])
-////    .post("/a", async(ctx) =>[|{
+////    }|])|]
+////    .post[|("/a", async(ctx) =>[|{
 ////        //a
-////    }|])
-////    .get("/", async(ctx) =>[|{
+////    }|])|]
+////    .get[|("/", async(ctx) =>[|{
 ////        ctx.body = "base";
-////    }|])
-////    .post("/a", async(ctx) =>[|{
+////    }|])|]
+////    .post[|("/a", async(ctx) =>[|{
 ////        //a
-////    }|])
-////    .get("/", async(ctx) =>[|{
+////    }|])|]
+////    .get[|("/", async(ctx) =>[|{
 ////        ctx.body = "base";
-////    }|])
-////    .post("/a", async(ctx) =>[|{
+////    }|])|]
+////    .post[|("/a", async(ctx) =>[|{
 ////        //a
-////    }|])
-////    .get("/", async(ctx) =>[|{
+////    }|])|]
+////    .get[|("/", async(ctx) =>[|{
 ////        ctx.body = "base";
-////    }|])
-////    .post("/a", async(ctx) =>[|{
+////    }|])|]
+////    .post[|("/a", async(ctx) =>[|{
 ////        //a
-////    }|])
-////    .get("/", async(ctx) =>[|{
+////    }|])|]
+////    .get[|("/", async(ctx) =>[|{
 ////        ctx.body = "base";
-////    }|])
-////    .post("/a", async(ctx) =>[|{
+////    }|])|]
+////    .post[|("/a", async(ctx) =>[|{
 ////        //a
-////    }|])
-////    .get("/", async(ctx) =>[|{
+////    }|])|]
+////    .get[|("/", async(ctx) =>[|{
 ////        ctx.body = "base";
-////    }|])
-////    .post("/a", async(ctx) =>[|{
+////    }|])|]
+////    .post[|("/a", async(ctx) =>[|{
 ////        //a
-////    }|])
+////    }|])|]
 
 verify.outliningSpansInCurrentFile(test.ranges());

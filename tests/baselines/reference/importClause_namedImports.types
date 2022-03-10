@@ -31,3 +31,8 @@ b.b;
 >b : B
 >b : string
 
+const c = { A };
+>c : { A: typeof A; }
+>{ A } : { A: typeof A; }
+>A : typeof A
+

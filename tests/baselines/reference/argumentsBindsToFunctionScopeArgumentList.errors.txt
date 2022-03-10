@@ -1,4 +1,4 @@
-tests/cases/compiler/argumentsBindsToFunctionScopeArgumentList.ts(3,5): error TS2322: Type '10' is not assignable to type 'IArguments'.
+tests/cases/compiler/argumentsBindsToFunctionScopeArgumentList.ts(3,5): error TS2322: Type 'number' is not assignable to type 'IArguments'.
 
 
 ==== tests/cases/compiler/argumentsBindsToFunctionScopeArgumentList.ts (1 errors) ====
@@ -6,5 +6,5 @@ tests/cases/compiler/argumentsBindsToFunctionScopeArgumentList.ts(3,5): error TS
     function foo(a) {
         arguments = 10;  /// This shouldnt be of type number and result in error.
         ~~~~~~~~~
-!!! error TS2322: Type '10' is not assignable to type 'IArguments'.
+!!! error TS2322: Type 'number' is not assignable to type 'IArguments'.
     }

@@ -1,0 +1,51 @@
+tests/cases/conformance/types/typeAliases/intrinsicKeyword.ts(1,9): error TS2304: Cannot find name 'intrinsic'.
+tests/cases/conformance/types/typeAliases/intrinsicKeyword.ts(2,22): error TS2304: Cannot find name 'intrinsic'.
+tests/cases/conformance/types/typeAliases/intrinsicKeyword.ts(3,13): error TS2304: Cannot find name 'intrinsic'.
+tests/cases/conformance/types/typeAliases/intrinsicKeyword.ts(4,23): error TS2795: The 'intrinsic' keyword can only be used to declare compiler provided intrinsic types.
+tests/cases/conformance/types/typeAliases/intrinsicKeyword.ts(5,20): error TS2304: Cannot find name 'intrinsic'.
+tests/cases/conformance/types/typeAliases/intrinsicKeyword.ts(6,28): error TS2313: Type parameter 'intrinsic' has a circular constraint.
+tests/cases/conformance/types/typeAliases/intrinsicKeyword.ts(6,41): error TS2795: The 'intrinsic' keyword can only be used to declare compiler provided intrinsic types.
+tests/cases/conformance/types/typeAliases/intrinsicKeyword.ts(7,28): error TS2313: Type parameter 'intrinsic' has a circular constraint.
+tests/cases/conformance/types/typeAliases/intrinsicKeyword.ts(10,20): error TS2503: Cannot find namespace 'intrinsic'.
+
+
+==== tests/cases/conformance/types/typeAliases/intrinsicKeyword.ts (9 errors) ====
+    let e1: intrinsic;
+            ~~~~~~~~~
+!!! error TS2304: Cannot find name 'intrinsic'.
+    let e2: { intrinsic: intrinsic };
+                         ~~~~~~~~~
+!!! error TS2304: Cannot find name 'intrinsic'.
+    type TE1 = (intrinsic);
+                ~~~~~~~~~
+!!! error TS2304: Cannot find name 'intrinsic'.
+    type TE2<intrinsic> = intrinsic;
+                          ~~~~~~~~~
+!!! error TS2795: The 'intrinsic' keyword can only be used to declare compiler provided intrinsic types.
+    type TE3<T extends intrinsic> = T;
+                       ~~~~~~~~~
+!!! error TS2304: Cannot find name 'intrinsic'.
+    type TE4<intrinsic extends intrinsic> = intrinsic;
+                               ~~~~~~~~~
+!!! error TS2313: Type parameter 'intrinsic' has a circular constraint.
+                                            ~~~~~~~~~
+!!! error TS2795: The 'intrinsic' keyword can only be used to declare compiler provided intrinsic types.
+    type TE5<intrinsic extends intrinsic> = (intrinsic);
+                               ~~~~~~~~~
+!!! error TS2313: Type parameter 'intrinsic' has a circular constraint.
+    
+    function f1() {
+        let intrinsic: intrinsic.intrinsic;
+                       ~~~~~~~~~
+!!! error TS2503: Cannot find namespace 'intrinsic'.
+    }
+    
+    function f2(intrinsic: string) {
+        return intrinsic;
+    }
+    
+    function f3() {
+        type intrinsic = string;
+        let s1: intrinsic = 'ok';
+    }
+    

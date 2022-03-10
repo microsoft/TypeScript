@@ -1,0 +1,20 @@
+=== tests/cases/compiler/accessorAccidentalCallDiagnostic.ts ===
+// https://github.com/microsoft/TypeScript/issues/24554
+class Test24554 {
+>Test24554 : Test24554
+
+    get property(): number { return 1; }
+>property : number
+>1 : 1
+}
+function test24554(x: Test24554) {
+>test24554 : (x: Test24554) => any
+>x : Test24554
+
+    return x.property();
+>x.property() : any
+>x.property : number
+>x : Test24554
+>property : number
+}
+

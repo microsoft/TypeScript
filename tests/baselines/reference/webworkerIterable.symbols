@@ -1,0 +1,20 @@
+=== tests/cases/compiler/webworkerIterable.ts ===
+// This API is only in webworker
+importScripts("")
+>importScripts : Symbol(importScripts, Decl(lib.webworker.d.ts, --, --))
+
+// This should not raise a compiler error
+const f = new FormData()
+>f : Symbol(f, Decl(webworkerIterable.ts, 4, 5))
+>FormData : Symbol(FormData, Decl(lib.webworker.d.ts, --, --), Decl(lib.webworker.d.ts, --, --), Decl(lib.webworker.iterable.d.ts, --, --))
+
+for (const element of f) {
+>element : Symbol(element, Decl(webworkerIterable.ts, 5, 10))
+>f : Symbol(f, Decl(webworkerIterable.ts, 4, 5))
+
+  element.length
+>element.length : Symbol(length)
+>element : Symbol(element, Decl(webworkerIterable.ts, 5, 10))
+>length : Symbol(length)
+}
+

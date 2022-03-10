@@ -11,7 +11,7 @@
     "File '/node_modules/js/index.d.ts' does not exist.",
     "Directory '/node_modules/@types' does not exist, skipping all lookups in it.",
     "Loading module 'js' from 'node_modules' folder, target file type 'JavaScript'.",
-    "File '/node_modules/js/package.json' does not exist.",
+    "File '/node_modules/js/package.json' does not exist according to earlier cached lookups.",
     "File '/node_modules/js.js' does not exist.",
     "File '/node_modules/js.jsx' does not exist.",
     "File '/node_modules/js/index.js' exist - use it as a name resolution result.",

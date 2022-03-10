@@ -238,6 +238,12 @@ declare function gg<T>(f: (x: Foo3<T>) => void): void;
 type Foo3<T> = T extends number ? { n: T } : { x: T };
 gg(ff);
 
+// Repro from #41613
+
+type Wat<K extends string> = { x: { y: 0, z: 1 } } extends { x: { [P in K]: 0 } } ? true : false;
+ 
+type Huh = Wat<"y">;  // true
+
 
 //// [conditionalTypes2.js]
 "use strict";
@@ -477,3 +483,14 @@ declare type Foo3<T> = T extends number ? {
 } : {
     x: T;
 };
+declare type Wat<K extends string> = {
+    x: {
+        y: 0;
+        z: 1;
+    };
+} extends {
+    x: {
+        [P in K]: 0;
+    };
+} ? true : false;
+declare type Huh = Wat<"y">;

@@ -1,0 +1,19 @@
+=== tests/cases/compiler/fs.d.ts ===
+export const x: number;
+>x : number
+
+=== tests/cases/compiler/mjts.ts ===
+import * as fs from "./fs";
+>fs : typeof fs
+
+fs;
+>fs : typeof fs
+
+export * from "./fs";
+export {x} from "./fs";
+>x : number
+
+export {x as y} from "./fs";
+>x : number
+>y : number
+

@@ -5,7 +5,7 @@ var c = {};
 
 [...c] = ["", 0];
 >[...c] = ["", 0] : (string | number)[]
->[...c] : undefined[]
+>[...c] : unknown[]
 >...c : any
 >c : {}
 >["", 0] : (string | number)[]

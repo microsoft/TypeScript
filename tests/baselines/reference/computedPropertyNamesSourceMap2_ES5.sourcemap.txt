@@ -91,14 +91,14 @@ sourceFile:computedPropertyNamesSourceMap2_ES5.ts
 >>>        },
 1 >^^^^^^^^
 2 >        ^
-3 >         ^^^^^^^^^^^^^^^^^->
+3 >         ^^^^^^^^^^^^^^^^^^->
 1 >
   >	
 2 >        }
 1 >Emitted(9, 9) Source(7, 2) + SourceIndex(0)
 2 >Emitted(9, 10) Source(7, 3) + SourceIndex(0)
 ---
->>>        enumerable: true,
+>>>        enumerable: false,
 >>>        configurable: true
 >>>    }),
 >>>    _a);

@@ -35,6 +35,7 @@ exports.__esModule = true;
 //// [index.js]
 "use strict";
 exports.__esModule = true;
+exports.Broken = void 0;
 var Broken = /** @class */ (function () {
     function Broken() {
     }
@@ -59,8 +60,7 @@ export declare type TypeB = Merge<TypeA, {
     b: string;
 }>;
 //// [index.d.ts]
+import { TypeB } from './type-b';
 export declare class Broken {
-    method(): import("./types").Merge<import("./type-a").TypeA, {
-        b: string;
-    }>;
+    method(): TypeB;
 }

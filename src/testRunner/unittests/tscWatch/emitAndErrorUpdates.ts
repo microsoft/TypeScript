@@ -14,6 +14,7 @@ namespace ts.tscWatch {
             lib,
             configFile,
             changes,
+            baselineIncremental
         }: VerifyEmitAndErrorUpdatesWorker) {
             verifyTscWatch({
                 scenario: "emitAndErrorUpdates",
@@ -23,7 +24,19 @@ namespace ts.tscWatch {
                     [...files(), configFile(), lib?.() || libFile],
                     { currentDirectory: currentDirectory || projectRoot }
                 ),
-                changes
+                changes,
+                baselineIncremental
+            });
+            verifyTscWatch({
+                scenario: "emitAndErrorUpdates",
+                subScenario: `incremental/${subScenario}`,
+                commandLineArgs: ["--w", "--i"],
+                sys: () => createWatchedSystem(
+                    [...files(), configFile(), lib?.() || libFile],
+                    { currentDirectory: currentDirectory || projectRoot }
+                ),
+                changes,
+                baselineIncremental
             });
         }
 
@@ -41,6 +54,7 @@ namespace ts.tscWatch {
             lib?: () => File;
             changes: TscWatchCompileChange[];
             configFile?: () => File;
+            baselineIncremental?: boolean
         }
         function verifyEmitAndErrorUpdates(input: VerifyEmitAndErrorUpdates) {
             verifyEmitAndErrorUpdatesWorker({
@@ -94,15 +108,24 @@ console.log(b.c.d);`
                     subScenario: `deepImportChanges/${subScenario}`,
                     files: () => [aFile, bFile, cFile],
                     changes: [
-                        sys => {
-                            sys.writeFile(cFile.path, cFile.content.replace("d", "d2"));
-                            sys.runQueuedTimeoutCallbacks();
-                            return "Rename property d to d2 of class C";
+                        {
+                            caption: "Rename property d to d2 of class C to initialize signatures",
+                            change: sys => sys.writeFile(cFile.path, cFile.content.replace("d", "d2")),
+                            timeouts: runQueuedTimeoutCallbacks,
+                        },
+                        {
+                            caption: "Rename property d2 to d of class C to revert back to original text",
+                            change: sys => sys.writeFile(cFile.path, cFile.content.replace("d2", "d")),
+                            timeouts: runQueuedTimeoutCallbacks,
+                        },
+                        {
+                            caption: "Rename property d to d2 of class C",
+                            change: sys => sys.writeFile(cFile.path, cFile.content.replace("d", "d2")),
+                            timeouts: runQueuedTimeoutCallbacks,
                         }
                     ],
                 });
             }
-
             describe("updates errors when deep import file changes", () => {
                 const bFile: File = {
                     path: `${projectRoot}/b.ts`,
@@ -120,12 +143,11 @@ export class B
 }`
                 };
                 verifyDeepImportChange(
-                    "updates errors when deep import file changes",
+                    "errors for .ts change",
                     bFile,
                     cFile
                 );
             });
-
             describe("updates errors when deep import through declaration file changes", () => {
                 const bFile: File = {
                     path: `${projectRoot}/b.d.ts`,
@@ -143,7 +165,7 @@ export class B
 }`
                 };
                 verifyDeepImportChange(
-                    "updates errors when deep import through declaration file changes",
+                    "errors for .d.ts change",
                     bFile,
                     cFile
                 );
@@ -194,15 +216,24 @@ getPoint().c.x;`
                 subScenario: "file not exporting a deep multilevel import that changes",
                 files: () => [aFile, bFile, cFile, dFile, eFile],
                 changes: [
-                    sys => {
-                        sys.writeFile(aFile.path, aFile.content.replace("x2", "x"));
-                        sys.runQueuedTimeoutCallbacks();
-                        return "Rename property x2 to x of interface Coords";
-                    }
+                    {
+                        caption: "Rename property x2 to x of interface Coords to initialize signatures",
+                        change: sys => sys.writeFile(aFile.path, aFile.content.replace("x2", "x")),
+                        timeouts: runQueuedTimeoutCallbacks,
+                    },
+                    {
+                        caption: "Rename property x to x2 of interface Coords to revert back to original text",
+                        change: sys => sys.writeFile(aFile.path, aFile.content.replace("x: number", "x2: number")),
+                        timeouts: runQueuedTimeoutCallbacks,
+                    },
+                    {
+                        caption: "Rename property x2 to x of interface Coords",
+                        change: sys => sys.writeFile(aFile.path, aFile.content.replace("x2", "x")),
+                        timeouts: runQueuedTimeoutCallbacks,
+                    },
                 ]
             });
         });
-
         describe("updates errors when file transitively exported file changes", () => {
             const config: File = {
                 path: `${projectRoot}/tsconfig.json`,
@@ -253,25 +284,34 @@ export class Data {
 
             function verifyTransitiveExports(subScenario: string, files: readonly File[]) {
                 verifyEmitAndErrorUpdates({
-                    subScenario: `updates errors when file transitively exported file changes/${subScenario}`,
+                    subScenario: `transitive exports/${subScenario}`,
                     files: () => [lib1ToolsInterface, lib1ToolsPublic, app, lib2Public, lib1Public, ...files],
                     configFile: () => config,
                     changes: [
-                        sys => {
-                            sys.writeFile(lib1ToolsInterface.path, lib1ToolsInterface.content.replace("title", "title2"));
-                            sys.runQueuedTimeoutCallbacks();
-                            return "Rename property title to title2 of interface ITest";
+                        {
+                            caption: "Rename property title to title2 of interface ITest to initialize signatures",
+                            change: sys => sys.writeFile(lib1ToolsInterface.path, lib1ToolsInterface.content.replace("title", "title2")),
+                            timeouts: runQueuedTimeoutCallbacks,
+                        },
+                        {
+                            caption: "Rename property title2 to title of interface ITest to revert back to original text",
+                            change: sys => sys.writeFile(lib1ToolsInterface.path, lib1ToolsInterface.content.replace("title2", "title")),
+                            timeouts: runQueuedTimeoutCallbacks,
+                        },
+                        {
+                            caption: "Rename property title to title2 of interface ITest",
+                            change: sys => sys.writeFile(lib1ToolsInterface.path, lib1ToolsInterface.content.replace("title", "title2")),
+                            timeouts: runQueuedTimeoutCallbacks,
                         }
                     ]
                 });
             }
             describe("when there are no circular import and exports", () => {
                 verifyTransitiveExports(
-                    "when there are no circular import and exports",
+                    "no circular import/export",
                     [lib2Data]
                 );
             });
-
             describe("when there are circular import and exports", () => {
                 const lib2Data: File = {
                     path: `${projectRoot}/lib2/data.ts`,
@@ -293,29 +333,49 @@ export class Data2 {
 }`
                 };
                 verifyTransitiveExports(
-                    "when there are circular import and exports",
+                    "yes circular import/exports",
                     [lib2Data, lib2Data2]
                 );
             });
         });
 
-        verifyEmitAndErrorUpdates({
-            subScenario: "with noEmitOnError",
-            currentDirectory: `${TestFSWithWatch.tsbuildProjectsLocation}/noEmitOnError`,
-            files: () => ["shared/types/db.ts", "src/main.ts", "src/other.ts"]
-                .map(f => TestFSWithWatch.getTsBuildProjectFile("noEmitOnError", f)),
-            lib: () => ({ path: libFile.path, content: libContent }),
-            configFile: () => TestFSWithWatch.getTsBuildProjectFile("noEmitOnError", "tsconfig.json"),
-            changes: [
-                sys => {
-                    sys.writeFile(`${TestFSWithWatch.tsbuildProjectsLocation}/noEmitOnError/src/main.ts`, `import { A } from "../shared/types/db";
+        describe("with noEmitOnError", () => {
+            function change(caption: string, content: string): TscWatchCompileChange {
+                return {
+                    caption,
+                    change: sys => sys.writeFile(`${TestFSWithWatch.tsbuildProjectsLocation}/noEmitOnError/src/main.ts`, content),
+                    // build project
+                    timeouts: checkSingleTimeoutQueueLengthAndRun
+                };
+            }
+            const noChange: TscWatchCompileChange = {
+                caption: "No change",
+                change: sys => sys.writeFile(`${TestFSWithWatch.tsbuildProjectsLocation}/noEmitOnError/src/main.ts`, sys.readFile(`${TestFSWithWatch.tsbuildProjectsLocation}/noEmitOnError/src/main.ts`)!),
+                // build project
+                timeouts: checkSingleTimeoutQueueLengthAndRun,
+            };
+            verifyEmitAndErrorUpdates({
+                subScenario: "with noEmitOnError",
+                currentDirectory: `${TestFSWithWatch.tsbuildProjectsLocation}/noEmitOnError`,
+                files: () => ["shared/types/db.ts", "src/main.ts", "src/other.ts"]
+                    .map(f => TestFSWithWatch.getTsBuildProjectFile("noEmitOnError", f)),
+                lib: () => ({ path: libFile.path, content: libContent }),
+                configFile: () => TestFSWithWatch.getTsBuildProjectFile("noEmitOnError", "tsconfig.json"),
+                changes: [
+                    noChange,
+                    change("Fix Syntax error", `import { A } from "../shared/types/db";
 const a = {
     lastName: 'sdsd'
-};`);
-                    sys.checkTimeoutQueueLengthAndRun(1); // build project
-                    return "Fix the error";
-                }
-            ]
+};`),
+                    change("Semantic Error", `import { A } from "../shared/types/db";
+const a: string = 10;`),
+                    noChange,
+                    change("Fix Semantic Error", `import { A } from "../shared/types/db";
+const a: string = "hello";`),
+                    noChange,
+                ],
+                baselineIncremental: true
+            });
         });
     });
 }

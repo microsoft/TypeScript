@@ -11,6 +11,10 @@ namespace Debug {
     type MethodDeclaration = Node;
     type Expression = Node;
     type SourceFile = Node;
+    type VariableDeclaration = Node;
+    type BindingElement = Node;
+    type CallExpression = Node;
+    type BinaryExpression = Node;
 
     interface SwitchStatement extends Node {
         caseBlock: CaseBlock;
@@ -46,10 +50,9 @@ namespace Debug {
             readonly SwitchClause: number,
             readonly ArrayMutation: number,
             readonly Call: number,
+            readonly ReduceLabel: number,
             readonly Referenced: number,
             readonly Shared: number,
-            readonly PreFinally: number,
-            readonly AfterFinally: number,
             readonly Label: number,
             readonly Condition: number,
         };
@@ -60,8 +63,6 @@ namespace Debug {
     }
 
     type FlowNode =
-        | AfterFinallyFlow
-        | PreFinallyFlow
         | FlowStart
         | FlowLabel
         | FlowAssignment
@@ -69,19 +70,12 @@ namespace Debug {
         | FlowCondition
         | FlowSwitchClause
         | FlowArrayMutation
+        | FlowReduceLabel
         ;
 
     interface FlowNodeBase {
         flags: FlowFlags;
         id?: number;
-    }
-
-    interface AfterFinallyFlow extends FlowNodeBase {
-        antecedent: FlowNode;
-    }
-
-    interface PreFinallyFlow extends FlowNodeBase {
-        antecedent: FlowNode;
     }
 
     interface FlowStart extends FlowNodeBase {
@@ -93,12 +87,12 @@ namespace Debug {
     }
 
     interface FlowAssignment extends FlowNodeBase {
-        node: Expression;
+        node: Expression | VariableDeclaration | BindingElement;
         antecedent: FlowNode;
     }
 
     interface FlowCall extends FlowNodeBase {
-        node: Expression;
+        node: CallExpression;
         antecedent: FlowNode;
     }
 
@@ -115,7 +109,13 @@ namespace Debug {
     }
 
     interface FlowArrayMutation extends FlowNodeBase {
-        node: Expression;
+        node: CallExpression | BinaryExpression;
+        antecedent: FlowNode;
+    }
+
+    export interface FlowReduceLabel extends FlowNodeBase {
+        target: FlowLabel;
+        antecedents: FlowNode[];
         antecedent: FlowNode;
     }
 
@@ -186,6 +186,7 @@ namespace Debug {
             lane: number;
             endLane: number;
             level: number;
+            circular: boolean | "circularity";
         }
 
         interface FlowGraphEdge {
@@ -199,8 +200,7 @@ namespace Debug {
             FlowFlags.SwitchClause |
             FlowFlags.ArrayMutation |
             FlowFlags.Call |
-            FlowFlags.PreFinally |
-            FlowFlags.AfterFinally;
+            FlowFlags.ReduceLabel;
 
         const hasNodeFlags =
             FlowFlags.Start |
@@ -212,8 +212,9 @@ namespace Debug {
         const links: Record<number, FlowGraphNode> = Object.create(/*o*/ null); // eslint-disable-line no-null/no-null
         const nodes: FlowGraphNode[] = [];
         const edges: FlowGraphEdge[] = [];
-        const root = buildGraphNode(flowNode);
+        const root = buildGraphNode(flowNode, new Set());
         for (const node of nodes) {
+            node.text = renderFlowNode(node.flowNode, node.circular);
             computeLevel(node);
         }
 
@@ -258,29 +259,43 @@ namespace Debug {
             return parents;
         }
 
-        function buildGraphNode(flowNode: FlowNode) {
+        function buildGraphNode(flowNode: FlowNode, seen: Set<FlowNode>): FlowGraphNode {
             const id = getDebugFlowNodeId(flowNode);
             let graphNode = links[id];
-            if (!graphNode) {
-                links[id] = graphNode = { id, flowNode, edges: [], text: renderFlowNode(flowNode), lane: -1, endLane: -1, level: -1 };
+            if (graphNode && seen.has(flowNode)) {
+                graphNode.circular = true;
+                graphNode = {
+                    id: -1,
+                    flowNode,
+                    edges: [],
+                    text: "",
+                    lane: -1,
+                    endLane: -1,
+                    level: -1,
+                    circular: "circularity"
+                };
                 nodes.push(graphNode);
-                if (!(flowNode.flags & FlowFlags.PreFinally)) {
-                    if (hasAntecedents(flowNode)) {
-
-                        for (const antecedent of flowNode.antecedents) {
-                            buildGraphEdge(graphNode, antecedent);
-                        }
-                    }
-                    else if (hasAntecedent(flowNode)) {
-                        buildGraphEdge(graphNode, flowNode.antecedent);
+                return graphNode;
+            }
+            seen.add(flowNode);
+            if (!graphNode) {
+                links[id] = graphNode = { id, flowNode, edges: [], text: "", lane: -1, endLane: -1, level: -1, circular: false };
+                nodes.push(graphNode);
+                if (hasAntecedents(flowNode)) {
+                    for (const antecedent of flowNode.antecedents) {
+                        buildGraphEdge(graphNode, antecedent, seen);
                     }
                 }
+                else if (hasAntecedent(flowNode)) {
+                    buildGraphEdge(graphNode, flowNode.antecedent, seen);
+                }
             }
+            seen.delete(flowNode);
             return graphNode;
         }
 
-        function buildGraphEdge(source: FlowGraphNode, antecedent: FlowNode) {
-            const target = buildGraphNode(antecedent);
+        function buildGraphEdge(source: FlowGraphNode, antecedent: FlowNode, seen: Set<FlowNode>) {
+            const target = buildGraphNode(antecedent, seen);
             const edge: FlowGraphEdge = { source, target };
             edges.push(edge);
             source.edges.push(edge);
@@ -341,8 +356,7 @@ namespace Debug {
             if (flags & FlowFlags.SwitchClause) return "SwitchClause";
             if (flags & FlowFlags.ArrayMutation) return "ArrayMutation";
             if (flags & FlowFlags.Call) return "Call";
-            if (flags & FlowFlags.PreFinally) return "PreFinally";
-            if (flags & FlowFlags.AfterFinally) return "AfterFinally";
+            if (flags & FlowFlags.ReduceLabel) return "ReduceLabel";
             if (flags & FlowFlags.Unreachable) return "Unreachable";
             throw new Error();
         }
@@ -352,8 +366,11 @@ namespace Debug {
             return getSourceTextOfNodeFromSourceFile(sourceFile, node, /*includeTrivia*/ false);
         }
 
-        function renderFlowNode(flowNode: FlowNode) {
+        function renderFlowNode(flowNode: FlowNode, circular: boolean | "circularity") {
             let text = getHeader(flowNode.flags);
+            if (circular) {
+                text = `${text}#${getDebugFlowNodeId(flowNode)}`;
+            }
             if (hasNode(flowNode)) {
                 if (flowNode.node) {
                     text += ` (${getNodeText(flowNode.node)})`;
@@ -372,7 +389,7 @@ namespace Debug {
                 }
                 text += ` (${clauses.join(", ")})`;
             }
-            return text;
+            return circular === "circularity" ? `Circular(${text})` : text;
         }
 
         function renderGraph() {

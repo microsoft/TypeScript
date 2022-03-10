@@ -7,7 +7,7 @@ var Validator = function VFunc() {
     this.flags = "gim"
 >this.flags = "gim" : "gim"
 >this.flags : any
->this : any
+>this : this
 >flags : any
 >"gim" : "gim"
 
@@ -26,8 +26,8 @@ Validator.prototype.num = 12
  * @param {Validator} state
  */
 var validateRegExpFlags = function(state) {
->validateRegExpFlags : (state: VFunc) => string
->function(state) {    return state.flags} : (state: VFunc) => string
+>validateRegExpFlags : (state: Validator) => string
+>function(state) {    return state.flags} : (state: Validator) => string
 >state : VFunc
 
     return state.flags

@@ -200,16 +200,19 @@ var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.ExtendsStatics = exports.HasStatics = exports.VariableBase = exports.O = exports.N = exports.M = exports.L = exports.K = exports.J = exports.JJ = exports.II = exports.I = exports.H = exports.G = exports.F = exports.E = exports.D = exports.C = exports.B = exports.A = void 0;
 var A = /** @class */ (function () {
     function A() {
     }
@@ -264,7 +267,7 @@ var E = /** @class */ (function () {
          * @param {U} _p
          */
         set: function (_p) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(E.prototype, "f2", {
@@ -272,7 +275,7 @@ var E = /** @class */ (function () {
          * @return {U}
          */
         get: function () { return /** @type {*} */ (null); },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(E.prototype, "f3", {
@@ -280,7 +283,7 @@ var E = /** @class */ (function () {
          * @param {U} _p
          */
         set: function (_p) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(E, "s1", {
@@ -292,7 +295,7 @@ var E = /** @class */ (function () {
          * @param {string} _p
          */
         set: function (_p) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(E, "s2", {
@@ -300,7 +303,7 @@ var E = /** @class */ (function () {
          * @return {string}
          */
         get: function () { return ""; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(E, "s3", {
@@ -308,7 +311,7 @@ var E = /** @class */ (function () {
          * @param {string} _p
          */
         set: function (_p) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     E.staticInitializedField = 12;
@@ -576,10 +579,6 @@ export class N<T> extends L {
  * @extends {N<U>}
  */
 export class O<U> extends N<U> {
-    /**
-     * @param {U} param
-     */
-    constructor(param: U);
     another2: U;
 }
 declare const VariableBase_base: any;

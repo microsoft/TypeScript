@@ -6,7 +6,7 @@ namespace ts.codefix {
     ];
     registerCodeFix({
         errorCodes,
-        getCodeActions: (context) => {
+        getCodeActions: function getCodeActionsToEnableExperimentalDecorators(context) {
             const { configFile } = context.program.getCompilerOptions();
             if (configFile === undefined) {
                 return undefined;
@@ -26,6 +26,6 @@ namespace ts.codefix {
     });
 
     function doChange(changeTracker: textChanges.ChangeTracker, configFile: TsConfigSourceFile) {
-        setJsonCompilerOptionValue(changeTracker, configFile, "experimentalDecorators", createTrue());
+        setJsonCompilerOptionValue(changeTracker, configFile, "experimentalDecorators", factory.createTrue());
     }
 }

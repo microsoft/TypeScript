@@ -11,3 +11,4 @@ error TS6082: Only 'amd' and 'system' modules are supported alongside --out.
     
 ==== tests/cases/compiler/b.ts (0 errors) ====
     class B { }
+    

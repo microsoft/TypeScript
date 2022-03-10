@@ -1,0 +1,33 @@
+=== tests/cases/compiler/controlFlowCommaExpressionFunctionCall.ts ===
+const otherValue = () => true;
+>otherValue : () => boolean
+>() => true : () => boolean
+>true : true
+
+const value : number | string = null as any;
+>value : string | number
+>null as any : any
+>null : null
+
+function isNumber(obj: any): obj is number {
+>isNumber : (obj: any) => obj is number
+>obj : any
+
+    return true; // method implementation irrelevant
+>true : true
+}
+
+// Bad case - fails
+if (isNumber((otherValue(), value))) {
+>isNumber((otherValue(), value)) : boolean
+>isNumber : (obj: any) => obj is number
+>(otherValue(), value) : string | number
+>otherValue(), value : string | number
+>otherValue() : boolean
+>otherValue : () => boolean
+>value : string | number
+
+    const b = value; // string | number , but should be number
+>b : number
+>value : number
+}

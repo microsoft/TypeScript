@@ -1,4 +1,4 @@
-/a/lib/tsc.js --w /f.ts
+Input::
 //// [/f.ts]
 
 
@@ -15,21 +15,19 @@ interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
-//// [/f.js]
 
-
-
+/a/lib/tsc.js --w /f.ts
 Output::
 >> Screen clear
-12:00:11 AM - Starting compilation in watch mode...
+[[90m12:00:11 AM[0m] Starting compilation in watch mode...
 
+[[90m12:00:14 AM[0m] Found 0 errors. Watching for file changes.
 
-
-12:00:14 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/f.ts"]
 Program options: {"watch":true}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /f.ts
@@ -37,6 +35,10 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 /f.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/f.ts (used version)
 
 WatchedFiles::
 /f.ts:
@@ -49,34 +51,38 @@ FsWatches::
 FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
+
+//// [/f.js]
+
+
 
 Change:: Comment added to file f
 
+Input::
 //// [/f.ts]
 //
-
-//// [/f.js]
-//
-
 
 
 Output::
 >> Screen clear
-12:00:17 AM - File change detected. Starting incremental compilation...
+[[90m12:00:17 AM[0m] File change detected. Starting incremental compilation...
 
+[[90m12:00:21 AM[0m] Found 0 errors. Watching for file changes.
 
-
-12:00:21 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/f.ts"]
 Program options: {"watch":true}
+Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
 /f.ts
 
 Semantic diagnostics in builder refreshed for::
 /f.ts
+
+Shape signatures in builder refreshed for::
+/f.ts (computed .d.ts)
 
 WatchedFiles::
 /f.ts:
@@ -89,3 +95,8 @@ FsWatches::
 FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
+
+//// [/f.js]
+//
+
+

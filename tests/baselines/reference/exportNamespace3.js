@@ -17,6 +17,7 @@ new a.A(); // Error
 //// [a.js]
 "use strict";
 exports.__esModule = true;
+exports.A = void 0;
 var A = /** @class */ (function () {
     function A() {
     }
@@ -29,6 +30,7 @@ exports.__esModule = true;
 //// [c.js]
 "use strict";
 exports.__esModule = true;
+exports.a = void 0;
 exports.a = require("./b");
 //// [d.js]
 "use strict";

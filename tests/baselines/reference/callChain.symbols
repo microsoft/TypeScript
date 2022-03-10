@@ -156,3 +156,18 @@ declare const o5: <T>() => undefined | (() => void);
 o5<number>()?.();
 >o5 : Symbol(o5, Decl(callChain.ts, 35, 13))
 
+// GH#36031
+o2?.b()!.toString;
+>o2?.b()!.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>o2?.b : Symbol(b, Decl(callChain.ts, 6, 31))
+>o2 : Symbol(o2, Decl(callChain.ts, 6, 13))
+>b : Symbol(b, Decl(callChain.ts, 6, 31))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+o2?.b()!.toString!;
+>o2?.b()!.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>o2?.b : Symbol(b, Decl(callChain.ts, 6, 31))
+>o2 : Symbol(o2, Decl(callChain.ts, 6, 13))
+>b : Symbol(b, Decl(callChain.ts, 6, 31))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+

@@ -53,6 +53,7 @@ export var publicUse_im_private_mi_public = new im_private_mi_public.c_public();
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    exports.c_public = void 0;
     // Public elements
     var c_public = /** @class */ (function () {
         function c_public() {
@@ -65,6 +66,7 @@ define(["require", "exports"], function (require, exports) {
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    exports.c_public = void 0;
     var c_public = /** @class */ (function () {
         function c_public() {
         }
@@ -76,6 +78,7 @@ define(["require", "exports"], function (require, exports) {
 define(["require", "exports", "m", "m2", "privacyTopLevelAmbientExternalModuleImportWithoutExport_require"], function (require, exports, im_private_mi_private, im_private_mu_private, im_private_mi_public) {
     "use strict";
     exports.__esModule = true;
+    exports.publicUse_im_private_mi_public = exports.publicUse_im_private_mu_private = exports.publicUse_im_private_mi_private = void 0;
     // Usage of privacy error imports
     var privateUse_im_private_mi_private = new im_private_mi_private.c_private();
     exports.publicUse_im_private_mi_private = new im_private_mi_private.c_private();

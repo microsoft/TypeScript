@@ -19,12 +19,11 @@
 
 verify.completions({
     marker: "",
-    exact: [
+    exact: completion.functionMembersWithPrototypePlus([
         "getName",
         "getNa",
-        ...completion.functionMembersWithPrototype,
         { name: "Person", sortText: completion.SortText.JavascriptIdentifiers },
         { name: "name", sortText: completion.SortText.JavascriptIdentifiers },
         { name: "age", sortText: completion.SortText.JavascriptIdentifiers }
-    ],
+    ]),
 });

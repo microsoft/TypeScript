@@ -79,3 +79,13 @@ class Private {
 >value : Symbol(value, Decl(jsdocAccessibilityTagDeclarations.js, 29, 10))
 }
 
+// https://github.com/microsoft/TypeScript/issues/38401
+class C {
+>C : Symbol(C, Decl(jsdocAccessibilityTagDeclarations.js, 30, 1))
+
+    constructor(/** @public */ x, /** @protected */ y, /** @private */ z) {
+>x : Symbol(x, Decl(jsdocAccessibilityTagDeclarations.js, 34, 16))
+>y : Symbol(y, Decl(jsdocAccessibilityTagDeclarations.js, 34, 33))
+>z : Symbol(z, Decl(jsdocAccessibilityTagDeclarations.js, 34, 54))
+    }
+}

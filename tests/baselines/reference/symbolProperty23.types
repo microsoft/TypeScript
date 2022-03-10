@@ -2,9 +2,9 @@
 interface I {
     [Symbol.toPrimitive]: () => boolean;
 >[Symbol.toPrimitive] : () => boolean
->Symbol.toPrimitive : symbol
+>Symbol.toPrimitive : unique symbol
 >Symbol : SymbolConstructor
->toPrimitive : symbol
+>toPrimitive : unique symbol
 }
 
 class C implements I {
@@ -12,9 +12,9 @@ class C implements I {
 
     [Symbol.toPrimitive]() {
 >[Symbol.toPrimitive] : () => boolean
->Symbol.toPrimitive : symbol
+>Symbol.toPrimitive : unique symbol
 >Symbol : SymbolConstructor
->toPrimitive : symbol
+>toPrimitive : unique symbol
 
         return true;
 >true : true

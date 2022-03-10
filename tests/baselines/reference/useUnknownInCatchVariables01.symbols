@@ -1,0 +1,71 @@
+=== tests/cases/compiler/useUnknownInCatchVariables01.ts ===
+try {
+    // ...
+}
+catch (e) {
+>e : Symbol(e, Decl(useUnknownInCatchVariables01.ts, 3, 7))
+
+    // error!
+    void e.toUpperCase();
+>e : Symbol(e, Decl(useUnknownInCatchVariables01.ts, 3, 7))
+
+    void e++;
+>e : Symbol(e, Decl(useUnknownInCatchVariables01.ts, 3, 7))
+
+    void e();
+>e : Symbol(e, Decl(useUnknownInCatchVariables01.ts, 3, 7))
+
+    if (typeof e === "string") {
+>e : Symbol(e, Decl(useUnknownInCatchVariables01.ts, 3, 7))
+
+        // works!
+        // We've narrowed 'e' down to the type 'string'.
+        console.log(e.toUpperCase());
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>e.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>e : Symbol(e, Decl(useUnknownInCatchVariables01.ts, 3, 7))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+    }
+    if (e instanceof Error) {
+>e : Symbol(e, Decl(useUnknownInCatchVariables01.ts, 3, 7))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+        e.stack?.toUpperCase();
+>e.stack?.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>e.stack : Symbol(Error.stack, Decl(lib.es5.d.ts, --, --))
+>e : Symbol(e, Decl(useUnknownInCatchVariables01.ts, 3, 7))
+>stack : Symbol(Error.stack, Decl(lib.es5.d.ts, --, --))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+    }
+    if (typeof e === "number") {
+>e : Symbol(e, Decl(useUnknownInCatchVariables01.ts, 3, 7))
+
+        e.toExponential();
+>e.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+>e : Symbol(e, Decl(useUnknownInCatchVariables01.ts, 3, 7))
+>toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+
+        e++;
+>e : Symbol(e, Decl(useUnknownInCatchVariables01.ts, 3, 7))
+    }
+}
+
+
+try {
+    // ...
+}
+catch (e: any) {
+>e : Symbol(e, Decl(useUnknownInCatchVariables01.ts, 27, 7))
+
+    // All are allowed.
+    void e.toUpperCase();
+>e : Symbol(e, Decl(useUnknownInCatchVariables01.ts, 27, 7))
+
+    void e.toExponential();
+>e : Symbol(e, Decl(useUnknownInCatchVariables01.ts, 27, 7))
+
+    void e();
+>e : Symbol(e, Decl(useUnknownInCatchVariables01.ts, 27, 7))
+}

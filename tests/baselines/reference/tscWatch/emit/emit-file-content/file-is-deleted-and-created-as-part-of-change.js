@@ -1,4 +1,4 @@
-/a/lib/tsc.js -w
+Input::
 //// [/home/username/project/app/file.ts]
 var a = 10;
 
@@ -18,22 +18,19 @@ interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
-//// [/home/username/project/app/file.js]
-var a = 10;
 
-
-
+/a/lib/tsc.js -w
 Output::
 >> Screen clear
-12:00:21 AM - Starting compilation in watch mode...
+[[90m12:00:21 AM[0m] Starting compilation in watch mode...
 
+[[90m12:00:24 AM[0m] Found 0 errors. Watching for file changes.
 
-
-12:00:24 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/home/username/project/app/file.ts"]
 Program options: {"watch":true,"configFilePath":"/home/username/project/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /home/username/project/app/file.ts
@@ -41,6 +38,10 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 /home/username/project/app/file.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/home/username/project/app/file.ts (used version)
 
 WatchedFiles::
 /home/username/project/tsconfig.json:
@@ -60,13 +61,14 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
-Change:: file is deleted and then created to modify content
-
 //// [/home/username/project/app/file.js]
 var a = 10;
-var b = 10;
 
 
+
+Change:: file is deleted and then created to modify content
+
+Input::
 //// [/home/username/project/app/file.ts]
 var a = 10;
 var b = 10;
@@ -74,15 +76,15 @@ var b = 10;
 
 Output::
 >> Screen clear
-12:00:28 AM - File change detected. Starting incremental compilation...
+[[90m12:00:28 AM[0m] File change detected. Starting incremental compilation...
 
+[[90m12:00:32 AM[0m] Found 0 errors. Watching for file changes.
 
-
-12:00:32 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/home/username/project/app/file.ts"]
 Program options: {"watch":true,"configFilePath":"/home/username/project/tsconfig.json"}
+Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
 /home/username/project/app/file.ts
@@ -90,6 +92,9 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 /home/username/project/app/file.ts
+
+Shape signatures in builder refreshed for::
+/home/username/project/app/file.ts (computed .d.ts)
 
 WatchedFiles::
 /home/username/project/tsconfig.json:
@@ -108,3 +113,9 @@ FsWatchesRecursive::
   {"directoryName":"/home/username/project/app","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
+
+//// [/home/username/project/app/file.js]
+var a = 10;
+var b = 10;
+
+

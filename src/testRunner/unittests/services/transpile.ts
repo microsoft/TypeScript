@@ -188,19 +188,19 @@ var x = 0;`, {
         transpilesCorrectly("Accepts string as enum values for compile-options", "export const x = 0", {
             options: {
                 compilerOptions: {
-                    module: <ModuleKind><any>"es6",
+                    module: "es6" as any as ModuleKind,
                     // Capitalization and spaces ignored
-                    target: <ScriptTarget><any>" Es6 "
+                    target: " Es6 " as any as ScriptTarget
                 }
             }
         });
 
         transpilesCorrectly("Report an error when compiler-options module-kind is out-of-range", "", {
-            options: { compilerOptions: { module: <ModuleKind><any>123 } }
+            options: { compilerOptions: { module: 123 as any as ModuleKind } }
         });
 
         transpilesCorrectly("Report an error when compiler-options target-script is out-of-range", "", {
-            options: { compilerOptions: { module: <ModuleKind><any>123 } }
+            options: { compilerOptions: { module: 123 as any as ModuleKind } }
         });
 
         transpilesCorrectly("Support options with lib values", "const a = 10;", {
@@ -363,12 +363,16 @@ var x = 0;`, {
             options: { compilerOptions: { jsxFactory: "createElement" }, fileName: "input.js", reportDiagnostics: true }
         });
 
+        transpilesCorrectly("Supports setting 'jsxFragmentFactory'", "x;", {
+            options: { compilerOptions: { jsxFactory: "x", jsxFragmentFactory: "frag" }, fileName: "input.js", reportDiagnostics: true }
+        });
+
         transpilesCorrectly("Supports setting 'removeComments'", "x;", {
             options: { compilerOptions: { removeComments: true }, fileName: "input.js", reportDiagnostics: true }
         });
 
         transpilesCorrectly("Supports setting 'rootDir'", "x;", {
-            options: { compilerOptions: { rootDir: "./rootDir" }, fileName: "input.js", reportDiagnostics: true }
+            options: { compilerOptions: { rootDir: "./rootDir" }, fileName: "./rootDir/input.js", reportDiagnostics: true }
         });
 
         transpilesCorrectly("Supports setting 'rootDirs'", "x;", {

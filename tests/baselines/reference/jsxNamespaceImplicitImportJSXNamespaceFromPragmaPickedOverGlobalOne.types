@@ -1,0 +1,113 @@
+=== /node_modules/react/index.d.ts ===
+export = React;
+>React : any
+
+export as namespace React;
+>React : error
+
+declare namespace React { }
+
+declare global {
+>global : any
+
+    namespace JSX {
+        interface Element { }
+        interface ElementClass { }
+        interface ElementAttributesProperty { }
+        interface ElementChildrenAttribute { }
+        type LibraryManagedAttributes<C, P> = {}
+>LibraryManagedAttributes : LibraryManagedAttributes<C, P>
+
+        interface IntrinsicAttributes { }
+        interface IntrinsicClassAttributes<T> { }
+        interface IntrinsicElements {
+            div: {}
+>div : {}
+        }
+    }
+}
+=== /node_modules/@emotion/react/jsx-runtime/index.d.ts ===
+export { EmotionJSX as JSX } from './jsx-namespace'
+>EmotionJSX : any
+>JSX : any
+
+=== /node_modules/@emotion/react/jsx-runtime/jsx-namespace.d.ts ===
+import 'react'
+
+type WithConditionalCSSProp<P> = 'className' extends keyof P
+>WithConditionalCSSProp : WithConditionalCSSProp<P>
+
+    ? (P extends { className?: string } ? P & { css?: string } : P)
+>className : string | undefined
+>css : string | undefined
+
+    : P
+
+type ReactJSXElement = JSX.Element
+>ReactJSXElement : JSX.Element
+>JSX : any
+
+type ReactJSXElementClass = JSX.ElementClass
+>ReactJSXElementClass : JSX.ElementClass
+>JSX : any
+
+type ReactJSXElementAttributesProperty = JSX.ElementAttributesProperty
+>ReactJSXElementAttributesProperty : JSX.ElementAttributesProperty
+>JSX : any
+
+type ReactJSXElementChildrenAttribute = JSX.ElementChildrenAttribute
+>ReactJSXElementChildrenAttribute : JSX.ElementChildrenAttribute
+>JSX : any
+
+type ReactJSXLibraryManagedAttributes<C, P> = JSX.LibraryManagedAttributes<C, P>
+>ReactJSXLibraryManagedAttributes : ReactJSXLibraryManagedAttributes<C, P>
+>JSX : any
+
+type ReactJSXIntrinsicAttributes = JSX.IntrinsicAttributes
+>ReactJSXIntrinsicAttributes : JSX.IntrinsicAttributes
+>JSX : any
+
+type ReactJSXIntrinsicClassAttributes<T> = JSX.IntrinsicClassAttributes<T>
+>ReactJSXIntrinsicClassAttributes : ReactJSXIntrinsicClassAttributes<T>
+>JSX : any
+
+type ReactJSXIntrinsicElements = JSX.IntrinsicElements
+>ReactJSXIntrinsicElements : JSX.IntrinsicElements
+>JSX : any
+
+export namespace EmotionJSX {
+    interface Element extends ReactJSXElement { }
+    interface ElementClass extends ReactJSXElementClass { }
+    interface ElementAttributesProperty
+        extends ReactJSXElementAttributesProperty { }
+    interface ElementChildrenAttribute extends ReactJSXElementChildrenAttribute { }
+
+    type LibraryManagedAttributes<C, P> = WithConditionalCSSProp<P> &
+>LibraryManagedAttributes : LibraryManagedAttributes<C, P>
+
+        ReactJSXLibraryManagedAttributes<C, P>
+
+    interface IntrinsicAttributes extends ReactJSXIntrinsicAttributes { }
+    interface IntrinsicClassAttributes<T>
+        extends ReactJSXIntrinsicClassAttributes<T> { }
+
+    type IntrinsicElements = {
+>IntrinsicElements : IntrinsicElements
+
+        [K in keyof ReactJSXIntrinsicElements]: ReactJSXIntrinsicElements[K] & {
+            css?: string
+>css : string | undefined
+        }
+    }
+}
+
+=== /index.tsx ===
+/* @jsxImportSource @emotion/react */
+export const Comp = () => <div css="color: hotpink;"></div>;
+>Comp : () => import("/node_modules/@emotion/react/jsx-runtime/jsx-namespace").EmotionJSX.Element
+>() => <div css="color: hotpink;"></div> : () => import("/node_modules/@emotion/react/jsx-runtime/jsx-namespace").EmotionJSX.Element
+><div css="color: hotpink;"></div> : import("/node_modules/@emotion/react/jsx-runtime/jsx-namespace").EmotionJSX.Element
+>div : any
+>css : string
+>div : any
+

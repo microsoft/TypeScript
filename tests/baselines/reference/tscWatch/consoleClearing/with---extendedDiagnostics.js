@@ -1,4 +1,4 @@
-/a/lib/tsc.js --w /f.ts --extendedDiagnostics
+Input::
 //// [/f.ts]
 
 
@@ -15,35 +15,25 @@ interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
-//// [/f.js]
 
-
-
+/a/lib/tsc.js --w /f.ts --extendedDiagnostics
 Output::
-
-12:00:11 AM - Starting compilation in watch mode...
-
+[[90m12:00:11 AM[0m] Starting compilation in watch mode...
 
 Current directory: / CaseSensitiveFileNames: false
-
 Synchronizing program
-
 CreatingProgramWith::
-
   roots: ["/f.ts"]
-
   options: {"watch":true,"extendedDiagnostics":true}
-
 FileWatcher:: Added:: WatchInfo: /f.ts 250 undefined Source file
-
 FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 250 undefined Source file
+[[90m12:00:14 AM[0m] Found 0 errors. Watching for file changes.
 
-
-12:00:14 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/f.ts"]
 Program options: {"watch":true,"extendedDiagnostics":true}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /f.ts
@@ -51,6 +41,10 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 /f.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/f.ts (used version)
 
 WatchedFiles::
 /f.ts:
@@ -64,47 +58,43 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+//// [/f.js]
+
+
+
 Change:: Comment added to file f
 
+Input::
 //// [/f.ts]
 //
-
-//// [/f.js]
-//
-
 
 
 Output::
 FileWatcher:: Triggered with /f.ts 1:: WatchInfo: /f.ts 250 undefined Source file
-
 Scheduling update
-
 Elapsed:: *ms FileWatcher:: Triggered with /f.ts 1:: WatchInfo: /f.ts 250 undefined Source file
-
-
-12:00:17 AM - File change detected. Starting incremental compilation...
-
-
 Synchronizing program
+[[90m12:00:17 AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
-
   roots: ["/f.ts"]
-
   options: {"watch":true,"extendedDiagnostics":true}
+[[90m12:00:21 AM[0m] Found 0 errors. Watching for file changes.
 
-
-12:00:21 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/f.ts"]
 Program options: {"watch":true,"extendedDiagnostics":true}
+Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
 /f.ts
 
 Semantic diagnostics in builder refreshed for::
 /f.ts
+
+Shape signatures in builder refreshed for::
+/f.ts (computed .d.ts)
 
 WatchedFiles::
 /f.ts:
@@ -117,3 +107,8 @@ FsWatches::
 FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
+
+//// [/f.js]
+//
+
+

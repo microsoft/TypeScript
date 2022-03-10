@@ -1,0 +1,24 @@
+=== tests/cases/compiler/enumPropertyAccessBeforeInitalisation.ts ===
+enum E {
+>E : Symbol(E, Decl(enumPropertyAccessBeforeInitalisation.ts, 0, 0))
+
+    A = A,
+>A : Symbol(E.A, Decl(enumPropertyAccessBeforeInitalisation.ts, 0, 8))
+>A : Symbol(E.A, Decl(enumPropertyAccessBeforeInitalisation.ts, 0, 8))
+
+    B = E.B,
+>B : Symbol(E.B, Decl(enumPropertyAccessBeforeInitalisation.ts, 1, 10))
+>E.B : Symbol(E.B, Decl(enumPropertyAccessBeforeInitalisation.ts, 1, 10))
+>E : Symbol(E, Decl(enumPropertyAccessBeforeInitalisation.ts, 0, 0))
+>B : Symbol(E.B, Decl(enumPropertyAccessBeforeInitalisation.ts, 1, 10))
+
+    C = E["C"],
+>C : Symbol(E.C, Decl(enumPropertyAccessBeforeInitalisation.ts, 2, 12))
+>E : Symbol(E, Decl(enumPropertyAccessBeforeInitalisation.ts, 0, 0))
+>"C" : Symbol(E.C, Decl(enumPropertyAccessBeforeInitalisation.ts, 2, 12))
+
+    D = 1 + D
+>D : Symbol(E.D, Decl(enumPropertyAccessBeforeInitalisation.ts, 3, 15))
+>D : Symbol(E.D, Decl(enumPropertyAccessBeforeInitalisation.ts, 3, 15))
+}
+

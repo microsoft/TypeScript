@@ -75,7 +75,7 @@ namespace ts.projectSystem {
             checkProjectActualFiles(configuredProjectAt(projectService, 0), [f1.path, t1.path, tsconfig.path]);
 
             // delete t1
-            host.reloadFS([f1, tsconfig]);
+            host.deleteFile(t1.path);
             // run throttled operation
             host.runQueuedTimeoutCallbacks();
 
@@ -83,7 +83,7 @@ namespace ts.projectSystem {
             checkProjectActualFiles(configuredProjectAt(projectService, 0), [f1.path, tsconfig.path]);
 
             // create t2
-            host.reloadFS([f1, tsconfig, t2]);
+            host.writeFile(t2.path, t2.content);
             // run throttled operation
             host.runQueuedTimeoutCallbacks();
 
@@ -103,18 +103,15 @@ namespace ts.projectSystem {
                 content: "import * as T from './moduleFile'; T.bar();"
             };
             const host = createServerHost([file1]);
-            const session = createSession(host);
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs() });
             openFilesForSession([file1], session);
             const getErrRequest = makeSessionRequest<server.protocol.SemanticDiagnosticsSyncRequestArgs>(
                 server.CommandNames.SemanticDiagnosticsSync,
                 { file: file1.path }
             );
-            let diags = session.executeCommand(getErrRequest).response as server.protocol.Diagnostic[];
-            verifyDiagnostics(diags, [
-                { diagnosticMessage: Diagnostics.Cannot_find_module_0, errorTextArguments: ["./moduleFile"] }
-            ]);
+            session.executeCommand(getErrRequest);
 
-            host.reloadFS([file1, moduleFile]);
+            host.writeFile(moduleFile.path, moduleFile.content);
             host.runQueuedTimeoutCallbacks();
 
             // Make a change to trigger the program rebuild
@@ -125,8 +122,8 @@ namespace ts.projectSystem {
             session.executeCommand(changeRequest);
 
             // Recheck
-            diags = session.executeCommand(getErrRequest).response as server.protocol.Diagnostic[];
-            verifyNoDiagnostics(diags);
+            session.executeCommand(getErrRequest);
+            baselineTsserverLogs("resolutionCache", "should remove the module not found error", session);
         });
 
         it("npm install @types works", () => {
@@ -135,10 +132,8 @@ namespace ts.projectSystem {
                 path: `${folderPath}/a.ts`,
                 content: 'import f = require("pad"); f;'
             };
-            const files = [file1, libFile];
-            const host = createServerHost(files);
-            const session = createSession(host, { canUseEvents: true });
-            const service = session.getProjectService();
+            const host = createServerHost([file1, libFile]);
+            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs() });
             session.executeCommandSeq<protocol.OpenRequest>({
                 command: server.CommandNames.Open,
                 arguments: {
@@ -148,38 +143,19 @@ namespace ts.projectSystem {
                     projectRootPath: folderPath
                 }
             });
-            checkNumberOfProjects(service, { inferredProjects: 1 });
 
-            const startOffset = file1.content.indexOf('"') + 1;
-            verifyGetErrRequest({
-                session,
-                host,
-                expected: [{
-                    file: file1,
-                    syntax: [],
-                    semantic: [
-                        createDiagnostic({ line: 1, offset: startOffset }, { line: 1, offset: startOffset + '"pad"'.length }, Diagnostics.Cannot_find_module_0, ["pad"])
-                    ],
-                    suggestion: []
-                }]
-            });
+            verifyGetErrRequest({ session, host, files: [file1] });
 
             const padIndex: File = {
                 path: `${folderPath}/node_modules/@types/pad/index.d.ts`,
                 content: "export = pad;declare function pad(length: number, text: string, char ?: string): string;"
             };
-            files.push(padIndex);
-            host.reloadFS(files, { ignoreWatchInvokedWithTriggerAsFileCreate: true });
+            host.ensureFileOrFolder(padIndex, /*ignoreWatchInvokedWithTriggerAsFileCreate*/ true);
+            host.runQueuedTimeoutCallbacks(); // Scheduled invalidation of resolutions
+            host.runQueuedTimeoutCallbacks(); // Actual update
             host.runQueuedTimeoutCallbacks();
-            checkProjectUpdatedInBackgroundEvent(session, [file1.path]);
-            session.clearMessages();
-
-            host.runQueuedTimeoutCallbacks();
-            checkErrorMessage(session, "syntaxDiag", { file: file1.path, diagnostics: [] });
-            session.clearMessages();
-
             host.runQueuedImmediateCallbacks();
-            checkErrorMessage(session, "semanticDiag", { file: file1.path, diagnostics: [] });
+            baselineTsserverLogs("resolutionCache", `npm install @types works`, session);
         });
 
         it("suggestion diagnostics", () => {
@@ -189,32 +165,16 @@ namespace ts.projectSystem {
             };
 
             const host = createServerHost([file]);
-            const session = createSession(host, { canUseEvents: true });
-            const service = session.getProjectService();
+            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs() });
 
             session.executeCommandSeq<protocol.OpenRequest>({
                 command: server.CommandNames.Open,
                 arguments: { file: file.path, fileContent: file.content },
             });
 
-            checkNumberOfProjects(service, { inferredProjects: 1 });
-            session.clearMessages();
-            host.checkTimeoutQueueLengthAndRun(2);
-
-            checkProjectUpdatedInBackgroundEvent(session, [file.path]);
-
-            verifyGetErrRequest({
-                session,
-                host,
-                expected: [{
-                    file,
-                    syntax: [],
-                    semantic: [],
-                    suggestion: [
-                        createDiagnostic({ line: 1, offset: 12 }, { line: 1, offset: 13 }, Diagnostics._0_is_declared_but_its_value_is_never_read, ["p"], "suggestion", /*reportsUnnecessary*/ true),
-                    ]
-                }]
-            });
+            host.checkTimeoutQueueLength(0);
+            verifyGetErrRequest({ session, host, files: [file] });
+            baselineTsserverLogs("resolutionCache", `suggestion diagnostics`, session);
         });
 
         it("disable suggestion diagnostics", () => {
@@ -224,8 +184,7 @@ namespace ts.projectSystem {
             };
 
             const host = createServerHost([file]);
-            const session = createSession(host, { canUseEvents: true });
-            const service = session.getProjectService();
+            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs() });
 
             session.executeCommandSeq<protocol.OpenRequest>({
                 command: server.CommandNames.Open,
@@ -239,21 +198,9 @@ namespace ts.projectSystem {
                 },
             });
 
-            checkNumberOfProjects(service, { inferredProjects: 1 });
-            session.clearMessages();
-            host.checkTimeoutQueueLengthAndRun(2);
-
-            checkProjectUpdatedInBackgroundEvent(session, [file.path]);
-
-            verifyGetErrRequest({
-                session,
-                host,
-                expected: [{
-                    file,
-                    syntax: [],
-                    semantic: []
-                }]
-            });
+            host.checkTimeoutQueueLength(0);
+            verifyGetErrRequest({ session, host, files: [file], skip: [{ suggestion: true }] });
+            baselineTsserverLogs("resolutionCache", `disable suggestion diagnostics`, session);
         });
 
         it("suppressed diagnostic events", () => {
@@ -263,23 +210,14 @@ namespace ts.projectSystem {
             };
 
             const host = createServerHost([file]);
-            const session = createSession(host, { canUseEvents: true, suppressDiagnosticEvents: true });
-            const service = session.getProjectService();
+            const session = createSession(host, { canUseEvents: true, suppressDiagnosticEvents: true, logger: createLoggerWithInMemoryLogs() });
 
             session.executeCommandSeq<protocol.OpenRequest>({
                 command: server.CommandNames.Open,
                 arguments: { file: file.path, fileContent: file.content },
             });
 
-            checkNumberOfProjects(service, { inferredProjects: 1 });
-
             host.checkTimeoutQueueLength(0);
-            checkNoDiagnosticEvents(session);
-
-            session.clearMessages();
-
-            let expectedSequenceId = session.getNextSeq();
-
             session.executeCommandSeq<protocol.GeterrRequest>({
                 command: server.CommandNames.Geterr,
                 arguments: {
@@ -289,14 +227,6 @@ namespace ts.projectSystem {
             });
 
             host.checkTimeoutQueueLength(0);
-            checkNoDiagnosticEvents(session);
-
-            checkCompleteEvent(session, 1, expectedSequenceId);
-
-            session.clearMessages();
-
-            expectedSequenceId = session.getNextSeq();
-
             session.executeCommandSeq<protocol.GeterrForProjectRequest>({
                 command: server.CommandNames.Geterr,
                 arguments: {
@@ -306,11 +236,7 @@ namespace ts.projectSystem {
             });
 
             host.checkTimeoutQueueLength(0);
-            checkNoDiagnosticEvents(session);
-
-            checkCompleteEvent(session, 1, expectedSequenceId);
-
-            session.clearMessages();
+            baselineTsserverLogs("resolutionCache", "suppressed diagnostic events", session);
         });
     });
 
@@ -325,29 +251,21 @@ namespace ts.projectSystem {
                 content: "import * as T from './moduleFile'; T.bar();"
             };
             const host = createServerHost([moduleFile, file1]);
-            const session = createSession(host);
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs() });
 
             openFilesForSession([file1], session);
             const getErrRequest = makeSessionRequest<server.protocol.SemanticDiagnosticsSyncRequestArgs>(
                 server.CommandNames.SemanticDiagnosticsSync,
                 { file: file1.path }
             );
-            let diags = session.executeCommand(getErrRequest).response as server.protocol.Diagnostic[];
-            verifyNoDiagnostics(diags);
+            session.executeCommand(getErrRequest);
 
-            const moduleFileOldPath = moduleFile.path;
             const moduleFileNewPath = "/a/b/moduleFile1.ts";
-            moduleFile.path = moduleFileNewPath;
-            host.reloadFS([moduleFile, file1]);
+            host.renameFile(moduleFile.path, moduleFileNewPath);
             host.runQueuedTimeoutCallbacks();
-            diags = session.executeCommand(getErrRequest).response as server.protocol.Diagnostic[];
-            verifyDiagnostics(diags, [
-                { diagnosticMessage: Diagnostics.Cannot_find_module_0, errorTextArguments: ["./moduleFile"] }
-            ]);
-            assert.equal(diags.length, 1);
+            session.executeCommand(getErrRequest);
 
-            moduleFile.path = moduleFileOldPath;
-            host.reloadFS([moduleFile, file1]);
+            host.renameFile(moduleFileNewPath, moduleFile.path);
             host.runQueuedTimeoutCallbacks();
 
             // Make a change to trigger the program rebuild
@@ -358,8 +276,8 @@ namespace ts.projectSystem {
             session.executeCommand(changeRequest);
             host.runQueuedTimeoutCallbacks();
 
-            diags = session.executeCommand(getErrRequest).response as server.protocol.Diagnostic[];
-            verifyNoDiagnostics(diags);
+            session.executeCommand(getErrRequest);
+            baselineTsserverLogs("resolutionCache", "renaming module should restore the states for inferred projects", session);
         });
 
         it("should restore the states for configured projects", () => {
@@ -376,31 +294,24 @@ namespace ts.projectSystem {
                 content: `{}`
             };
             const host = createServerHost([moduleFile, file1, configFile]);
-            const session = createSession(host);
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs() });
 
             openFilesForSession([file1], session);
             const getErrRequest = makeSessionRequest<server.protocol.SemanticDiagnosticsSyncRequestArgs>(
                 server.CommandNames.SemanticDiagnosticsSync,
                 { file: file1.path }
             );
-            let diags = session.executeCommand(getErrRequest).response as server.protocol.Diagnostic[];
-            verifyNoDiagnostics(diags);
+            session.executeCommand(getErrRequest);
 
-            const moduleFileOldPath = moduleFile.path;
             const moduleFileNewPath = "/a/b/moduleFile1.ts";
-            moduleFile.path = moduleFileNewPath;
-            host.reloadFS([moduleFile, file1, configFile]);
+            host.renameFile(moduleFile.path, moduleFileNewPath);
             host.runQueuedTimeoutCallbacks();
-            diags = session.executeCommand(getErrRequest).response as server.protocol.Diagnostic[];
-            verifyDiagnostics(diags, [
-                { diagnosticMessage: Diagnostics.Cannot_find_module_0, errorTextArguments: ["./moduleFile"] }
-            ]);
+            session.executeCommand(getErrRequest);
 
-            moduleFile.path = moduleFileOldPath;
-            host.reloadFS([moduleFile, file1, configFile]);
+            host.renameFile(moduleFileNewPath, moduleFile.path);
             host.runQueuedTimeoutCallbacks();
-            diags = session.executeCommand(getErrRequest).response as server.protocol.Diagnostic[];
-            verifyNoDiagnostics(diags);
+            session.executeCommand(getErrRequest);
+            baselineTsserverLogs("resolutionCache", "renaming module should restore the states for configured projects", session);
         });
 
         it("should property handle missing config files", () => {
@@ -420,7 +331,7 @@ namespace ts.projectSystem {
             // should have one external project since config file is missing
             projectService.checkNumberOfProjects({ externalProjects: 1 });
 
-            host.reloadFS([f1, config]);
+            host.writeFile(config.path, config.content);
             projectService.openExternalProject({ rootFiles: toExternalFiles([f1.path, config.path]), options: {}, projectFileName: projectName });
             projectService.checkNumberOfProjects({ configuredProjects: 1 });
         });
@@ -528,6 +439,10 @@ namespace ts.projectSystem {
             expectedTrace.push(`======== Module name '${moduleName}' was successfully resolved to '${module.path}'. ========`);
         }
 
+        function getExpectedModuleResolutionFromCacheTrace(containingFile: File, module: File, moduleName: string, cacheLocation: string): string {
+            return `Reusing resolution of module '${moduleName}' from '${containingFile.path}' found in cache from location '${cacheLocation}', it was successfully resolved to '${module.path}'.`;
+        }
+
         function getExpectedRelativeModuleResolutionTrace(host: TestServerHost, file: File, module: File, moduleName: string, expectedTrace: string[] = []) {
             getExpectedResolutionTraceHeader(expectedTrace, file, moduleName);
             expectedTrace.push(`Loading module as file / folder, candidate module location '${removeFileExtension(module.path)}', target file type 'TypeScript'.`);
@@ -553,12 +468,12 @@ namespace ts.projectSystem {
             return expectedTrace;
         }
 
-        function getExpectedReusingResolutionFromOldProgram(file: File, moduleName: string) {
-            return `Reusing resolution of module '${moduleName}' to file '${file.path}' from old program.`;
+        function getExpectedReusingResolutionFromOldProgram(file: File, moduleFile: File, moduleName: string) {
+            return `Reusing resolution of module '${moduleName}' from '${file.path}' of old program, it was successfully resolved to '${moduleFile.path}'.`;
         }
 
         function verifyWatchesWithConfigFile(host: TestServerHost, files: File[], openFile: File, extraExpectedDirectories?: readonly string[]) {
-            const expectedRecursiveDirectories = arrayToSet([tscWatch.projectRoot, `${tscWatch.projectRoot}/${nodeModulesAtTypes}`, ...(extraExpectedDirectories || emptyArray)]);
+            const expectedRecursiveDirectories = new Set([tscWatch.projectRoot, `${tscWatch.projectRoot}/${nodeModulesAtTypes}`, ...(extraExpectedDirectories || emptyArray)]);
             checkWatchedFiles(host, mapDefined(files, f => {
                 if (f === openFile) {
                     return undefined;
@@ -567,11 +482,11 @@ namespace ts.projectSystem {
                 if (indexOfNodeModules === -1) {
                     return f.path;
                 }
-                expectedRecursiveDirectories.set(f.path.substr(0, indexOfNodeModules + "/node_modules".length), true);
+                expectedRecursiveDirectories.add(f.path.substr(0, indexOfNodeModules + "/node_modules".length));
                 return undefined;
             }));
             checkWatchedDirectories(host, [], /*recursive*/ false);
-            checkWatchedDirectories(host, arrayFrom(expectedRecursiveDirectories.keys()), /*recursive*/ true);
+            checkWatchedDirectories(host, arrayFrom(expectedRecursiveDirectories.values()), /*recursive*/ true);
         }
 
         describe("from files in same folder", () => {
@@ -600,16 +515,19 @@ namespace ts.projectSystem {
                 service.openClientFile(file1.path);
                 const expectedTrace = getExpectedRelativeModuleResolutionTrace(host, file1, module1, module1Name);
                 getExpectedRelativeModuleResolutionTrace(host, file1, module2, module2Name, expectedTrace);
+                expectedTrace.push(getExpectedModuleResolutionFromCacheTrace(file2, module1, module1Name, `${tscWatch.projectRoot}/src`));
+                expectedTrace.push(getExpectedModuleResolutionFromCacheTrace(file2, module2, module2Name, `${tscWatch.projectRoot}/src`));
                 verifyTrace(resolutionTrace, expectedTrace);
                 verifyWatchesWithConfigFile(host, files, file1);
 
-                file1.content += fileContent;
-                file2.content += fileContent;
-                host.reloadFS(files);
+                host.writeFile(file1.path, file1.content + fileContent);
+                host.writeFile(file2.path, file2.content + fileContent);
                 host.runQueuedTimeoutCallbacks();
                 verifyTrace(resolutionTrace, [
-                    getExpectedReusingResolutionFromOldProgram(file1, module1Name),
-                    getExpectedReusingResolutionFromOldProgram(file1, module2Name)
+                    getExpectedReusingResolutionFromOldProgram(file1, module1, module1Name),
+                    getExpectedReusingResolutionFromOldProgram(file1, module2, module2Name),
+                    getExpectedReusingResolutionFromOldProgram(file2, module1, module1Name),
+                    getExpectedReusingResolutionFromOldProgram(file2, module2, module2Name),
                 ]);
                 verifyWatchesWithConfigFile(host, files, file1);
             });
@@ -628,16 +546,19 @@ namespace ts.projectSystem {
                 service.openClientFile(file1.path);
                 const expectedTrace = getExpectedNonRelativeModuleResolutionTrace(host, file1, module1, module1Name);
                 getExpectedNonRelativeModuleResolutionTrace(host, file1, module2, module2Name, expectedTrace);
+                expectedTrace.push(getExpectedModuleResolutionFromCacheTrace(file2, module1, module1Name, `${tscWatch.projectRoot}/src`));
+                expectedTrace.push(getExpectedModuleResolutionFromCacheTrace(file2, module2, module2Name, `${tscWatch.projectRoot}/src`));
                 verifyTrace(resolutionTrace, expectedTrace);
                 verifyWatchesWithConfigFile(host, files, file1, expectedNonRelativeDirectories);
 
-                file1.content += fileContent;
-                file2.content += fileContent;
-                host.reloadFS(files);
+                host.writeFile(file1.path, file1.content + fileContent);
+                host.writeFile(file2.path, file2.content + fileContent);
                 host.runQueuedTimeoutCallbacks();
                 verifyTrace(resolutionTrace, [
-                    getExpectedReusingResolutionFromOldProgram(file1, module1Name),
-                    getExpectedReusingResolutionFromOldProgram(file1, module2Name)
+                    getExpectedReusingResolutionFromOldProgram(file1, module1, module1Name),
+                    getExpectedReusingResolutionFromOldProgram(file1, module2, module2Name),
+                    getExpectedReusingResolutionFromOldProgram(file2, module1, module1Name),
+                    getExpectedReusingResolutionFromOldProgram(file2, module2, module2Name),
                 ]);
                 verifyWatchesWithConfigFile(host, files, file1, expectedNonRelativeDirectories);
             });
@@ -693,16 +614,21 @@ namespace ts.projectSystem {
                 verifyTrace(resolutionTrace, expectedTrace);
                 verifyWatchesWithConfigFile(host, files, file1);
 
-                file1.content += fileContent1;
-                file2.content += fileContent2;
-                file3.content += fileContent3;
-                file4.content += fileContent4;
-                host.reloadFS(files);
+                host.writeFile(file1.path, file1.content + fileContent1);
+                host.writeFile(file2.path, file2.content + fileContent2);
+                host.writeFile(file3.path, file3.content + fileContent3);
+                host.writeFile(file4.path, file4.content + fileContent4);
                 host.runQueuedTimeoutCallbacks();
 
                 verifyTrace(resolutionTrace, [
-                    getExpectedReusingResolutionFromOldProgram(file1, module1Name),
-                    getExpectedReusingResolutionFromOldProgram(file1, module2Name)
+                    getExpectedReusingResolutionFromOldProgram(file1, module1, module1Name),
+                    getExpectedReusingResolutionFromOldProgram(file1, module2, module2Name),
+                    getExpectedReusingResolutionFromOldProgram(file2, module1, module3Name),
+                    getExpectedReusingResolutionFromOldProgram(file2, module2, module4Name),
+                    getExpectedReusingResolutionFromOldProgram(file4, module1, module6Name),
+                    getExpectedReusingResolutionFromOldProgram(file4, module2, module2Name),
+                    getExpectedReusingResolutionFromOldProgram(file3, module1, module5Name),
+                    getExpectedReusingResolutionFromOldProgram(file3, module2, module4Name),
                 ]);
                 verifyWatchesWithConfigFile(host, files, file1);
             });
@@ -730,16 +656,21 @@ namespace ts.projectSystem {
                 verifyTrace(resolutionTrace, expectedTrace);
                 verifyWatchesWithConfigFile(host, files, file1, expectedNonRelativeDirectories);
 
-                file1.content += fileContent;
-                file2.content += fileContent;
-                file3.content += fileContent;
-                file4.content += fileContent;
-                host.reloadFS(files);
+                host.writeFile(file1.path, file1.content + fileContent);
+                host.writeFile(file2.path, file2.content + fileContent);
+                host.writeFile(file3.path, file3.content + fileContent);
+                host.writeFile(file4.path, file4.content + fileContent);
                 host.runQueuedTimeoutCallbacks();
 
                 verifyTrace(resolutionTrace, [
-                    getExpectedReusingResolutionFromOldProgram(file1, module1Name),
-                    getExpectedReusingResolutionFromOldProgram(file1, module2Name)
+                    getExpectedReusingResolutionFromOldProgram(file1, module1, module1Name),
+                    getExpectedReusingResolutionFromOldProgram(file1, module2, module2Name),
+                    getExpectedReusingResolutionFromOldProgram(file2, module1, module1Name),
+                    getExpectedReusingResolutionFromOldProgram(file2, module2, module2Name),
+                    getExpectedReusingResolutionFromOldProgram(file4, module1, module1Name),
+                    getExpectedReusingResolutionFromOldProgram(file4, module2, module2Name),
+                    getExpectedReusingResolutionFromOldProgram(file3, module1, module1Name),
+                    getExpectedReusingResolutionFromOldProgram(file3, module2, module2Name),
                 ]);
                 verifyWatchesWithConfigFile(host, files, file1, expectedNonRelativeDirectories);
             });
@@ -782,19 +713,24 @@ namespace ts.projectSystem {
                 ]);
                 checkWatches();
 
-                file1.content += importModuleContent;
-                file2.content += importModuleContent;
-                file3.content += importModuleContent;
-                file4.content += importModuleContent;
-                host.reloadFS(files);
+                host.writeFile(file1.path, file1.content + importModuleContent);
+                host.writeFile(file2.path, file2.content + importModuleContent);
+                host.writeFile(file3.path, file3.content + importModuleContent);
+                host.writeFile(file4.path, file4.content + importModuleContent);
                 host.runQueuedTimeoutCallbacks();
 
                 verifyTrace(resolutionTrace, [
-                    getExpectedReusingResolutionFromOldProgram(file1, file2Name),
-                    getExpectedReusingResolutionFromOldProgram(file1, file4Name),
-                    getExpectedReusingResolutionFromOldProgram(file1, file3Name),
-                    getExpectedReusingResolutionFromOldProgram(file1, module1Name),
-                    getExpectedReusingResolutionFromOldProgram(file1, module2Name)
+                    getExpectedReusingResolutionFromOldProgram(file1, file2, file2Name),
+                    getExpectedReusingResolutionFromOldProgram(file1, file4, file4Name),
+                    getExpectedReusingResolutionFromOldProgram(file1, file3, file3Name),
+                    getExpectedReusingResolutionFromOldProgram(file1, module1, module1Name),
+                    getExpectedReusingResolutionFromOldProgram(file1, module2, module2Name),
+                    getExpectedReusingResolutionFromOldProgram(file2, module1, module1Name),
+                    getExpectedReusingResolutionFromOldProgram(file2, module2, module2Name),
+                    getExpectedReusingResolutionFromOldProgram(file4, module1, module1Name),
+                    getExpectedReusingResolutionFromOldProgram(file4, module2, module2Name),
+                    getExpectedReusingResolutionFromOldProgram(file3, module1, module1Name),
+                    getExpectedReusingResolutionFromOldProgram(file3, module2, module2Name),
                 ]);
                 checkWatches();
 
@@ -862,7 +798,7 @@ export const x = 10;`
                 else {
                     checkWatchedDirectoriesDetailed(host, [`${tscWatch.projectRoot}`, `${tscWatch.projectRoot}/src`], 1,  /*recursive*/ false); // failed lookup for fs
                 }
-                const expectedWatchedDirectories = createMap<number>();
+                const expectedWatchedDirectories = new Map<string, number>();
                 expectedWatchedDirectories.set(`${tscWatch.projectRoot}/src`, 1); // Wild card
                 expectedWatchedDirectories.set(`${tscWatch.projectRoot}/src/somefolder`, 1); // failedLookup for somefolder/module2
                 expectedWatchedDirectories.set(`${tscWatch.projectRoot}/src/node_modules`, 1); // failed lookup for somefolder/module2
@@ -902,7 +838,6 @@ export const x = 10;`
                 checkNumberOfProjects(service, { inferredProjects: 1 });
                 const project = service.inferredProjects[0];
                 checkProjectActualFiles(project, files.map(f => f.path));
-                (project as ResolutionCacheHost).maxNumberOfFilesToIterateForInvalidation = 1;
                 host.checkTimeoutQueueLength(0);
 
                 host.ensureFileOrFolder(npmCacheFile);
@@ -918,7 +853,7 @@ export const x = 10;`
                 const service = createProjectService(host);
                 service.openClientFile(file1.path);
                 checkNumberOfProjects(service, { configuredProjects: 1 });
-                const project = Debug.assertDefined(service.configuredProjects.get(config.path));
+                const project = Debug.checkDefined(service.configuredProjects.get(config.path));
                 checkProjectActualFiles(project, files.map(f => f.path));
                 host.checkTimeoutQueueLength(0);
 
@@ -943,8 +878,6 @@ export const x = 10;`
                 const resolutionTrace = createHostModuleResolutionTrace(host);
                 const service = createProjectService(host);
                 service.openClientFile(file1.path);
-                const project = service.configuredProjects.get(configFile.path)!;
-                (project as ResolutionCacheHost).maxNumberOfFilesToIterateForInvalidation = 1;
                 const expectedTrace = getExpectedNonRelativeModuleResolutionTrace(host, file1, module1, module1Name);
                 getExpectedNonRelativeModuleResolutionTrace(host, file1, module2, module2Name, expectedTrace);
                 verifyTrace(resolutionTrace, expectedTrace);

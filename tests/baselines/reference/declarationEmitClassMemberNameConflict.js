@@ -38,6 +38,7 @@ export class C4 {
 //// [declarationEmitClassMemberNameConflict.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.C4 = exports.C3 = exports.C2 = exports.C1 = void 0;
 var C1 = /** @class */ (function () {
     function C1() {
     }
@@ -65,7 +66,7 @@ var C3 = /** @class */ (function () {
     Object.defineProperty(C3.prototype, "C3", {
         get: function () { return 0; } // has to be the same as the class name
         ,
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     C3.prototype.bar = function () {
@@ -81,7 +82,7 @@ var C4 = /** @class */ (function () {
     Object.defineProperty(C4.prototype, "C4", {
         set: function (v) { } // has to be the same as the class name
         ,
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     C4.prototype.bar = function () {

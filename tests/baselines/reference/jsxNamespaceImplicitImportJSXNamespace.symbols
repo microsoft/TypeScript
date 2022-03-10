@@ -1,0 +1,298 @@
+=== /node_modules/preact/index.d.ts ===
+type Defaultize<Props, Defaults> =
+>Defaultize : Symbol(Defaultize, Decl(index.d.ts, 0, 0))
+>Props : Symbol(Props, Decl(index.d.ts, 0, 16))
+>Defaults : Symbol(Defaults, Decl(index.d.ts, 0, 22))
+
+	// Distribute over unions
+	Props extends any // Make any properties included in Default optional
+>Props : Symbol(Props, Decl(index.d.ts, 0, 16))
+
+		? Partial<Pick<Props, Extract<keyof Props, keyof Defaults>>> &
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>Props : Symbol(Props, Decl(index.d.ts, 0, 16))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>Props : Symbol(Props, Decl(index.d.ts, 0, 16))
+>Defaults : Symbol(Defaults, Decl(index.d.ts, 0, 22))
+
+				// Include the remaining properties from Props
+				Pick<Props, Exclude<keyof Props, keyof Defaults>>
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>Props : Symbol(Props, Decl(index.d.ts, 0, 16))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>Props : Symbol(Props, Decl(index.d.ts, 0, 16))
+>Defaults : Symbol(Defaults, Decl(index.d.ts, 0, 22))
+
+		: never;
+export namespace JSXInternal {
+>JSXInternal : Symbol(JSXInternal, Decl(index.d.ts, 6, 10))
+
+    interface HTMLAttributes<T = {}> { }
+>HTMLAttributes : Symbol(HTMLAttributes, Decl(index.d.ts, 7, 30))
+>T : Symbol(T, Decl(index.d.ts, 8, 29))
+
+    interface SVGAttributes<T = {}> { }
+>SVGAttributes : Symbol(SVGAttributes, Decl(index.d.ts, 8, 40))
+>T : Symbol(T, Decl(index.d.ts, 9, 28))
+
+    type LibraryManagedAttributes<Component, Props> = Component extends {
+>LibraryManagedAttributes : Symbol(LibraryManagedAttributes, Decl(index.d.ts, 9, 39))
+>Component : Symbol(Component, Decl(index.d.ts, 10, 34))
+>Props : Symbol(Props, Decl(index.d.ts, 10, 44))
+>Component : Symbol(Component, Decl(index.d.ts, 10, 34))
+
+        defaultProps: infer Defaults;
+>defaultProps : Symbol(defaultProps, Decl(index.d.ts, 10, 73))
+>Defaults : Symbol(Defaults, Decl(index.d.ts, 11, 27))
+    }
+        ? Defaultize<Props, Defaults>
+>Defaultize : Symbol(Defaultize, Decl(index.d.ts, 0, 0))
+>Props : Symbol(Props, Decl(index.d.ts, 10, 44))
+>Defaults : Symbol(Defaults, Decl(index.d.ts, 11, 27))
+
+        : Props;
+>Props : Symbol(Props, Decl(index.d.ts, 10, 44))
+
+    interface IntrinsicAttributes {
+>IntrinsicAttributes : Symbol(IntrinsicAttributes, Decl(index.d.ts, 14, 16))
+
+        key?: any;
+>key : Symbol(IntrinsicAttributes.key, Decl(index.d.ts, 16, 35))
+    }
+
+    interface Element extends VNode<any> { }
+>Element : Symbol(Element, Decl(index.d.ts, 18, 5))
+>VNode : Symbol(VNode, Decl(index.d.ts, 39, 35))
+
+    interface ElementClass extends Component<any, any> { }
+>ElementClass : Symbol(ElementClass, Decl(index.d.ts, 20, 44))
+>Component : Symbol(Component, Decl(index.d.ts, 41, 28))
+
+    interface ElementAttributesProperty {
+>ElementAttributesProperty : Symbol(ElementAttributesProperty, Decl(index.d.ts, 22, 58))
+
+        props: any;
+>props : Symbol(ElementAttributesProperty.props, Decl(index.d.ts, 24, 41))
+    }
+
+    interface ElementChildrenAttribute {
+>ElementChildrenAttribute : Symbol(ElementChildrenAttribute, Decl(index.d.ts, 26, 5))
+
+        children: any;
+>children : Symbol(ElementChildrenAttribute.children, Decl(index.d.ts, 28, 40))
+    }
+
+    interface IntrinsicElements {
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(index.d.ts, 30, 5))
+
+        div: HTMLAttributes;
+>div : Symbol(IntrinsicElements.div, Decl(index.d.ts, 32, 33))
+>HTMLAttributes : Symbol(HTMLAttributes, Decl(index.d.ts, 7, 30))
+    }
+}
+export const Fragment: unique symbol;
+>Fragment : Symbol(Fragment, Decl(index.d.ts, 36, 12))
+
+export type ComponentType<T = {}> = {};
+>ComponentType : Symbol(ComponentType, Decl(index.d.ts, 36, 37))
+>T : Symbol(T, Decl(index.d.ts, 37, 26))
+
+export type ComponentChild = {};
+>ComponentChild : Symbol(ComponentChild, Decl(index.d.ts, 37, 39))
+
+export type ComponentChildren = {};
+>ComponentChildren : Symbol(ComponentChildren, Decl(index.d.ts, 38, 32))
+
+export type VNode<T = {}> = {};
+>VNode : Symbol(VNode, Decl(index.d.ts, 39, 35))
+>T : Symbol(T, Decl(index.d.ts, 40, 18))
+
+export type Attributes = {};
+>Attributes : Symbol(Attributes, Decl(index.d.ts, 40, 31))
+
+export type Component<T = {}, U = {}> = {};
+>Component : Symbol(Component, Decl(index.d.ts, 41, 28))
+>T : Symbol(T, Decl(index.d.ts, 42, 22))
+>U : Symbol(U, Decl(index.d.ts, 42, 29))
+
+=== /node_modules/preact/jsx-runtime/index.d.ts ===
+export { Fragment } from '..';
+>Fragment : Symbol(Fragment, Decl(index.d.ts, 0, 8))
+
+import {
+    ComponentType,
+>ComponentType : Symbol(ComponentType, Decl(index.d.ts, 1, 8))
+
+    ComponentChild,
+>ComponentChild : Symbol(ComponentChild, Decl(index.d.ts, 2, 18))
+
+    ComponentChildren,
+>ComponentChildren : Symbol(ComponentChildren, Decl(index.d.ts, 3, 19))
+
+    VNode,
+>VNode : Symbol(VNode, Decl(index.d.ts, 4, 22))
+
+    Attributes
+>Attributes : Symbol(Attributes, Decl(index.d.ts, 5, 10))
+
+} from '..';
+import { JSXInternal } from '..';
+>JSXInternal : Symbol(JSXInternal, Decl(index.d.ts, 8, 8))
+
+export function jsx(
+>jsx : Symbol(jsx, Decl(index.d.ts, 8, 33), Decl(index.d.ts, 16, 14))
+
+    type: string,
+>type : Symbol(type, Decl(index.d.ts, 10, 20))
+
+    props: JSXInternal.HTMLAttributes &
+>props : Symbol(props, Decl(index.d.ts, 11, 17))
+>JSXInternal : Symbol(JSXInternal, Decl(index.d.ts, 8, 8))
+>HTMLAttributes : Symbol(JSXInternal.HTMLAttributes, Decl(index.d.ts, 7, 30))
+
+        JSXInternal.SVGAttributes &
+>JSXInternal : Symbol(JSXInternal, Decl(index.d.ts, 8, 8))
+>SVGAttributes : Symbol(JSXInternal.SVGAttributes, Decl(index.d.ts, 8, 40))
+
+        Record<string, any> & { children?: ComponentChild },
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>children : Symbol(children, Decl(index.d.ts, 14, 31))
+>ComponentChild : Symbol(ComponentChild, Decl(index.d.ts, 2, 18))
+
+    key?: string
+>key : Symbol(key, Decl(index.d.ts, 14, 60))
+
+): VNode<any>;
+>VNode : Symbol(VNode, Decl(index.d.ts, 4, 22))
+
+export function jsx<P>(
+>jsx : Symbol(jsx, Decl(index.d.ts, 8, 33), Decl(index.d.ts, 16, 14))
+>P : Symbol(P, Decl(index.d.ts, 17, 20))
+
+    type: ComponentType<P>,
+>type : Symbol(type, Decl(index.d.ts, 17, 23))
+>ComponentType : Symbol(ComponentType, Decl(index.d.ts, 1, 8))
+>P : Symbol(P, Decl(index.d.ts, 17, 20))
+
+    props: Attributes & P & { children?: ComponentChild },
+>props : Symbol(props, Decl(index.d.ts, 18, 27))
+>Attributes : Symbol(Attributes, Decl(index.d.ts, 5, 10))
+>P : Symbol(P, Decl(index.d.ts, 17, 20))
+>children : Symbol(children, Decl(index.d.ts, 19, 29))
+>ComponentChild : Symbol(ComponentChild, Decl(index.d.ts, 2, 18))
+
+    key?: string
+>key : Symbol(key, Decl(index.d.ts, 19, 58))
+
+): VNode<any>;
+>VNode : Symbol(VNode, Decl(index.d.ts, 4, 22))
+
+
+export function jsxs(
+>jsxs : Symbol(jsxs, Decl(index.d.ts, 21, 14), Decl(index.d.ts, 30, 14))
+
+    type: string,
+>type : Symbol(type, Decl(index.d.ts, 24, 21))
+
+    props: JSXInternal.HTMLAttributes &
+>props : Symbol(props, Decl(index.d.ts, 25, 17))
+>JSXInternal : Symbol(JSXInternal, Decl(index.d.ts, 8, 8))
+>HTMLAttributes : Symbol(JSXInternal.HTMLAttributes, Decl(index.d.ts, 7, 30))
+
+        JSXInternal.SVGAttributes &
+>JSXInternal : Symbol(JSXInternal, Decl(index.d.ts, 8, 8))
+>SVGAttributes : Symbol(JSXInternal.SVGAttributes, Decl(index.d.ts, 8, 40))
+
+        Record<string, any> & { children?: ComponentChild[] },
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>children : Symbol(children, Decl(index.d.ts, 28, 31))
+>ComponentChild : Symbol(ComponentChild, Decl(index.d.ts, 2, 18))
+
+    key?: string
+>key : Symbol(key, Decl(index.d.ts, 28, 62))
+
+): VNode<any>;
+>VNode : Symbol(VNode, Decl(index.d.ts, 4, 22))
+
+export function jsxs<P>(
+>jsxs : Symbol(jsxs, Decl(index.d.ts, 21, 14), Decl(index.d.ts, 30, 14))
+>P : Symbol(P, Decl(index.d.ts, 31, 21))
+
+    type: ComponentType<P>,
+>type : Symbol(type, Decl(index.d.ts, 31, 24))
+>ComponentType : Symbol(ComponentType, Decl(index.d.ts, 1, 8))
+>P : Symbol(P, Decl(index.d.ts, 31, 21))
+
+    props: Attributes & P & { children?: ComponentChild[] },
+>props : Symbol(props, Decl(index.d.ts, 32, 27))
+>Attributes : Symbol(Attributes, Decl(index.d.ts, 5, 10))
+>P : Symbol(P, Decl(index.d.ts, 31, 21))
+>children : Symbol(children, Decl(index.d.ts, 33, 29))
+>ComponentChild : Symbol(ComponentChild, Decl(index.d.ts, 2, 18))
+
+    key?: string
+>key : Symbol(key, Decl(index.d.ts, 33, 60))
+
+): VNode<any>;
+>VNode : Symbol(VNode, Decl(index.d.ts, 4, 22))
+
+
+export function jsxDEV(
+>jsxDEV : Symbol(jsxDEV, Decl(index.d.ts, 35, 14), Decl(index.d.ts, 44, 14))
+
+    type: string,
+>type : Symbol(type, Decl(index.d.ts, 38, 23))
+
+    props: JSXInternal.HTMLAttributes &
+>props : Symbol(props, Decl(index.d.ts, 39, 17))
+>JSXInternal : Symbol(JSXInternal, Decl(index.d.ts, 8, 8))
+>HTMLAttributes : Symbol(JSXInternal.HTMLAttributes, Decl(index.d.ts, 7, 30))
+
+        JSXInternal.SVGAttributes &
+>JSXInternal : Symbol(JSXInternal, Decl(index.d.ts, 8, 8))
+>SVGAttributes : Symbol(JSXInternal.SVGAttributes, Decl(index.d.ts, 8, 40))
+
+        Record<string, any> & { children?: ComponentChildren },
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>children : Symbol(children, Decl(index.d.ts, 42, 31))
+>ComponentChildren : Symbol(ComponentChildren, Decl(index.d.ts, 3, 19))
+
+    key?: string
+>key : Symbol(key, Decl(index.d.ts, 42, 63))
+
+): VNode<any>;
+>VNode : Symbol(VNode, Decl(index.d.ts, 4, 22))
+
+export function jsxDEV<P>(
+>jsxDEV : Symbol(jsxDEV, Decl(index.d.ts, 35, 14), Decl(index.d.ts, 44, 14))
+>P : Symbol(P, Decl(index.d.ts, 45, 23))
+
+    type: ComponentType<P>,
+>type : Symbol(type, Decl(index.d.ts, 45, 26))
+>ComponentType : Symbol(ComponentType, Decl(index.d.ts, 1, 8))
+>P : Symbol(P, Decl(index.d.ts, 45, 23))
+
+    props: Attributes & P & { children?: ComponentChildren },
+>props : Symbol(props, Decl(index.d.ts, 46, 27))
+>Attributes : Symbol(Attributes, Decl(index.d.ts, 5, 10))
+>P : Symbol(P, Decl(index.d.ts, 45, 23))
+>children : Symbol(children, Decl(index.d.ts, 47, 29))
+>ComponentChildren : Symbol(ComponentChildren, Decl(index.d.ts, 3, 19))
+
+    key?: string
+>key : Symbol(key, Decl(index.d.ts, 47, 61))
+
+): VNode<any>;
+>VNode : Symbol(VNode, Decl(index.d.ts, 4, 22))
+
+export import JSX = JSXInternal;
+>JSX : Symbol(JSX, Decl(index.d.ts, 49, 14))
+>JSXInternal : Symbol(JSXInternal, Decl(index.d.ts, 8, 8))
+
+=== /index.tsx ===
+export const Comp = () => <div></div>;
+>Comp : Symbol(Comp, Decl(index.tsx, 0, 12))
+>div : Symbol(JSXInternal.IntrinsicElements.div, Decl(index.d.ts, 32, 33))
+>div : Symbol(JSXInternal.IntrinsicElements.div, Decl(index.d.ts, 32, 33))
+

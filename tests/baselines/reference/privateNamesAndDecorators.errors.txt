@@ -1,9 +1,8 @@
 tests/cases/conformance/classes/members/privateNames/privateNamesAndDecorators.ts(4,5): error TS1206: Decorators are not valid here.
 tests/cases/conformance/classes/members/privateNames/privateNamesAndDecorators.ts(6,5): error TS1206: Decorators are not valid here.
-tests/cases/conformance/classes/members/privateNames/privateNamesAndDecorators.ts(7,5): error TS18022: A method cannot be named with a private identifier.
 
 
-==== tests/cases/conformance/classes/members/privateNames/privateNamesAndDecorators.ts (3 errors) ====
+==== tests/cases/conformance/classes/members/privateNames/privateNamesAndDecorators.ts (2 errors) ====
     declare function dec<T>(target: T): T;
     
     class A {
@@ -15,7 +14,5 @@ tests/cases/conformance/classes/members/privateNames/privateNamesAndDecorators.t
         ~
 !!! error TS1206: Decorators are not valid here.
         #bar(): void { }
-        ~~~~
-!!! error TS18022: A method cannot be named with a private identifier.
     }
     

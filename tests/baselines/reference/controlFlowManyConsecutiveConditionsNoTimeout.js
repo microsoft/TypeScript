@@ -135,6 +135,7 @@ while (true) {
 //// [controlFlowManyConsecutiveConditionsNoTimeout.js]
 "use strict";
 exports.__esModule = true;
+exports.Choice = void 0;
 var Choice;
 (function (Choice) {
     Choice[Choice["One"] = 0] = "One";

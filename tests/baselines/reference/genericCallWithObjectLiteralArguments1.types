@@ -1,6 +1,6 @@
 === tests/cases/compiler/genericCallWithObjectLiteralArguments1.ts ===
 function foo<T>(n: { x: T; y: T }, m: T) { return m; }
->foo : <T>(n: { x: T; y: T; }, m: T) => T
+>foo : <T>(n: {    x: T;    y: T;}, m: T) => T
 >n : { x: T; y: T; }
 >x : T
 >y : T

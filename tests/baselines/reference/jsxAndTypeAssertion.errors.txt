@@ -1,5 +1,5 @@
 tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(6,6): error TS17008: JSX element 'any' has no corresponding closing tag.
-tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(6,13): error TS2582: Cannot find name 'test'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`.
+tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(6,13): error TS2582: Cannot find name 'test'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha`.
 tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(6,17): error TS1005: '}' expected.
 tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(6,31): error TS1381: Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
 tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(8,6): error TS17008: JSX element 'any' has no corresponding closing tag.
@@ -33,7 +33,7 @@ tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(21,1): error TS1005: '</' ex
          ~~~
 !!! error TS17008: JSX element 'any' has no corresponding closing tag.
                 ~~~~
-!!! error TS2582: Cannot find name 'test'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`.
+!!! error TS2582: Cannot find name 'test'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha`.
                     ~
 !!! error TS1005: '}' expected.
                                   ~

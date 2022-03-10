@@ -1,0 +1,13 @@
+=== tests/cases/conformance/jsdoc/0.js ===
+// @ts-check
+/**
+ * @param {number} a
+ * @param {number} [b]
+ * @param {number} c
+ */
+function foo(a, b, c) {}
+>foo : Symbol(foo, Decl(0.js, 0, 0))
+>a : Symbol(a, Decl(0.js, 6, 13))
+>b : Symbol(b, Decl(0.js, 6, 15))
+>c : Symbol(c, Decl(0.js, 6, 18))
+

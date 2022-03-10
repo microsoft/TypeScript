@@ -38,7 +38,7 @@ declare global {
 
 export interface RouteProps {
     children?: (props: { x: number }) => any;
->children : ((props: { x: number; }) => any) | undefined
+>children : ((props: {    x: number;}) => any) | undefined
 >props : { x: number; }
 >x : number
 }

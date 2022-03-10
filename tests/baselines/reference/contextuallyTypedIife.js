@@ -95,11 +95,11 @@ let eleven = (o => o.a(11))({ a: function(n) { return n; } });
     return p;
 })({ p: 15 });
 (function (_a) {
-    var _b = (_a === void 0 ? { r: 18 } : _a).r, r = _b === void 0 ? 17 : _b;
+    var _b = _a === void 0 ? { r: 18 } : _a, _c = _b.r, r = _c === void 0 ? 17 : _c;
     return r;
 })({ r: 19 });
 (function (_a) {
-    var _b = (_a === void 0 ? { u: 23 } : _a).u, u = _b === void 0 ? 22 : _b;
+    var _b = _a === void 0 ? { u: 23 } : _a, _c = _b.u, u = _c === void 0 ? 22 : _c;
     return u;
 })();
 // contextually typed parameters.

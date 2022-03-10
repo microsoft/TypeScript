@@ -12,7 +12,7 @@ let mappedObject: {[K in "foo"]: null | {x: string}} = {foo: {x: "hello"}};
 >"hello" : "hello"
 
 declare function foo<T>(x: T): null | T;
->foo : <T>(x: T) => T
+>foo : <T>(x: T) => null | T
 >x : T
 >null : null
 

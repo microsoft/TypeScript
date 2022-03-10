@@ -5,11 +5,11 @@ interface Bar {  bar: number; foo: object | null;  }
 >null : null
 
 let a = {
->a : { test<K extends "bar" | "foo">(a: K, b?: Bar[K] | null | undefined): void; }
->{  test<K extends keyof Bar> (a: K,  b?: Bar[K]  |  null)  { }} : { test<K extends "bar" | "foo">(a: K, b?: Bar[K] | null | undefined): void; }
+>a : { test<K extends keyof Bar>(a: K, b?: Bar[K] | null | undefined): void; }
+>{  test<K extends keyof Bar> (a: K,  b?: Bar[K]  |  null)  { }} : { test<K extends keyof Bar>(a: K, b?: Bar[K] | null | undefined): void; }
 
   test<K extends keyof Bar> (a: K,  b?: Bar[K]  |  null)  { }
->test : <K extends "bar" | "foo">(a: K, b?: Bar[K] | null | undefined) => void
+>test : <K extends keyof Bar>(a: K, b?: Bar[K] | null | undefined) => void
 >a : K
 >b : Bar[K] | null | undefined
 >null : null
@@ -17,9 +17,9 @@ let a = {
 };
 a.test("bar", null); // ok, null is assignable to number | null | undefined
 >a.test("bar", null) : void
->a.test : <K extends "bar" | "foo">(a: K, b?: Bar[K] | null | undefined) => void
->a : { test<K extends "bar" | "foo">(a: K, b?: Bar[K] | null | undefined): void; }
->test : <K extends "bar" | "foo">(a: K, b?: Bar[K] | null | undefined) => void
+>a.test : <K extends keyof Bar>(a: K, b?: Bar[K] | null | undefined) => void
+>a : { test<K extends keyof Bar>(a: K, b?: Bar[K] | null | undefined): void; }
+>test : <K extends keyof Bar>(a: K, b?: Bar[K] | null | undefined) => void
 >"bar" : "bar"
 >null : null
 

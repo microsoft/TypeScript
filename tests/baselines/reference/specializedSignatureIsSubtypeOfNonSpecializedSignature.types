@@ -3,7 +3,7 @@
 // All the below should not be errors
 
 function foo(x: 'a');
->foo : { (x: "a"): any; (x: string): any; }
+>foo : { (x: 'a'): any; (x: string): any; }
 >x : "a"
 
 function foo(x: string);
@@ -18,7 +18,7 @@ class C {
 >C : C
 
     foo(x: 'a');
->foo : { (x: "a"): any; (x: string): any; }
+>foo : { (x: 'a'): any; (x: string): any; }
 >x : "a"
 
     foo(x: string);
@@ -34,7 +34,7 @@ class C2<T> {
 >C2 : C2<T>
 
     foo(x: 'a');
->foo : { (x: "a"): any; (x: string): any; (x: T): any; }
+>foo : { (x: 'a'): any; (x: string): any; (x: T): any; }
 >x : "a"
 
     foo(x: string);
@@ -54,7 +54,7 @@ class C3<T extends String> {
 >C3 : C3<T>
 
     foo(x: 'a');
->foo : { (x: "a"): any; (x: string): any; (x: T): any; }
+>foo : { (x: 'a'): any; (x: string): any; (x: T): any; }
 >x : "a"
 
     foo(x: string);
@@ -81,7 +81,7 @@ interface I {
 >x : string
 
     foo(x: 'a');
->foo : { (x: "a"): any; (x: string): any; (x: number): any; }
+>foo : { (x: 'a'): any; (x: string): any; (x: number): any; }
 >x : "a"
 
     foo(x: string);
@@ -104,7 +104,7 @@ interface I2<T> {
 >x : string
 
     foo(x: 'a');
->foo : { (x: "a"): any; (x: string): any; (x: T): any; }
+>foo : { (x: 'a'): any; (x: string): any; (x: T): any; }
 >x : "a"
 
     foo(x: string);
@@ -127,7 +127,7 @@ interface I3<T extends String> {
 >x : T
 
     foo(x: 'a');
->foo : { (x: "a"): any; (x: string): any; (x: T): any; }
+>foo : { (x: 'a'): any; (x: string): any; (x: T): any; }
 >x : "a"
 
     foo(x: string);
@@ -140,7 +140,7 @@ interface I3<T extends String> {
 }
 
 var a: {
->a : { (x: string): any; (x: "a"): any; (x: number): any; foo(x: string): any; foo(x: "a"): any; foo(x: number): any; }
+>a : { (x: string): any; (x: 'a'): any; (x: number): any; foo(x: string): any; foo(x: 'a'): any; foo(x: number): any; }
 
     (x: string);
 >x : string
@@ -156,7 +156,7 @@ var a: {
 >x : string
 
     foo(x: 'a');
->foo : { (x: string): any; (x: "a"): any; (x: number): any; }
+>foo : { (x: string): any; (x: 'a'): any; (x: number): any; }
 >x : "a"
 
     foo(x: number);
@@ -165,7 +165,7 @@ var a: {
 }
 
 var a2: {
->a2 : { (x: "a"): any; (x: string): any; <T>(x: T): any; foo(x: string): any; foo(x: "a"): any; foo<T>(x: T): any; }
+>a2 : { (x: 'a'): any; (x: string): any; <T>(x: T): any; foo(x: string): any; foo(x: 'a'): any; foo<T>(x: T): any; }
 
     (x: 'a');
 >x : "a"
@@ -181,7 +181,7 @@ var a2: {
 >x : string
 
     foo(x: 'a');
->foo : { (x: string): any; (x: "a"): any; <T>(x: T): any; }
+>foo : { (x: string): any; (x: 'a'): any; <T>(x: T): any; }
 >x : "a"
 
     foo<T>(x: T);
@@ -190,7 +190,7 @@ var a2: {
 }
 
 var a3: {
->a3 : { (x: "a"): any; <T>(x: T): any; (x: string): any; foo(x: string): any; foo(x: "a"): any; foo<T extends String>(x: T): any; }
+>a3 : { (x: 'a'): any; <T>(x: T): any; (x: string): any; foo(x: string): any; foo(x: 'a'): any; foo<T extends String>(x: T): any; }
 
     (x: 'a');
 >x : "a"
@@ -206,7 +206,7 @@ var a3: {
 >x : string
 
     foo(x: 'a');
->foo : { (x: string): any; (x: "a"): any; <T extends String>(x: T): any; }
+>foo : { (x: string): any; (x: 'a'): any; <T extends String>(x: T): any; }
 >x : "a"
 
     foo<T extends String>(x: T);

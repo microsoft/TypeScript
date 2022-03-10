@@ -1,0 +1,212 @@
+=== /node_modules/preact/index.d.ts ===
+type Defaultize<Props, Defaults> =
+>Defaultize : Defaultize<Props, Defaults>
+
+	// Distribute over unions
+	Props extends any // Make any properties included in Default optional
+		? Partial<Pick<Props, Extract<keyof Props, keyof Defaults>>> &
+				// Include the remaining properties from Props
+				Pick<Props, Exclude<keyof Props, keyof Defaults>>
+		: never;
+export namespace JSXInternal {
+    interface HTMLAttributes<T = {}> { }
+    interface SVGAttributes<T = {}> { }
+    type LibraryManagedAttributes<Component, Props> = Component extends {
+>LibraryManagedAttributes : LibraryManagedAttributes<Component, Props>
+
+        defaultProps: infer Defaults;
+>defaultProps : Defaults
+    }
+        ? Defaultize<Props, Defaults>
+        : Props;
+
+    interface IntrinsicAttributes {
+        key?: any;
+>key : any
+    }
+
+    interface Element extends VNode<any> { }
+
+    interface ElementClass extends Component<any, any> { }
+
+    interface ElementAttributesProperty {
+        props: any;
+>props : any
+    }
+
+    interface ElementChildrenAttribute {
+        children: any;
+>children : any
+    }
+
+    interface IntrinsicElements {
+        div: HTMLAttributes;
+>div : HTMLAttributes<{}>
+    }
+}
+export const Fragment: unique symbol;
+>Fragment : unique symbol
+
+export type ComponentType<T = {}> = {};
+>ComponentType : ComponentType<T>
+
+export type ComponentChild = {};
+>ComponentChild : ComponentChild
+
+export type ComponentChildren = {};
+>ComponentChildren : ComponentChildren
+
+export type VNode<T = {}> = {};
+>VNode : VNode<T>
+
+export type Attributes = {};
+>Attributes : Attributes
+
+export type Component<T = {}, U = {}> = {};
+>Component : Component<T, U>
+
+=== /node_modules/preact/jsx-runtime/index.d.ts ===
+export { Fragment } from '..';
+>Fragment : unique symbol
+
+import {
+    ComponentType,
+>ComponentType : any
+
+    ComponentChild,
+>ComponentChild : any
+
+    ComponentChildren,
+>ComponentChildren : any
+
+    VNode,
+>VNode : any
+
+    Attributes
+>Attributes : any
+
+} from '..';
+import { JSXInternal } from '..';
+>JSXInternal : any
+
+export function jsx(
+>jsx : { (type: string, props: JSXInternal.HTMLAttributes & JSXInternal.SVGAttributes & Record<string, any> & {    children?: ComponentChild;}, key?: string | undefined): VNode<any>; <P>(type: ComponentType<P>, props: P & { children?: ComponentChild | undefined; }, key?: string | undefined): VNode<any>; }
+
+    type: string,
+>type : string
+
+    props: JSXInternal.HTMLAttributes &
+>props : JSXInternal.HTMLAttributes<{}> & JSXInternal.SVGAttributes<{}> & Record<string, any> & { children?: ComponentChild | undefined; }
+>JSXInternal : any
+
+        JSXInternal.SVGAttributes &
+>JSXInternal : any
+
+        Record<string, any> & { children?: ComponentChild },
+>children : ComponentChild | undefined
+
+    key?: string
+>key : string | undefined
+
+): VNode<any>;
+export function jsx<P>(
+>jsx : { (type: string, props: JSXInternal.HTMLAttributes<{}> & JSXInternal.SVGAttributes<{}> & Record<string, any> & { children?: ComponentChild | undefined; }, key?: string | undefined): VNode<any>; <P>(type: ComponentType<P>, props: Attributes & P & {    children?: ComponentChild;}, key?: string | undefined): VNode<any>; }
+
+    type: ComponentType<P>,
+>type : ComponentType<P>
+
+    props: Attributes & P & { children?: ComponentChild },
+>props : P & { children?: ComponentChild | undefined; }
+>children : ComponentChild | undefined
+
+    key?: string
+>key : string | undefined
+
+): VNode<any>;
+
+export function jsxs(
+>jsxs : { (type: string, props: JSXInternal.HTMLAttributes & JSXInternal.SVGAttributes & Record<string, any> & {    children?: ComponentChild[];}, key?: string | undefined): VNode<any>; <P>(type: ComponentType<P>, props: P & { children?: ComponentChild[] | undefined; }, key?: string | undefined): VNode<any>; }
+
+    type: string,
+>type : string
+
+    props: JSXInternal.HTMLAttributes &
+>props : JSXInternal.HTMLAttributes<{}> & JSXInternal.SVGAttributes<{}> & Record<string, any> & { children?: ComponentChild[] | undefined; }
+>JSXInternal : any
+
+        JSXInternal.SVGAttributes &
+>JSXInternal : any
+
+        Record<string, any> & { children?: ComponentChild[] },
+>children : ComponentChild[] | undefined
+
+    key?: string
+>key : string | undefined
+
+): VNode<any>;
+export function jsxs<P>(
+>jsxs : { (type: string, props: JSXInternal.HTMLAttributes<{}> & JSXInternal.SVGAttributes<{}> & Record<string, any> & { children?: ComponentChild[] | undefined; }, key?: string | undefined): VNode<any>; <P>(type: ComponentType<P>, props: Attributes & P & {    children?: ComponentChild[];}, key?: string | undefined): VNode<any>; }
+
+    type: ComponentType<P>,
+>type : ComponentType<P>
+
+    props: Attributes & P & { children?: ComponentChild[] },
+>props : P & { children?: ComponentChild[] | undefined; }
+>children : ComponentChild[] | undefined
+
+    key?: string
+>key : string | undefined
+
+): VNode<any>;
+
+export function jsxDEV(
+>jsxDEV : { (type: string, props: JSXInternal.HTMLAttributes & JSXInternal.SVGAttributes & Record<string, any> & {    children?: ComponentChildren;}, key?: string | undefined): VNode<any>; <P>(type: ComponentType<P>, props: P & { children?: ComponentChildren | undefined; }, key?: string | undefined): VNode<any>; }
+
+    type: string,
+>type : string
+
+    props: JSXInternal.HTMLAttributes &
+>props : JSXInternal.HTMLAttributes<{}> & JSXInternal.SVGAttributes<{}> & Record<string, any> & { children?: ComponentChildren | undefined; }
+>JSXInternal : any
+
+        JSXInternal.SVGAttributes &
+>JSXInternal : any
+
+        Record<string, any> & { children?: ComponentChildren },
+>children : ComponentChildren | undefined
+
+    key?: string
+>key : string | undefined
+
+): VNode<any>;
+export function jsxDEV<P>(
+>jsxDEV : { (type: string, props: JSXInternal.HTMLAttributes<{}> & JSXInternal.SVGAttributes<{}> & Record<string, any> & { children?: ComponentChildren | undefined; }, key?: string | undefined): VNode<any>; <P>(type: ComponentType<P>, props: Attributes & P & {    children?: ComponentChildren;}, key?: string | undefined): VNode<any>; }
+
+    type: ComponentType<P>,
+>type : ComponentType<P>
+
+    props: Attributes & P & { children?: ComponentChildren },
+>props : P & { children?: ComponentChildren | undefined; }
+>children : ComponentChildren | undefined
+
+    key?: string
+>key : string | undefined
+
+): VNode<any>;
+
+declare global {
+>global : typeof global
+
+    // @ts-ignore
+    export import JSX = NotFound;
+>JSX : any
+>NotFound : any
+}
+=== /index.tsx ===
+export const Comp = () => <div></div>;
+>Comp : () => any
+>() => <div></div> : () => any
+><div></div> : any
+>div : any
+>div : any
+

@@ -244,8 +244,8 @@ foo() **= value;
 
 ([]) **= value;
 >([]) **= value : number
->([]) : undefined[]
->[] : undefined[]
+>([]) : []
+>[] : []
 >value : any
 
 (function baz1() { }) **= value;

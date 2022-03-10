@@ -7,9 +7,9 @@ function logLength<T extends string, U extends string>(arg: { [K in U]: T }[U]):
 
     console.log(arg.length);
 >console.log(arg.length) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >arg.length : number
 >arg : { [K in U]: T; }[U]
 >length : number
@@ -38,9 +38,9 @@ function logFirstLength<T extends string[], U extends string>(arg: { [K in U]: T
 
     console.log(arg[0].length);
 >console.log(arg[0].length) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >arg[0].length : number
 >arg[0] : string
 >arg : { [K in U]: T; }[U]

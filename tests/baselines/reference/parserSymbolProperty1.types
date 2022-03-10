@@ -2,7 +2,7 @@
 interface I {
     [Symbol.iterator]: string;
 >[Symbol.iterator] : string
->Symbol.iterator : symbol
+>Symbol.iterator : unique symbol
 >Symbol : SymbolConstructor
->iterator : symbol
+>iterator : unique symbol
 }

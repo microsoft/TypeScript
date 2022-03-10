@@ -30,6 +30,7 @@ export class MyComponent {
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    exports.MyComponent = void 0;
     var MyComponent = /** @class */ (function () {
         function MyComponent() {
         }

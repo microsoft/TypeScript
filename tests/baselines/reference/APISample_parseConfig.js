@@ -50,12 +50,13 @@ export function createProgram(rootFiles: string[], compilerOptionsJson: string):
  *       Please log a "breaking change" issue for any API breaking change affecting this issue
  */
 exports.__esModule = true;
+exports.createProgram = void 0;
 var ts = require("typescript");
 function printError(error) {
     if (!error) {
         return;
     }
-    console.log((error.file && error.file.fileName) + ": " + error.messageText);
+    console.log("".concat(error.file && error.file.fileName, ": ").concat(error.messageText));
 }
 function createProgram(rootFiles, compilerOptionsJson) {
     var _a = ts.parseConfigFileTextToJson("tsconfig.json", compilerOptionsJson), config = _a.config, error = _a.error;

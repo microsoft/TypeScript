@@ -15,8 +15,10 @@ module foo {
 
     export var x: T;
 >x : Symbol(x, Decl(genericMergedDeclarationUsingTypeParameter.ts, 2, 14))
+>T : Symbol(T)
 
     var y = <T>1;
 >y : Symbol(y, Decl(genericMergedDeclarationUsingTypeParameter.ts, 3, 7))
+>T : Symbol(T)
 }
 

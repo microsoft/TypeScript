@@ -2,51 +2,51 @@
 // #34802
 
 const C = require('./ex').C;
->C : typeof import("tests/cases/conformance/jsdoc/ex").C
->require('./ex').C : typeof import("tests/cases/conformance/jsdoc/ex").C
+>C : typeof C
+>require('./ex').C : typeof C
 >require('./ex') : typeof import("tests/cases/conformance/jsdoc/ex")
 >require : any
 >'./ex' : "./ex"
->C : typeof import("tests/cases/conformance/jsdoc/ex").C
+>C : typeof C
 
 const D = require('./ex')?.C;
->D : typeof import("tests/cases/conformance/jsdoc/ex").C
->require('./ex')?.C : typeof import("tests/cases/conformance/jsdoc/ex").C
+>D : typeof C
+>require('./ex')?.C : typeof C
 >require('./ex') : typeof import("tests/cases/conformance/jsdoc/ex")
 >require : any
 >'./ex' : "./ex"
->C : typeof import("tests/cases/conformance/jsdoc/ex").C
+>C : typeof C
 
 /** @type {C} c */
 var c = new C()
->c : import("tests/cases/conformance/jsdoc/ex").C
->new C() : import("tests/cases/conformance/jsdoc/ex").C
->C : typeof import("tests/cases/conformance/jsdoc/ex").C
+>c : C
+>new C() : C
+>C : typeof C
 
 c.start
 >c.start : number
->c : import("tests/cases/conformance/jsdoc/ex").C
+>c : C
 >start : number
 
 c.end
 >c.end : number
->c : import("tests/cases/conformance/jsdoc/ex").C
+>c : C
 >end : number
 
 /** @type {D} c */
 var d = new D()
->d : import("tests/cases/conformance/jsdoc/ex").C
->new D() : import("tests/cases/conformance/jsdoc/ex").C
->D : typeof import("tests/cases/conformance/jsdoc/ex").C
+>d : C
+>new D() : C
+>D : typeof C
 
 d.start
 >d.start : number
->d : import("tests/cases/conformance/jsdoc/ex").C
+>d : C
 >start : number
 
 d.end
 >d.end : number
->d : import("tests/cases/conformance/jsdoc/ex").C
+>d : C
 >end : number
 
 === tests/cases/conformance/jsdoc/ex.d.ts ===

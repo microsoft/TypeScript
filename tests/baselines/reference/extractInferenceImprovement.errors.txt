@@ -1,4 +1,4 @@
-tests/cases/compiler/extractInferenceImprovement.ts(26,26): error TS2345: Argument of type 'unique symbol' is not assignable to parameter of type 'never'.
+tests/cases/compiler/extractInferenceImprovement.ts(26,26): error TS2345: Argument of type 'typeof s' is not assignable to parameter of type 'never'.
 tests/cases/compiler/extractInferenceImprovement.ts(28,1): error TS2322: Type 'string | number' is not assignable to type 'string'.
   Type 'number' is not assignable to type 'string'.
 tests/cases/compiler/extractInferenceImprovement.ts(28,26): error TS2345: Argument of type 'unique symbol' is not assignable to parameter of type '"first" | "second"'.
@@ -32,7 +32,7 @@ tests/cases/compiler/extractInferenceImprovement.ts(28,26): error TS2345: Argume
     // Should fail
     prop = getProperty2(obj, s);
                              ~
-!!! error TS2345: Argument of type 'unique symbol' is not assignable to parameter of type 'never'.
+!!! error TS2345: Argument of type 'typeof s' is not assignable to parameter of type 'never'.
     
     prop = getProperty3(obj, s);
     ~~~~

@@ -1,0 +1,226 @@
+=== tests/cases/compiler/truthinessCallExpressionCoercion1.ts ===
+function onlyErrorsWhenTestingNonNullableFunctionType(required: () => boolean, optional?: () => boolean) {
+>onlyErrorsWhenTestingNonNullableFunctionType : Symbol(onlyErrorsWhenTestingNonNullableFunctionType, Decl(truthinessCallExpressionCoercion1.ts, 0, 0))
+>required : Symbol(required, Decl(truthinessCallExpressionCoercion1.ts, 0, 54))
+>optional : Symbol(optional, Decl(truthinessCallExpressionCoercion1.ts, 0, 78))
+
+    // error
+    required ? console.log('required') : undefined;
+>required : Symbol(required, Decl(truthinessCallExpressionCoercion1.ts, 0, 54))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>undefined : Symbol(undefined)
+
+    // ok
+    optional ? console.log('optional') : undefined;
+>optional : Symbol(optional, Decl(truthinessCallExpressionCoercion1.ts, 0, 78))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>undefined : Symbol(undefined)
+
+    // ok
+    !!required ? console.log('not required') : undefined;
+>required : Symbol(required, Decl(truthinessCallExpressionCoercion1.ts, 0, 54))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>undefined : Symbol(undefined)
+
+    // ok
+    required() ? console.log('required call') : undefined;
+>required : Symbol(required, Decl(truthinessCallExpressionCoercion1.ts, 0, 54))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>undefined : Symbol(undefined)
+}
+
+function onlyErrorsWhenUnusedInBody() {
+>onlyErrorsWhenUnusedInBody : Symbol(onlyErrorsWhenUnusedInBody, Decl(truthinessCallExpressionCoercion1.ts, 12, 1))
+
+    function test() { return Math.random() > 0.5; }
+>test : Symbol(test, Decl(truthinessCallExpressionCoercion1.ts, 14, 39))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+    // error
+    test ? console.log('test') : undefined;
+>test : Symbol(test, Decl(truthinessCallExpressionCoercion1.ts, 14, 39))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>undefined : Symbol(undefined)
+
+    // ok
+    test ? console.log(test) : undefined;
+>test : Symbol(test, Decl(truthinessCallExpressionCoercion1.ts, 14, 39))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>test : Symbol(test, Decl(truthinessCallExpressionCoercion1.ts, 14, 39))
+>undefined : Symbol(undefined)
+
+    // ok
+    test ? test() : undefined;
+>test : Symbol(test, Decl(truthinessCallExpressionCoercion1.ts, 14, 39))
+>test : Symbol(test, Decl(truthinessCallExpressionCoercion1.ts, 14, 39))
+>undefined : Symbol(undefined)
+
+    // ok
+    test
+>test : Symbol(test, Decl(truthinessCallExpressionCoercion1.ts, 14, 39))
+
+        ? [() => null].forEach(() => { test(); })
+>[() => null].forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>test : Symbol(test, Decl(truthinessCallExpressionCoercion1.ts, 14, 39))
+
+        : undefined;
+>undefined : Symbol(undefined)
+
+    // error
+    test
+>test : Symbol(test, Decl(truthinessCallExpressionCoercion1.ts, 14, 39))
+
+        ? [() => null].forEach(test => { test() })
+>[() => null].forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>test : Symbol(test, Decl(truthinessCallExpressionCoercion1.ts, 33, 31))
+>test : Symbol(test, Decl(truthinessCallExpressionCoercion1.ts, 33, 31))
+
+        : undefined;
+>undefined : Symbol(undefined)
+}
+
+function checksPropertyAccess() {
+>checksPropertyAccess : Symbol(checksPropertyAccess, Decl(truthinessCallExpressionCoercion1.ts, 35, 1))
+
+    const x = {
+>x : Symbol(x, Decl(truthinessCallExpressionCoercion1.ts, 38, 9))
+
+        foo: {
+>foo : Symbol(foo, Decl(truthinessCallExpressionCoercion1.ts, 38, 15))
+
+            bar() { return true; }
+>bar : Symbol(bar, Decl(truthinessCallExpressionCoercion1.ts, 39, 14))
+        }
+    }
+
+    // error
+    x.foo.bar ? console.log('x.foo.bar') : undefined;
+>x.foo.bar : Symbol(bar, Decl(truthinessCallExpressionCoercion1.ts, 39, 14))
+>x.foo : Symbol(foo, Decl(truthinessCallExpressionCoercion1.ts, 38, 15))
+>x : Symbol(x, Decl(truthinessCallExpressionCoercion1.ts, 38, 9))
+>foo : Symbol(foo, Decl(truthinessCallExpressionCoercion1.ts, 38, 15))
+>bar : Symbol(bar, Decl(truthinessCallExpressionCoercion1.ts, 39, 14))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>undefined : Symbol(undefined)
+
+    // ok
+    x.foo.bar ? x.foo.bar : undefined;
+>x.foo.bar : Symbol(bar, Decl(truthinessCallExpressionCoercion1.ts, 39, 14))
+>x.foo : Symbol(foo, Decl(truthinessCallExpressionCoercion1.ts, 38, 15))
+>x : Symbol(x, Decl(truthinessCallExpressionCoercion1.ts, 38, 9))
+>foo : Symbol(foo, Decl(truthinessCallExpressionCoercion1.ts, 38, 15))
+>bar : Symbol(bar, Decl(truthinessCallExpressionCoercion1.ts, 39, 14))
+>x.foo.bar : Symbol(bar, Decl(truthinessCallExpressionCoercion1.ts, 39, 14))
+>x.foo : Symbol(foo, Decl(truthinessCallExpressionCoercion1.ts, 38, 15))
+>x : Symbol(x, Decl(truthinessCallExpressionCoercion1.ts, 38, 9))
+>foo : Symbol(foo, Decl(truthinessCallExpressionCoercion1.ts, 38, 15))
+>bar : Symbol(bar, Decl(truthinessCallExpressionCoercion1.ts, 39, 14))
+>undefined : Symbol(undefined)
+
+    var chrome = {
+>chrome : Symbol(chrome, Decl(truthinessCallExpressionCoercion1.ts, 50, 7))
+
+        platformKeys: {
+>platformKeys : Symbol(platformKeys, Decl(truthinessCallExpressionCoercion1.ts, 50, 18))
+
+            subtleCrypto() {
+>subtleCrypto : Symbol(subtleCrypto, Decl(truthinessCallExpressionCoercion1.ts, 51, 23))
+
+                return {
+                    sign() {},
+>sign : Symbol(sign, Decl(truthinessCallExpressionCoercion1.ts, 53, 24))
+
+                    exportKey() { return true }
+>exportKey : Symbol(exportKey, Decl(truthinessCallExpressionCoercion1.ts, 54, 30))
+                }
+            }
+        }
+    }
+    // ok
+    if (chrome.platformKeys.subtleCrypto().exportKey) {
+>chrome.platformKeys.subtleCrypto().exportKey : Symbol(exportKey, Decl(truthinessCallExpressionCoercion1.ts, 54, 30))
+>chrome.platformKeys.subtleCrypto : Symbol(subtleCrypto, Decl(truthinessCallExpressionCoercion1.ts, 51, 23))
+>chrome.platformKeys : Symbol(platformKeys, Decl(truthinessCallExpressionCoercion1.ts, 50, 18))
+>chrome : Symbol(chrome, Decl(truthinessCallExpressionCoercion1.ts, 50, 7))
+>platformKeys : Symbol(platformKeys, Decl(truthinessCallExpressionCoercion1.ts, 50, 18))
+>subtleCrypto : Symbol(subtleCrypto, Decl(truthinessCallExpressionCoercion1.ts, 51, 23))
+>exportKey : Symbol(exportKey, Decl(truthinessCallExpressionCoercion1.ts, 54, 30))
+
+        chrome.platformKeys.subtleCrypto().exportKey
+>chrome.platformKeys.subtleCrypto().exportKey : Symbol(exportKey, Decl(truthinessCallExpressionCoercion1.ts, 54, 30))
+>chrome.platformKeys.subtleCrypto : Symbol(subtleCrypto, Decl(truthinessCallExpressionCoercion1.ts, 51, 23))
+>chrome.platformKeys : Symbol(platformKeys, Decl(truthinessCallExpressionCoercion1.ts, 50, 18))
+>chrome : Symbol(chrome, Decl(truthinessCallExpressionCoercion1.ts, 50, 7))
+>platformKeys : Symbol(platformKeys, Decl(truthinessCallExpressionCoercion1.ts, 50, 18))
+>subtleCrypto : Symbol(subtleCrypto, Decl(truthinessCallExpressionCoercion1.ts, 51, 23))
+>exportKey : Symbol(exportKey, Decl(truthinessCallExpressionCoercion1.ts, 54, 30))
+    }
+}
+
+class Foo {
+>Foo : Symbol(Foo, Decl(truthinessCallExpressionCoercion1.ts, 64, 1))
+
+    maybeIsUser?: () => boolean;
+>maybeIsUser : Symbol(Foo.maybeIsUser, Decl(truthinessCallExpressionCoercion1.ts, 66, 11))
+
+    isUser() {
+>isUser : Symbol(Foo.isUser, Decl(truthinessCallExpressionCoercion1.ts, 67, 32))
+
+        return true;
+    }
+
+    test() {
+>test : Symbol(Foo.test, Decl(truthinessCallExpressionCoercion1.ts, 71, 5))
+
+        // error
+        this.isUser ? console.log('this.isUser') : undefined;
+>this.isUser : Symbol(Foo.isUser, Decl(truthinessCallExpressionCoercion1.ts, 67, 32))
+>this : Symbol(Foo, Decl(truthinessCallExpressionCoercion1.ts, 64, 1))
+>isUser : Symbol(Foo.isUser, Decl(truthinessCallExpressionCoercion1.ts, 67, 32))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>undefined : Symbol(undefined)
+
+        // ok
+        this.maybeIsUser ? console.log('this.maybeIsUser') : undefined;
+>this.maybeIsUser : Symbol(Foo.maybeIsUser, Decl(truthinessCallExpressionCoercion1.ts, 66, 11))
+>this : Symbol(Foo, Decl(truthinessCallExpressionCoercion1.ts, 64, 1))
+>maybeIsUser : Symbol(Foo.maybeIsUser, Decl(truthinessCallExpressionCoercion1.ts, 66, 11))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>undefined : Symbol(undefined)
+
+        // ok
+        if (this.isUser) {
+>this.isUser : Symbol(Foo.isUser, Decl(truthinessCallExpressionCoercion1.ts, 67, 32))
+>this : Symbol(Foo, Decl(truthinessCallExpressionCoercion1.ts, 64, 1))
+>isUser : Symbol(Foo.isUser, Decl(truthinessCallExpressionCoercion1.ts, 67, 32))
+
+            this.isUser();
+>this.isUser : Symbol(Foo.isUser, Decl(truthinessCallExpressionCoercion1.ts, 67, 32))
+>this : Symbol(Foo, Decl(truthinessCallExpressionCoercion1.ts, 64, 1))
+>isUser : Symbol(Foo.isUser, Decl(truthinessCallExpressionCoercion1.ts, 67, 32))
+        }
+    }
+}
+

@@ -7,93 +7,93 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts(100,15): error TS2430: Interface 'I1<T>' incorrectly extends interface 'Base2'.
   The types returned by 'new a()' are incompatible between these types.
     Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-      'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+      'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts(104,15): error TS2430: Interface 'I2<T>' incorrectly extends interface 'Base2'.
   The types returned by 'new a(...)' are incompatible between these types.
     Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-      'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+      'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts(108,15): error TS2430: Interface 'I3<T>' incorrectly extends interface 'Base2'.
   Types of property 'a' are incompatible.
     Type 'new (x: T) => T' is not assignable to type 'new <T>() => T'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts(113,15): error TS2430: Interface 'I4<T>' incorrectly extends interface 'Base2'.
   The types returned by 'new a2(...)' are incompatible between these types.
     Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-      'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+      'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts(117,15): error TS2430: Interface 'I5<T>' incorrectly extends interface 'Base2'.
   Types of property 'a2' are incompatible.
     Type 'new (x?: T) => T' is not assignable to type 'new <T>(x?: T) => T'.
       Types of parameters 'x' and 'x' are incompatible.
         Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-          'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+          'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts(121,15): error TS2430: Interface 'I6<T>' incorrectly extends interface 'Base2'.
   Types of property 'a2' are incompatible.
     Type 'new (x: T) => T' is not assignable to type 'new <T>(x?: T) => T'.
       Types of parameters 'x' and 'x' are incompatible.
         Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-          'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+          'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts(126,15): error TS2430: Interface 'I7<T>' incorrectly extends interface 'Base2'.
   The types returned by 'new a3(...)' are incompatible between these types.
     Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-      'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+      'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts(130,15): error TS2430: Interface 'I8<T>' incorrectly extends interface 'Base2'.
   Types of property 'a3' are incompatible.
     Type 'new (x?: T) => T' is not assignable to type 'new <T>(x: T) => T'.
       Types of parameters 'x' and 'x' are incompatible.
         Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-          'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+          'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts(134,15): error TS2430: Interface 'I9<T>' incorrectly extends interface 'Base2'.
   Types of property 'a3' are incompatible.
     Type 'new (x: T) => T' is not assignable to type 'new <T>(x: T) => T'.
       Types of parameters 'x' and 'x' are incompatible.
         Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-          'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+          'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts(138,15): error TS2430: Interface 'I10<T>' incorrectly extends interface 'Base2'.
   Types of property 'a3' are incompatible.
     Type 'new (x: T, y: T) => T' is not assignable to type 'new <T>(x: T) => T'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts(143,15): error TS2430: Interface 'I11<T>' incorrectly extends interface 'Base2'.
   The types returned by 'new a4(...)' are incompatible between these types.
     Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-      'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+      'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts(147,15): error TS2430: Interface 'I12<T>' incorrectly extends interface 'Base2'.
   Types of property 'a4' are incompatible.
     Type 'new (x?: T, y?: T) => T' is not assignable to type 'new <T>(x: T, y?: T) => T'.
       Types of parameters 'x' and 'x' are incompatible.
         Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-          'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+          'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts(151,15): error TS2430: Interface 'I13<T>' incorrectly extends interface 'Base2'.
   Types of property 'a4' are incompatible.
     Type 'new (x: T) => T' is not assignable to type 'new <T>(x: T, y?: T) => T'.
       Types of parameters 'x' and 'x' are incompatible.
         Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-          'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+          'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts(155,15): error TS2430: Interface 'I14<T>' incorrectly extends interface 'Base2'.
   Types of property 'a4' are incompatible.
     Type 'new (x: T, y: T) => T' is not assignable to type 'new <T>(x: T, y?: T) => T'.
       Types of parameters 'x' and 'x' are incompatible.
         Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-          'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+          'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts(160,15): error TS2430: Interface 'I15<T>' incorrectly extends interface 'Base2'.
   The types returned by 'new a5(...)' are incompatible between these types.
     Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-      'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+      'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts(164,15): error TS2430: Interface 'I16<T>' incorrectly extends interface 'Base2'.
   Types of property 'a5' are incompatible.
     Type 'new (x?: T, y?: T) => T' is not assignable to type 'new <T>(x?: T, y?: T) => T'.
       Types of parameters 'x' and 'x' are incompatible.
         Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-          'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+          'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts(168,15): error TS2430: Interface 'I17<T>' incorrectly extends interface 'Base2'.
   Types of property 'a5' are incompatible.
     Type 'new (x: T) => T' is not assignable to type 'new <T>(x?: T, y?: T) => T'.
       Types of parameters 'x' and 'x' are incompatible.
         Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-          'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+          'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts(172,15): error TS2430: Interface 'I18<T>' incorrectly extends interface 'Base2'.
   Types of property 'a5' are incompatible.
     Type 'new (x: T, y: T) => T' is not assignable to type 'new <T>(x?: T, y?: T) => T'.
       Types of parameters 'x' and 'x' are incompatible.
         Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-          'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+          'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts(196,15): error TS2430: Interface 'I3' incorrectly extends interface 'Base2'.
   Types of property 'a' are incompatible.
     Type 'new <T>(x: T) => T' is not assignable to type 'new <T>() => T'.
@@ -215,7 +215,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
 !!! error TS2430: Interface 'I1<T>' incorrectly extends interface 'Base2'.
 !!! error TS2430:   The types returned by 'new a()' are incompatible between these types.
 !!! error TS2430:     Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-!!! error TS2430:       'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2430:       'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
             a: new () => T; 
         }
     
@@ -224,7 +224,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
 !!! error TS2430: Interface 'I2<T>' incorrectly extends interface 'Base2'.
 !!! error TS2430:   The types returned by 'new a(...)' are incompatible between these types.
 !!! error TS2430:     Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-!!! error TS2430:       'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2430:       'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
             a: new (x?: T) => T;
         }
     
@@ -242,7 +242,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
 !!! error TS2430: Interface 'I4<T>' incorrectly extends interface 'Base2'.
 !!! error TS2430:   The types returned by 'new a2(...)' are incompatible between these types.
 !!! error TS2430:     Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-!!! error TS2430:       'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2430:       'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
             a2: new () => T; 
         }
     
@@ -253,7 +253,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
 !!! error TS2430:     Type 'new (x?: T) => T' is not assignable to type 'new <T>(x?: T) => T'.
 !!! error TS2430:       Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2430:         Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-!!! error TS2430:           'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2430:           'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
             a2: new (x?: T) => T
         }
     
@@ -264,7 +264,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
 !!! error TS2430:     Type 'new (x: T) => T' is not assignable to type 'new <T>(x?: T) => T'.
 !!! error TS2430:       Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2430:         Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-!!! error TS2430:           'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2430:           'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
             a2: new (x: T) => T;
         }
     
@@ -274,7 +274,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
 !!! error TS2430: Interface 'I7<T>' incorrectly extends interface 'Base2'.
 !!! error TS2430:   The types returned by 'new a3(...)' are incompatible between these types.
 !!! error TS2430:     Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-!!! error TS2430:       'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2430:       'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
             a3: new () => T;
         }
     
@@ -285,7 +285,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
 !!! error TS2430:     Type 'new (x?: T) => T' is not assignable to type 'new <T>(x: T) => T'.
 !!! error TS2430:       Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2430:         Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-!!! error TS2430:           'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2430:           'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
             a3: new (x?: T) => T; 
         }
     
@@ -296,7 +296,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
 !!! error TS2430:     Type 'new (x: T) => T' is not assignable to type 'new <T>(x: T) => T'.
 !!! error TS2430:       Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2430:         Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-!!! error TS2430:           'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2430:           'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
             a3: new (x: T) => T; 
         }
     
@@ -314,7 +314,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
 !!! error TS2430: Interface 'I11<T>' incorrectly extends interface 'Base2'.
 !!! error TS2430:   The types returned by 'new a4(...)' are incompatible between these types.
 !!! error TS2430:     Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-!!! error TS2430:       'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2430:       'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
             a4: new () => T; 
         }
     
@@ -325,7 +325,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
 !!! error TS2430:     Type 'new (x?: T, y?: T) => T' is not assignable to type 'new <T>(x: T, y?: T) => T'.
 !!! error TS2430:       Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2430:         Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-!!! error TS2430:           'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2430:           'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
             a4: new (x?: T, y?: T) => T; 
         }
     
@@ -336,7 +336,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
 !!! error TS2430:     Type 'new (x: T) => T' is not assignable to type 'new <T>(x: T, y?: T) => T'.
 !!! error TS2430:       Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2430:         Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-!!! error TS2430:           'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2430:           'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
             a4: new (x: T) => T; 
         }
     
@@ -347,7 +347,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
 !!! error TS2430:     Type 'new (x: T, y: T) => T' is not assignable to type 'new <T>(x: T, y?: T) => T'.
 !!! error TS2430:       Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2430:         Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-!!! error TS2430:           'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2430:           'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
             a4: new (x: T, y: T) => T; 
         }
     
@@ -357,7 +357,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
 !!! error TS2430: Interface 'I15<T>' incorrectly extends interface 'Base2'.
 !!! error TS2430:   The types returned by 'new a5(...)' are incompatible between these types.
 !!! error TS2430:     Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-!!! error TS2430:       'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2430:       'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
             a5: new () => T; 
         }
     
@@ -368,7 +368,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
 !!! error TS2430:     Type 'new (x?: T, y?: T) => T' is not assignable to type 'new <T>(x?: T, y?: T) => T'.
 !!! error TS2430:       Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2430:         Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-!!! error TS2430:           'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2430:           'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
             a5: new (x?: T, y?: T) => T; 
         }
     
@@ -379,7 +379,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
 !!! error TS2430:     Type 'new (x: T) => T' is not assignable to type 'new <T>(x?: T, y?: T) => T'.
 !!! error TS2430:       Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2430:         Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-!!! error TS2430:           'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2430:           'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
             a5: new (x: T) => T;
         }
     
@@ -390,7 +390,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
 !!! error TS2430:     Type 'new (x: T, y: T) => T' is not assignable to type 'new <T>(x?: T, y?: T) => T'.
 !!! error TS2430:       Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2430:         Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-!!! error TS2430:           'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2430:           'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
             a5: new (x: T, y: T) => T; 
         }
     }

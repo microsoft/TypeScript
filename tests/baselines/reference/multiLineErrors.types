@@ -4,7 +4,7 @@ var t = 32;
 >32 : 32
 
 function noReturn(): {
->noReturn : () => { n: string; y: number; }
+>noReturn : () => {    n: string;    y: number;}
 
     n: string;
 >n : string

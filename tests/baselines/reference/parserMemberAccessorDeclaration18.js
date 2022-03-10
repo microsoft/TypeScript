@@ -14,7 +14,7 @@ var C = /** @class */ (function () {
                 a[_i] = arguments[_i];
             }
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return C;

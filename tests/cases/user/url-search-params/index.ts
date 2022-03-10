@@ -1,0 +1,1 @@
+import x = require('url-search-params');

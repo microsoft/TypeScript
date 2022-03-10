@@ -15,5 +15,5 @@ class C1 {
 
 // Invalid, as there is already an exported member.
 export = C1;
->C1 : import("tests/cases/conformance/externalModules/foo_0")
+>C1 : C1
 

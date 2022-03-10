@@ -9,9 +9,8 @@ function /*[#|*/f/*|]*/() {
 
 async function f() {
     try {
-        return fetch(Promise.resolve(1).then(res => "https://typescriptlang.org"));
-    }
-    catch (err) {
+        return await fetch(Promise.resolve(1).then(res => "https://typescriptlang.org"));
+    } catch (err) {
         return console.log(err);
     }
 }

@@ -2,7 +2,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoForJSDocCodefence.ts",
-      "position": 54
+      "position": 54,
+      "name": "1"
     },
     "quickInfo": {
       "kind": "function",
@@ -49,7 +50,12 @@
       "tags": [
         {
           "name": "example",
-          "text": "```\n1 + 2\n```"
+          "text": [
+            {
+              "text": "```\n1 + 2\n```",
+              "kind": "text"
+            }
+          ]
         }
       ]
     }
@@ -57,7 +63,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoForJSDocCodefence.ts",
-      "position": 129
+      "position": 129,
+      "name": "2"
     },
     "quickInfo": {
       "kind": "function",
@@ -104,7 +111,12 @@
       "tags": [
         {
           "name": "example",
-          "text": "``\n1 + 2\n`"
+          "text": [
+            {
+              "text": "``\n1 + 2\n`",
+              "kind": "text"
+            }
+          ]
         }
       ]
     }

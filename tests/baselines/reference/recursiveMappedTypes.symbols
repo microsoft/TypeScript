@@ -219,3 +219,64 @@ declare let x: ListChild;
 x.type;
 >x : Symbol(x, Decl(recursiveMappedTypes.ts, 77, 11))
 
+// Repros from #41790
+
+export type TV<T, K extends keyof T> = T[K] extends Record<infer E, any> ? E : never;
+>TV : Symbol(TV, Decl(recursiveMappedTypes.ts, 78, 7))
+>T : Symbol(T, Decl(recursiveMappedTypes.ts, 82, 15))
+>K : Symbol(K, Decl(recursiveMappedTypes.ts, 82, 17))
+>T : Symbol(T, Decl(recursiveMappedTypes.ts, 82, 15))
+>T : Symbol(T, Decl(recursiveMappedTypes.ts, 82, 15))
+>K : Symbol(K, Decl(recursiveMappedTypes.ts, 82, 17))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>E : Symbol(E, Decl(recursiveMappedTypes.ts, 82, 64))
+>E : Symbol(E, Decl(recursiveMappedTypes.ts, 82, 64))
+
+export type ObjectOrArray<T, K extends keyof any = keyof any> = T[] | Record<K, T | Record<K, T> | T[]>;
+>ObjectOrArray : Symbol(ObjectOrArray, Decl(recursiveMappedTypes.ts, 82, 85))
+>T : Symbol(T, Decl(recursiveMappedTypes.ts, 84, 26))
+>K : Symbol(K, Decl(recursiveMappedTypes.ts, 84, 28))
+>T : Symbol(T, Decl(recursiveMappedTypes.ts, 84, 26))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>K : Symbol(K, Decl(recursiveMappedTypes.ts, 84, 28))
+>T : Symbol(T, Decl(recursiveMappedTypes.ts, 84, 26))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>K : Symbol(K, Decl(recursiveMappedTypes.ts, 84, 28))
+>T : Symbol(T, Decl(recursiveMappedTypes.ts, 84, 26))
+>T : Symbol(T, Decl(recursiveMappedTypes.ts, 84, 26))
+
+export type ThemeValue<K extends keyof ThemeType, ThemeType, TVal = any> =
+>ThemeValue : Symbol(ThemeValue, Decl(recursiveMappedTypes.ts, 84, 104))
+>K : Symbol(K, Decl(recursiveMappedTypes.ts, 85, 23))
+>ThemeType : Symbol(ThemeType, Decl(recursiveMappedTypes.ts, 85, 49))
+>ThemeType : Symbol(ThemeType, Decl(recursiveMappedTypes.ts, 85, 49))
+>TVal : Symbol(TVal, Decl(recursiveMappedTypes.ts, 85, 60))
+
+    ThemeType[K] extends TVal[] ? number :
+>ThemeType : Symbol(ThemeType, Decl(recursiveMappedTypes.ts, 85, 49))
+>K : Symbol(K, Decl(recursiveMappedTypes.ts, 85, 23))
+>TVal : Symbol(TVal, Decl(recursiveMappedTypes.ts, 85, 60))
+
+    ThemeType[K] extends Record<infer E, TVal> ? E :
+>ThemeType : Symbol(ThemeType, Decl(recursiveMappedTypes.ts, 85, 49))
+>K : Symbol(K, Decl(recursiveMappedTypes.ts, 85, 23))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>E : Symbol(E, Decl(recursiveMappedTypes.ts, 87, 37))
+>TVal : Symbol(TVal, Decl(recursiveMappedTypes.ts, 85, 60))
+>E : Symbol(E, Decl(recursiveMappedTypes.ts, 87, 37))
+
+    ThemeType[K] extends ObjectOrArray<infer F> ? F : never;
+>ThemeType : Symbol(ThemeType, Decl(recursiveMappedTypes.ts, 85, 49))
+>K : Symbol(K, Decl(recursiveMappedTypes.ts, 85, 23))
+>ObjectOrArray : Symbol(ObjectOrArray, Decl(recursiveMappedTypes.ts, 82, 85))
+>F : Symbol(F, Decl(recursiveMappedTypes.ts, 88, 44))
+>F : Symbol(F, Decl(recursiveMappedTypes.ts, 88, 44))
+
+export type Foo<T> = T extends { [P in infer E]: any } ? E : never;
+>Foo : Symbol(Foo, Decl(recursiveMappedTypes.ts, 88, 60))
+>T : Symbol(T, Decl(recursiveMappedTypes.ts, 90, 16))
+>T : Symbol(T, Decl(recursiveMappedTypes.ts, 90, 16))
+>P : Symbol(P, Decl(recursiveMappedTypes.ts, 90, 34))
+>E : Symbol(E, Decl(recursiveMappedTypes.ts, 90, 44))
+>E : Symbol(E, Decl(recursiveMappedTypes.ts, 90, 44))
+

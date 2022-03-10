@@ -41,3 +41,26 @@ import { C } from './a';
 let c: C;
 let d: C.Two;
 console.log(c, d);
+
+// @Filename: /h.ts
+class H {}
+export = H;
+
+// @Filename: /i.ts
+import H = require('./h'); // Error
+let h: H = {};
+console.log(h);
+
+// @Filename: /j.ts
+import H = require('./h'); // noUnusedLocals error only
+
+// @Filename: /k.ts
+const enum K { One, Two }
+export = K;
+
+// @Filename: /l.ts
+import K = require('./k');
+K.One;
+
+// @Filename: /j.ts
+// Sad face https://github.com/microsoft/TypeScript/blob/6b04f5039429b9d412696fe2febe39ecc69ad365/src/testRunner/compilerRunner.ts#L207

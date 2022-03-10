@@ -1,0 +1,29 @@
+=== tests/cases/compiler/trivialSubtypeReductionNoStructuralCheck.ts ===
+declare const props: WizardStepProps;
+>props : WizardStepProps
+
+export class Wizard {
+>Wizard : Wizard
+
+  get steps() {
+>steps : any
+
+    return {
+>{      wizard: this,      ...props,    } as WizardStepProps : WizardStepProps
+>{      wizard: this,      ...props,    } : { wizard: Wizard; }
+
+      wizard: this,
+>wizard : this
+>this : this
+
+      ...props,
+>props : WizardStepProps
+
+    } as WizardStepProps;
+  }
+}
+
+export interface WizardStepProps {
+  wizard?: Wizard;
+>wizard : Wizard | undefined
+}

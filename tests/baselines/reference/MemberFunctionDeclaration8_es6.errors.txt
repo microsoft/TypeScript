@@ -12,7 +12,7 @@ tests/cases/conformance/es6/memberFunctionDeclarations/MemberFunctionDeclaration
         if (a) ¬ * bar;
             ~
 !!! error TS2304: Cannot find name 'a'.
-               
+               ~
 !!! error TS1127: Invalid character.
                  ~
 !!! error TS1109: Expression expected.

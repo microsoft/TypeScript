@@ -35,6 +35,7 @@ if (x instanceof X) {
 //// [controlFlowInstanceofExtendsFunction.js]
 "use strict";
 exports.__esModule = true;
+exports.x = void 0;
 Function.prototype.now = function () {
     return "now";
 };

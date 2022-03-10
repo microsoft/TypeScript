@@ -1,0 +1,5 @@
+=== /a.js ===
+/** @type {function(): number} */
+function f() {}
+>f : Symbol(f, Decl(a.js, 0, 0))
+

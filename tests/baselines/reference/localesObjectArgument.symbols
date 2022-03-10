@@ -1,0 +1,94 @@
+=== tests/cases/conformance/es2020/localesObjectArgument.ts ===
+const enUS = new Intl.Locale("en-US");
+>enUS : Symbol(enUS, Decl(localesObjectArgument.ts, 0, 5))
+>Intl.Locale : Symbol(Intl.Locale, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+>Locale : Symbol(Intl.Locale, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+
+const deDE = new Intl.Locale("de-DE");
+>deDE : Symbol(deDE, Decl(localesObjectArgument.ts, 1, 5))
+>Intl.Locale : Symbol(Intl.Locale, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+>Locale : Symbol(Intl.Locale, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+
+const jaJP = new Intl.Locale("ja-JP");
+>jaJP : Symbol(jaJP, Decl(localesObjectArgument.ts, 2, 5))
+>Intl.Locale : Symbol(Intl.Locale, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+>Locale : Symbol(Intl.Locale, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+
+const now = new Date();
+>now : Symbol(now, Decl(localesObjectArgument.ts, 4, 5))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 1 more)
+
+const num = 1000;
+>num : Symbol(num, Decl(localesObjectArgument.ts, 5, 5))
+
+const bigint = 123456789123456789n;
+>bigint : Symbol(bigint, Decl(localesObjectArgument.ts, 6, 5))
+
+now.toLocaleString(enUS);
+>now.toLocaleString : Symbol(Date.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.date.d.ts, --, --))
+>now : Symbol(now, Decl(localesObjectArgument.ts, 4, 5))
+>toLocaleString : Symbol(Date.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.date.d.ts, --, --))
+>enUS : Symbol(enUS, Decl(localesObjectArgument.ts, 0, 5))
+
+now.toLocaleDateString(enUS);
+>now.toLocaleDateString : Symbol(Date.toLocaleDateString, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.date.d.ts, --, --))
+>now : Symbol(now, Decl(localesObjectArgument.ts, 4, 5))
+>toLocaleDateString : Symbol(Date.toLocaleDateString, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.date.d.ts, --, --))
+>enUS : Symbol(enUS, Decl(localesObjectArgument.ts, 0, 5))
+
+now.toLocaleTimeString(enUS);
+>now.toLocaleTimeString : Symbol(Date.toLocaleTimeString, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.date.d.ts, --, --))
+>now : Symbol(now, Decl(localesObjectArgument.ts, 4, 5))
+>toLocaleTimeString : Symbol(Date.toLocaleTimeString, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.date.d.ts, --, --))
+>enUS : Symbol(enUS, Decl(localesObjectArgument.ts, 0, 5))
+
+now.toLocaleString([deDE, jaJP]);
+>now.toLocaleString : Symbol(Date.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.date.d.ts, --, --))
+>now : Symbol(now, Decl(localesObjectArgument.ts, 4, 5))
+>toLocaleString : Symbol(Date.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.date.d.ts, --, --))
+>deDE : Symbol(deDE, Decl(localesObjectArgument.ts, 1, 5))
+>jaJP : Symbol(jaJP, Decl(localesObjectArgument.ts, 2, 5))
+
+now.toLocaleDateString([deDE, jaJP]);
+>now.toLocaleDateString : Symbol(Date.toLocaleDateString, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.date.d.ts, --, --))
+>now : Symbol(now, Decl(localesObjectArgument.ts, 4, 5))
+>toLocaleDateString : Symbol(Date.toLocaleDateString, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.date.d.ts, --, --))
+>deDE : Symbol(deDE, Decl(localesObjectArgument.ts, 1, 5))
+>jaJP : Symbol(jaJP, Decl(localesObjectArgument.ts, 2, 5))
+
+now.toLocaleTimeString([deDE, jaJP]);
+>now.toLocaleTimeString : Symbol(Date.toLocaleTimeString, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.date.d.ts, --, --))
+>now : Symbol(now, Decl(localesObjectArgument.ts, 4, 5))
+>toLocaleTimeString : Symbol(Date.toLocaleTimeString, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.date.d.ts, --, --))
+>deDE : Symbol(deDE, Decl(localesObjectArgument.ts, 1, 5))
+>jaJP : Symbol(jaJP, Decl(localesObjectArgument.ts, 2, 5))
+
+num.toLocaleString(enUS);
+>num.toLocaleString : Symbol(Number.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.number.d.ts, --, --))
+>num : Symbol(num, Decl(localesObjectArgument.ts, 5, 5))
+>toLocaleString : Symbol(Number.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.number.d.ts, --, --))
+>enUS : Symbol(enUS, Decl(localesObjectArgument.ts, 0, 5))
+
+num.toLocaleString([deDE, jaJP]);
+>num.toLocaleString : Symbol(Number.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.number.d.ts, --, --))
+>num : Symbol(num, Decl(localesObjectArgument.ts, 5, 5))
+>toLocaleString : Symbol(Number.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.number.d.ts, --, --))
+>deDE : Symbol(deDE, Decl(localesObjectArgument.ts, 1, 5))
+>jaJP : Symbol(jaJP, Decl(localesObjectArgument.ts, 2, 5))
+
+bigint.toLocaleString(enUS);
+>bigint.toLocaleString : Symbol(BigInt.toLocaleString, Decl(lib.es2020.bigint.d.ts, --, --))
+>bigint : Symbol(bigint, Decl(localesObjectArgument.ts, 6, 5))
+>toLocaleString : Symbol(BigInt.toLocaleString, Decl(lib.es2020.bigint.d.ts, --, --))
+>enUS : Symbol(enUS, Decl(localesObjectArgument.ts, 0, 5))
+
+bigint.toLocaleString([deDE, jaJP]);
+>bigint.toLocaleString : Symbol(BigInt.toLocaleString, Decl(lib.es2020.bigint.d.ts, --, --))
+>bigint : Symbol(bigint, Decl(localesObjectArgument.ts, 6, 5))
+>toLocaleString : Symbol(BigInt.toLocaleString, Decl(lib.es2020.bigint.d.ts, --, --))
+>deDE : Symbol(deDE, Decl(localesObjectArgument.ts, 1, 5))
+>jaJP : Symbol(jaJP, Decl(localesObjectArgument.ts, 2, 5))
+

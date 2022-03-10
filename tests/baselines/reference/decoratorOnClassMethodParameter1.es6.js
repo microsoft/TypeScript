@@ -15,13 +15,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-let default_1 = /** @class */ (() => {
-    class default_1 {
-        method(p) { }
-    }
-    __decorate([
-        __param(0, dec)
-    ], default_1.prototype, "method", null);
-    return default_1;
-})();
-export default default_1;
+export default class default_1 {
+    method(p) { }
+}
+__decorate([
+    __param(0, dec)
+], default_1.prototype, "method", null);

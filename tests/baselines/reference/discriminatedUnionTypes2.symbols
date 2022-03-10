@@ -317,9 +317,9 @@ function f(problem: abc & (b | c)) {
 >c : Symbol(c, Decl(discriminatedUnionTypes2.ts, 104, 1))
 
     if (problem.type === 'b') {
->problem.type : Symbol(type, Decl(discriminatedUnionTypes2.ts, 101, 10), Decl(discriminatedUnionTypes2.ts, 105, 10), Decl(discriminatedUnionTypes2.ts, 97, 10), Decl(discriminatedUnionTypes2.ts, 101, 10), Decl(discriminatedUnionTypes2.ts, 97, 10) ... and 5 more)
+>problem.type : Symbol(type, Decl(discriminatedUnionTypes2.ts, 101, 10), Decl(discriminatedUnionTypes2.ts, 105, 10))
 >problem : Symbol(problem, Decl(discriminatedUnionTypes2.ts, 112, 11))
->type : Symbol(type, Decl(discriminatedUnionTypes2.ts, 101, 10), Decl(discriminatedUnionTypes2.ts, 105, 10), Decl(discriminatedUnionTypes2.ts, 97, 10), Decl(discriminatedUnionTypes2.ts, 101, 10), Decl(discriminatedUnionTypes2.ts, 97, 10) ... and 5 more)
+>type : Symbol(type, Decl(discriminatedUnionTypes2.ts, 101, 10), Decl(discriminatedUnionTypes2.ts, 105, 10))
 
         problem.name;
 >problem.name : Symbol(name, Decl(discriminatedUnionTypes2.ts, 102, 14))
@@ -356,9 +356,9 @@ function foo1(x: RuntimeValue & { type: 'number' }) {
 >type : Symbol(type, Decl(discriminatedUnionTypes2.ts, 126, 33))
 
     if (x.type === 'number') {
->x.type : Symbol(type, Decl(discriminatedUnionTypes2.ts, 122, 7), Decl(discriminatedUnionTypes2.ts, 126, 33), Decl(discriminatedUnionTypes2.ts, 123, 7), Decl(discriminatedUnionTypes2.ts, 126, 33), Decl(discriminatedUnionTypes2.ts, 124, 7) ... and 1 more)
+>x.type : Symbol(type, Decl(discriminatedUnionTypes2.ts, 122, 7), Decl(discriminatedUnionTypes2.ts, 126, 33))
 >x : Symbol(x, Decl(discriminatedUnionTypes2.ts, 126, 14))
->type : Symbol(type, Decl(discriminatedUnionTypes2.ts, 122, 7), Decl(discriminatedUnionTypes2.ts, 126, 33), Decl(discriminatedUnionTypes2.ts, 123, 7), Decl(discriminatedUnionTypes2.ts, 126, 33), Decl(discriminatedUnionTypes2.ts, 124, 7) ... and 1 more)
+>type : Symbol(type, Decl(discriminatedUnionTypes2.ts, 122, 7), Decl(discriminatedUnionTypes2.ts, 126, 33))
 
         x.value;  // number
 >x.value : Symbol(value, Decl(discriminatedUnionTypes2.ts, 122, 23))
@@ -366,8 +366,10 @@ function foo1(x: RuntimeValue & { type: 'number' }) {
 >value : Symbol(value, Decl(discriminatedUnionTypes2.ts, 122, 23))
     }
     else {
-        x.value;  // Error, x is never
+        x.value;  // number
+>x.value : Symbol(value, Decl(discriminatedUnionTypes2.ts, 122, 23))
 >x : Symbol(x, Decl(discriminatedUnionTypes2.ts, 126, 14))
+>value : Symbol(value, Decl(discriminatedUnionTypes2.ts, 122, 23))
     }
 }
 
@@ -379,9 +381,9 @@ function foo2(x: RuntimeValue & ({ type: 'number' } | { type: 'string' })) {
 >type : Symbol(type, Decl(discriminatedUnionTypes2.ts, 135, 55))
 
     if (x.type === 'number') {
->x.type : Symbol(type, Decl(discriminatedUnionTypes2.ts, 122, 7), Decl(discriminatedUnionTypes2.ts, 135, 34), Decl(discriminatedUnionTypes2.ts, 122, 7), Decl(discriminatedUnionTypes2.ts, 135, 55), Decl(discriminatedUnionTypes2.ts, 123, 7) ... and 7 more)
+>x.type : Symbol(type, Decl(discriminatedUnionTypes2.ts, 122, 7), Decl(discriminatedUnionTypes2.ts, 135, 34), Decl(discriminatedUnionTypes2.ts, 123, 7), Decl(discriminatedUnionTypes2.ts, 135, 55))
 >x : Symbol(x, Decl(discriminatedUnionTypes2.ts, 135, 14))
->type : Symbol(type, Decl(discriminatedUnionTypes2.ts, 122, 7), Decl(discriminatedUnionTypes2.ts, 135, 34), Decl(discriminatedUnionTypes2.ts, 122, 7), Decl(discriminatedUnionTypes2.ts, 135, 55), Decl(discriminatedUnionTypes2.ts, 123, 7) ... and 7 more)
+>type : Symbol(type, Decl(discriminatedUnionTypes2.ts, 122, 7), Decl(discriminatedUnionTypes2.ts, 135, 34), Decl(discriminatedUnionTypes2.ts, 123, 7), Decl(discriminatedUnionTypes2.ts, 135, 55))
 
         x.value;  // number
 >x.value : Symbol(value, Decl(discriminatedUnionTypes2.ts, 122, 23))

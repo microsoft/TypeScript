@@ -1,14 +1,14 @@
 === tests/cases/conformance/es6/templates/templateStringInFunctionParameterTypeES6.ts ===
 function f(`hello`);
->f : { (): any; (x: string): any; }
->`hello` : "hello"
+>f : { (: any): any; (x: string): any; }
+> : any
 
 function f(x: string);
->f : { (): any; (x: string): any; }
+>f : { (: any): any; (x: string): any; }
 >x : string
 
 function f(x: string) {
->f : { (): any; (x: string): any; }
+>f : { (: any): any; (x: string): any; }
 >x : string
 
     return x;

@@ -5,9 +5,9 @@ namespace globalThis {
     export function foo() { console.log("x"); }
 >foo : () => void
 >console.log("x") : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >"x" : "x"
 }
 

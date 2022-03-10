@@ -314,18 +314,15 @@ async function* asyncGenFuncYieldConstCall() { yield constCall; }
 async function* asyncGenFuncYieldLetCall() { yield letCall; }
 async function* asyncGenFuncYieldVarCall() { yield varCall; }
 // classes
-let C = /** @class */ (() => {
-    class C {
-        constructor() {
-            this.readonlyCall = Symbol();
-            this.readwriteCall = Symbol();
-        }
+class C {
+    constructor() {
+        this.readonlyCall = Symbol();
+        this.readwriteCall = Symbol();
     }
-    C.readonlyStaticCall = Symbol();
-    C.readonlyStaticTypeAndCall = Symbol();
-    C.readwriteStaticCall = Symbol();
-    return C;
-})();
+    static { this.readonlyStaticCall = Symbol(); }
+    static { this.readonlyStaticTypeAndCall = Symbol(); }
+    static { this.readwriteStaticCall = Symbol(); }
+}
 const constInitToCReadonlyStaticCall = C.readonlyStaticCall;
 const constInitToCReadonlyStaticType = C.readonlyStaticType;
 const constInitToCReadonlyStaticTypeAndCall = C.readonlyStaticTypeAndCall;
@@ -373,30 +370,27 @@ const o2 = {
     method5(p = s) { return p; },
 };
 // property initializers
-let C0 = /** @class */ (() => {
-    class C0 {
-        constructor() {
-            this.a = s;
-            this.b = N.s;
-            this.c = N["s"];
-            this.d = s;
-            this.e = N.s;
-            this.f = N["s"];
-        }
-        method1() { return s; }
-        async method2() { return s; }
-        async *method3() { yield s; }
-        *method4() { yield s; }
-        method5(p = s) { return p; }
+class C0 {
+    constructor() {
+        this.a = s;
+        this.b = N.s;
+        this.c = N["s"];
+        this.d = s;
+        this.e = N.s;
+        this.f = N["s"];
     }
-    C0.a = s;
-    C0.b = N.s;
-    C0.c = N["s"];
-    C0.d = s;
-    C0.e = N.s;
-    C0.f = N["s"];
-    return C0;
-})();
+    static { this.a = s; }
+    static { this.b = N.s; }
+    static { this.c = N["s"]; }
+    static { this.d = s; }
+    static { this.e = N.s; }
+    static { this.f = N["s"]; }
+    method1() { return s; }
+    async method2() { return s; }
+    async *method3() { yield s; }
+    *method4() { yield s; }
+    method5(p = s) { return p; }
+}
 // non-widening positions
 // element access
 o[s];
@@ -423,8 +417,8 @@ Math.random() * 2 ? N["s"] : "a";
     [N.s]: "b",
 });
 class C1 {
+    static { N.s, N.s; }
 }
-N.s, N.s;
 const o3 = {
     method1() {
         return s; // return type should not widen due to contextual type

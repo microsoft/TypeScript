@@ -10,7 +10,7 @@ for (var i = 0, j = 10; i < j; i++, j--)
 {
 }
 
-//Comma operator in fuction arguments and return
+//Comma operator in function arguments and return
 function foo(x: number, y: string)
 >foo : Symbol(foo, Decl(commaOperatorOtherValidOperation.ts, 3, 1))
 >x : Symbol(x, Decl(commaOperatorOtherValidOperation.ts, 6, 13))

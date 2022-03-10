@@ -31,11 +31,11 @@ function f<T extends Cat | Dog>(a: T) {
     a.run();
 >a.run() : void
 >a.run : (() => void) | (() => void)
->a : T
+>a : Cat | Dog
 >run : (() => void) | (() => void)
 
     run(a);
 >run(a) : void
 >run : (a: Animal) => void
->a : T
+>a : Cat | Dog
 }

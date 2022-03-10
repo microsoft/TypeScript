@@ -1,0 +1,79 @@
+=== tests/cases/conformance/jsx/inline/react.d.ts ===
+declare global {
+>global : Symbol(global, Decl(react.d.ts, 0, 0))
+
+    namespace JSX {
+>JSX : Symbol(JSX, Decl(react.d.ts, 0, 16))
+
+        interface IntrinsicElements {
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(react.d.ts, 1, 19))
+
+            [e: string]: any;
+>e : Symbol(e, Decl(react.d.ts, 3, 13))
+        }
+    }
+}
+export function createElement(): void;
+>createElement : Symbol(createElement, Decl(react.d.ts, 6, 1))
+
+export function Fragment(): void;
+>Fragment : Symbol(Fragment, Decl(react.d.ts, 7, 38))
+
+=== tests/cases/conformance/jsx/inline/preact.d.ts ===
+export function h(): void;
+>h : Symbol(h, Decl(preact.d.ts, 0, 0))
+
+export function Frag(): void;
+>Frag : Symbol(Frag, Decl(preact.d.ts, 0, 26))
+
+=== tests/cases/conformance/jsx/inline/snabbdom.d.ts ===
+export function h(): void;
+>h : Symbol(h, Decl(snabbdom.d.ts, 0, 0))
+
+=== tests/cases/conformance/jsx/inline/reacty.tsx ===
+import {createElement, Fragment} from "./react";
+>createElement : Symbol(createElement, Decl(reacty.tsx, 0, 8))
+>Fragment : Symbol(Fragment, Decl(reacty.tsx, 0, 22))
+
+<><span></span></>
+>span : Symbol(JSX.IntrinsicElements, Decl(react.d.ts, 1, 19))
+>span : Symbol(JSX.IntrinsicElements, Decl(react.d.ts, 1, 19))
+
+=== tests/cases/conformance/jsx/inline/preacty.tsx ===
+/**
+ * @jsx h
+ * @jsxFrag Frag
+ */
+import {h, Frag} from "./preact";
+>h : Symbol(h, Decl(preacty.tsx, 4, 8))
+>Frag : Symbol(Frag, Decl(preacty.tsx, 4, 10))
+
+<><div></div></>
+>div : Symbol(JSX.IntrinsicElements, Decl(react.d.ts, 1, 19))
+>div : Symbol(JSX.IntrinsicElements, Decl(react.d.ts, 1, 19))
+
+=== tests/cases/conformance/jsx/inline/snabbdomy.tsx ===
+/**
+ * @jsx h
+ * @jsxfrag null
+ */
+import {h} from "./snabbdom";
+>h : Symbol(h, Decl(snabbdomy.tsx, 4, 8))
+
+<><div></div></>
+>div : Symbol(JSX.IntrinsicElements, Decl(react.d.ts, 1, 19))
+>div : Symbol(JSX.IntrinsicElements, Decl(react.d.ts, 1, 19))
+
+=== tests/cases/conformance/jsx/inline/mix-n-match.tsx ===
+/* @jsx h */
+/* @jsxFrag Fragment */
+import {h} from "./preact";
+>h : Symbol(h, Decl(mix-n-match.tsx, 2, 8))
+
+import {Fragment} from "./react";
+>Fragment : Symbol(Fragment, Decl(mix-n-match.tsx, 3, 8))
+
+<><span></span></>
+>span : Symbol(JSX.IntrinsicElements, Decl(react.d.ts, 1, 19))
+>span : Symbol(JSX.IntrinsicElements, Decl(react.d.ts, 1, 19))
+

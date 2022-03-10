@@ -1,0 +1,36 @@
+=== tests/cases/compiler/index.ts ===
+import X = require("./file");
+>X : Symbol(X, Decl(index.ts, 0, 0))
+
+X(0); // shouldn't cause a crash
+>X : Symbol(X, Decl(index.ts, 0, 0))
+
+=== tests/cases/compiler/file.d.ts ===
+declare namespace Foo {
+>Foo : Symbol(Foo, Decl(file.d.ts, 4, 1), Decl(file.d.ts, 6, 48), Decl(file.d.ts, 0, 0))
+
+    interface Whatever {
+>Whatever : Symbol(Whatever, Decl(file.d.ts, 0, 23))
+
+        prop: any;
+>prop : Symbol(Whatever.prop, Decl(file.d.ts, 1, 24))
+    }
+}
+
+declare function Foo(opts?: Foo.Whatever): void;
+>Foo : Symbol(Foo, Decl(file.d.ts, 4, 1), Decl(file.d.ts, 6, 48), Decl(file.d.ts, 0, 0))
+>opts : Symbol(opts, Decl(file.d.ts, 6, 21))
+>Foo : Symbol(Foo, Decl(file.d.ts, 4, 1), Decl(file.d.ts, 6, 48), Decl(file.d.ts, 0, 0))
+>Whatever : Symbol(Foo.Whatever, Decl(file.d.ts, 0, 23))
+
+declare function Foo(cb: Function, opts?: Foo.Whatever): void;
+>Foo : Symbol(Foo, Decl(file.d.ts, 4, 1), Decl(file.d.ts, 6, 48), Decl(file.d.ts, 0, 0))
+>cb : Symbol(cb, Decl(file.d.ts, 7, 21))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>opts : Symbol(opts, Decl(file.d.ts, 7, 34))
+>Foo : Symbol(Foo, Decl(file.d.ts, 4, 1), Decl(file.d.ts, 6, 48), Decl(file.d.ts, 0, 0))
+>Whatever : Symbol(Foo.Whatever, Decl(file.d.ts, 0, 23))
+
+export = Foo;
+>Foo : Symbol(Foo, Decl(file.d.ts, 4, 1), Decl(file.d.ts, 6, 48), Decl(file.d.ts, 0, 0))
+

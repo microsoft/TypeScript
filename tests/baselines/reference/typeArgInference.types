@@ -1,7 +1,7 @@
 === tests/cases/compiler/typeArgInference.ts ===
 interface I {
     f<T, U>(a1: { a: T; b: U }[], a2: { a: T; b: U }[]): { c: T; d: U };
->f : <T, U>(a1: { a: T; b: U; }[], a2: { a: T; b: U; }[]) => { c: T; d: U; }
+>f : <T, U>(a1: {    a: T;    b: U;}[], a2: {    a: T;    b: U;}[]) => {    c: T;    d: U;}
 >a1 : { a: T; b: U; }[]
 >a : T
 >b : U
@@ -12,7 +12,7 @@ interface I {
 >d : U
 
     g<T, U>(...arg: { a: T; b: U }[][]): { c: T; d: U };
->g : <T, U>(...arg: { a: T; b: U; }[][]) => { c: T; d: U; }
+>g : <T, U>(...arg: {    a: T;    b: U;}[][]) => {    c: T;    d: U;}
 >arg : { a: T; b: U; }[][]
 >a : T
 >b : U

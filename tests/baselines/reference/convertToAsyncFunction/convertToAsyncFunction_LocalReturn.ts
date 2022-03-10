@@ -11,9 +11,8 @@ function /*[#|*/f/*|]*/() {
 async function f() {
     let x = fetch("https://typescriptlang.org").then(res => console.log(res));
     try {
-        return x;
-    }
-    catch (err) {
+        return await x;
+    } catch (err) {
         return console.log("Error!", err);
     }
 }

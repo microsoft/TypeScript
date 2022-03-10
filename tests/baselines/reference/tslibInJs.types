@@ -1,0 +1,10 @@
+=== tests/cases/compiler/main.js ===
+"use strict";
+>"use strict" : "use strict"
+
+const { foo } = require("bar");
+>foo : any
+>require("bar") : any
+>require : any
+>"bar" : "bar"
+

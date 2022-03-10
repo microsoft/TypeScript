@@ -3,7 +3,7 @@ export class Foo {
 >Foo : Foo
 
     doThing(x: {a: number}) {
->doThing : (x: { a: number; }) => { b: number; }
+>doThing : (x: {    a: number;}) => { b: number; }
 >x : { a: number; }
 >a : number
 

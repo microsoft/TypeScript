@@ -3,7 +3,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/callSign
     Type '(x: T) => U[]' is not assignable to type '(x: number) => string[]'.
       Types of parameters 'x' and 'x' are incompatible.
         Type 'number' is not assignable to type 'T'.
-          'number' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+          'T' could be instantiated with an arbitrary type which could be unrelated to 'number'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/callSignatureAssignabilityInInheritance3.ts(60,19): error TS2430: Interface 'I4' incorrectly extends interface 'A'.
   Types of property 'a8' are incompatible.
     Type '<T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => U' is not assignable to type '(x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived'.
@@ -30,7 +30,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/callSign
   The types returned by 'a2(...)' are incompatible between these types.
     Type 'string[]' is not assignable to type 'T[]'.
       Type 'string' is not assignable to type 'T'.
-        'string' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+        'T' could be instantiated with an arbitrary type which could be unrelated to 'string'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/callSignatureAssignabilityInInheritance3.ts(109,19): error TS2430: Interface 'I7' incorrectly extends interface 'C'.
   The types returned by 'a2(...)' are incompatible between these types.
     Type 'T[]' is not assignable to type 'string[]'.
@@ -95,7 +95,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/callSign
 !!! error TS2430:     Type '(x: T) => U[]' is not assignable to type '(x: number) => string[]'.
 !!! error TS2430:       Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2430:         Type 'number' is not assignable to type 'T'.
-!!! error TS2430:           'number' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2430:           'T' could be instantiated with an arbitrary type which could be unrelated to 'number'.
                 a2: (x: T) => U[]; // error, no contextual signature instantiation since I2.a2 is not generic
             }
     
@@ -175,7 +175,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/callSign
 !!! error TS2430:   The types returned by 'a2(...)' are incompatible between these types.
 !!! error TS2430:     Type 'string[]' is not assignable to type 'T[]'.
 !!! error TS2430:       Type 'string' is not assignable to type 'T'.
-!!! error TS2430:         'string' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2430:         'T' could be instantiated with an arbitrary type which could be unrelated to 'string'.
                 a2: <T>(x: T) => string[]; // error
             }
     

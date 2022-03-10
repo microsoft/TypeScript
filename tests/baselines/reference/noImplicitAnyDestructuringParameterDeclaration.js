@@ -29,8 +29,8 @@ function f4(_a, x) {
     var b = _a.b;
 }
 function f5(_a, _b, c1, d1) {
-    var a1 = (_a === void 0 ? [undefined] : _a)[0];
-    var b1 = (_b === void 0 ? { b1: null } : _b).b1;
+    var _c = _a === void 0 ? [undefined] : _a, a1 = _c[0];
+    var _d = _b === void 0 ? { b1: null } : _b, b1 = _d.b1;
     if (c1 === void 0) { c1 = undefined; }
     if (d1 === void 0) { d1 = null; }
 }

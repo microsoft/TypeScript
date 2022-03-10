@@ -4,14 +4,14 @@ tests/cases/compiler/specializedSignatureAsCallbackParameter1.ts(7,1): error TS2
       Types of parameters 'x' and 'x' are incompatible.
         Type 'number' is not assignable to type 'string'.
   Overload 2 of 2, '(a: string, cb: (x: number) => number): any', gave the following error.
-    Argument of type '1' is not assignable to parameter of type 'string'.
+    Argument of type 'number' is not assignable to parameter of type 'string'.
 tests/cases/compiler/specializedSignatureAsCallbackParameter1.ts(8,1): error TS2769: No overload matches this call.
   Overload 1 of 2, '(a: number, cb: (x: number) => number): any', gave the following error.
-    Argument of type '(x: "hm") => number' is not assignable to parameter of type '(x: number) => number'.
+    Argument of type '(x: 'hm') => number' is not assignable to parameter of type '(x: number) => number'.
       Types of parameters 'x' and 'x' are incompatible.
         Type 'number' is not assignable to type '"hm"'.
   Overload 2 of 2, '(a: string, cb: (x: number) => number): any', gave the following error.
-    Argument of type '1' is not assignable to parameter of type 'string'.
+    Argument of type 'number' is not assignable to parameter of type 'string'.
 
 
 ==== tests/cases/compiler/specializedSignatureAsCallbackParameter1.ts (2 errors) ====
@@ -29,13 +29,13 @@ tests/cases/compiler/specializedSignatureAsCallbackParameter1.ts(8,1): error TS2
 !!! error TS2769:       Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2769:         Type 'number' is not assignable to type 'string'.
 !!! error TS2769:   Overload 2 of 2, '(a: string, cb: (x: number) => number): any', gave the following error.
-!!! error TS2769:     Argument of type '1' is not assignable to parameter of type 'string'.
+!!! error TS2769:     Argument of type 'number' is not assignable to parameter of type 'string'.
     x3(1, (x: 'hm') => 1); 
     ~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 2, '(a: number, cb: (x: number) => number): any', gave the following error.
-!!! error TS2769:     Argument of type '(x: "hm") => number' is not assignable to parameter of type '(x: number) => number'.
+!!! error TS2769:     Argument of type '(x: 'hm') => number' is not assignable to parameter of type '(x: number) => number'.
 !!! error TS2769:       Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2769:         Type 'number' is not assignable to type '"hm"'.
 !!! error TS2769:   Overload 2 of 2, '(a: string, cb: (x: number) => number): any', gave the following error.
-!!! error TS2769:     Argument of type '1' is not assignable to parameter of type 'string'.
+!!! error TS2769:     Argument of type 'number' is not assignable to parameter of type 'string'.

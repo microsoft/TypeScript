@@ -1,6 +1,6 @@
-tests/cases/conformance/functions/parameterInitializersForwardReferencing1_es6.ts(13,20): error TS2373: Initializer of parameter 'bar' cannot reference identifier 'foo' declared after it.
-tests/cases/conformance/functions/parameterInitializersForwardReferencing1_es6.ts(21,18): error TS2372: Parameter 'a' cannot be referenced in its initializer.
-tests/cases/conformance/functions/parameterInitializersForwardReferencing1_es6.ts(25,22): error TS2372: Parameter 'async' cannot be referenced in its initializer.
+tests/cases/conformance/functions/parameterInitializersForwardReferencing1_es6.ts(13,20): error TS2373: Parameter 'bar' cannot reference identifier 'foo' declared after it.
+tests/cases/conformance/functions/parameterInitializersForwardReferencing1_es6.ts(21,18): error TS2372: Parameter 'a' cannot reference itself.
+tests/cases/conformance/functions/parameterInitializersForwardReferencing1_es6.ts(25,22): error TS2372: Parameter 'async' cannot reference itself.
 tests/cases/conformance/functions/parameterInitializersForwardReferencing1_es6.ts(29,15): error TS2537: Type 'any[]' has no matching index signature for type 'string'.
 
 
@@ -19,7 +19,7 @@ tests/cases/conformance/functions/parameterInitializersForwardReferencing1_es6.t
     
     function f3 (bar = foo, foo = 2) { // correct compiler error, error at runtime
                        ~~~
-!!! error TS2373: Initializer of parameter 'bar' cannot reference identifier 'foo' declared after it.
+!!! error TS2373: Parameter 'bar' cannot reference identifier 'foo' declared after it.
         return bar;
     }
     
@@ -29,13 +29,13 @@ tests/cases/conformance/functions/parameterInitializersForwardReferencing1_es6.t
     
     function f5 (a = a) {
                      ~
-!!! error TS2372: Parameter 'a' cannot be referenced in its initializer.
+!!! error TS2372: Parameter 'a' cannot reference itself.
         return a
     }
     
     function f6 (async = async) {
                          ~~~~~
-!!! error TS2372: Parameter 'async' cannot be referenced in its initializer.
+!!! error TS2372: Parameter 'async' cannot reference itself.
         return async
     }
     

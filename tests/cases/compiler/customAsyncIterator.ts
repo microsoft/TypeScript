@@ -1,4 +1,5 @@
 // @target: esnext
+// @useDefineForClassFields: false
 
 // GH: https://github.com/microsoft/TypeScript/issues/33239
 class ConstantIterator<T> implements AsyncIterator<T, undefined, T | undefined> {

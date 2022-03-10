@@ -2,10 +2,24 @@
 
 //// type A = 'foo' | 'bar' | 'baz';
 //// type B<T extends A> = {};
-//// type C = B<'foo' | '/**/'>
+//// type C = B<'foo' | '[|/**/|]'>
 
-verify.completions({ marker: "", exact: ["bar", "baz"] });
+const replacementSpan = test.ranges()[0]
+verify.completions({ marker: "", exact: [
+    { name: "bar", replacementSpan },
+    { name: "baz", replacementSpan }
+] });
 edit.insert("b");
-verify.completions({ exact: ["bar", "baz"] });
+replacementSpan.end++
+
+verify.completions({ exact: [
+    { name: "bar", replacementSpan },
+    { name: "baz", replacementSpan }
+] });
 edit.insert("ar");
-verify.completions({ exact: ["bar", "baz"] });
+replacementSpan.end += 2
+
+verify.completions({ exact: [
+    { name: "bar", replacementSpan },
+    { name: "baz", replacementSpan }
+] });

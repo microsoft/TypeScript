@@ -1,0 +1,21 @@
+=== tests/cases/conformance/decorators/class/method/decoratorOnClassMethod16.ts ===
+declare var decorator: any;
+>decorator : any
+
+class Foo {
+>Foo : Foo
+
+    private prop
+>prop : any
+
+    @decorator
+>decorator : any
+
+    foo() {
+>foo : () => number
+
+        return 0;
+>0 : 0
+    }
+}
+

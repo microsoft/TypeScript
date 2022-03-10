@@ -1,0 +1,82 @@
+=== tests/cases/compiler/node_modules/backbone/index.d.ts ===
+declare global {
+>global : typeof global
+
+    interface JQueryXHR { }
+    class Model<T = any, E = {}> {
+>Model : Model<T, E>
+
+        initialize(attributes?: T, options?: CombinedModelConstructorOptions<E, this>): void;
+>initialize : (attributes?: T | undefined, options?: CombinedModelConstructorOptions<E, this> | undefined) => void
+>attributes : T | undefined
+>options : CombinedModelConstructorOptions<E, this> | undefined
+
+        fetch(options?: any): JQueryXHR;
+>fetch : (options?: any) => JQueryXHR
+>options : any
+    }
+    interface ModelConstructorOptions<TModel extends Model = Model> {
+        collection?: Collection<TModel>;
+>collection : Collection<TModel> | undefined
+    }
+    class Collection<TModel extends Model = Model> {
+>Collection : Collection<TModel>
+
+        without(...values: TModel[]): TModel[];
+>without : (...values: TModel[]) => TModel[]
+>values : TModel[]
+    }
+    type CombinedModelConstructorOptions<E, M extends Model<any, E> = Model> = ModelConstructorOptions<M> & E;
+>CombinedModelConstructorOptions : CombinedModelConstructorOptions<E, M>
+}
+
+export {
+    Model
+>Model : typeof Model
+
+};
+export as namespace Backbone;
+>Backbone : typeof import("tests/cases/compiler/node_modules/backbone/index")
+
+=== tests/cases/compiler/node_modules/backbone-fetch-cache/index.d.ts ===
+import * as Backbone from "backbone";
+>Backbone : typeof Backbone
+
+declare module "backbone" {
+>"backbone" : typeof Backbone
+
+    interface ModelWithCache extends Model {
+        fetch(options?: any): JQueryXHR;
+>fetch : (options?: any) => JQueryXHR
+>options : any
+    }
+}
+export {};
+export as namespace BackboneFetchCache;
+>BackboneFetchCache : typeof import("tests/cases/compiler/node_modules/backbone-fetch-cache/index")
+
+=== tests/cases/compiler/index.ts ===
+import * as Backbone from "backbone";
+>Backbone : typeof Backbone
+
+import * as BackboneFetchCache from "backbone-fetch-cache";
+>BackboneFetchCache : typeof BackboneFetchCache
+
+
+const hoge = new Backbone.Model() as Backbone.ModelWithCache;
+>hoge : Backbone.ModelWithCache
+>new Backbone.Model() as Backbone.ModelWithCache : Backbone.ModelWithCache
+>new Backbone.Model() : Backbone.Model<any, ModelConstructorOptions<Backbone.ModelWithCache>>
+>Backbone.Model : typeof Backbone.Model
+>Backbone : typeof Backbone
+>Model : typeof Backbone.Model
+>Backbone : any
+
+hoge.fetch(null as any);
+>hoge.fetch(null as any) : JQueryXHR
+>hoge.fetch : (options?: any) => JQueryXHR
+>hoge : Backbone.ModelWithCache
+>fetch : (options?: any) => JQueryXHR
+>null as any : any
+>null : null
+

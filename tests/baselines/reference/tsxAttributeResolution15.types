@@ -37,7 +37,7 @@ let b = <BigGreeter ref={(input) => { this.textInput = input; }} />
 >input : BigGreeter
 >this.textInput = input : BigGreeter
 >this.textInput : any
->this : typeof globalThis
+>this : undefined
 >textInput : any
 >input : BigGreeter
 

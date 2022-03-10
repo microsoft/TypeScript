@@ -24,7 +24,7 @@ var C = /** @class */ (function () {
          * Setter.
          */
         set: function (v) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return C;

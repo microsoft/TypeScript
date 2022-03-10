@@ -1,0 +1,19 @@
+=== tests/cases/conformance/jsdoc/declarations/index.js ===
+/**
+ * @module A
+ */
+class A {}
+>A : A
+
+
+/**
+ * Target element
+ * @type {module:A}
+ */
+export let el = null;
+>el : error
+>null : null
+
+export default A;
+>A : A
+

@@ -1,0 +1,92 @@
+=== tests/cases/compiler/jsxNamespacePrefixInName.tsx ===
+var justElement1 = <a:element />;
+>justElement1 : Symbol(justElement1, Decl(jsxNamespacePrefixInName.tsx, 0, 3))
+
+var justElement2 = <a:element></a:element>;
+>justElement2 : Symbol(justElement2, Decl(jsxNamespacePrefixInName.tsx, 1, 3))
+
+var justElement3 = <a:element attr={"value"}></a:element>;
+>justElement3 : Symbol(justElement3, Decl(jsxNamespacePrefixInName.tsx, 2, 3))
+>attr : Symbol(attr, Decl(jsxNamespacePrefixInName.tsx, 2, 29))
+
+var justElement4 = <a:element>{"text"}</a:element>;
+>justElement4 : Symbol(justElement4, Decl(jsxNamespacePrefixInName.tsx, 3, 3))
+
+var justElement5 = <a:element attr={"value"}>{"text"}</a:element>;
+>justElement5 : Symbol(justElement5, Decl(jsxNamespacePrefixInName.tsx, 4, 3))
+>attr : Symbol(attr, Decl(jsxNamespacePrefixInName.tsx, 4, 29))
+
+var tooManySeparators1 = <a:ele:ment />;
+>tooManySeparators1 : Symbol(tooManySeparators1, Decl(jsxNamespacePrefixInName.tsx, 6, 3))
+>ment : Symbol(ment, Decl(jsxNamespacePrefixInName.tsx, 6, 32))
+
+var tooManySeparators2 = <a:ele:ment></a:ele:ment>;
+>tooManySeparators2 : Symbol(tooManySeparators2, Decl(jsxNamespacePrefixInName.tsx, 7, 3))
+>ment : Symbol(ment, Decl(jsxNamespacePrefixInName.tsx, 7, 32))
+>ment : Symbol(ment, Decl(jsxNamespacePrefixInName.tsx, 7, 45), Decl(jsxNamespacePrefixInName.tsx, 8, 60), Decl(jsxNamespacePrefixInName.tsx, 9, 53), Decl(jsxNamespacePrefixInName.tsx, 10, 68))
+
+var tooManySeparators3 = <a:ele:ment attr={"value"}></a:ele:ment>;
+>tooManySeparators3 : Symbol(tooManySeparators3, Decl(jsxNamespacePrefixInName.tsx, 8, 3))
+>ment : Symbol(ment, Decl(jsxNamespacePrefixInName.tsx, 8, 32))
+>attr : Symbol(attr, Decl(jsxNamespacePrefixInName.tsx, 8, 36))
+>ment : Symbol(ment, Decl(jsxNamespacePrefixInName.tsx, 7, 45), Decl(jsxNamespacePrefixInName.tsx, 8, 60), Decl(jsxNamespacePrefixInName.tsx, 9, 53), Decl(jsxNamespacePrefixInName.tsx, 10, 68))
+
+var tooManySeparators4 = <a:ele:ment>{"text"}</a:ele:ment>;
+>tooManySeparators4 : Symbol(tooManySeparators4, Decl(jsxNamespacePrefixInName.tsx, 9, 3))
+>ment : Symbol(ment, Decl(jsxNamespacePrefixInName.tsx, 9, 32))
+>ment : Symbol(ment, Decl(jsxNamespacePrefixInName.tsx, 7, 45), Decl(jsxNamespacePrefixInName.tsx, 8, 60), Decl(jsxNamespacePrefixInName.tsx, 9, 53), Decl(jsxNamespacePrefixInName.tsx, 10, 68))
+
+var tooManySeparators5 = <a:ele:ment attr={"value"}>{"text"}</a:ele:ment>;
+>tooManySeparators5 : Symbol(tooManySeparators5, Decl(jsxNamespacePrefixInName.tsx, 10, 3))
+>ment : Symbol(ment, Decl(jsxNamespacePrefixInName.tsx, 10, 32))
+>attr : Symbol(attr, Decl(jsxNamespacePrefixInName.tsx, 10, 36))
+>ment : Symbol(ment, Decl(jsxNamespacePrefixInName.tsx, 7, 45), Decl(jsxNamespacePrefixInName.tsx, 8, 60), Decl(jsxNamespacePrefixInName.tsx, 9, 53), Decl(jsxNamespacePrefixInName.tsx, 10, 68))
+
+var justAttribute1 = <element a:attr={"value"} />;
+>justAttribute1 : Symbol(justAttribute1, Decl(jsxNamespacePrefixInName.tsx, 12, 3))
+>a:attr : Symbol(a:attr, Decl(jsxNamespacePrefixInName.tsx, 12, 29))
+
+var justAttribute2 = <element a:attr={"value"}></element>;
+>justAttribute2 : Symbol(justAttribute2, Decl(jsxNamespacePrefixInName.tsx, 13, 3))
+>a:attr : Symbol(a:attr, Decl(jsxNamespacePrefixInName.tsx, 13, 29))
+
+var justAttribute3 = <element a:attr={"value"}>{"text"}</element>;
+>justAttribute3 : Symbol(justAttribute3, Decl(jsxNamespacePrefixInName.tsx, 14, 3))
+>a:attr : Symbol(a:attr, Decl(jsxNamespacePrefixInName.tsx, 14, 29))
+
+var both1 = <a:element a:attr={"value"} />;
+>both1 : Symbol(both1, Decl(jsxNamespacePrefixInName.tsx, 16, 3))
+>a:attr : Symbol(a:attr, Decl(jsxNamespacePrefixInName.tsx, 16, 22))
+
+var both2 = <a:element k:attr={"value"}></a:element>;
+>both2 : Symbol(both2, Decl(jsxNamespacePrefixInName.tsx, 17, 3))
+>k:attr : Symbol(k:attr, Decl(jsxNamespacePrefixInName.tsx, 17, 22))
+
+var both3 = <a:element a:attr={"value"}>{"text"}</a:element>;
+>both3 : Symbol(both3, Decl(jsxNamespacePrefixInName.tsx, 18, 3))
+>a:attr : Symbol(a:attr, Decl(jsxNamespacePrefixInName.tsx, 18, 22))
+
+var endOfIdent1 = <a: attr={"value"} />;
+>endOfIdent1 : Symbol(endOfIdent1, Decl(jsxNamespacePrefixInName.tsx, 20, 3))
+>attr : Symbol(attr, Decl(jsxNamespacePrefixInName.tsx, 20, 21))
+
+var endOfIdent2 = <a attr:={"value"} />;
+>endOfIdent2 : Symbol(endOfIdent2, Decl(jsxNamespacePrefixInName.tsx, 21, 3))
+>attr : Symbol(attr, Decl(jsxNamespacePrefixInName.tsx, 21, 20))
+
+var beginOfIdent1 = <:a attr={"value"} />;
+>beginOfIdent1 : Symbol(beginOfIdent1, Decl(jsxNamespacePrefixInName.tsx, 23, 3))
+>a : Symbol(a, Decl(jsxNamespacePrefixInName.tsx, 23, 22))
+>attr : Symbol(attr, Decl(jsxNamespacePrefixInName.tsx, 23, 23))
+>"value" : Symbol("value", Decl(jsxNamespacePrefixInName.tsx, 23, 30))
+
+var beginOfIdent2 = <a :attr={"value"} />;
+>beginOfIdent2 : Symbol(beginOfIdent2, Decl(jsxNamespacePrefixInName.tsx, 24, 3))
+>attr : Symbol(attr, Decl(jsxNamespacePrefixInName.tsx, 24, 24))
+
+var upcaseComponent1 = <ns:Upcase />;  // Parsed as intrinsic
+>upcaseComponent1 : Symbol(upcaseComponent1, Decl(jsxNamespacePrefixInName.tsx, 26, 3))
+
+var upcaseComponent2 = <Upcase:element />;  // Parsed as instrinsic
+>upcaseComponent2 : Symbol(upcaseComponent2, Decl(jsxNamespacePrefixInName.tsx, 27, 3))
+

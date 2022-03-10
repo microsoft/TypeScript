@@ -3,17 +3,16 @@
 // @jsx: react
 // @filename: main.tsx
 
-//// let x6 = <div>>{"foo"}</div>;
+//// let foo = <div>>{"foo"}</div>;
 
 verify.codeFix({
-    description: "Wrap invalid character in an expression container",
-    newFileContent:
-`let x6 = <div>{'>'}{"foo"}</div>;`,
+    description: ts.Diagnostics.Wrap_invalid_character_in_an_expression_container.message,
+    newFileContent: `let foo = <div>{">"}{"foo"}</div>;`,
     index: 0,
 });
+
 verify.codeFix({
-    description: "Convert invalid character to its html entity code",
-    newFileContent:
-`let x6 = <div>&gt;{"foo"}</div>;`,
+    description: ts.Diagnostics.Convert_invalid_character_to_its_html_entity_code.message,
+    newFileContent: `let foo = <div>&gt;{"foo"}</div>;`,
     index: 1,
 });

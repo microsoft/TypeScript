@@ -30,9 +30,12 @@ import * as React from "react";
 
 let x = <MyComp<Prop> a={10} b="hi" />; // error, no type arguments in js
 >x : JSX.Element
-><MyComp<Prop> a={10} b="hi" /> : JSX.Element
+><MyComp<Prop> a={10} b="hi" />; // error, no type arguments in js : JSX.Element
+><MyComp : JSX.Element
 >MyComp : typeof MyComp
->a : number
+><Prop> a={10} b="hi" />; // error, no type arguments in js : JSX.Element
+>Prop : any
 >10 : 10
->b : string
+
+> : any
 

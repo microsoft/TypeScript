@@ -40,6 +40,7 @@ export class D {
 })(function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    exports.foo = void 0;
     function foo() { return "foo"; }
     exports.foo = foo;
 });
@@ -56,6 +57,7 @@ export class D {
     "use strict";
     var __syncRequire = typeof module === "object" && typeof module.exports === "object";
     Object.defineProperty(exports, "__esModule", { value: true });
+    exports.D = exports.p2 = void 0;
     __syncRequire ? Promise.resolve().then(() => require("./0")) : new Promise((resolve_1, reject_1) => { require(["./0"], resolve_1, reject_1); });
     var p1 = __syncRequire ? Promise.resolve().then(() => require("./0")) : new Promise((resolve_2, reject_2) => { require(["./0"], resolve_2, reject_2); });
     p1.then(zero => {

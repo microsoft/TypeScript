@@ -66,9 +66,9 @@ const Test2 = () => <FieldFeedback when={value => console.log(value)} />;
 >value => console.log(value) : (value: string) => void
 >value : string
 >console.log(value) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >value : string
 
 class FieldFeedbackBeta<P extends Props = BaseProps> extends React.Component<P> {
@@ -123,9 +123,9 @@ const Test2a = () => <FieldFeedbackBeta when={value => console.log(value)} error
 >value => console.log(value) : (value: string) => void
 >value : string
 >console.log(value) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >value : string
 >error : true
 >FieldFeedbackBeta : typeof FieldFeedbackBeta
@@ -193,9 +193,9 @@ const Test4 = () => <FieldFeedback2 when={value => console.log(value)} />;
 >value => console.log(value) : (value: string) => void
 >value : string
 >console.log(value) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >value : string
 
 // OK

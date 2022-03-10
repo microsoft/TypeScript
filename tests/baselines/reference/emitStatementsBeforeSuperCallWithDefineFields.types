@@ -12,9 +12,9 @@ class Sub extends Base {
 
         console.log('hi');
 >console.log('hi') : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >'hi' : "hi"
 
         super();

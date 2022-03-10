@@ -99,7 +99,7 @@ declare module "express" {
     }
 
     export = e;
->e : typeof e
+>e : typeof import("tests/cases/compiler/express.d.ts")
 }
 
 === tests/cases/compiler/augmentation.ts ===

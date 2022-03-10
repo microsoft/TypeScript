@@ -36,7 +36,7 @@ import {StyledOtherComponent, StyledOtherComponentList} from "create-emotion-sty
 >StyledOtherComponentList : any
 
 export default function styled(tag: string): (o: object) => StyledOtherComponent<{}, StyledOtherComponentList["div"], any>;
->styled : (tag: string) => (o: object) => StyledOtherComponent<{}, import("tests/cases/compiler/node_modules/react/index").DetailedHTMLProps<import("tests/cases/compiler/node_modules/react/index").HTMLAttributes<HTMLDivElement>, HTMLDivElement>, any>
+>styled : (tag: string) => (o: object) => StyledOtherComponent<{}, StyledOtherComponentList["div"], any>
 >tag : string
 >o : object
 

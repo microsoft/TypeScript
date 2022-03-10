@@ -46,6 +46,7 @@ exports.default = 12;
 //// [index2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.bar = exports.x = void 0;
 function foo() {
     return foo;
 }
@@ -55,6 +56,7 @@ exports.x = foo;
 //// [index3.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Bar = exports.X = void 0;
 var Foo = /** @class */ (function () {
     function Foo() {
         this.a = (null);
@@ -71,10 +73,12 @@ var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -113,7 +117,7 @@ exports.default = func;
 
 
 //// [index1.d.ts]
-declare var _default: 12;
+declare const _default: 12;
 export default _default;
 //// [index2.d.ts]
 export default function foo(): typeof foo;
@@ -133,7 +137,7 @@ declare class Bar extends Fab {
 import Fab from "./index3";
 //// [index5.d.ts]
 type _default = string | number;
-declare var _default: 12;
+declare const _default: 12;
 export default _default;
 //// [index6.d.ts]
 declare function func(): void;

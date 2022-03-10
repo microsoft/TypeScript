@@ -1,0 +1,173 @@
+=== tests/cases/compiler/keyRemappingKeyofResult.ts ===
+const sym = Symbol("")
+>sym : unique symbol
+>Symbol("") : unique symbol
+>Symbol : SymbolConstructor
+>"" : ""
+
+type Orig = { [k: string]: any, str: any, [sym]: any }
+>Orig : Orig
+>k : string
+>str : any
+>[sym] : any
+>sym : unique symbol
+
+type Okay = Exclude<keyof Orig, never>
+>Okay : Okay
+
+// type Okay = string | number | typeof sym
+
+type Remapped = { [K in keyof Orig as {} extends Record<K, any> ? never : K]: any }
+>Remapped : Remapped
+
+/* type Remapped = {
+    str: any;
+    [sym]: any;
+} */
+// no string index signature, right?
+
+type Oops = Exclude<keyof Remapped, never>
+>Oops : Oops
+
+declare let x: Oops;
+>x : Oops
+
+x = sym;
+>x = sym : unique symbol
+>x : Oops
+>sym : unique symbol
+
+x = "str";
+>x = "str" : "str"
+>x : Oops
+>"str" : "str"
+
+// type Oops = typeof sym <-- what happened to "str"?
+
+// equivalently, with an unresolved generic (no `exclude` shenanigans, since conditions won't execute):
+function f<T>() {
+>f : <T>() => void
+
+    type Orig = { [k: string]: any, str: any, [sym]: any } & T;
+>Orig : { [k: string]: any; str: any; [sym]: any; } & T
+>k : string
+>str : any
+>[sym] : any
+>sym : unique symbol
+    
+    type Okay = keyof Orig;
+>Okay : string | number | unique symbol | keyof T
+
+    let a: Okay;
+>a : string | number | unique symbol | keyof T
+
+    a = "str";
+>a = "str" : "str"
+>a : string | number | unique symbol | keyof T
+>"str" : "str"
+
+    a = sym;
+>a = sym : unique symbol
+>a : string | number | unique symbol | keyof T
+>sym : unique symbol
+
+    a = "whatever";
+>a = "whatever" : "whatever"
+>a : string | number | unique symbol | keyof T
+>"whatever" : "whatever"
+
+    // type Okay = string | number | typeof sym
+    
+    type Remapped = { [K in keyof Orig as {} extends Record<K, any> ? never : K]: any }
+>Remapped : { [K in keyof ({ [k: string]: any; str: any; [sym]: any; } & T) as {} extends Record<K, any> ? never : K]: any; }
+
+    /* type Remapped = {
+        str: any;
+        [sym]: any;
+    } */
+    // no string index signature, right?
+    
+    type Oops = keyof Remapped;
+>Oops : keyof { [K in keyof ({ [k: string]: any; str: any; [sym]: any; } & T) as {} extends Record<K, any> ? never : K]: any; }
+
+    let x: Oops;
+>x : keyof { [K in keyof ({ [k: string]: any; str: any; [sym]: any; } & T) as {} extends Record<K, any> ? never : K]: any; }
+
+    x = sym;
+>x = sym : unique symbol
+>x : keyof { [K in keyof ({ [k: string]: any; str: any; [sym]: any; } & T) as {} extends Record<K, any> ? never : K]: any; }
+>sym : unique symbol
+
+    x = "str";
+>x = "str" : "str"
+>x : keyof { [K in keyof ({ [k: string]: any; str: any; [sym]: any; } & T) as {} extends Record<K, any> ? never : K]: any; }
+>"str" : "str"
+}
+
+// and another generic case with a _distributive_ mapping, to trigger a different branch in `getIndexType`
+function g<T>() {
+>g : <T>() => void
+
+    type Orig = { [k: string]: any, str: any, [sym]: any } & T;
+>Orig : { [k: string]: any; str: any; [sym]: any; } & T
+>k : string
+>str : any
+>[sym] : any
+>sym : unique symbol
+    
+    type Okay = keyof Orig;
+>Okay : string | number | unique symbol | keyof T
+
+    let a: Okay;
+>a : string | number | unique symbol | keyof T
+
+    a = "str";
+>a = "str" : "str"
+>a : string | number | unique symbol | keyof T
+>"str" : "str"
+
+    a = sym;
+>a = sym : unique symbol
+>a : string | number | unique symbol | keyof T
+>sym : unique symbol
+
+    a = "whatever";
+>a = "whatever" : "whatever"
+>a : string | number | unique symbol | keyof T
+>"whatever" : "whatever"
+
+    // type Okay = string | number | typeof sym
+
+    type NonIndex<T extends PropertyKey> = {} extends Record<T, any> ? never : T;
+>NonIndex : {} extends Record<T, any> ? never : T
+
+    type DistributiveNonIndex<T extends PropertyKey> = T extends unknown ? NonIndex<T> : never;
+>DistributiveNonIndex : T extends unknown ? {} extends Record<T, any> ? never : T : never
+    
+    type Remapped = { [K in keyof Orig as DistributiveNonIndex<K>]: any }
+>Remapped : { [K in keyof ({ [k: string]: any; str: any; [sym]: any; } & T) as K extends unknown ? {} extends Record<K, any> ? never : K : never]: any; }
+
+    /* type Remapped = {
+        str: any;
+        [sym]: any;
+    } */
+    // no string index signature, right?
+    
+    type Oops = keyof Remapped;
+>Oops : keyof { [K in keyof ({ [k: string]: any; str: any; [sym]: any; } & T) as K extends unknown ? {} extends Record<K, any> ? never : K : never]: any; }
+
+    let x: Oops;
+>x : keyof { [K in keyof ({ [k: string]: any; str: any; [sym]: any; } & T) as K extends unknown ? {} extends Record<K, any> ? never : K : never]: any; }
+
+    x = sym;
+>x = sym : unique symbol
+>x : keyof { [K in keyof ({ [k: string]: any; str: any; [sym]: any; } & T) as K extends unknown ? {} extends Record<K, any> ? never : K : never]: any; }
+>sym : unique symbol
+
+    x = "str";
+>x = "str" : "str"
+>x : keyof { [K in keyof ({ [k: string]: any; str: any; [sym]: any; } & T) as K extends unknown ? {} extends Record<K, any> ? never : K : never]: any; }
+>"str" : "str"
+}
+
+export {};

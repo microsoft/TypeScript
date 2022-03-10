@@ -1,0 +1,1992 @@
+=== tests/cases/compiler/ramdaToolsNoInfinite2.ts ===
+declare module "Any/Kind" {
+>"Any/Kind" : Symbol("Any/Kind", Decl(ramdaToolsNoInfinite2.ts, 0, 0))
+
+    import { Extends } from "Any/Extends";
+>Extends : Symbol(Extends, Decl(ramdaToolsNoInfinite2.ts, 1, 12))
+
+    import { List } from "List/List";
+>List : Symbol(List, Decl(ramdaToolsNoInfinite2.ts, 2, 12))
+
+    export type Kind<A extends any> = Extends<A, Function> extends 1 ? 'function' : Extends<A, List> extends 1 ? 'array' : Extends<A, object> extends 1 ? 'object' : Extends<A, string> extends 1 ? 'string' : Extends<A, number> extends 1 ? 'number' : Extends<A, boolean> extends 1 ? 'boolean' : 'unknown';
+>Kind : Symbol(Kind, Decl(ramdaToolsNoInfinite2.ts, 2, 37))
+>A : Symbol(A, Decl(ramdaToolsNoInfinite2.ts, 4, 21))
+>Extends : Symbol(Extends, Decl(ramdaToolsNoInfinite2.ts, 1, 12))
+>A : Symbol(A, Decl(ramdaToolsNoInfinite2.ts, 4, 21))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Extends : Symbol(Extends, Decl(ramdaToolsNoInfinite2.ts, 1, 12))
+>A : Symbol(A, Decl(ramdaToolsNoInfinite2.ts, 4, 21))
+>List : Symbol(List, Decl(ramdaToolsNoInfinite2.ts, 2, 12))
+>Extends : Symbol(Extends, Decl(ramdaToolsNoInfinite2.ts, 1, 12))
+>A : Symbol(A, Decl(ramdaToolsNoInfinite2.ts, 4, 21))
+>Extends : Symbol(Extends, Decl(ramdaToolsNoInfinite2.ts, 1, 12))
+>A : Symbol(A, Decl(ramdaToolsNoInfinite2.ts, 4, 21))
+>Extends : Symbol(Extends, Decl(ramdaToolsNoInfinite2.ts, 1, 12))
+>A : Symbol(A, Decl(ramdaToolsNoInfinite2.ts, 4, 21))
+>Extends : Symbol(Extends, Decl(ramdaToolsNoInfinite2.ts, 1, 12))
+>A : Symbol(A, Decl(ramdaToolsNoInfinite2.ts, 4, 21))
+}
+declare module "Any/Compute" {
+>"Any/Compute" : Symbol("Any/Compute", Decl(ramdaToolsNoInfinite2.ts, 5, 1))
+
+    export type Compute<A extends any> = A extends Function ? A : {
+>Compute : Symbol(Compute, Decl(ramdaToolsNoInfinite2.ts, 6, 30))
+>A : Symbol(A, Decl(ramdaToolsNoInfinite2.ts, 7, 24))
+>A : Symbol(A, Decl(ramdaToolsNoInfinite2.ts, 7, 24))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>A : Symbol(A, Decl(ramdaToolsNoInfinite2.ts, 7, 24))
+
+        [K in keyof A]: A[K];
+>K : Symbol(K, Decl(ramdaToolsNoInfinite2.ts, 8, 9))
+>A : Symbol(A, Decl(ramdaToolsNoInfinite2.ts, 7, 24))
+>A : Symbol(A, Decl(ramdaToolsNoInfinite2.ts, 7, 24))
+>K : Symbol(K, Decl(ramdaToolsNoInfinite2.ts, 8, 9))
+
+    } & {};
+}
+declare module "Object/Pick" {
+>"Object/Pick" : Symbol("Object/Pick", Decl(ramdaToolsNoInfinite2.ts, 10, 1))
+
+    import { Key } from "Any/Key";
+>Key : Symbol(Key, Decl(ramdaToolsNoInfinite2.ts, 12, 12))
+
+    type __Pick<O extends object, K extends keyof O> = {
+>__Pick : Symbol(__Pick, Decl(ramdaToolsNoInfinite2.ts, 12, 34))
+>O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 14, 16))
+>K : Symbol(K, Decl(ramdaToolsNoInfinite2.ts, 14, 33))
+>O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 14, 16))
+
+        [P in K]: O[P];
+>P : Symbol(P, Decl(ramdaToolsNoInfinite2.ts, 15, 9))
+>K : Symbol(K, Decl(ramdaToolsNoInfinite2.ts, 14, 33))
+>O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 14, 16))
+>P : Symbol(P, Decl(ramdaToolsNoInfinite2.ts, 15, 9))
+
+    } & {};
+
+    export type _Pick<O extends object, K extends Key> = __Pick<O, keyof O & K>;
+>_Pick : Symbol(_Pick, Decl(ramdaToolsNoInfinite2.ts, 16, 11))
+>O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 18, 22))
+>K : Symbol(K, Decl(ramdaToolsNoInfinite2.ts, 18, 39))
+>Key : Symbol(Key, Decl(ramdaToolsNoInfinite2.ts, 12, 12))
+>__Pick : Symbol(__Pick, Decl(ramdaToolsNoInfinite2.ts, 12, 34))
+>O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 18, 22))
+>O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 18, 22))
+>K : Symbol(K, Decl(ramdaToolsNoInfinite2.ts, 18, 39))
+
+    export type Pick<O extends object, K extends Key> = O extends unknown ? _Pick<O, K & keyof O> : never;
+>Pick : Symbol(Pick, Decl(ramdaToolsNoInfinite2.ts, 18, 80))
+>O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 20, 21))
+>K : Symbol(K, Decl(ramdaToolsNoInfinite2.ts, 20, 38))
+>Key : Symbol(Key, Decl(ramdaToolsNoInfinite2.ts, 12, 12))
+>O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 20, 21))
+>_Pick : Symbol(_Pick, Decl(ramdaToolsNoInfinite2.ts, 16, 11))
+>O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 20, 21))
+>K : Symbol(K, Decl(ramdaToolsNoInfinite2.ts, 20, 38))
+>O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 20, 21))
+}
+declare module "Object/Keys" {
+>"Object/Keys" : Symbol("Object/Keys", Decl(ramdaToolsNoInfinite2.ts, 21, 1))
+
+    import { Keys as UKeys } from "Union/Keys";
+>Keys : Symbol(UKeys, Decl(ramdaToolsNoInfinite2.ts, 96, 34))
+>UKeys : Symbol(UKeys, Decl(ramdaToolsNoInfinite2.ts, 23, 12))
+
+    export type Keys<O extends object> = UKeys<O>;
+>Keys : Symbol(Keys, Decl(ramdaToolsNoInfinite2.ts, 23, 47))
+>O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 25, 21))
+>UKeys : Symbol(UKeys, Decl(ramdaToolsNoInfinite2.ts, 23, 12))
+>O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 25, 21))
+}
+declare module "Object/Omit" {
+>"Object/Omit" : Symbol("Object/Omit", Decl(ramdaToolsNoInfinite2.ts, 26, 1))
+
+    import { _Pick } from "Object/Pick";
+>_Pick : Symbol(_Pick, Decl(ramdaToolsNoInfinite2.ts, 28, 12))
+
+    import { Exclude } from "Union/Exclude";
+>Exclude : Symbol(Exclude, Decl(ramdaToolsNoInfinite2.ts, 29, 12))
+
+    import { Key } from "Any/Key";
+>Key : Symbol(Key, Decl(ramdaToolsNoInfinite2.ts, 30, 12))
+
+    import { Keys } from "Object/Keys";
+>Keys : Symbol(Keys, Decl(ramdaToolsNoInfinite2.ts, 31, 12))
+
+    export type _Omit<O extends object, K extends Key> = _Pick<O, Exclude<Keys<O>, K>>;
+>_Omit : Symbol(_Omit, Decl(ramdaToolsNoInfinite2.ts, 31, 39))
+>O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 32, 22))
+>K : Symbol(K, Decl(ramdaToolsNoInfinite2.ts, 32, 39))
+>Key : Symbol(Key, Decl(ramdaToolsNoInfinite2.ts, 30, 12))
+>_Pick : Symbol(_Pick, Decl(ramdaToolsNoInfinite2.ts, 28, 12))
+>O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 32, 22))
+>Exclude : Symbol(Exclude, Decl(ramdaToolsNoInfinite2.ts, 29, 12))
+>Keys : Symbol(Keys, Decl(ramdaToolsNoInfinite2.ts, 31, 12))
+>O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 32, 22))
+>K : Symbol(K, Decl(ramdaToolsNoInfinite2.ts, 32, 39))
+
+    export type Omit<O extends object, K extends Key> = O extends unknown ? _Omit<O, K> : never;
+>Omit : Symbol(Omit, Decl(ramdaToolsNoInfinite2.ts, 32, 87))
+>O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 34, 21))
+>K : Symbol(K, Decl(ramdaToolsNoInfinite2.ts, 34, 38))
+>Key : Symbol(Key, Decl(ramdaToolsNoInfinite2.ts, 30, 12))
+>O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 34, 21))
+>_Omit : Symbol(_Omit, Decl(ramdaToolsNoInfinite2.ts, 31, 39))
+>O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 34, 21))
+>K : Symbol(K, Decl(ramdaToolsNoInfinite2.ts, 34, 38))
+}
+declare module "Object/At" {
+>"Object/At" : Symbol("Object/At", Decl(ramdaToolsNoInfinite2.ts, 35, 1))
+
+    import { Key } from "Any/Key";
+>Key : Symbol(Key, Decl(ramdaToolsNoInfinite2.ts, 37, 12))
+
+    import { Boolean } from "Boolean/Boolean";
+>Boolean : Symbol(Boolean, Decl(ramdaToolsNoInfinite2.ts, 38, 12))
+
+    type AtStrict<O extends object, K extends Key> = [K & keyof O] extends [never] ? never : O[K & keyof O];
+>AtStrict : Symbol(AtStrict, Decl(ramdaToolsNoInfinite2.ts, 38, 46))
+>O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 40, 18))
+>K : Symbol(K, Decl(ramdaToolsNoInfinite2.ts, 40, 35))
+>Key : Symbol(Key, Decl(ramdaToolsNoInfinite2.ts, 37, 12))
+>K : Symbol(K, Decl(ramdaToolsNoInfinite2.ts, 40, 35))
+>O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 40, 18))
+>O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 40, 18))
+>K : Symbol(K, Decl(ramdaToolsNoInfinite2.ts, 40, 35))
+>O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 40, 18))
+
+    type AtLoose<O extends object, K extends Key> = O extends unknown ? AtStrict<O, K> : never;
+>AtLoose : Symbol(AtLoose, Decl(ramdaToolsNoInfinite2.ts, 40, 108))
+>O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 42, 17))
+>K : Symbol(K, Decl(ramdaToolsNoInfinite2.ts, 42, 34))
+>Key : Symbol(Key, Decl(ramdaToolsNoInfinite2.ts, 37, 12))
+>O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 42, 17))
+>AtStrict : Symbol(AtStrict, Decl(ramdaToolsNoInfinite2.ts, 38, 46))
+>O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 42, 17))
+>K : Symbol(K, Decl(ramdaToolsNoInfinite2.ts, 42, 34))
+
+    export type At<O extends object, K extends Key, strict extends Boolean = 1> = {
+>At : Symbol(At, Decl(ramdaToolsNoInfinite2.ts, 42, 95))
+>O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 44, 19))
+>K : Symbol(K, Decl(ramdaToolsNoInfinite2.ts, 44, 36))
+>Key : Symbol(Key, Decl(ramdaToolsNoInfinite2.ts, 37, 12))
+>strict : Symbol(strict, Decl(ramdaToolsNoInfinite2.ts, 44, 51))
+>Boolean : Symbol(Boolean, Decl(ramdaToolsNoInfinite2.ts, 38, 12))
+
+        1: AtStrict<O, K>;
+>1 : Symbol(1, Decl(ramdaToolsNoInfinite2.ts, 44, 83))
+>AtStrict : Symbol(AtStrict, Decl(ramdaToolsNoInfinite2.ts, 38, 46))
+>O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 44, 19))
+>K : Symbol(K, Decl(ramdaToolsNoInfinite2.ts, 44, 36))
+
+        0: AtLoose<O, K>;
+>0 : Symbol(0, Decl(ramdaToolsNoInfinite2.ts, 45, 26))
+>AtLoose : Symbol(AtLoose, Decl(ramdaToolsNoInfinite2.ts, 40, 108))
+>O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 44, 19))
+>K : Symbol(K, Decl(ramdaToolsNoInfinite2.ts, 44, 36))
+
+    }[strict];
+>strict : Symbol(strict, Decl(ramdaToolsNoInfinite2.ts, 44, 51))
+}
+declare module "Boolean/Boolean" {
+>"Boolean/Boolean" : Symbol("Boolean/Boolean", Decl(ramdaToolsNoInfinite2.ts, 48, 1))
+
+    export type Boolean = True | False;
+>Boolean : Symbol(Boolean, Decl(ramdaToolsNoInfinite2.ts, 49, 34))
+>True : Symbol(True, Decl(ramdaToolsNoInfinite2.ts, 50, 39))
+>False : Symbol(False, Decl(ramdaToolsNoInfinite2.ts, 52, 25))
+
+    export type True = 1;
+>True : Symbol(True, Decl(ramdaToolsNoInfinite2.ts, 50, 39))
+
+    export type False = 0;
+>False : Symbol(False, Decl(ramdaToolsNoInfinite2.ts, 52, 25))
+}
+declare module "Boolean/Not" {
+>"Boolean/Not" : Symbol("Boolean/Not", Decl(ramdaToolsNoInfinite2.ts, 55, 1))
+
+    import { Boolean } from "Boolean/Boolean";
+>Boolean : Symbol(Boolean, Decl(ramdaToolsNoInfinite2.ts, 57, 12))
+
+    export type Not<B extends Boolean> = {
+>Not : Symbol(Not, Decl(ramdaToolsNoInfinite2.ts, 57, 46))
+>B : Symbol(B, Decl(ramdaToolsNoInfinite2.ts, 59, 20))
+>Boolean : Symbol(Boolean, Decl(ramdaToolsNoInfinite2.ts, 57, 12))
+
+        0: 1;
+>0 : Symbol(0, Decl(ramdaToolsNoInfinite2.ts, 59, 42))
+
+        1: 0;
+>1 : Symbol(1, Decl(ramdaToolsNoInfinite2.ts, 60, 13))
+
+    }[B];
+>B : Symbol(B, Decl(ramdaToolsNoInfinite2.ts, 59, 20))
+}
+declare module "Union/Has" {
+>"Union/Has" : Symbol("Union/Has", Decl(ramdaToolsNoInfinite2.ts, 63, 1))
+
+    import { Union } from "Union/Union";
+>Union : Symbol(Union, Decl(ramdaToolsNoInfinite2.ts, 65, 12))
+
+    import { Not } from "Boolean/Not";
+>Not : Symbol(Not, Decl(ramdaToolsNoInfinite2.ts, 66, 12))
+
+    import { Extends } from "Any/Extends";
+>Extends : Symbol(Extends, Decl(ramdaToolsNoInfinite2.ts, 67, 12))
+
+    export type Has<U extends Union, U1 extends Union> = Not<Extends<Exclude<U1, U>, U1>>;
+>Has : Symbol(Has, Decl(ramdaToolsNoInfinite2.ts, 67, 42))
+>U : Symbol(U, Decl(ramdaToolsNoInfinite2.ts, 69, 20))
+>Union : Symbol(Union, Decl(ramdaToolsNoInfinite2.ts, 65, 12))
+>U1 : Symbol(U1, Decl(ramdaToolsNoInfinite2.ts, 69, 36))
+>Union : Symbol(Union, Decl(ramdaToolsNoInfinite2.ts, 65, 12))
+>Not : Symbol(Not, Decl(ramdaToolsNoInfinite2.ts, 66, 12))
+>Extends : Symbol(Extends, Decl(ramdaToolsNoInfinite2.ts, 67, 12))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>U1 : Symbol(U1, Decl(ramdaToolsNoInfinite2.ts, 69, 36))
+>U : Symbol(U, Decl(ramdaToolsNoInfinite2.ts, 69, 20))
+>U1 : Symbol(U1, Decl(ramdaToolsNoInfinite2.ts, 69, 36))
+}
+declare module "Union/Union" {
+>"Union/Union" : Symbol("Union/Union", Decl(ramdaToolsNoInfinite2.ts, 70, 1))
+
+    export type Union = any;
+>Union : Symbol(Union, Decl(ramdaToolsNoInfinite2.ts, 71, 30))
+}
+declare module "Union/Exclude" {
+>"Union/Exclude" : Symbol("Union/Exclude", Decl(ramdaToolsNoInfinite2.ts, 73, 1))
+
+    import { Union } from "Union/Union";
+>Union : Symbol(Union, Decl(ramdaToolsNoInfinite2.ts, 75, 12))
+
+    export type Exclude<U extends Union, M extends Union> = U extends M ? never : U;
+>Exclude : Symbol(Exclude, Decl(ramdaToolsNoInfinite2.ts, 75, 40))
+>U : Symbol(U, Decl(ramdaToolsNoInfinite2.ts, 77, 24))
+>Union : Symbol(Union, Decl(ramdaToolsNoInfinite2.ts, 75, 12))
+>M : Symbol(M, Decl(ramdaToolsNoInfinite2.ts, 77, 40))
+>Union : Symbol(Union, Decl(ramdaToolsNoInfinite2.ts, 75, 12))
+>U : Symbol(U, Decl(ramdaToolsNoInfinite2.ts, 77, 24))
+>M : Symbol(M, Decl(ramdaToolsNoInfinite2.ts, 77, 40))
+>U : Symbol(U, Decl(ramdaToolsNoInfinite2.ts, 77, 24))
+}
+declare module "Any/_Internal" {
+>"Any/_Internal" : Symbol("Any/_Internal", Decl(ramdaToolsNoInfinite2.ts, 78, 1))
+
+    import { _NumberOf } from "Number/NumberOf";
+>_NumberOf : Symbol(_NumberOf, Decl(ramdaToolsNoInfinite2.ts, 80, 12))
+
+    export type Match = 'default' | 'implements->' | '<-implements' | 'extends->' | '<-extends' | 'equals';
+>Match : Symbol(Match, Decl(ramdaToolsNoInfinite2.ts, 80, 48))
+
+    export type NumberOf<N extends any> = N extends number ? _NumberOf<N> : N;
+>NumberOf : Symbol(NumberOf, Decl(ramdaToolsNoInfinite2.ts, 82, 107))
+>N : Symbol(N, Decl(ramdaToolsNoInfinite2.ts, 84, 25))
+>N : Symbol(N, Decl(ramdaToolsNoInfinite2.ts, 84, 25))
+>_NumberOf : Symbol(_NumberOf, Decl(ramdaToolsNoInfinite2.ts, 80, 12))
+>N : Symbol(N, Decl(ramdaToolsNoInfinite2.ts, 84, 25))
+>N : Symbol(N, Decl(ramdaToolsNoInfinite2.ts, 84, 25))
+}
+declare module "Any/Implements" {
+>"Any/Implements" : Symbol("Any/Implements", Decl(ramdaToolsNoInfinite2.ts, 85, 1))
+
+    import { Extends } from "Any/Extends";
+>Extends : Symbol(Extends, Decl(ramdaToolsNoInfinite2.ts, 87, 12))
+
+    export type Implements<A1 extends any, A2 extends any> = Extends<A1, A2> extends 1 ? 1 : 0;
+>Implements : Symbol(Implements, Decl(ramdaToolsNoInfinite2.ts, 87, 42))
+>A1 : Symbol(A1, Decl(ramdaToolsNoInfinite2.ts, 89, 27))
+>A2 : Symbol(A2, Decl(ramdaToolsNoInfinite2.ts, 89, 42))
+>Extends : Symbol(Extends, Decl(ramdaToolsNoInfinite2.ts, 87, 12))
+>A1 : Symbol(A1, Decl(ramdaToolsNoInfinite2.ts, 89, 27))
+>A2 : Symbol(A2, Decl(ramdaToolsNoInfinite2.ts, 89, 42))
+}
+declare module "Any/Key" {
+>"Any/Key" : Symbol("Any/Key", Decl(ramdaToolsNoInfinite2.ts, 90, 1))
+
+    export type Key = string | number | symbol;
+>Key : Symbol(Key, Decl(ramdaToolsNoInfinite2.ts, 91, 26))
+}
+declare module "Union/Keys" {
+>"Union/Keys" : Symbol("Union/Keys", Decl(ramdaToolsNoInfinite2.ts, 93, 1))
+
+    import { Union } from "Union/Union";
+>Union : Symbol(Union, Decl(ramdaToolsNoInfinite2.ts, 95, 12))
+
+    import { Key } from "Any/Key";
+>Key : Symbol(Key, Decl(ramdaToolsNoInfinite2.ts, 96, 12))
+
+    export type Keys<U extends Union> = (U extends unknown ? keyof U : never) & Key;
+>Keys : Symbol(Keys, Decl(ramdaToolsNoInfinite2.ts, 96, 34))
+>U : Symbol(U, Decl(ramdaToolsNoInfinite2.ts, 98, 21))
+>Union : Symbol(Union, Decl(ramdaToolsNoInfinite2.ts, 95, 12))
+>U : Symbol(U, Decl(ramdaToolsNoInfinite2.ts, 98, 21))
+>U : Symbol(U, Decl(ramdaToolsNoInfinite2.ts, 98, 21))
+>Key : Symbol(Key, Decl(ramdaToolsNoInfinite2.ts, 96, 12))
+}
+declare module "List/ObjectOf" {
+>"List/ObjectOf" : Symbol("List/ObjectOf", Decl(ramdaToolsNoInfinite2.ts, 99, 1))
+
+    import { _Omit } from "Object/Omit";
+>_Omit : Symbol(_Omit, Decl(ramdaToolsNoInfinite2.ts, 101, 12))
+
+    import { Has } from "Union/Has";
+>Has : Symbol(Has, Decl(ramdaToolsNoInfinite2.ts, 102, 12))
+
+    import { At } from "Object/At";
+>At : Symbol(At, Decl(ramdaToolsNoInfinite2.ts, 103, 12))
+
+    import { List } from "List/List";
+>List : Symbol(List, Decl(ramdaToolsNoInfinite2.ts, 104, 12))
+
+    export type _ObjectOf<L extends object> = Has<keyof L, keyof List> extends 1 ? number extends At<L, 'length'> ? _Omit<L, Exclude<keyof any[], number>> : _Omit<L, keyof any[]> : L;
+>_ObjectOf : Symbol(_ObjectOf, Decl(ramdaToolsNoInfinite2.ts, 104, 37))
+>L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 106, 26))
+>Has : Symbol(Has, Decl(ramdaToolsNoInfinite2.ts, 102, 12))
+>L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 106, 26))
+>List : Symbol(List, Decl(ramdaToolsNoInfinite2.ts, 104, 12))
+>At : Symbol(At, Decl(ramdaToolsNoInfinite2.ts, 103, 12))
+>L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 106, 26))
+>_Omit : Symbol(_Omit, Decl(ramdaToolsNoInfinite2.ts, 101, 12))
+>L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 106, 26))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>_Omit : Symbol(_Omit, Decl(ramdaToolsNoInfinite2.ts, 101, 12))
+>L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 106, 26))
+>L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 106, 26))
+
+    export type ObjectOf<L extends object> = L extends unknown ? _ObjectOf<L> : never;
+>ObjectOf : Symbol(ObjectOf, Decl(ramdaToolsNoInfinite2.ts, 106, 183))
+>L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 108, 25))
+>L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 108, 25))
+>_ObjectOf : Symbol(_ObjectOf, Decl(ramdaToolsNoInfinite2.ts, 104, 37))
+>L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 108, 25))
+}
+declare module "List/Keys" {
+>"List/Keys" : Symbol("List/Keys", Decl(ramdaToolsNoInfinite2.ts, 109, 1))
+
+    import { Exclude } from "Union/Exclude";
+>Exclude : Symbol(Exclude, Decl(ramdaToolsNoInfinite2.ts, 111, 12))
+
+    import { List } from "List/List";
+>List : Symbol(List, Decl(ramdaToolsNoInfinite2.ts, 112, 12))
+
+    import { Keys as UKeys } from "Union/Keys";
+>Keys : Symbol(UKeys, Decl(ramdaToolsNoInfinite2.ts, 96, 34))
+>UKeys : Symbol(UKeys, Decl(ramdaToolsNoInfinite2.ts, 113, 12))
+
+    export type Keys<L extends List> = Exclude<UKeys<L>, keyof any[]> | number;
+>Keys : Symbol(Keys, Decl(ramdaToolsNoInfinite2.ts, 113, 47))
+>L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 115, 21))
+>List : Symbol(List, Decl(ramdaToolsNoInfinite2.ts, 112, 12))
+>Exclude : Symbol(Exclude, Decl(ramdaToolsNoInfinite2.ts, 111, 12))
+>UKeys : Symbol(UKeys, Decl(ramdaToolsNoInfinite2.ts, 113, 12))
+>L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 115, 21))
+}
+declare module "Object/Merge" {
+>"Object/Merge" : Symbol("Object/Merge", Decl(ramdaToolsNoInfinite2.ts, 116, 1))
+
+    import { _Omit } from "Object/Omit";
+>_Omit : Symbol(_Omit, Decl(ramdaToolsNoInfinite2.ts, 118, 12))
+
+    import { At } from "Object/At";
+>At : Symbol(At, Decl(ramdaToolsNoInfinite2.ts, 119, 12))
+
+    import { Compute } from "Any/Compute";
+>Compute : Symbol(Compute, Decl(ramdaToolsNoInfinite2.ts, 120, 12))
+
+    import { Depth } from "Object/_Internal";
+>Depth : Symbol(Depth, Decl(ramdaToolsNoInfinite2.ts, 121, 12))
+
+    import { Kind } from "Any/Kind";
+>Kind : Symbol(Kind, Decl(ramdaToolsNoInfinite2.ts, 122, 12))
+
+    export type MergeFlat<O extends object, O1 extends object> = Compute<O & _Omit<O1, keyof O>>;
+>MergeFlat : Symbol(MergeFlat, Decl(ramdaToolsNoInfinite2.ts, 122, 36))
+>O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 124, 26))
+>O1 : Symbol(O1, Decl(ramdaToolsNoInfinite2.ts, 124, 43))
+>Compute : Symbol(Compute, Decl(ramdaToolsNoInfinite2.ts, 120, 12))
+>O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 124, 26))
+>_Omit : Symbol(_Omit, Decl(ramdaToolsNoInfinite2.ts, 118, 12))
+>O1 : Symbol(O1, Decl(ramdaToolsNoInfinite2.ts, 124, 43))
+>O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 124, 26))
+
+    export type MergeDeep<O, O1> = (Kind<(O | O1)> extends 'object' ? MergeFlat<O & {}, O1 & {}> extends infer M ? {
+>MergeDeep : Symbol(MergeDeep, Decl(ramdaToolsNoInfinite2.ts, 124, 97))
+>O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 126, 26))
+>O1 : Symbol(O1, Decl(ramdaToolsNoInfinite2.ts, 126, 28))
+>Kind : Symbol(Kind, Decl(ramdaToolsNoInfinite2.ts, 122, 12))
+>O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 126, 26))
+>O1 : Symbol(O1, Decl(ramdaToolsNoInfinite2.ts, 126, 28))
+>MergeFlat : Symbol(MergeFlat, Decl(ramdaToolsNoInfinite2.ts, 122, 36))
+>O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 126, 26))
+>O1 : Symbol(O1, Decl(ramdaToolsNoInfinite2.ts, 126, 28))
+>M : Symbol(M, Decl(ramdaToolsNoInfinite2.ts, 126, 110))
+
+        [K in keyof M]: MergeDeep<M[K], At<O1 & {}, K>>;
+>K : Symbol(K, Decl(ramdaToolsNoInfinite2.ts, 127, 9))
+>M : Symbol(M, Decl(ramdaToolsNoInfinite2.ts, 126, 110))
+>MergeDeep : Symbol(MergeDeep, Decl(ramdaToolsNoInfinite2.ts, 124, 97))
+>M : Symbol(M, Decl(ramdaToolsNoInfinite2.ts, 126, 110))
+>K : Symbol(K, Decl(ramdaToolsNoInfinite2.ts, 127, 9))
+>At : Symbol(At, Decl(ramdaToolsNoInfinite2.ts, 119, 12))
+>O1 : Symbol(O1, Decl(ramdaToolsNoInfinite2.ts, 126, 28))
+>K : Symbol(K, Decl(ramdaToolsNoInfinite2.ts, 127, 9))
+
+    } & {} : never : O);
+>O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 126, 26))
+
+    export type Merge<O extends object, O1 extends object, depth extends Depth = 'flat'> = {
+>Merge : Symbol(Merge, Decl(ramdaToolsNoInfinite2.ts, 128, 24))
+>O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 130, 22))
+>O1 : Symbol(O1, Decl(ramdaToolsNoInfinite2.ts, 130, 39))
+>depth : Symbol(depth, Decl(ramdaToolsNoInfinite2.ts, 130, 58))
+>Depth : Symbol(Depth, Decl(ramdaToolsNoInfinite2.ts, 121, 12))
+
+        'flat': MergeFlat<O, O1>;
+>'flat' : Symbol('flat', Decl(ramdaToolsNoInfinite2.ts, 130, 92))
+>MergeFlat : Symbol(MergeFlat, Decl(ramdaToolsNoInfinite2.ts, 122, 36))
+>O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 130, 22))
+>O1 : Symbol(O1, Decl(ramdaToolsNoInfinite2.ts, 130, 39))
+
+        'deep': MergeDeep<O, O1>;
+>'deep' : Symbol('deep', Decl(ramdaToolsNoInfinite2.ts, 131, 33))
+>MergeDeep : Symbol(MergeDeep, Decl(ramdaToolsNoInfinite2.ts, 124, 97))
+>O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 130, 22))
+>O1 : Symbol(O1, Decl(ramdaToolsNoInfinite2.ts, 130, 39))
+
+    }[depth];
+>depth : Symbol(depth, Decl(ramdaToolsNoInfinite2.ts, 130, 58))
+}
+declare module "Union/NonNullable" {
+>"Union/NonNullable" : Symbol("Union/NonNullable", Decl(ramdaToolsNoInfinite2.ts, 134, 1))
+
+    import { Exclude } from "Union/Exclude";
+>Exclude : Symbol(Exclude, Decl(ramdaToolsNoInfinite2.ts, 136, 12))
+
+    import { Union } from "Union/Union";
+>Union : Symbol(Union, Decl(ramdaToolsNoInfinite2.ts, 137, 12))
+
+    export type NonNullable<U extends Union> = Exclude<U, undefined | null>;
+>NonNullable : Symbol(NonNullable, Decl(ramdaToolsNoInfinite2.ts, 137, 40))
+>U : Symbol(U, Decl(ramdaToolsNoInfinite2.ts, 139, 28))
+>Union : Symbol(Union, Decl(ramdaToolsNoInfinite2.ts, 137, 12))
+>Exclude : Symbol(Exclude, Decl(ramdaToolsNoInfinite2.ts, 136, 12))
+>U : Symbol(U, Decl(ramdaToolsNoInfinite2.ts, 139, 28))
+}
+declare module "Object/ListOf" {
+>"Object/ListOf" : Symbol("Object/ListOf", Decl(ramdaToolsNoInfinite2.ts, 140, 1))
+
+    import { IterationOf } from "Iteration/IterationOf";
+>IterationOf : Symbol(IterationOf, Decl(ramdaToolsNoInfinite2.ts, 142, 12))
+
+    import { Iteration } from "Iteration/Iteration";
+>Iteration : Symbol(Iteration, Decl(ramdaToolsNoInfinite2.ts, 143, 12))
+
+    import { Cast } from "Any/Cast";
+>Cast : Symbol(Cast, Decl(ramdaToolsNoInfinite2.ts, 144, 12))
+
+    import { Key } from "Iteration/Key";
+>Key : Symbol(Key, Decl(ramdaToolsNoInfinite2.ts, 145, 12))
+
+    import { Next } from "Iteration/Next";
+>Next : Symbol(Next, Decl(ramdaToolsNoInfinite2.ts, 146, 12))
+
+    import { _Append } from "List/Append";
+>_Append : Symbol(_Append, Decl(ramdaToolsNoInfinite2.ts, 147, 12))
+
+    import { Exclude } from "Union/Exclude";
+>Exclude : Symbol(Exclude, Decl(ramdaToolsNoInfinite2.ts, 148, 12))
+
+    import { List } from "List/List";
+>List : Symbol(List, Decl(ramdaToolsNoInfinite2.ts, 149, 12))
+
+    import { Extends } from "Any/Extends";
+>Extends : Symbol(Extends, Decl(ramdaToolsNoInfinite2.ts, 150, 12))
+
+    type PickIfEntry<O extends object, LN extends List, I extends Iteration> = Key<I> extends keyof O ? _Append<LN, O[Cast<Key<I>, keyof O>]> : LN;
+>PickIfEntry : Symbol(PickIfEntry, Decl(ramdaToolsNoInfinite2.ts, 150, 42))
+>O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 152, 21))
+>LN : Symbol(LN, Decl(ramdaToolsNoInfinite2.ts, 152, 38))
+>List : Symbol(List, Decl(ramdaToolsNoInfinite2.ts, 149, 12))
+>I : Symbol(I, Decl(ramdaToolsNoInfinite2.ts, 152, 55))
+>Iteration : Symbol(Iteration, Decl(ramdaToolsNoInfinite2.ts, 143, 12))
+>Key : Symbol(Key, Decl(ramdaToolsNoInfinite2.ts, 145, 12))
+>I : Symbol(I, Decl(ramdaToolsNoInfinite2.ts, 152, 55))
+>O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 152, 21))
+>_Append : Symbol(_Append, Decl(ramdaToolsNoInfinite2.ts, 147, 12))
+>LN : Symbol(LN, Decl(ramdaToolsNoInfinite2.ts, 152, 38))
+>O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 152, 21))
+>Cast : Symbol(Cast, Decl(ramdaToolsNoInfinite2.ts, 144, 12))
+>Key : Symbol(Key, Decl(ramdaToolsNoInfinite2.ts, 145, 12))
+>I : Symbol(I, Decl(ramdaToolsNoInfinite2.ts, 152, 55))
+>O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 152, 21))
+>LN : Symbol(LN, Decl(ramdaToolsNoInfinite2.ts, 152, 38))
+
+    type __ListOf<O extends object, K, LN extends List = [], I extends Iteration = IterationOf<'0'>> = {
+>__ListOf : Symbol(__ListOf, Decl(ramdaToolsNoInfinite2.ts, 152, 147))
+>O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 154, 18))
+>K : Symbol(K, Decl(ramdaToolsNoInfinite2.ts, 154, 35))
+>LN : Symbol(LN, Decl(ramdaToolsNoInfinite2.ts, 154, 38))
+>List : Symbol(List, Decl(ramdaToolsNoInfinite2.ts, 149, 12))
+>I : Symbol(I, Decl(ramdaToolsNoInfinite2.ts, 154, 60))
+>Iteration : Symbol(Iteration, Decl(ramdaToolsNoInfinite2.ts, 143, 12))
+>IterationOf : Symbol(IterationOf, Decl(ramdaToolsNoInfinite2.ts, 142, 12))
+
+        0: __ListOf<O, Exclude<K, Key<I>>, PickIfEntry<O, LN, I>, Next<I>>;
+>0 : Symbol(0, Decl(ramdaToolsNoInfinite2.ts, 154, 104))
+>__ListOf : Symbol(__ListOf, Decl(ramdaToolsNoInfinite2.ts, 152, 147))
+>O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 154, 18))
+>Exclude : Symbol(Exclude, Decl(ramdaToolsNoInfinite2.ts, 148, 12))
+>K : Symbol(K, Decl(ramdaToolsNoInfinite2.ts, 154, 35))
+>Key : Symbol(Key, Decl(ramdaToolsNoInfinite2.ts, 145, 12))
+>I : Symbol(I, Decl(ramdaToolsNoInfinite2.ts, 154, 60))
+>PickIfEntry : Symbol(PickIfEntry, Decl(ramdaToolsNoInfinite2.ts, 150, 42))
+>O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 154, 18))
+>LN : Symbol(LN, Decl(ramdaToolsNoInfinite2.ts, 154, 38))
+>I : Symbol(I, Decl(ramdaToolsNoInfinite2.ts, 154, 60))
+>Next : Symbol(Next, Decl(ramdaToolsNoInfinite2.ts, 146, 12))
+>I : Symbol(I, Decl(ramdaToolsNoInfinite2.ts, 154, 60))
+
+        1: LN;
+>1 : Symbol(1, Decl(ramdaToolsNoInfinite2.ts, 155, 75))
+>LN : Symbol(LN, Decl(ramdaToolsNoInfinite2.ts, 154, 38))
+
+    }[Extends<[K], [never]>];
+>Extends : Symbol(Extends, Decl(ramdaToolsNoInfinite2.ts, 150, 12))
+>K : Symbol(K, Decl(ramdaToolsNoInfinite2.ts, 154, 35))
+
+    export type _ListOf<O extends object> = __ListOf<O, keyof O> extends infer X ? Cast<X, List> : never;
+>_ListOf : Symbol(_ListOf, Decl(ramdaToolsNoInfinite2.ts, 157, 29))
+>O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 159, 24))
+>__ListOf : Symbol(__ListOf, Decl(ramdaToolsNoInfinite2.ts, 152, 147))
+>O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 159, 24))
+>O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 159, 24))
+>X : Symbol(X, Decl(ramdaToolsNoInfinite2.ts, 159, 78))
+>Cast : Symbol(Cast, Decl(ramdaToolsNoInfinite2.ts, 144, 12))
+>X : Symbol(X, Decl(ramdaToolsNoInfinite2.ts, 159, 78))
+>List : Symbol(List, Decl(ramdaToolsNoInfinite2.ts, 149, 12))
+
+    export type ListOf<O extends object> = O extends unknown ? _ListOf<O> : never;
+>ListOf : Symbol(ListOf, Decl(ramdaToolsNoInfinite2.ts, 159, 105))
+>O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 161, 23))
+>O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 161, 23))
+>_ListOf : Symbol(_ListOf, Decl(ramdaToolsNoInfinite2.ts, 157, 29))
+>O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 161, 23))
+}
+declare module "Object/NonNullable" {
+>"Object/NonNullable" : Symbol("Object/NonNullable", Decl(ramdaToolsNoInfinite2.ts, 162, 1))
+
+    import { MergeFlat } from "Object/Merge";
+>MergeFlat : Symbol(MergeFlat, Decl(ramdaToolsNoInfinite2.ts, 164, 12))
+
+    import { NonNullable as UNonNullable } from "Union/NonNullable";
+>NonNullable : Symbol(UNonNullable, Decl(ramdaToolsNoInfinite2.ts, 137, 40))
+>UNonNullable : Symbol(UNonNullable, Decl(ramdaToolsNoInfinite2.ts, 165, 12))
+
+    import { Depth } from "Object/_Internal";
+>Depth : Symbol(Depth, Decl(ramdaToolsNoInfinite2.ts, 166, 12))
+
+    import { Pick } from "Object/Pick";
+>Pick : Symbol(Pick, Decl(ramdaToolsNoInfinite2.ts, 167, 12))
+
+    import { Key } from "Any/Key";
+>Key : Symbol(Key, Decl(ramdaToolsNoInfinite2.ts, 168, 12))
+
+    import { Implements } from "Any/Implements";
+>Implements : Symbol(Implements, Decl(ramdaToolsNoInfinite2.ts, 169, 12))
+
+    import { Keys } from "Object/Keys";
+>Keys : Symbol(Keys, Decl(ramdaToolsNoInfinite2.ts, 170, 12))
+
+    export type NonNullableFlat<O> = {
+>NonNullableFlat : Symbol(NonNullableFlat, Decl(ramdaToolsNoInfinite2.ts, 170, 39))
+>O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 172, 32))
+
+        [K in keyof O]: UNonNullable<O[K]>;
+>K : Symbol(K, Decl(ramdaToolsNoInfinite2.ts, 173, 9))
+>O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 172, 32))
+>UNonNullable : Symbol(UNonNullable, Decl(ramdaToolsNoInfinite2.ts, 165, 12))
+>O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 172, 32))
+>K : Symbol(K, Decl(ramdaToolsNoInfinite2.ts, 173, 9))
+
+    } & {};
+
+    export type NonNullableDeep<O> = {
+>NonNullableDeep : Symbol(NonNullableDeep, Decl(ramdaToolsNoInfinite2.ts, 174, 11))
+>O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 176, 32))
+
+        [K in keyof O]: NonNullableDeep<UNonNullable<O[K]>>;
+>K : Symbol(K, Decl(ramdaToolsNoInfinite2.ts, 177, 9))
+>O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 176, 32))
+>NonNullableDeep : Symbol(NonNullableDeep, Decl(ramdaToolsNoInfinite2.ts, 174, 11))
+>UNonNullable : Symbol(UNonNullable, Decl(ramdaToolsNoInfinite2.ts, 165, 12))
+>O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 176, 32))
+>K : Symbol(K, Decl(ramdaToolsNoInfinite2.ts, 177, 9))
+
+    };
+
+    type NonNullablePart<O extends object, depth extends Depth> = {
+>NonNullablePart : Symbol(NonNullablePart, Decl(ramdaToolsNoInfinite2.ts, 178, 6))
+>O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 180, 25))
+>depth : Symbol(depth, Decl(ramdaToolsNoInfinite2.ts, 180, 42))
+>Depth : Symbol(Depth, Decl(ramdaToolsNoInfinite2.ts, 166, 12))
+
+        'flat': NonNullableFlat<O>;
+>'flat' : Symbol('flat', Decl(ramdaToolsNoInfinite2.ts, 180, 67))
+>NonNullableFlat : Symbol(NonNullableFlat, Decl(ramdaToolsNoInfinite2.ts, 170, 39))
+>O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 180, 25))
+
+        'deep': NonNullableDeep<O>;
+>'deep' : Symbol('deep', Decl(ramdaToolsNoInfinite2.ts, 181, 35))
+>NonNullableDeep : Symbol(NonNullableDeep, Decl(ramdaToolsNoInfinite2.ts, 174, 11))
+>O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 180, 25))
+
+    }[depth];
+>depth : Symbol(depth, Decl(ramdaToolsNoInfinite2.ts, 180, 42))
+
+    export type NonNullable<O extends object, K extends Key = Key, depth extends Depth = 'flat'> = {
+>NonNullable : Symbol(NonNullable, Decl(ramdaToolsNoInfinite2.ts, 183, 13))
+>O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 185, 28))
+>K : Symbol(K, Decl(ramdaToolsNoInfinite2.ts, 185, 45))
+>Key : Symbol(Key, Decl(ramdaToolsNoInfinite2.ts, 168, 12))
+>Key : Symbol(Key, Decl(ramdaToolsNoInfinite2.ts, 168, 12))
+>depth : Symbol(depth, Decl(ramdaToolsNoInfinite2.ts, 185, 66))
+>Depth : Symbol(Depth, Decl(ramdaToolsNoInfinite2.ts, 166, 12))
+
+        1: NonNullablePart<O, depth>;
+>1 : Symbol(1, Decl(ramdaToolsNoInfinite2.ts, 185, 100))
+>NonNullablePart : Symbol(NonNullablePart, Decl(ramdaToolsNoInfinite2.ts, 178, 6))
+>O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 185, 28))
+>depth : Symbol(depth, Decl(ramdaToolsNoInfinite2.ts, 185, 66))
+
+        0: MergeFlat<NonNullablePart<Pick<O, K>, depth>, O>;
+>0 : Symbol(0, Decl(ramdaToolsNoInfinite2.ts, 186, 37))
+>MergeFlat : Symbol(MergeFlat, Decl(ramdaToolsNoInfinite2.ts, 164, 12))
+>NonNullablePart : Symbol(NonNullablePart, Decl(ramdaToolsNoInfinite2.ts, 178, 6))
+>Pick : Symbol(Pick, Decl(ramdaToolsNoInfinite2.ts, 167, 12))
+>O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 185, 28))
+>K : Symbol(K, Decl(ramdaToolsNoInfinite2.ts, 185, 45))
+>depth : Symbol(depth, Decl(ramdaToolsNoInfinite2.ts, 185, 66))
+>O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 185, 28))
+
+    }[Implements<Keys<O>, K>] & {};
+>Implements : Symbol(Implements, Decl(ramdaToolsNoInfinite2.ts, 169, 12))
+>Keys : Symbol(Keys, Decl(ramdaToolsNoInfinite2.ts, 170, 12))
+>O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 185, 28))
+>K : Symbol(K, Decl(ramdaToolsNoInfinite2.ts, 185, 45))
+}
+declare module "Object/Overwrite" {
+>"Object/Overwrite" : Symbol("Object/Overwrite", Decl(ramdaToolsNoInfinite2.ts, 189, 1))
+
+    export type Overwrite<O extends object, O1 extends object> = {
+>Overwrite : Symbol(Overwrite, Decl(ramdaToolsNoInfinite2.ts, 190, 35))
+>O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 191, 26))
+>O1 : Symbol(O1, Decl(ramdaToolsNoInfinite2.ts, 191, 43))
+
+        [K in keyof O]: K extends keyof O1 ? O1[K] : O[K];
+>K : Symbol(K, Decl(ramdaToolsNoInfinite2.ts, 192, 9))
+>O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 191, 26))
+>K : Symbol(K, Decl(ramdaToolsNoInfinite2.ts, 192, 9))
+>O1 : Symbol(O1, Decl(ramdaToolsNoInfinite2.ts, 191, 43))
+>O1 : Symbol(O1, Decl(ramdaToolsNoInfinite2.ts, 191, 43))
+>K : Symbol(K, Decl(ramdaToolsNoInfinite2.ts, 192, 9))
+>O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 191, 26))
+>K : Symbol(K, Decl(ramdaToolsNoInfinite2.ts, 192, 9))
+
+    } & {};
+}
+declare module "Number/_Internal" {
+>"Number/_Internal" : Symbol("Number/_Internal", Decl(ramdaToolsNoInfinite2.ts, 194, 1))
+
+    import { IterationMap } from "Iteration/IterationOf";
+>IterationMap : Symbol(IterationMap, Decl(ramdaToolsNoInfinite2.ts, 196, 12))
+
+    import { Format } from "Iteration/Format";
+>Format : Symbol(Format, Decl(ramdaToolsNoInfinite2.ts, 197, 12))
+
+    export type Formats = 'b' | 'n' | 's';
+>Formats : Symbol(Formats, Decl(ramdaToolsNoInfinite2.ts, 197, 46))
+
+    type KnownIterationMapKeys = '-40' | '-39' | '-38' | '-37' | '-36' | '-35' | '-34' | '-33' | '-32' | '-31' | '-30' | '-29' | '-28' | '-27' | '-26' | '-25' | '-24' | '-23' | '-22' | '-21' | '-20' | '-19' | '-18' | '-17' | '-16' | '-15' | '-14' | '-13' | '-12' | '-11' | '-10' | '-9' | '-8' | '-7' | '-6' | '-5' | '-4' | '-3' | '-2' | '-1' | '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10' | '11' | '12' | '13' | '14' | '15' | '16' | '17' | '18' | '19' | '20' | '21' | '22' | '23' | '24' | '25' | '26' | '27' | '28' | '29' | '30' | '31' | '32' | '33' | '34' | '35' | '36' | '37' | '38' | '39' | '40';
+>KnownIterationMapKeys : Symbol(KnownIterationMapKeys, Decl(ramdaToolsNoInfinite2.ts, 199, 42))
+
+    type PositiveIterationKeys = '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10' | '11' | '12' | '13' | '14' | '15' | '16' | '17' | '18' | '19' | '20' | '21' | '22' | '23' | '24' | '25' | '26' | '27' | '28' | '29' | '30' | '31' | '32' | '33' | '34' | '35' | '36' | '37' | '38' | '39' | '40';
+>PositiveIterationKeys : Symbol(PositiveIterationKeys, Decl(ramdaToolsNoInfinite2.ts, 201, 619))
+
+    type NegativeIterationKeys = '-40' | '-39' | '-38' | '-37' | '-36' | '-35' | '-34' | '-33' | '-32' | '-31' | '-30' | '-29' | '-28' | '-27' | '-26' | '-25' | '-24' | '-23' | '-22' | '-21' | '-20' | '-19' | '-18' | '-17' | '-16' | '-15' | '-14' | '-13' | '-12' | '-11' | '-10' | '-9' | '-8' | '-7' | '-6' | '-5' | '-4' | '-3' | '-2' | '-1';
+>NegativeIterationKeys : Symbol(NegativeIterationKeys, Decl(ramdaToolsNoInfinite2.ts, 203, 302))
+
+    export type Numbers = {
+>Numbers : Symbol(Numbers, Decl(ramdaToolsNoInfinite2.ts, 205, 342))
+
+        'string': {
+>'string' : Symbol('string', Decl(ramdaToolsNoInfinite2.ts, 207, 27))
+
+            'all': Format<IterationMap[KnownIterationMapKeys], 's'>;
+>'all' : Symbol('all', Decl(ramdaToolsNoInfinite2.ts, 208, 19))
+>Format : Symbol(Format, Decl(ramdaToolsNoInfinite2.ts, 197, 12))
+>IterationMap : Symbol(IterationMap, Decl(ramdaToolsNoInfinite2.ts, 196, 12))
+>KnownIterationMapKeys : Symbol(KnownIterationMapKeys, Decl(ramdaToolsNoInfinite2.ts, 199, 42))
+
+            '+': Format<IterationMap[PositiveIterationKeys], 's'>;
+>'+' : Symbol('+', Decl(ramdaToolsNoInfinite2.ts, 209, 68))
+>Format : Symbol(Format, Decl(ramdaToolsNoInfinite2.ts, 197, 12))
+>IterationMap : Symbol(IterationMap, Decl(ramdaToolsNoInfinite2.ts, 196, 12))
+>PositiveIterationKeys : Symbol(PositiveIterationKeys, Decl(ramdaToolsNoInfinite2.ts, 201, 619))
+
+            '-': Format<IterationMap[NegativeIterationKeys], 's'>;
+>'-' : Symbol('-', Decl(ramdaToolsNoInfinite2.ts, 210, 66))
+>Format : Symbol(Format, Decl(ramdaToolsNoInfinite2.ts, 197, 12))
+>IterationMap : Symbol(IterationMap, Decl(ramdaToolsNoInfinite2.ts, 196, 12))
+>NegativeIterationKeys : Symbol(NegativeIterationKeys, Decl(ramdaToolsNoInfinite2.ts, 203, 302))
+
+            '0': Format<IterationMap['0'], 's'>;
+>'0' : Symbol('0', Decl(ramdaToolsNoInfinite2.ts, 211, 66))
+>Format : Symbol(Format, Decl(ramdaToolsNoInfinite2.ts, 197, 12))
+>IterationMap : Symbol(IterationMap, Decl(ramdaToolsNoInfinite2.ts, 196, 12))
+
+        };
+        'number': {
+>'number' : Symbol('number', Decl(ramdaToolsNoInfinite2.ts, 213, 10))
+
+            'all': Format<IterationMap[KnownIterationMapKeys], 'n'>;
+>'all' : Symbol('all', Decl(ramdaToolsNoInfinite2.ts, 214, 19))
+>Format : Symbol(Format, Decl(ramdaToolsNoInfinite2.ts, 197, 12))
+>IterationMap : Symbol(IterationMap, Decl(ramdaToolsNoInfinite2.ts, 196, 12))
+>KnownIterationMapKeys : Symbol(KnownIterationMapKeys, Decl(ramdaToolsNoInfinite2.ts, 199, 42))
+
+            '+': Format<IterationMap[PositiveIterationKeys], 'n'>;
+>'+' : Symbol('+', Decl(ramdaToolsNoInfinite2.ts, 215, 68))
+>Format : Symbol(Format, Decl(ramdaToolsNoInfinite2.ts, 197, 12))
+>IterationMap : Symbol(IterationMap, Decl(ramdaToolsNoInfinite2.ts, 196, 12))
+>PositiveIterationKeys : Symbol(PositiveIterationKeys, Decl(ramdaToolsNoInfinite2.ts, 201, 619))
+
+            '-': Format<IterationMap[NegativeIterationKeys], 'n'>;
+>'-' : Symbol('-', Decl(ramdaToolsNoInfinite2.ts, 216, 66))
+>Format : Symbol(Format, Decl(ramdaToolsNoInfinite2.ts, 197, 12))
+>IterationMap : Symbol(IterationMap, Decl(ramdaToolsNoInfinite2.ts, 196, 12))
+>NegativeIterationKeys : Symbol(NegativeIterationKeys, Decl(ramdaToolsNoInfinite2.ts, 203, 302))
+
+            '0': Format<IterationMap['0'], 'n'>;
+>'0' : Symbol('0', Decl(ramdaToolsNoInfinite2.ts, 217, 66))
+>Format : Symbol(Format, Decl(ramdaToolsNoInfinite2.ts, 197, 12))
+>IterationMap : Symbol(IterationMap, Decl(ramdaToolsNoInfinite2.ts, 196, 12))
+
+        };
+    };
+}
+declare module "Number/Number" {
+>"Number/Number" : Symbol("Number/Number", Decl(ramdaToolsNoInfinite2.ts, 221, 1))
+
+    export type Number = string;
+>Number : Symbol(Number, Decl(ramdaToolsNoInfinite2.ts, 222, 32))
+}
+declare module "Iteration/_Internal" {
+>"Iteration/_Internal" : Symbol("Iteration/_Internal", Decl(ramdaToolsNoInfinite2.ts, 224, 1))
+
+    export type Formats = 'n' | 's';
+>Formats : Symbol(Formats, Decl(ramdaToolsNoInfinite2.ts, 225, 38))
+
+    export type Way = '->' | '<-';
+>Way : Symbol(Way, Decl(ramdaToolsNoInfinite2.ts, 226, 36))
+}
+declare module "List/Prepend" {
+>"List/Prepend" : Symbol("List/Prepend", Decl(ramdaToolsNoInfinite2.ts, 228, 1))
+
+    import { List } from "List/List";
+>List : Symbol(List, Decl(ramdaToolsNoInfinite2.ts, 230, 12))
+
+    export type Prepend<L extends List, A extends any> = ((head: A, ...args: L) => any) extends ((...args: infer U) => any) ? U : L;
+>Prepend : Symbol(Prepend, Decl(ramdaToolsNoInfinite2.ts, 230, 37))
+>L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 232, 24))
+>List : Symbol(List, Decl(ramdaToolsNoInfinite2.ts, 230, 12))
+>A : Symbol(A, Decl(ramdaToolsNoInfinite2.ts, 232, 39))
+>head : Symbol(head, Decl(ramdaToolsNoInfinite2.ts, 232, 59))
+>A : Symbol(A, Decl(ramdaToolsNoInfinite2.ts, 232, 39))
+>args : Symbol(args, Decl(ramdaToolsNoInfinite2.ts, 232, 67))
+>L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 232, 24))
+>args : Symbol(args, Decl(ramdaToolsNoInfinite2.ts, 232, 98))
+>U : Symbol(U, Decl(ramdaToolsNoInfinite2.ts, 232, 112))
+>U : Symbol(U, Decl(ramdaToolsNoInfinite2.ts, 232, 112))
+>L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 232, 24))
+}
+declare module "List/_Internal" {
+>"List/_Internal" : Symbol("List/_Internal", Decl(ramdaToolsNoInfinite2.ts, 233, 1))
+
+    import { Overwrite } from "Object/Overwrite";
+>Overwrite : Symbol(Overwrite, Decl(ramdaToolsNoInfinite2.ts, 235, 12))
+
+    import { List } from "List/List";
+>List : Symbol(List, Decl(ramdaToolsNoInfinite2.ts, 236, 12))
+
+    export type Naked<L extends List> = Overwrite<Required<L>, L>;
+>Naked : Symbol(Naked, Decl(ramdaToolsNoInfinite2.ts, 236, 37))
+>L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 238, 22))
+>List : Symbol(List, Decl(ramdaToolsNoInfinite2.ts, 236, 12))
+>Overwrite : Symbol(Overwrite, Decl(ramdaToolsNoInfinite2.ts, 235, 12))
+>Required : Symbol(Required, Decl(lib.es5.d.ts, --, --))
+>L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 238, 22))
+>L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 238, 22))
+}
+declare module "List/Tail" {
+>"List/Tail" : Symbol("List/Tail", Decl(ramdaToolsNoInfinite2.ts, 239, 1))
+
+    import { List } from "List/List";
+>List : Symbol(List, Decl(ramdaToolsNoInfinite2.ts, 241, 12))
+
+    export type Tail<L extends List> = ((...t: L) => any) extends ((head: any, ...tail: infer LTail) => any) ? LTail : never;
+>Tail : Symbol(Tail, Decl(ramdaToolsNoInfinite2.ts, 241, 37))
+>L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 243, 21))
+>List : Symbol(List, Decl(ramdaToolsNoInfinite2.ts, 241, 12))
+>t : Symbol(t, Decl(ramdaToolsNoInfinite2.ts, 243, 41))
+>L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 243, 21))
+>head : Symbol(head, Decl(ramdaToolsNoInfinite2.ts, 243, 68))
+>tail : Symbol(tail, Decl(ramdaToolsNoInfinite2.ts, 243, 78))
+>LTail : Symbol(LTail, Decl(ramdaToolsNoInfinite2.ts, 243, 93))
+>LTail : Symbol(LTail, Decl(ramdaToolsNoInfinite2.ts, 243, 93))
+}
+declare module "Iteration/Format" {
+>"Iteration/Format" : Symbol("Iteration/Format", Decl(ramdaToolsNoInfinite2.ts, 244, 1))
+
+    import { Iteration } from "Iteration/Iteration";
+>Iteration : Symbol(Iteration, Decl(ramdaToolsNoInfinite2.ts, 246, 12))
+
+    import { Formats } from "Iteration/_Internal";
+>Formats : Symbol(Formats, Decl(ramdaToolsNoInfinite2.ts, 247, 12))
+
+    export type Format<I extends Iteration, fmt extends Formats> = {
+>Format : Symbol(Format, Decl(ramdaToolsNoInfinite2.ts, 247, 50))
+>I : Symbol(I, Decl(ramdaToolsNoInfinite2.ts, 249, 23))
+>Iteration : Symbol(Iteration, Decl(ramdaToolsNoInfinite2.ts, 246, 12))
+>fmt : Symbol(fmt, Decl(ramdaToolsNoInfinite2.ts, 249, 43))
+>Formats : Symbol(Formats, Decl(ramdaToolsNoInfinite2.ts, 247, 12))
+
+        's': I[2];
+>'s' : Symbol('s', Decl(ramdaToolsNoInfinite2.ts, 249, 68))
+>I : Symbol(I, Decl(ramdaToolsNoInfinite2.ts, 249, 23))
+
+        'n': I[3];
+>'n' : Symbol('n', Decl(ramdaToolsNoInfinite2.ts, 250, 18))
+>I : Symbol(I, Decl(ramdaToolsNoInfinite2.ts, 249, 23))
+
+    }[fmt];
+>fmt : Symbol(fmt, Decl(ramdaToolsNoInfinite2.ts, 249, 43))
+}
+declare module "Iteration/Pos" {
+>"Iteration/Pos" : Symbol("Iteration/Pos", Decl(ramdaToolsNoInfinite2.ts, 253, 1))
+
+    import { Iteration } from "Iteration/Iteration";
+>Iteration : Symbol(Iteration, Decl(ramdaToolsNoInfinite2.ts, 255, 12))
+
+    import { Format } from "Iteration/Format";
+>Format : Symbol(Format, Decl(ramdaToolsNoInfinite2.ts, 256, 12))
+
+    export type Pos<I extends Iteration> = Format<I, 'n'>;
+>Pos : Symbol(Pos, Decl(ramdaToolsNoInfinite2.ts, 256, 46))
+>I : Symbol(I, Decl(ramdaToolsNoInfinite2.ts, 258, 20))
+>Iteration : Symbol(Iteration, Decl(ramdaToolsNoInfinite2.ts, 255, 12))
+>Format : Symbol(Format, Decl(ramdaToolsNoInfinite2.ts, 256, 12))
+>I : Symbol(I, Decl(ramdaToolsNoInfinite2.ts, 258, 20))
+}
+declare module "List/Append" {
+>"List/Append" : Symbol("List/Append", Decl(ramdaToolsNoInfinite2.ts, 259, 1))
+
+    import { _Concat } from "List/Concat";
+>_Concat : Symbol(_Concat, Decl(ramdaToolsNoInfinite2.ts, 261, 12))
+
+    import { List } from "List/List";
+>List : Symbol(List, Decl(ramdaToolsNoInfinite2.ts, 262, 12))
+
+    export type _Append<L extends List, A extends any> = _Concat<L, [A]>;
+>_Append : Symbol(_Append, Decl(ramdaToolsNoInfinite2.ts, 262, 37))
+>L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 264, 24))
+>List : Symbol(List, Decl(ramdaToolsNoInfinite2.ts, 262, 12))
+>A : Symbol(A, Decl(ramdaToolsNoInfinite2.ts, 264, 39))
+>_Concat : Symbol(_Concat, Decl(ramdaToolsNoInfinite2.ts, 261, 12))
+>L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 264, 24))
+>A : Symbol(A, Decl(ramdaToolsNoInfinite2.ts, 264, 39))
+
+    export type Append<L extends List, A extends any> = L extends unknown ? A extends unknown ? _Append<L, A> : never : never;
+>Append : Symbol(Append, Decl(ramdaToolsNoInfinite2.ts, 264, 73))
+>L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 266, 23))
+>List : Symbol(List, Decl(ramdaToolsNoInfinite2.ts, 262, 12))
+>A : Symbol(A, Decl(ramdaToolsNoInfinite2.ts, 266, 38))
+>L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 266, 23))
+>A : Symbol(A, Decl(ramdaToolsNoInfinite2.ts, 266, 38))
+>_Append : Symbol(_Append, Decl(ramdaToolsNoInfinite2.ts, 262, 37))
+>L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 266, 23))
+>A : Symbol(A, Decl(ramdaToolsNoInfinite2.ts, 266, 38))
+}
+declare module "List/Reverse" {
+>"List/Reverse" : Symbol("List/Reverse", Decl(ramdaToolsNoInfinite2.ts, 267, 1))
+
+    import { Prepend } from "List/Prepend";
+>Prepend : Symbol(Prepend, Decl(ramdaToolsNoInfinite2.ts, 269, 12))
+
+    import { Pos } from "Iteration/Pos";
+>Pos : Symbol(Pos, Decl(ramdaToolsNoInfinite2.ts, 270, 12))
+
+    import { Next } from "Iteration/Next";
+>Next : Symbol(Next, Decl(ramdaToolsNoInfinite2.ts, 271, 12))
+
+    import { Length } from "List/Length";
+>Length : Symbol(Length, Decl(ramdaToolsNoInfinite2.ts, 272, 12))
+
+    import { IterationOf } from "Iteration/IterationOf";
+>IterationOf : Symbol(IterationOf, Decl(ramdaToolsNoInfinite2.ts, 273, 12))
+
+    import { Iteration } from "Iteration/Iteration";
+>Iteration : Symbol(Iteration, Decl(ramdaToolsNoInfinite2.ts, 274, 12))
+
+    import { Cast } from "Any/Cast";
+>Cast : Symbol(Cast, Decl(ramdaToolsNoInfinite2.ts, 275, 12))
+
+    import { List } from "List/List";
+>List : Symbol(List, Decl(ramdaToolsNoInfinite2.ts, 276, 12))
+
+    import { Naked } from "List/_Internal";
+>Naked : Symbol(Naked, Decl(ramdaToolsNoInfinite2.ts, 277, 12))
+
+    import { Extends } from "Any/Extends";
+>Extends : Symbol(Extends, Decl(ramdaToolsNoInfinite2.ts, 278, 12))
+
+    type __Reverse<L extends List, LO extends List, I extends Iteration = IterationOf<'0'>> = {
+>__Reverse : Symbol(__Reverse, Decl(ramdaToolsNoInfinite2.ts, 278, 42))
+>L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 280, 19))
+>List : Symbol(List, Decl(ramdaToolsNoInfinite2.ts, 276, 12))
+>LO : Symbol(LO, Decl(ramdaToolsNoInfinite2.ts, 280, 34))
+>List : Symbol(List, Decl(ramdaToolsNoInfinite2.ts, 276, 12))
+>I : Symbol(I, Decl(ramdaToolsNoInfinite2.ts, 280, 51))
+>Iteration : Symbol(Iteration, Decl(ramdaToolsNoInfinite2.ts, 274, 12))
+>IterationOf : Symbol(IterationOf, Decl(ramdaToolsNoInfinite2.ts, 273, 12))
+
+        0: __Reverse<L, Prepend<LO, L[Pos<I>]>, Next<I>>;
+>0 : Symbol(0, Decl(ramdaToolsNoInfinite2.ts, 280, 95))
+>__Reverse : Symbol(__Reverse, Decl(ramdaToolsNoInfinite2.ts, 278, 42))
+>L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 280, 19))
+>Prepend : Symbol(Prepend, Decl(ramdaToolsNoInfinite2.ts, 269, 12))
+>LO : Symbol(LO, Decl(ramdaToolsNoInfinite2.ts, 280, 34))
+>L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 280, 19))
+>Pos : Symbol(Pos, Decl(ramdaToolsNoInfinite2.ts, 270, 12))
+>I : Symbol(I, Decl(ramdaToolsNoInfinite2.ts, 280, 51))
+>Next : Symbol(Next, Decl(ramdaToolsNoInfinite2.ts, 271, 12))
+>I : Symbol(I, Decl(ramdaToolsNoInfinite2.ts, 280, 51))
+
+        1: LO;
+>1 : Symbol(1, Decl(ramdaToolsNoInfinite2.ts, 281, 57))
+>LO : Symbol(LO, Decl(ramdaToolsNoInfinite2.ts, 280, 34))
+
+    }[Extends<Pos<I>, Length<L>>];
+>Extends : Symbol(Extends, Decl(ramdaToolsNoInfinite2.ts, 278, 12))
+>Pos : Symbol(Pos, Decl(ramdaToolsNoInfinite2.ts, 270, 12))
+>I : Symbol(I, Decl(ramdaToolsNoInfinite2.ts, 280, 51))
+>Length : Symbol(Length, Decl(ramdaToolsNoInfinite2.ts, 272, 12))
+>L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 280, 19))
+
+    export type _Reverse<L extends List, LO extends List = []> = __Reverse<Naked<L>, LO> extends infer X ? Cast<X, List> : never;
+>_Reverse : Symbol(_Reverse, Decl(ramdaToolsNoInfinite2.ts, 283, 34))
+>L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 285, 25))
+>List : Symbol(List, Decl(ramdaToolsNoInfinite2.ts, 276, 12))
+>LO : Symbol(LO, Decl(ramdaToolsNoInfinite2.ts, 285, 40))
+>List : Symbol(List, Decl(ramdaToolsNoInfinite2.ts, 276, 12))
+>__Reverse : Symbol(__Reverse, Decl(ramdaToolsNoInfinite2.ts, 278, 42))
+>Naked : Symbol(Naked, Decl(ramdaToolsNoInfinite2.ts, 277, 12))
+>L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 285, 25))
+>LO : Symbol(LO, Decl(ramdaToolsNoInfinite2.ts, 285, 40))
+>X : Symbol(X, Decl(ramdaToolsNoInfinite2.ts, 285, 102))
+>Cast : Symbol(Cast, Decl(ramdaToolsNoInfinite2.ts, 275, 12))
+>X : Symbol(X, Decl(ramdaToolsNoInfinite2.ts, 285, 102))
+>List : Symbol(List, Decl(ramdaToolsNoInfinite2.ts, 276, 12))
+
+    export type Reverse<L extends List, LO extends List = []> = L extends unknown ? LO extends unknown ? _Reverse<L, LO> : never : never;
+>Reverse : Symbol(Reverse, Decl(ramdaToolsNoInfinite2.ts, 285, 129))
+>L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 287, 24))
+>List : Symbol(List, Decl(ramdaToolsNoInfinite2.ts, 276, 12))
+>LO : Symbol(LO, Decl(ramdaToolsNoInfinite2.ts, 287, 39))
+>List : Symbol(List, Decl(ramdaToolsNoInfinite2.ts, 276, 12))
+>L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 287, 24))
+>LO : Symbol(LO, Decl(ramdaToolsNoInfinite2.ts, 287, 39))
+>_Reverse : Symbol(_Reverse, Decl(ramdaToolsNoInfinite2.ts, 283, 34))
+>L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 287, 24))
+>LO : Symbol(LO, Decl(ramdaToolsNoInfinite2.ts, 287, 39))
+}
+declare module "List/Concat" {
+>"List/Concat" : Symbol("List/Concat", Decl(ramdaToolsNoInfinite2.ts, 288, 1))
+
+    import { _Reverse } from "List/Reverse";
+>_Reverse : Symbol(_Reverse, Decl(ramdaToolsNoInfinite2.ts, 290, 12))
+
+    import { List } from "List/List";
+>List : Symbol(List, Decl(ramdaToolsNoInfinite2.ts, 291, 12))
+
+    export type _Concat<L extends List, L1 extends List> = _Reverse<_Reverse<L>, L1>;
+>_Concat : Symbol(_Concat, Decl(ramdaToolsNoInfinite2.ts, 291, 37))
+>L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 293, 24))
+>List : Symbol(List, Decl(ramdaToolsNoInfinite2.ts, 291, 12))
+>L1 : Symbol(L1, Decl(ramdaToolsNoInfinite2.ts, 293, 39))
+>List : Symbol(List, Decl(ramdaToolsNoInfinite2.ts, 291, 12))
+>_Reverse : Symbol(_Reverse, Decl(ramdaToolsNoInfinite2.ts, 290, 12))
+>_Reverse : Symbol(_Reverse, Decl(ramdaToolsNoInfinite2.ts, 290, 12))
+>L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 293, 24))
+>L1 : Symbol(L1, Decl(ramdaToolsNoInfinite2.ts, 293, 39))
+
+    export type Concat<L extends List, L1 extends List> = L extends unknown ? L1 extends L1 ? _Concat<L, L1> : never : never;
+>Concat : Symbol(Concat, Decl(ramdaToolsNoInfinite2.ts, 293, 85))
+>L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 295, 23))
+>List : Symbol(List, Decl(ramdaToolsNoInfinite2.ts, 291, 12))
+>L1 : Symbol(L1, Decl(ramdaToolsNoInfinite2.ts, 295, 38))
+>List : Symbol(List, Decl(ramdaToolsNoInfinite2.ts, 291, 12))
+>L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 295, 23))
+>L1 : Symbol(L1, Decl(ramdaToolsNoInfinite2.ts, 295, 38))
+>L1 : Symbol(L1, Decl(ramdaToolsNoInfinite2.ts, 295, 38))
+>_Concat : Symbol(_Concat, Decl(ramdaToolsNoInfinite2.ts, 291, 37))
+>L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 295, 23))
+>L1 : Symbol(L1, Decl(ramdaToolsNoInfinite2.ts, 295, 38))
+}
+declare module "List/Drop" {
+>"List/Drop" : Symbol("List/Drop", Decl(ramdaToolsNoInfinite2.ts, 296, 1))
+
+    import { Tail } from "List/Tail";
+>Tail : Symbol(Tail, Decl(ramdaToolsNoInfinite2.ts, 298, 12))
+
+    import { Cast } from "Any/Cast";
+>Cast : Symbol(Cast, Decl(ramdaToolsNoInfinite2.ts, 299, 12))
+
+    import { IterationOf } from "Iteration/IterationOf";
+>IterationOf : Symbol(IterationOf, Decl(ramdaToolsNoInfinite2.ts, 300, 12))
+
+    import { Iteration } from "Iteration/Iteration";
+>Iteration : Symbol(Iteration, Decl(ramdaToolsNoInfinite2.ts, 301, 12))
+
+    import { Number } from "Number/Number";
+>Number : Symbol(Number, Decl(ramdaToolsNoInfinite2.ts, 302, 12))
+
+    import { Way } from "Iteration/_Internal";
+>Way : Symbol(Way, Decl(ramdaToolsNoInfinite2.ts, 303, 12))
+
+    import { List } from "List/List";
+>List : Symbol(List, Decl(ramdaToolsNoInfinite2.ts, 304, 12))
+
+    import { Pos } from "Iteration/Pos";
+>Pos : Symbol(Pos, Decl(ramdaToolsNoInfinite2.ts, 305, 12))
+
+    import { Prev } from "Iteration/Prev";
+>Prev : Symbol(Prev, Decl(ramdaToolsNoInfinite2.ts, 306, 12))
+
+    import { Prepend } from "List/Prepend";
+>Prepend : Symbol(Prepend, Decl(ramdaToolsNoInfinite2.ts, 307, 12))
+
+    import { Naked } from "List/_Internal";
+>Naked : Symbol(Naked, Decl(ramdaToolsNoInfinite2.ts, 308, 12))
+
+    import { Extends } from "Any/Extends";
+>Extends : Symbol(Extends, Decl(ramdaToolsNoInfinite2.ts, 309, 12))
+
+    type DropForth<L extends List, N extends Iteration> = {
+>DropForth : Symbol(DropForth, Decl(ramdaToolsNoInfinite2.ts, 309, 42))
+>L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 311, 19))
+>List : Symbol(List, Decl(ramdaToolsNoInfinite2.ts, 304, 12))
+>N : Symbol(N, Decl(ramdaToolsNoInfinite2.ts, 311, 34))
+>Iteration : Symbol(Iteration, Decl(ramdaToolsNoInfinite2.ts, 301, 12))
+
+        0: DropForth<Tail<L>, Prev<N>>;
+>0 : Symbol(0, Decl(ramdaToolsNoInfinite2.ts, 311, 59))
+>DropForth : Symbol(DropForth, Decl(ramdaToolsNoInfinite2.ts, 309, 42))
+>Tail : Symbol(Tail, Decl(ramdaToolsNoInfinite2.ts, 298, 12))
+>L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 311, 19))
+>Prev : Symbol(Prev, Decl(ramdaToolsNoInfinite2.ts, 306, 12))
+>N : Symbol(N, Decl(ramdaToolsNoInfinite2.ts, 311, 34))
+
+        1: L;
+>1 : Symbol(1, Decl(ramdaToolsNoInfinite2.ts, 312, 39))
+>L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 311, 19))
+
+    }[Extends<0, Pos<N>>];
+>Extends : Symbol(Extends, Decl(ramdaToolsNoInfinite2.ts, 309, 12))
+>Pos : Symbol(Pos, Decl(ramdaToolsNoInfinite2.ts, 305, 12))
+>N : Symbol(N, Decl(ramdaToolsNoInfinite2.ts, 311, 34))
+
+    type DropBack<L extends List, N extends Iteration, I extends Iteration = Prev<N>, LN extends List = []> = {
+>DropBack : Symbol(DropBack, Decl(ramdaToolsNoInfinite2.ts, 314, 26))
+>L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 316, 18))
+>List : Symbol(List, Decl(ramdaToolsNoInfinite2.ts, 304, 12))
+>N : Symbol(N, Decl(ramdaToolsNoInfinite2.ts, 316, 33))
+>Iteration : Symbol(Iteration, Decl(ramdaToolsNoInfinite2.ts, 301, 12))
+>I : Symbol(I, Decl(ramdaToolsNoInfinite2.ts, 316, 54))
+>Iteration : Symbol(Iteration, Decl(ramdaToolsNoInfinite2.ts, 301, 12))
+>Prev : Symbol(Prev, Decl(ramdaToolsNoInfinite2.ts, 306, 12))
+>N : Symbol(N, Decl(ramdaToolsNoInfinite2.ts, 316, 33))
+>LN : Symbol(LN, Decl(ramdaToolsNoInfinite2.ts, 316, 85))
+>List : Symbol(List, Decl(ramdaToolsNoInfinite2.ts, 304, 12))
+
+        0: DropBack<L, N, Prev<I>, Prepend<LN, L[Pos<I>]>>;
+>0 : Symbol(0, Decl(ramdaToolsNoInfinite2.ts, 316, 111))
+>DropBack : Symbol(DropBack, Decl(ramdaToolsNoInfinite2.ts, 314, 26))
+>L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 316, 18))
+>N : Symbol(N, Decl(ramdaToolsNoInfinite2.ts, 316, 33))
+>Prev : Symbol(Prev, Decl(ramdaToolsNoInfinite2.ts, 306, 12))
+>I : Symbol(I, Decl(ramdaToolsNoInfinite2.ts, 316, 54))
+>Prepend : Symbol(Prepend, Decl(ramdaToolsNoInfinite2.ts, 307, 12))
+>LN : Symbol(LN, Decl(ramdaToolsNoInfinite2.ts, 316, 85))
+>L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 316, 18))
+>Pos : Symbol(Pos, Decl(ramdaToolsNoInfinite2.ts, 305, 12))
+>I : Symbol(I, Decl(ramdaToolsNoInfinite2.ts, 316, 54))
+
+        1: LN;
+>1 : Symbol(1, Decl(ramdaToolsNoInfinite2.ts, 317, 59))
+>LN : Symbol(LN, Decl(ramdaToolsNoInfinite2.ts, 316, 85))
+
+    }[Extends<-1, Pos<I>>];
+>Extends : Symbol(Extends, Decl(ramdaToolsNoInfinite2.ts, 309, 12))
+>Pos : Symbol(Pos, Decl(ramdaToolsNoInfinite2.ts, 305, 12))
+>I : Symbol(I, Decl(ramdaToolsNoInfinite2.ts, 316, 54))
+
+    type __Drop<L extends List, N extends Iteration, way extends Way = '->'> = {
+>__Drop : Symbol(__Drop, Decl(ramdaToolsNoInfinite2.ts, 319, 27))
+>L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 321, 16))
+>List : Symbol(List, Decl(ramdaToolsNoInfinite2.ts, 304, 12))
+>N : Symbol(N, Decl(ramdaToolsNoInfinite2.ts, 321, 31))
+>Iteration : Symbol(Iteration, Decl(ramdaToolsNoInfinite2.ts, 301, 12))
+>way : Symbol(way, Decl(ramdaToolsNoInfinite2.ts, 321, 52))
+>Way : Symbol(Way, Decl(ramdaToolsNoInfinite2.ts, 303, 12))
+
+        '->': DropForth<L, N>;
+>'->' : Symbol('->', Decl(ramdaToolsNoInfinite2.ts, 321, 80))
+>DropForth : Symbol(DropForth, Decl(ramdaToolsNoInfinite2.ts, 309, 42))
+>L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 321, 16))
+>N : Symbol(N, Decl(ramdaToolsNoInfinite2.ts, 321, 31))
+
+        '<-': DropBack<L, N>;
+>'<-' : Symbol('<-', Decl(ramdaToolsNoInfinite2.ts, 322, 30))
+>DropBack : Symbol(DropBack, Decl(ramdaToolsNoInfinite2.ts, 314, 26))
+>L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 321, 16))
+>N : Symbol(N, Decl(ramdaToolsNoInfinite2.ts, 321, 31))
+
+    }[way];
+>way : Symbol(way, Decl(ramdaToolsNoInfinite2.ts, 321, 52))
+
+    export type _Drop<L extends List, N extends Number, way extends Way = '->'> = __Drop<Naked<L>, IterationOf<N>, way> extends infer X ? Cast<X, List> : never;
+>_Drop : Symbol(_Drop, Decl(ramdaToolsNoInfinite2.ts, 324, 11))
+>L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 326, 22))
+>List : Symbol(List, Decl(ramdaToolsNoInfinite2.ts, 304, 12))
+>N : Symbol(N, Decl(ramdaToolsNoInfinite2.ts, 326, 37))
+>Number : Symbol(Number, Decl(ramdaToolsNoInfinite2.ts, 302, 12))
+>way : Symbol(way, Decl(ramdaToolsNoInfinite2.ts, 326, 55))
+>Way : Symbol(Way, Decl(ramdaToolsNoInfinite2.ts, 303, 12))
+>__Drop : Symbol(__Drop, Decl(ramdaToolsNoInfinite2.ts, 319, 27))
+>Naked : Symbol(Naked, Decl(ramdaToolsNoInfinite2.ts, 308, 12))
+>L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 326, 22))
+>IterationOf : Symbol(IterationOf, Decl(ramdaToolsNoInfinite2.ts, 300, 12))
+>N : Symbol(N, Decl(ramdaToolsNoInfinite2.ts, 326, 37))
+>way : Symbol(way, Decl(ramdaToolsNoInfinite2.ts, 326, 55))
+>X : Symbol(X, Decl(ramdaToolsNoInfinite2.ts, 326, 133))
+>Cast : Symbol(Cast, Decl(ramdaToolsNoInfinite2.ts, 299, 12))
+>X : Symbol(X, Decl(ramdaToolsNoInfinite2.ts, 326, 133))
+>List : Symbol(List, Decl(ramdaToolsNoInfinite2.ts, 304, 12))
+
+    export type Drop<L extends List, N extends Number, way extends Way = '->'> = L extends unknown ? N extends unknown ? _Drop<L, N, way> : never : never;
+>Drop : Symbol(Drop, Decl(ramdaToolsNoInfinite2.ts, 326, 160))
+>L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 328, 21))
+>List : Symbol(List, Decl(ramdaToolsNoInfinite2.ts, 304, 12))
+>N : Symbol(N, Decl(ramdaToolsNoInfinite2.ts, 328, 36))
+>Number : Symbol(Number, Decl(ramdaToolsNoInfinite2.ts, 302, 12))
+>way : Symbol(way, Decl(ramdaToolsNoInfinite2.ts, 328, 54))
+>Way : Symbol(Way, Decl(ramdaToolsNoInfinite2.ts, 303, 12))
+>L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 328, 21))
+>N : Symbol(N, Decl(ramdaToolsNoInfinite2.ts, 328, 36))
+>_Drop : Symbol(_Drop, Decl(ramdaToolsNoInfinite2.ts, 324, 11))
+>L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 328, 21))
+>N : Symbol(N, Decl(ramdaToolsNoInfinite2.ts, 328, 36))
+>way : Symbol(way, Decl(ramdaToolsNoInfinite2.ts, 328, 54))
+}
+declare module "List/Length" {
+>"List/Length" : Symbol("List/Length", Decl(ramdaToolsNoInfinite2.ts, 329, 1))
+
+    import { NumberOf } from "Number/NumberOf";
+>NumberOf : Symbol(NumberOf, Decl(ramdaToolsNoInfinite2.ts, 331, 12))
+
+    import { Formats } from "Iteration/_Internal";
+>Formats : Symbol(Formats, Decl(ramdaToolsNoInfinite2.ts, 332, 12))
+
+    import { List } from "List/List";
+>List : Symbol(List, Decl(ramdaToolsNoInfinite2.ts, 333, 12))
+
+    export type Length<L extends List, fmt extends Formats = 'n'> = {
+>Length : Symbol(Length, Decl(ramdaToolsNoInfinite2.ts, 333, 37))
+>L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 335, 23))
+>List : Symbol(List, Decl(ramdaToolsNoInfinite2.ts, 333, 12))
+>fmt : Symbol(fmt, Decl(ramdaToolsNoInfinite2.ts, 335, 38))
+>Formats : Symbol(Formats, Decl(ramdaToolsNoInfinite2.ts, 332, 12))
+
+        's': NumberOf<L['length']>;
+>'s' : Symbol('s', Decl(ramdaToolsNoInfinite2.ts, 335, 69))
+>NumberOf : Symbol(NumberOf, Decl(ramdaToolsNoInfinite2.ts, 331, 12))
+>L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 335, 23))
+
+        'n': L['length'];
+>'n' : Symbol('n', Decl(ramdaToolsNoInfinite2.ts, 336, 35))
+>L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 335, 23))
+
+    }[fmt];
+>fmt : Symbol(fmt, Decl(ramdaToolsNoInfinite2.ts, 335, 38))
+}
+declare module "Iteration/Next" {
+>"Iteration/Next" : Symbol("Iteration/Next", Decl(ramdaToolsNoInfinite2.ts, 339, 1))
+
+    import { IterationMap } from "Iteration/IterationOf";
+>IterationMap : Symbol(IterationMap, Decl(ramdaToolsNoInfinite2.ts, 341, 12))
+
+    import { Iteration } from "Iteration/Iteration";
+>Iteration : Symbol(Iteration, Decl(ramdaToolsNoInfinite2.ts, 342, 12))
+
+    export type Next<I extends Iteration> = IterationMap[I[1]];
+>Next : Symbol(Next, Decl(ramdaToolsNoInfinite2.ts, 342, 52))
+>I : Symbol(I, Decl(ramdaToolsNoInfinite2.ts, 344, 21))
+>Iteration : Symbol(Iteration, Decl(ramdaToolsNoInfinite2.ts, 342, 12))
+>IterationMap : Symbol(IterationMap, Decl(ramdaToolsNoInfinite2.ts, 341, 12))
+>I : Symbol(I, Decl(ramdaToolsNoInfinite2.ts, 344, 21))
+}
+declare module "Any/Cast" {
+>"Any/Cast" : Symbol("Any/Cast", Decl(ramdaToolsNoInfinite2.ts, 345, 1))
+
+    export type Cast<A1 extends any, A2 extends any> = A1 extends A2 ? A1 : A2;
+>Cast : Symbol(Cast, Decl(ramdaToolsNoInfinite2.ts, 346, 27))
+>A1 : Symbol(A1, Decl(ramdaToolsNoInfinite2.ts, 347, 21))
+>A2 : Symbol(A2, Decl(ramdaToolsNoInfinite2.ts, 347, 36))
+>A1 : Symbol(A1, Decl(ramdaToolsNoInfinite2.ts, 347, 21))
+>A2 : Symbol(A2, Decl(ramdaToolsNoInfinite2.ts, 347, 36))
+>A1 : Symbol(A1, Decl(ramdaToolsNoInfinite2.ts, 347, 21))
+>A2 : Symbol(A2, Decl(ramdaToolsNoInfinite2.ts, 347, 36))
+}
+declare module "Function/Parameters" {
+>"Function/Parameters" : Symbol("Function/Parameters", Decl(ramdaToolsNoInfinite2.ts, 348, 1))
+
+    import { Function } from "Function/Function";
+>Function : Symbol(Function, Decl(ramdaToolsNoInfinite2.ts, 350, 12))
+
+    export type Parameters<F extends Function> = F extends ((...args: infer L) => any) ? L : never;
+>Parameters : Symbol(Parameters, Decl(ramdaToolsNoInfinite2.ts, 350, 49))
+>F : Symbol(F, Decl(ramdaToolsNoInfinite2.ts, 352, 27))
+>Function : Symbol(Function, Decl(ramdaToolsNoInfinite2.ts, 350, 12))
+>F : Symbol(F, Decl(ramdaToolsNoInfinite2.ts, 352, 27))
+>args : Symbol(args, Decl(ramdaToolsNoInfinite2.ts, 352, 61))
+>L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 352, 75))
+>L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 352, 75))
+}
+declare module "Function/Return" {
+>"Function/Return" : Symbol("Function/Return", Decl(ramdaToolsNoInfinite2.ts, 353, 1))
+
+    import { Function } from "Function/Function";
+>Function : Symbol(Function, Decl(ramdaToolsNoInfinite2.ts, 355, 12))
+
+    export type Return<F extends Function> = F extends ((...args: any[]) => infer R) ? R : never;
+>Return : Symbol(Return, Decl(ramdaToolsNoInfinite2.ts, 355, 49))
+>F : Symbol(F, Decl(ramdaToolsNoInfinite2.ts, 357, 23))
+>Function : Symbol(Function, Decl(ramdaToolsNoInfinite2.ts, 355, 12))
+>F : Symbol(F, Decl(ramdaToolsNoInfinite2.ts, 357, 23))
+>args : Symbol(args, Decl(ramdaToolsNoInfinite2.ts, 357, 57))
+>R : Symbol(R, Decl(ramdaToolsNoInfinite2.ts, 357, 81))
+>R : Symbol(R, Decl(ramdaToolsNoInfinite2.ts, 357, 81))
+}
+declare module "Iteration/Prev" {
+>"Iteration/Prev" : Symbol("Iteration/Prev", Decl(ramdaToolsNoInfinite2.ts, 358, 1))
+
+    import { IterationMap } from "Iteration/IterationOf";
+>IterationMap : Symbol(IterationMap, Decl(ramdaToolsNoInfinite2.ts, 360, 12))
+
+    import { Iteration } from "Iteration/Iteration";
+>Iteration : Symbol(Iteration, Decl(ramdaToolsNoInfinite2.ts, 361, 12))
+
+    export type Prev<I extends Iteration> = IterationMap[I[0]];
+>Prev : Symbol(Prev, Decl(ramdaToolsNoInfinite2.ts, 361, 52))
+>I : Symbol(I, Decl(ramdaToolsNoInfinite2.ts, 363, 21))
+>Iteration : Symbol(Iteration, Decl(ramdaToolsNoInfinite2.ts, 361, 12))
+>IterationMap : Symbol(IterationMap, Decl(ramdaToolsNoInfinite2.ts, 360, 12))
+>I : Symbol(I, Decl(ramdaToolsNoInfinite2.ts, 363, 21))
+}
+declare module "Number/NumberOf" {
+>"Number/NumberOf" : Symbol("Number/NumberOf", Decl(ramdaToolsNoInfinite2.ts, 364, 1))
+
+    import { IterationMap } from "Iteration/IterationOf";
+>IterationMap : Symbol(IterationMap, Decl(ramdaToolsNoInfinite2.ts, 366, 12))
+
+    import { Key } from "Iteration/Key";
+>Key : Symbol(Key, Decl(ramdaToolsNoInfinite2.ts, 367, 12))
+
+    import { Pos } from "Iteration/Pos";
+>Pos : Symbol(Pos, Decl(ramdaToolsNoInfinite2.ts, 368, 12))
+
+    import { Numbers } from "Number/_Internal";
+>Numbers : Symbol(Numbers, Decl(ramdaToolsNoInfinite2.ts, 369, 12))
+
+    export type _NumberOf<N extends number> = {
+>_NumberOf : Symbol(_NumberOf, Decl(ramdaToolsNoInfinite2.ts, 369, 47))
+>N : Symbol(N, Decl(ramdaToolsNoInfinite2.ts, 371, 26))
+
+        [K in keyof IterationMap]: Pos<IterationMap[K]> extends N ? Key<IterationMap[K]> : never;
+>K : Symbol(K, Decl(ramdaToolsNoInfinite2.ts, 372, 9))
+>IterationMap : Symbol(IterationMap, Decl(ramdaToolsNoInfinite2.ts, 366, 12))
+>Pos : Symbol(Pos, Decl(ramdaToolsNoInfinite2.ts, 368, 12))
+>IterationMap : Symbol(IterationMap, Decl(ramdaToolsNoInfinite2.ts, 366, 12))
+>K : Symbol(K, Decl(ramdaToolsNoInfinite2.ts, 372, 9))
+>N : Symbol(N, Decl(ramdaToolsNoInfinite2.ts, 371, 26))
+>Key : Symbol(Key, Decl(ramdaToolsNoInfinite2.ts, 367, 12))
+>IterationMap : Symbol(IterationMap, Decl(ramdaToolsNoInfinite2.ts, 366, 12))
+>K : Symbol(K, Decl(ramdaToolsNoInfinite2.ts, 372, 9))
+
+    }[keyof IterationMap];
+>IterationMap : Symbol(IterationMap, Decl(ramdaToolsNoInfinite2.ts, 366, 12))
+
+    export type NumberOf<N extends number> = N extends Numbers['number']['all'] ? _NumberOf<N> : string;
+>NumberOf : Symbol(NumberOf, Decl(ramdaToolsNoInfinite2.ts, 373, 26))
+>N : Symbol(N, Decl(ramdaToolsNoInfinite2.ts, 375, 25))
+>N : Symbol(N, Decl(ramdaToolsNoInfinite2.ts, 375, 25))
+>Numbers : Symbol(Numbers, Decl(ramdaToolsNoInfinite2.ts, 369, 12))
+>_NumberOf : Symbol(_NumberOf, Decl(ramdaToolsNoInfinite2.ts, 369, 47))
+>N : Symbol(N, Decl(ramdaToolsNoInfinite2.ts, 375, 25))
+}
+declare module "Object/_Internal" {
+>"Object/_Internal" : Symbol("Object/_Internal", Decl(ramdaToolsNoInfinite2.ts, 376, 1))
+
+    export type Modx = ['?' | '!', 'W' | 'R'];
+>Modx : Symbol(Modx, Decl(ramdaToolsNoInfinite2.ts, 377, 35))
+
+    export type Depth = 'flat' | 'deep';
+>Depth : Symbol(Depth, Decl(ramdaToolsNoInfinite2.ts, 378, 46))
+
+    export type Empty<O extends object> = {
+>Empty : Symbol(Empty, Decl(ramdaToolsNoInfinite2.ts, 380, 40))
+>O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 382, 22))
+
+        [K in keyof O]: undefined;
+>K : Symbol(K, Decl(ramdaToolsNoInfinite2.ts, 383, 9))
+>O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 382, 22))
+
+    };
+}
+declare module "Iteration/IterationOf" {
+>"Iteration/IterationOf" : Symbol("Iteration/IterationOf", Decl(ramdaToolsNoInfinite2.ts, 385, 1))
+
+    import { Number } from "Number/Number";
+>Number : Symbol(Number, Decl(ramdaToolsNoInfinite2.ts, 387, 12))
+
+    export type IterationMap = {
+>IterationMap : Symbol(IterationMap, Decl(ramdaToolsNoInfinite2.ts, 387, 43))
+
+        '-40': ['__', '-39', '-40', -40, '-'];
+>'-40' : Symbol('-40', Decl(ramdaToolsNoInfinite2.ts, 389, 32))
+
+        '-39': ['-40', '-38', '-39', -39, '-'];
+>'-39' : Symbol('-39', Decl(ramdaToolsNoInfinite2.ts, 390, 46))
+
+        '-38': ['-39', '-37', '-38', -38, '-'];
+>'-38' : Symbol('-38', Decl(ramdaToolsNoInfinite2.ts, 391, 47))
+
+        '-37': ['-38', '-36', '-37', -37, '-'];
+>'-37' : Symbol('-37', Decl(ramdaToolsNoInfinite2.ts, 392, 47))
+
+        '-36': ['-37', '-35', '-36', -36, '-'];
+>'-36' : Symbol('-36', Decl(ramdaToolsNoInfinite2.ts, 393, 47))
+
+        '-35': ['-36', '-34', '-35', -35, '-'];
+>'-35' : Symbol('-35', Decl(ramdaToolsNoInfinite2.ts, 394, 47))
+
+        '-34': ['-35', '-33', '-34', -34, '-'];
+>'-34' : Symbol('-34', Decl(ramdaToolsNoInfinite2.ts, 395, 47))
+
+        '-33': ['-34', '-32', '-33', -33, '-'];
+>'-33' : Symbol('-33', Decl(ramdaToolsNoInfinite2.ts, 396, 47))
+
+        '-32': ['-33', '-31', '-32', -32, '-'];
+>'-32' : Symbol('-32', Decl(ramdaToolsNoInfinite2.ts, 397, 47))
+
+        '-31': ['-32', '-30', '-31', -31, '-'];
+>'-31' : Symbol('-31', Decl(ramdaToolsNoInfinite2.ts, 398, 47))
+
+        '-30': ['-31', '-29', '-30', -30, '-'];
+>'-30' : Symbol('-30', Decl(ramdaToolsNoInfinite2.ts, 399, 47))
+
+        '-29': ['-30', '-28', '-29', -29, '-'];
+>'-29' : Symbol('-29', Decl(ramdaToolsNoInfinite2.ts, 400, 47))
+
+        '-28': ['-29', '-27', '-28', -28, '-'];
+>'-28' : Symbol('-28', Decl(ramdaToolsNoInfinite2.ts, 401, 47))
+
+        '-27': ['-28', '-26', '-27', -27, '-'];
+>'-27' : Symbol('-27', Decl(ramdaToolsNoInfinite2.ts, 402, 47))
+
+        '-26': ['-27', '-25', '-26', -26, '-'];
+>'-26' : Symbol('-26', Decl(ramdaToolsNoInfinite2.ts, 403, 47))
+
+        '-25': ['-26', '-24', '-25', -25, '-'];
+>'-25' : Symbol('-25', Decl(ramdaToolsNoInfinite2.ts, 404, 47))
+
+        '-24': ['-25', '-23', '-24', -24, '-'];
+>'-24' : Symbol('-24', Decl(ramdaToolsNoInfinite2.ts, 405, 47))
+
+        '-23': ['-24', '-22', '-23', -23, '-'];
+>'-23' : Symbol('-23', Decl(ramdaToolsNoInfinite2.ts, 406, 47))
+
+        '-22': ['-23', '-21', '-22', -22, '-'];
+>'-22' : Symbol('-22', Decl(ramdaToolsNoInfinite2.ts, 407, 47))
+
+        '-21': ['-22', '-20', '-21', -21, '-'];
+>'-21' : Symbol('-21', Decl(ramdaToolsNoInfinite2.ts, 408, 47))
+
+        '-20': ['-21', '-19', '-20', -20, '-'];
+>'-20' : Symbol('-20', Decl(ramdaToolsNoInfinite2.ts, 409, 47))
+
+        '-19': ['-20', '-18', '-19', -19, '-'];
+>'-19' : Symbol('-19', Decl(ramdaToolsNoInfinite2.ts, 410, 47))
+
+        '-18': ['-19', '-17', '-18', -18, '-'];
+>'-18' : Symbol('-18', Decl(ramdaToolsNoInfinite2.ts, 411, 47))
+
+        '-17': ['-18', '-16', '-17', -17, '-'];
+>'-17' : Symbol('-17', Decl(ramdaToolsNoInfinite2.ts, 412, 47))
+
+        '-16': ['-17', '-15', '-16', -16, '-'];
+>'-16' : Symbol('-16', Decl(ramdaToolsNoInfinite2.ts, 413, 47))
+
+        '-15': ['-16', '-14', '-15', -15, '-'];
+>'-15' : Symbol('-15', Decl(ramdaToolsNoInfinite2.ts, 414, 47))
+
+        '-14': ['-15', '-13', '-14', -14, '-'];
+>'-14' : Symbol('-14', Decl(ramdaToolsNoInfinite2.ts, 415, 47))
+
+        '-13': ['-14', '-12', '-13', -13, '-'];
+>'-13' : Symbol('-13', Decl(ramdaToolsNoInfinite2.ts, 416, 47))
+
+        '-12': ['-13', '-11', '-12', -12, '-'];
+>'-12' : Symbol('-12', Decl(ramdaToolsNoInfinite2.ts, 417, 47))
+
+        '-11': ['-12', '-10', '-11', -11, '-'];
+>'-11' : Symbol('-11', Decl(ramdaToolsNoInfinite2.ts, 418, 47))
+
+        '-10': ['-11', '-9', '-10', -10, '-'];
+>'-10' : Symbol('-10', Decl(ramdaToolsNoInfinite2.ts, 419, 47))
+
+        '-9': ['-10', '-8', '-9', -9, '-'];
+>'-9' : Symbol('-9', Decl(ramdaToolsNoInfinite2.ts, 420, 46))
+
+        '-8': ['-9', '-7', '-8', -8, '-'];
+>'-8' : Symbol('-8', Decl(ramdaToolsNoInfinite2.ts, 421, 43))
+
+        '-7': ['-8', '-6', '-7', -7, '-'];
+>'-7' : Symbol('-7', Decl(ramdaToolsNoInfinite2.ts, 422, 42))
+
+        '-6': ['-7', '-5', '-6', -6, '-'];
+>'-6' : Symbol('-6', Decl(ramdaToolsNoInfinite2.ts, 423, 42))
+
+        '-5': ['-6', '-4', '-5', -5, '-'];
+>'-5' : Symbol('-5', Decl(ramdaToolsNoInfinite2.ts, 424, 42))
+
+        '-4': ['-5', '-3', '-4', -4, '-'];
+>'-4' : Symbol('-4', Decl(ramdaToolsNoInfinite2.ts, 425, 42))
+
+        '-3': ['-4', '-2', '-3', -3, '-'];
+>'-3' : Symbol('-3', Decl(ramdaToolsNoInfinite2.ts, 426, 42))
+
+        '-2': ['-3', '-1', '-2', -2, '-'];
+>'-2' : Symbol('-2', Decl(ramdaToolsNoInfinite2.ts, 427, 42))
+
+        '-1': ['-2', '0', '-1', -1, '-'];
+>'-1' : Symbol('-1', Decl(ramdaToolsNoInfinite2.ts, 428, 42))
+
+        '0': ['-1', '1', '0', 0, '0'];
+>'0' : Symbol('0', Decl(ramdaToolsNoInfinite2.ts, 429, 41))
+
+        '1': ['0', '2', '1', 1, '+'];
+>'1' : Symbol('1', Decl(ramdaToolsNoInfinite2.ts, 430, 38))
+
+        '2': ['1', '3', '2', 2, '+'];
+>'2' : Symbol('2', Decl(ramdaToolsNoInfinite2.ts, 431, 37))
+
+        '3': ['2', '4', '3', 3, '+'];
+>'3' : Symbol('3', Decl(ramdaToolsNoInfinite2.ts, 432, 37))
+
+        '4': ['3', '5', '4', 4, '+'];
+>'4' : Symbol('4', Decl(ramdaToolsNoInfinite2.ts, 433, 37))
+
+        '5': ['4', '6', '5', 5, '+'];
+>'5' : Symbol('5', Decl(ramdaToolsNoInfinite2.ts, 434, 37))
+
+        '6': ['5', '7', '6', 6, '+'];
+>'6' : Symbol('6', Decl(ramdaToolsNoInfinite2.ts, 435, 37))
+
+        '7': ['6', '8', '7', 7, '+'];
+>'7' : Symbol('7', Decl(ramdaToolsNoInfinite2.ts, 436, 37))
+
+        '8': ['7', '9', '8', 8, '+'];
+>'8' : Symbol('8', Decl(ramdaToolsNoInfinite2.ts, 437, 37))
+
+        '9': ['8', '10', '9', 9, '+'];
+>'9' : Symbol('9', Decl(ramdaToolsNoInfinite2.ts, 438, 37))
+
+        '10': ['9', '11', '10', 10, '+'];
+>'10' : Symbol('10', Decl(ramdaToolsNoInfinite2.ts, 439, 38))
+
+        '11': ['10', '12', '11', 11, '+'];
+>'11' : Symbol('11', Decl(ramdaToolsNoInfinite2.ts, 440, 41))
+
+        '12': ['11', '13', '12', 12, '+'];
+>'12' : Symbol('12', Decl(ramdaToolsNoInfinite2.ts, 441, 42))
+
+        '13': ['12', '14', '13', 13, '+'];
+>'13' : Symbol('13', Decl(ramdaToolsNoInfinite2.ts, 442, 42))
+
+        '14': ['13', '15', '14', 14, '+'];
+>'14' : Symbol('14', Decl(ramdaToolsNoInfinite2.ts, 443, 42))
+
+        '15': ['14', '16', '15', 15, '+'];
+>'15' : Symbol('15', Decl(ramdaToolsNoInfinite2.ts, 444, 42))
+
+        '16': ['15', '17', '16', 16, '+'];
+>'16' : Symbol('16', Decl(ramdaToolsNoInfinite2.ts, 445, 42))
+
+        '17': ['16', '18', '17', 17, '+'];
+>'17' : Symbol('17', Decl(ramdaToolsNoInfinite2.ts, 446, 42))
+
+        '18': ['17', '19', '18', 18, '+'];
+>'18' : Symbol('18', Decl(ramdaToolsNoInfinite2.ts, 447, 42))
+
+        '19': ['18', '20', '19', 19, '+'];
+>'19' : Symbol('19', Decl(ramdaToolsNoInfinite2.ts, 448, 42))
+
+        '20': ['19', '21', '20', 20, '+'];
+>'20' : Symbol('20', Decl(ramdaToolsNoInfinite2.ts, 449, 42))
+
+        '21': ['20', '22', '21', 21, '+'];
+>'21' : Symbol('21', Decl(ramdaToolsNoInfinite2.ts, 450, 42))
+
+        '22': ['21', '23', '22', 22, '+'];
+>'22' : Symbol('22', Decl(ramdaToolsNoInfinite2.ts, 451, 42))
+
+        '23': ['22', '24', '23', 23, '+'];
+>'23' : Symbol('23', Decl(ramdaToolsNoInfinite2.ts, 452, 42))
+
+        '24': ['23', '25', '24', 24, '+'];
+>'24' : Symbol('24', Decl(ramdaToolsNoInfinite2.ts, 453, 42))
+
+        '25': ['24', '26', '25', 25, '+'];
+>'25' : Symbol('25', Decl(ramdaToolsNoInfinite2.ts, 454, 42))
+
+        '26': ['25', '27', '26', 26, '+'];
+>'26' : Symbol('26', Decl(ramdaToolsNoInfinite2.ts, 455, 42))
+
+        '27': ['26', '28', '27', 27, '+'];
+>'27' : Symbol('27', Decl(ramdaToolsNoInfinite2.ts, 456, 42))
+
+        '28': ['27', '29', '28', 28, '+'];
+>'28' : Symbol('28', Decl(ramdaToolsNoInfinite2.ts, 457, 42))
+
+        '29': ['28', '30', '29', 29, '+'];
+>'29' : Symbol('29', Decl(ramdaToolsNoInfinite2.ts, 458, 42))
+
+        '30': ['29', '31', '30', 30, '+'];
+>'30' : Symbol('30', Decl(ramdaToolsNoInfinite2.ts, 459, 42))
+
+        '31': ['30', '32', '31', 31, '+'];
+>'31' : Symbol('31', Decl(ramdaToolsNoInfinite2.ts, 460, 42))
+
+        '32': ['31', '33', '32', 32, '+'];
+>'32' : Symbol('32', Decl(ramdaToolsNoInfinite2.ts, 461, 42))
+
+        '33': ['32', '34', '33', 33, '+'];
+>'33' : Symbol('33', Decl(ramdaToolsNoInfinite2.ts, 462, 42))
+
+        '34': ['33', '35', '34', 34, '+'];
+>'34' : Symbol('34', Decl(ramdaToolsNoInfinite2.ts, 463, 42))
+
+        '35': ['34', '36', '35', 35, '+'];
+>'35' : Symbol('35', Decl(ramdaToolsNoInfinite2.ts, 464, 42))
+
+        '36': ['35', '37', '36', 36, '+'];
+>'36' : Symbol('36', Decl(ramdaToolsNoInfinite2.ts, 465, 42))
+
+        '37': ['36', '38', '37', 37, '+'];
+>'37' : Symbol('37', Decl(ramdaToolsNoInfinite2.ts, 466, 42))
+
+        '38': ['37', '39', '38', 38, '+'];
+>'38' : Symbol('38', Decl(ramdaToolsNoInfinite2.ts, 467, 42))
+
+        '39': ['38', '40', '39', 39, '+'];
+>'39' : Symbol('39', Decl(ramdaToolsNoInfinite2.ts, 468, 42))
+
+        '40': ['39', '__', '40', 40, '+'];
+>'40' : Symbol('40', Decl(ramdaToolsNoInfinite2.ts, 469, 42))
+
+        '__': ['__', '__', string, number, '-' | '0' | '+'];
+>'__' : Symbol('__', Decl(ramdaToolsNoInfinite2.ts, 470, 42))
+
+    };
+
+    export type IterationOf<N extends Number> = N extends keyof IterationMap ? IterationMap[N] : IterationMap['__'];
+>IterationOf : Symbol(IterationOf, Decl(ramdaToolsNoInfinite2.ts, 472, 6))
+>N : Symbol(N, Decl(ramdaToolsNoInfinite2.ts, 474, 28))
+>Number : Symbol(Number, Decl(ramdaToolsNoInfinite2.ts, 387, 12))
+>N : Symbol(N, Decl(ramdaToolsNoInfinite2.ts, 474, 28))
+>IterationMap : Symbol(IterationMap, Decl(ramdaToolsNoInfinite2.ts, 387, 43))
+>IterationMap : Symbol(IterationMap, Decl(ramdaToolsNoInfinite2.ts, 387, 43))
+>N : Symbol(N, Decl(ramdaToolsNoInfinite2.ts, 474, 28))
+>IterationMap : Symbol(IterationMap, Decl(ramdaToolsNoInfinite2.ts, 387, 43))
+}
+declare module "Iteration/Iteration" {
+>"Iteration/Iteration" : Symbol("Iteration/Iteration", Decl(ramdaToolsNoInfinite2.ts, 475, 1))
+
+    import { IterationMap } from "Iteration/IterationOf";
+>IterationMap : Symbol(IterationMap, Decl(ramdaToolsNoInfinite2.ts, 477, 12))
+
+    export type Iteration = [keyof IterationMap, keyof IterationMap, string, number, '-' | '0' | '+'];
+>Iteration : Symbol(Iteration, Decl(ramdaToolsNoInfinite2.ts, 477, 57))
+>IterationMap : Symbol(IterationMap, Decl(ramdaToolsNoInfinite2.ts, 477, 12))
+>IterationMap : Symbol(IterationMap, Decl(ramdaToolsNoInfinite2.ts, 477, 12))
+}
+declare module "Iteration/Key" {
+>"Iteration/Key" : Symbol("Iteration/Key", Decl(ramdaToolsNoInfinite2.ts, 480, 1))
+
+    import { Iteration } from "Iteration/Iteration";
+>Iteration : Symbol(Iteration, Decl(ramdaToolsNoInfinite2.ts, 482, 12))
+
+    import { Format } from "Iteration/Format";
+>Format : Symbol(Format, Decl(ramdaToolsNoInfinite2.ts, 483, 12))
+
+    export type Key<I extends Iteration> = Format<I, 's'>;
+>Key : Symbol(Key, Decl(ramdaToolsNoInfinite2.ts, 483, 46))
+>I : Symbol(I, Decl(ramdaToolsNoInfinite2.ts, 485, 20))
+>Iteration : Symbol(Iteration, Decl(ramdaToolsNoInfinite2.ts, 482, 12))
+>Format : Symbol(Format, Decl(ramdaToolsNoInfinite2.ts, 483, 12))
+>I : Symbol(I, Decl(ramdaToolsNoInfinite2.ts, 485, 20))
+}
+declare module "List/NonNullable" {
+>"List/NonNullable" : Symbol("List/NonNullable", Decl(ramdaToolsNoInfinite2.ts, 486, 1))
+
+    import { Depth } from "Object/_Internal";
+>Depth : Symbol(Depth, Decl(ramdaToolsNoInfinite2.ts, 488, 12))
+
+    import { NonNullable as ONonNullable } from "Object/NonNullable";
+>NonNullable : Symbol(ONonNullable, Decl(ramdaToolsNoInfinite2.ts, 183, 13))
+>ONonNullable : Symbol(ONonNullable, Decl(ramdaToolsNoInfinite2.ts, 489, 12))
+
+    import { ListOf } from "Object/ListOf";
+>ListOf : Symbol(ListOf, Decl(ramdaToolsNoInfinite2.ts, 490, 12))
+
+    import { Cast } from "Any/Cast";
+>Cast : Symbol(Cast, Decl(ramdaToolsNoInfinite2.ts, 491, 12))
+
+    import { Key } from "Any/Key";
+>Key : Symbol(Key, Decl(ramdaToolsNoInfinite2.ts, 492, 12))
+
+    import { ObjectOf } from "List/ObjectOf";
+>ObjectOf : Symbol(ObjectOf, Decl(ramdaToolsNoInfinite2.ts, 493, 12))
+
+    import { Implements } from "Any/Implements";
+>Implements : Symbol(Implements, Decl(ramdaToolsNoInfinite2.ts, 494, 12))
+
+    import { Keys } from "List/Keys";
+>Keys : Symbol(Keys, Decl(ramdaToolsNoInfinite2.ts, 495, 12))
+
+    import { List } from "List/List";
+>List : Symbol(List, Decl(ramdaToolsNoInfinite2.ts, 496, 12))
+
+    import { NumberOf } from "Any/_Internal";
+>NumberOf : Symbol(NumberOf, Decl(ramdaToolsNoInfinite2.ts, 497, 12))
+
+    export type NonNullable<L extends List, K extends Key = Key, depth extends Depth = 'flat'> = {
+>NonNullable : Symbol(NonNullable, Decl(ramdaToolsNoInfinite2.ts, 497, 45))
+>L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 499, 28))
+>List : Symbol(List, Decl(ramdaToolsNoInfinite2.ts, 496, 12))
+>K : Symbol(K, Decl(ramdaToolsNoInfinite2.ts, 499, 43))
+>Key : Symbol(Key, Decl(ramdaToolsNoInfinite2.ts, 492, 12))
+>Key : Symbol(Key, Decl(ramdaToolsNoInfinite2.ts, 492, 12))
+>depth : Symbol(depth, Decl(ramdaToolsNoInfinite2.ts, 499, 64))
+>Depth : Symbol(Depth, Decl(ramdaToolsNoInfinite2.ts, 488, 12))
+
+        1: Cast<ONonNullable<L, Key, depth>, List>;
+>1 : Symbol(1, Decl(ramdaToolsNoInfinite2.ts, 499, 98))
+>Cast : Symbol(Cast, Decl(ramdaToolsNoInfinite2.ts, 491, 12))
+>ONonNullable : Symbol(ONonNullable, Decl(ramdaToolsNoInfinite2.ts, 489, 12))
+>L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 499, 28))
+>Key : Symbol(Key, Decl(ramdaToolsNoInfinite2.ts, 492, 12))
+>depth : Symbol(depth, Decl(ramdaToolsNoInfinite2.ts, 499, 64))
+>List : Symbol(List, Decl(ramdaToolsNoInfinite2.ts, 496, 12))
+
+        0: ListOf<ONonNullable<ObjectOf<L>, NumberOf<K>, depth>>;
+>0 : Symbol(0, Decl(ramdaToolsNoInfinite2.ts, 500, 51))
+>ListOf : Symbol(ListOf, Decl(ramdaToolsNoInfinite2.ts, 490, 12))
+>ONonNullable : Symbol(ONonNullable, Decl(ramdaToolsNoInfinite2.ts, 489, 12))
+>ObjectOf : Symbol(ObjectOf, Decl(ramdaToolsNoInfinite2.ts, 493, 12))
+>L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 499, 28))
+>NumberOf : Symbol(NumberOf, Decl(ramdaToolsNoInfinite2.ts, 497, 12))
+>K : Symbol(K, Decl(ramdaToolsNoInfinite2.ts, 499, 43))
+>depth : Symbol(depth, Decl(ramdaToolsNoInfinite2.ts, 499, 64))
+
+    }[Implements<Keys<L>, K>] & {};
+>Implements : Symbol(Implements, Decl(ramdaToolsNoInfinite2.ts, 494, 12))
+>Keys : Symbol(Keys, Decl(ramdaToolsNoInfinite2.ts, 495, 12))
+>L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 499, 28))
+>K : Symbol(K, Decl(ramdaToolsNoInfinite2.ts, 499, 43))
+}
+declare module "Any/Type" {
+>"Any/Type" : Symbol("Any/Type", Decl(ramdaToolsNoInfinite2.ts, 503, 1))
+
+    const symbol: unique symbol;
+>symbol : Symbol(symbol, Decl(ramdaToolsNoInfinite2.ts, 505, 9))
+
+    export type Type<A extends any, Id extends string> = A & {
+>Type : Symbol(Type, Decl(ramdaToolsNoInfinite2.ts, 505, 32))
+>A : Symbol(A, Decl(ramdaToolsNoInfinite2.ts, 507, 21))
+>Id : Symbol(Id, Decl(ramdaToolsNoInfinite2.ts, 507, 35))
+>A : Symbol(A, Decl(ramdaToolsNoInfinite2.ts, 507, 21))
+
+        [K in typeof symbol]: Id;
+>K : Symbol(K, Decl(ramdaToolsNoInfinite2.ts, 508, 9))
+>symbol : Symbol(symbol, Decl(ramdaToolsNoInfinite2.ts, 505, 9))
+>Id : Symbol(Id, Decl(ramdaToolsNoInfinite2.ts, 507, 35))
+
+    };
+}
+declare module "Any/x" {
+>"Any/x" : Symbol("Any/x", Decl(ramdaToolsNoInfinite2.ts, 510, 1))
+
+    import { Type } from "Any/Type";
+>Type : Symbol(Type, Decl(ramdaToolsNoInfinite2.ts, 512, 12))
+
+    export type x = Type<{}, 'x'>;
+>x : Symbol(x, Decl(ramdaToolsNoInfinite2.ts, 512, 36))
+>Type : Symbol(Type, Decl(ramdaToolsNoInfinite2.ts, 512, 12))
+}
+declare module "List/List" {
+>"List/List" : Symbol("List/List", Decl(ramdaToolsNoInfinite2.ts, 515, 1))
+
+    export type List<A = any> = ReadonlyArray<A>;
+>List : Symbol(List, Decl(ramdaToolsNoInfinite2.ts, 516, 28))
+>A : Symbol(A, Decl(ramdaToolsNoInfinite2.ts, 518, 21))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+>A : Symbol(A, Decl(ramdaToolsNoInfinite2.ts, 518, 21))
+}
+declare module "Function/Function" {
+>"Function/Function" : Symbol("Function/Function", Decl(ramdaToolsNoInfinite2.ts, 519, 1))
+
+    import { List } from "List/List";
+>List : Symbol(List, Decl(ramdaToolsNoInfinite2.ts, 521, 12))
+
+    export interface Function<P extends List = any, R extends any = any> {
+>Function : Symbol(Function, Decl(ramdaToolsNoInfinite2.ts, 521, 37))
+>P : Symbol(P, Decl(ramdaToolsNoInfinite2.ts, 523, 30))
+>List : Symbol(List, Decl(ramdaToolsNoInfinite2.ts, 521, 12))
+>R : Symbol(R, Decl(ramdaToolsNoInfinite2.ts, 523, 51))
+
+        (...args: P): R;
+>args : Symbol(args, Decl(ramdaToolsNoInfinite2.ts, 524, 9))
+>P : Symbol(P, Decl(ramdaToolsNoInfinite2.ts, 523, 30))
+>R : Symbol(R, Decl(ramdaToolsNoInfinite2.ts, 523, 51))
+    }
+}
+declare module "Any/Extends" {
+>"Any/Extends" : Symbol("Any/Extends", Decl(ramdaToolsNoInfinite2.ts, 526, 1))
+
+    export type Extends<A1 extends any, A2 extends any> = [A1] extends [never] ? 0 : A1 extends A2 ? 1 : 0;
+>Extends : Symbol(Extends, Decl(ramdaToolsNoInfinite2.ts, 527, 30))
+>A1 : Symbol(A1, Decl(ramdaToolsNoInfinite2.ts, 528, 24))
+>A2 : Symbol(A2, Decl(ramdaToolsNoInfinite2.ts, 528, 39))
+>A1 : Symbol(A1, Decl(ramdaToolsNoInfinite2.ts, 528, 24))
+>A1 : Symbol(A1, Decl(ramdaToolsNoInfinite2.ts, 528, 24))
+>A2 : Symbol(A2, Decl(ramdaToolsNoInfinite2.ts, 528, 39))
+}
+
+declare module "Function/Curry" {
+>"Function/Curry" : Symbol("Function/Curry", Decl(ramdaToolsNoInfinite2.ts, 529, 1))
+
+    import { Pos } from "Iteration/Pos";
+>Pos : Symbol(Pos, Decl(ramdaToolsNoInfinite2.ts, 532, 12))
+
+    import { _Append } from "List/Append";
+>_Append : Symbol(_Append, Decl(ramdaToolsNoInfinite2.ts, 533, 12))
+
+    import { _Concat } from "List/Concat";
+>_Concat : Symbol(_Concat, Decl(ramdaToolsNoInfinite2.ts, 534, 12))
+
+    import { _Drop } from "List/Drop";
+>_Drop : Symbol(_Drop, Decl(ramdaToolsNoInfinite2.ts, 535, 12))
+
+    import { Length } from "List/Length";
+>Length : Symbol(Length, Decl(ramdaToolsNoInfinite2.ts, 536, 12))
+
+    import { Next } from "Iteration/Next";
+>Next : Symbol(Next, Decl(ramdaToolsNoInfinite2.ts, 537, 12))
+
+    import { Cast } from "Any/Cast";
+>Cast : Symbol(Cast, Decl(ramdaToolsNoInfinite2.ts, 538, 12))
+
+    import { Parameters } from "Function/Parameters";
+>Parameters : Symbol(Parameters, Decl(ramdaToolsNoInfinite2.ts, 539, 12))
+
+    import { Return } from "Function/Return";
+>Return : Symbol(Return, Decl(ramdaToolsNoInfinite2.ts, 540, 12))
+
+    import { IterationOf } from "Iteration/IterationOf";
+>IterationOf : Symbol(IterationOf, Decl(ramdaToolsNoInfinite2.ts, 541, 12))
+
+    import { Iteration } from "Iteration/Iteration";
+>Iteration : Symbol(Iteration, Decl(ramdaToolsNoInfinite2.ts, 542, 12))
+
+    import { Key } from "Iteration/Key";
+>Key : Symbol(Key, Decl(ramdaToolsNoInfinite2.ts, 543, 12))
+
+    import { NonNullable } from "List/NonNullable";
+>NonNullable : Symbol(NonNullable, Decl(ramdaToolsNoInfinite2.ts, 544, 12))
+
+    import { x } from "Any/x";
+>x : Symbol(x, Decl(ramdaToolsNoInfinite2.ts, 545, 12))
+
+    import { List } from "List/List";
+>List : Symbol(List, Decl(ramdaToolsNoInfinite2.ts, 546, 12))
+
+    import { Function } from "Function/Function";
+>Function : Symbol(Function, Decl(ramdaToolsNoInfinite2.ts, 547, 12))
+
+    import { Extends } from "Any/Extends";
+>Extends : Symbol(Extends, Decl(ramdaToolsNoInfinite2.ts, 548, 12))
+
+    type GapOf<L1 extends List, L2 extends List, LN extends List, I extends Iteration = IterationOf<'0'>> = L1[Pos<I>] extends x ? _Append<LN, L2[Pos<I>]> : LN;
+>GapOf : Symbol(GapOf, Decl(ramdaToolsNoInfinite2.ts, 548, 42))
+>L1 : Symbol(L1, Decl(ramdaToolsNoInfinite2.ts, 550, 15))
+>List : Symbol(List, Decl(ramdaToolsNoInfinite2.ts, 546, 12))
+>L2 : Symbol(L2, Decl(ramdaToolsNoInfinite2.ts, 550, 31))
+>List : Symbol(List, Decl(ramdaToolsNoInfinite2.ts, 546, 12))
+>LN : Symbol(LN, Decl(ramdaToolsNoInfinite2.ts, 550, 48))
+>List : Symbol(List, Decl(ramdaToolsNoInfinite2.ts, 546, 12))
+>I : Symbol(I, Decl(ramdaToolsNoInfinite2.ts, 550, 65))
+>Iteration : Symbol(Iteration, Decl(ramdaToolsNoInfinite2.ts, 542, 12))
+>IterationOf : Symbol(IterationOf, Decl(ramdaToolsNoInfinite2.ts, 541, 12))
+>L1 : Symbol(L1, Decl(ramdaToolsNoInfinite2.ts, 550, 15))
+>Pos : Symbol(Pos, Decl(ramdaToolsNoInfinite2.ts, 532, 12))
+>I : Symbol(I, Decl(ramdaToolsNoInfinite2.ts, 550, 65))
+>x : Symbol(x, Decl(ramdaToolsNoInfinite2.ts, 545, 12))
+>_Append : Symbol(_Append, Decl(ramdaToolsNoInfinite2.ts, 533, 12))
+>LN : Symbol(LN, Decl(ramdaToolsNoInfinite2.ts, 550, 48))
+>L2 : Symbol(L2, Decl(ramdaToolsNoInfinite2.ts, 550, 31))
+>Pos : Symbol(Pos, Decl(ramdaToolsNoInfinite2.ts, 532, 12))
+>I : Symbol(I, Decl(ramdaToolsNoInfinite2.ts, 550, 65))
+>LN : Symbol(LN, Decl(ramdaToolsNoInfinite2.ts, 550, 48))
+
+    type _GapsOf<L1 extends List, L2 extends List, LN extends List = [], I extends Iteration = IterationOf<'0'>> = {
+>_GapsOf : Symbol(_GapsOf, Decl(ramdaToolsNoInfinite2.ts, 550, 160))
+>L1 : Symbol(L1, Decl(ramdaToolsNoInfinite2.ts, 552, 17))
+>List : Symbol(List, Decl(ramdaToolsNoInfinite2.ts, 546, 12))
+>L2 : Symbol(L2, Decl(ramdaToolsNoInfinite2.ts, 552, 33))
+>List : Symbol(List, Decl(ramdaToolsNoInfinite2.ts, 546, 12))
+>LN : Symbol(LN, Decl(ramdaToolsNoInfinite2.ts, 552, 50))
+>List : Symbol(List, Decl(ramdaToolsNoInfinite2.ts, 546, 12))
+>I : Symbol(I, Decl(ramdaToolsNoInfinite2.ts, 552, 72))
+>Iteration : Symbol(Iteration, Decl(ramdaToolsNoInfinite2.ts, 542, 12))
+>IterationOf : Symbol(IterationOf, Decl(ramdaToolsNoInfinite2.ts, 541, 12))
+
+        0: _GapsOf<L1, L2, GapOf<L1, L2, LN, I>, Next<I>>;
+>0 : Symbol(0, Decl(ramdaToolsNoInfinite2.ts, 552, 116))
+>_GapsOf : Symbol(_GapsOf, Decl(ramdaToolsNoInfinite2.ts, 550, 160))
+>L1 : Symbol(L1, Decl(ramdaToolsNoInfinite2.ts, 552, 17))
+>L2 : Symbol(L2, Decl(ramdaToolsNoInfinite2.ts, 552, 33))
+>GapOf : Symbol(GapOf, Decl(ramdaToolsNoInfinite2.ts, 548, 42))
+>L1 : Symbol(L1, Decl(ramdaToolsNoInfinite2.ts, 552, 17))
+>L2 : Symbol(L2, Decl(ramdaToolsNoInfinite2.ts, 552, 33))
+>LN : Symbol(LN, Decl(ramdaToolsNoInfinite2.ts, 552, 50))
+>I : Symbol(I, Decl(ramdaToolsNoInfinite2.ts, 552, 72))
+>Next : Symbol(Next, Decl(ramdaToolsNoInfinite2.ts, 537, 12))
+>I : Symbol(I, Decl(ramdaToolsNoInfinite2.ts, 552, 72))
+
+        1: _Concat<LN, _Drop<L2, Key<I>>>;
+>1 : Symbol(1, Decl(ramdaToolsNoInfinite2.ts, 553, 58))
+>_Concat : Symbol(_Concat, Decl(ramdaToolsNoInfinite2.ts, 534, 12))
+>LN : Symbol(LN, Decl(ramdaToolsNoInfinite2.ts, 552, 50))
+>_Drop : Symbol(_Drop, Decl(ramdaToolsNoInfinite2.ts, 535, 12))
+>L2 : Symbol(L2, Decl(ramdaToolsNoInfinite2.ts, 552, 33))
+>Key : Symbol(Key, Decl(ramdaToolsNoInfinite2.ts, 543, 12))
+>I : Symbol(I, Decl(ramdaToolsNoInfinite2.ts, 552, 72))
+
+    }[Extends<Pos<I>, Length<L1>>];
+>Extends : Symbol(Extends, Decl(ramdaToolsNoInfinite2.ts, 548, 12))
+>Pos : Symbol(Pos, Decl(ramdaToolsNoInfinite2.ts, 532, 12))
+>I : Symbol(I, Decl(ramdaToolsNoInfinite2.ts, 552, 72))
+>Length : Symbol(Length, Decl(ramdaToolsNoInfinite2.ts, 536, 12))
+>L1 : Symbol(L1, Decl(ramdaToolsNoInfinite2.ts, 552, 17))
+
+    type GapsOf<L1 extends List, L2 extends List> = _GapsOf<L1, L2> extends infer X ? Cast<X, List> : never;
+>GapsOf : Symbol(GapsOf, Decl(ramdaToolsNoInfinite2.ts, 555, 35))
+>L1 : Symbol(L1, Decl(ramdaToolsNoInfinite2.ts, 557, 16))
+>List : Symbol(List, Decl(ramdaToolsNoInfinite2.ts, 546, 12))
+>L2 : Symbol(L2, Decl(ramdaToolsNoInfinite2.ts, 557, 32))
+>List : Symbol(List, Decl(ramdaToolsNoInfinite2.ts, 546, 12))
+>_GapsOf : Symbol(_GapsOf, Decl(ramdaToolsNoInfinite2.ts, 550, 160))
+>L1 : Symbol(L1, Decl(ramdaToolsNoInfinite2.ts, 557, 16))
+>L2 : Symbol(L2, Decl(ramdaToolsNoInfinite2.ts, 557, 32))
+>X : Symbol(X, Decl(ramdaToolsNoInfinite2.ts, 557, 81))
+>Cast : Symbol(Cast, Decl(ramdaToolsNoInfinite2.ts, 538, 12))
+>X : Symbol(X, Decl(ramdaToolsNoInfinite2.ts, 557, 81))
+>List : Symbol(List, Decl(ramdaToolsNoInfinite2.ts, 546, 12))
+
+    type Gaps<L extends List> = NonNullable<{
+>Gaps : Symbol(Gaps, Decl(ramdaToolsNoInfinite2.ts, 557, 108))
+>L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 559, 14))
+>List : Symbol(List, Decl(ramdaToolsNoInfinite2.ts, 546, 12))
+>NonNullable : Symbol(NonNullable, Decl(ramdaToolsNoInfinite2.ts, 544, 12))
+
+        [K in keyof L]?: L[K] | x;
+>K : Symbol(K, Decl(ramdaToolsNoInfinite2.ts, 560, 9))
+>L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 559, 14))
+>L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 559, 14))
+>K : Symbol(K, Decl(ramdaToolsNoInfinite2.ts, 560, 9))
+>x : Symbol(x, Decl(ramdaToolsNoInfinite2.ts, 545, 12))
+
+    }>;
+
+    export type Curry<F extends Function> = <L extends List>(...args: Cast<L, Gaps<Parameters<F>>>) => GapsOf<L, Parameters<F>> extends infer G ? Length<Cast<G, List>> extends infer L ? L extends 0 ? Return<F> : L extends 1 ? Curry<(...args: Cast<G, List>) => Return<F>> & ((...args: Cast<G, List>) => Return<F>) : Curry<(...args: Cast<G, List>) => Return<F>> : never : never;
+>Curry : Symbol(Curry, Decl(ramdaToolsNoInfinite2.ts, 561, 7))
+>F : Symbol(F, Decl(ramdaToolsNoInfinite2.ts, 563, 22))
+>Function : Symbol(Function, Decl(ramdaToolsNoInfinite2.ts, 547, 12))
+>L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 563, 45))
+>List : Symbol(List, Decl(ramdaToolsNoInfinite2.ts, 546, 12))
+>args : Symbol(args, Decl(ramdaToolsNoInfinite2.ts, 563, 61))
+>Cast : Symbol(Cast, Decl(ramdaToolsNoInfinite2.ts, 538, 12))
+>L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 563, 45))
+>Gaps : Symbol(Gaps, Decl(ramdaToolsNoInfinite2.ts, 557, 108))
+>Parameters : Symbol(Parameters, Decl(ramdaToolsNoInfinite2.ts, 539, 12))
+>F : Symbol(F, Decl(ramdaToolsNoInfinite2.ts, 563, 22))
+>GapsOf : Symbol(GapsOf, Decl(ramdaToolsNoInfinite2.ts, 555, 35))
+>L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 563, 45))
+>Parameters : Symbol(Parameters, Decl(ramdaToolsNoInfinite2.ts, 539, 12))
+>F : Symbol(F, Decl(ramdaToolsNoInfinite2.ts, 563, 22))
+>G : Symbol(G, Decl(ramdaToolsNoInfinite2.ts, 563, 141))
+>Length : Symbol(Length, Decl(ramdaToolsNoInfinite2.ts, 536, 12))
+>Cast : Symbol(Cast, Decl(ramdaToolsNoInfinite2.ts, 538, 12))
+>G : Symbol(G, Decl(ramdaToolsNoInfinite2.ts, 563, 141))
+>List : Symbol(List, Decl(ramdaToolsNoInfinite2.ts, 546, 12))
+>L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 563, 181))
+>L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 563, 181))
+>Return : Symbol(Return, Decl(ramdaToolsNoInfinite2.ts, 540, 12))
+>F : Symbol(F, Decl(ramdaToolsNoInfinite2.ts, 563, 22))
+>L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 563, 181))
+>Curry : Symbol(Curry, Decl(ramdaToolsNoInfinite2.ts, 561, 7))
+>args : Symbol(args, Decl(ramdaToolsNoInfinite2.ts, 563, 233))
+>Cast : Symbol(Cast, Decl(ramdaToolsNoInfinite2.ts, 538, 12))
+>G : Symbol(G, Decl(ramdaToolsNoInfinite2.ts, 563, 141))
+>List : Symbol(List, Decl(ramdaToolsNoInfinite2.ts, 546, 12))
+>Return : Symbol(Return, Decl(ramdaToolsNoInfinite2.ts, 540, 12))
+>F : Symbol(F, Decl(ramdaToolsNoInfinite2.ts, 563, 22))
+>args : Symbol(args, Decl(ramdaToolsNoInfinite2.ts, 563, 275))
+>Cast : Symbol(Cast, Decl(ramdaToolsNoInfinite2.ts, 538, 12))
+>G : Symbol(G, Decl(ramdaToolsNoInfinite2.ts, 563, 141))
+>List : Symbol(List, Decl(ramdaToolsNoInfinite2.ts, 546, 12))
+>Return : Symbol(Return, Decl(ramdaToolsNoInfinite2.ts, 540, 12))
+>F : Symbol(F, Decl(ramdaToolsNoInfinite2.ts, 563, 22))
+>Curry : Symbol(Curry, Decl(ramdaToolsNoInfinite2.ts, 561, 7))
+>args : Symbol(args, Decl(ramdaToolsNoInfinite2.ts, 563, 322))
+>Cast : Symbol(Cast, Decl(ramdaToolsNoInfinite2.ts, 538, 12))
+>G : Symbol(G, Decl(ramdaToolsNoInfinite2.ts, 563, 141))
+>List : Symbol(List, Decl(ramdaToolsNoInfinite2.ts, 546, 12))
+>Return : Symbol(Return, Decl(ramdaToolsNoInfinite2.ts, 540, 12))
+>F : Symbol(F, Decl(ramdaToolsNoInfinite2.ts, 563, 22))
+}
+
+
+

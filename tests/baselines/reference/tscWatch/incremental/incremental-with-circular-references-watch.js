@@ -1,4 +1,4 @@
-/a/lib/tsc.js -w
+Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -42,6 +42,64 @@ export { C } from "./c";
 //// [/users/username/projects/project/tsconfig.json]
 {"compilerOptions":{"incremental":true,"target":"es5","module":"commonjs","declaration":true,"emitDeclarationOnly":true}}
 
+
+/a/lib/tsc.js -w
+Output::
+>> Screen clear
+[[90m12:00:27 AM[0m] Starting compilation in watch mode...
+
+[[90m12:00:38 AM[0m] Found 0 errors. Watching for file changes.
+
+
+
+Program root files: ["/users/username/projects/project/a.ts","/users/username/projects/project/b.ts","/users/username/projects/project/c.ts","/users/username/projects/project/index.ts"]
+Program options: {"incremental":true,"target":1,"module":1,"declaration":true,"emitDeclarationOnly":true,"watch":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/users/username/projects/project/c.ts
+/users/username/projects/project/b.ts
+/users/username/projects/project/a.ts
+/users/username/projects/project/index.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/users/username/projects/project/c.ts
+/users/username/projects/project/b.ts
+/users/username/projects/project/a.ts
+/users/username/projects/project/index.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/users/username/projects/project/c.ts (used version)
+/users/username/projects/project/b.ts (used version)
+/users/username/projects/project/a.ts (used version)
+/users/username/projects/project/index.ts (used version)
+
+WatchedFiles::
+/users/username/projects/project/tsconfig.json:
+  {"fileName":"/users/username/projects/project/tsconfig.json","pollingInterval":250}
+/users/username/projects/project/a.ts:
+  {"fileName":"/users/username/projects/project/a.ts","pollingInterval":250}
+/users/username/projects/project/b.ts:
+  {"fileName":"/users/username/projects/project/b.ts","pollingInterval":250}
+/users/username/projects/project/c.ts:
+  {"fileName":"/users/username/projects/project/c.ts","pollingInterval":250}
+/users/username/projects/project/index.ts:
+  {"fileName":"/users/username/projects/project/index.ts","pollingInterval":250}
+/a/lib/lib.d.ts:
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+
+FsWatches::
+
+FsWatchesRecursive::
+/users/username/projects/project/node_modules/@types:
+  {"directoryName":"/users/username/projects/project/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/users/username/projects/project:
+  {"directoryName":"/users/username/projects/project","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+
+exitCode:: ExitStatus.undefined
+
 //// [/users/username/projects/project/c.d.ts]
 import { A } from "./a";
 export interface C {
@@ -70,12 +128,39 @@ export { C } from "./c";
 
 
 //// [/users/username/projects/project/tsconfig.tsbuildinfo]
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./c.ts","./b.ts","./a.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-3358372745-import { A } from \"./a\";\nexport interface C {\n    a: A;\n}\n","2102342013-import { C } from \"./c\";\nexport interface B {\n    b: C;\n}\n","-9690779495-import { B } from \"./b\";\nexport interface A {\n    b: B;\n}\n","1286756397-export { A } from \"./a\";\nexport { B } from \"./b\";\nexport { C } from \"./c\";\n"],"options":{"declaration":true,"emitDeclarationOnly":true,"module":1,"target":1},"fileIdsList":[[3],[2],[4],[2,3,4]],"referencedMap":[[4,1],[3,2],[2,3],[5,4]],"exportedModulesMap":[[4,1],[3,2],[2,3],[5,4]],"semanticDiagnosticsPerFile":[1,4,3,2,5]},"version":"FakeTSVersion"}
+
+//// [/users/username/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "program": {
+    "fileNames": [
+      "../../../../a/lib/lib.d.ts",
+      "./c.ts",
+      "./b.ts",
+      "./a.ts",
+      "./index.ts"
+    ],
+    "fileNamesList": [
+      [
+        "./b.ts"
+      ],
+      [
+        "./c.ts"
+      ],
+      [
+        "./a.ts"
+      ],
+      [
+        "./c.ts",
+        "./b.ts",
+        "./a.ts"
+      ]
+    ],
     "fileInfos": {
       "../../../../a/lib/lib.d.ts": {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+        "affectsGlobalScope": true
       },
       "./c.ts": {
         "version": "-3358372745-import { A } from \"./a\";\nexport interface C {\n    a: A;\n}\n",
@@ -95,13 +180,10 @@ export { C } from "./c";
       }
     },
     "options": {
-      "incremental": true,
-      "target": 1,
-      "module": 1,
       "declaration": true,
       "emitDeclarationOnly": true,
-      "watch": true,
-      "configFilePath": "./tsconfig.json"
+      "module": 1,
+      "target": 1
     },
     "referencedMap": {
       "./a.ts": [
@@ -114,9 +196,9 @@ export { C } from "./c";
         "./a.ts"
       ],
       "./index.ts": [
-        "./a.ts",
+        "./c.ts",
         "./b.ts",
-        "./c.ts"
+        "./a.ts"
       ]
     },
     "exportedModulesMap": {
@@ -130,9 +212,9 @@ export { C } from "./c";
         "./a.ts"
       ],
       "./index.ts": [
-        "./a.ts",
+        "./c.ts",
         "./b.ts",
-        "./c.ts"
+        "./a.ts"
       ]
     },
     "semanticDiagnosticsPerFile": [
@@ -143,21 +225,34 @@ export { C } from "./c";
       "./index.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1115
 }
+
+
+Change::
+
+Input::
+//// [/users/username/projects/project/a.ts]
+import { B } from "./b";
+export interface A {
+    b: B;
+    foo: any;
+}
+
 
 
 Output::
 >> Screen clear
-12:00:27 AM - Starting compilation in watch mode...
+[[90m12:00:44 AM[0m] Starting compilation in watch mode...
 
+[[90m12:01:00 AM[0m] Found 0 errors. Watching for file changes.
 
-
-12:00:38 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/users/username/projects/project/a.ts","/users/username/projects/project/b.ts","/users/username/projects/project/c.ts","/users/username/projects/project/index.ts"]
 Program options: {"incremental":true,"target":1,"module":1,"declaration":true,"emitDeclarationOnly":true,"watch":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /users/username/projects/project/c.ts
@@ -166,11 +261,16 @@ Program files::
 /users/username/projects/project/index.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
 /users/username/projects/project/c.ts
 /users/username/projects/project/b.ts
 /users/username/projects/project/a.ts
 /users/username/projects/project/index.ts
+
+Shape signatures in builder refreshed for::
+/users/username/projects/project/a.ts (used version)
+/users/username/projects/project/index.ts (used version)
+/users/username/projects/project/c.ts (used version)
+/users/username/projects/project/b.ts (used version)
 
 WatchedFiles::
 /users/username/projects/project/tsconfig.json:
@@ -196,16 +296,6 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
-Change::
-
-//// [/users/username/projects/project/a.ts]
-import { B } from "./b";
-export interface A {
-    b: B;
-    foo: any;
-}
-
-
 //// [/users/username/projects/project/c.d.ts] file written with same contents
 //// [/users/username/projects/project/b.d.ts] file written with same contents
 //// [/users/username/projects/project/a.d.ts]
@@ -218,12 +308,39 @@ export interface A {
 
 //// [/users/username/projects/project/index.d.ts] file written with same contents
 //// [/users/username/projects/project/tsconfig.tsbuildinfo]
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./c.ts","./b.ts","./a.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-3358372745-import { A } from \"./a\";\nexport interface C {\n    a: A;\n}\n","2102342013-import { C } from \"./c\";\nexport interface B {\n    b: C;\n}\n","-7623824316-import { B } from \"./b\";\nexport interface A {\n    b: B;\n    foo: any;\n}\n","1286756397-export { A } from \"./a\";\nexport { B } from \"./b\";\nexport { C } from \"./c\";\n"],"options":{"declaration":true,"emitDeclarationOnly":true,"module":1,"target":1},"fileIdsList":[[3],[2],[4],[2,3,4]],"referencedMap":[[4,1],[3,2],[2,3],[5,4]],"exportedModulesMap":[[4,1],[3,2],[2,3],[5,4]],"semanticDiagnosticsPerFile":[1,4,3,2,5]},"version":"FakeTSVersion"}
+
+//// [/users/username/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "program": {
+    "fileNames": [
+      "../../../../a/lib/lib.d.ts",
+      "./c.ts",
+      "./b.ts",
+      "./a.ts",
+      "./index.ts"
+    ],
+    "fileNamesList": [
+      [
+        "./b.ts"
+      ],
+      [
+        "./c.ts"
+      ],
+      [
+        "./a.ts"
+      ],
+      [
+        "./c.ts",
+        "./b.ts",
+        "./a.ts"
+      ]
+    ],
     "fileInfos": {
       "../../../../a/lib/lib.d.ts": {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+        "affectsGlobalScope": true
       },
       "./c.ts": {
         "version": "-3358372745-import { A } from \"./a\";\nexport interface C {\n    a: A;\n}\n",
@@ -243,13 +360,10 @@ export interface A {
       }
     },
     "options": {
-      "incremental": true,
-      "target": 1,
-      "module": 1,
       "declaration": true,
       "emitDeclarationOnly": true,
-      "watch": true,
-      "configFilePath": "./tsconfig.json"
+      "module": 1,
+      "target": 1
     },
     "referencedMap": {
       "./a.ts": [
@@ -262,9 +376,9 @@ export interface A {
         "./a.ts"
       ],
       "./index.ts": [
-        "./a.ts",
+        "./c.ts",
         "./b.ts",
-        "./c.ts"
+        "./a.ts"
       ]
     },
     "exportedModulesMap": {
@@ -278,9 +392,9 @@ export interface A {
         "./a.ts"
       ],
       "./index.ts": [
-        "./a.ts",
+        "./c.ts",
         "./b.ts",
-        "./c.ts"
+        "./a.ts"
       ]
     },
     "semanticDiagnosticsPerFile": [
@@ -291,54 +405,7 @@ export interface A {
       "./index.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1130
 }
 
-
-Output::
->> Screen clear
-12:00:42 AM - Starting compilation in watch mode...
-
-
-
-12:00:58 AM - Found 0 errors. Watching for file changes.
-
-
-Program root files: ["/users/username/projects/project/a.ts","/users/username/projects/project/b.ts","/users/username/projects/project/c.ts","/users/username/projects/project/index.ts"]
-Program options: {"incremental":true,"target":1,"module":1,"declaration":true,"emitDeclarationOnly":true,"watch":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
-Program files::
-/a/lib/lib.d.ts
-/users/username/projects/project/c.ts
-/users/username/projects/project/b.ts
-/users/username/projects/project/a.ts
-/users/username/projects/project/index.ts
-
-Semantic diagnostics in builder refreshed for::
-/users/username/projects/project/c.ts
-/users/username/projects/project/b.ts
-/users/username/projects/project/a.ts
-/users/username/projects/project/index.ts
-
-WatchedFiles::
-/users/username/projects/project/tsconfig.json:
-  {"fileName":"/users/username/projects/project/tsconfig.json","pollingInterval":250}
-/users/username/projects/project/a.ts:
-  {"fileName":"/users/username/projects/project/a.ts","pollingInterval":250}
-/users/username/projects/project/b.ts:
-  {"fileName":"/users/username/projects/project/b.ts","pollingInterval":250}
-/users/username/projects/project/c.ts:
-  {"fileName":"/users/username/projects/project/c.ts","pollingInterval":250}
-/users/username/projects/project/index.ts:
-  {"fileName":"/users/username/projects/project/index.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/users/username/projects/project/node_modules/@types:
-  {"directoryName":"/users/username/projects/project/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/users/username/projects/project:
-  {"directoryName":"/users/username/projects/project","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
-exitCode:: ExitStatus.undefined

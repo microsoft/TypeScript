@@ -1,0 +1,36 @@
+=== tests/cases/compiler/divergentAccessorsTypes2.ts ===
+class Test1<T> {
+>Test1 : Symbol(Test1, Decl(divergentAccessorsTypes2.ts, 0, 0))
+>T : Symbol(T, Decl(divergentAccessorsTypes2.ts, 0, 12))
+
+    get foo(): T { return null as any }
+>foo : Symbol(Test1.foo, Decl(divergentAccessorsTypes2.ts, 0, 16), Decl(divergentAccessorsTypes2.ts, 1, 39))
+>T : Symbol(T, Decl(divergentAccessorsTypes2.ts, 0, 12))
+
+    set foo(s: T | undefined ) {
+>foo : Symbol(Test1.foo, Decl(divergentAccessorsTypes2.ts, 0, 16), Decl(divergentAccessorsTypes2.ts, 1, 39))
+>s : Symbol(s, Decl(divergentAccessorsTypes2.ts, 2, 12))
+>T : Symbol(T, Decl(divergentAccessorsTypes2.ts, 0, 12))
+    }
+}
+
+const s = new Test1<string>();
+>s : Symbol(s, Decl(divergentAccessorsTypes2.ts, 6, 5))
+>Test1 : Symbol(Test1, Decl(divergentAccessorsTypes2.ts, 0, 0))
+
+s.foo = undefined;
+>s.foo : Symbol(Test1.foo, Decl(divergentAccessorsTypes2.ts, 0, 16), Decl(divergentAccessorsTypes2.ts, 1, 39))
+>s : Symbol(s, Decl(divergentAccessorsTypes2.ts, 6, 5))
+>foo : Symbol(Test1.foo, Decl(divergentAccessorsTypes2.ts, 0, 16), Decl(divergentAccessorsTypes2.ts, 1, 39))
+>undefined : Symbol(undefined)
+
+s.foo = "hello";
+>s.foo : Symbol(Test1.foo, Decl(divergentAccessorsTypes2.ts, 0, 16), Decl(divergentAccessorsTypes2.ts, 1, 39))
+>s : Symbol(s, Decl(divergentAccessorsTypes2.ts, 6, 5))
+>foo : Symbol(Test1.foo, Decl(divergentAccessorsTypes2.ts, 0, 16), Decl(divergentAccessorsTypes2.ts, 1, 39))
+
+s.foo = 42;
+>s.foo : Symbol(Test1.foo, Decl(divergentAccessorsTypes2.ts, 0, 16), Decl(divergentAccessorsTypes2.ts, 1, 39))
+>s : Symbol(s, Decl(divergentAccessorsTypes2.ts, 6, 5))
+>foo : Symbol(Test1.foo, Decl(divergentAccessorsTypes2.ts, 0, 16), Decl(divergentAccessorsTypes2.ts, 1, 39))
+

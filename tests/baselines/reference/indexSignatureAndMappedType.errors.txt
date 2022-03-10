@@ -1,7 +1,7 @@
 tests/cases/compiler/indexSignatureAndMappedType.ts(6,5): error TS2322: Type '{ [key: string]: T; }' is not assignable to type 'Record<K, T>'.
 tests/cases/compiler/indexSignatureAndMappedType.ts(15,5): error TS2322: Type 'Record<K, U>' is not assignable to type '{ [key: string]: T; }'.
   Type 'U' is not assignable to type 'T'.
-    'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+    'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
 tests/cases/compiler/indexSignatureAndMappedType.ts(16,5): error TS2322: Type '{ [key: string]: T; }' is not assignable to type 'Record<K, U>'.
 
 
@@ -26,7 +26,7 @@ tests/cases/compiler/indexSignatureAndMappedType.ts(16,5): error TS2322: Type '{
         ~
 !!! error TS2322: Type 'Record<K, U>' is not assignable to type '{ [key: string]: T; }'.
 !!! error TS2322:   Type 'U' is not assignable to type 'T'.
-!!! error TS2322:     'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322:     'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
         y = x;  // Error
         ~
 !!! error TS2322: Type '{ [key: string]: T; }' is not assignable to type 'Record<K, U>'.

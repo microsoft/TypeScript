@@ -1,0 +1,22 @@
+=== /globals.ts ===
+namespace globals {
+>globals : typeof globals
+
+  export type Foo = {};
+>Foo : Foo
+
+  export const Bar = {};
+>Bar : {}
+>{} : {}
+}
+import Foo = globals.toString.Blah;
+>Foo : any
+>globals : typeof globals
+>toString : any
+>Blah : any
+
+=== /index.ts ===
+const Foo = {};
+>Foo : {}
+>{} : {}
+

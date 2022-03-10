@@ -1,4 +1,4 @@
-/a/lib/tsc.js -w
+Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -21,60 +21,27 @@ const y = 20;
 //// [/users/username/projects/project/tsconfig.json]
 {"compilerOptions":{"incremental":true,"outFile":"out.js"}}
 
-//// [/users/username/projects/project/out.js]
-var x = 10;
-var y = 20;
 
-
-//// [/users/username/projects/project/out.tsbuildinfo]
-{
-  "bundle": {
-    "commonSourceDirectory": "./",
-    "sourceFiles": [
-      "./file1.ts",
-      "./file2.ts"
-    ],
-    "js": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 24,
-          "kind": "text"
-        }
-      ]
-    }
-  },
-  "version": "FakeTSVersion"
-}
-
-//// [/users/username/projects/project/out.tsbuildinfo.baseline.txt]
-======================================================================
-File:: /users/username/projects/project/out.js
-----------------------------------------------------------------------
-text: (0-24)
-var x = 10;
-var y = 20;
-
-======================================================================
-
-
+/a/lib/tsc.js -w
 Output::
 >> Screen clear
-12:00:23 AM - Starting compilation in watch mode...
+[[90m12:00:23 AM[0m] Starting compilation in watch mode...
 
+[[90m12:00:28 AM[0m] Found 0 errors. Watching for file changes.
 
-
-12:00:28 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/users/username/projects/project/file1.ts","/users/username/projects/project/file2.ts"]
 Program options: {"incremental":true,"outFile":"/users/username/projects/project/out.js","watch":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /users/username/projects/project/file1.ts
 /users/username/projects/project/file2.ts
 
 No cached semantic diagnostics in the builder::
+
+No shapes updated in the builder::
 
 WatchedFiles::
 /users/username/projects/project/tsconfig.json:
@@ -95,3 +62,44 @@ FsWatchesRecursive::
   {"directoryName":"/users/username/projects/project","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
+
+//// [/users/username/projects/project/out.js]
+var x = 10;
+var y = 20;
+
+
+//// [/users/username/projects/project/out.tsbuildinfo]
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file1.ts","./file2.ts"],"js":{"sections":[{"pos":0,"end":24,"kind":"text"}]}},"version":"FakeTSVersion"}
+
+//// [/users/username/projects/project/out.tsbuildinfo.readable.baseline.txt]
+{
+  "bundle": {
+    "commonSourceDirectory": "./",
+    "sourceFiles": [
+      "./file1.ts",
+      "./file2.ts"
+    ],
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 24,
+          "kind": "text"
+        }
+      ]
+    }
+  },
+  "version": "FakeTSVersion",
+  "size": 162
+}
+
+//// [/users/username/projects/project/out.tsbuildinfo.baseline.txt]
+======================================================================
+File:: /users/username/projects/project/out.js
+----------------------------------------------------------------------
+text: (0-24)
+var x = 10;
+var y = 20;
+
+======================================================================
+

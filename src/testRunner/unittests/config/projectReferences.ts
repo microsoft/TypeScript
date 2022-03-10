@@ -43,7 +43,7 @@ namespace ts {
     }
 
     function testProjectReferences(spec: TestSpecification, entryPointConfigFileName: string, checkResult: (prog: Program, host: fakes.CompilerHost) => void) {
-        const files = createMap<string>();
+        const files = new Map<string, string>();
         for (const key in spec) {
             const sp = spec[key];
             const configFileName = combineAllPaths("/", key, sp.configFileName || "tsconfig.json");

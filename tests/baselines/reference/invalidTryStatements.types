@@ -2,23 +2,28 @@
 function fn() {
 >fn : () => void
 
-    try {
-    } catch (x) {
+    catch(x) { } // error missing try
 >x : any
 
-        var x: string; // ensure x is 'Any'
->x : string
-    }
+    finally { } // potential error; can be absorbed by the 'catch'
 
-    // no type annotation allowed
-    try { } catch (z: any) { }
->z : any
-
-    try { } catch (a: number) { }
->a : any
-
-    try { } catch (y: string) { }
->y : any
+    try { }; // error missing finally
 }
 
+function fn2() {
+>fn2 : () => void
 
+    finally { } // error missing try
+    catch (x) { } // error missing try
+>x : any
+    
+    try { } finally { } // statement is here, so the 'catch' clause above doesn't absorb errors from the 'finally' clause below
+
+    finally { } // error missing try
+    
+    catch (x) { } // error missing try
+>x : any
+
+    try { } catch () { } // error missing catch binding
+> : any
+}

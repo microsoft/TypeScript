@@ -8,16 +8,16 @@ class C {
 
         this.x = x
 >this.x = x : number
->this.x : number
+>this.x : any
 >this : this
->x : number
+>x : any
 >x : number
 
         this.exports = [x]
 >this.exports = [x] : number[]
->this.exports : number[]
+>this.exports : any
 >this : this
->exports : number[]
+>exports : any
 >[x] : number[]
 >x : number
     }

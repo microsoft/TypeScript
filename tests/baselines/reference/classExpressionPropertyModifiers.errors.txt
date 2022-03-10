@@ -1,5 +1,5 @@
 tests/cases/compiler/classExpressionPropertyModifiers.ts(2,36): error TS1039: Initializers are not allowed in ambient contexts.
-tests/cases/compiler/classExpressionPropertyModifiers.ts(3,5): error TS1031: 'export' modifier cannot appear on a class element.
+tests/cases/compiler/classExpressionPropertyModifiers.ts(3,5): error TS1031: 'export' modifier cannot appear on class elements of this kind.
 
 
 ==== tests/cases/compiler/classExpressionPropertyModifiers.ts (2 errors) ====
@@ -9,6 +9,6 @@ tests/cases/compiler/classExpressionPropertyModifiers.ts(3,5): error TS1031: 'ex
 !!! error TS1039: Initializers are not allowed in ambient contexts.
         export foo = 1;
         ~~~~~~
-!!! error TS1031: 'export' modifier cannot appear on a class element.
+!!! error TS1031: 'export' modifier cannot appear on class elements of this kind.
     }
     

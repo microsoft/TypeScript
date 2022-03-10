@@ -76,9 +76,9 @@ const intersectDictionaries = <F1 extends Dictionary, F2 extends Dictionary>(
 
 ): F1 & F2 => Object.assign({}, d1, d2);
 >Object.assign({}, d1, d2) : {} & F1 & F2
->Object.assign : { <T, U>(target: T, source: U): T & U; <T, U, V>(target: T, source1: U, source2: V): T & U & V; <T, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W; (target: object, ...sources: any[]): any; }
+>Object.assign : { <T extends {}, U>(target: T, source: U): T & U; <T extends {}, U, V>(target: T, source1: U, source2: V): T & U & V; <T extends {}, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W; (target: object, ...sources: any[]): any; }
 >Object : ObjectConstructor
->assign : { <T, U>(target: T, source: U): T & U; <T, U, V>(target: T, source1: U, source2: V): T & U & V; <T, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W; (target: object, ...sources: any[]): any; }
+>assign : { <T extends {}, U>(target: T, source: U): T & U; <T extends {}, U, V>(target: T, source1: U, source2: V): T & U & V; <T extends {}, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W; (target: object, ...sources: any[]): any; }
 >{} : {}
 >d1 : F1
 >d2 : F2
@@ -206,3 +206,30 @@ var unknownChoices: choices<IUnknownChoiceList>;
 var unknownChoicesAndEmpty: choices<IUnknownChoiceList & {}>;
 >unknownChoicesAndEmpty : { shoes: boolean; food: boolean; }
 
+// Repro from #38672
+
+type Foo1 = { x: string } & { [x: number]: Foo1 };
+>Foo1 : Foo1
+>x : string
+>x : number
+
+type Foo2 = { x: string } & { [K in number]: Foo2 };
+>Foo2 : Foo2
+>x : string
+
+// Repro from #40239
+
+declare function mock<M>(_: Promise<M>): {} & M;
+>mock : <M>(_: Promise<M>) => {} & M
+>_ : Promise<M>
+
+mock(import('./ex'))
+>mock(import('./ex')) : {}
+>mock : <M>(_: Promise<M>) => {} & M
+>import('./ex') : Promise<{ default: typeof import("tests/cases/conformance/types/intersection/ex"); }>
+>'./ex' : "./ex"
+
+=== tests/cases/conformance/types/intersection/ex.d.ts ===
+export {}
+No type information for this code.
+No type information for this code.

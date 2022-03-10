@@ -113,88 +113,75 @@ module m2 {
 }
 
 //// [es6ModuleClassDeclaration.js]
-let c = /** @class */ (() => {
-    class c {
-        constructor() {
-            this.x = 10;
-            this.y = 30;
-        }
-        method1() {
-        }
-        method2() {
-        }
-        static method3() {
-        }
-        static method4() {
-        }
+export class c {
+    constructor() {
+        this.x = 10;
+        this.y = 30;
     }
-    c.k = 20;
-    c.l = 30;
-    return c;
-})();
-export { c };
-let c2 = /** @class */ (() => {
-    class c2 {
-        constructor() {
-            this.x = 10;
-            this.y = 30;
-        }
-        method1() {
-        }
-        method2() {
-        }
-        static method3() {
-        }
-        static method4() {
-        }
+    method1() {
     }
-    c2.k = 20;
-    c2.l = 30;
-    return c2;
-})();
+    method2() {
+    }
+    static method3() {
+    }
+    static method4() {
+    }
+}
+c.k = 20;
+c.l = 30;
+class c2 {
+    constructor() {
+        this.x = 10;
+        this.y = 30;
+    }
+    method1() {
+    }
+    method2() {
+    }
+    static method3() {
+    }
+    static method4() {
+    }
+}
+c2.k = 20;
+c2.l = 30;
 new c();
 new c2();
 export var m1;
 (function (m1) {
-    let c3 = /** @class */ (() => {
-        class c3 {
-            constructor() {
-                this.x = 10;
-                this.y = 30;
-            }
-            method1() {
-            }
-            method2() {
-            }
-            static method3() {
-            }
-            static method4() {
-            }
+    class c3 {
+        constructor() {
+            this.x = 10;
+            this.y = 30;
         }
-        c3.k = 20;
-        c3.l = 30;
-        return c3;
-    })();
+        method1() {
+        }
+        method2() {
+        }
+        static method3() {
+        }
+        static method4() {
+        }
+    }
+    c3.k = 20;
+    c3.l = 30;
     m1.c3 = c3;
-    let c4 = /** @class */ (() => {
-        class c4 {
-            constructor() {
-                this.x = 10;
-                this.y = 30;
-            }
-            method1() {
-            }
-            method2() {
-            }
-            static method3() {
-            }
-            static method4() {
-            }
+    class c4 {
+        constructor() {
+            this.x = 10;
+            this.y = 30;
         }
-        c4.k = 20;
-        c4.l = 30;
-        return c4;
-    })();
+        method1() {
+        }
+        method2() {
+        }
+        static method3() {
+        }
+        static method4() {
+        }
+    }
+    c4.k = 20;
+    c4.l = 30;
     new c();
     new c2();
     new c3();
@@ -202,45 +189,39 @@ export var m1;
 })(m1 || (m1 = {}));
 var m2;
 (function (m2) {
-    let c3 = /** @class */ (() => {
-        class c3 {
-            constructor() {
-                this.x = 10;
-                this.y = 30;
-            }
-            method1() {
-            }
-            method2() {
-            }
-            static method3() {
-            }
-            static method4() {
-            }
+    class c3 {
+        constructor() {
+            this.x = 10;
+            this.y = 30;
         }
-        c3.k = 20;
-        c3.l = 30;
-        return c3;
-    })();
+        method1() {
+        }
+        method2() {
+        }
+        static method3() {
+        }
+        static method4() {
+        }
+    }
+    c3.k = 20;
+    c3.l = 30;
     m2.c3 = c3;
-    let c4 = /** @class */ (() => {
-        class c4 {
-            constructor() {
-                this.x = 10;
-                this.y = 30;
-            }
-            method1() {
-            }
-            method2() {
-            }
-            static method3() {
-            }
-            static method4() {
-            }
+    class c4 {
+        constructor() {
+            this.x = 10;
+            this.y = 30;
         }
-        c4.k = 20;
-        c4.l = 30;
-        return c4;
-    })();
+        method1() {
+        }
+        method2() {
+        }
+        static method3() {
+        }
+        static method4() {
+        }
+    }
+    c4.k = 20;
+    c4.l = 30;
     new c();
     new c2();
     new c3();

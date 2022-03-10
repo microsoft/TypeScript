@@ -1,15 +1,15 @@
 === tests/cases/compiler/functionWithDefaultParameterWithNoStatements9.ts ===
 function foo(a = console.log) { }
->foo : (a?: (message?: any, ...optionalParams: any[]) => void) => void
->a : (message?: any, ...optionalParams: any[]) => void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>foo : (a?: (...data: any[]) => void) => void
+>a : (...data: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 
 function bar(a = console.log) {
->bar : (a?: (message?: any, ...optionalParams: any[]) => void) => void
->a : (message?: any, ...optionalParams: any[]) => void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>bar : (a?: (...data: any[]) => void) => void
+>a : (...data: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 }

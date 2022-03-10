@@ -1,6 +1,6 @@
 tests/cases/compiler/typedArraysCrossAssignability01.ts(13,5): error TS2322: Type 'Uint8Array' is not assignable to type 'Int8Array'.
   Types of property '[Symbol.toStringTag]' are incompatible.
-    Type '"UInt8Array"' is not assignable to type '"Int8Array"'.
+    Type '"Uint8Array"' is not assignable to type '"Int8Array"'.
 tests/cases/compiler/typedArraysCrossAssignability01.ts(14,5): error TS2322: Type 'Int16Array' is not assignable to type 'Int8Array'.
   Types of property '[Symbol.toStringTag]' are incompatible.
     Type '"Int16Array"' is not assignable to type '"Int8Array"'.
@@ -24,34 +24,34 @@ tests/cases/compiler/typedArraysCrossAssignability01.ts(20,5): error TS2322: Typ
     Type '"Uint8ClampedArray"' is not assignable to type '"Int8Array"'.
 tests/cases/compiler/typedArraysCrossAssignability01.ts(22,5): error TS2322: Type 'Int8Array' is not assignable to type 'Uint8Array'.
   Types of property '[Symbol.toStringTag]' are incompatible.
-    Type '"Int8Array"' is not assignable to type '"UInt8Array"'.
+    Type '"Int8Array"' is not assignable to type '"Uint8Array"'.
 tests/cases/compiler/typedArraysCrossAssignability01.ts(24,5): error TS2322: Type 'Int16Array' is not assignable to type 'Uint8Array'.
   Types of property '[Symbol.toStringTag]' are incompatible.
-    Type '"Int16Array"' is not assignable to type '"UInt8Array"'.
+    Type '"Int16Array"' is not assignable to type '"Uint8Array"'.
 tests/cases/compiler/typedArraysCrossAssignability01.ts(25,5): error TS2322: Type 'Uint16Array' is not assignable to type 'Uint8Array'.
   Types of property '[Symbol.toStringTag]' are incompatible.
-    Type '"Uint16Array"' is not assignable to type '"UInt8Array"'.
+    Type '"Uint16Array"' is not assignable to type '"Uint8Array"'.
 tests/cases/compiler/typedArraysCrossAssignability01.ts(26,5): error TS2322: Type 'Int32Array' is not assignable to type 'Uint8Array'.
   Types of property '[Symbol.toStringTag]' are incompatible.
-    Type '"Int32Array"' is not assignable to type '"UInt8Array"'.
+    Type '"Int32Array"' is not assignable to type '"Uint8Array"'.
 tests/cases/compiler/typedArraysCrossAssignability01.ts(27,5): error TS2322: Type 'Uint32Array' is not assignable to type 'Uint8Array'.
   Types of property '[Symbol.toStringTag]' are incompatible.
-    Type '"Uint32Array"' is not assignable to type '"UInt8Array"'.
+    Type '"Uint32Array"' is not assignable to type '"Uint8Array"'.
 tests/cases/compiler/typedArraysCrossAssignability01.ts(28,5): error TS2322: Type 'Float32Array' is not assignable to type 'Uint8Array'.
   Types of property '[Symbol.toStringTag]' are incompatible.
-    Type '"Float32Array"' is not assignable to type '"UInt8Array"'.
+    Type '"Float32Array"' is not assignable to type '"Uint8Array"'.
 tests/cases/compiler/typedArraysCrossAssignability01.ts(29,5): error TS2322: Type 'Float64Array' is not assignable to type 'Uint8Array'.
   Types of property '[Symbol.toStringTag]' are incompatible.
-    Type '"Float64Array"' is not assignable to type '"UInt8Array"'.
+    Type '"Float64Array"' is not assignable to type '"Uint8Array"'.
 tests/cases/compiler/typedArraysCrossAssignability01.ts(30,5): error TS2322: Type 'Uint8ClampedArray' is not assignable to type 'Uint8Array'.
   Types of property '[Symbol.toStringTag]' are incompatible.
-    Type '"Uint8ClampedArray"' is not assignable to type '"UInt8Array"'.
+    Type '"Uint8ClampedArray"' is not assignable to type '"Uint8Array"'.
 tests/cases/compiler/typedArraysCrossAssignability01.ts(32,5): error TS2322: Type 'Int8Array' is not assignable to type 'Int16Array'.
   Types of property '[Symbol.toStringTag]' are incompatible.
     Type '"Int8Array"' is not assignable to type '"Int16Array"'.
 tests/cases/compiler/typedArraysCrossAssignability01.ts(33,5): error TS2322: Type 'Uint8Array' is not assignable to type 'Int16Array'.
   Types of property '[Symbol.toStringTag]' are incompatible.
-    Type '"UInt8Array"' is not assignable to type '"Int16Array"'.
+    Type '"Uint8Array"' is not assignable to type '"Int16Array"'.
 tests/cases/compiler/typedArraysCrossAssignability01.ts(35,5): error TS2322: Type 'Uint16Array' is not assignable to type 'Int16Array'.
   Types of property '[Symbol.toStringTag]' are incompatible.
     Type '"Uint16Array"' is not assignable to type '"Int16Array"'.
@@ -75,7 +75,7 @@ tests/cases/compiler/typedArraysCrossAssignability01.ts(42,5): error TS2322: Typ
     Type '"Int8Array"' is not assignable to type '"Uint16Array"'.
 tests/cases/compiler/typedArraysCrossAssignability01.ts(43,5): error TS2322: Type 'Uint8Array' is not assignable to type 'Uint16Array'.
   Types of property '[Symbol.toStringTag]' are incompatible.
-    Type '"UInt8Array"' is not assignable to type '"Uint16Array"'.
+    Type '"Uint8Array"' is not assignable to type '"Uint16Array"'.
 tests/cases/compiler/typedArraysCrossAssignability01.ts(44,5): error TS2322: Type 'Int16Array' is not assignable to type 'Uint16Array'.
   Types of property '[Symbol.toStringTag]' are incompatible.
     Type '"Int16Array"' is not assignable to type '"Uint16Array"'.
@@ -99,7 +99,7 @@ tests/cases/compiler/typedArraysCrossAssignability01.ts(52,5): error TS2322: Typ
     Type '"Int8Array"' is not assignable to type '"Int32Array"'.
 tests/cases/compiler/typedArraysCrossAssignability01.ts(53,5): error TS2322: Type 'Uint8Array' is not assignable to type 'Int32Array'.
   Types of property '[Symbol.toStringTag]' are incompatible.
-    Type '"UInt8Array"' is not assignable to type '"Int32Array"'.
+    Type '"Uint8Array"' is not assignable to type '"Int32Array"'.
 tests/cases/compiler/typedArraysCrossAssignability01.ts(54,5): error TS2322: Type 'Int16Array' is not assignable to type 'Int32Array'.
   Types of property '[Symbol.toStringTag]' are incompatible.
     Type '"Int16Array"' is not assignable to type '"Int32Array"'.
@@ -123,7 +123,7 @@ tests/cases/compiler/typedArraysCrossAssignability01.ts(62,5): error TS2322: Typ
     Type '"Int8Array"' is not assignable to type '"Float32Array"'.
 tests/cases/compiler/typedArraysCrossAssignability01.ts(63,5): error TS2322: Type 'Uint8Array' is not assignable to type 'Float32Array'.
   Types of property '[Symbol.toStringTag]' are incompatible.
-    Type '"UInt8Array"' is not assignable to type '"Float32Array"'.
+    Type '"Uint8Array"' is not assignable to type '"Float32Array"'.
 tests/cases/compiler/typedArraysCrossAssignability01.ts(64,5): error TS2322: Type 'Int16Array' is not assignable to type 'Float32Array'.
   Types of property '[Symbol.toStringTag]' are incompatible.
     Type '"Int16Array"' is not assignable to type '"Float32Array"'.
@@ -147,7 +147,7 @@ tests/cases/compiler/typedArraysCrossAssignability01.ts(72,5): error TS2322: Typ
     Type '"Int8Array"' is not assignable to type '"Float64Array"'.
 tests/cases/compiler/typedArraysCrossAssignability01.ts(73,5): error TS2322: Type 'Uint8Array' is not assignable to type 'Float64Array'.
   Types of property '[Symbol.toStringTag]' are incompatible.
-    Type '"UInt8Array"' is not assignable to type '"Float64Array"'.
+    Type '"Uint8Array"' is not assignable to type '"Float64Array"'.
 tests/cases/compiler/typedArraysCrossAssignability01.ts(74,5): error TS2322: Type 'Int16Array' is not assignable to type 'Float64Array'.
   Types of property '[Symbol.toStringTag]' are incompatible.
     Type '"Int16Array"' is not assignable to type '"Float64Array"'.
@@ -171,7 +171,7 @@ tests/cases/compiler/typedArraysCrossAssignability01.ts(82,5): error TS2322: Typ
     Type '"Int8Array"' is not assignable to type '"Uint8ClampedArray"'.
 tests/cases/compiler/typedArraysCrossAssignability01.ts(83,5): error TS2322: Type 'Uint8Array' is not assignable to type 'Uint8ClampedArray'.
   Types of property '[Symbol.toStringTag]' are incompatible.
-    Type '"UInt8Array"' is not assignable to type '"Uint8ClampedArray"'.
+    Type '"Uint8Array"' is not assignable to type '"Uint8ClampedArray"'.
 tests/cases/compiler/typedArraysCrossAssignability01.ts(84,5): error TS2322: Type 'Int16Array' is not assignable to type 'Uint8ClampedArray'.
   Types of property '[Symbol.toStringTag]' are incompatible.
     Type '"Int16Array"' is not assignable to type '"Uint8ClampedArray"'.
@@ -209,7 +209,7 @@ tests/cases/compiler/typedArraysCrossAssignability01.ts(89,5): error TS2322: Typ
         ~~~~~~~~~~~~~
 !!! error TS2322: Type 'Uint8Array' is not assignable to type 'Int8Array'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
-!!! error TS2322:     Type '"UInt8Array"' is not assignable to type '"Int8Array"'.
+!!! error TS2322:     Type '"Uint8Array"' is not assignable to type '"Int8Array"'.
         arr_Int8Array = arr_Int16Array;
         ~~~~~~~~~~~~~
 !!! error TS2322: Type 'Int16Array' is not assignable to type 'Int8Array'.
@@ -250,43 +250,43 @@ tests/cases/compiler/typedArraysCrossAssignability01.ts(89,5): error TS2322: Typ
         ~~~~~~~~~~~~~~
 !!! error TS2322: Type 'Int8Array' is not assignable to type 'Uint8Array'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
-!!! error TS2322:     Type '"Int8Array"' is not assignable to type '"UInt8Array"'.
+!!! error TS2322:     Type '"Int8Array"' is not assignable to type '"Uint8Array"'.
         arr_Uint8Array = arr_Uint8Array;
         arr_Uint8Array = arr_Int16Array;
         ~~~~~~~~~~~~~~
 !!! error TS2322: Type 'Int16Array' is not assignable to type 'Uint8Array'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
-!!! error TS2322:     Type '"Int16Array"' is not assignable to type '"UInt8Array"'.
+!!! error TS2322:     Type '"Int16Array"' is not assignable to type '"Uint8Array"'.
         arr_Uint8Array = arr_Uint16Array;
         ~~~~~~~~~~~~~~
 !!! error TS2322: Type 'Uint16Array' is not assignable to type 'Uint8Array'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
-!!! error TS2322:     Type '"Uint16Array"' is not assignable to type '"UInt8Array"'.
+!!! error TS2322:     Type '"Uint16Array"' is not assignable to type '"Uint8Array"'.
         arr_Uint8Array = arr_Int32Array;
         ~~~~~~~~~~~~~~
 !!! error TS2322: Type 'Int32Array' is not assignable to type 'Uint8Array'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
-!!! error TS2322:     Type '"Int32Array"' is not assignable to type '"UInt8Array"'.
+!!! error TS2322:     Type '"Int32Array"' is not assignable to type '"Uint8Array"'.
         arr_Uint8Array = arr_Uint32Array;
         ~~~~~~~~~~~~~~
 !!! error TS2322: Type 'Uint32Array' is not assignable to type 'Uint8Array'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
-!!! error TS2322:     Type '"Uint32Array"' is not assignable to type '"UInt8Array"'.
+!!! error TS2322:     Type '"Uint32Array"' is not assignable to type '"Uint8Array"'.
         arr_Uint8Array = arr_Float32Array;
         ~~~~~~~~~~~~~~
 !!! error TS2322: Type 'Float32Array' is not assignable to type 'Uint8Array'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
-!!! error TS2322:     Type '"Float32Array"' is not assignable to type '"UInt8Array"'.
+!!! error TS2322:     Type '"Float32Array"' is not assignable to type '"Uint8Array"'.
         arr_Uint8Array = arr_Float64Array;
         ~~~~~~~~~~~~~~
 !!! error TS2322: Type 'Float64Array' is not assignable to type 'Uint8Array'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
-!!! error TS2322:     Type '"Float64Array"' is not assignable to type '"UInt8Array"'.
+!!! error TS2322:     Type '"Float64Array"' is not assignable to type '"Uint8Array"'.
         arr_Uint8Array = arr_Uint8ClampedArray;
         ~~~~~~~~~~~~~~
 !!! error TS2322: Type 'Uint8ClampedArray' is not assignable to type 'Uint8Array'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
-!!! error TS2322:     Type '"Uint8ClampedArray"' is not assignable to type '"UInt8Array"'.
+!!! error TS2322:     Type '"Uint8ClampedArray"' is not assignable to type '"Uint8Array"'.
     
         arr_Int16Array = arr_Int8Array;
         ~~~~~~~~~~~~~~
@@ -297,7 +297,7 @@ tests/cases/compiler/typedArraysCrossAssignability01.ts(89,5): error TS2322: Typ
         ~~~~~~~~~~~~~~
 !!! error TS2322: Type 'Uint8Array' is not assignable to type 'Int16Array'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
-!!! error TS2322:     Type '"UInt8Array"' is not assignable to type '"Int16Array"'.
+!!! error TS2322:     Type '"Uint8Array"' is not assignable to type '"Int16Array"'.
         arr_Int16Array = arr_Int16Array;
         arr_Int16Array = arr_Uint16Array;
         ~~~~~~~~~~~~~~
@@ -339,7 +339,7 @@ tests/cases/compiler/typedArraysCrossAssignability01.ts(89,5): error TS2322: Typ
         ~~~~~~~~~~~~~~~
 !!! error TS2322: Type 'Uint8Array' is not assignable to type 'Uint16Array'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
-!!! error TS2322:     Type '"UInt8Array"' is not assignable to type '"Uint16Array"'.
+!!! error TS2322:     Type '"Uint8Array"' is not assignable to type '"Uint16Array"'.
         arr_Uint16Array = arr_Int16Array;
         ~~~~~~~~~~~~~~~
 !!! error TS2322: Type 'Int16Array' is not assignable to type 'Uint16Array'.
@@ -381,7 +381,7 @@ tests/cases/compiler/typedArraysCrossAssignability01.ts(89,5): error TS2322: Typ
         ~~~~~~~~~~~~~~
 !!! error TS2322: Type 'Uint8Array' is not assignable to type 'Int32Array'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
-!!! error TS2322:     Type '"UInt8Array"' is not assignable to type '"Int32Array"'.
+!!! error TS2322:     Type '"Uint8Array"' is not assignable to type '"Int32Array"'.
         arr_Int32Array = arr_Int16Array;
         ~~~~~~~~~~~~~~
 !!! error TS2322: Type 'Int16Array' is not assignable to type 'Int32Array'.
@@ -423,7 +423,7 @@ tests/cases/compiler/typedArraysCrossAssignability01.ts(89,5): error TS2322: Typ
         ~~~~~~~~~~~~~~~~
 !!! error TS2322: Type 'Uint8Array' is not assignable to type 'Float32Array'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
-!!! error TS2322:     Type '"UInt8Array"' is not assignable to type '"Float32Array"'.
+!!! error TS2322:     Type '"Uint8Array"' is not assignable to type '"Float32Array"'.
         arr_Float32Array = arr_Int16Array;
         ~~~~~~~~~~~~~~~~
 !!! error TS2322: Type 'Int16Array' is not assignable to type 'Float32Array'.
@@ -465,7 +465,7 @@ tests/cases/compiler/typedArraysCrossAssignability01.ts(89,5): error TS2322: Typ
         ~~~~~~~~~~~~~~~~
 !!! error TS2322: Type 'Uint8Array' is not assignable to type 'Float64Array'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
-!!! error TS2322:     Type '"UInt8Array"' is not assignable to type '"Float64Array"'.
+!!! error TS2322:     Type '"Uint8Array"' is not assignable to type '"Float64Array"'.
         arr_Float64Array = arr_Int16Array;
         ~~~~~~~~~~~~~~~~
 !!! error TS2322: Type 'Int16Array' is not assignable to type 'Float64Array'.
@@ -507,7 +507,7 @@ tests/cases/compiler/typedArraysCrossAssignability01.ts(89,5): error TS2322: Typ
         ~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2322: Type 'Uint8Array' is not assignable to type 'Uint8ClampedArray'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
-!!! error TS2322:     Type '"UInt8Array"' is not assignable to type '"Uint8ClampedArray"'.
+!!! error TS2322:     Type '"Uint8Array"' is not assignable to type '"Uint8ClampedArray"'.
         arr_Uint8ClampedArray = arr_Int16Array;
         ~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2322: Type 'Int16Array' is not assignable to type 'Uint8ClampedArray'.

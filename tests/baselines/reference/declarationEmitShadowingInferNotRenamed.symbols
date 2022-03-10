@@ -1,0 +1,58 @@
+=== tests/cases/compiler/declarationEmitShadowingInferNotRenamed.ts ===
+// Any instance type
+type Client = string
+>Client : Symbol(Client, Decl(declarationEmitShadowingInferNotRenamed.ts, 0, 0))
+
+// Modified instance
+type UpdatedClient<C> = C & {foo: number}
+>UpdatedClient : Symbol(UpdatedClient, Decl(declarationEmitShadowingInferNotRenamed.ts, 1, 20))
+>C : Symbol(C, Decl(declarationEmitShadowingInferNotRenamed.ts, 4, 19))
+>C : Symbol(C, Decl(declarationEmitShadowingInferNotRenamed.ts, 4, 19))
+>foo : Symbol(foo, Decl(declarationEmitShadowingInferNotRenamed.ts, 4, 29))
+
+export const createClient = <
+>createClient : Symbol(createClient, Decl(declarationEmitShadowingInferNotRenamed.ts, 6, 12))
+
+  D extends
+>D : Symbol(D, Decl(declarationEmitShadowingInferNotRenamed.ts, 6, 29))
+
+    | (new (...args: any[]) => Client) // accept class
+>args : Symbol(args, Decl(declarationEmitShadowingInferNotRenamed.ts, 8, 12))
+>Client : Symbol(Client, Decl(declarationEmitShadowingInferNotRenamed.ts, 0, 0))
+
+    | Record<string, new (...args: any[]) => Client> // or map of classes
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>args : Symbol(args, Decl(declarationEmitShadowingInferNotRenamed.ts, 9, 26))
+>Client : Symbol(Client, Decl(declarationEmitShadowingInferNotRenamed.ts, 0, 0))
+
+>(
+  clientDef: D
+>clientDef : Symbol(clientDef, Decl(declarationEmitShadowingInferNotRenamed.ts, 10, 2))
+>D : Symbol(D, Decl(declarationEmitShadowingInferNotRenamed.ts, 6, 29))
+
+): D extends new (...args: any[]) => infer C
+>D : Symbol(D, Decl(declarationEmitShadowingInferNotRenamed.ts, 6, 29))
+>args : Symbol(args, Decl(declarationEmitShadowingInferNotRenamed.ts, 12, 18))
+>C : Symbol(C, Decl(declarationEmitShadowingInferNotRenamed.ts, 12, 42))
+
+  ? UpdatedClient<C> // return instance
+>UpdatedClient : Symbol(UpdatedClient, Decl(declarationEmitShadowingInferNotRenamed.ts, 1, 20))
+>C : Symbol(C, Decl(declarationEmitShadowingInferNotRenamed.ts, 12, 42))
+
+  : {
+      [K in keyof D]: D[K] extends new (...args: any[]) => infer C // or map of instances respectively
+>K : Symbol(K, Decl(declarationEmitShadowingInferNotRenamed.ts, 15, 7))
+>D : Symbol(D, Decl(declarationEmitShadowingInferNotRenamed.ts, 6, 29))
+>D : Symbol(D, Decl(declarationEmitShadowingInferNotRenamed.ts, 6, 29))
+>K : Symbol(K, Decl(declarationEmitShadowingInferNotRenamed.ts, 15, 7))
+>args : Symbol(args, Decl(declarationEmitShadowingInferNotRenamed.ts, 15, 40))
+>C : Symbol(C, Decl(declarationEmitShadowingInferNotRenamed.ts, 15, 64))
+
+        ? UpdatedClient<C>
+>UpdatedClient : Symbol(UpdatedClient, Decl(declarationEmitShadowingInferNotRenamed.ts, 1, 20))
+>C : Symbol(C, Decl(declarationEmitShadowingInferNotRenamed.ts, 15, 64))
+
+        : never
+    } => {
+  return null as any
+}

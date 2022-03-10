@@ -6,5 +6,5 @@ class D { }
 >D : D
 
 export = D;
->D : import("tests/cases/compiler/exportAssignmentWithExports")
+>D : D
 

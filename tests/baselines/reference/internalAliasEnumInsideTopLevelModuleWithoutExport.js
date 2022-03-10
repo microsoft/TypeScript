@@ -15,6 +15,7 @@ export var bVal: b = b.Sunday;
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    exports.bVal = exports.a = void 0;
     var a;
     (function (a) {
         var weekend;

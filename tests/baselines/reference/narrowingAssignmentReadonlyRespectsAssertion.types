@@ -1,0 +1,147 @@
+=== tests/cases/compiler/narrowingAssignmentReadonlyRespectsAssertion.ts ===
+// https://github.com/microsoft/TypeScript/issues/41984
+
+interface TestCase<T extends string | number> {
+  readonly val1: T | ReadonlyArray<T>;
+>val1 : T | readonly T[]
+
+  readonly val2: ReadonlyArray<T>;
+>val2 : readonly T[]
+}
+
+interface MultiCaseFixture<T> {
+  cases: T[];
+>cases : T[]
+}
+
+function subDataFunc(): TestCase<string | number>[] {
+>subDataFunc : () => TestCase<string | number>[]
+
+  return [
+>[      { val1: "a", val2: ["a", "b", "c"] },      { val1: 2, val2: [1, 2, 3] },      { val1: ["a", "z"], val2: ["x", "y", "z"] },      { val1: [5, 10], val2: [10, 100, 1000] },  ] : ({ val1: string; val2: string[]; } | { val1: number; val2: number[]; } | { val1: string[]; val2: string[]; } | { val1: number[]; val2: number[]; })[]
+
+      { val1: "a", val2: ["a", "b", "c"] },
+>{ val1: "a", val2: ["a", "b", "c"] } : { val1: string; val2: string[]; }
+>val1 : string
+>"a" : "a"
+>val2 : string[]
+>["a", "b", "c"] : string[]
+>"a" : "a"
+>"b" : "b"
+>"c" : "c"
+
+      { val1: 2, val2: [1, 2, 3] },
+>{ val1: 2, val2: [1, 2, 3] } : { val1: number; val2: number[]; }
+>val1 : number
+>2 : 2
+>val2 : number[]
+>[1, 2, 3] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+
+      { val1: ["a", "z"], val2: ["x", "y", "z"] },
+>{ val1: ["a", "z"], val2: ["x", "y", "z"] } : { val1: string[]; val2: string[]; }
+>val1 : string[]
+>["a", "z"] : string[]
+>"a" : "a"
+>"z" : "z"
+>val2 : string[]
+>["x", "y", "z"] : string[]
+>"x" : "x"
+>"y" : "y"
+>"z" : "z"
+
+      { val1: [5, 10], val2: [10, 100, 1000] },
+>{ val1: [5, 10], val2: [10, 100, 1000] } : { val1: number[]; val2: number[]; }
+>val1 : number[]
+>[5, 10] : number[]
+>5 : 5
+>10 : 10
+>val2 : number[]
+>[10, 100, 1000] : number[]
+>10 : 10
+>100 : 100
+>1000 : 1000
+
+  ];
+}
+
+function dataFunc<T>(subFunc: () => T[]): MultiCaseFixture<T> {
+>dataFunc : <T>(subFunc: () => T[]) => MultiCaseFixture<T>
+>subFunc : () => T[]
+
+  return { cases: subFunc() };
+>{ cases: subFunc() } : { cases: T[]; }
+>cases : T[]
+>subFunc() : T[]
+>subFunc : () => T[]
+}
+
+function testFunc() {
+>testFunc : () => void
+
+  const fixture = dataFunc<TestCase<string | number>>(subDataFunc);
+>fixture : MultiCaseFixture<TestCase<string | number>>
+>dataFunc<TestCase<string | number>>(subDataFunc) : MultiCaseFixture<TestCase<string | number>>
+>dataFunc : <T>(subFunc: () => T[]) => MultiCaseFixture<T>
+>subDataFunc : () => TestCase<string | number>[]
+
+  fixture.cases.forEach(({ val1, val2 }) => {
+>fixture.cases.forEach(({ val1, val2 }) => {      if (Array.isArray(val1)) {          // This should retain val1 as being an array          const reversedVal1 = val1.slice().reverse();          console.log(reversedVal1);      } else {          console.log(val1);      }      console.log(val2);  }) : void
+>fixture.cases.forEach : (callbackfn: (value: TestCase<string | number>, index: number, array: TestCase<string | number>[]) => void, thisArg?: any) => void
+>fixture.cases : TestCase<string | number>[]
+>fixture : MultiCaseFixture<TestCase<string | number>>
+>cases : TestCase<string | number>[]
+>forEach : (callbackfn: (value: TestCase<string | number>, index: number, array: TestCase<string | number>[]) => void, thisArg?: any) => void
+>({ val1, val2 }) => {      if (Array.isArray(val1)) {          // This should retain val1 as being an array          const reversedVal1 = val1.slice().reverse();          console.log(reversedVal1);      } else {          console.log(val1);      }      console.log(val2);  } : ({ val1, val2 }: TestCase<string | number>) => void
+>val1 : string | number | readonly (string | number)[]
+>val2 : readonly (string | number)[]
+
+      if (Array.isArray(val1)) {
+>Array.isArray(val1) : boolean
+>Array.isArray : (arg: any) => arg is any[]
+>Array : ArrayConstructor
+>isArray : (arg: any) => arg is any[]
+>val1 : string | number | readonly (string | number)[]
+
+          // This should retain val1 as being an array
+          const reversedVal1 = val1.slice().reverse();
+>reversedVal1 : any[]
+>val1.slice().reverse() : any[]
+>val1.slice().reverse : () => any[]
+>val1.slice() : any[]
+>val1.slice : (start?: number, end?: number) => any[]
+>val1 : any[]
+>slice : (start?: number, end?: number) => any[]
+>reverse : () => any[]
+
+          console.log(reversedVal1);
+>console.log(reversedVal1) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>reversedVal1 : any[]
+
+      } else {
+          console.log(val1);
+>console.log(val1) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>val1 : string | number | readonly (string | number)[]
+      }
+      console.log(val2);
+>console.log(val2) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>val2 : readonly (string | number)[]
+
+  });
+}
+
+testFunc();
+>testFunc() : void
+>testFunc : () => void
+

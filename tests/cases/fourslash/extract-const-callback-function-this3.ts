@@ -10,8 +10,6 @@ edit.applyRefactor({
     actionDescription: "Extract to constant in enclosing scope",
     newContent:
 `declare function fWithThis(fn: (this: { a: string }, a: string) => string): void;
-const newLocal = function(this: {
-    a: string;
-}, a: string): string { return this.a; };
+const newLocal = function(this: { a: string; }, a: string): string { return this.a; };
 fWithThis(/*RENAME*/newLocal);`
 });

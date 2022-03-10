@@ -1,0 +1,17 @@
+tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers4.ts(9,22): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
+
+
+==== tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers4.ts (1 errors) ====
+    class C {
+        static a = 1;
+        static b = this.a + 1;
+    }
+    
+    class D extends C {
+        static c = 2;
+        static d = this.c + 1;
+        static e = super.a + this.c + 1;
+                         ~
+!!! error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
+    }
+    

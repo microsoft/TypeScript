@@ -2,7 +2,7 @@
 
 //// /// <reference path="./module.ts" types="node" />
 
-var c = classification;
+const c = classification("original");
 verify.syntacticClassificationsAre(
     c.comment("/// "),
     c.punctuation("<"),
@@ -17,3 +17,5 @@ verify.syntacticClassificationsAre(
     c.jsxAttributeStringLiteralValue("\"node\""),
     c.comment(" "),
     c.punctuation("/>"));
+
+

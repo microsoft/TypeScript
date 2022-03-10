@@ -53,17 +53,17 @@ function d0<T extends Class>({x} = { x: new Class() }) { }
 >Class : typeof Class
 
 function d1<T extends F>({x}: { x: F }) { }
->d1 : <T extends F>({ x }: { x: F; }) => void
+>d1 : <T extends F>({ x }: {    x: F;}) => void
 >x : F
 >x : F
 
 function d2<T extends Class>({x}: { x: Class }) { }
->d2 : <T extends Class>({ x }: { x: Class; }) => void
+>d2 : <T extends Class>({ x }: {    x: Class;}) => void
 >x : Class
 >x : Class
 
 function d3<T extends D>({y}: { y: D }) { }
->d3 : <T extends D>({ y }: { y: D; }) => void
+>d3 : <T extends D>({ y }: {    y: D;}) => void
 >y : D
 >y : D
 

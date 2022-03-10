@@ -27,7 +27,7 @@ namespace ts.codefix {
     }
 
     function doChanges(changes: textChanges.ChangeTracker, sourceFile: SourceFile, extendsToken: Node, heritageClauses: readonly HeritageClause[]): void {
-        changes.replaceNode(sourceFile, extendsToken, createToken(SyntaxKind.ImplementsKeyword));
+        changes.replaceNode(sourceFile, extendsToken, factory.createToken(SyntaxKind.ImplementsKeyword));
 
         // If there is already an implements clause, replace the implements keyword with a comma.
         if (heritageClauses.length === 2 &&
@@ -36,7 +36,7 @@ namespace ts.codefix {
 
             const implementsToken = heritageClauses[1].getFirstToken()!;
             const implementsFullStart = implementsToken.getFullStart();
-            changes.replaceRange(sourceFile, { pos: implementsFullStart, end: implementsFullStart }, createToken(SyntaxKind.CommaToken));
+            changes.replaceRange(sourceFile, { pos: implementsFullStart, end: implementsFullStart }, factory.createToken(SyntaxKind.CommaToken));
 
             // Rough heuristic: delete trailing whitespace after keyword so that it's not excessive.
             // (Trailing because leading might be indentation, which is more sensitive.)

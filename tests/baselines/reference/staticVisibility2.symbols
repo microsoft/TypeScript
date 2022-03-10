@@ -1,0 +1,15 @@
+=== tests/cases/compiler/staticVisibility2.ts ===
+class Square {
+>Square : Symbol(Square, Decl(staticVisibility2.ts, 0, 0))
+
+    static sideLength;
+>sideLength : Symbol(Square.sideLength, Decl(staticVisibility2.ts, 0, 14))
+
+    constructor(sideLength: number) {
+>sideLength : Symbol(sideLength, Decl(staticVisibility2.ts, 2, 16))
+
+        this.sideLength = sideLength;
+>this : Symbol(Square, Decl(staticVisibility2.ts, 0, 0))
+>sideLength : Symbol(sideLength, Decl(staticVisibility2.ts, 2, 16))
+    }
+}

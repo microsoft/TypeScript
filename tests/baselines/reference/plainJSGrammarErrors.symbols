@@ -1,0 +1,470 @@
+=== tests/cases/conformance/salsa/plainJSGrammarErrors.js ===
+class C {
+>C : Symbol(C, Decl(plainJSGrammarErrors.js, 0, 0))
+
+    // #private mistakes
+    q = #unbound
+>q : Symbol(C.q, Decl(plainJSGrammarErrors.js, 0, 9))
+
+    m() {
+>m : Symbol(C.m, Decl(plainJSGrammarErrors.js, 2, 16))
+
+        #p
+        if (#po in this) {
+>this : Symbol(C, Decl(plainJSGrammarErrors.js, 0, 0))
+        }
+    }
+    #m() {
+>#m : Symbol(C.#m, Decl(plainJSGrammarErrors.js, 7, 5))
+
+         this.#m = () => {}
+>this.#m : Symbol(C.#m, Decl(plainJSGrammarErrors.js, 7, 5))
+>this : Symbol(C, Decl(plainJSGrammarErrors.js, 0, 0))
+    }
+    // await in static block
+    static {
+        for await (const x of [1,2,3]) {
+>x : Symbol(x, Decl(plainJSGrammarErrors.js, 13, 24))
+
+            console.log(x)
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>x : Symbol(x, Decl(plainJSGrammarErrors.js, 13, 24))
+        }
+        return null
+    }
+    // modifier mistakes
+    static constructor() { }
+    async constructor() { }
+    const x = 1
+>x : Symbol(C.x, Decl(plainJSGrammarErrors.js, 20, 27))
+
+    const y() {
+>y : Symbol(C.y, Decl(plainJSGrammarErrors.js, 21, 15))
+
+        return 12
+    }
+    async async extremelyAsync() {
+>extremelyAsync : Symbol(C.extremelyAsync, Decl(plainJSGrammarErrors.js, 24, 5))
+    }
+    async static oorder(){ }
+>oorder : Symbol(C.oorder, Decl(plainJSGrammarErrors.js, 26, 5))
+
+    export cantExportProperty = 1
+>cantExportProperty : Symbol(C.cantExportProperty, Decl(plainJSGrammarErrors.js, 27, 28))
+
+    export cantExportMethod() {
+>cantExportMethod : Symbol(C.cantExportMethod, Decl(plainJSGrammarErrors.js, 28, 33))
+    }
+
+    // accessor mistakes
+    get incorporeal();
+>incorporeal : Symbol(C.incorporeal, Decl(plainJSGrammarErrors.js, 30, 5))
+
+    get parametric(n) { return 1 }
+>parametric : Symbol(C.parametric, Decl(plainJSGrammarErrors.js, 33, 22))
+>n : Symbol(n, Decl(plainJSGrammarErrors.js, 34, 19))
+
+    set invariant() { }
+>invariant : Symbol(C.invariant, Decl(plainJSGrammarErrors.js, 34, 34))
+
+    set binary(fst, snd) { }
+>binary : Symbol(C.binary, Decl(plainJSGrammarErrors.js, 35, 23))
+>fst : Symbol(fst, Decl(plainJSGrammarErrors.js, 36, 15))
+>snd : Symbol(snd, Decl(plainJSGrammarErrors.js, 36, 19))
+
+    set variable(...n) { }
+>variable : Symbol(C.variable, Decl(plainJSGrammarErrors.js, 36, 28))
+>n : Symbol(n, Decl(plainJSGrammarErrors.js, 37, 17))
+
+    // other
+    "constructor" = 16
+>"constructor" : Symbol(C["constructor"], Decl(plainJSGrammarErrors.js, 37, 26))
+}
+class {
+    missingName = true
+>missingName : Symbol(__missing.missingName, Decl(plainJSGrammarErrors.js, 42, 7))
+}
+class Doubler extends C extends C { }
+>Doubler : Symbol(Doubler, Decl(plainJSGrammarErrors.js, 44, 1))
+>C : Symbol(C, Decl(plainJSGrammarErrors.js, 0, 0))
+>C : Symbol(C, Decl(plainJSGrammarErrors.js, 0, 0))
+
+class Trebler extends C,C,C { }
+>Trebler : Symbol(Trebler, Decl(plainJSGrammarErrors.js, 45, 37))
+>C : Symbol(C, Decl(plainJSGrammarErrors.js, 0, 0))
+>C : Symbol(C, Decl(plainJSGrammarErrors.js, 0, 0))
+>C : Symbol(C, Decl(plainJSGrammarErrors.js, 0, 0))
+
+// #private mistakes
+#unrelated
+junk.#m
+new C().#m
+>C : Symbol(C, Decl(plainJSGrammarErrors.js, 0, 0))
+
+// modifier mistakes
+export export var extremelyExported = 10
+>extremelyExported : Symbol(extremelyExported, Decl(plainJSGrammarErrors.js, 53, 17))
+
+export static var staticExport = 1
+>staticExport : Symbol(staticExport, Decl(plainJSGrammarErrors.js, 54, 17))
+
+function staticParam(static x = 1) { return x }
+>staticParam : Symbol(staticParam, Decl(plainJSGrammarErrors.js, 54, 34))
+>x : Symbol(x, Decl(plainJSGrammarErrors.js, 55, 21))
+>x : Symbol(x, Decl(plainJSGrammarErrors.js, 55, 21))
+
+async export function oorder(x = 1) { return x }
+>oorder : Symbol(oorder, Decl(plainJSGrammarErrors.js, 55, 47))
+>x : Symbol(x, Decl(plainJSGrammarErrors.js, 56, 29))
+>x : Symbol(x, Decl(plainJSGrammarErrors.js, 56, 29))
+
+function cantExportParam(export x = 1) { return x }
+>cantExportParam : Symbol(cantExportParam, Decl(plainJSGrammarErrors.js, 56, 48))
+>x : Symbol(x, Decl(plainJSGrammarErrors.js, 57, 25))
+>x : Symbol(x, Decl(plainJSGrammarErrors.js, 57, 25))
+
+function cantAsyncParam(async x = 1) { return x }
+>cantAsyncParam : Symbol(cantAsyncParam, Decl(plainJSGrammarErrors.js, 57, 51))
+>x : Symbol(x, Decl(plainJSGrammarErrors.js, 58, 24))
+>x : Symbol(x, Decl(plainJSGrammarErrors.js, 58, 24))
+
+async async function extremelyAsync() {}
+>extremelyAsync : Symbol(extremelyAsync, Decl(plainJSGrammarErrors.js, 58, 49))
+
+async class CantAsyncClass {
+>CantAsyncClass : Symbol(CantAsyncClass, Decl(plainJSGrammarErrors.js, 59, 40))
+
+    async cantAsyncPropert = 1
+>cantAsyncPropert : Symbol(CantAsyncClass.cantAsyncPropert, Decl(plainJSGrammarErrors.js, 60, 28))
+}
+async const cantAsyncConst = 2
+>cantAsyncConst : Symbol(cantAsyncConst, Decl(plainJSGrammarErrors.js, 63, 11))
+
+async import 'assert'
+async export { CantAsyncClass }
+>CantAsyncClass : Symbol(CantAsyncClass, Decl(plainJSGrammarErrors.js, 65, 14))
+
+export import 'fs'
+export export { C }
+>C : Symbol(C, Decl(plainJSGrammarErrors.js, 67, 15))
+
+function nestedExports() {
+>nestedExports : Symbol(nestedExports, Decl(plainJSGrammarErrors.js, 67, 19))
+
+    export { staticParam }
+>staticParam : Symbol(staticParam, Decl(plainJSGrammarErrors.js, 69, 12))
+
+    import 'fs'
+    export default 12
+}
+function outerStaticFunction() { 
+>outerStaticFunction : Symbol(outerStaticFunction, Decl(plainJSGrammarErrors.js, 72, 1))
+
+    static function staticFunction() { }
+>staticFunction : Symbol(staticFunction, Decl(plainJSGrammarErrors.js, 73, 32))
+}
+const noStaticLiteralMethods = {
+>noStaticLiteralMethods : Symbol(noStaticLiteralMethods, Decl(plainJSGrammarErrors.js, 76, 5))
+
+    static m() {
+>m : Symbol(m, Decl(plainJSGrammarErrors.js, 76, 32))
+    }
+}
+
+// rest parameters
+function restMustBeLast(...x, y) {
+>restMustBeLast : Symbol(restMustBeLast, Decl(plainJSGrammarErrors.js, 79, 1))
+>x : Symbol(x, Decl(plainJSGrammarErrors.js, 82, 24))
+>y : Symbol(y, Decl(plainJSGrammarErrors.js, 82, 29))
+}
+function restCantHaveInitialiser(...x = [1,2,3]) {
+>restCantHaveInitialiser : Symbol(restCantHaveInitialiser, Decl(plainJSGrammarErrors.js, 83, 1))
+>x : Symbol(x, Decl(plainJSGrammarErrors.js, 84, 33))
+}
+function restCantHaveTrailingComma (...x,) {
+>restCantHaveTrailingComma : Symbol(restCantHaveTrailingComma, Decl(plainJSGrammarErrors.js, 85, 1))
+>x : Symbol(x, Decl(plainJSGrammarErrors.js, 86, 36))
+}
+;({ ...{} } = {})
+const doom = { e: 1, m: 1, name: "knee-deep" }
+>doom : Symbol(doom, Decl(plainJSGrammarErrors.js, 89, 5))
+>e : Symbol(e, Decl(plainJSGrammarErrors.js, 89, 14))
+>m : Symbol(m, Decl(plainJSGrammarErrors.js, 89, 20))
+>name : Symbol(name, Decl(plainJSGrammarErrors.js, 89, 26))
+
+const { ...rest, e: episode, m: mission } = doom
+>rest : Symbol(rest, Decl(plainJSGrammarErrors.js, 90, 7))
+>e : Symbol(e, Decl(plainJSGrammarErrors.js, 89, 14))
+>episode : Symbol(episode, Decl(plainJSGrammarErrors.js, 90, 16))
+>m : Symbol(m, Decl(plainJSGrammarErrors.js, 89, 20))
+>mission : Symbol(mission, Decl(plainJSGrammarErrors.js, 90, 28))
+>doom : Symbol(doom, Decl(plainJSGrammarErrors.js, 89, 5))
+
+const { e: eep, m: em, ...rest: noRestAllowed } = doom
+>e : Symbol(e, Decl(plainJSGrammarErrors.js, 89, 14))
+>eep : Symbol(eep, Decl(plainJSGrammarErrors.js, 91, 7))
+>m : Symbol(m, Decl(plainJSGrammarErrors.js, 89, 20))
+>em : Symbol(em, Decl(plainJSGrammarErrors.js, 91, 15))
+>noRestAllowed : Symbol(noRestAllowed, Decl(plainJSGrammarErrors.js, 91, 22))
+>doom : Symbol(doom, Decl(plainJSGrammarErrors.js, 89, 5))
+
+const { e: erp, m: erm, ...noInitialiser = true } = doom
+>e : Symbol(e, Decl(plainJSGrammarErrors.js, 89, 14))
+>erp : Symbol(erp, Decl(plainJSGrammarErrors.js, 92, 7))
+>m : Symbol(m, Decl(plainJSGrammarErrors.js, 89, 20))
+>erm : Symbol(erm, Decl(plainJSGrammarErrors.js, 92, 15))
+>noInitialiser : Symbol(noInitialiser, Decl(plainJSGrammarErrors.js, 92, 23))
+>doom : Symbol(doom, Decl(plainJSGrammarErrors.js, 89, 5))
+
+// left-over parsing
+var;
+var x = 1 || 2 ?? 3
+>x : Symbol(x, Decl(plainJSGrammarErrors.js, 96, 3), Decl(plainJSGrammarErrors.js, 97, 3))
+
+var x = 2 ?? 3 || 4
+>x : Symbol(x, Decl(plainJSGrammarErrors.js, 96, 3), Decl(plainJSGrammarErrors.js, 97, 3))
+
+const arr = x
+>arr : Symbol(arr, Decl(plainJSGrammarErrors.js, 98, 5))
+>x : Symbol(x, Decl(plainJSGrammarErrors.js, 98, 11))
+
+  => x + 1
+>x : Symbol(x, Decl(plainJSGrammarErrors.js, 98, 11))
+
+var a = [1,2]
+>a : Symbol(a, Decl(plainJSGrammarErrors.js, 100, 3))
+
+a?.`length`;
+>a : Symbol(a, Decl(plainJSGrammarErrors.js, 100, 3))
+
+const o = {
+>o : Symbol(o, Decl(plainJSGrammarErrors.js, 102, 5))
+
+    [console.log('oh no'),2]: 'hi',
+>[console.log('oh no'),2] : Symbol([console.log('oh no'),2], Decl(plainJSGrammarErrors.js, 102, 11))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+
+    #noPrivate: 3,
+>#noPrivate : Symbol(#noPrivate, Decl(plainJSGrammarErrors.js, 103, 35))
+
+    export cantExportProperties: 4,
+>cantExportProperties : Symbol(cantExportProperties, Decl(plainJSGrammarErrors.js, 104, 18))
+
+    // TODO: See what the existing JS error is like for these
+    cantHaveQuestionMark?: 1,
+>cantHaveQuestionMark : Symbol(cantHaveQuestionMark, Decl(plainJSGrammarErrors.js, 105, 35))
+
+    m?() { return 12 },
+>m : Symbol(m, Decl(plainJSGrammarErrors.js, 107, 29))
+
+    definitely!,
+>definitely : Symbol(definitely, Decl(plainJSGrammarErrors.js, 108, 23))
+
+    definiteMethod!() { return 13 },
+>definiteMethod : Symbol(definiteMethod, Decl(plainJSGrammarErrors.js, 109, 16))
+}
+const noAssignment = {
+>noAssignment : Symbol(noAssignment, Decl(plainJSGrammarErrors.js, 112, 5))
+
+    assignment = 1,
+>assignment : Symbol(assignment, Decl(plainJSGrammarErrors.js, 112, 22))
+}
+var noTrailingComma = 1,;
+>noTrailingComma : Symbol(noTrailingComma, Decl(plainJSGrammarErrors.js, 115, 3))
+
+class MissingExtends extends { }
+>MissingExtends : Symbol(MissingExtends, Decl(plainJSGrammarErrors.js, 115, 25))
+
+// let/const mistakes
+const { e: ee };
+>e : Symbol(e)
+>ee : Symbol(ee, Decl(plainJSGrammarErrors.js, 119, 7))
+
+const noInit;
+>noInit : Symbol(noInit, Decl(plainJSGrammarErrors.js, 120, 5))
+
+let let = 15;
+>let : Symbol(let, Decl(plainJSGrammarErrors.js, 121, 3))
+
+if (true)
+    let onlyBlockLet = 17;
+>onlyBlockLet : Symbol(onlyBlockLet, Decl(plainJSGrammarErrors.js, 123, 7))
+
+if (true)
+    const onlyBlockConst = 18;
+>onlyBlockConst : Symbol(onlyBlockConst, Decl(plainJSGrammarErrors.js, 125, 9))
+
+// loop mistakes
+let async
+>async : Symbol(async, Decl(plainJSGrammarErrors.js, 128, 3))
+
+export const l = [1,2,3]
+>l : Symbol(l, Decl(plainJSGrammarErrors.js, 129, 12))
+
+for (async of l) {
+>async : Symbol(async, Decl(plainJSGrammarErrors.js, 128, 3))
+>l : Symbol(l, Decl(plainJSGrammarErrors.js, 129, 12))
+
+    console.log(x)
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>x : Symbol(x, Decl(plainJSGrammarErrors.js, 96, 3), Decl(plainJSGrammarErrors.js, 97, 3))
+}
+for (const cantHaveInit = 1 of [1,2,3]) {
+>cantHaveInit : Symbol(cantHaveInit, Decl(plainJSGrammarErrors.js, 133, 10))
+
+    console.log(cantHaveInit)
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>cantHaveInit : Symbol(cantHaveInit, Decl(plainJSGrammarErrors.js, 133, 10))
+}
+for (const cantHaveInit = 1 in [1,2,3]) {
+>cantHaveInit : Symbol(cantHaveInit, Decl(plainJSGrammarErrors.js, 136, 10))
+
+    console.log(cantHaveInit)
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>cantHaveInit : Symbol(cantHaveInit, Decl(plainJSGrammarErrors.js, 136, 10))
+}
+for (let y, x of [1,2,3]) {
+>y : Symbol(y, Decl(plainJSGrammarErrors.js, 139, 8))
+>x : Symbol(x, Decl(plainJSGrammarErrors.js, 139, 11))
+
+    console.log(x)
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>x : Symbol(x, Decl(plainJSGrammarErrors.js, 139, 11))
+}
+for (let y, x in [1,2,3]) {
+>y : Symbol(y, Decl(plainJSGrammarErrors.js, 142, 8))
+>x : Symbol(x, Decl(plainJSGrammarErrors.js, 142, 11))
+
+    console.log(x)
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>x : Symbol(x, Decl(plainJSGrammarErrors.js, 142, 11))
+}
+
+// duplication mistakes
+var b
+>b : Symbol(b, Decl(plainJSGrammarErrors.js, 147, 3))
+
+switch (b) {
+>b : Symbol(b, Decl(plainJSGrammarErrors.js, 147, 3))
+
+    case false:
+        console.log('no')
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+
+    default:
+        console.log('yes')
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+
+    default:
+        console.log('wat')
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+}
+try {
+    throw 2
+}
+catch (e) {
+>e : Symbol(e, Decl(plainJSGrammarErrors.js, 159, 7))
+
+    const e = 1
+>e : Symbol(e, Decl(plainJSGrammarErrors.js, 160, 9))
+
+    console.log(e)
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>e : Symbol(e, Decl(plainJSGrammarErrors.js, 160, 9))
+}
+try {
+    throw 20
+}
+catch (e = 0) {
+>e : Symbol(e, Decl(plainJSGrammarErrors.js, 166, 7))
+}
+label: for (const x in [1,2,3]) {
+>x : Symbol(x, Decl(plainJSGrammarErrors.js, 168, 17))
+
+    label: for (const y in [1,2,3]) {
+>y : Symbol(y, Decl(plainJSGrammarErrors.js, 169, 21))
+
+        break label;
+    }
+}
+
+// labels
+function crossFunctionBoundary() {
+>crossFunctionBoundary : Symbol(crossFunctionBoundary, Decl(plainJSGrammarErrors.js, 172, 1))
+
+    outer: for(;;) {
+        function test() {
+>test : Symbol(test, Decl(plainJSGrammarErrors.js, 176, 20))
+
+            break outer
+        }
+        test()
+>test : Symbol(test, Decl(plainJSGrammarErrors.js, 176, 20))
+    }
+}
+function continueIterationOnly(x) {
+>continueIterationOnly : Symbol(continueIterationOnly, Decl(plainJSGrammarErrors.js, 182, 1))
+>x : Symbol(x, Decl(plainJSGrammarErrors.js, 183, 31))
+
+    outer: switch (x) {
+>x : Symbol(x, Decl(plainJSGrammarErrors.js, 183, 31))
+
+        case 1:
+            continue outer
+    }
+}
+function jumpToLabelOnly(x) {
+>jumpToLabelOnly : Symbol(jumpToLabelOnly, Decl(plainJSGrammarErrors.js, 188, 1))
+>x : Symbol(x, Decl(plainJSGrammarErrors.js, 189, 25))
+
+    break jumpToLabelOnly
+}
+for (;;) {
+    break toplevel
+    continue toplevel
+}
+break
+continue
+
+// other weirdness
+export let noMeta = import.metal
+>noMeta : Symbol(noMeta, Decl(plainJSGrammarErrors.js, 200, 10))
+
+function foo() { new.targe }
+>foo : Symbol(foo, Decl(plainJSGrammarErrors.js, 200, 32))
+>new.targe : Symbol(foo, Decl(plainJSGrammarErrors.js, 200, 32))
+>targe : Symbol(foo, Decl(plainJSGrammarErrors.js, 200, 32))
+
+const nullaryDynamicImport = import()
+>nullaryDynamicImport : Symbol(nullaryDynamicImport, Decl(plainJSGrammarErrors.js, 202, 5))
+
+const trinaryDynamicImport = import('1', '2', '3')
+>trinaryDynamicImport : Symbol(trinaryDynamicImport, Decl(plainJSGrammarErrors.js, 203, 5))
+
+const spreadDynamicImport = import(...[])
+>spreadDynamicImport : Symbol(spreadDynamicImport, Decl(plainJSGrammarErrors.js, 204, 5))
+
+return
+

@@ -25,8 +25,8 @@ verify.codeFix({
   index: 0,
   description: "Infer parameter types from usage",
   newFileContent:
-`import { getEmail } from './getEmail';
-import { User, Settings } from './a';
+`import { User, Settings } from './a';
+import { getEmail } from './getEmail';
 
 export function f(user: User, settings: Settings) {
     getEmail(user, settings);

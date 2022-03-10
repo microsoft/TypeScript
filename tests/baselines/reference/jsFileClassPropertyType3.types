@@ -8,17 +8,17 @@ class C {
 
             this.p = null;
 >this.p = null : null
->this.p : number
+>this.p : any
 >this : this
->p : number
+>p : any
 >null : null
         }
         else {
             this.p = 0;
 >this.p = 0 : 0
->this.p : number
+>this.p : any
 >this : this
->p : number
+>p : any
 >0 : 0
         }
     }

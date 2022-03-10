@@ -1,0 +1,814 @@
+=== tests/cases/compiler/strictOptionalProperties1.ts ===
+function f1(obj: { a?: string, b?: string | undefined }) {
+>f1 : (obj: { a?: string; b?: string | undefined; }) => void
+>obj : { a?: string; b?: string | undefined; }
+>a : string | undefined
+>b : string | undefined
+
+    let a = obj.a;  // string | undefined
+>a : string | undefined
+>obj.a : string | undefined
+>obj : { a?: string; b?: string | undefined; }
+>a : string | undefined
+
+    let b = obj.b;  // string | undefined
+>b : string | undefined
+>obj.b : string | undefined
+>obj : { a?: string; b?: string | undefined; }
+>b : string | undefined
+
+    obj.a = 'hello';
+>obj.a = 'hello' : "hello"
+>obj.a : string
+>obj : { a?: string; b?: string | undefined; }
+>a : string
+>'hello' : "hello"
+
+    obj.b = 'hello';
+>obj.b = 'hello' : "hello"
+>obj.b : string | undefined
+>obj : { a?: string; b?: string | undefined; }
+>b : string | undefined
+>'hello' : "hello"
+
+    obj.a = undefined;  // Error
+>obj.a = undefined : undefined
+>obj.a : string
+>obj : { a?: string; b?: string | undefined; }
+>a : string
+>undefined : undefined
+
+    obj.b = undefined;
+>obj.b = undefined : undefined
+>obj.b : string | undefined
+>obj : { a?: string; b?: string | undefined; }
+>b : string | undefined
+>undefined : undefined
+}
+
+function f2(obj: { a?: string, b?: string | undefined }) {
+>f2 : (obj: {    a?: string;    b?: string | undefined;}) => void
+>obj : { a?: string; b?: string | undefined; }
+>a : string | undefined
+>b : string | undefined
+
+    obj = obj;
+>obj = obj : { a?: string; b?: string | undefined; }
+>obj : { a?: string; b?: string | undefined; }
+>obj : { a?: string; b?: string | undefined; }
+
+    obj.a = obj.a;  // Error
+>obj.a = obj.a : string | undefined
+>obj.a : string
+>obj : { a?: string; b?: string | undefined; }
+>a : string
+>obj.a : string | undefined
+>obj : { a?: string; b?: string | undefined; }
+>a : string | undefined
+
+    obj.b = obj.b;
+>obj.b = obj.b : string | undefined
+>obj.b : string | undefined
+>obj : { a?: string; b?: string | undefined; }
+>b : string | undefined
+>obj.b : string | undefined
+>obj : { a?: string; b?: string | undefined; }
+>b : string | undefined
+
+    if ('a' in obj) {
+>'a' in obj : boolean
+>'a' : "a"
+>obj : { a?: string; b?: string | undefined; }
+
+        obj.a;
+>obj.a : string
+>obj : { a?: string; b?: string | undefined; }
+>a : string
+
+        obj.a = obj.a;
+>obj.a = obj.a : string
+>obj.a : string
+>obj : { a?: string; b?: string | undefined; }
+>a : string
+>obj.a : string
+>obj : { a?: string; b?: string | undefined; }
+>a : string
+    }
+    else {
+        obj.a;
+>obj.a : undefined
+>obj : { a?: string; b?: string | undefined; }
+>a : undefined
+
+        obj.a = obj.a;  // Error
+>obj.a = obj.a : undefined
+>obj.a : string
+>obj : { a?: string; b?: string | undefined; }
+>a : string
+>obj.a : undefined
+>obj : { a?: string; b?: string | undefined; }
+>a : undefined
+    }
+    if (obj.hasOwnProperty('a')) {
+>obj.hasOwnProperty('a') : boolean
+>obj.hasOwnProperty : (v: PropertyKey) => boolean
+>obj : { a?: string; b?: string | undefined; }
+>hasOwnProperty : (v: PropertyKey) => boolean
+>'a' : "a"
+
+        obj.a;
+>obj.a : string
+>obj : { a?: string; b?: string | undefined; }
+>a : string
+
+        obj.a = obj.a;
+>obj.a = obj.a : string
+>obj.a : string
+>obj : { a?: string; b?: string | undefined; }
+>a : string
+>obj.a : string
+>obj : { a?: string; b?: string | undefined; }
+>a : string
+    }
+    else {
+        obj.a;
+>obj.a : undefined
+>obj : { a?: string; b?: string | undefined; }
+>a : undefined
+
+        obj.a = obj.a;  // Error
+>obj.a = obj.a : undefined
+>obj.a : string
+>obj : { a?: string; b?: string | undefined; }
+>a : string
+>obj.a : undefined
+>obj : { a?: string; b?: string | undefined; }
+>a : undefined
+    }
+    if ('b' in obj) {
+>'b' in obj : boolean
+>'b' : "b"
+>obj : { a?: string; b?: string | undefined; }
+
+        obj.b;
+>obj.b : string | undefined
+>obj : { a?: string; b?: string | undefined; }
+>b : string | undefined
+
+        obj.b = obj.b;
+>obj.b = obj.b : string | undefined
+>obj.b : string | undefined
+>obj : { a?: string; b?: string | undefined; }
+>b : string | undefined
+>obj.b : string | undefined
+>obj : { a?: string; b?: string | undefined; }
+>b : string | undefined
+    }
+    else {
+        obj.b;
+>obj.b : string | undefined
+>obj : { a?: string; b?: string | undefined; }
+>b : string | undefined
+
+        obj.b = obj.b;
+>obj.b = obj.b : string | undefined
+>obj.b : string | undefined
+>obj : { a?: string; b?: string | undefined; }
+>b : string | undefined
+>obj.b : string | undefined
+>obj : { a?: string; b?: string | undefined; }
+>b : string | undefined
+    }
+    if (obj.hasOwnProperty('b')) {
+>obj.hasOwnProperty('b') : boolean
+>obj.hasOwnProperty : (v: PropertyKey) => boolean
+>obj : { a?: string; b?: string | undefined; }
+>hasOwnProperty : (v: PropertyKey) => boolean
+>'b' : "b"
+
+        obj.b;
+>obj.b : string | undefined
+>obj : { a?: string; b?: string | undefined; }
+>b : string | undefined
+
+        obj.b = obj.b;
+>obj.b = obj.b : string | undefined
+>obj.b : string | undefined
+>obj : { a?: string; b?: string | undefined; }
+>b : string | undefined
+>obj.b : string | undefined
+>obj : { a?: string; b?: string | undefined; }
+>b : string | undefined
+    }
+    else {
+        obj.b;
+>obj.b : string | undefined
+>obj : { a?: string; b?: string | undefined; }
+>b : string | undefined
+
+        obj.b = obj.b;
+>obj.b = obj.b : string | undefined
+>obj.b : string | undefined
+>obj : { a?: string; b?: string | undefined; }
+>b : string | undefined
+>obj.b : string | undefined
+>obj : { a?: string; b?: string | undefined; }
+>b : string | undefined
+    }
+}
+
+function f3(obj: Partial<{ a: string, b: string | undefined }>) {
+>f3 : (obj: Partial<{ a: string; b: string | undefined; }>) => void
+>obj : Partial<{ a: string; b: string | undefined; }>
+>a : string
+>b : string | undefined
+
+    let a = obj.a;  // string | undefined
+>a : string | undefined
+>obj.a : string | undefined
+>obj : Partial<{ a: string; b: string | undefined; }>
+>a : string | undefined
+
+    let b = obj.b;  // string | undefined
+>b : string | undefined
+>obj.b : string | undefined
+>obj : Partial<{ a: string; b: string | undefined; }>
+>b : string | undefined
+
+    obj.a = 'hello';
+>obj.a = 'hello' : "hello"
+>obj.a : string
+>obj : Partial<{ a: string; b: string | undefined; }>
+>a : string
+>'hello' : "hello"
+
+    obj.b = 'hello';
+>obj.b = 'hello' : "hello"
+>obj.b : string | undefined
+>obj : Partial<{ a: string; b: string | undefined; }>
+>b : string | undefined
+>'hello' : "hello"
+
+    obj.a = undefined;  // Error
+>obj.a = undefined : undefined
+>obj.a : string
+>obj : Partial<{ a: string; b: string | undefined; }>
+>a : string
+>undefined : undefined
+
+    obj.b = undefined;
+>obj.b = undefined : undefined
+>obj.b : string | undefined
+>obj : Partial<{ a: string; b: string | undefined; }>
+>b : string | undefined
+>undefined : undefined
+}
+
+function f4(t: [string?]) {
+>f4 : (t: [string?]) => void
+>t : [string?]
+
+    let x = t[0];  // string | undefined
+>x : string | undefined
+>t[0] : string | undefined
+>t : [string?]
+>0 : 0
+
+    t[0] = 'hello';
+>t[0] = 'hello' : "hello"
+>t[0] : string
+>t : [string?]
+>0 : 0
+>'hello' : "hello"
+
+    t[0] = undefined;  // Error
+>t[0] = undefined : undefined
+>t[0] : string
+>t : [string?]
+>0 : 0
+>undefined : undefined
+}
+
+function f4a(t1: [number, string?], t2: [number, string?, string?]) {
+>f4a : (t1: [number, string?], t2: [number, string?, string?]) => void
+>t1 : [number, string?]
+>t2 : [number, string?, string?]
+
+    t1 = t2;  // Wasn't an error, but should be
+>t1 = t2 : [number, string?, string?]
+>t1 : [number, string?]
+>t2 : [number, string?, string?]
+}
+
+function f5(t: [number, string?, boolean?]) {
+>f5 : (t: [number, string?, boolean?]) => void
+>t : [number, string?, boolean?]
+
+    t = [42];
+>t = [42] : [number]
+>t : [number, string?, boolean?]
+>[42] : [number]
+>42 : 42
+
+    t = [42, 'abc'];
+>t = [42, 'abc'] : [number, string]
+>t : [number, string?, boolean?]
+>[42, 'abc'] : [number, string]
+>42 : 42
+>'abc' : "abc"
+
+    t = [42, 'abc', true];
+>t = [42, 'abc', true] : [number, string, true]
+>t : [number, string?, boolean?]
+>[42, 'abc', true] : [number, string, true]
+>42 : 42
+>'abc' : "abc"
+>true : true
+
+    t = [42, ,];
+>t = [42, ,] : [number, never?]
+>t : [number, string?, boolean?]
+>[42, ,] : [number, never?]
+>42 : 42
+> : undefined
+
+    t = [42, , ,];
+>t = [42, , ,] : [number, never?, never?]
+>t : [number, string?, boolean?]
+>[42, , ,] : [number, never?, never?]
+>42 : 42
+> : undefined
+> : undefined
+
+    t = [42, , , ,];  // Error
+>t = [42, , , ,] : [number, never?, never?, never?]
+>t : [number, string?, boolean?]
+>[42, , , ,] : [number, never?, never?, never?]
+>42 : 42
+> : undefined
+> : undefined
+> : undefined
+
+    t = [, , true];  // Error
+>t = [, , true] : [never?, never?, true?]
+>t : [number, string?, boolean?]
+>[, , true] : [never?, never?, true?]
+> : undefined
+> : undefined
+>true : true
+
+    t = [42, undefined, true];  // Error
+>t = [42, undefined, true] : [number, undefined, true]
+>t : [number, string?, boolean?]
+>[42, undefined, true] : [number, undefined, true]
+>42 : 42
+>undefined : undefined
+>true : true
+}
+
+function f6() {
+>f6 : () => void
+
+    const t1 = [1, 2] as const;
+>t1 : readonly [1, 2]
+>[1, 2] as const : readonly [1, 2]
+>[1, 2] : readonly [1, 2]
+>1 : 1
+>2 : 2
+
+    const t2 = [1, 2, ,] as const;
+>t2 : readonly [1, 2, never?]
+>[1, 2, ,] as const : readonly [1, 2, never?]
+>[1, 2, ,] : readonly [1, 2, never?]
+>1 : 1
+>2 : 2
+> : undefined
+
+    const t3 = [1, 2, , ,] as const;
+>t3 : readonly [1, 2, never?, never?]
+>[1, 2, , ,] as const : readonly [1, 2, never?, never?]
+>[1, 2, , ,] : readonly [1, 2, never?, never?]
+>1 : 1
+>2 : 2
+> : undefined
+> : undefined
+
+    const t4 = [1, , 2] as const;
+>t4 : readonly [1, never?, 2?]
+>[1, , 2] as const : readonly [1, never?, 2?]
+>[1, , 2] : readonly [1, never?, 2?]
+>1 : 1
+> : undefined
+>2 : 2
+
+    const t5 = [1, , , 2] as const;
+>t5 : readonly [1, never?, never?, 2?]
+>[1, , , 2] as const : readonly [1, never?, never?, 2?]
+>[1, , , 2] : readonly [1, never?, never?, 2?]
+>1 : 1
+> : undefined
+> : undefined
+>2 : 2
+}
+
+// Example from #13195
+
+type Props = {
+>Props : Props
+
+    foo: string;
+>foo : string
+
+    bar: string
+>bar : string
+}
+
+type InputProps = {
+>InputProps : InputProps
+
+    foo?: string;
+>foo : string | undefined
+
+    bar: string;
+>bar : string
+}
+
+const defaultProps: Pick<Props, 'foo'> = { foo: 'foo' };
+>defaultProps : Pick<Props, "foo">
+>{ foo: 'foo' } : { foo: string; }
+>foo : string
+>'foo' : "foo"
+
+const inputProps: InputProps = { foo: undefined, bar: 'bar' };
+>inputProps : InputProps
+>{ foo: undefined, bar: 'bar' } : { foo: undefined; bar: string; }
+>foo : undefined
+>undefined : undefined
+>bar : string
+>'bar' : "bar"
+
+const completeProps: Props = { ...defaultProps, ...inputProps };
+>completeProps : Props
+>{ ...defaultProps, ...inputProps } : { foo: string; bar: string; }
+>defaultProps : Pick<Props, "foo">
+>inputProps : InputProps
+
+// Example from #13195
+
+const t1: [number, string?, boolean?] = [1];
+>t1 : [number, string?, boolean?]
+>[1] : [number]
+>1 : 1
+
+const t2: [number, string?, boolean?] = [1, undefined];
+>t2 : [number, string?, boolean?]
+>[1, undefined] : [number, undefined]
+>1 : 1
+>undefined : undefined
+
+const t3: [number, string?, boolean?] = [1, "string", undefined];
+>t3 : [number, string?, boolean?]
+>[1, "string", undefined] : [number, string, undefined]
+>1 : 1
+>"string" : "string"
+>undefined : undefined
+
+const t4: [number, string?, boolean?] = [1, undefined, undefined];
+>t4 : [number, string?, boolean?]
+>[1, undefined, undefined] : [number, undefined, undefined]
+>1 : 1
+>undefined : undefined
+>undefined : undefined
+
+// Example from #13195
+
+const x: { foo?: number } = { foo: undefined };
+>x : { foo?: number; }
+>foo : number | undefined
+>{ foo: undefined } : { foo: undefined; }
+>foo : undefined
+>undefined : undefined
+
+const y: { foo: number } = { foo: 123, ...x };
+>y : { foo: number; }
+>foo : number
+>{ foo: 123, ...x } : { foo: number; }
+>foo : number
+>123 : 123
+>x : { foo?: number; }
+
+// Index signatures and strict optional properties
+
+interface Test {
+    [key: string]: string;
+>key : string
+
+    foo?: string;  // Should be ok
+>foo : string | undefined
+
+    bar?: string | undefined;  // Error
+>bar : string | undefined
+}
+
+// Strict optional properties and inference
+
+declare let ox1: { p: string };
+>ox1 : { p: string; }
+>p : string
+
+declare let ox2: { p: string | undefined };
+>ox2 : { p: string | undefined; }
+>p : string | undefined
+
+declare let ox3: { p?: string };
+>ox3 : { p?: string; }
+>p : string | undefined
+
+declare let ox4: { p?: string | undefined };
+>ox4 : { p?: string | undefined; }
+>p : string | undefined
+
+declare let tx1: [string];
+>tx1 : [string]
+
+declare let tx2: [string | undefined];
+>tx2 : [string | undefined]
+
+declare let tx3: [string?];
+>tx3 : [string?]
+
+declare let tx4: [(string | undefined)?];
+>tx4 : [(string | undefined)?]
+
+declare function f11<T>(x: { p?: T }): T;
+>f11 : <T>(x: {    p?: T;}) => T
+>x : { p?: T; }
+>p : T | undefined
+
+f11(ox1);  // string
+>f11(ox1) : string
+>f11 : <T>(x: { p?: T; }) => T
+>ox1 : { p: string; }
+
+f11(ox2);  // string | undefined
+>f11(ox2) : string | undefined
+>f11 : <T>(x: { p?: T; }) => T
+>ox2 : { p: string | undefined; }
+
+f11(ox3);  // string
+>f11(ox3) : string
+>f11 : <T>(x: { p?: T; }) => T
+>ox3 : { p?: string; }
+
+f11(ox4);  // string | undefined
+>f11(ox4) : string | undefined
+>f11 : <T>(x: { p?: T; }) => T
+>ox4 : { p?: string | undefined; }
+
+declare function f12<T>(x: [T?]): T;
+>f12 : <T>(x: [T?]) => T
+>x : [T?]
+
+f12(tx1);  // string
+>f12(tx1) : string
+>f12 : <T>(x: [T?]) => T
+>tx1 : [string]
+
+f12(tx2);  // string | undefined
+>f12(tx2) : string | undefined
+>f12 : <T>(x: [T?]) => T
+>tx2 : [string | undefined]
+
+f12(tx3);  // string
+>f12(tx3) : string
+>f12 : <T>(x: [T?]) => T
+>tx3 : [string?]
+
+f12(tx4);  // string | undefined
+>f12(tx4) : string | undefined
+>f12 : <T>(x: [T?]) => T
+>tx4 : [(string | undefined)?]
+
+declare function f13<T>(x: Partial<T>): T;
+>f13 : <T>(x: Partial<T>) => T
+>x : Partial<T>
+
+f13(ox1);  // { p: string }
+>f13(ox1) : { p: string; }
+>f13 : <T>(x: Partial<T>) => T
+>ox1 : { p: string; }
+
+f13(ox2);  // { p: string | undefined }
+>f13(ox2) : { p: string | undefined; }
+>f13 : <T>(x: Partial<T>) => T
+>ox2 : { p: string | undefined; }
+
+f13(ox3);  // { p: string }
+>f13(ox3) : { p: string; }
+>f13 : <T>(x: Partial<T>) => T
+>ox3 : { p?: string; }
+
+f13(ox4);  // { p: string | undefined }
+>f13(ox4) : { p: string | undefined; }
+>f13 : <T>(x: Partial<T>) => T
+>ox4 : { p?: string | undefined; }
+
+f13(tx1);  // [string]
+>f13(tx1) : [string]
+>f13 : <T>(x: Partial<T>) => T
+>tx1 : [string]
+
+f13(tx2);  // [string | undefined]
+>f13(tx2) : [string | undefined]
+>f13 : <T>(x: Partial<T>) => T
+>tx2 : [string | undefined]
+
+f13(tx3);  // [string]
+>f13(tx3) : [string]
+>f13 : <T>(x: Partial<T>) => T
+>tx3 : [string?]
+
+f13(tx4);  // [string | undefined]
+>f13(tx4) : [string | undefined]
+>f13 : <T>(x: Partial<T>) => T
+>tx4 : [(string | undefined)?]
+
+// Repro from #44388
+
+type Undefinable<T> = T | undefined;
+>Undefinable : Undefinable<T>
+
+function expectNotUndefined<T>(value: Undefinable<T>): T {
+>expectNotUndefined : <T>(value: Undefinable<T>) => T
+>value : Undefinable<T>
+
+    if (value === undefined) {
+>value === undefined : boolean
+>value : Undefinable<T>
+>undefined : undefined
+
+        throw new TypeError('value is undefined');
+>new TypeError('value is undefined') : TypeError
+>TypeError : TypeErrorConstructor
+>'value is undefined' : "value is undefined"
+    }
+    return value;
+>value : T
+}
+
+interface Bar {
+    bar?: number;
+>bar : number | undefined
+}
+
+function aa(input: Bar): void {
+>aa : (input: Bar) => void
+>input : Bar
+
+    const notUndefinedVal = expectNotUndefined(input.bar);
+>notUndefinedVal : number
+>expectNotUndefined(input.bar) : number
+>expectNotUndefined : <T>(value: Undefinable<T>) => T
+>input.bar : number | undefined
+>input : Bar
+>bar : number | undefined
+
+    bb(notUndefinedVal);
+>bb(notUndefinedVal) : void
+>bb : (input: number) => void
+>notUndefinedVal : number
+}
+
+declare function bb(input: number): void;
+>bb : (input: number) => void
+>input : number
+
+interface U1 {
+    name: string
+>name : string
+
+    email?: string | number | undefined
+>email : string | number | undefined
+}
+interface U2 {
+    name: string
+>name : string
+
+    email?: string | number
+>email : string | number | undefined
+}
+declare const e: string | boolean | undefined
+>e : string | boolean | undefined
+
+declare const u1: U1
+>u1 : U1
+
+declare let u2: U2
+>u2 : U2
+
+u1.email = e // error, but only because boolean isn't in email's type
+>u1.email = e : string | boolean | undefined
+>u1.email : string | number | undefined
+>u1 : U1
+>email : string | number | undefined
+>e : string | boolean | undefined
+
+u2.email = e // error, and suggest adding undefined
+>u2.email = e : string | boolean | undefined
+>u2.email : string | number
+>u2 : U2
+>email : string | number
+>e : string | boolean | undefined
+
+u2 = {
+>u2 = {    name: 'hi',    email: undefined} : { name: string; email: undefined; }
+>u2 : U2
+>{    name: 'hi',    email: undefined} : { name: string; email: undefined; }
+
+    name: 'hi',
+>name : string
+>'hi' : "hi"
+
+    email: undefined
+>email : undefined
+>undefined : undefined
+}
+
+// Repro from #44437
+
+declare var a: {[x: string]: number | string }
+>a : { [x: string]: string | number; }
+>x : string
+
+declare var b: {a: number, b: string}
+>b : { a: number; b: string; }
+>a : number
+>b : string
+
+declare var c: {a: number, b?: string}
+>c : { a: number; b?: string; }
+>a : number
+>b : string | undefined
+
+declare var d: {a: number, b: string | undefined }
+>d : { a: number; b: string | undefined; }
+>a : number
+>b : string | undefined
+
+declare var e: {a: number, b?: string | undefined }
+>e : { a: number; b?: string | undefined; }
+>a : number
+>b : string | undefined
+
+a = b;
+>a = b : { a: number; b: string; }
+>a : { [x: string]: string | number; }
+>b : { a: number; b: string; }
+
+a = c;
+>a = c : { a: number; b?: string; }
+>a : { [x: string]: string | number; }
+>c : { a: number; b?: string; }
+
+a = d;  // Error
+>a = d : { a: number; b: string | undefined; }
+>a : { [x: string]: string | number; }
+>d : { a: number; b: string | undefined; }
+
+a = e;  // Error
+>a = e : string | boolean | undefined
+>a : { [x: string]: string | number; }
+>e : string | boolean | undefined
+
+// Repro from #46004
+
+interface PropsFromReact {
+    onClick?: () => void;
+>onClick : (() => void) | undefined
+}
+
+interface PropsFromMaterialUI {
+    onClick?: (() => void) | undefined;
+>onClick : (() => void) | undefined
+}
+
+type TheTypeFromMaterialUI = PropsFromReact & PropsFromMaterialUI;
+>TheTypeFromMaterialUI : TheTypeFromMaterialUI
+
+interface NavBottomListItem extends TheTypeFromMaterialUI {
+    value: string;
+>value : string
+}
+
+// Repro from #46004
+
+type UA = undefined;  // Explicit undefined type
+>UA : undefined
+
+type UB = { x?: never }['x'];  // undefined from missing property
+>UB : undefined
+>x : undefined
+
+type UC = UA & UB;  // undefined
+>UC : undefined
+

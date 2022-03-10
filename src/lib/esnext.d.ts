@@ -1,2 +1,2 @@
-/// <reference lib="es2020" />
+/// <reference lib="es2022" />
 /// <reference lib="esnext.intl" />

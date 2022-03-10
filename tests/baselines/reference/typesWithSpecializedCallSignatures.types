@@ -19,11 +19,11 @@ class C {
 >C : C
 
     foo(x: 'hi'): Derived1;
->foo : { (x: "hi"): Derived1; (x: "bye"): Derived2; (x: string): Base; }
+>foo : { (x: 'hi'): Derived1; (x: "bye"): Derived2; (x: string): Base; }
 >x : "hi"
 
     foo(x: 'bye'): Derived2;
->foo : { (x: "hi"): Derived1; (x: "bye"): Derived2; (x: string): Base; }
+>foo : { (x: "hi"): Derived1; (x: 'bye'): Derived2; (x: string): Base; }
 >x : "bye"
 
     foo(x: string): Base;
@@ -45,11 +45,11 @@ var c = new C();
 
 interface I {
     foo(x: 'hi'): Derived1;
->foo : { (x: "hi"): Derived1; (x: "bye"): Derived2; (x: string): Base; }
+>foo : { (x: 'hi'): Derived1; (x: "bye"): Derived2; (x: string): Base; }
 >x : "hi"
 
     foo(x: 'bye'): Derived2;
->foo : { (x: "hi"): Derived1; (x: "bye"): Derived2; (x: string): Base; }
+>foo : { (x: "hi"): Derived1; (x: 'bye'): Derived2; (x: string): Base; }
 >x : "bye"
 
     foo(x: string): Base;
@@ -60,14 +60,14 @@ var i: I;
 >i : I
 
 var a: {
->a : { foo(x: "hi"): Derived1; foo(x: "bye"): Derived2; foo(x: string): Base; }
+>a : { foo(x: 'hi'): Derived1; foo(x: 'bye'): Derived2; foo(x: string): Base; }
 
     foo(x: 'hi'): Derived1;
->foo : { (x: "hi"): Derived1; (x: "bye"): Derived2; (x: string): Base; }
+>foo : { (x: 'hi'): Derived1; (x: "bye"): Derived2; (x: string): Base; }
 >x : "hi"
 
     foo(x: 'bye'): Derived2;
->foo : { (x: "hi"): Derived1; (x: "bye"): Derived2; (x: string): Base; }
+>foo : { (x: "hi"): Derived1; (x: 'bye'): Derived2; (x: string): Base; }
 >x : "bye"
 
     foo(x: string): Base;
