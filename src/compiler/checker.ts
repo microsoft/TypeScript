@@ -41493,9 +41493,6 @@ namespace ts {
                     return getSymbolOfNode(node as BinaryExpression) || getSymbolOfNode((node as BinaryExpression).left);
 
                 default:
-                    if (isDeclaration(node)) {
-                        return getSymbolOfNode(node);
-                    }
                     return undefined;
             }
         }

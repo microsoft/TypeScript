@@ -2296,10 +2296,10 @@ namespace ts.FindAllReferences {
         }
 
         function isImplementation(node: Node): boolean {
-            return !!(node.flags & NodeFlags.Ambient) ? !(isInterfaceDeclaration(node) || isTypeAliasDeclaration(node)) :
+            return !(node.flags & NodeFlags.Ambient) && (
                 (isVariableLike(node) ? hasInitializer(node) :
                 isFunctionLikeDeclaration(node) ? !!node.body :
-                isClassLike(node) || isModuleOrEnumDeclaration(node));
+                isClassLike(node) || isModuleOrEnumDeclaration(node)));
         }
 
         export function getReferenceEntriesForShorthandPropertyAssignment(node: Node, checker: TypeChecker, addReference: (node: Node) => void): void {
