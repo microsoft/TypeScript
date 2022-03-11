@@ -70,6 +70,24 @@ namespace ts {
                 assert.isTrue(set.delete(11));
                 assert.equal(set.size, 0);
             });
+            it("resizing", () => {
+                const set = createSet<number, number>(x => x % 2, (x, y) => x === y);
+                const elementCount = 100;
+
+                for (let i = 0; i < elementCount; i++) {
+                    assert.isFalse(set.has(i));
+                    set.add(i);
+                    assert.isTrue(set.has(i));
+                    assert.equal(set.size, i + 1);
+                }
+
+                for (let i = 0; i < elementCount; i++) {
+                    assert.isTrue(set.has(i));
+                    set.delete(i);
+                    assert.isFalse(set.has(i));
+                    assert.equal(set.size, elementCount - (i + 1));
+                }
+            });
             it("clear", () => {
                 const set = createSet<number, number>(x => x % 2, (x, y) => (x % 4) === (y % 4));
                 for (let j = 0; j < 2; j++) {

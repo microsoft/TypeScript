@@ -1494,9 +1494,12 @@ namespace ts {
      *
      * If `equals(a, b)`, it must be the case that `getHashCode(a) === getHashCode(b)`.
      * The converse is not required.
+     *
+     * To facilitate a perf optimization (lazy allocation of bucket arrays), `TElement` is
+     * assumed not to be an array type.
      */
     export function createSet<TElement, THash = number>(getHashCode: (element: TElement) => THash, equals: EqualityComparer<TElement>): Set<TElement> {
-        const multiMap = new Map<THash, TElement[]>();
+        const multiMap = new Map<THash, TElement | TElement[]>();
         let size = 0;
 
         function getElementIterator(): Iterator<TElement> {
@@ -1517,6 +1520,9 @@ namespace ts {
                             if (n.done) {
                                 return { value: undefined, done: true };
                             }
+                            if (!isArray(n.value)) {
+                                return { value: n.value };
+                            }
                             arrayIt = arrayIterator(n.value);
                         }
                     }
@@ -1527,28 +1533,37 @@ namespace ts {
         const set: Set<TElement> = {
             has(element: TElement): boolean {
                 const hash = getHashCode(element);
-                const candidates = multiMap.get(hash);
-                if (candidates) {
-                    for (const candidate of candidates) {
-                        if (equals(candidate, element)) {
-                            return true;
-                        }
+                if (!multiMap.has(hash)) return false;
+                const candidates = multiMap.get(hash)!;
+                if (!isArray(candidates)) return equals(candidates, element);
+
+                for (const candidate of candidates) {
+                    if (equals(candidate, element)) {
+                        return true;
                     }
                 }
-
                 return false;
             },
             add(element: TElement): Set<TElement> {
                 const hash = getHashCode(element);
-                const values = multiMap.get(hash);
-                if (values) {
-                    if (!contains(values, element, equals)) {
-                        values.push(element);
-                        size++;
+                if (multiMap.has(hash)) {
+                    const values = multiMap.get(hash)!;
+                    if (isArray(values)) {
+                        if (!contains(values, element, equals)) {
+                            values.push(element);
+                            size++;
+                        }
+                    }
+                    else {
+                        const value = values;
+                        if (!equals(value, element)) {
+                            multiMap.set(hash, [ value, element ]);
+                            size++;
+                        }
                     }
                 }
                 else {
-                    multiMap.set(hash, [ element ]);
+                    multiMap.set(hash, element);
                     size++;
                 }
 
@@ -1556,12 +1571,16 @@ namespace ts {
             },
             delete(element: TElement): boolean {
                 const hash = getHashCode(element);
-                const candidates = multiMap.get(hash);
-                if (candidates) {
+                if (!multiMap.has(hash)) return false;
+                const candidates = multiMap.get(hash)!;
+                if (isArray(candidates)) {
                     for (let i = 0; i < candidates.length; i++) {
                         if (equals(candidates[i], element)) {
                             if (candidates.length === 1) {
                                 multiMap.delete(hash);
+                            }
+                            else if (candidates.length === 2) {
+                                multiMap.set(hash, candidates[1 - i]);
                             }
                             else {
                                 unorderedRemoveItemAt(candidates, i);
@@ -1569,6 +1588,14 @@ namespace ts {
                             size--;
                             return true;
                         }
+                    }
+                }
+                else {
+                    const candidate = candidates;
+                    if (equals(candidate, element)) {
+                        multiMap.delete(hash);
+                        size--;
+                        return true;
                     }
                 }
 
@@ -1583,7 +1610,13 @@ namespace ts {
             },
             forEach(action: (value: TElement, key: TElement) => void): void {
                 for (const elements of arrayFrom(multiMap.values())) {
-                    for (const element of elements) {
+                    if (isArray(elements)) {
+                        for (const element of elements) {
+                            action(element, element);
+                        }
+                    }
+                    else {
+                        const element = elements;
                         action(element, element);
                     }
                 }
