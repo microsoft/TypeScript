@@ -83,7 +83,6 @@
         "ms": "^2.1.3",
         "node-fetch": "^2.6.1",
         "plugin-error": "latest",
-        "pretty-hrtime": "^1.0.3",
         "prex": "^0.4.3",
         "q": "latest",
         "source-map-support": "latest",
