@@ -1312,6 +1312,14 @@ namespace ts {
             return doInsideOfContext(NodeFlags.DisallowInContext, func);
         }
 
+        function allowConditionalTypesAnd<T>(func: () => T): T {
+            return doOutsideOfContext(NodeFlags.DisallowConditionalTypesContext, func);
+        }
+
+        function disallowConditionalTypesAnd<T>(func: () => T): T {
+            return doInsideOfContext(NodeFlags.DisallowConditionalTypesContext, func);
+        }
+
         function doInYieldContext<T>(func: () => T): T {
             return doInsideOfContext(NodeFlags.YieldContext, func);
         }
@@ -1346,6 +1354,10 @@ namespace ts {
 
         function inDisallowInContext() {
             return inContext(NodeFlags.DisallowInContext);
+        }
+
+        function inDisallowConditionalTypesContext() {
+            return inContext(NodeFlags.DisallowConditionalTypesContext);
         }
 
         function inDecoratorContext() {
@@ -2968,7 +2980,7 @@ namespace ts {
         function parseJSDocNonNullableType(): TypeNode {
             const pos = getNodePos();
             nextToken();
-            return finishNode(factory.createJSDocNonNullableType(parseNonArrayType()), pos);
+            return finishNode(factory.createJSDocNonNullableType(parseNonArrayType(), /*postfix*/ false), pos);
         }
 
         function parseJSDocUnknownOrNullableType(): JSDocUnknownType | JSDocNullableType {
@@ -2995,7 +3007,7 @@ namespace ts {
                 return finishNode(factory.createJSDocUnknownType(), pos);
             }
             else {
-                return finishNode(factory.createJSDocNullableType(parseType()), pos);
+                return finishNode(factory.createJSDocNullableType(parseType(), /*postfix*/ false), pos);
             }
         }
 
@@ -3077,10 +3089,6 @@ namespace ts {
         }
 
         function parseTypeParameter(): TypeParameterDeclaration {
-            return parseTypeParameterWorker(/*canHaveDefault*/ true);
-        }
-
-        function parseTypeParameterWorker(canHaveDefault: boolean): TypeParameterDeclaration {
             const pos = getNodePos();
             const name = parseIdentifier();
             let constraint: TypeNode | undefined;
@@ -3105,7 +3113,7 @@ namespace ts {
                 }
             }
 
-            const defaultType = canHaveDefault && parseOptional(SyntaxKind.EqualsToken) ? parseType() : undefined;
+            const defaultType = parseOptional(SyntaxKind.EqualsToken) ? parseType() : undefined;
             const node = factory.createTypeParameterDeclaration(name, constraint, defaultType);
             node.expression = expression;
             return finishNode(node, pos);
@@ -3828,7 +3836,7 @@ namespace ts {
                 switch (token()) {
                     case SyntaxKind.ExclamationToken:
                         nextToken();
-                        type = finishNode(factory.createJSDocNonNullableType(type), pos);
+                        type = finishNode(factory.createJSDocNonNullableType(type, /*postfix*/ true), pos);
                         break;
                     case SyntaxKind.QuestionToken:
                         // If next token is start of a type we have a conditional type
@@ -3836,7 +3844,7 @@ namespace ts {
                             return type;
                         }
                         nextToken();
-                        type = finishNode(factory.createJSDocNullableType(type), pos);
+                        type = finishNode(factory.createJSDocNullableType(type, /*postfix*/ true), pos);
                         break;
                     case SyntaxKind.OpenBracketToken:
                         parseExpected(SyntaxKind.OpenBracketToken);
@@ -3863,10 +3871,28 @@ namespace ts {
             return finishNode(factory.createTypeOperatorNode(operator, parseTypeOperatorOrHigher()), pos);
         }
 
+        function tryParseConstraintOfInferType() {
+            if (parseOptional(SyntaxKind.ExtendsKeyword)) {
+                const constraint = disallowConditionalTypesAnd(parseType);
+                if (inDisallowConditionalTypesContext() || token() !== SyntaxKind.QuestionToken) {
+                    return constraint;
+                }
+            }
+        }
+
+        function parseTypeParameterOfInferType(): TypeParameterDeclaration {
+            const pos = getNodePos();
+            const name = parseIdentifier();
+            const constraint = tryParse(tryParseConstraintOfInferType);
+            const node = factory.createTypeParameterDeclaration(name, constraint);
+            node.expression = undefined;
+            return finishNode(node, pos);
+        }
+
         function parseInferType(): InferTypeNode {
             const pos = getNodePos();
             parseExpected(SyntaxKind.InferKeyword);
-            return finishNode(factory.createInferTypeNode(parseTypeParameterWorker(/*canHaveDefault*/ false)), pos);
+            return finishNode(factory.createInferTypeNode(parseTypeParameterOfInferType()), pos);
         }
 
         function parseTypeOperatorOrHigher(): TypeNode {
@@ -3879,7 +3905,7 @@ namespace ts {
                 case SyntaxKind.InferKeyword:
                     return parseInferType();
             }
-            return parsePostfixTypeOrHigher();
+            return allowConditionalTypesAnd(parsePostfixTypeOrHigher);
         }
 
         function parseFunctionOrConstructorTypeToError(
@@ -4028,24 +4054,22 @@ namespace ts {
         }
 
         function parseType(): TypeNode {
-            // The rules about 'yield' only apply to actual code/expression contexts.  They don't
-            // apply to 'type' contexts.  So we disable these parameters here before moving on.
-            return doOutsideOfContext(NodeFlags.TypeExcludesFlags, parseTypeWorker);
-        }
+            if (contextFlags & NodeFlags.TypeExcludesFlags) {
+                return doOutsideOfContext(NodeFlags.TypeExcludesFlags, parseType);
+            }
 
-        function parseTypeWorker(noConditionalTypes?: boolean): TypeNode {
             if (isStartOfFunctionTypeOrConstructorType()) {
                 return parseFunctionOrConstructorType();
             }
             const pos = getNodePos();
             const type = parseUnionTypeOrHigher();
-            if (!noConditionalTypes && !scanner.hasPrecedingLineBreak() && parseOptional(SyntaxKind.ExtendsKeyword)) {
+            if (!inDisallowConditionalTypesContext() && !scanner.hasPrecedingLineBreak() && parseOptional(SyntaxKind.ExtendsKeyword)) {
                 // The type following 'extends' is not permitted to be another conditional type
-                const extendsType = parseTypeWorker(/*noConditionalTypes*/ true);
+                const extendsType = disallowConditionalTypesAnd(parseType);
                 parseExpected(SyntaxKind.QuestionToken);
-                const trueType = parseTypeWorker();
+                const trueType = allowConditionalTypesAnd(parseType);
                 parseExpected(SyntaxKind.ColonToken);
-                const falseType = parseTypeWorker();
+                const falseType = allowConditionalTypesAnd(parseType);
                 return finishNode(factory.createConditionalTypeNode(type, extendsType, trueType, falseType), pos);
             }
             return type;

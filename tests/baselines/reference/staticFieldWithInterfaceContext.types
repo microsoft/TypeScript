@@ -107,7 +107,7 @@ let [ c6 ]: [I] = [class { static x = { a: "a" } }];
 
 let [ c7 ]: I[] = [class { static x = { a: "a" } }];
 >c7 : I
->[class { static x = { a: "a" } }] : (typeof (Anonymous class))[]
+>[class { static x = { a: "a" } }] : typeof (Anonymous class)[]
 >class { static x = { a: "a" } } : typeof (Anonymous class)
 >x : { a: "a"; }
 >{ a: "a" } : { a: "a"; }
@@ -153,7 +153,7 @@ let [ c11 = class { static x = { a: "a" } } ]: I[] = [class { static x = { a: "a
 >{ a: "a" } : { a: "a"; }
 >a : "a"
 >"a" : "a"
->[class { static x = { a: "a" } }] : (typeof (Anonymous class))[]
+>[class { static x = { a: "a" } }] : typeof (Anonymous class)[]
 >class { static x = { a: "a" } } : typeof (Anonymous class)
 >x : { a: "a"; }
 >{ a: "a" } : { a: "a"; }

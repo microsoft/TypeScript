@@ -10,5 +10,5 @@ verify.codeFix({
     errorCode: 2794,
     description: "Add 'void' to Promise resolved without a value",
     index: 0,
-    newFileContent: `const p4 = new Promise<({ x: number } & { y: string }) | void>(resolve => resolve());`
+    newFileContent: `const p4 = new Promise<{ x: number } & { y: string } | void>(resolve => resolve());`
 });

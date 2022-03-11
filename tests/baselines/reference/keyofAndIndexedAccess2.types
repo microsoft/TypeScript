@@ -495,7 +495,7 @@ function fn4<K extends number>() {
 >'abc' : "abc"
 
     let y: ReadonlyArray<string>[K] = 'abc';
->y : readonly string[][K]
+>y : (readonly string[])[K]
 >'abc' : "abc"
 }
 
@@ -564,7 +564,7 @@ for (const action of actions) {
 
 		window[action](x, y);
 >window[action](x, y) : void
->window[action] : (((x: number, y: number) => void) & ((x: number, y: number) => void)) | (((width: number, height: number) => void) & ((width: number, height: number) => void))
+>window[action] : ((x: number, y: number) => void) & ((x: number, y: number) => void) | ((width: number, height: number) => void) & ((width: number, height: number) => void)
 >window : Window & typeof globalThis
 >action : "resizeTo" | "resizeBy"
 >x : number
