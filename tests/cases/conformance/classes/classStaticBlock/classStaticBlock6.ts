@@ -60,3 +60,14 @@ function foo1 () {
         }
     }
 }
+
+class foo2 {
+    static {
+        this.b  // should error
+        if (1) {
+            this.b; // should error
+        }
+    }
+
+    static b = 1;
+}

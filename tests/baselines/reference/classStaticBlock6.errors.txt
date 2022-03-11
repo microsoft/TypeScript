@@ -13,9 +13,11 @@ tests/cases/conformance/classes/classStaticBlock/classStaticBlock6.ts(42,18): er
 tests/cases/conformance/classes/classStaticBlock/classStaticBlock6.ts(45,17): error TS2522: The 'arguments' object cannot be referenced in an async function or method in ES3 and ES5. Consider using a standard function or method.
 tests/cases/conformance/classes/classStaticBlock/classStaticBlock6.ts(46,22): error TS1109: Expression expected.
 tests/cases/conformance/classes/classStaticBlock/classStaticBlock6.ts(55,13): error TS2815: 'arguments' cannot be referenced in property initializers or class static initialization block.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock6.ts(66,14): error TS2729: Property 'b' is used before its initialization.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock6.ts(68,18): error TS2729: Property 'b' is used before its initialization.
 
 
-==== tests/cases/conformance/classes/classStaticBlock/classStaticBlock6.ts (15 errors) ====
+==== tests/cases/conformance/classes/classStaticBlock/classStaticBlock6.ts (17 errors) ====
     class B {
         static a = 1;
     }
@@ -109,3 +111,19 @@ tests/cases/conformance/classes/classStaticBlock/classStaticBlock6.ts(55,13): er
         }
     }
     
+    class foo2 {
+        static {
+            this.b  // should error
+                 ~
+!!! error TS2729: Property 'b' is used before its initialization.
+!!! related TS2728 tests/cases/conformance/classes/classStaticBlock/classStaticBlock6.ts:72:12: 'b' is declared here.
+            if (1) {
+                this.b; // should error
+                     ~
+!!! error TS2729: Property 'b' is used before its initialization.
+!!! related TS2728 tests/cases/conformance/classes/classStaticBlock/classStaticBlock6.ts:72:12: 'b' is declared here.
+            }
+        }
+    
+        static b = 1;
+    }

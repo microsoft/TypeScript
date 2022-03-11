@@ -102,3 +102,23 @@ function foo1 () {
     }
 }
 
+class foo2 {
+>foo2 : Symbol(foo2, Decl(classStaticBlock6.ts, 61, 1))
+
+    static {
+        this.b  // should error
+>this.b : Symbol(foo2.b, Decl(classStaticBlock6.ts, 69, 5))
+>this : Symbol(foo2, Decl(classStaticBlock6.ts, 61, 1))
+>b : Symbol(foo2.b, Decl(classStaticBlock6.ts, 69, 5))
+
+        if (1) {
+            this.b; // should error
+>this.b : Symbol(foo2.b, Decl(classStaticBlock6.ts, 69, 5))
+>this : Symbol(foo2, Decl(classStaticBlock6.ts, 61, 1))
+>b : Symbol(foo2.b, Decl(classStaticBlock6.ts, 69, 5))
+        }
+    }
+
+    static b = 1;
+>b : Symbol(foo2.b, Decl(classStaticBlock6.ts, 69, 5))
+}

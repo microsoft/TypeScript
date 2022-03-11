@@ -25347,7 +25347,7 @@ namespace ts {
             // To avoid that we will give an error to users if they use arguments objects in arrow function so that they
             // can explicitly bound arguments objects
             if (symbol === argumentsSymbol) {
-                if (isArgumentsInPropertyInitializerOrClassStaticBlock(node)) {
+                if (isInPropertyInitializerOrClassStaticBlock(node, /* ignoreArrowFunctions */true)) {
                     error(node, Diagnostics.arguments_cannot_be_referenced_in_property_initializers_or_class_static_initialization_block);
                     return errorType;
                 }
@@ -28869,11 +28869,12 @@ namespace ts {
             }
         }
 
-        function isInPropertyInitializerOrClassStaticBlock(node: Node): boolean {
+        function isInPropertyInitializerOrClassStaticBlock(node: Node, ignoreArrowFunctions?: boolean): boolean {
             return !!findAncestor(node, node => {
                 switch (node.kind) {
                     case SyntaxKind.PropertyDeclaration:
-                        return true;
+                    case SyntaxKind.ClassStaticBlockDeclaration:
+                            return true;
                     case SyntaxKind.PropertyAssignment:
                     case SyntaxKind.MethodDeclaration:
                     case SyntaxKind.GetAccessor:
@@ -28889,23 +28890,10 @@ namespace ts {
                     case SyntaxKind.ExpressionWithTypeArguments:
                     case SyntaxKind.HeritageClause:
                         return false;
+                    case SyntaxKind.JsxClosingElement:  // already reported in JsxOpeningElement
+                        return "quit";
                     case SyntaxKind.ArrowFunction:
-                    case SyntaxKind.ExpressionStatement:
-                        return isBlock(node.parent) && isClassStaticBlockDeclaration(node.parent.parent) ? true : "quit";
-                    default:
-                        return isExpressionNode(node) ? false : "quit";
-                }
-            });
-        }
-
-        function isArgumentsInPropertyInitializerOrClassStaticBlock(node: Node): boolean {
-            return !!findAncestor(node, node => {
-                switch(node.kind) {
-                    case SyntaxKind.PropertyDeclaration:
-                    case SyntaxKind.ClassStaticBlockDeclaration:
-                        return true;
-                    case SyntaxKind.ArrowFunction:
-                        return false;
+                        return ignoreArrowFunctions ? false : "quit";
                     default:
                         return isFunctionLikeDeclaration(node) ? "quit" : false;
                 }

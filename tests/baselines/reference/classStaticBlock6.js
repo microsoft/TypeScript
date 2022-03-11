@@ -62,6 +62,16 @@ function foo1 () {
     }
 }
 
+class foo2 {
+    static {
+        this.b  // should error
+        if (1) {
+            this.b; // should error
+        }
+    }
+
+    static b = 1;
+}
 
 //// [classStaticBlock6.js]
 var __extends = (this && this.__extends) || (function () {
@@ -115,6 +125,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var _this = this;
 var B = /** @class */ (function () {
     function B() {
     }
@@ -211,3 +222,17 @@ function foo1() {
         }
     })();
 }
+var foo2 = /** @class */ (function () {
+    function foo2() {
+    }
+    var _a;
+    _a = foo2;
+    (function () {
+        _a.b; // should error
+        if (1) {
+            _a.b; // should error
+        }
+    })();
+    foo2.b = 1;
+    return foo2;
+}());
