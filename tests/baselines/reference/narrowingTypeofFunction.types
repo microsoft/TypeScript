@@ -7,12 +7,12 @@ interface F { (): string }
 
 function f1(a: (F & Meta) | string) {
 >f1 : (a: (F & Meta) | string) => void
->a : string | (F & Meta)
+>a : string | F & Meta
 
     if (typeof a === "function") {
 >typeof a === "function" : boolean
 >typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
->a : string | (F & Meta)
+>a : string | F & Meta
 >"function" : "function"
 
         a;
@@ -25,17 +25,17 @@ function f1(a: (F & Meta) | string) {
 }
 
 function f2<T>(x: (T & F) | T & string) {
->f2 : <T>(x: (T & F) | (T & string)) => void
->x : (T & F) | (T & string)
+>f2 : <T>(x: (T & F) | T & string) => void
+>x : T & F | T & string
 
     if (typeof x === "function") {
 >typeof x === "function" : boolean
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
->x : (T & F) | (T & string)
+>x : T & F | T & string
 >"function" : "function"
 
         x;
->x : (T & F) | (T & string)
+>x : T & F | T & string
     }
     else {
         x;

@@ -46,10 +46,10 @@ type X3<T extends (...args: any[]) => any> =
 >X3 : X3<T>
 >args : any[]
 
-    T extends (...args: any[]) => infer U extends string ? ["string", U] :
+    T extends (...args: any[]) => (infer U extends string) ? ["string", U] :
 >args : any[]
 
-    T extends (...args: any[]) => infer U extends number ? ["number", U] :
+    T extends (...args: any[]) => (infer U extends number) ? ["number", U] :
 >args : any[]
 
     never;
@@ -68,11 +68,11 @@ type X4<T extends new (...args: any[]) => any> =
 >X4 : X4<T>
 >args : any[]
 
-    T extends new (...args: any[]) => infer U extends { a: string } ? ["string", U] :
+    T extends new (...args: any[]) => (infer U extends { a: string }) ? ["string", U] :
 >args : any[]
 >a : string
 
-    T extends new (...args: any[]) => infer U extends { a: number } ? ["number", U] :
+    T extends new (...args: any[]) => (infer U extends { a: number }) ? ["number", U] :
 >args : any[]
 >a : number
 
@@ -232,4 +232,42 @@ type X9_T4 = X9<{ a: "a", b: 1 }>; // never
 >X9_T4 : never
 >a : "a"
 >b : 1
+
+// Speculative lookahead for `infer T extends U ?`
+type X10<T> = T extends (infer U extends number ? 1 : 0) ? 1 : 0; // ok, parsed as conditional
+>X10 : X10<T>
+
+type X10_Y1<T> = X10<T extends number ? 1 : 0>;
+>X10_Y1 : X10_Y1<T>
+
+type X10_T1_T1 = X10_Y1<number>;
+>X10_T1_T1 : 0
+
+type X11<T> = T extends ((infer U) extends number ? 1 : 0) ? 1 : 0; // ok, parsed as conditional
+>X11 : X11<T>
+
+type X12<T> = T extends (infer U extends number) ? 1 : 0; // ok, parsed as `infer..extends` (no trailing `?`)
+>X12 : X12<T>
+
+type X13<T> = T extends infer U extends number ? 1 : 0; // ok, parsed as `infer..extends` (conditional types not allowed in 'extends type')
+>X13 : X13<T>
+
+type X14<T> = T extends keyof infer U extends number ? 1 : 0; // ok, parsed as `infer..extends` (precedence wouldn't have parsed the `?` as part of a type operator)
+>X14 : X14<T>
+
+type X15<T> = T extends { [P in infer U extends keyof T ? 1 : 0]: 1; } ? 1 : 0; // ok, parsed as conditional
+>X15 : X15<T>
+
+type X16<T> = T extends { [P in infer U extends keyof T]: 1; } ? 1 : 0; // ok, parsed as `infer..extends` (no trailing `?`)
+>X16 : X16<T>
+
+type X17<T> = T extends { [P in keyof T as infer U extends P ? 1 : 0]: 1; } ? 1 : 0; // ok, parsed as conditional
+>X17 : X17<T>
+
+type X18<T> = T extends { [P in keyof T as infer U extends P]: 1; } ? 1 : 0; // ok, parsed as `infer..extends` (no trailing `?`)
+>X18 : X18<T>
+
+// from mongoose
+type IfEquals<X, Y, A, B> = (<T>() => T extends X ? 1 : 2) extends <T>() => T extends Y ? 1 : 2 ? A : B;
+>IfEquals : IfEquals<X, Y, A, B>
 

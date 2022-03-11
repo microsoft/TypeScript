@@ -9,12 +9,12 @@ function f1<T>(a: T & undefined) {
 }
 
 function f2<T>(a: T | T & undefined) {
->f2 : <T>(a: T | (T & undefined)) => T | (T & undefined)
->a : T | (T & undefined)
+>f2 : <T>(a: T | T & undefined) => T | T & undefined
+>a : T | T & undefined
 
     return { ...a };
->{ ...a } : T | (T & undefined)
->a : T | (T & undefined)
+>{ ...a } : T | T & undefined
+>a : T | T & undefined
 }
 
 function f3<T extends undefined>(a: T) {
