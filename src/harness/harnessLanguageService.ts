@@ -163,6 +163,24 @@ namespace Harness.LanguageService {
             }
         }
 
+        public fileExists(path: string): boolean {
+            try {
+                return this.vfs.existsSync(path);
+            }
+            catch {
+                return false;
+            }
+        }
+
+        public readFile(path: string): string | undefined {
+            try {
+                return this.vfs.readFileSync(path).toString();
+            }
+            catch {
+                return undefined;
+            }
+        }
+
         public directoryExists(path: string) {
             return this.vfs.statSync(path).isDirectory();
         }

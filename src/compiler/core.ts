@@ -2156,14 +2156,16 @@ namespace ts {
         return (arg: T) => f(arg) && g(arg);
     }
 
-    export function or<T extends unknown[]>(...fs: ((...args: T) => boolean)[]): (...args: T) => boolean {
+    export function or<T extends unknown[], U>(...fs: ((...args: T) => U)[]): (...args: T) => U {
         return (...args) => {
+            let lastResult: U;
             for (const f of fs) {
-                if (f(...args)) {
-                    return true;
+                lastResult = f(...args);
+                if (lastResult) {
+                    return lastResult;
                 }
             }
-            return false;
+            return lastResult!;
         };
     }
 
