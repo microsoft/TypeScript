@@ -43302,11 +43302,12 @@ namespace ts {
                     case SyntaxKind.OutKeyword:
                         const inOutFlag = modifier.kind === SyntaxKind.InKeyword ? ModifierFlags.In : ModifierFlags.Out;
                         const inOutText = modifier.kind === SyntaxKind.InKeyword ? "in" : "out";
+                        if (node.kind !== SyntaxKind.TypeParameter || (node.parent.kind !== SyntaxKind.InterfaceDeclaration &&
+                            node.parent.kind !== SyntaxKind.ClassDeclaration && node.parent.kind !== SyntaxKind.TypeAliasDeclaration)) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_can_only_appear_on_a_type_parameter_of_a_class_interface_or_type_alias, inOutText);
+                        }
                         if (flags & inOutFlag) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_already_seen, inOutText);
-                        }
-                        if (node.kind !== SyntaxKind.TypeParameter) {
-                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_can_only_appear_on_a_type_parameter, inOutText);
                         }
                         if (inOutFlag & ModifierFlags.In && flags & ModifierFlags.Out) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "in", "out");

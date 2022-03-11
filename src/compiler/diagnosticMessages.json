@@ -883,7 +883,7 @@
         "category": "Error",
         "code": 1272
     },
-    "'{0}' modifier can only appear on a type parameter": {
+    "'{0}' modifier can only appear on a type parameter of a class, interface or type alias": {
         "category": "Error",
         "code": 1273
     },
