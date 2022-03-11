@@ -1488,6 +1488,13 @@ namespace ts {
         return createMultiMap() as UnderscoreEscapedMultiMap<T>;
     }
 
+    /**
+     * Creates a Set with custom equality and hash code functionality.  This is useful when you
+     * want to use something looser than object identity - e.g. "has the same span".
+     *
+     * If `equals(a, b)`, it must be the case that `getHashCode(a) === getHashCode(b)`.
+     * The converse is not required.
+     */
     export function createSet<TElement, THash = number>(getHashCode: (element: TElement) => THash, equals: EqualityComparer<TElement>): Set<TElement> {
         const multiMap = new Map<THash, TElement[]>();
         let size = 0;
