@@ -321,7 +321,7 @@ interface B<T> { variant: 'b', value: Array<T> }
 >T : Symbol(T, Decl(dependentDestructuredVariables.ts, 128, 12))
 >variant : Symbol(B.variant, Decl(dependentDestructuredVariables.ts, 128, 16))
 >value : Symbol(B.value, Decl(dependentDestructuredVariables.ts, 128, 30))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 3 more)
 >T : Symbol(T, Decl(dependentDestructuredVariables.ts, 128, 12))
 
 type AB<T> = A<T> | B<T>;
@@ -342,7 +342,7 @@ declare function printValueList<T>(t: Array<T>): void;
 >printValueList : Symbol(printValueList, Decl(dependentDestructuredVariables.ts, 132, 43))
 >T : Symbol(T, Decl(dependentDestructuredVariables.ts, 134, 32))
 >t : Symbol(t, Decl(dependentDestructuredVariables.ts, 134, 35))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 3 more)
 >T : Symbol(T, Decl(dependentDestructuredVariables.ts, 134, 32))
 
 function unrefined1<T>(ab: AB<T>): void {
@@ -514,7 +514,7 @@ declare function readFile(path: string, callback: (...args: [err: null, data: un
 >path : Symbol(path, Decl(dependentDestructuredVariables.ts, 200, 26))
 >callback : Symbol(callback, Decl(dependentDestructuredVariables.ts, 200, 39))
 >args : Symbol(args, Decl(dependentDestructuredVariables.ts, 200, 51))
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
 
 readFile('hello', (err, data) => {
 >readFile : Symbol(readFile, Decl(dependentDestructuredVariables.ts, 198, 2))
@@ -594,4 +594,161 @@ reducer("concat", { firstArr: [1, 2], secondArr: [3, 4] });
 >reducer : Symbol(reducer, Decl(dependentDestructuredVariables.ts, 213, 5))
 >firstArr : Symbol(firstArr, Decl(dependentDestructuredVariables.ts, 225, 19))
 >secondArr : Symbol(secondArr, Decl(dependentDestructuredVariables.ts, 225, 37))
+
+// repro from https://github.com/microsoft/TypeScript/pull/47190#issuecomment-1057603588
+
+type FooMethod = {
+>FooMethod : Symbol(FooMethod, Decl(dependentDestructuredVariables.ts, 225, 59))
+
+  method(...args:
+>method : Symbol(method, Decl(dependentDestructuredVariables.ts, 229, 18))
+>args : Symbol(args, Decl(dependentDestructuredVariables.ts, 230, 9))
+
+    [type: "str", cb: (e: string) => void] |
+>e : Symbol(e, Decl(dependentDestructuredVariables.ts, 231, 23))
+
+    [type: "num", cb: (e: number) => void]
+>e : Symbol(e, Decl(dependentDestructuredVariables.ts, 232, 23))
+
+  ): void;
+}
+
+let fooM: FooMethod = {
+>fooM : Symbol(fooM, Decl(dependentDestructuredVariables.ts, 236, 3))
+>FooMethod : Symbol(FooMethod, Decl(dependentDestructuredVariables.ts, 225, 59))
+
+  method(type, cb) {
+>method : Symbol(method, Decl(dependentDestructuredVariables.ts, 236, 23))
+>type : Symbol(type, Decl(dependentDestructuredVariables.ts, 237, 9))
+>cb : Symbol(cb, Decl(dependentDestructuredVariables.ts, 237, 14))
+
+    if (type == 'num') {
+>type : Symbol(type, Decl(dependentDestructuredVariables.ts, 237, 9))
+
+      cb(123)
+>cb : Symbol(cb, Decl(dependentDestructuredVariables.ts, 237, 14))
+
+    } else {
+      cb("abc")
+>cb : Symbol(cb, Decl(dependentDestructuredVariables.ts, 237, 14))
+    }
+  }
+};
+
+type FooAsyncMethod = {
+>FooAsyncMethod : Symbol(FooAsyncMethod, Decl(dependentDestructuredVariables.ts, 244, 2))
+
+  method(...args:
+>method : Symbol(method, Decl(dependentDestructuredVariables.ts, 246, 23))
+>args : Symbol(args, Decl(dependentDestructuredVariables.ts, 247, 9))
+
+    [type: "str", cb: (e: string) => void] |
+>e : Symbol(e, Decl(dependentDestructuredVariables.ts, 248, 23))
+
+    [type: "num", cb: (e: number) => void]
+>e : Symbol(e, Decl(dependentDestructuredVariables.ts, 249, 23))
+
+  ): Promise<any>;
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+}
+
+let fooAsyncM: FooAsyncMethod = {
+>fooAsyncM : Symbol(fooAsyncM, Decl(dependentDestructuredVariables.ts, 253, 3))
+>FooAsyncMethod : Symbol(FooAsyncMethod, Decl(dependentDestructuredVariables.ts, 244, 2))
+
+  async method(type, cb) {
+>method : Symbol(method, Decl(dependentDestructuredVariables.ts, 253, 33))
+>type : Symbol(type, Decl(dependentDestructuredVariables.ts, 254, 15))
+>cb : Symbol(cb, Decl(dependentDestructuredVariables.ts, 254, 20))
+
+    if (type == 'num') {
+>type : Symbol(type, Decl(dependentDestructuredVariables.ts, 254, 15))
+
+      cb(123)
+>cb : Symbol(cb, Decl(dependentDestructuredVariables.ts, 254, 20))
+
+    } else {
+      cb("abc")
+>cb : Symbol(cb, Decl(dependentDestructuredVariables.ts, 254, 20))
+    }
+  }
+};
+
+type FooGenMethod = {
+>FooGenMethod : Symbol(FooGenMethod, Decl(dependentDestructuredVariables.ts, 261, 2))
+
+  method(...args:
+>method : Symbol(method, Decl(dependentDestructuredVariables.ts, 263, 21))
+>args : Symbol(args, Decl(dependentDestructuredVariables.ts, 264, 9))
+
+    [type: "str", cb: (e: string) => void] |
+>e : Symbol(e, Decl(dependentDestructuredVariables.ts, 265, 23))
+
+    [type: "num", cb: (e: number) => void]
+>e : Symbol(e, Decl(dependentDestructuredVariables.ts, 266, 23))
+
+  ): Generator<any, any, any>;
+>Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
+}
+
+let fooGenM: FooGenMethod = {
+>fooGenM : Symbol(fooGenM, Decl(dependentDestructuredVariables.ts, 270, 3))
+>FooGenMethod : Symbol(FooGenMethod, Decl(dependentDestructuredVariables.ts, 261, 2))
+
+  *method(type, cb) {
+>method : Symbol(method, Decl(dependentDestructuredVariables.ts, 270, 29))
+>type : Symbol(type, Decl(dependentDestructuredVariables.ts, 271, 10))
+>cb : Symbol(cb, Decl(dependentDestructuredVariables.ts, 271, 15))
+
+    if (type == 'num') {
+>type : Symbol(type, Decl(dependentDestructuredVariables.ts, 271, 10))
+
+      cb(123)
+>cb : Symbol(cb, Decl(dependentDestructuredVariables.ts, 271, 15))
+
+    } else {
+      cb("abc")
+>cb : Symbol(cb, Decl(dependentDestructuredVariables.ts, 271, 15))
+    }
+  }
+};
+
+type FooAsyncGenMethod = {
+>FooAsyncGenMethod : Symbol(FooAsyncGenMethod, Decl(dependentDestructuredVariables.ts, 278, 2))
+
+  method(...args:
+>method : Symbol(method, Decl(dependentDestructuredVariables.ts, 280, 26))
+>args : Symbol(args, Decl(dependentDestructuredVariables.ts, 281, 9))
+
+    [type: "str", cb: (e: string) => void] |
+>e : Symbol(e, Decl(dependentDestructuredVariables.ts, 282, 23))
+
+    [type: "num", cb: (e: number) => void]
+>e : Symbol(e, Decl(dependentDestructuredVariables.ts, 283, 23))
+
+  ): AsyncGenerator<any, any, any>;
+>AsyncGenerator : Symbol(AsyncGenerator, Decl(lib.es2018.asyncgenerator.d.ts, --, --))
+}
+
+let fooAsyncGenM: FooAsyncGenMethod = {
+>fooAsyncGenM : Symbol(fooAsyncGenM, Decl(dependentDestructuredVariables.ts, 287, 3))
+>FooAsyncGenMethod : Symbol(FooAsyncGenMethod, Decl(dependentDestructuredVariables.ts, 278, 2))
+
+  async *method(type, cb) {
+>method : Symbol(method, Decl(dependentDestructuredVariables.ts, 287, 39))
+>type : Symbol(type, Decl(dependentDestructuredVariables.ts, 288, 16))
+>cb : Symbol(cb, Decl(dependentDestructuredVariables.ts, 288, 21))
+
+    if (type == 'num') {
+>type : Symbol(type, Decl(dependentDestructuredVariables.ts, 288, 16))
+
+      cb(123)
+>cb : Symbol(cb, Decl(dependentDestructuredVariables.ts, 288, 21))
+
+    } else {
+      cb("abc")
+>cb : Symbol(cb, Decl(dependentDestructuredVariables.ts, 288, 21))
+    }
+  }
+};
 
