@@ -1413,11 +1413,14 @@ namespace ts.server {
                                 }
                                 const auxiliaryProgram = auxiliaryProject.getLanguageService().getProgram()!;
                                 const fileToSearch = Debug.checkDefined(auxiliaryProgram.getSourceFile(fileNameToSearch!));
-                                const matches = FindAllReferences.Core.getTopMostDeclarationsInFile(candidate.name, fileToSearch);
+                                const matches = FindAllReferences.Core.getTopMostDeclarationNamesInFile(candidate.name, fileToSearch);
                                 for (const match of matches) {
-                                    const symbol = match.symbol || auxiliaryProgram.getTypeChecker().getSymbolAtLocation(match);
-                                    if (symbol) {
-                                        pushIfUnique(implementations, GoToDefinition.createDefinitionInfo(match, auxiliaryProgram.getTypeChecker(), symbol, match));
+                                    const symbol = auxiliaryProgram.getTypeChecker().getSymbolAtLocation(match);
+                                    const decl = getDeclarationFromName(match);
+                                    if (symbol && decl) {
+                                        // I think the last argument to this is supposed to be the start node, but it doesn't seem important.
+                                        // Callers internal to GoToDefinition already get confused about this.
+                                        pushIfUnique(implementations, GoToDefinition.createDefinitionInfo(decl, auxiliaryProgram.getTypeChecker(), symbol, decl));
                                     }
                                 }
                             }

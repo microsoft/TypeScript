@@ -41488,9 +41488,6 @@ namespace ts {
                     return isMetaProperty(node.parent) ? checkMetaPropertyKeyword(node.parent).symbol : undefined;
                 case SyntaxKind.MetaProperty:
                     return checkExpression(node as Expression).symbol;
-                case SyntaxKind.BinaryExpression:
-                    // See binary expression handling in `getDeclarationFromName`
-                    return getSymbolOfNode(node as BinaryExpression) || getSymbolOfNode((node as BinaryExpression).left);
 
                 default:
                     return undefined;

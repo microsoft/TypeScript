@@ -1335,21 +1335,21 @@ namespace ts.FindAllReferences {
             }
         }
 
-        export function getTopMostDeclarationsInFile(declarationName: string, sourceFile: SourceFile): readonly Declaration[] {
-            const candidates = mapDefined(getPossibleSymbolReferenceNodes(sourceFile, declarationName), getDeclarationFromName);
+        export function getTopMostDeclarationNamesInFile(declarationName: string, sourceFile: SourceFile): readonly Node[] {
+            const candidates = filter(getPossibleSymbolReferenceNodes(sourceFile, declarationName), name => !!getDeclarationFromName(name));
             return candidates.reduce((topMost, decl) => {
                 const depth = getDepth(decl);
-                if (!some(topMost.declarations) || depth === topMost.depth) {
-                    topMost.declarations.push(decl);
+                if (!some(topMost.declarationNames) || depth === topMost.depth) {
+                    topMost.declarationNames.push(decl);
                 }
                 else if (depth < topMost.depth) {
-                    topMost.declarations = [decl];
+                    topMost.declarationNames = [decl];
                 }
                 topMost.depth = depth;
                 return topMost;
-            }, { depth: Infinity, declarations: [] as Declaration[] }).declarations;
+            }, { depth: Infinity, declarationNames: [] as Node[] }).declarationNames;
 
-            function getDepth(declaration: Declaration | undefined) {
+            function getDepth(declaration: Node | undefined) {
                 let depth = 0;
                 while (declaration) {
                     declaration = getContainerNode(declaration);
