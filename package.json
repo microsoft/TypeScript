@@ -31,7 +31,6 @@
     "packageManager": "npm@6.14.15",
     "devDependencies": {
         "@octokit/rest": "latest",
-        "@types/browserify": "latest",
         "@types/chai": "latest",
         "@types/convert-source-map": "latest",
         "@types/glob": "latest",
@@ -60,7 +59,6 @@
         "async": "latest",
         "azure-devops-node-api": "^11.0.1",
         "browser-resolve": "^1.11.2",
-        "browserify": "latest",
         "chai": "latest",
         "chalk": "^4.1.2",
         "convert-source-map": "latest",
