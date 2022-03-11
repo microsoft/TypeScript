@@ -29,7 +29,7 @@ namespace ts {
 
         function getSemanticDocumentHighlights(position: number, node: Node, program: Program, cancellationToken: CancellationToken, sourceFilesToSearch: readonly SourceFile[]): DocumentHighlights[] | undefined {
             const sourceFilesSet = new Set(sourceFilesToSearch.map(f => f.fileName));
-            const referenceEntries = FindAllReferences.getReferenceEntriesForNode(position, node, program, sourceFilesToSearch, cancellationToken, /*options*/ undefined, sourceFilesSet);
+            const referenceEntries = FindAllReferences.getReferenceEntriesForNode(position, node, program, sourceFilesToSearch, cancellationToken, /*sourceMapper*/ undefined, /*options*/ undefined, sourceFilesSet);
             if (!referenceEntries) return undefined;
             const map = arrayToMultiMap(referenceEntries.map(FindAllReferences.toHighlightSpan), e => e.fileName, e => e.span);
             const getCanonicalFileName = createGetCanonicalFileName(program.useCaseSensitiveFileNames());

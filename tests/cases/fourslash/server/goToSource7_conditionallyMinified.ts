@@ -15,19 +15,19 @@
 //// }
 
 // @Filename: /node_modules/react/cjs/react.production.min.js
-//// 'use strict';exports./*production*/useState=function(a){};exports.version='16.8.6';
+//// 'use strict';exports.[|useState|]=function(a){};exports.version='16.8.6';
 
 // @Filename: /node_modules/react/cjs/react.development.js
 //// 'use strict';
 //// if (process.env.NODE_ENV !== 'production') {
 ////   (function() {
 ////     function useState(initialState) {}
-////     exports./*development*/useState = useState;
+////     exports.[|useState|] = useState;
 ////     exports.version = '16.8.6';
 ////   }());
 //// }
 
 // @Filename: /index.ts
-//// import { [|/*start*/useState|] } from 'react';
+//// import { /*start*/useState } from 'react';
 
-verify.goToSourceDefinition("start", ["production", "development"]);
+verify.allRangesAppearInImplementationList("start");
