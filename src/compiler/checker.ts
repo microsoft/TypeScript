@@ -18104,7 +18104,8 @@ namespace ts {
                     return true;
                 }
             }
-            else {
+            else if (!((source.flags | target.flags) & (TypeFlags.UnionOrIntersection | TypeFlags.IndexedAccess | TypeFlags.Conditional | TypeFlags.Substitution))) {
+                // We have excluded types that may simplify to other forms, so types must have identical flags
                 if (source.flags !== target.flags) return false;
                 if (source.flags & TypeFlags.Singleton) return true;
             }
@@ -24471,7 +24472,7 @@ namespace ts {
             }
 
             function getCandidateDiscriminantPropertyAccess(expr: Expression) {
-                if (isBindingPattern(reference) || isFunctionExpressionOrArrowFunction(reference)) {
+                if (isBindingPattern(reference) || isFunctionExpressionOrArrowFunction(reference) || isObjectLiteralMethod(reference)) {
                     // When the reference is a binding pattern or function or arrow expression, we are narrowing a pesudo-reference in
                     // getNarrowedTypeOfSymbol. An identifier for a destructuring variable declared in the same binding pattern or
                     // parameter declared in the same parameter list is a candidate.
@@ -32188,6 +32189,9 @@ namespace ts {
                     }
                     assignBindingElementTypes(declaration.name, links.type);
                 }
+            }
+            else if (type) {
+                Debug.assertEqual(links.type, type, "Parameter symbol already has a cached type which differs from newly assigned type");
             }
         }
 
