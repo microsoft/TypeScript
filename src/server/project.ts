@@ -2273,6 +2273,7 @@ namespace ts.server {
          * @returns: true if set of files in the project stays the same and false - otherwise.
          */
         updateGraph(): boolean {
+            tracing?.push(tracing.Phase.Session, "updateGraph", { path: this.canonicalConfigFilePath });
             const isInitialLoad = this.isInitialLoadPending();
             this.isInitialLoadPending = returnFalse;
             const reloadLevel = this.pendingReload;
@@ -2296,6 +2297,7 @@ namespace ts.server {
             this.compilerHost = undefined;
             this.projectService.sendProjectLoadingFinishEvent(this);
             this.projectService.sendProjectTelemetry(this);
+            tracing?.pop();
             return result;
         }
 
