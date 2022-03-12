@@ -223,7 +223,6 @@ WatchedFiles::
 /user/username/projects/myproject/file1.ts:
   {"fileName":"/user/username/projects/myproject/file1.ts","pollingInterval":250}
 /user/username/projects/myproject/src/file2.ts:
-  {"fileName":"/user/username/projects/myproject/src/file2.ts","pollingInterval":250}
 /a/lib/lib.es2016.full.d.ts:
   {"fileName":"/a/lib/lib.es2016.full.d.ts","pollingInterval":250}
 
@@ -255,13 +254,6 @@ Output::
 
 [91merror[0m[90m TS2318: [0mCannot find global type 'Boolean'.
 
-[91merror[0m[90m TS2318: [0mCannot find global type 'CallableFunction'.
-
-[91merror[0m[90m TS2318: [0mCannot find global type 'Function'.
-
-[91merror[0m[90m TS2318: [0mCannot find global type 'IArguments'.
-
-[91merror[0m[90m TS2318: [0mCannot find global type 'NewableFunction'.
 
 [91merror[0m[90m TS2318: [0mCannot find global type 'Number'.
 
@@ -283,12 +275,6 @@ Output::
 [[90m12:00:38 AM[0m] Found 11 errors. Watching for file changes.
 
 
-
-Program root files: ["/user/username/projects/myproject/file1.ts","/user/username/projects/myproject/src/file2.ts","/user/username/projects/myproject/src/file3.ts"]
-Program options: {"target":3,"module":2,"outFile":"/user/username/projects/myproject/build/outFile.js","esModuleInterop":true,"forceConsistentCasingInFileNames":true,"strict":true,"skipLibCheck":true,"watch":true,"project":"/user/username/projects/myproject/tsconfig.json","configFilePath":"/user/username/projects/myproject/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/user/username/projects/myproject/file1.ts
 /user/username/projects/myproject/src/file2.ts
 /user/username/projects/myproject/src/file3.ts
 
