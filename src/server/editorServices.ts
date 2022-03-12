@@ -2062,7 +2062,7 @@ namespace ts.server {
 
         /* @internal */
         createConfiguredProject(configFileName: NormalizedPath) {
-            tracing?.instant(tracing.Phase.Session, "createConfiguredProject", { path: configFileName });
+            tracing?.instant(tracing.Phase.Session, "createConfiguredProject", { configFilePath: configFileName });
             this.logger.info(`Creating configuration project ${configFileName}`);
             const canonicalConfigFilePath = asNormalizedPath(this.toCanonicalFileName(configFileName));
             let configFileExistenceInfo = this.configFileExistenceInfoCache.get(canonicalConfigFilePath);
@@ -2120,7 +2120,7 @@ namespace ts.server {
          */
         /* @internal */
         private loadConfiguredProject(project: ConfiguredProject, reason: string) {
-            tracing?.push(tracing.Phase.Session, "loadConfiguredProject", { args: project.canonicalConfigFilePath });
+            tracing?.push(tracing.Phase.Session, "loadConfiguredProject", { configFilePath: project.canonicalConfigFilePath });
             this.sendProjectLoadingStartEvent(project, reason);
 
             // Read updated contents from disk
