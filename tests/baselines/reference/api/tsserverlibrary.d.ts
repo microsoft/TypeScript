@@ -3375,7 +3375,11 @@ declare namespace ts {
         createComputedPropertyName(expression: Expression): ComputedPropertyName;
         updateComputedPropertyName(node: ComputedPropertyName, expression: Expression): ComputedPropertyName;
         createTypeParameterDeclaration(modifiers: readonly Modifier[] | undefined, name: string | Identifier, constraint?: TypeNode, defaultType?: TypeNode): TypeParameterDeclaration;
+        /** @deprecated */
+        createTypeParameterDeclaration(name: string | Identifier, constraint?: TypeNode, defaultType?: TypeNode): TypeParameterDeclaration;
         updateTypeParameterDeclaration(node: TypeParameterDeclaration, modifiers: readonly Modifier[] | undefined, name: Identifier, constraint: TypeNode | undefined, defaultType: TypeNode | undefined): TypeParameterDeclaration;
+        /** @deprecated */
+        updateTypeParameterDeclaration(node: TypeParameterDeclaration, name: Identifier, constraint: TypeNode | undefined, defaultType: TypeNode | undefined): TypeParameterDeclaration;
         createParameterDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, dotDotDotToken: DotDotDotToken | undefined, name: string | BindingName, questionToken?: QuestionToken, type?: TypeNode, initializer?: Expression): ParameterDeclaration;
         updateParameterDeclaration(node: ParameterDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, dotDotDotToken: DotDotDotToken | undefined, name: string | BindingName, questionToken: QuestionToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined): ParameterDeclaration;
         createDecorator(expression: Expression): Decorator;
@@ -10719,9 +10723,15 @@ declare namespace ts {
     /** @deprecated Use `factory.updateComputedPropertyName` or the factory supplied by your transformation context instead. */
     const updateComputedPropertyName: (node: ComputedPropertyName, expression: Expression) => ComputedPropertyName;
     /** @deprecated Use `factory.createTypeParameterDeclaration` or the factory supplied by your transformation context instead. */
-    const createTypeParameterDeclaration: (modifiers: readonly Modifier[] | undefined, name: string | Identifier, constraint?: TypeNode | undefined, defaultType?: TypeNode | undefined) => TypeParameterDeclaration;
+    const createTypeParameterDeclaration: {
+        (modifiers: readonly Modifier[] | undefined, name: string | Identifier, constraint?: TypeNode | undefined, defaultType?: TypeNode | undefined): TypeParameterDeclaration;
+        (name: string | Identifier, constraint?: TypeNode | undefined, defaultType?: TypeNode | undefined): TypeParameterDeclaration;
+    };
     /** @deprecated Use `factory.updateTypeParameterDeclaration` or the factory supplied by your transformation context instead. */
-    const updateTypeParameterDeclaration: (node: TypeParameterDeclaration, modifiers: readonly Modifier[] | undefined, name: Identifier, constraint: TypeNode | undefined, defaultType: TypeNode | undefined) => TypeParameterDeclaration;
+    const updateTypeParameterDeclaration: {
+        (node: TypeParameterDeclaration, modifiers: readonly Modifier[] | undefined, name: Identifier, constraint: TypeNode | undefined, defaultType: TypeNode | undefined): TypeParameterDeclaration;
+        (node: TypeParameterDeclaration, name: Identifier, constraint: TypeNode | undefined, defaultType: TypeNode | undefined): TypeParameterDeclaration;
+    };
     /** @deprecated Use `factory.createParameterDeclaration` or the factory supplied by your transformation context instead. */
     const createParameter: (decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, dotDotDotToken: DotDotDotToken | undefined, name: string | BindingName, questionToken?: QuestionToken | undefined, type?: TypeNode | undefined, initializer?: Expression | undefined) => ParameterDeclaration;
     /** @deprecated Use `factory.updateParameterDeclaration` or the factory supplied by your transformation context instead. */
