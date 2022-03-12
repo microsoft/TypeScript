@@ -347,6 +347,7 @@ namespace ts {
         let instantiationDepth = 0;
         let inlineLevel = 0;
         let currentNode: Node | undefined;
+        let varianceTypeParameter: TypeParameter | undefined;
 
         const emptySymbols = createSymbolTable();
         const arrayVariances = [VarianceFlags.Covariant];
@@ -4986,9 +4987,12 @@ namespace ts {
                         return factory.createTypeReferenceNode(factory.createIdentifier(idText(name)), /*typeArguments*/ undefined);
                     }
                     // Ignore constraint/default when creating a usage (as opposed to declaration) of a type parameter.
-                    return type.symbol
-                        ? symbolToTypeNode(type.symbol, context, SymbolFlags.Type)
-                        : factory.createTypeReferenceNode(factory.createIdentifier(type === markerSuperType ? "Super" : type === markerSubType ? "Sub" : "?"), /*typeArguments*/ undefined);
+                    if (type.symbol) {
+                        return symbolToTypeNode(type.symbol, context, SymbolFlags.Type);
+                    }
+                    const name = (type === markerSuperType || type === markerSubType) && varianceTypeParameter && varianceTypeParameter.symbol ?
+                        (type === markerSubType ? "sub-" : "super-") + symbolName(varianceTypeParameter.symbol) : "?";
+                    return factory.createTypeReferenceNode(factory.createIdentifier(name), /*typeArguments*/ undefined);
                 }
                 if (type.flags & TypeFlags.Union && (type as UnionType).origin) {
                     type = (type as UnionType).origin!;
@@ -18391,7 +18395,7 @@ namespace ts {
                     generalizedSourceType = getTypeNameForErrorDisplay(generalizedSource);
                 }
 
-                if (target.flags & TypeFlags.TypeParameter) {
+                if (target.flags & TypeFlags.TypeParameter && target !== markerSuperType && target !== markerSubType) {
                     const constraint = getBaseConstraintOfType(target);
                     let needsOriginalSource;
                     if (constraint && (isTypeAssignableTo(generalizedSource, constraint) || (needsOriginalSource = isTypeAssignableTo(source, constraint)))) {
@@ -34682,7 +34686,10 @@ namespace ts {
                     const symbol = getSymbolOfNode(node.parent);
                     const source = createMarkerType(symbol, typeParameter, modifiers === ModifierFlags.Out ? markerSubType : markerSuperType);
                     const target = createMarkerType(symbol, typeParameter, modifiers === ModifierFlags.Out ? markerSuperType : markerSubType);
+                    const saveVarianceTypeParameter = typeParameter;
+                    varianceTypeParameter = typeParameter;
                     checkTypeAssignableTo(source, target, node, Diagnostics.Type_0_is_not_assignable_to_type_1_as_implied_by_variance_annotation);
+                    varianceTypeParameter = saveVarianceTypeParameter;
                 }
             }
             if (produceDiagnostics) {
