@@ -1130,7 +1130,23 @@ namespace ts {
         //
 
         // @api
-        function createTypeParameterDeclaration(modifiers: readonly Modifier[] | undefined, name: string | Identifier, constraint?: TypeNode, defaultType?: TypeNode) {
+        function createTypeParameterDeclaration(modifiers: readonly Modifier[] | undefined, name: string | Identifier, constraint?: TypeNode, defaultType?: TypeNode): TypeParameterDeclaration;
+        /** @deprecated */
+        function createTypeParameterDeclaration(name: string | Identifier, constraint?: TypeNode, defaultType?: TypeNode): TypeParameterDeclaration;
+        function createTypeParameterDeclaration(modifiersOrName: readonly Modifier[] | string | Identifier | undefined , nameOrConstraint?: string | Identifier | TypeNode, constraintOrDefault?: TypeNode, defaultType?: TypeNode) {
+            let name;
+            let modifiers;
+            let constraint;
+            if (modifiersOrName === undefined || isArray(modifiersOrName)) {
+                modifiers = modifiersOrName;
+                name = nameOrConstraint as string | Identifier;
+                constraint = constraintOrDefault;
+            }
+            else {
+                modifiers = undefined;
+                name = modifiersOrName;
+                constraint = nameOrConstraint as TypeNode | undefined;
+            }
             const node = createBaseNamedDeclaration<TypeParameterDeclaration>(
                 SyntaxKind.TypeParameter,
                 /*decorators*/ undefined,
@@ -1144,7 +1160,23 @@ namespace ts {
         }
 
         // @api
-        function updateTypeParameterDeclaration(node: TypeParameterDeclaration, modifiers: readonly Modifier[] | undefined, name: Identifier, constraint: TypeNode | undefined, defaultType: TypeNode | undefined) {
+        function updateTypeParameterDeclaration(node: TypeParameterDeclaration, modifiers: readonly Modifier[] | undefined, name: Identifier, constraint: TypeNode | undefined, defaultType: TypeNode | undefined): TypeParameterDeclaration;
+        /** @deprecated */
+        function updateTypeParameterDeclaration(node: TypeParameterDeclaration, name: Identifier, constraint: TypeNode | undefined, defaultType: TypeNode | undefined): TypeParameterDeclaration;
+        function updateTypeParameterDeclaration(node: TypeParameterDeclaration, modifiersOrName: readonly Modifier[] | Identifier | undefined, nameOrConstraint: Identifier | TypeNode | undefined, constraintOrDefault: TypeNode | undefined, defaultType?: TypeNode | undefined) {
+            let name;
+            let modifiers;
+            let constraint;
+            if (modifiersOrName === undefined || isArray(modifiersOrName)) {
+                modifiers = modifiersOrName;
+                name = nameOrConstraint as Identifier;
+                constraint = constraintOrDefault;
+            }
+            else {
+                modifiers = undefined;
+                name = modifiersOrName;
+                constraint = nameOrConstraint as TypeNode | undefined;
+            }
             return node.modifiers !== modifiers
                 || node.name !== name
                 || node.constraint !== constraint
