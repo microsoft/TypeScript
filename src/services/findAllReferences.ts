@@ -293,7 +293,18 @@ namespace ts.FindAllReferences {
         options: Options = {},
         sourceFilesSet: ReadonlySet<string> = new Set(sourceFiles.map(f => f.fileName)),
     ): readonly Entry[] | undefined {
-        return flattenEntries(Core.getReferencedSymbolsForNode(position, node, program, sourceFiles, cancellationToken, sourceMapper, options, sourceFilesSet));
+        const allEntries = flattenEntries(Core.getReferencedSymbolsForNode(position, node, program, sourceFiles, cancellationToken, sourceMapper, options, sourceFilesSet));
+        if (options.implementations) {
+            return filter(allEntries, entry => {
+                switch (entry.kind) {
+                    case EntryKind.Span:
+                        return !isDeclarationFileName(entry.fileName);
+                    default:
+                        return Core.isImplementation(entry.node, sourceMapper);
+                }
+            });
+        }
+        return allEntries;
     }
 
     function flattenEntries(referenceSymbols: readonly SymbolAndEntries[] | undefined): readonly Entry[] | undefined {
@@ -2297,10 +2308,10 @@ namespace ts.FindAllReferences {
             return meaning;
         }
 
-        function isImplementation(node: Node, sourceMapper: SourceMapper | undefined): boolean {
+        export function isImplementation(node: Node, sourceMapper: SourceMapper | undefined): boolean {
             if (node.flags & NodeFlags.Ambient) {
                 if (!sourceMapper) return false;
-                if (!isVariableLike(node) && !isFunctionLikeDeclaration(node) && !isClassLike(node) && !isModuleOrEnumDeclaration(node)) return false;
+                if (isPartOfTypeNode(node)) return false;
                 const source = sourceMapper.tryGetSourcePosition({ fileName: node.getSourceFile().fileName, pos: node.pos });
                 return !!source && !isDeclarationFileName(source.fileName);
             }

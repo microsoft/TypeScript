@@ -41,14 +41,26 @@ namespace ts.GoToDefinition {
             });
         }
 
-        const { symbol, isAliasTarget, failedAliasResolution } = getSymbol(node, typeChecker);
-        if (!symbol && isModuleSpecifierLike(node)) {
-            // We couldn't resolve the symbol as an external module, but it could
+        let { symbol, isAliasTarget, failedAliasResolution } = getSymbol(node, typeChecker);
+        let fallbackNode = node;
+
+        if (aliasesOnly && failedAliasResolution) {
+            // We couldn't resolve the specific import, try on the module specifier.
+            const importDeclaration = findAncestor(node, isAnyImportOrBareOrAccessedRequire);
+            const moduleSpecifier = importDeclaration && tryGetModuleSpecifierFromDeclaration(importDeclaration);
+            if (moduleSpecifier) {
+                ({ symbol, isAliasTarget, failedAliasResolution } = getSymbol(moduleSpecifier, typeChecker));
+                fallbackNode = moduleSpecifier;
+            }
+        }
+
+        if (!symbol && isModuleSpecifierLike(fallbackNode)) {
+            // We couldn't resolve the module specifier as an external module, but it could
             // be that module resolution succeeded but the target was not a module.
-            const ref = sourceFile.resolvedModules?.get(node.text, getModeForUsageLocation(sourceFile, node));
+            const ref = sourceFile.resolvedModules?.get(fallbackNode.text, getModeForUsageLocation(sourceFile, fallbackNode));
             if (ref) {
                 return [{
-                    name: node.text,
+                    name: fallbackNode.text,
                     fileName: ref.resolvedFileName,
                     containerName: undefined!,
                     containerKind: undefined!,
@@ -57,6 +69,7 @@ namespace ts.GoToDefinition {
                     isAliasTarget: true,
                     failedAliasResolution,
                     isAmbient: isDeclarationFileName(ref.resolvedFileName),
+                    unverified: fallbackNode !== node,
                 }];
             }
         }

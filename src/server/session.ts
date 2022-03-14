@@ -1381,18 +1381,24 @@ namespace ts.server {
         private getImplementation(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): readonly protocol.FileSpanWithContext[] | readonly ImplementationLocation[] {
             const { file, project } = this.getFileAndProject(args);
             const position = this.getPositionInFile(args, file);
-            const implementations = this.mapImplementationLocations(project.getLanguageService().getImplementationAtPosition(file, position) || emptyArray, project);
-
-            // const needsJsResolution = !some(definitions, d => !!d.isAliasTarget && !d.isAmbient) || some(definitions, d => !!d.failedAliasResolution);
-            const needsJsResolution = !some(implementations);
-
+            const implementations = this.mapImplementationLocations(project.getLanguageService().getImplementationAtPosition(file, position) || emptyArray, project).slice();
+            const needsJsResolution = !length(implementations);
             if (needsJsResolution) {
                 project.withAuxiliaryProjectForFiles([file], auxiliaryProject => {
                     const ls = auxiliaryProject.getLanguageService();
                     const jsDefinitions = ls.getDefinitionAndBoundSpan(file, position, /*aliasesOnly*/ true);
                     if (some(jsDefinitions?.definitions)) {
                         for (const jsDefinition of jsDefinitions!.definitions) {
-                            pushIfUnique(implementations, jsDefinition, (a, b) => a.fileName === b.fileName && a.textSpan.start === b.textSpan.start);
+                            if (jsDefinition.unverified) {
+                                const refined = tryRefineDefinition(jsDefinition, project.getLanguageService().getProgram()!, ls.getProgram()!);
+                                if (some(refined)) {
+                                    for (const def of refined || emptyArray) {
+                                        pushIfUnique(implementations, definitionInfoToImplementationLocation(def), documentSpansEqual);
+                                    }
+                                    continue;
+                                }
+                            }
+                            pushIfUnique(implementations, definitionInfoToImplementationLocation(jsDefinition), documentSpansEqual);
                         }
                     }
                     else {
@@ -1413,15 +1419,8 @@ namespace ts.server {
                                 }
                                 const auxiliaryProgram = auxiliaryProject.getLanguageService().getProgram()!;
                                 const fileToSearch = Debug.checkDefined(auxiliaryProgram.getSourceFile(fileNameToSearch!));
-                                const matches = FindAllReferences.Core.getTopMostDeclarationNamesInFile(candidate.name, fileToSearch);
-                                for (const match of matches) {
-                                    const symbol = auxiliaryProgram.getTypeChecker().getSymbolAtLocation(match);
-                                    const decl = getDeclarationFromName(match);
-                                    if (symbol && decl) {
-                                        // I think the last argument to this is supposed to be the start node, but it doesn't seem important.
-                                        // Callers internal to GoToDefinition already get confused about this.
-                                        pushIfUnique(implementations, GoToDefinition.createDefinitionInfo(decl, auxiliaryProgram.getTypeChecker(), symbol, decl));
-                                    }
+                                for (const definition of searchForDeclaration(candidate.name, fileToSearch, auxiliaryProgram)) {
+                                    pushIfUnique(implementations, definition, documentSpansEqual);
                                 }
                             }
                         }
@@ -1432,6 +1431,16 @@ namespace ts.server {
             return simplifiedResult ?
                 implementations.map(({ fileName, textSpan, contextSpan }) => this.toFileSpanWithContext(fileName, textSpan, contextSpan, project)) :
                 implementations.map(Session.mapToOriginalLocation);
+
+            function definitionInfoToImplementationLocation(definition: DefinitionInfo): ImplementationLocation {
+                return {
+                    fileName: definition.fileName,
+                    textSpan: definition.textSpan,
+                    contextSpan: definition.contextSpan,
+                    kind: definition.kind,
+                    displayParts: [],
+                };
+            }
 
             function getEffectiveFileNameOfDefinition(definition: DefinitionInfo, program: Program) {
                 const sourceFile = program.getSourceFile(definition.fileName)!;
@@ -1497,6 +1506,34 @@ namespace ts.server {
                 // We're not in node_modules, and we only get to this function if non-dts module resolution failed.
                 // I'm not sure what else I can do here that isn't already covered by that module resolution.
                 return undefined;
+            }
+
+            function tryRefineDefinition(definition: DefinitionInfo, program: Program, auxiliaryProgram: Program) {
+                const fileToSearch = auxiliaryProgram.getSourceFile(definition.fileName);
+                if (!fileToSearch) {
+                    return undefined;
+                }
+                const initialNode = getTouchingPropertyName(program.getSourceFile(file)!, position);
+                const symbol = program.getTypeChecker().getSymbolAtLocation(initialNode);
+                if (!symbol || !symbol.declarations || some(symbol.declarations, isFreelyNameableImport)) {
+                    return undefined;
+                }
+
+                const nameToSearch = find(symbol.declarations, isImportSpecifier)?.propertyName?.text || symbol.name;
+                return searchForDeclaration(nameToSearch, fileToSearch, auxiliaryProgram);
+            }
+
+            function searchForDeclaration(declarationName: string, fileToSearch: SourceFile, auxiliaryProgram: Program) {
+                const matches = FindAllReferences.Core.getTopMostDeclarationNamesInFile(declarationName, fileToSearch);
+                return mapDefined(matches, match => {
+                    const symbol = auxiliaryProgram.getTypeChecker().getSymbolAtLocation(match);
+                    const decl = getDeclarationFromName(match);
+                    if (symbol && decl) {
+                        // I think the last argument to this is supposed to be the start node, but it doesn't seem important.
+                        // Callers internal to GoToDefinition already get confused about this.
+                        return GoToDefinition.createDefinitionInfo(decl, auxiliaryProgram.getTypeChecker(), symbol, decl);
+                    }
+                });
             }
         }
 

@@ -933,6 +933,10 @@ namespace ts {
         }
     }
 
+    export function isAnyImportOrBareOrAccessedRequire(node: Node): node is AnyImportOrBareOrAccessedRequire {
+        return isAnyImportSyntax(node) || isVariableDeclarationInitializedToBareOrAccessedRequire(node);
+    }
+
     export function isLateVisibilityPaintedStatement(node: Node): node is LateVisibilityPaintedStatement {
         switch (node.kind) {
             case SyntaxKind.ImportDeclaration:
@@ -2548,14 +2552,14 @@ namespace ts {
         return decl.kind === SyntaxKind.FunctionDeclaration || isVariableDeclaration(decl) && decl.initializer && isFunctionLike(decl.initializer);
     }
 
-    export function tryGetModuleSpecifierFromDeclaration(node: AnyImportOrRequire): string | undefined {
+    export function tryGetModuleSpecifierFromDeclaration(node: AnyImportOrBareOrAccessedRequire): StringLiteralLike | undefined {
         switch (node.kind) {
             case SyntaxKind.VariableDeclaration:
-                return node.initializer.arguments[0].text;
+                return findAncestor(node.initializer, (node): node is RequireOrImportCall => isRequireCall(node, /*requireStringLiteralLikeArgument*/ true))?.arguments[0];
             case SyntaxKind.ImportDeclaration:
-                return tryCast(node.moduleSpecifier, isStringLiteralLike)?.text;
+                return tryCast(node.moduleSpecifier, isStringLiteralLike);
             case SyntaxKind.ImportEqualsDeclaration:
-                return tryCast(tryCast(node.moduleReference, isExternalModuleReference)?.expression, isStringLiteralLike)?.text;
+                return tryCast(tryCast(node.moduleReference, isExternalModuleReference)?.expression, isStringLiteralLike);
             default:
                 Debug.assertNever(node);
         }

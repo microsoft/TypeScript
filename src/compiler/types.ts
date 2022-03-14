@@ -4644,6 +4644,9 @@ namespace ts {
     export type AnyImportOrRequire = AnyImportSyntax | VariableDeclarationInitializedTo<RequireOrImportCall>;
 
     /* @internal */
+    export type AnyImportOrBareOrAccessedRequire = AnyImportSyntax | VariableDeclarationInitializedTo<RequireOrImportCall | AccessExpression>;
+
+    /* @internal */
     export type AnyImportOrRequireStatement = AnyImportSyntax | RequireVariableStatement;
 
     /* @internal */

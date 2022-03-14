@@ -2399,6 +2399,20 @@ namespace ts {
         return !!location.parent && isImportOrExportSpecifier(location.parent) && location.parent.propertyName === location;
     }
 
+    /**
+     * Returns true if `node` is the declaration of `n` in:
+     * - `import n from "m"`
+     * - `import * as n from "m"`
+     * - `import n = require("m")`
+     * - `const n = require("m")`
+     */
+    export function isFreelyNameableImport(node: Node): node is ImportClause | NamespaceImport | ImportEqualsDeclaration & { moduleReference: ExternalModuleReference } | VariableDeclarationInitializedTo<RequireOrImportCall> {
+        return node.kind === SyntaxKind.ImportClause
+            || node.kind === SyntaxKind.NamespaceImport
+            || isImportEqualsDeclaration(node) && isExternalModuleReference(node.moduleReference)
+            || isVariableDeclarationInitializedToRequire(node);
+    }
+
     export function getScriptKind(fileName: string, host: LanguageServiceHost): ScriptKind {
         // First check to see if the script kind was specified by the host. Chances are the host
         // may override the default script kind for the file extension.
