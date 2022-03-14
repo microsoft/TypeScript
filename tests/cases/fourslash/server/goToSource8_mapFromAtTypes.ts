@@ -22,12 +22,12 @@
 ////      * _.add(6, 4);
 ////      * // => 10
 ////      */
-////     var [|add|] = createMathOperation(function(augend, addend) {
+////     var [|/*variable*/add|] = createMathOperation(function(augend, addend) {
 ////      return augend + addend;
 ////     }, 0);
 ////
 ////     function lodash(value) {}
-////     lodash.[|add|] = add;
+////     lodash.[|/*property*/add|] = add;
 ////
 ////     /** Detect free variable `global` from Node.js. */
 ////     var freeGlobal = typeof global == 'object' && global && global.Object === Object && global;
@@ -72,6 +72,6 @@
 //// }
 
 // @Filename: /index.ts
-//// import { /*start*/add } from 'lodash';
+//// import { [|/*start*/add|] } from 'lodash';
 
-verify.allRangesAppearInImplementationList("start");
+verify.goToSourceDefinition("start", ["variable", "property"]);

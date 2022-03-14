@@ -4,7 +4,7 @@
 //// { "name": "foo", "version": "1.2.3", "typesVersions": { "*": { "*": ["./types/*"] } } }
 
 // @Filename: /node_modules/foo/src/a.ts
-//// export const [|a|] = 'a';
+//// export const /*end*/a = 'a';
 
 // @Filename: /node_modules/foo/types/a.d.ts
 //// export declare const a: string;
@@ -18,6 +18,7 @@
 
 // @Filename: /b.ts
 //// import { a } from 'foo/a';
-//// a/*start*/
+//// [|a/*start*/|]
 
-verify.allRangesAppearInImplementationList("start");
+verify.goToDefinition("start", "end");
+verify.goToSourceDefinition("start", "end");

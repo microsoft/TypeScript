@@ -697,6 +697,13 @@ namespace FourSlash {
             this.verifyGoToX(arg0, endMarkerNames, () => this.getGoToDefinitionAndBoundSpan());
         }
 
+        public verifyGoToSourceDefinition(startMarkerNames: ArrayOrSingle<string>, end?: ArrayOrSingle<string | { marker: string, unverified?: boolean }> | { file: string, unverified?: boolean }) {
+            if (this.testType !== FourSlashTestType.Server) {
+                this.raiseError("goToSourceDefinition may only be used in fourslash/server tests.");
+            }
+            this.verifyGoToX(startMarkerNames, end, () => (this.languageService as ts.server.SessionClient).getSourceDefinitionAndBoundSpan(this.activeFile.fileName, this.currentCaretPosition)!);
+        }
+
         private getGoToDefinition(): readonly ts.DefinitionInfo[] {
             return this.languageService.getDefinitionAtPosition(this.activeFile.fileName, this.currentCaretPosition)!;
         }
@@ -2440,12 +2447,7 @@ namespace FourSlash {
                 assert.isTrue(implementations && implementations.length > 0, "Expected at least one implementation but got 0");
             }
             else {
-                if (this.testType === FourSlashTestType.Server) {
-                    assert.deepEqual(implementations, [], "Expected implementation list to be empty but implementations returned");
-                }
-                else {
-                    assert.isUndefined(implementations, "Expected implementation list to be empty but implementations returned");
-                }
+                assert.isUndefined(implementations, "Expected implementation list to be empty but implementations returned");
             }
         }
 

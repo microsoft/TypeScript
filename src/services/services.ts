@@ -1765,7 +1765,7 @@ namespace ts {
 
         function getImplementationAtPosition(fileName: string, position: number): ImplementationLocation[] | undefined {
             synchronizeHostData();
-            return FindAllReferences.getImplementationsAtPosition(program, sourceMapper, cancellationToken, program.getSourceFiles(), getValidSourceFile(fileName), position);
+            return FindAllReferences.getImplementationsAtPosition(program, cancellationToken, program.getSourceFiles(), getValidSourceFile(fileName), position);
         }
 
         /// References and Occurrences
@@ -1827,12 +1827,12 @@ namespace ts {
                 ? program.getSourceFiles().filter(sourceFile => !program.isSourceFileDefaultLibrary(sourceFile))
                 : program.getSourceFiles();
 
-            return FindAllReferences.findReferenceOrRenameEntries(program, cancellationToken, sourceFiles, node, position, sourceMapper, options, cb);
+            return FindAllReferences.findReferenceOrRenameEntries(program, cancellationToken, sourceFiles, node, position, options, cb);
         }
 
         function findReferences(fileName: string, position: number): ReferencedSymbol[] | undefined {
             synchronizeHostData();
-            return FindAllReferences.findReferencedSymbols(program, sourceMapper, cancellationToken, program.getSourceFiles(), getValidSourceFile(fileName), position);
+            return FindAllReferences.findReferencedSymbols(program, cancellationToken, program.getSourceFiles(), getValidSourceFile(fileName), position);
         }
 
         function getFileReferences(fileName: string): ReferenceEntry[] {

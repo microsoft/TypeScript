@@ -1,7 +1,7 @@
 /// <reference path="../fourslash.ts" />
 
 // @Filename: /a.ts
-//// export const [|a|] = 'a';
+//// export const /*end*/a = 'a';
 
 // @Filename: /a.d.ts
 //// export declare const a: string;
@@ -11,6 +11,7 @@
 
 // @Filename: /b.ts
 //// import { a } from './a';
-//// a/*start*/
+//// [|a/*start*/|]
 
-verify.allRangesAppearInImplementationList("start");
+verify.goToDefinition("start", "end");
+verify.goToSourceDefinition("start", "end");

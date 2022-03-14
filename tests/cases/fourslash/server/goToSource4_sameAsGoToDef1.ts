@@ -1,8 +1,8 @@
 /// <reference path="../fourslash.ts" />
 
 // @Filename: /index.ts
-//// import { a } from "./a";
-//// a/*start*/
+//// import { a/*end*/ } from "./a";
+//// [|a/*start*/|]
 
-goTo.marker("start");
-verify.implementationListIsEmpty();
+verify.goToDefinition("start", "end");
+verify.goToSourceDefinition("start", "end");
