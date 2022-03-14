@@ -70,13 +70,13 @@ import * as type from "inner/js/index";
 >type : Symbol(type, Decl(index.d.ts, 3, 6))
 
 export { cjs };
->cjs : Symbol(mjs.cjs.type.cjs, Decl(index.d.ts, 4, 8))
+>cjs : Symbol(mjs.cjs.cjs.type.cjs, Decl(index.d.ts, 4, 8))
 
 export { mjs };
->mjs : Symbol(mjs.cjs.type.mjs, Decl(index.d.ts, 5, 8))
+>mjs : Symbol(mjs.cjs.cjs.type.mjs, Decl(index.d.ts, 5, 8))
 
 export { type };
->type : Symbol(mjs.cjs.type.type, Decl(index.d.ts, 6, 8))
+>type : Symbol(mjs.cjs.cjs.type.type, Decl(index.d.ts, 6, 8))
 
 === tests/cases/conformance/node/allowJs/node_modules/inner/index.d.mts ===
 // esm format file
@@ -90,13 +90,13 @@ import * as type from "inner/js/index";
 >type : Symbol(type, Decl(index.d.mts, 3, 6))
 
 export { cjs };
->cjs : Symbol(cjs.mjs.cjs, Decl(index.d.mts, 4, 8))
+>cjs : Symbol(cjs.cjs.mjs.cjs, Decl(index.d.mts, 4, 8))
 
 export { mjs };
->mjs : Symbol(cjs.mjs.mjs, Decl(index.d.mts, 5, 8))
+>mjs : Symbol(cjs.cjs.mjs.mjs, Decl(index.d.mts, 5, 8))
 
 export { type };
->type : Symbol(cjs.mjs.type, Decl(index.d.mts, 6, 8))
+>type : Symbol(cjs.cjs.mjs.type, Decl(index.d.mts, 6, 8))
 
 === tests/cases/conformance/node/allowJs/node_modules/inner/index.d.cts ===
 // cjs format file

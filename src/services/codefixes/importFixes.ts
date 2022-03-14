@@ -847,9 +847,10 @@ namespace ts.codefix {
         const checker = program.getTypeChecker();
         const compilerOptions = program.getCompilerOptions();
         const symbolName = getSymbolName(sourceFile, checker, symbolToken, compilerOptions);
-        // "default" is a keyword and not a legal identifier for the import, so we don't expect it here
-        Debug.assert(symbolName !== InternalSymbolName.Default, "'default' isn't a legal identifier and couldn't occur here");
-
+        // "default" is a keyword and not a legal identifier for the import, but appears as an identifier.
+        if (symbolName === InternalSymbolName.Default) {
+            return undefined;
+        }
         const isValidTypeOnlyUseSite = isValidTypeOnlyAliasUseSite(symbolToken);
         const useRequire = shouldUseRequire(sourceFile, program);
         const exportInfo = getExportInfos(symbolName, isJSXTagName(symbolToken), getMeaningFromLocation(symbolToken), cancellationToken, sourceFile, program, useAutoImportProvider, host, preferences);

@@ -532,7 +532,7 @@ namespace ts {
             return directoryStructureHost.fileExists(fileName);
         }
 
-        function getVersionedSourceFileByPath(fileName: string, path: Path, languageVersion: ScriptTarget, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined {
+        function getVersionedSourceFileByPath(fileName: string, path: Path, languageVersionOrOptions: ScriptTarget | CreateSourceFileOptions, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined {
             const hostSourceFile = sourceFilesCache.get(path);
             // No source file on the host
             if (isFileMissingOnHost(hostSourceFile)) {
@@ -541,7 +541,7 @@ namespace ts {
 
             // Create new source file if requested or the versions dont match
             if (hostSourceFile === undefined || shouldCreateNewSourceFile || isFilePresenceUnknownOnHost(hostSourceFile)) {
-                const sourceFile = getNewSourceFile(fileName, languageVersion, onError);
+                const sourceFile = getNewSourceFile(fileName, languageVersionOrOptions, onError);
                 if (hostSourceFile) {
                     if (sourceFile) {
                         // Set the source file and create file watcher now that file was present on the disk
