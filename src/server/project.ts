@@ -1128,7 +1128,9 @@ namespace ts.server {
             this.resolutionCache.startCachingPerDirectoryResolution();
             this.program = this.languageService.getProgram(); // TODO: GH#18217
             this.dirty = false;
+            tracing?.push(tracing.Phase.Session, "finishCachingPerDirectoryResolution");
             this.resolutionCache.finishCachingPerDirectoryResolution();
+            tracing?.pop();
 
             Debug.assert(oldProgram === undefined || this.program !== undefined);
 
