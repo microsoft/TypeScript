@@ -210,7 +210,7 @@ interface ObjectConstructor {
      * Prevents the modification of existing property attributes and values, and prevents the addition of new properties.
      * @param o Object on which to lock the attributes.
      */
-    freeze<T extends {[idx: string]: U | null | undefined | object}, U extends string | bigint | number | symbol>(o: T): Readonly<T>;
+    freeze<T extends {[idx: string]: U | null | undefined | object}, U extends string | bigint | number | boolean | symbol>(o: T): Readonly<T>;
 
     /**
      * Prevents the modification of existing property attributes and values, and prevents the addition of new properties.
