@@ -5,5 +5,4 @@
 //// declare function [|someFunction|](): () => void;
 //// someFun/*reference*/ction();
 
-goTo.marker("reference");
-verify.implementationListIsEmpty();
+verify.allRangesAppearInImplementationList("reference");
