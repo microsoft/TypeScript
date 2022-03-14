@@ -1,10 +1,13 @@
 ---
 name: Library change
-about: Fix or improve issues with built-in type definitions like `lib.dom.d.ts`, `lib.es6.d.ts`, etc.
+about: Fix or improve issues with built-in type definitions like `lib.dom.d.ts`, `lib.es6.d.ts`,
+  etc.
 title: ''
 labels: ''
 assignees: ''
+
 ---
+
 # lib Update Request
 
 <!--
