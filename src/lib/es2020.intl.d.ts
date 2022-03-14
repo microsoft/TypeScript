@@ -291,12 +291,34 @@ declare namespace Intl {
         new (tag: BCP47LanguageTag | Locale, options?: LocaleOptions): Locale;
     };
 
-     interface DisplayNamesOptions {
-        locale: UnicodeBCP47LocaleIdentifier;
+    type DisplayNamesFallback =
+        | "code"
+        | "none";
+
+    type ResolvedDisplayNamesType =
+        | "language"
+        | "region"
+        | "script"
+        | "currency";
+
+    type DisplayNamesType =
+        | ResolvedDisplayNamesType
+        | "calendar"
+        | "datetimeField";
+
+    interface DisplayNamesOptions {
         localeMatcher: RelativeTimeFormatLocaleMatcher;
         style: RelativeTimeFormatStyle;
-        type: "language" | "region" | "script" | "currency";
-        fallback: "code" | "none";
+        type: DisplayNamesType;
+        languageDisplay: "dialect" | "standard";
+        fallback: DisplayNamesFallback;
+    }
+
+    interface ResolvedDisplayNamesOptions {
+        locale: UnicodeBCP47LocaleIdentifier;
+        style: RelativeTimeFormatStyle;
+        type: ResolvedDisplayNamesType;
+        fallback: DisplayNamesFallback;
     }
 
     interface DisplayNames {
@@ -322,7 +344,7 @@ declare namespace Intl {
          *
          * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DisplayNames/resolvedOptions).
          */
-        resolvedOptions(): DisplayNamesOptions;
+        resolvedOptions(): ResolvedDisplayNamesOptions;
     }
 
     /**
