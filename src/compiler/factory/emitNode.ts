@@ -279,4 +279,16 @@ namespace ts {
         getOrCreateEmitNode(node).flags |= EmitFlags.IgnoreSourceNewlines;
         return node;
     }
+
+    /* @internal */
+    export function setTypeNode<T extends Node>(node: T, type: TypeNode): T {
+        const emitNode = getOrCreateEmitNode(node);
+        emitNode.typeNode = type;
+        return node;
+    }
+
+    /* @internal */
+    export function getTypeNode<T extends Node>(node: T): TypeNode | undefined {
+        return node.emitNode?.typeNode;
+    }
 }

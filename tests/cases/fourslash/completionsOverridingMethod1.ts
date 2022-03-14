@@ -25,11 +25,6 @@ verify.completions({
         {
             name: "foo",
             sortText: completion.SortText.LocationPriority,
-            replacementSpan: {
-                fileName: "",
-                pos: 0,
-                end: 0,
-            },
             insertText: "override foo(a: string): void {\n}",
         }
     ],

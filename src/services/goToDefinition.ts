@@ -233,6 +233,10 @@ namespace ts.GoToDefinition {
             return undefined;
         }
 
+        if (isImportMeta(node.parent) && node.parent.name === node) {
+            return definitionFromType(typeChecker.getTypeAtLocation(node.parent), typeChecker, node.parent, /*isAliasTarget*/ false, /*failedAliasResolution*/ false);
+        }
+
         const { symbol, isAliasTarget, failedAliasResolution } = getSymbol(node, typeChecker);
         if (!symbol) return undefined;
 

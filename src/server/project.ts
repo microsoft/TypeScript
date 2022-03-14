@@ -1679,6 +1679,11 @@ namespace ts.server {
             return packageJsons;
         }
 
+        /* @internal */
+        getPackageJsonCache() {
+            return this.projectService.packageJsonCache;
+        }
+
         /*@internal*/
         getCachedExportInfoMap() {
             return this.exportMapCache ||= createCacheableExportInfoMap(this);

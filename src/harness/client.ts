@@ -110,14 +110,12 @@ namespace ts.server {
                 }
             }
 
-            // verify the sequence numbers
-            Debug.assert(response.request_seq === request.seq, "Malformed response: response sequence number did not match request sequence number.");
-
             // unmarshal errors
             if (!response.success) {
                 throw new Error("Error " + response.message);
             }
 
+            Debug.assert(response.request_seq === request.seq, "Malformed response: response sequence number did not match request sequence number.");
             Debug.assert(expectEmptyBody || !!response.body, "Malformed response: Unexpected empty response body.");
             Debug.assert(!expectEmptyBody || !response.body, "Malformed response: Unexpected non-empty response body.");
 
