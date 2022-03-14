@@ -1319,11 +1319,12 @@ namespace ts.server {
                                 }
                                 const auxiliaryProgram = auxiliaryProject.getLanguageService().getProgram()!;
                                 const fileToSearch = Debug.checkDefined(auxiliaryProgram.getSourceFile(fileNameToSearch!));
-                                const matches = FindAllReferences.Core.getTopMostDeclarationsInFile(candidate.name, fileToSearch);
+                                const matches = FindAllReferences.Core.getTopMostDeclarationNamesInFile(candidate.name, fileToSearch);
                                 for (const match of matches) {
                                     const symbol = match.symbol || auxiliaryProgram.getTypeChecker().getSymbolAtLocation(match);
-                                    if (symbol) {
-                                        pushIfUnique(definitions, GoToDefinition.createDefinitionInfo(match, auxiliaryProgram.getTypeChecker(), symbol, match));
+                                    const decl = getDeclarationFromName(match);
+                                    if (symbol && decl) {
+                                        pushIfUnique(definitions, GoToDefinition.createDefinitionInfo(decl, auxiliaryProgram.getTypeChecker(), symbol, match));
                                     }
                                 }
                             }

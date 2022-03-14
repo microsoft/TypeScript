@@ -6,7 +6,7 @@
 //// { "name": "lodash", "version": "4.17.15", "main": "./lodash.js" }
 
 // @Filename: /node_modules/lodash/lodash.js
-//// [||];(function() {
+//// ;(function() {
 ////     /**
 ////      * Adds two numbers.
 ////      *
@@ -72,8 +72,8 @@
 //// }
 
 // @Filename: /index.ts
-//// import /*defaultImport*/_, { /*unresolvableNamedImport*/foo } from /*moduleSpecifier*/'lodash';
+//// import [|/*defaultImport*/_|], { [|/*unresolvableNamedImport*/foo|] } from [|/*moduleSpecifier*/'lodash'|];
 
-verify.allRangesAppearInImplementationList("defaultImport");
-verify.allRangesAppearInImplementationList("unresolvableNamedImport");
-verify.allRangesAppearInImplementationList("moduleSpecifier");
+verify.goToSourceDefinition("defaultImport", { file: "/node_modules/lodash/lodash.js", unverified: true });
+verify.goToSourceDefinition("unresolvableNamedImport", { file: "/node_modules/lodash/lodash.js", unverified: true });
+verify.goToSourceDefinition("moduleSpecifier", { file: "/node_modules/lodash/lodash.js", unverified: true });
