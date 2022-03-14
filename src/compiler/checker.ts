@@ -8873,10 +8873,8 @@ namespace ts {
                         return getReturnTypeOfSignature(getterSignature);
                     }
                 }
-                if (isInJSFile(declaration)) {
-                    const type = getParameterTypeOfTypeTag(func, declaration);
-                    if (type) return type;
-                }
+                const parameterTypeOfTypeTag = getParameterTypeOfTypeTag(func, declaration);
+                if (parameterTypeOfTypeTag) return parameterTypeOfTypeTag;
                 // Use contextual parameter type if one is available
                 const type = declaration.symbol.escapedName === InternalSymbolName.This ? getContextualThisParameterType(func) : getContextuallyTypedParameterType(declaration);
                 if (type) {
@@ -12762,10 +12760,8 @@ namespace ts {
         }
 
         function getSignatureFromDeclaration(declaration: SignatureDeclaration | JSDocSignature): Signature {
-            if (isInJSFile(declaration)) {
-                const signature = getSignatureOfTypeTag(declaration);
-                if (signature) return signature;
-            }
+            const signature = getSignatureOfTypeTag(declaration);
+            if (signature) return signature;
             const links = getNodeLinks(declaration);
             if (!links.resolvedSignature) {
                 const parameters: Symbol[] = [];
@@ -12980,7 +12976,7 @@ namespace ts {
                 else {
                     const type = signature.declaration && getEffectiveReturnTypeNode(signature.declaration);
                     let jsdocPredicate: TypePredicate | undefined;
-                    if (!type && isInJSFile(signature.declaration)) {
+                    if (!type) {
                         const jsdocSignature = getSignatureOfTypeTag(signature.declaration!);
                         if (jsdocSignature && signature !== jsdocSignature) {
                             jsdocPredicate = getTypePredicateOfSignature(jsdocSignature);
