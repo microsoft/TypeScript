@@ -44,7 +44,7 @@ ${'content' in file ? file.content :  file.fileContent}`;
             // 1. Create a server host with no files, then updateFS and make sure everything works as before
             // Things still to test
             // 2. Send another updateFS request and assert that the vfs content changes
-            // 3. Send another updateFS request and assert that the internal reported content changes
+            // 3. Send another updateFS request and assert that the internal reported content changes (such as projectversion)
             // 4. Send a close message (or whatever will write a file?) and make sure that the vfs state is updated
             // after file watchers are implemented:
             // 5. send updateFS request with a create/update/delete of a watched file, assert that file watchers fired
@@ -80,7 +80,7 @@ ${'content' in file ? file.content :  file.fileContent}`;
             verifyProjectVersion(project, 2);
 
             // Verify Texts
-            verifyText(service, commonFile1.path, commonFile1.content);
+            verifyText(service, file1.file, file1.fileContent!);
             verifyText(service, commonFile2.path, commonFile2.content);
             verifyText(service, app.file, app.fileContent!);
             verifyText(service, file3.file, fileContentWithComment(file3));
@@ -94,10 +94,28 @@ ${'content' in file ? file.content :  file.fileContent}`;
                     updated: [], //FileSystemRequestArgs[];
                 }
             });
+            // no change when not deleting file
+            verifyProjectVersion(project, 2);
+
+            // Verify Texts
+            verifyText(service, file1.file, file1.fileContent!);
+            verifyText(service, commonFile2.path, commonFile2.content);
+            verifyText(service, app.file, app.fileContent!);
+            verifyText(service, file3.file, fileContentWithComment(file3));
+
+            session.executeCommandSeq<protocol.UpdateFileSystemRequest>({
+                command: protocol.CommandTypes.UpdateFileSystem,
+                arguments:{
+                    fileSystem: 'memfs',
+                    created: [],
+                    deleted: [file1.file], // string[];
+                    updated: [], //FileSystemRequestArgs[];
+                }
+            });
             verifyProjectVersion(project, 3);
 
             // Verify Texts
-            verifyText(service, commonFile1.path, commonFile1.content);
+            verifyText(service, file1.file, file1.fileContent!);
             verifyText(service, commonFile2.path, commonFile2.content);
             verifyText(service, app.file, app.fileContent!);
             verifyText(service, file3.file, fileContentWithComment(file3));
