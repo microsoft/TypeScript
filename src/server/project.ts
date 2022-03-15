@@ -1751,13 +1751,16 @@ namespace ts.server {
 
             const dependencySelection = this.includePackageJsonAutoImports();
             if (dependencySelection) {
+                tracing?.push(tracing.Phase.Session, "getPackageJsonAutoImportProvider");
                 const start = timestamp();
                 this.autoImportProviderHost = AutoImportProviderProject.create(dependencySelection, this, this.getModuleResolutionHostForAutoImportProvider(), this.documentRegistry);
                 if (this.autoImportProviderHost) {
                     updateProjectIfDirty(this.autoImportProviderHost);
                     this.sendPerformanceEvent("CreatePackageJsonAutoImportProvider", timestamp() - start);
+                    tracing?.pop();
                     return this.autoImportProviderHost.getCurrentProgram();
                 }
+                tracing?.pop();
             }
         }
 
@@ -1780,9 +1783,13 @@ namespace ts.server {
     }
 
     function getUnresolvedImports(program: Program, cachedUnresolvedImportsPerFile: ESMap<Path, readonly string[]>): SortedReadonlyArray<string> {
+        const sourceFiles = program.getSourceFiles();
+        tracing?.push(tracing.Phase.Session, "getUnresolvedImports", { count: sourceFiles.length });
         const ambientModules = program.getTypeChecker().getAmbientModules().map(mod => stripQuotes(mod.getName()));
-        return sortAndDeduplicate(flatMap(program.getSourceFiles(), sourceFile =>
+        const result = sortAndDeduplicate(flatMap(sourceFiles, sourceFile =>
             extractUnresolvedImportsFromSourceFile(sourceFile, ambientModules, cachedUnresolvedImportsPerFile)));
+        tracing?.pop();
+        return result;
     }
     function extractUnresolvedImportsFromSourceFile(file: SourceFile, ambientModules: readonly string[], cachedUnresolvedImportsPerFile: ESMap<Path, readonly string[]>): readonly string[] {
         return getOrUpdate(cachedUnresolvedImportsPerFile, file.path, () => {

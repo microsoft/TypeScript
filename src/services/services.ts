@@ -1004,9 +1004,11 @@ namespace ts {
 
             // Initialize the list with the root file names
             const rootFileNames = host.getScriptFileNames();
+            tracing?.push(tracing.Phase.Session, "initializeHostCache", { count: rootFileNames.length });
             for (const fileName of rootFileNames) {
                 this.createEntry(fileName, toPath(fileName, this.currentDirectory, getCanonicalFileName));
             }
+            tracing?.pop();
         }
 
         private createEntry(fileName: string, path: Path) {
