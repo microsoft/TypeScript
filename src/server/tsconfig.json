@@ -12,7 +12,7 @@
         { "path": "../compiler" },
         { "path": "../jsTyping" },
         { "path": "../services" },
-        { "path": "../vfs" }
+        { "path": "../vfs", "prepend": true }
     ],
     "files": [
         "types.ts",
