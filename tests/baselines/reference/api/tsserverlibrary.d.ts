@@ -7018,6 +7018,7 @@ declare namespace ts.server.protocol {
         Rename = "rename",
         Saveto = "saveto",
         SignatureHelp = "signatureHelp",
+        SourceDefinitionAndBoundSpan = "sourceDefinitionAndBoundSpan",
         Status = "status",
         TypeDefinition = "typeDefinition",
         ProjectInfo = "projectInfo",
@@ -7636,6 +7637,9 @@ declare namespace ts.server.protocol {
     }
     interface DefinitionAndBoundSpanRequest extends FileLocationRequest {
         readonly command: CommandTypes.DefinitionAndBoundSpan;
+    }
+    interface SourceDefinitionAndBoundSpanRequest extends FileLocationRequest {
+        readonly command: CommandTypes.SourceDefinitionAndBoundSpan;
     }
     interface DefinitionAndBoundSpanResponse extends Response {
         readonly body: DefinitionInfoAndBoundSpan;
@@ -10592,6 +10596,7 @@ declare namespace ts.server {
         private getDefinition;
         private mapDefinitionInfoLocations;
         private getDefinitionAndBoundSpan;
+        private getSourceDefinitionAndBoundSpan;
         private getEmitOutput;
         private mapJSDocTagInfo;
         private mapDisplayParts;
