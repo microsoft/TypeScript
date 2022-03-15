@@ -1,27 +1,18 @@
 === tests/cases/compiler/index.js ===
-"use strict";
->"use strict" : "use strict"
-
 self.importScripts = (function (importScripts) {
->self.importScripts = (function (importScripts) {  return function () {    setTimeout(function () {}, 0);    return importScripts.apply(this, arguments);  };})(importScripts) : (...args: string[]) => any
+>self.importScripts = (function (importScripts) {    return function () {        return importScripts.apply(this, arguments);    };})(importScripts) : (...args: string[]) => any
 >self.importScripts : (...urls: string[]) => void
 >self : Window & typeof globalThis
 >importScripts : (...urls: string[]) => void
->(function (importScripts) {  return function () {    setTimeout(function () {}, 0);    return importScripts.apply(this, arguments);  };})(importScripts) : (...args: string[]) => any
->(function (importScripts) {  return function () {    setTimeout(function () {}, 0);    return importScripts.apply(this, arguments);  };}) : (importScripts: (...urls: string[]) => void) => (...args: string[]) => any
->function (importScripts) {  return function () {    setTimeout(function () {}, 0);    return importScripts.apply(this, arguments);  };} : (importScripts: (...urls: string[]) => void) => (...args: string[]) => any
+>(function (importScripts) {    return function () {        return importScripts.apply(this, arguments);    };})(importScripts) : (...args: string[]) => any
+>(function (importScripts) {    return function () {        return importScripts.apply(this, arguments);    };}) : (importScripts: (...urls: string[]) => void) => (...args: string[]) => any
+>function (importScripts) {    return function () {        return importScripts.apply(this, arguments);    };} : (importScripts: (...urls: string[]) => void) => (...args: string[]) => any
 >importScripts : (...urls: string[]) => void
 
-  return function () {
->function () {    setTimeout(function () {}, 0);    return importScripts.apply(this, arguments);  } : (...args: string[]) => any
+    return function () {
+>function () {        return importScripts.apply(this, arguments);    } : (...args: string[]) => any
 
-    setTimeout(function () {}, 0);
->setTimeout(function () {}, 0) : number
->setTimeout : (handler: TimerHandler, timeout?: number, ...arguments: any[]) => number
->function () {} : () => void
->0 : 0
-
-    return importScripts.apply(this, arguments);
+        return importScripts.apply(this, arguments);
 >importScripts.apply(this, arguments) : any
 >importScripts.apply : (this: Function, thisArg: any, argArray?: any) => any
 >importScripts : (...urls: string[]) => void
@@ -29,30 +20,7 @@ self.importScripts = (function (importScripts) {
 >this : any
 >arguments : IArguments
 
-  };
+    };
 })(importScripts);
 >importScripts : (...urls: string[]) => void
 
-importScripts("../node_modules/systemjs/dist/system.js");
->importScripts("../node_modules/systemjs/dist/system.js") : void
->importScripts : (...urls: string[]) => void
->"../node_modules/systemjs/dist/system.js" : "../node_modules/systemjs/dist/system.js"
-
-importScripts("../systemjs.config.js");
->importScripts("../systemjs.config.js") : void
->importScripts : (...urls: string[]) => void
->"../systemjs.config.js" : "../systemjs.config.js"
-
-SystemJS.import("pdfjs/core/worker.js").then(function () {
->SystemJS.import("pdfjs/core/worker.js").then(function () {    // Worker is loaded at this point.}) : any
->SystemJS.import("pdfjs/core/worker.js").then : any
->SystemJS.import("pdfjs/core/worker.js") : any
->SystemJS.import : any
->SystemJS : any
->import : any
->"pdfjs/core/worker.js" : "pdfjs/core/worker.js"
->then : any
->function () {    // Worker is loaded at this point.} : () => void
-
-    // Worker is loaded at this point.
-});
