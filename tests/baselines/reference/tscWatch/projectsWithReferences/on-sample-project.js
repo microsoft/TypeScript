@@ -190,6 +190,8 @@ Program files::
 
 Semantic diagnostics in builder refreshed for::
 
+No shapes updated in the builder::
+
 Dependencies for::
 /a/lib/lib.d.ts:
   /a/lib/lib.d.ts
@@ -296,6 +298,8 @@ Program files::
 /user/username/projects/sample1/tests/index.ts
 
 Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
 
 Dependencies for::
 /a/lib/lib.d.ts:
@@ -413,6 +417,10 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /user/username/projects/sample1/logic/index.d.ts
 /user/username/projects/sample1/tests/index.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/sample1/logic/index.d.ts (used version)
+/user/username/projects/sample1/tests/index.ts (computed .d.ts)
 
 Dependencies for::
 /a/lib/lib.d.ts:
@@ -604,6 +612,10 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /user/username/projects/sample1/logic/decls/index.d.ts
 /user/username/projects/sample1/tests/index.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/sample1/logic/decls/index.d.ts (used version)
+/user/username/projects/sample1/tests/index.ts (computed .d.ts)
 
 Dependencies for::
 /a/lib/lib.d.ts:

@@ -15,7 +15,7 @@ namespace ts.Rename {
         const symbol = typeChecker.getSymbolAtLocation(node);
         if (!symbol) {
             if (isStringLiteralLike(node)) {
-                const type = getContextualTypeOrAncestorTypeNodeType(node, typeChecker);
+                const type = getContextualTypeFromParentOrAncestorTypeNode(node, typeChecker);
                 if (type && ((type.flags & TypeFlags.StringLiteral) || (
                     (type.flags & TypeFlags.Union) && every((type as UnionType).types, type => !!(type.flags & TypeFlags.StringLiteral))
                 ))) {
@@ -111,7 +111,7 @@ namespace ts.Rename {
         return createTextSpan(start, width);
     }
 
-    function nodeIsEligibleForRename(node: Node): boolean {
+    export function nodeIsEligibleForRename(node: Node): boolean {
         switch (node.kind) {
             case SyntaxKind.Identifier:
             case SyntaxKind.PrivateIdentifier:

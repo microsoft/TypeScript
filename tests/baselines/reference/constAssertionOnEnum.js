@@ -16,6 +16,17 @@ enum Bar {
 let foo = Foo.A as const;
 let bar = Bar.A as const;
 
+//// [ns.ts]
+namespace ns {
+    export enum Foo { X }
+    ns.Foo.X as const;
+}
+
+//// [more.ts]
+export enum Foo { X }
+(Foo).X as const;
+
+
 //// [enum.js]
 export var Foo;
 (function (Foo) {
@@ -31,3 +42,19 @@ var Bar;
 })(Bar || (Bar = {}));
 let foo = Foo.A;
 let bar = Bar.A;
+//// [ns.js]
+"use strict";
+var ns;
+(function (ns) {
+    let Foo;
+    (function (Foo) {
+        Foo[Foo["X"] = 0] = "X";
+    })(Foo = ns.Foo || (ns.Foo = {}));
+    ns.Foo.X;
+})(ns || (ns = {}));
+//// [more.js]
+export var Foo;
+(function (Foo) {
+    Foo[Foo["X"] = 0] = "X";
+})(Foo || (Foo = {}));
+(Foo).X;

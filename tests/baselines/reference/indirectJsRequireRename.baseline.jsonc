@@ -128,7 +128,7 @@
           "length": 66
         },
         "isWriteAccess": true,
-        "isDefinition": true
+        "isDefinition": false
       }
     ]
   }

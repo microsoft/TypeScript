@@ -304,6 +304,67 @@ namespace ts {
     }
 
     /**
+     * Expand the read and increment/decrement operations a pre- or post-increment or pre- or post-decrement expression.
+     *
+     * ```ts
+     * // input
+     * <expression>++
+     * // output (if result is not discarded)
+     * var <temp>;
+     * (<temp> = <expression>, <resultVariable> = <temp>++, <temp>)
+     * // output (if result is discarded)
+     * var <temp>;
+     * (<temp> = <expression>, <temp>++, <temp>)
+     *
+     * // input
+     * ++<expression>
+     * // output (if result is not discarded)
+     * var <temp>;
+     * (<temp> = <expression>, <resultVariable> = ++<temp>)
+     * // output (if result is discarded)
+     * var <temp>;
+     * (<temp> = <expression>, ++<temp>)
+     * ```
+     *
+     * It is up to the caller to supply a temporary variable for `<resultVariable>` if one is needed.
+     * The temporary variable `<temp>` is injected so that `++` and `--` work uniformly with `number` and `bigint`.
+     * The result of the expression is always the final result of incrementing or decrementing the expression, so that it can be used for storage.
+     *
+     * @param factory {@link NodeFactory} used to create the expanded representation.
+     * @param node The original prefix or postfix unary node.
+     * @param expression The expression to use as the value to increment or decrement
+     * @param resultVariable A temporary variable in which to store the result. Pass `undefined` if the result is discarded, or if the value of `<temp>` is the expected result.
+     */
+    export function expandPreOrPostfixIncrementOrDecrementExpression(factory: NodeFactory, node: PrefixUnaryExpression | PostfixUnaryExpression, expression: Expression, recordTempVariable: (node: Identifier) => void, resultVariable: Identifier | undefined) {
+        const operator = node.operator;
+        Debug.assert(operator === SyntaxKind.PlusPlusToken || operator === SyntaxKind.MinusMinusToken, "Expected 'node' to be a pre- or post-increment or pre- or post-decrement expression");
+
+        const temp = factory.createTempVariable(recordTempVariable);
+        expression = factory.createAssignment(temp, expression);
+        setTextRange(expression, node.operand);
+
+        let operation: Expression = isPrefixUnaryExpression(node) ?
+            factory.createPrefixUnaryExpression(operator, temp) :
+            factory.createPostfixUnaryExpression(temp, operator);
+        setTextRange(operation, node);
+
+        if (resultVariable) {
+            operation = factory.createAssignment(resultVariable, operation);
+            setTextRange(operation, node);
+        }
+
+        expression = factory.createComma(expression, operation);
+        setTextRange(expression, node);
+
+        if (isPostfixUnaryExpression(node)) {
+            expression = factory.createComma(expression, temp);
+            setTextRange(expression, node);
+        }
+
+        return expression;
+    }
+
+    /**
      * Gets whether an identifier should only be referred to by its internal name.
      */
     export function isInternalName(node: Identifier) {
@@ -355,9 +416,24 @@ namespace ts {
             node.kind === SyntaxKind.CommaListExpression;
     }
 
+    export function isJSDocTypeAssertion(node: Node): node is JSDocTypeAssertion {
+        return isParenthesizedExpression(node)
+            && isInJSFile(node)
+            && !!getJSDocTypeTag(node);
+    }
+
+    export function getJSDocTypeAssertionType(node: JSDocTypeAssertion) {
+        const type = getJSDocType(node);
+        Debug.assertIsDefined(type);
+        return type;
+    }
+
     export function isOuterExpression(node: Node, kinds = OuterExpressionKinds.All): node is OuterExpression {
         switch (node.kind) {
             case SyntaxKind.ParenthesizedExpression:
+                if (kinds & OuterExpressionKinds.ExcludeJSDocTypeAssertion && isJSDocTypeAssertion(node)) {
+                    return false;
+                }
                 return (kinds & OuterExpressionKinds.Parentheses) !== 0;
             case SyntaxKind.TypeAssertionExpression:
             case SyntaxKind.AsExpression:
@@ -405,7 +481,7 @@ namespace ts {
         if (compilerOptions.importHelpers && isEffectiveExternalModule(sourceFile, compilerOptions)) {
             let namedBindings: NamedImportBindings | undefined;
             const moduleKind = getEmitModuleKind(compilerOptions);
-            if (moduleKind >= ModuleKind.ES2015 && moduleKind <= ModuleKind.ESNext) {
+            if ((moduleKind >= ModuleKind.ES2015 && moduleKind <= ModuleKind.ESNext) || sourceFile.impliedNodeFormat === ModuleKind.ESNext) {
                 // use named imports
                 const helpers = getEmitHelpers(sourceFile);
                 if (helpers) {
@@ -424,8 +500,8 @@ namespace ts {
                         // NOTE: We don't need to care about global import collisions as this is a module.
                         namedBindings = nodeFactory.createNamedImports(
                             map(helperNames, name => isFileLevelUniqueName(sourceFile, name)
-                                ? nodeFactory.createImportSpecifier(/*propertyName*/ undefined, nodeFactory.createIdentifier(name))
-                                : nodeFactory.createImportSpecifier(nodeFactory.createIdentifier(name), helperFactory.getUnscopedHelperName(name))
+                                ? nodeFactory.createImportSpecifier(/*isTypeOnly*/ false, /*propertyName*/ undefined, nodeFactory.createIdentifier(name))
+                                : nodeFactory.createImportSpecifier(/*isTypeOnly*/ false, nodeFactory.createIdentifier(name), helperFactory.getUnscopedHelperName(name))
                             )
                         );
                         const parseNode = getOriginalNode(sourceFile, isSourceFile);
@@ -446,7 +522,8 @@ namespace ts {
                     /*decorators*/ undefined,
                     /*modifiers*/ undefined,
                     nodeFactory.createImportClause(/*isTypeOnly*/ false, /*name*/ undefined, namedBindings),
-                    nodeFactory.createStringLiteral(externalHelpersModuleNameText)
+                    nodeFactory.createStringLiteral(externalHelpersModuleNameText),
+                     /*assertClause*/ undefined
                 );
                 addEmitFlags(externalHelpersImportDeclaration, EmitFlags.NeverApplyImportHelper);
                 return externalHelpersImportDeclaration;
@@ -462,9 +539,9 @@ namespace ts {
             }
 
             const moduleKind = getEmitModuleKind(compilerOptions);
-            let create = (hasExportStarsToExportValues || (compilerOptions.esModuleInterop && hasImportStarOrImportDefault))
+            let create = (hasExportStarsToExportValues || (getESModuleInterop(compilerOptions) && hasImportStarOrImportDefault))
                 && moduleKind !== ModuleKind.System
-                && moduleKind < ModuleKind.ES2015;
+                && (moduleKind < ModuleKind.ES2015 || node.impliedNodeFormat === ModuleKind.CommonJS);
             if (!create) {
                 const helpers = getEmitHelpers(node);
                 if (helpers) {

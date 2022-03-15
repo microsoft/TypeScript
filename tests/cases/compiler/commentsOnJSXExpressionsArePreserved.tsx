@@ -1,5 +1,6 @@
 // @module: system,commonjs
 // @jsx: react,react-jsx,react-jsxdev,preserve
+// @moduleDetection: legacy,auto,force
 // file is intentionally not a module - this tests for a crash in the module/system transforms alongside the `react-jsx` and `react-jsxdev` outputs
 namespace JSX {}
 class Component {

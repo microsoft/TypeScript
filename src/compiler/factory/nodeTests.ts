@@ -129,6 +129,11 @@ namespace ts {
         return node.kind === SyntaxKind.StaticKeyword;
     }
 
+    /* @internal */
+    export function isAbstractModifier(node: Node): node is AbstractKeyword {
+        return node.kind === SyntaxKind.AbstractKeyword;
+    }
+
     /*@internal*/
     export function isSuperKeyword(node: Node): node is SuperExpression {
         return node.kind === SyntaxKind.SuperKeyword;
@@ -180,6 +185,10 @@ namespace ts {
 
     export function isMethodDeclaration(node: Node): node is MethodDeclaration {
         return node.kind === SyntaxKind.MethodDeclaration;
+    }
+
+    export function isClassStaticBlockDeclaration(node: Node): node is ClassStaticBlockDeclaration {
+        return node.kind === SyntaxKind.ClassStaticBlockDeclaration;
     }
 
     export function isConstructorDeclaration(node: Node): node is ConstructorDeclaration {
@@ -588,6 +597,14 @@ namespace ts {
         return node.kind === SyntaxKind.ImportClause;
     }
 
+    export function isAssertClause(node: Node): node is AssertClause {
+        return node.kind === SyntaxKind.AssertClause;
+    }
+
+    export function isAssertEntry(node: Node): node is AssertEntry {
+        return node.kind === SyntaxKind.AssertEntry;
+    }
+
     export function isNamespaceImport(node: Node): node is NamespaceImport {
         return node.kind === SyntaxKind.NamespaceImport;
     }
@@ -819,7 +836,7 @@ namespace ts {
     }
 
     export function isJSDoc(node: Node): node is JSDoc {
-        return node.kind === SyntaxKind.JSDocComment;
+        return node.kind === SyntaxKind.JSDoc;
     }
 
     export function isJSDocTypeLiteral(node: Node): node is JSDocTypeLiteral {

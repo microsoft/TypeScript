@@ -41,6 +41,8 @@ Program files::
 
 No cached semantic diagnostics in the builder::
 
+No shapes updated in the builder::
+
 WatchedFiles::
 /a/tsconfig.json:
   {"fileName":"/a/tsconfig.json","pollingInterval":250}
@@ -92,6 +94,8 @@ Program files::
 
 No cached semantic diagnostics in the builder::
 
+No shapes updated in the builder::
+
 WatchedFiles::
 /a/tsconfig.json:
   {"fileName":"/a/tsconfig.json","pollingInterval":250}
@@ -142,6 +146,8 @@ Program files::
 /a/lib/lib.d.ts
 
 No cached semantic diagnostics in the builder::
+
+No shapes updated in the builder::
 
 WatchedFiles::
 /a/tsconfig.json:

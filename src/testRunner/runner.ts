@@ -6,8 +6,27 @@ namespace Harness {
 
     function runTests(runners: RunnerBase[]) {
         for (let i = iterations; i > 0; i--) {
+            const seen = new Map<string, string>();
+            const dupes: [string, string][] = [];
             for (const runner of runners) {
+                if (runner instanceof CompilerBaselineRunner || runner instanceof FourSlashRunner) {
+                    for (const sf of runner.enumerateTestFiles()) {
+                        const full = typeof sf === "string" ? sf : sf.file;
+                        const base = vpath.basename(full).toLowerCase();
+                        // allow existing dupes in fourslash/shims and fourslash/server
+                        if (seen.has(base) && !/fourslash\/(shim|server)/.test(full)) {
+                            dupes.push([seen.get(base)!, full]);
+                        }
+                        else {
+                            seen.set(base, full);
+                        }
+                    }
+                }
                 runner.initializeTests();
+            }
+            if (dupes.length) {
+                throw new Error(`${dupes.length} Tests with duplicate baseline names:
+${JSON.stringify(dupes, undefined, 2)}`);
             }
         }
     }

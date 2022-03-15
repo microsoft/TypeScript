@@ -17,3 +17,8 @@ let a: A = { a: '' };
 >a : string
 >'' : ""
 
+let b = { A };
+>b : { A: typeof A; }
+>{ A } : { A: typeof A; }
+>A : typeof A
+

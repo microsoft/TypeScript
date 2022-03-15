@@ -870,6 +870,7 @@ interface Array<T> { length: number; [n: number]: T; }`
             const fsEntry = this.fs.get(path);
             if (fsEntry) {
                 fsEntry.modifiedTime = date;
+                this.invokeFileAndFsWatches(fsEntry.fullPath, FileWatcherEventKind.Changed);
             }
         }
 

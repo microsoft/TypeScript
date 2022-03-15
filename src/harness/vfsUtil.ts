@@ -848,14 +848,18 @@ namespace vfs {
             // no difference if links are empty
             if (!changedLinks.size) return false;
 
-            changedLinks.forEach((node, basename) => { FileSystem.trackCreatedInode(container, basename, changed, node); });
+            changedLinks.forEach((node, basename) => {
+                FileSystem.trackCreatedInode(container, basename, changed, node);
+            });
             return true;
         }
 
         private static trackDeletedInodes(container: FileSet, baseLinks: ReadonlyMap<string, Inode>) {
             // no difference if links are empty
             if (!baseLinks.size) return false;
-            baseLinks.forEach((node, basename) => { container[basename] = isDirectory(node) ? new Rmdir() : new Unlink(); });
+            baseLinks.forEach((node, basename) => {
+                container[basename] = isDirectory(node) ? new Rmdir() : new Unlink();
+            });
             return true;
         }
 

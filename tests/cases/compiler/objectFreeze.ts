@@ -8,5 +8,5 @@ new c(1);
 const a = Object.freeze([1, 2, 3]);
 a[0] = a[2].toString();
 
-const o = Object.freeze({ a: 1, b: "string" });
+const o = Object.freeze({ a: 1, b: "string", c: true });
 o.b = o.a.toString();

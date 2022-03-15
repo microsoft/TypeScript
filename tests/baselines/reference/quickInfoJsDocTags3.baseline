@@ -107,7 +107,7 @@
               "kind": "space"
             },
             {
-              "text": "- x comment",
+              "text": "x comment",
               "kind": "text"
             }
           ]
@@ -124,7 +124,7 @@
               "kind": "space"
             },
             {
-              "text": "- y comment",
+              "text": "y comment",
               "kind": "text"
             }
           ]

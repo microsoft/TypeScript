@@ -432,6 +432,8 @@ namespace ts.formatting {
                 case SyntaxKind.ConstructorType:
                 case SyntaxKind.ConstructSignature:
                     return getList((node as SignatureDeclaration).typeParameters) || getList((node as SignatureDeclaration).parameters);
+                case SyntaxKind.GetAccessor:
+                    return getList((node as GetAccessorDeclaration).parameters);
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.ClassExpression:
                 case SyntaxKind.InterfaceDeclaration:
@@ -605,6 +607,11 @@ namespace ts.formatting {
                 case SyntaxKind.BinaryExpression:
                     if (!settings.indentMultiLineObjectLiteralBeginningOnBlankLine && sourceFile && childKind === SyntaxKind.ObjectLiteralExpression) { // TODO: GH#18217
                         return rangeIsOnOneLine(sourceFile, child!);
+                    }
+                    if (parent.kind === SyntaxKind.BinaryExpression && sourceFile && child && childKind === SyntaxKind.JsxElement) {
+                        const parentStartLine = sourceFile.getLineAndCharacterOfPosition(skipTrivia(sourceFile.text, parent.pos)).line;
+                        const childStartLine = sourceFile.getLineAndCharacterOfPosition(skipTrivia(sourceFile.text, child.pos)).line;
+                        return parentStartLine !== childStartLine;
                     }
                     if (parent.kind !== SyntaxKind.BinaryExpression) {
                         return true;

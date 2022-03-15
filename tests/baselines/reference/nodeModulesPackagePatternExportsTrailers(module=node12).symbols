@@ -1,0 +1,120 @@
+=== tests/cases/conformance/node/index.ts ===
+// esm format file
+import * as cjsi from "inner/cjs/index.cjs";
+>cjsi : Symbol(cjsi, Decl(index.ts, 1, 6))
+
+import * as mjsi from "inner/mjs/index.mjs";
+>mjsi : Symbol(mjsi, Decl(index.ts, 2, 6))
+
+import * as typei from "inner/js/index.js";
+>typei : Symbol(typei, Decl(index.ts, 3, 6))
+
+cjsi;
+>cjsi : Symbol(cjsi, Decl(index.ts, 1, 6))
+
+mjsi;
+>mjsi : Symbol(mjsi, Decl(index.ts, 2, 6))
+
+typei;
+>typei : Symbol(typei, Decl(index.ts, 3, 6))
+
+=== tests/cases/conformance/node/index.mts ===
+// esm format file
+import * as cjsi from "inner/cjs/index.cjs";
+>cjsi : Symbol(cjsi, Decl(index.mts, 1, 6))
+
+import * as mjsi from "inner/mjs/index.mjs";
+>mjsi : Symbol(mjsi, Decl(index.mts, 2, 6))
+
+import * as typei from "inner/js/index.js";
+>typei : Symbol(typei, Decl(index.mts, 3, 6))
+
+cjsi;
+>cjsi : Symbol(cjsi, Decl(index.mts, 1, 6))
+
+mjsi;
+>mjsi : Symbol(mjsi, Decl(index.mts, 2, 6))
+
+typei;
+>typei : Symbol(typei, Decl(index.mts, 3, 6))
+
+=== tests/cases/conformance/node/index.cts ===
+// cjs format file
+import * as cjsi from "inner/cjs/index.cjs";
+>cjsi : Symbol(cjsi, Decl(index.cts, 1, 6))
+
+import * as mjsi from "inner/mjs/index.mjs";
+>mjsi : Symbol(mjsi, Decl(index.cts, 2, 6))
+
+import * as typei from "inner/js/index.js";
+>typei : Symbol(typei, Decl(index.cts, 3, 6))
+
+cjsi;
+>cjsi : Symbol(cjsi, Decl(index.cts, 1, 6))
+
+mjsi;
+>mjsi : Symbol(mjsi, Decl(index.cts, 2, 6))
+
+typei;
+>typei : Symbol(typei, Decl(index.cts, 3, 6))
+
+=== tests/cases/conformance/node/node_modules/inner/index.d.ts ===
+// cjs format file
+import * as cjs from "inner/cjs/index.cjs";
+>cjs : Symbol(cjs, Decl(index.d.ts, 1, 6))
+
+import * as mjs from "inner/mjs/index.mjs";
+>mjs : Symbol(mjs, Decl(index.d.ts, 2, 6))
+
+import * as type from "inner/js/index.js";
+>type : Symbol(type, Decl(index.d.ts, 3, 6))
+
+export { cjs };
+>cjs : Symbol(cjs, Decl(index.d.ts, 4, 8))
+
+export { mjs };
+>mjs : Symbol(mjs, Decl(index.d.ts, 5, 8))
+
+export { type };
+>type : Symbol(type, Decl(index.d.ts, 6, 8))
+
+=== tests/cases/conformance/node/node_modules/inner/index.d.mts ===
+// esm format file
+import * as cjs from "inner/cjs/index.cjs";
+>cjs : Symbol(cjs, Decl(index.d.mts, 1, 6))
+
+import * as mjs from "inner/mjs/index.mjs";
+>mjs : Symbol(mjs, Decl(index.d.mts, 2, 6))
+
+import * as type from "inner/js/index.js";
+>type : Symbol(type, Decl(index.d.mts, 3, 6))
+
+export { cjs };
+>cjs : Symbol(cjs, Decl(index.d.mts, 4, 8))
+
+export { mjs };
+>mjs : Symbol(mjs, Decl(index.d.mts, 5, 8))
+
+export { type };
+>type : Symbol(type, Decl(index.d.mts, 6, 8))
+
+=== tests/cases/conformance/node/node_modules/inner/index.d.cts ===
+// cjs format file
+import * as cjs from "inner/cjs/index.cjs";
+>cjs : Symbol(cjs, Decl(index.d.cts, 1, 6))
+
+import * as mjs from "inner/mjs/index.mjs";
+>mjs : Symbol(mjs, Decl(index.d.cts, 2, 6))
+
+import * as type from "inner/js/index.js";
+>type : Symbol(type, Decl(index.d.cts, 3, 6))
+
+export { cjs };
+>cjs : Symbol(cjs, Decl(index.d.cts, 4, 8))
+
+export { mjs };
+>mjs : Symbol(mjs, Decl(index.d.cts, 5, 8))
+
+export { type };
+>type : Symbol(type, Decl(index.d.cts, 6, 8))
+

@@ -37,7 +37,7 @@ Output::
 [[90m12:00:27 AM[0m] Starting compilation in watch mode...
 
 ../../../../a/lib/lib.d.ts
-  Default library
+  Default library for target 'es3'
 XY/a.ts
   Imported via "./XY/a" from file 'b.ts'
   Matched by include pattern '**/*' in 'tsconfig.json'
@@ -59,6 +59,8 @@ Program files::
 /user/username/projects/myproject/b.ts
 
 No cached semantic diagnostics in the builder::
+
+No shapes updated in the builder::
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
@@ -145,7 +147,7 @@ Output::
 [[90m12:00:33 AM[0m] File change detected. Starting incremental compilation...
 
 ../../../../a/lib/lib.d.ts
-  Default library
+  Default library for target 'es3'
 XY/a.ts
   Imported via "./XY/a" from file 'b.ts'
   Matched by include pattern '**/*' in 'tsconfig.json'
@@ -167,6 +169,8 @@ Program files::
 /user/username/projects/myproject/b.ts
 
 No cached semantic diagnostics in the builder::
+
+No shapes updated in the builder::
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:

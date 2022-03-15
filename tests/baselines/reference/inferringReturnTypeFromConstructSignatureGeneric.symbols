@@ -1,0 +1,87 @@
+=== tests/cases/compiler/inferringReturnTypeFromConstructSignatureGeneric.ts ===
+class GenericObject<T extends {} = {}> {
+>GenericObject : Symbol(GenericObject, Decl(inferringReturnTypeFromConstructSignatureGeneric.ts, 0, 0))
+>T : Symbol(T, Decl(inferringReturnTypeFromConstructSignatureGeneric.ts, 0, 20))
+
+  give(value: T) {
+>give : Symbol(GenericObject.give, Decl(inferringReturnTypeFromConstructSignatureGeneric.ts, 0, 40))
+>value : Symbol(value, Decl(inferringReturnTypeFromConstructSignatureGeneric.ts, 1, 7))
+>T : Symbol(T, Decl(inferringReturnTypeFromConstructSignatureGeneric.ts, 0, 20))
+
+    return value;
+>value : Symbol(value, Decl(inferringReturnTypeFromConstructSignatureGeneric.ts, 1, 7))
+  }
+}
+class GenericNumber<T extends number> {
+>GenericNumber : Symbol(GenericNumber, Decl(inferringReturnTypeFromConstructSignatureGeneric.ts, 4, 1))
+>T : Symbol(T, Decl(inferringReturnTypeFromConstructSignatureGeneric.ts, 5, 20))
+
+  give(value: T) {
+>give : Symbol(GenericNumber.give, Decl(inferringReturnTypeFromConstructSignatureGeneric.ts, 5, 39))
+>value : Symbol(value, Decl(inferringReturnTypeFromConstructSignatureGeneric.ts, 6, 7))
+>T : Symbol(T, Decl(inferringReturnTypeFromConstructSignatureGeneric.ts, 5, 20))
+
+    return value;
+>value : Symbol(value, Decl(inferringReturnTypeFromConstructSignatureGeneric.ts, 6, 7))
+  }
+}
+class GenericNumberOrString<T extends number | string> {
+>GenericNumberOrString : Symbol(GenericNumberOrString, Decl(inferringReturnTypeFromConstructSignatureGeneric.ts, 9, 1))
+>T : Symbol(T, Decl(inferringReturnTypeFromConstructSignatureGeneric.ts, 10, 28))
+
+  give(value: T) {
+>give : Symbol(GenericNumberOrString.give, Decl(inferringReturnTypeFromConstructSignatureGeneric.ts, 10, 56))
+>value : Symbol(value, Decl(inferringReturnTypeFromConstructSignatureGeneric.ts, 11, 7))
+>T : Symbol(T, Decl(inferringReturnTypeFromConstructSignatureGeneric.ts, 10, 28))
+
+    return value;
+>value : Symbol(value, Decl(inferringReturnTypeFromConstructSignatureGeneric.ts, 11, 7))
+  }
+}
+
+function g<T>(type: new () => T): T {
+>g : Symbol(g, Decl(inferringReturnTypeFromConstructSignatureGeneric.ts, 14, 1))
+>T : Symbol(T, Decl(inferringReturnTypeFromConstructSignatureGeneric.ts, 16, 11))
+>type : Symbol(type, Decl(inferringReturnTypeFromConstructSignatureGeneric.ts, 16, 14))
+>T : Symbol(T, Decl(inferringReturnTypeFromConstructSignatureGeneric.ts, 16, 11))
+>T : Symbol(T, Decl(inferringReturnTypeFromConstructSignatureGeneric.ts, 16, 11))
+
+    return new type();
+>type : Symbol(type, Decl(inferringReturnTypeFromConstructSignatureGeneric.ts, 16, 14))
+}
+
+const g1 = g(GenericObject);
+>g1 : Symbol(g1, Decl(inferringReturnTypeFromConstructSignatureGeneric.ts, 20, 5))
+>g : Symbol(g, Decl(inferringReturnTypeFromConstructSignatureGeneric.ts, 14, 1))
+>GenericObject : Symbol(GenericObject, Decl(inferringReturnTypeFromConstructSignatureGeneric.ts, 0, 0))
+
+g1.give({});
+>g1.give : Symbol(GenericObject.give, Decl(inferringReturnTypeFromConstructSignatureGeneric.ts, 0, 40))
+>g1 : Symbol(g1, Decl(inferringReturnTypeFromConstructSignatureGeneric.ts, 20, 5))
+>give : Symbol(GenericObject.give, Decl(inferringReturnTypeFromConstructSignatureGeneric.ts, 0, 40))
+
+const g2 = g(GenericNumber);
+>g2 : Symbol(g2, Decl(inferringReturnTypeFromConstructSignatureGeneric.ts, 23, 5))
+>g : Symbol(g, Decl(inferringReturnTypeFromConstructSignatureGeneric.ts, 14, 1))
+>GenericNumber : Symbol(GenericNumber, Decl(inferringReturnTypeFromConstructSignatureGeneric.ts, 4, 1))
+
+g2.give(1);
+>g2.give : Symbol(GenericNumber.give, Decl(inferringReturnTypeFromConstructSignatureGeneric.ts, 5, 39))
+>g2 : Symbol(g2, Decl(inferringReturnTypeFromConstructSignatureGeneric.ts, 23, 5))
+>give : Symbol(GenericNumber.give, Decl(inferringReturnTypeFromConstructSignatureGeneric.ts, 5, 39))
+
+const g3 = g(GenericNumberOrString);
+>g3 : Symbol(g3, Decl(inferringReturnTypeFromConstructSignatureGeneric.ts, 26, 5))
+>g : Symbol(g, Decl(inferringReturnTypeFromConstructSignatureGeneric.ts, 14, 1))
+>GenericNumberOrString : Symbol(GenericNumberOrString, Decl(inferringReturnTypeFromConstructSignatureGeneric.ts, 9, 1))
+
+g3.give(1);
+>g3.give : Symbol(GenericNumberOrString.give, Decl(inferringReturnTypeFromConstructSignatureGeneric.ts, 10, 56))
+>g3 : Symbol(g3, Decl(inferringReturnTypeFromConstructSignatureGeneric.ts, 26, 5))
+>give : Symbol(GenericNumberOrString.give, Decl(inferringReturnTypeFromConstructSignatureGeneric.ts, 10, 56))
+
+g3.give('1');
+>g3.give : Symbol(GenericNumberOrString.give, Decl(inferringReturnTypeFromConstructSignatureGeneric.ts, 10, 56))
+>g3 : Symbol(g3, Decl(inferringReturnTypeFromConstructSignatureGeneric.ts, 26, 5))
+>give : Symbol(GenericNumberOrString.give, Decl(inferringReturnTypeFromConstructSignatureGeneric.ts, 10, 56))
+

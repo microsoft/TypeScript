@@ -33,7 +33,7 @@ verify.completions(
     // yes contextual keywords
     {
         marker: "unique",
-        exact: [
+        unsorted: [
             completion.globalThisEntry,
             ...completion.globalsVars,
             completion.undefinedVarEntry,

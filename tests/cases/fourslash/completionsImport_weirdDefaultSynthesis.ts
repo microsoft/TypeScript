@@ -12,7 +12,7 @@
 verify.applyCodeActionFromCompletion("", {
   name: "Collection",
   source: "/collection",
-  description: `Import 'Collection' from module "./collection"`,
+  description: `Add import from "./collection"`,
   preferences: {
     includeCompletionsForModuleExports: true
   },

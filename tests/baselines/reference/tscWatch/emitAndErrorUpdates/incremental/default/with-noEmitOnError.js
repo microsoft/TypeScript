@@ -68,6 +68,12 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/noEmitOnError/src/main.ts
 /user/username/projects/noEmitOnError/src/other.ts
 
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/noemitonerror/shared/types/db.ts (used version)
+/user/username/projects/noemitonerror/src/main.ts (used version)
+/user/username/projects/noemitonerror/src/other.ts (used version)
+
 WatchedFiles::
 /user/username/projects/noemitonerror/tsconfig.json:
   {"fileName":"/user/username/projects/noEmitOnError/tsconfig.json","pollingInterval":250}
@@ -195,6 +201,8 @@ Program files::
 
 Semantic diagnostics in builder refreshed for::
 
+No shapes updated in the builder::
+
 WatchedFiles::
 /user/username/projects/noemitonerror/tsconfig.json:
   {"fileName":"/user/username/projects/noEmitOnError/tsconfig.json","pollingInterval":250}
@@ -247,6 +255,9 @@ Program files::
 
 Semantic diagnostics in builder refreshed for::
 /user/username/projects/noEmitOnError/src/main.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/noemitonerror/src/main.ts (computed .d.ts)
 
 WatchedFiles::
 /user/username/projects/noemitonerror/tsconfig.json:
@@ -380,6 +391,9 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /user/username/projects/noEmitOnError/src/main.ts
 
+Shape signatures in builder refreshed for::
+/user/username/projects/noemitonerror/src/main.ts (computed .d.ts)
+
 WatchedFiles::
 /user/username/projects/noemitonerror/tsconfig.json:
   {"fileName":"/user/username/projects/noEmitOnError/tsconfig.json","pollingInterval":250}
@@ -507,6 +521,8 @@ Program files::
 
 Semantic diagnostics in builder refreshed for::
 
+No shapes updated in the builder::
+
 WatchedFiles::
 /user/username/projects/noemitonerror/tsconfig.json:
   {"fileName":"/user/username/projects/noEmitOnError/tsconfig.json","pollingInterval":250}
@@ -557,6 +573,9 @@ Program files::
 
 Semantic diagnostics in builder refreshed for::
 /user/username/projects/noEmitOnError/src/main.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/noemitonerror/src/main.ts (computed .d.ts)
 
 WatchedFiles::
 /user/username/projects/noemitonerror/tsconfig.json:
@@ -667,6 +686,8 @@ Program files::
 /user/username/projects/noEmitOnError/src/other.ts
 
 Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
 
 WatchedFiles::
 /user/username/projects/noemitonerror/tsconfig.json:

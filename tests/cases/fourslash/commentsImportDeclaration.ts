@@ -34,8 +34,8 @@ verify.completions({ marker: "6", exact: [{ name: "m1", text: "namespace extMod.
 verify.completions({
     marker: "7",
     exact: [
-        { name: "fooExport", text: "function extMod.m1.fooExport(): number", documentation: "exported function" },
         { name: "b", text: "var extMod.m1.b: number", documentation: "b's comment" },
+        { name: "fooExport", text: "function extMod.m1.fooExport(): number", documentation: "exported function" },
         { name: "m2", text: "namespace extMod.m1.m2", documentation: "m2 comments" },
     ]
 })

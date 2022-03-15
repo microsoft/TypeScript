@@ -1,0 +1,16 @@
+tests/cases/compiler/index.ts(1,20): error TS2307: Cannot find module 'pkg' or its corresponding type declarations.
+
+
+==== tests/cases/compiler/node_modules/pkg/package.json (0 errors) ====
+    {
+        "name": "pkg",
+        "version": "0.0.1",
+        "exports": "./entrypoint.js"
+    }
+==== tests/cases/compiler/node_modules/pkg/entrypoint.d.ts (0 errors) ====
+    export declare function thing(): void;
+==== tests/cases/compiler/index.ts (1 errors) ====
+    import * as p from "pkg";
+                       ~~~~~
+!!! error TS2307: Cannot find module 'pkg' or its corresponding type declarations.
+    p.thing();

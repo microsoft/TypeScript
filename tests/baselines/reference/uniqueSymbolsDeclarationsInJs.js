@@ -35,17 +35,17 @@ class C {
         this.readonlyCall = Symbol();
         this.readwriteCall = Symbol();
     }
+    /**
+     * @readonly
+     */
+    static { this.readonlyStaticCall = Symbol(); }
+    /**
+     * @type {unique symbol}
+     * @readonly
+     */
+    static { this.readonlyStaticTypeAndCall = Symbol(); }
+    static { this.readwriteStaticCall = Symbol(); }
 }
-/**
- * @readonly
- */
-C.readonlyStaticCall = Symbol();
-/**
- * @type {unique symbol}
- * @readonly
- */
-C.readonlyStaticTypeAndCall = Symbol();
-C.readwriteStaticCall = Symbol();
 
 
 //// [uniqueSymbolsDeclarationsInJs-out.d.ts]

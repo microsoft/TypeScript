@@ -36,7 +36,7 @@ namespace ts.codefix {
     registerCodeFix({
         errorCodes,
         fixIds: [fixIdAddReturnStatement, fixRemoveBracesFromArrowFunctionBody, fixIdWrapTheBlockWithParen],
-        getCodeActions: context => {
+        getCodeActions: function getCodeActionsToCorrectReturnValue(context) {
             const { program, sourceFile, span: { start }, errorCode } = context;
             const info = getInfo(program.getTypeChecker(), sourceFile, start, errorCode);
             if (!info) return undefined;
@@ -76,7 +76,7 @@ namespace ts.codefix {
         const member = checker.createSymbol(SymbolFlags.Property, label.escapedText);
         member.type = checker.getTypeAtLocation(expression);
         const members = createSymbolTable([member]);
-        return checker.createAnonymousType(/*symbol*/ undefined, members, [], [], /*stringIndexInfo*/ undefined, /*numberIndexInfo*/ undefined);
+        return checker.createAnonymousType(/*symbol*/ undefined, members, [], [], []);
     }
 
     function getFixInfo(checker: TypeChecker, declaration: FunctionLikeDeclaration, expectType: Type, isFunctionType: boolean): Info | undefined {
@@ -152,8 +152,7 @@ namespace ts.codefix {
                     createSymbolTable(),
                     [newSig],
                     [],
-                    /*stringIndexInfo*/ undefined,
-                    /*numberIndexInfo*/ undefined);
+                    []);
             }
             else {
                 exprType = checker.getAnyType();

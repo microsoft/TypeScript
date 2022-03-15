@@ -12,9 +12,9 @@ class Foo {
 >Foo : Foo
 
     f(@decorate user: A.B.C.D.E): void {}
->f : (user: any) => void
+>f : (user: A.B.C.D.E) => void
 >decorate : any
->user : any
+>user : A.B.C.D.E
 >A : any
 >B : any
 >C : any

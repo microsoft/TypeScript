@@ -92,6 +92,11 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/sample1/core/anotherModule.ts
 /user/username/projects/sample1/core/index.ts
 
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/sample1/core/anothermodule.ts (used version)
+/user/username/projects/sample1/core/index.ts (used version)
+
 WatchedFiles::
 /user/username/projects/sample1/core/tsconfig.json:
   {"fileName":"/user/username/projects/sample1/core/tsconfig.json","pollingInterval":250}
@@ -233,6 +238,12 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/sample1/core/anotherModule.d.ts
 /user/username/projects/sample1/logic/index.ts
 
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/sample1/core/index.d.ts (used version)
+/user/username/projects/sample1/core/anothermodule.d.ts (used version)
+/user/username/projects/sample1/logic/index.ts (used version)
+
 WatchedFiles::
 /user/username/projects/sample1/core/tsconfig.json:
   {"fileName":"/user/username/projects/sample1/core/tsconfig.json","pollingInterval":250}
@@ -373,6 +384,13 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/sample1/core/anotherModule.d.ts
 /user/username/projects/sample1/logic/index.d.ts
 /user/username/projects/sample1/tests/index.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/sample1/core/index.d.ts (used version)
+/user/username/projects/sample1/core/anothermodule.d.ts (used version)
+/user/username/projects/sample1/logic/index.d.ts (used version)
+/user/username/projects/sample1/tests/index.ts (used version)
 
 WatchedFiles::
 /user/username/projects/sample1/core/tsconfig.json:

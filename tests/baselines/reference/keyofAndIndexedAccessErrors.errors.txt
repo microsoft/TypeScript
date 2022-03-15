@@ -33,8 +33,11 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(82,5): error 
             Type 'string | number | symbol' is not assignable to type 'keyof U'.
               Type 'string' is not assignable to type 'keyof U'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(83,5): error TS2322: Type 'keyof T | keyof U' is not assignable to type 'keyof T & keyof U'.
+  Type 'keyof T' is not assignable to type 'keyof T & keyof U'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(86,5): error TS2322: Type 'keyof T | keyof U' is not assignable to type 'keyof T & keyof U'.
+  Type 'keyof T' is not assignable to type 'keyof T & keyof U'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(87,5): error TS2322: Type 'keyof T | keyof U' is not assignable to type 'keyof T & keyof U'.
+  Type 'keyof T' is not assignable to type 'keyof T & keyof U'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(103,9): error TS2322: Type 'Extract<keyof T, string>' is not assignable to type 'K'.
   'Extract<keyof T, string>' is assignable to the constraint of type 'K', but 'K' could be instantiated with a different subtype of constraint 'string'.
     Type 'string & keyof T' is not assignable to type 'K'.
@@ -209,14 +212,17 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(142,5): error
         k1 = k4;  // Error
         ~~
 !!! error TS2322: Type 'keyof T | keyof U' is not assignable to type 'keyof T & keyof U'.
+!!! error TS2322:   Type 'keyof T' is not assignable to type 'keyof T & keyof U'.
     
         k2 = k1;
         k2 = k3;  // Error
         ~~
 !!! error TS2322: Type 'keyof T | keyof U' is not assignable to type 'keyof T & keyof U'.
+!!! error TS2322:   Type 'keyof T' is not assignable to type 'keyof T & keyof U'.
         k2 = k4;  // Error
         ~~
 !!! error TS2322: Type 'keyof T | keyof U' is not assignable to type 'keyof T & keyof U'.
+!!! error TS2322:   Type 'keyof T' is not assignable to type 'keyof T & keyof U'.
     
         k3 = k1;
         k3 = k2;
