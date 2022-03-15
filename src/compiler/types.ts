@@ -344,6 +344,7 @@ namespace ts {
         CatchClause,
         AssertClause,
         AssertEntry,
+        ImportTypeAssertionContainer,
 
         // Property assignments
         PropertyAssignment,
@@ -377,6 +378,7 @@ namespace ts {
         JSDocFunctionType,
         JSDocVariadicType,
         JSDocNamepathType, // https://jsdoc.app/about-namepaths.html
+        /** @deprecated Use SyntaxKind.JSDoc */
         JSDocComment,
         JSDocText,
         JSDocTypeLiteral,
@@ -454,6 +456,7 @@ namespace ts {
         LastJSDocTagNode = JSDocPropertyTag,
         /* @internal */ FirstContextualKeyword = AbstractKeyword,
         /* @internal */ LastContextualKeyword = OfKeyword,
+        JSDoc = JSDocComment,
     }
 
     export type TriviaSyntaxKind =
@@ -930,6 +933,7 @@ namespace ts {
         | ExportDeclaration
         | NamedTupleMember
         | ExportSpecifier
+        | CaseClause
         | EndOfFileToken
         ;
 
@@ -1567,10 +1571,18 @@ namespace ts {
         readonly kind: TKind;
     }
 
+    export interface ImportTypeAssertionContainer extends Node {
+        readonly kind: SyntaxKind.ImportTypeAssertionContainer;
+        readonly parent: ImportTypeNode;
+        readonly assertClause: AssertClause;
+        readonly multiLine?: boolean;
+    }
+
     export interface ImportTypeNode extends NodeWithTypeArguments {
         readonly kind: SyntaxKind.ImportType;
         readonly isTypeOf: boolean;
         readonly argument: TypeNode;
+        readonly assertions?: ImportTypeAssertionContainer;
         readonly qualifier?: EntityName;
     }
 
@@ -1615,7 +1627,7 @@ namespace ts {
         readonly type?: TypeNode;
     }
 
-    export interface TypeQueryNode extends TypeNode {
+    export interface TypeQueryNode extends NodeWithTypeArguments {
         readonly kind: SyntaxKind.TypeQuery;
         readonly exprName: EntityName;
     }
@@ -2445,9 +2457,8 @@ namespace ts {
         readonly expression: ImportExpression;
     }
 
-    export interface ExpressionWithTypeArguments extends NodeWithTypeArguments {
+    export interface ExpressionWithTypeArguments extends MemberExpression, NodeWithTypeArguments {
         readonly kind: SyntaxKind.ExpressionWithTypeArguments;
-        readonly parent: HeritageClause | JSDocAugmentsTag | JSDocImplementsTag;
         readonly expression: LeftHandSideExpression;
     }
 
@@ -2801,7 +2812,7 @@ namespace ts {
         readonly clauses: NodeArray<CaseOrDefaultClause>;
     }
 
-    export interface CaseClause extends Node {
+    export interface CaseClause extends Node, JSDocContainer {
         readonly kind: SyntaxKind.CaseClause;
         readonly parent: CaseBlock;
         readonly expression: Expression;
@@ -3159,6 +3170,7 @@ namespace ts {
 
     export interface FileReference extends TextRange {
         fileName: string;
+        resolutionMode?: SourceFile["impliedNodeFormat"];
     }
 
     export interface CheckJsDirective extends TextRange {
@@ -3246,7 +3258,7 @@ namespace ts {
         ;
 
     export interface JSDoc extends Node {
-        readonly kind: SyntaxKind.JSDocComment;
+        readonly kind: SyntaxKind.JSDoc;
         readonly parent: HasJSDoc;
         readonly tags?: NodeArray<JSDocTag>;
         readonly comment?: string | NodeArray<JSDocComment>;
@@ -3514,12 +3526,12 @@ namespace ts {
         name?: string;
     }
 
-    /* @internal */
     /**
      * Subset of properties from SourceFile that are used in multiple utility functions
      */
     export interface SourceFileLike {
         readonly text: string;
+        /* @internal */
         lineMap?: readonly number[];
         /* @internal */
         getPositionOfLineAndCharacter?(line: number, character: number, allowEdits?: true): number;
@@ -3610,7 +3622,13 @@ namespace ts {
          * This is intended to be the first top-level import/export,
          * but could be arbitrarily nested (e.g. `import.meta`).
          */
-        /* @internal */ externalModuleIndicator?: Node;
+        /* @internal */ externalModuleIndicator?: Node | true;
+        /**
+         * The callback used to set the external module indicator - this is saved to
+         * be later reused during incremental reparsing, which otherwise lacks the information
+         * to set this field
+         */
+        /* @internal */ setExternalModuleIndicator?: (file: SourceFile) => void;
         // The first node that causes this file to be a CommonJS module
         /* @internal */ commonJsModuleIndicator?: Node;
         // JS identifier-declarations that are intended to merge with globals
@@ -3712,7 +3730,7 @@ namespace ts {
 
         // References and noDefaultLibAre Dts only
         referencedFiles: readonly FileReference[];
-        typeReferenceDirectives: readonly string[] | undefined;
+        typeReferenceDirectives: readonly FileReference[] | undefined;
         libReferenceDirectives: readonly FileReference[];
         hasNoDefaultLib?: boolean;
 
@@ -4005,7 +4023,7 @@ namespace ts {
         getRelationCacheSizes(): { assignable: number, identity: number, subtype: number, strictSubtype: number };
 
         /* @internal */ getFileProcessingDiagnostics(): FilePreprocessingDiagnostics[] | undefined;
-        /* @internal */ getResolvedTypeReferenceDirectives(): ESMap<string, ResolvedTypeReferenceDirective | undefined>;
+        /* @internal */ getResolvedTypeReferenceDirectives(): ModeAwareCache<ResolvedTypeReferenceDirective | undefined>;
         isSourceFileFromExternalLibrary(file: SourceFile): boolean;
         isSourceFileDefaultLibrary(file: SourceFile): boolean;
 
@@ -4145,7 +4163,7 @@ namespace ts {
 
         getSourceFiles(): readonly SourceFile[];
         getSourceFile(fileName: string): SourceFile | undefined;
-        getResolvedTypeReferenceDirectives(): ReadonlyESMap<string, ResolvedTypeReferenceDirective | undefined>;
+        getResolvedTypeReferenceDirectives(): ModeAwareCache<ResolvedTypeReferenceDirective | undefined>;
         getProjectReferenceRedirect(fileName: string): string | undefined;
         isSourceOfProjectReferenceRedirect(fileName: string): boolean;
 
@@ -4788,8 +4806,8 @@ namespace ts {
         moduleExportsSomeValue(moduleReferenceExpression: Expression): boolean;
         isArgumentsLocalBinding(node: Identifier): boolean;
         getExternalModuleFileFromDeclaration(declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration | ImportTypeNode | ImportCall): SourceFile | undefined;
-        getTypeReferenceDirectivesForEntityName(name: EntityNameOrEntityNameExpression): string[] | undefined;
-        getTypeReferenceDirectivesForSymbol(symbol: Symbol, meaning?: SymbolFlags): string[] | undefined;
+        getTypeReferenceDirectivesForEntityName(name: EntityNameOrEntityNameExpression): [specifier: string, mode: SourceFile["impliedNodeFormat"] | undefined][] | undefined;
+        getTypeReferenceDirectivesForSymbol(symbol: Symbol, meaning?: SymbolFlags): [specifier: string, mode: SourceFile["impliedNodeFormat"] | undefined][] | undefined;
         isLiteralConstDeclaration(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration): boolean;
         getJsxFactoryEntity(location?: Node): EntityName | undefined;
         getJsxFragmentFactoryEntity(location?: Node): EntityName | undefined;
@@ -4952,6 +4970,7 @@ namespace ts {
         extendedContainersByFile?: ESMap<NodeId, Symbol[]>; // Containers (other than the parent) which this symbol is aliased in
         variances?: VarianceFlags[];                // Alias symbol type argument variance cache
         deferralConstituents?: Type[];              // Calculated list of constituents for a deferred type
+        deferralWriteConstituents?: Type[];         // Constituents of a deferred `writeType`
         deferralParent?: Type;                      // Source union/intersection of a deferred type
         cjsExportMerged?: Symbol;                   // Version of the symbol with all non export= exports merged with the export= target
         typeOnlyDeclaration?: TypeOnlyAliasDeclaration | false; // First resolved alias declaration that makes the symbol only usable in type constructs
@@ -5174,6 +5193,8 @@ namespace ts {
         ESSymbolLike = ESSymbol | UniqueESSymbol,
         VoidLike = Void | Undefined,
         /* @internal */
+        DefinitelyNonNullable = StringLike | NumberLike | BigIntLike | BooleanLike | EnumLike | ESSymbolLike | Object | NonPrimitive,
+        /* @internal */
         DisjointDomains = NonPrimitive | StringLike | NumberLike | BigIntLike | BooleanLike | ESSymbolLike | VoidLike | Null,
         UnionOrIntersection = Union | Intersection,
         StructuredType = Object | Union | Intersection,
@@ -5228,6 +5249,8 @@ namespace ts {
         permissiveInstantiation?: Type;  // Instantiation with type parameters mapped to wildcard type
         /* @internal */
         restrictiveInstantiation?: Type; // Instantiation with type parameters mapped to unconstrained form
+        /* @internal */
+        uniqueLiteralFilledInstantiation?: Type;  // Instantiation with type parameters mapped to never type
         /* @internal */
         immediateBaseConstraint?: Type;  // Immediate base constraint cache
         /* @internal */
@@ -5331,13 +5354,14 @@ namespace ts {
         // Flags that require TypeFlags.Object
         ContainsSpread   = 1 << 22,  // Object literal contains spread operation
         ObjectRestType   = 1 << 23,  // Originates in object rest declaration
+        InstantiationExpressionType = 1 << 24,  // Originates in instantiation expression
         /* @internal */
-        IsClassInstanceClone = 1 << 24, // Type is a clone of a class instance type
+        IsClassInstanceClone = 1 << 25, // Type is a clone of a class instance type
         // Flags that require TypeFlags.Object and ObjectFlags.Reference
         /* @internal */
-        IdenticalBaseTypeCalculated = 1 << 25, // has had `getSingleBaseForNonAugmentingSubtype` invoked on it already
+        IdenticalBaseTypeCalculated = 1 << 26, // has had `getSingleBaseForNonAugmentingSubtype` invoked on it already
         /* @internal */
-        IdenticalBaseTypeExists = 1 << 26, // has a defined cachedEquivalentBaseType member
+        IdenticalBaseTypeExists = 1 << 27, // has a defined cachedEquivalentBaseType member
 
         // Flags that require TypeFlags.UnionOrIntersection or TypeFlags.Substitution
         /* @internal */
@@ -5520,6 +5544,11 @@ namespace ts {
         target?: AnonymousType;  // Instantiation target
         mapper?: TypeMapper;     // Instantiation mapper
         instantiations?: ESMap<string, Type>; // Instantiations of generic type alias (undefined if non-generic)
+    }
+
+    /* @internal */
+    export interface InstantiationExpressionType extends AnonymousType {
+        node: ExpressionWithTypeArguments | TypeQueryNode;
     }
 
     /* @internal */
@@ -6006,6 +6035,21 @@ namespace ts {
         NodeNext = 99, // Not simply `Node12` so that compiled code linked against TS can use the `Next` value reliably (same as with `ModuleKind`)
     }
 
+    export enum ModuleDetectionKind {
+        /**
+         * Files with imports, exports and/or import.meta are considered modules
+         */
+        Legacy = 1,
+        /**
+         * Legacy, but also files with jsx under react-jsx or react-jsxdev and esm mode files under moduleResolution: node12+
+         */
+        Auto = 2,
+        /**
+         * Consider all non-declaration files modules, regardless of present syntax
+         */
+        Force = 3,
+    }
+
     export interface PluginImport {
         name: string;
     }
@@ -6101,6 +6145,7 @@ namespace ts {
         maxNodeModuleJsDepth?: number;
         module?: ModuleKind;
         moduleResolution?: ModuleResolutionKind;
+        moduleDetection?: ModuleDetectionKind;
         newLine?: NewLineKind;
         noEmit?: boolean;
         /*@internal*/noEmitForJsFiles?: boolean;
@@ -6566,6 +6611,14 @@ namespace ts {
     }
 
     /**
+     * Used by services to specify the minimum host area required to set up source files under any compilation settings
+     */
+    export interface MinimalResolutionCacheHost extends ModuleResolutionHost {
+        getCompilationSettings(): CompilerOptions;
+        getCompilerHost?(): CompilerHost | undefined;
+    }
+
+    /**
      * Represents the result of module resolution.
      * Module resolution will pick up tsx/jsx/js files even if '--jsx' and '--allowJs' are turned off.
      * The Program will then filter results based on these flags.
@@ -6667,8 +6720,8 @@ namespace ts {
     export type HasChangedAutomaticTypeDirectiveNames = () => boolean;
 
     export interface CompilerHost extends ModuleResolutionHost {
-        getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined;
-        getSourceFileByPath?(fileName: string, path: Path, languageVersion: ScriptTarget, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined;
+        getSourceFile(fileName: string, languageVersionOrOptions: ScriptTarget | CreateSourceFileOptions, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined;
+        getSourceFileByPath?(fileName: string, path: Path, languageVersionOrOptions: ScriptTarget | CreateSourceFileOptions, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined;
         getCancellationToken?(): CancellationToken;
         getDefaultLibFileName(options: CompilerOptions): string;
         getDefaultLibLocation?(): string;
@@ -6694,7 +6747,7 @@ namespace ts {
         /**
          * This method is a companion for 'resolveModuleNames' and is used to resolve 'types' references to actual type declaration files
          */
-        resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions): (ResolvedTypeReferenceDirective | undefined)[];
+        resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[] | readonly FileReference[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingFileMode?: SourceFile["impliedNodeFormat"] | undefined): (ResolvedTypeReferenceDirective | undefined)[];
         getEnvironmentVariable?(name: string): string | undefined;
         /* @internal */ onReleaseOldSourceFile?(oldSourceFile: SourceFile, oldOptions: CompilerOptions, hasSourceFileByPath: boolean): void;
         /* @internal */ onReleaseParsedCommandLine?(configFileName: string, oldResolvedRef: ResolvedProjectReference | undefined, optionOptions: CompilerOptions): void;
@@ -6836,6 +6889,7 @@ namespace ts {
         helpers?: EmitHelper[];                  // Emit helpers for the node
         startsOnNewLine?: boolean;               // If the node should begin on a new line
         snippetElement?: SnippetElement;         // Snippet element of the node
+        typeNode?: TypeNode;                         // VariableDeclaration type
     }
 
     /* @internal */
@@ -7240,8 +7294,8 @@ namespace ts {
         updateConstructorTypeNode(node: ConstructorTypeNode, modifiers: readonly Modifier[] | undefined, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode): ConstructorTypeNode;
         /** @deprecated */
         updateConstructorTypeNode(node: ConstructorTypeNode, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode): ConstructorTypeNode;
-        createTypeQueryNode(exprName: EntityName): TypeQueryNode;
-        updateTypeQueryNode(node: TypeQueryNode, exprName: EntityName): TypeQueryNode;
+        createTypeQueryNode(exprName: EntityName, typeArguments?: readonly TypeNode[]): TypeQueryNode;
+        updateTypeQueryNode(node: TypeQueryNode, exprName: EntityName, typeArguments?: readonly TypeNode[]): TypeQueryNode;
         createTypeLiteralNode(members: readonly TypeElement[] | undefined): TypeLiteralNode;
         updateTypeLiteralNode(node: TypeLiteralNode, members: NodeArray<TypeElement>): TypeLiteralNode;
         createArrayTypeNode(elementType: TypeNode): ArrayTypeNode;
@@ -7262,8 +7316,12 @@ namespace ts {
         updateConditionalTypeNode(node: ConditionalTypeNode, checkType: TypeNode, extendsType: TypeNode, trueType: TypeNode, falseType: TypeNode): ConditionalTypeNode;
         createInferTypeNode(typeParameter: TypeParameterDeclaration): InferTypeNode;
         updateInferTypeNode(node: InferTypeNode, typeParameter: TypeParameterDeclaration): InferTypeNode;
+        /*@deprecated*/
         createImportTypeNode(argument: TypeNode, qualifier?: EntityName, typeArguments?: readonly TypeNode[], isTypeOf?: boolean): ImportTypeNode;
+        createImportTypeNode(argument: TypeNode, assertions?: ImportTypeAssertionContainer, qualifier?: EntityName, typeArguments?: readonly TypeNode[], isTypeOf?: boolean): ImportTypeNode;
+        /*@deprecated*/
         updateImportTypeNode(node: ImportTypeNode, argument: TypeNode, qualifier: EntityName | undefined, typeArguments: readonly TypeNode[] | undefined, isTypeOf?: boolean): ImportTypeNode;
+        updateImportTypeNode(node: ImportTypeNode, argument: TypeNode, assertions: ImportTypeAssertionContainer | undefined, qualifier: EntityName | undefined, typeArguments: readonly TypeNode[] | undefined, isTypeOf?: boolean): ImportTypeNode;
         createParenthesizedType(type: TypeNode): ParenthesizedTypeNode;
         updateParenthesizedType(node: ParenthesizedTypeNode, type: TypeNode): ParenthesizedTypeNode;
         createThisTypeNode(): ThisTypeNode;
@@ -7449,6 +7507,8 @@ namespace ts {
         updateAssertClause(node: AssertClause, elements: NodeArray<AssertEntry>, multiLine?: boolean): AssertClause;
         createAssertEntry(name: AssertionKey, value: Expression): AssertEntry;
         updateAssertEntry(node: AssertEntry, name: AssertionKey, value: Expression): AssertEntry;
+        createImportTypeAssertionContainer(clause: AssertClause, multiLine?: boolean): ImportTypeAssertionContainer;
+        updateImportTypeAssertionContainer(node: ImportTypeAssertionContainer, clause: AssertClause, multiLine?: boolean): ImportTypeAssertionContainer;
         createNamespaceImport(name: Identifier): NamespaceImport;
         updateNamespaceImport(node: NamespaceImport, name: Identifier): NamespaceImport;
         createNamespaceExport(name: Identifier): NamespaceExport;
@@ -8048,6 +8108,8 @@ namespace ts {
         NoDefaultLib = "no-default-lib",
         Reference = "reference",
         Type = "type",
+        TypeResolutionModeRequire = "type-require",
+        TypeResolutionModeImport = "type-import",
         Lib = "lib",
         Prepend = "prepend",
         Text = "text",
@@ -8080,7 +8142,7 @@ namespace ts {
 
     /*@internal*/
     export interface BundleFileReference extends BundleFileSectionBase {
-        kind: BundleFileSectionKind.Reference | BundleFileSectionKind.Type | BundleFileSectionKind.Lib;
+        kind: BundleFileSectionKind.Reference | BundleFileSectionKind.Type | BundleFileSectionKind.Lib | BundleFileSectionKind.TypeResolutionModeImport | BundleFileSectionKind.TypeResolutionModeRequire;
         data: string;
     }
 
@@ -8371,11 +8433,16 @@ namespace ts {
     }
 
     /* @internal */
+    export interface ModuleSpecifierOptions {
+        overrideImportMode?: SourceFile["impliedNodeFormat"];
+    }
+
+    /* @internal */
     export interface ModuleSpecifierCache {
-        get(fromFileName: Path, toFileName: Path, preferences: UserPreferences): Readonly<ResolvedModuleSpecifierInfo> | undefined;
-        set(fromFileName: Path, toFileName: Path, preferences: UserPreferences, modulePaths: readonly ModulePath[], moduleSpecifiers: readonly string[]): void;
-        setIsAutoImportable(fromFileName: Path, toFileName: Path, preferences: UserPreferences, isAutoImportable: boolean): void;
-        setModulePaths(fromFileName: Path, toFileName: Path, preferences: UserPreferences, modulePaths: readonly ModulePath[]): void;
+        get(fromFileName: Path, toFileName: Path, preferences: UserPreferences, options: ModuleSpecifierOptions): Readonly<ResolvedModuleSpecifierInfo> | undefined;
+        set(fromFileName: Path, toFileName: Path, preferences: UserPreferences, options: ModuleSpecifierOptions, modulePaths: readonly ModulePath[], moduleSpecifiers: readonly string[]): void;
+        setIsAutoImportable(fromFileName: Path, toFileName: Path, preferences: UserPreferences, options: ModuleSpecifierOptions, isAutoImportable: boolean): void;
+        setModulePaths(fromFileName: Path, toFileName: Path, preferences: UserPreferences, options: ModuleSpecifierOptions, modulePaths: readonly ModulePath[]): void;
         clear(): void;
         count(): number;
     }
@@ -8571,7 +8638,8 @@ namespace ts {
                 { name: "types", optional: true, captureSpan: true },
                 { name: "lib", optional: true, captureSpan: true },
                 { name: "path", optional: true, captureSpan: true },
-                { name: "no-default-lib", optional: true }
+                { name: "no-default-lib", optional: true },
+                { name: "resolution-mode", optional: true }
             ],
             kind: PragmaKindFlags.TripleSlashXML
         },
@@ -8685,6 +8753,13 @@ namespace ts {
         readonly includePackageJsonAutoImports?: "auto" | "on" | "off";
         readonly provideRefactorNotApplicableReason?: boolean;
         readonly jsxAttributeCompletionStyle?: "auto" | "braces" | "none";
+        readonly includeInlayParameterNameHints?: "none" | "literals" | "all";
+        readonly includeInlayParameterNameHintsWhenArgumentMatchesName?: boolean;
+        readonly includeInlayFunctionParameterTypeHints?: boolean,
+        readonly includeInlayVariableTypeHints?: boolean;
+        readonly includeInlayPropertyDeclarationTypeHints?: boolean;
+        readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
+        readonly includeInlayEnumMemberValueHints?: boolean;
     }
 
     /** Represents a bigint literal value without requiring bigint support */

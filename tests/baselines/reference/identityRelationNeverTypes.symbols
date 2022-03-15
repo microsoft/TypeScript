@@ -1,0 +1,64 @@
+=== tests/cases/compiler/identityRelationNeverTypes.ts ===
+// Repro from #47996
+
+type Equals<A, B> = (<T>() => T extends B ? 1 : 0) extends (<T>() => T extends A ? 1 : 0) ? true : false;
+>Equals : Symbol(Equals, Decl(identityRelationNeverTypes.ts, 0, 0))
+>A : Symbol(A, Decl(identityRelationNeverTypes.ts, 2, 12))
+>B : Symbol(B, Decl(identityRelationNeverTypes.ts, 2, 14))
+>T : Symbol(T, Decl(identityRelationNeverTypes.ts, 2, 22))
+>T : Symbol(T, Decl(identityRelationNeverTypes.ts, 2, 22))
+>B : Symbol(B, Decl(identityRelationNeverTypes.ts, 2, 14))
+>T : Symbol(T, Decl(identityRelationNeverTypes.ts, 2, 61))
+>T : Symbol(T, Decl(identityRelationNeverTypes.ts, 2, 61))
+>A : Symbol(A, Decl(identityRelationNeverTypes.ts, 2, 12))
+
+declare class State<TContext> {
+>State : Symbol(State, Decl(identityRelationNeverTypes.ts, 2, 105))
+>TContext : Symbol(TContext, Decl(identityRelationNeverTypes.ts, 4, 20))
+
+    _context: TContext;
+>_context : Symbol(State._context, Decl(identityRelationNeverTypes.ts, 4, 31))
+>TContext : Symbol(TContext, Decl(identityRelationNeverTypes.ts, 4, 20))
+
+    _value: string;
+>_value : Symbol(State._value, Decl(identityRelationNeverTypes.ts, 5, 23))
+
+    matches<TSV extends string>(stateValue: TSV): this is State<TContext> & { value: TSV };
+>matches : Symbol(State.matches, Decl(identityRelationNeverTypes.ts, 6, 19))
+>TSV : Symbol(TSV, Decl(identityRelationNeverTypes.ts, 7, 12))
+>stateValue : Symbol(stateValue, Decl(identityRelationNeverTypes.ts, 7, 32))
+>TSV : Symbol(TSV, Decl(identityRelationNeverTypes.ts, 7, 12))
+>State : Symbol(State, Decl(identityRelationNeverTypes.ts, 2, 105))
+>TContext : Symbol(TContext, Decl(identityRelationNeverTypes.ts, 4, 20))
+>value : Symbol(value, Decl(identityRelationNeverTypes.ts, 7, 77))
+>TSV : Symbol(TSV, Decl(identityRelationNeverTypes.ts, 7, 12))
+}
+
+function f1(state: State<{ foo: number }>) {
+>f1 : Symbol(f1, Decl(identityRelationNeverTypes.ts, 8, 1))
+>state : Symbol(state, Decl(identityRelationNeverTypes.ts, 10, 12))
+>State : Symbol(State, Decl(identityRelationNeverTypes.ts, 2, 105))
+>foo : Symbol(foo, Decl(identityRelationNeverTypes.ts, 10, 26))
+
+    if (state.matches('a') && state.matches('a.b')) {
+>state.matches : Symbol(State.matches, Decl(identityRelationNeverTypes.ts, 6, 19))
+>state : Symbol(state, Decl(identityRelationNeverTypes.ts, 10, 12))
+>matches : Symbol(State.matches, Decl(identityRelationNeverTypes.ts, 6, 19))
+>state.matches : Symbol(State.matches, Decl(identityRelationNeverTypes.ts, 6, 19))
+>state : Symbol(state, Decl(identityRelationNeverTypes.ts, 10, 12))
+>matches : Symbol(State.matches, Decl(identityRelationNeverTypes.ts, 6, 19))
+
+        state;  // never
+>state : Symbol(state, Decl(identityRelationNeverTypes.ts, 10, 12))
+
+        type T1 = Equals<typeof state, never>;  // true
+>T1 : Symbol(T1, Decl(identityRelationNeverTypes.ts, 12, 14))
+>Equals : Symbol(Equals, Decl(identityRelationNeverTypes.ts, 0, 0))
+>state : Symbol(state, Decl(identityRelationNeverTypes.ts, 10, 12))
+
+        type T2 = Equals<never, never>;  // true
+>T2 : Symbol(T2, Decl(identityRelationNeverTypes.ts, 13, 46))
+>Equals : Symbol(Equals, Decl(identityRelationNeverTypes.ts, 0, 0))
+    }
+}
+

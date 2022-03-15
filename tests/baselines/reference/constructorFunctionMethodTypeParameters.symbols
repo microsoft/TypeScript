@@ -1,0 +1,73 @@
+=== tests/cases/conformance/salsa/constructorFunctionMethodTypeParameters.js ===
+/**
+ * @template {string} T
+ * @param {T} t
+ */
+function Cls(t) {
+>Cls : Symbol(Cls, Decl(constructorFunctionMethodTypeParameters.js, 0, 0))
+>t : Symbol(t, Decl(constructorFunctionMethodTypeParameters.js, 4, 13))
+
+    this.t = t;
+>this.t : Symbol(Cls.t, Decl(constructorFunctionMethodTypeParameters.js, 4, 17))
+>this : Symbol(Cls, Decl(constructorFunctionMethodTypeParameters.js, 0, 0))
+>t : Symbol(Cls.t, Decl(constructorFunctionMethodTypeParameters.js, 4, 17))
+>t : Symbol(t, Decl(constructorFunctionMethodTypeParameters.js, 4, 13))
+}
+
+/**
+ * @template {string} V
+ * @param {T} t
+ * @param {V} v
+ * @return {V}
+ */
+Cls.prototype.topLevelComment = function (t, v) {
+>Cls.prototype : Symbol(Cls.topLevelComment, Decl(constructorFunctionMethodTypeParameters.js, 6, 1))
+>Cls : Symbol(Cls, Decl(constructorFunctionMethodTypeParameters.js, 0, 0))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>topLevelComment : Symbol(Cls.topLevelComment, Decl(constructorFunctionMethodTypeParameters.js, 6, 1))
+>t : Symbol(t, Decl(constructorFunctionMethodTypeParameters.js, 14, 42))
+>v : Symbol(v, Decl(constructorFunctionMethodTypeParameters.js, 14, 44))
+
+    return v
+>v : Symbol(v, Decl(constructorFunctionMethodTypeParameters.js, 14, 44))
+
+};
+
+Cls.prototype.nestedComment =
+>Cls.prototype : Symbol(Cls.nestedComment, Decl(constructorFunctionMethodTypeParameters.js, 16, 2))
+>Cls : Symbol(Cls, Decl(constructorFunctionMethodTypeParameters.js, 0, 0))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>nestedComment : Symbol(Cls.nestedComment, Decl(constructorFunctionMethodTypeParameters.js, 16, 2))
+
+    /**
+     * @template {string} U
+     * @param {T} t
+     * @param {U} u
+     * @return {T}
+     */
+    function (t, u) {
+>t : Symbol(t, Decl(constructorFunctionMethodTypeParameters.js, 25, 14))
+>u : Symbol(u, Decl(constructorFunctionMethodTypeParameters.js, 25, 16))
+
+        return t
+>t : Symbol(t, Decl(constructorFunctionMethodTypeParameters.js, 25, 14))
+
+    };
+
+var c = new Cls('a');
+>c : Symbol(c, Decl(constructorFunctionMethodTypeParameters.js, 29, 3))
+>Cls : Symbol(Cls, Decl(constructorFunctionMethodTypeParameters.js, 0, 0))
+
+const s = c.topLevelComment('a', 'b');
+>s : Symbol(s, Decl(constructorFunctionMethodTypeParameters.js, 30, 5))
+>c.topLevelComment : Symbol(Cls.topLevelComment, Decl(constructorFunctionMethodTypeParameters.js, 6, 1))
+>c : Symbol(c, Decl(constructorFunctionMethodTypeParameters.js, 29, 3))
+>topLevelComment : Symbol(Cls.topLevelComment, Decl(constructorFunctionMethodTypeParameters.js, 6, 1))
+
+const t = c.nestedComment('a', 'b');
+>t : Symbol(t, Decl(constructorFunctionMethodTypeParameters.js, 31, 5))
+>c.nestedComment : Symbol(Cls.nestedComment, Decl(constructorFunctionMethodTypeParameters.js, 16, 2))
+>c : Symbol(c, Decl(constructorFunctionMethodTypeParameters.js, 29, 3))
+>nestedComment : Symbol(Cls.nestedComment, Decl(constructorFunctionMethodTypeParameters.js, 16, 2))
+
+

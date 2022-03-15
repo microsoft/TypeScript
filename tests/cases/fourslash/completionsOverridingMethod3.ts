@@ -24,11 +24,6 @@ verify.completions({
         {
             name: "boo",
             sortText: completion.SortText.LocationPriority,
-            replacementSpan: {
-                fileName: "",
-                pos: 0,
-                end: 0,
-            },
             insertText: "boo(): string;",
         }
     ],

@@ -74,7 +74,7 @@ namespace ts {
         const existingDirectories = new Map<string, boolean>();
         const getCanonicalFileName = createGetCanonicalFileName(system.useCaseSensitiveFileNames);
         const computeHash = maybeBind(system, system.createHash) || generateDjb2Hash;
-        function getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile | undefined {
+        function getSourceFile(fileName: string, languageVersionOrOptions: ScriptTarget | CreateSourceFileOptions, onError?: (message: string) => void): SourceFile | undefined {
             let text: string | undefined;
             try {
                 performance.mark("beforeIORead");
@@ -88,7 +88,7 @@ namespace ts {
                 }
                 text = "";
             }
-            return text !== undefined ? createSourceFile(fileName, text, languageVersion, setParentNodes) : undefined;
+            return text !== undefined ? createSourceFile(fileName, text, languageVersionOrOptions, setParentNodes) : undefined;
         }
 
         function directoryExists(directoryPath: string): boolean {
@@ -510,7 +510,7 @@ namespace ts {
     }
 
     /* @internal */
-    export function loadWithLocalCache<T>(names: string[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, loader: (name: string, containingFile: string, redirectedReference: ResolvedProjectReference | undefined) => T): T[] {
+    export function loadWithTypeDirectiveCache<T>(names: string[] | readonly FileReference[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, containingFileMode: SourceFile["impliedNodeFormat"], loader: (name: string, containingFile: string, redirectedReference: ResolvedProjectReference | undefined, resolutionMode: SourceFile["impliedNodeFormat"]) => T): T[] {
         if (names.length === 0) {
             return [];
         }
@@ -518,11 +518,15 @@ namespace ts {
         const cache = new Map<string, T>();
         for (const name of names) {
             let result: T;
-            if (cache.has(name)) {
-                result = cache.get(name)!;
+            const mode = getModeForFileReference(name, containingFileMode);
+            // We lower-case all type references because npm automatically lowercases all packages. See GH#9824.
+            const strName = isString(name) ? name : name.fileName.toLowerCase();
+            const cacheKey = mode !== undefined ? `${mode}|${strName}` : strName;
+            if (cache.has(cacheKey)) {
+                result = cache.get(cacheKey)!;
             }
             else {
-                cache.set(name, result = loader(name, containingFile, redirectedReference));
+                cache.set(cacheKey, result = loader(strName, containingFile, redirectedReference, mode));
             }
             resolutions.push(result);
         }
@@ -537,6 +541,11 @@ namespace ts {
     };
 
     /* @internal */
+    export function getModeForFileReference(ref: FileReference | string, containingFileMode: SourceFile["impliedNodeFormat"]) {
+        return (isString(ref) ? containingFileMode : ref.resolutionMode) || containingFileMode;
+    }
+
+    /* @internal */
     export function getModeForResolutionAtIndex(file: SourceFileImportsList, index: number) {
         if (file.impliedNodeFormat === undefined) return undefined;
         // we ensure all elements of file.imports and file.moduleAugmentations have the relevant parent pointers set during program setup,
@@ -545,8 +554,34 @@ namespace ts {
     }
 
     /* @internal */
+    export function isExclusivelyTypeOnlyImportOrExport(decl: ImportDeclaration | ExportDeclaration) {
+        if (isExportDeclaration(decl)) {
+            return decl.isTypeOnly;
+        }
+        if (decl.importClause?.isTypeOnly) {
+            return true;
+        }
+        return false;
+    }
+
+    /* @internal */
     export function getModeForUsageLocation(file: {impliedNodeFormat?: SourceFile["impliedNodeFormat"]}, usage: StringLiteralLike) {
         if (file.impliedNodeFormat === undefined) return undefined;
+        if ((isImportDeclaration(usage.parent) || isExportDeclaration(usage.parent))) {
+            const isTypeOnly = isExclusivelyTypeOnlyImportOrExport(usage.parent);
+            if (isTypeOnly) {
+                const override = getResolutionModeOverrideForClause(usage.parent.assertClause);
+                if (override) {
+                    return override;
+                }
+            }
+        }
+        if (usage.parent.parent && isImportTypeNode(usage.parent.parent)) {
+            const override = getResolutionModeOverrideForClause(usage.parent.parent.assertions?.assertClause);
+            if (override) {
+                return override;
+            }
+        }
         if (file.impliedNodeFormat !== ModuleKind.ESNext) {
             // in cjs files, import call expressions are esm format, otherwise everything is cjs
             return isImportCall(walkUpParenthesizedExpressions(usage.parent)) ? ModuleKind.ESNext : ModuleKind.CommonJS;
@@ -555,6 +590,27 @@ namespace ts {
         // imports are only parent'd up to their containing declaration/expression, so access farther parents with care
         const exprParentParent = walkUpParenthesizedExpressions(usage.parent)?.parent;
         return exprParentParent && isImportEqualsDeclaration(exprParentParent) ? ModuleKind.CommonJS : ModuleKind.ESNext;
+    }
+
+    /* @internal */
+    export function getResolutionModeOverrideForClause(clause: AssertClause | undefined, grammarErrorOnNode?: (node: Node, diagnostic: DiagnosticMessage) => boolean) {
+        if (!clause) return undefined;
+        if (length(clause.elements) !== 1) {
+            grammarErrorOnNode?.(clause, Diagnostics.Type_import_assertions_should_have_exactly_one_key_resolution_mode_with_value_import_or_require);
+            return undefined;
+        }
+        const elem = clause.elements[0];
+        if (!isStringLiteralLike(elem.name)) return undefined;
+        if (elem.name.text !== "resolution-mode") {
+            grammarErrorOnNode?.(elem.name, Diagnostics.resolution_mode_is_the_only_valid_key_for_type_import_assertions);
+            return undefined;
+        }
+        if (!isStringLiteralLike(elem.value)) return undefined;
+        if (elem.value.text !== "import" && elem.value.text !== "require") {
+            grammarErrorOnNode?.(elem.value, Diagnostics.resolution_mode_should_be_either_require_or_import);
+            return undefined;
+        }
+        return elem.value.text === "import" ? ModuleKind.ESNext : ModuleKind.CommonJS;
     }
 
     /* @internal */
@@ -671,7 +727,7 @@ namespace ts {
     export function getReferencedFileLocation(getSourceFileByPath: (path: Path) => SourceFile | undefined, ref: ReferencedFile): ReferenceFileLocation | SyntheticReferenceFileLocation {
         const file = Debug.checkDefined(getSourceFileByPath(ref.file));
         const { kind, index } = ref;
-        let pos: number | undefined, end: number | undefined, packageId: PackageId | undefined;
+        let pos: number | undefined, end: number | undefined, packageId: PackageId | undefined, resolutionMode: FileReference["resolutionMode"] | undefined;
         switch (kind) {
             case FileIncludeKind.Import:
                 const importLiteral = getModuleNameStringLiteralAt(file, index);
@@ -684,8 +740,8 @@ namespace ts {
                 ({ pos, end } = file.referencedFiles[index]);
                 break;
             case FileIncludeKind.TypeReferenceDirective:
-                ({ pos, end } = file.typeReferenceDirectives[index]);
-                packageId = file.resolvedTypeReferenceDirectiveNames?.get(toFileNameLowerCase(file.typeReferenceDirectives[index].fileName), file.impliedNodeFormat)?.packageId;
+                ({ pos, end, resolutionMode } = file.typeReferenceDirectives[index]);
+                packageId = file.resolvedTypeReferenceDirectiveNames?.get(toFileNameLowerCase(file.typeReferenceDirectives[index].fileName), resolutionMode || file.impliedNodeFormat)?.packageId;
                 break;
             case FileIncludeKind.LibReferenceDirective:
                 ({ pos, end } = file.libReferenceDirectives[index]);
@@ -861,9 +917,9 @@ namespace ts {
         Diagnostics.A_return_statement_cannot_be_used_inside_a_class_static_block.code,
         Diagnostics.A_set_accessor_cannot_have_rest_parameter.code,
         Diagnostics.A_set_accessor_must_have_exactly_one_parameter.code,
-        Diagnostics.An_export_declaration_can_only_be_used_in_a_module.code,
+        Diagnostics.An_export_declaration_can_only_be_used_at_the_top_level_of_a_module.code,
         Diagnostics.An_export_declaration_cannot_have_modifiers.code,
-        Diagnostics.An_import_declaration_can_only_be_used_in_a_namespace_or_module.code,
+        Diagnostics.An_import_declaration_can_only_be_used_at_the_top_level_of_a_module.code,
         Diagnostics.An_import_declaration_cannot_have_modifiers.code,
         Diagnostics.An_object_member_cannot_be_declared_optional.code,
         Diagnostics.Argument_of_dynamic_import_cannot_be_spread_element.code,
@@ -977,7 +1033,7 @@ namespace ts {
         const cachedBindAndCheckDiagnosticsForFile: DiagnosticCache<Diagnostic> = {};
         const cachedDeclarationDiagnosticsForFile: DiagnosticCache<DiagnosticWithLocation> = {};
 
-        let resolvedTypeReferenceDirectives = new Map<string, ResolvedTypeReferenceDirective | undefined>();
+        let resolvedTypeReferenceDirectives = createModeAwareCache<ResolvedTypeReferenceDirective | undefined>();
         let fileProcessingDiagnostics: FilePreprocessingDiagnostics[] | undefined;
 
         // The below settings are to track if a .js file should be add to the program if loaded via searching under node_modules.
@@ -1037,21 +1093,22 @@ namespace ts {
             actualResolveModuleNamesWorker = (moduleNames, containingFile, containingFileName, _reusedNames, redirectedReference) => loadWithModeAwareCache<ResolvedModuleFull>(Debug.checkEachDefined(moduleNames), containingFile, containingFileName, redirectedReference, loader);
         }
 
-        let actualResolveTypeReferenceDirectiveNamesWorker: (typeDirectiveNames: string[], containingFile: string, redirectedReference?: ResolvedProjectReference) => (ResolvedTypeReferenceDirective | undefined)[];
+        let actualResolveTypeReferenceDirectiveNamesWorker: (typeDirectiveNames: string[] | readonly FileReference[], containingFile: string, redirectedReference?: ResolvedProjectReference, containingFileMode?: SourceFile["impliedNodeFormat"] | undefined) => (ResolvedTypeReferenceDirective | undefined)[];
         if (host.resolveTypeReferenceDirectives) {
-            actualResolveTypeReferenceDirectiveNamesWorker = (typeDirectiveNames, containingFile, redirectedReference) => host.resolveTypeReferenceDirectives!(Debug.checkEachDefined(typeDirectiveNames), containingFile, redirectedReference, options);
+            actualResolveTypeReferenceDirectiveNamesWorker = (typeDirectiveNames, containingFile, redirectedReference, containingFileMode) => host.resolveTypeReferenceDirectives!(Debug.checkEachDefined(typeDirectiveNames), containingFile, redirectedReference, options, containingFileMode);
         }
         else {
             typeReferenceDirectiveResolutionCache = createTypeReferenceDirectiveResolutionCache(currentDirectory, getCanonicalFileName, /*options*/ undefined, moduleResolutionCache?.getPackageJsonInfoCache());
-            const loader = (typesRef: string, containingFile: string, redirectedReference: ResolvedProjectReference | undefined) => resolveTypeReferenceDirective(
+            const loader = (typesRef: string, containingFile: string, redirectedReference: ResolvedProjectReference | undefined, resolutionMode: SourceFile["impliedNodeFormat"] | undefined) => resolveTypeReferenceDirective(
                 typesRef,
                 containingFile,
                 options,
                 host,
                 redirectedReference,
                 typeReferenceDirectiveResolutionCache,
+                resolutionMode,
             ).resolvedTypeReferenceDirective!; // TODO: GH#18217
-            actualResolveTypeReferenceDirectiveNamesWorker = (typeReferenceDirectiveNames, containingFile, redirectedReference) => loadWithLocalCache<ResolvedTypeReferenceDirective>(Debug.checkEachDefined(typeReferenceDirectiveNames), containingFile, redirectedReference, loader);
+            actualResolveTypeReferenceDirectiveNamesWorker = (typeReferenceDirectiveNames, containingFile, redirectedReference, containingFileMode) => loadWithTypeDirectiveCache<ResolvedTypeReferenceDirective>(Debug.checkEachDefined(typeReferenceDirectiveNames), containingFile, redirectedReference, containingFileMode, loader);
         }
 
         // Map from a stringified PackageId to the source file with that id.
@@ -1154,7 +1211,8 @@ namespace ts {
                 const containingFilename = combinePaths(containingDirectory, inferredTypesContainingFile);
                 const resolutions = resolveTypeReferenceDirectiveNamesWorker(typeReferences, containingFilename);
                 for (let i = 0; i < typeReferences.length; i++) {
-                    processTypeReferenceDirective(typeReferences[i], resolutions[i], { kind: FileIncludeKind.AutomaticTypeDirectiveFile, typeReference: typeReferences[i], packageId: resolutions[i]?.packageId });
+                    // under node12/nodenext module resolution, load `types`/ata include names as cjs resolution results by passing an `undefined` mode
+                    processTypeReferenceDirective(typeReferences[i], /*mode*/ undefined, resolutions[i], { kind: FileIncludeKind.AutomaticTypeDirectiveFile, typeReference: typeReferences[i], packageId: resolutions[i]?.packageId });
                 }
                 tracing?.pop();
             }
@@ -1322,13 +1380,14 @@ namespace ts {
             return result;
         }
 
-        function resolveTypeReferenceDirectiveNamesWorker(typeDirectiveNames: string[], containingFile: string | SourceFile): readonly (ResolvedTypeReferenceDirective | undefined)[] {
+        function resolveTypeReferenceDirectiveNamesWorker(typeDirectiveNames: string[] | readonly FileReference[], containingFile: string | SourceFile): readonly (ResolvedTypeReferenceDirective | undefined)[] {
             if (!typeDirectiveNames.length) return [];
             const containingFileName = !isString(containingFile) ? getNormalizedAbsolutePath(containingFile.originalFileName, currentDirectory) : containingFile;
             const redirectedReference = !isString(containingFile) ? getRedirectReferenceForResolution(containingFile) : undefined;
+            const containingFileMode = !isString(containingFile) ? containingFile.impliedNodeFormat : undefined;
             tracing?.push(tracing.Phase.Program, "resolveTypeReferenceDirectiveNamesWorker", { containingFileName });
             performance.mark("beforeResolveTypeReference");
-            const result = actualResolveTypeReferenceDirectiveNamesWorker(typeDirectiveNames, containingFileName, redirectedReference);
+            const result = actualResolveTypeReferenceDirectiveNamesWorker(typeDirectiveNames, containingFileName, redirectedReference, containingFileMode);
             performance.mark("afterResolveTypeReference");
             performance.measure("ResolveTypeReference", "beforeResolveTypeReference", "afterResolveTypeReference");
             tracing?.pop();
@@ -1636,8 +1695,8 @@ namespace ts {
 
             for (const oldSourceFile of oldSourceFiles) {
                 let newSourceFile = host.getSourceFileByPath
-                    ? host.getSourceFileByPath(oldSourceFile.fileName, oldSourceFile.resolvedPath, getEmitScriptTarget(options), /*onError*/ undefined, shouldCreateNewSourceFile)
-                    : host.getSourceFile(oldSourceFile.fileName, getEmitScriptTarget(options), /*onError*/ undefined, shouldCreateNewSourceFile); // TODO: GH#18217
+                    ? host.getSourceFileByPath(oldSourceFile.fileName, oldSourceFile.resolvedPath, getCreateSourceFileOptions(oldSourceFile.fileName, moduleResolutionCache, host, options), /*onError*/ undefined, shouldCreateNewSourceFile)
+                    : host.getSourceFile(oldSourceFile.fileName, getCreateSourceFileOptions(oldSourceFile.fileName, moduleResolutionCache, host, options), /*onError*/ undefined, shouldCreateNewSourceFile); // TODO: GH#18217
 
                 if (!newSourceFile) {
                     return StructureIsReused.Not;
@@ -1672,7 +1731,6 @@ namespace ts {
                 newSourceFile.originalFileName = oldSourceFile.originalFileName;
                 newSourceFile.resolvedPath = oldSourceFile.resolvedPath;
                 newSourceFile.fileName = oldSourceFile.fileName;
-                newSourceFile.impliedNodeFormat = oldSourceFile.impliedNodeFormat;
 
                 const packageName = oldProgram.sourceFileToPackageName.get(oldSourceFile.path);
                 if (packageName !== undefined) {
@@ -1766,8 +1824,7 @@ namespace ts {
                 else {
                     newSourceFile.resolvedModules = oldSourceFile.resolvedModules;
                 }
-                // We lower-case all type references because npm automatically lowercases all packages. See GH#9824.
-                const typesReferenceDirectives = map(newSourceFile.typeReferenceDirectives, ref => toFileNameLowerCase(ref.fileName));
+                const typesReferenceDirectives = newSourceFile.typeReferenceDirectives;
                 const typeReferenceResolutions = resolveTypeReferenceDirectiveNamesWorker(typesReferenceDirectives, newSourceFile);
                 // ensure that types resolutions are still correct
                 const typeReferenceResolutionsChanged = hasChangesInResolutions(typesReferenceDirectives, typeReferenceResolutions, oldSourceFile.resolvedTypeReferenceDirectiveNames, oldSourceFile, typeDirectiveIsEqualTo);
@@ -2102,7 +2159,7 @@ namespace ts {
 
                 const isJs = sourceFile.scriptKind === ScriptKind.JS || sourceFile.scriptKind === ScriptKind.JSX;
                 const isCheckJs = isJs && isCheckJsEnabledForFile(sourceFile, options);
-                const isPlainJs = isJs && !sourceFile.checkJsDirective && options.checkJs === undefined;
+                const isPlainJs = isPlainJsFile(sourceFile, options.checkJs);
                 const isTsNoCheck = !!sourceFile.checkJsDirective && sourceFile.checkJsDirective.enabled === false;
 
                 // By default, only type-check .ts, .tsx, Deferred, plain JS, checked JS and External
@@ -2722,6 +2779,18 @@ namespace ts {
             return result;
         }
 
+        function getCreateSourceFileOptions(fileName: string, moduleResolutionCache: ModuleResolutionCache | undefined, host: CompilerHost, options: CompilerOptions) {
+            // It's a _little odd_ that we can't set `impliedNodeFormat` until the program step - but it's the first and only time we have a resolution cache
+            // and a freshly made source file node on hand at the same time, and we need both to set the field. Persisting the resolution cache all the way
+            // to the check and emit steps would be bad - so we much prefer detecting and storing the format information on the source file node upfront.
+            const impliedNodeFormat = getImpliedNodeFormatForFile(toPath(fileName), moduleResolutionCache?.getPackageJsonInfoCache(), host, options);
+            return {
+                languageVersion: getEmitScriptTarget(options),
+                impliedNodeFormat,
+                setExternalModuleIndicator: getSetExternalModuleIndicator(options)
+            };
+        }
+
         function findSourceFileWorker(fileName: string, isDefaultLib: boolean, ignoreNoDefaultLib: boolean, reason: FileIncludeReason, packageId: PackageId | undefined): SourceFile | undefined {
             const path = toPath(fileName);
             if (useSourceOfProjectReferenceRedirect) {
@@ -2814,7 +2883,7 @@ namespace ts {
             // We haven't looked for this file, do so now and cache result
             const file = host.getSourceFile(
                 fileName,
-                getEmitScriptTarget(options),
+                getCreateSourceFileOptions(fileName, moduleResolutionCache, host, options),
                 hostErrorMessage => addFilePreprocessingFileExplainingDiagnostic(/*file*/ undefined, reason, Diagnostics.Cannot_read_file_0_Colon_1, [fileName, hostErrorMessage]),
                 shouldCreateNewSourceFile
             );
@@ -2847,10 +2916,6 @@ namespace ts {
                 file.path = path;
                 file.resolvedPath = toPath(fileName);
                 file.originalFileName = originalFileName;
-                // It's a _little odd_ that we can't set `impliedNodeFormat` until the program step - but it's the first and only time we have a resolution cache
-                // and a freshly made source file node on hand at the same time, and we need both to set the field. Persisting the resolution cache all the way
-                // to the check and emit steps would be bad - so we much prefer detecting and storing the format information on the source file node upfront.
-                file.impliedNodeFormat = getImpliedNodeFormatForFile(file.resolvedPath, moduleResolutionCache?.getPackageJsonInfoCache(), host, options);
                 addFileIncludeReason(file, reason);
 
                 if (host.useCaseSensitiveFileNames()) {
@@ -3002,8 +3067,7 @@ namespace ts {
         }
 
         function processTypeReferenceDirectives(file: SourceFile) {
-            // We lower-case all type references because npm automatically lowercases all packages. See GH#9824.
-            const typeDirectives = map(file.typeReferenceDirectives, ref => toFileNameLowerCase(ref.fileName));
+            const typeDirectives = file.typeReferenceDirectives;
             if (!typeDirectives) {
                 return;
             }
@@ -3015,28 +3079,34 @@ namespace ts {
                 // store resolved type directive on the file
                 const fileName = toFileNameLowerCase(ref.fileName);
                 setResolvedTypeReferenceDirective(file, fileName, resolvedTypeReferenceDirective);
-                processTypeReferenceDirective(fileName, resolvedTypeReferenceDirective, { kind: FileIncludeKind.TypeReferenceDirective, file: file.path, index, });
+                const mode = ref.resolutionMode || file.impliedNodeFormat;
+                if (mode && getEmitModuleResolutionKind(options) !== ModuleResolutionKind.Node12 && getEmitModuleResolutionKind(options) !== ModuleResolutionKind.NodeNext) {
+                    programDiagnostics.add(createDiagnosticForRange(file, ref, Diagnostics.Resolution_modes_are_only_supported_when_moduleResolution_is_node12_or_nodenext));
+                }
+                processTypeReferenceDirective(fileName, mode, resolvedTypeReferenceDirective, { kind: FileIncludeKind.TypeReferenceDirective, file: file.path, index, });
             }
         }
 
         function processTypeReferenceDirective(
             typeReferenceDirective: string,
+            mode: SourceFile["impliedNodeFormat"] | undefined,
             resolvedTypeReferenceDirective: ResolvedTypeReferenceDirective | undefined,
             reason: FileIncludeReason
         ): void {
             tracing?.push(tracing.Phase.Program, "processTypeReferenceDirective", { directive: typeReferenceDirective, hasResolved: !!resolveModuleNamesReusingOldState, refKind: reason.kind, refPath: isReferencedFile(reason) ? reason.file : undefined });
-            processTypeReferenceDirectiveWorker(typeReferenceDirective, resolvedTypeReferenceDirective, reason);
+            processTypeReferenceDirectiveWorker(typeReferenceDirective, mode, resolvedTypeReferenceDirective, reason);
             tracing?.pop();
         }
 
         function processTypeReferenceDirectiveWorker(
             typeReferenceDirective: string,
+            mode: SourceFile["impliedNodeFormat"] | undefined,
             resolvedTypeReferenceDirective: ResolvedTypeReferenceDirective | undefined,
             reason: FileIncludeReason
         ): void {
 
             // If we already found this library as a primary reference - nothing to do
-            const previousResolution = resolvedTypeReferenceDirectives.get(typeReferenceDirective);
+            const previousResolution = resolvedTypeReferenceDirectives.get(typeReferenceDirective, mode);
             if (previousResolution && previousResolution.primary) {
                 return;
             }
@@ -3081,7 +3151,7 @@ namespace ts {
             }
 
             if (saveResolution) {
-                resolvedTypeReferenceDirectives.set(typeReferenceDirective, resolvedTypeReferenceDirective);
+                resolvedTypeReferenceDirectives.set(typeReferenceDirective, mode, resolvedTypeReferenceDirective);
             }
         }
 
@@ -3438,7 +3508,7 @@ namespace ts {
             }
             else if (firstNonAmbientExternalModuleSourceFile && languageVersion < ScriptTarget.ES2015 && options.module === ModuleKind.None) {
                 // We cannot use createDiagnosticFromNode because nodes do not have parents yet
-                const span = getErrorSpanForNode(firstNonAmbientExternalModuleSourceFile, firstNonAmbientExternalModuleSourceFile.externalModuleIndicator!);
+                const span = getErrorSpanForNode(firstNonAmbientExternalModuleSourceFile, typeof firstNonAmbientExternalModuleSourceFile.externalModuleIndicator === "boolean" ? firstNonAmbientExternalModuleSourceFile : firstNonAmbientExternalModuleSourceFile.externalModuleIndicator!);
                 programDiagnostics.add(createFileDiagnostic(firstNonAmbientExternalModuleSourceFile, span.start, span.length, Diagnostics.Cannot_use_imports_exports_or_module_augmentations_when_module_is_none));
             }
 
@@ -3448,7 +3518,7 @@ namespace ts {
                     createDiagnosticForOptionName(Diagnostics.Only_amd_and_system_modules_are_supported_alongside_0, options.out ? "out" : "outFile", "module");
                 }
                 else if (options.module === undefined && firstNonAmbientExternalModuleSourceFile) {
-                    const span = getErrorSpanForNode(firstNonAmbientExternalModuleSourceFile, firstNonAmbientExternalModuleSourceFile.externalModuleIndicator!);
+                    const span = getErrorSpanForNode(firstNonAmbientExternalModuleSourceFile, typeof firstNonAmbientExternalModuleSourceFile.externalModuleIndicator === "boolean" ? firstNonAmbientExternalModuleSourceFile : firstNonAmbientExternalModuleSourceFile.externalModuleIndicator!);
                     programDiagnostics.add(createFileDiagnostic(firstNonAmbientExternalModuleSourceFile, span.start, span.length, Diagnostics.Cannot_compile_modules_using_option_0_unless_the_module_flag_is_amd_or_system, options.out ? "out" : "outFile"));
                 }
             }

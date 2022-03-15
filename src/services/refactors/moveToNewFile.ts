@@ -473,7 +473,7 @@ namespace ts.refactor {
         let newModuleName = moduleName;
         for (let i = 1; ; i++) {
             const name = combinePaths(inDirectory, newModuleName + extension);
-            if (!host.fileExists!(name)) return newModuleName; // TODO: GH#18217
+            if (!host.fileExists(name)) return newModuleName;
             newModuleName = `${moduleName}.${i}`;
         }
     }

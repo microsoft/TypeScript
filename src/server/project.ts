@@ -484,8 +484,8 @@ namespace ts.server {
             return this.resolutionCache.getResolvedModuleWithFailedLookupLocationsFromCache(moduleName, containingFile, resolutionMode);
         }
 
-        resolveTypeReferenceDirectives(typeDirectiveNames: string[], containingFile: string, redirectedReference?: ResolvedProjectReference): (ResolvedTypeReferenceDirective | undefined)[] {
-            return this.resolutionCache.resolveTypeReferenceDirectives(typeDirectiveNames, containingFile, redirectedReference);
+        resolveTypeReferenceDirectives(typeDirectiveNames: string[] | FileReference[], containingFile: string, redirectedReference?: ResolvedProjectReference, _options?: CompilerOptions, containingFileMode?: SourceFile["impliedNodeFormat"] | undefined): (ResolvedTypeReferenceDirective | undefined)[] {
+            return this.resolutionCache.resolveTypeReferenceDirectives(typeDirectiveNames, containingFile, redirectedReference, containingFileMode);
         }
 
         directoryExists(path: string): boolean {
@@ -1676,6 +1676,11 @@ namespace ts.server {
             const packageJsons = this.getPackageJsonsVisibleToFile(combinePaths(this.currentDirectory, inferredTypesContainingFile), rootDir);
             this.packageJsonsForAutoImport = new Set(packageJsons.map(p => p.fileName));
             return packageJsons;
+        }
+
+        /* @internal */
+        getPackageJsonCache() {
+            return this.projectService.packageJsonCache;
         }
 
         /*@internal*/

@@ -103,7 +103,7 @@ namespace ts {
         /** If provided, used to resolve the module names, otherwise typescript's default module resolution */
         resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile?: SourceFile): (ResolvedModule | undefined)[];
         /** If provided, used to resolve type reference directives, otherwise typescript's default resolution */
-        resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions): (ResolvedTypeReferenceDirective | undefined)[];
+        resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[] | readonly FileReference[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingFileMode?: SourceFile["impliedNodeFormat"] | undefined): (ResolvedTypeReferenceDirective | undefined)[];
     }
     /** Internal interface used to wire emit through same host */
 
@@ -353,7 +353,7 @@ namespace ts {
             ((moduleNames, containingFile, reusedNames, redirectedReference, _options, sourceFile) => resolutionCache.resolveModuleNames(moduleNames, containingFile, reusedNames, redirectedReference, sourceFile));
         compilerHost.resolveTypeReferenceDirectives = host.resolveTypeReferenceDirectives ?
             ((...args) => host.resolveTypeReferenceDirectives!(...args)) :
-            ((typeDirectiveNames, containingFile, redirectedReference) => resolutionCache.resolveTypeReferenceDirectives(typeDirectiveNames, containingFile, redirectedReference));
+            ((typeDirectiveNames, containingFile, redirectedReference, _options, containingFileMode) => resolutionCache.resolveTypeReferenceDirectives(typeDirectiveNames, containingFile, redirectedReference, containingFileMode));
         const userProvidedResolution = !!host.resolveModuleNames || !!host.resolveTypeReferenceDirectives;
 
         builderProgram = readBuilderProgram(compilerOptions, compilerHost) as any as T;
@@ -532,7 +532,7 @@ namespace ts {
             return directoryStructureHost.fileExists(fileName);
         }
 
-        function getVersionedSourceFileByPath(fileName: string, path: Path, languageVersion: ScriptTarget, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined {
+        function getVersionedSourceFileByPath(fileName: string, path: Path, languageVersionOrOptions: ScriptTarget | CreateSourceFileOptions, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined {
             const hostSourceFile = sourceFilesCache.get(path);
             // No source file on the host
             if (isFileMissingOnHost(hostSourceFile)) {
@@ -541,7 +541,7 @@ namespace ts {
 
             // Create new source file if requested or the versions dont match
             if (hostSourceFile === undefined || shouldCreateNewSourceFile || isFilePresenceUnknownOnHost(hostSourceFile)) {
-                const sourceFile = getNewSourceFile(fileName, languageVersion, onError);
+                const sourceFile = getNewSourceFile(fileName, languageVersionOrOptions, onError);
                 if (hostSourceFile) {
                     if (sourceFile) {
                         // Set the source file and create file watcher now that file was present on the disk
