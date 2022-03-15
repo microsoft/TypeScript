@@ -7,9 +7,9 @@ tests/cases/conformance/salsa/generic.js(20,32): error TS2345: Argument of type 
 tests/cases/conformance/salsa/second.ts(8,25): error TS2507: Type '(numberEaten: number) => void' is not a constructor function type.
 tests/cases/conformance/salsa/second.ts(14,7): error TS2417: Class static side 'typeof Conestoga' incorrectly extends base class static side 'typeof Wagon'.
   Types of property 'circle' are incompatible.
-    Type '(others: typeof Wagon[]) => number' is not assignable to type '(wagons?: Wagon[]) => number'.
+    Type '(others: (typeof Wagon)[]) => number' is not assignable to type '(wagons?: Wagon[]) => number'.
       Types of parameters 'others' and 'wagons' are incompatible.
-        Type 'Wagon[]' is not assignable to type 'typeof Wagon[]'.
+        Type 'Wagon[]' is not assignable to type '(typeof Wagon)[]'.
           Property 'circle' is missing in type 'Wagon' but required in type 'typeof Wagon'.
 tests/cases/conformance/salsa/second.ts(17,15): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
 
@@ -93,9 +93,9 @@ tests/cases/conformance/salsa/second.ts(17,15): error TS2345: Argument of type '
           ~~~~~~~~~
 !!! error TS2417: Class static side 'typeof Conestoga' incorrectly extends base class static side 'typeof Wagon'.
 !!! error TS2417:   Types of property 'circle' are incompatible.
-!!! error TS2417:     Type '(others: typeof Wagon[]) => number' is not assignable to type '(wagons?: Wagon[]) => number'.
+!!! error TS2417:     Type '(others: (typeof Wagon)[]) => number' is not assignable to type '(wagons?: Wagon[]) => number'.
 !!! error TS2417:       Types of parameters 'others' and 'wagons' are incompatible.
-!!! error TS2417:         Type 'Wagon[]' is not assignable to type 'typeof Wagon[]'.
+!!! error TS2417:         Type 'Wagon[]' is not assignable to type '(typeof Wagon)[]'.
 !!! error TS2417:           Property 'circle' is missing in type 'Wagon' but required in type 'typeof Wagon'.
 !!! related TS2728 tests/cases/conformance/salsa/first.js:9:1: 'circle' is declared here.
         constructor(public drunkOO: true) {

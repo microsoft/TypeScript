@@ -44,6 +44,8 @@ namespace ts {
         const factory: NodeFactory = {
             get parenthesizer() { return parenthesizerRules(); },
             get converters() { return converters(); },
+            baseFactory,
+            flags,
             createNodeArray,
             createNumericLiteral,
             createBigIntLiteral,

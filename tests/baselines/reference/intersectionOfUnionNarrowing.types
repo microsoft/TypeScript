@@ -20,9 +20,9 @@ declare const q: X & AorB;
 
 if (q.a !== undefined) {
 >q.a !== undefined : boolean
->q.a : { aProp: string; } & object | undefined
+>q.a : ({ aProp: string; } & object) | undefined
 >q : X & AorB
->a : { aProp: string; } & object | undefined
+>a : ({ aProp: string; } & object) | undefined
 >undefined : undefined
 
   q.a.aProp;

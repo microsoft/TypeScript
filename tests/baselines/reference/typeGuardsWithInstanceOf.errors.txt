@@ -1,8 +1,8 @@
 tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOf.ts(7,20): error TS2339: Property 'global' does not exist on type 'never'.
   The intersection 'I & RegExp' was reduced to 'never' because property 'global' has conflicting types in some constituents.
-tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOf.ts(36,11): error TS2339: Property 'onChanges' does not exist on type 'C | Validator & Partial<OnChanges>'.
+tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOf.ts(36,11): error TS2339: Property 'onChanges' does not exist on type 'C | (Validator & Partial<OnChanges>)'.
   Property 'onChanges' does not exist on type 'C'.
-tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOf.ts(37,11): error TS2339: Property 'onChanges' does not exist on type 'C | Validator & Partial<OnChanges>'.
+tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOf.ts(37,11): error TS2339: Property 'onChanges' does not exist on type 'C | (Validator & Partial<OnChanges>)'.
   Property 'onChanges' does not exist on type 'C'.
 
 
@@ -47,11 +47,11 @@ tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOf.ts(37,11
         // before 4.1.
         if (v.onChanges) {
               ~~~~~~~~~
-!!! error TS2339: Property 'onChanges' does not exist on type 'C | Validator & Partial<OnChanges>'.
+!!! error TS2339: Property 'onChanges' does not exist on type 'C | (Validator & Partial<OnChanges>)'.
 !!! error TS2339:   Property 'onChanges' does not exist on type 'C'.
             v.onChanges({});
               ~~~~~~~~~
-!!! error TS2339: Property 'onChanges' does not exist on type 'C | Validator & Partial<OnChanges>'.
+!!! error TS2339: Property 'onChanges' does not exist on type 'C | (Validator & Partial<OnChanges>)'.
 !!! error TS2339:   Property 'onChanges' does not exist on type 'C'.
         }
     }

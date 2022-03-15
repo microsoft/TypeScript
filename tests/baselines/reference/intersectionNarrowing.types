@@ -2,11 +2,11 @@
 // Repros from #43130
 
 function f1<T>(x: T & string | T & undefined) {
->f1 : <T>(x: T & string | T & undefined) => void
->x : T & string | T & undefined
+>f1 : <T>(x: (T & string) | (T & undefined)) => void
+>x : (T & string) | (T & undefined)
 
     if (x) {
->x : T & string | T & undefined
+>x : (T & string) | (T & undefined)
 
         x;  // Should narrow to T & string
 >x : T & string
@@ -14,12 +14,12 @@ function f1<T>(x: T & string | T & undefined) {
 }
 
 function f2<T>(x: T & string | T & undefined) {
->f2 : <T>(x: T & string | T & undefined) => void
->x : T & string | T & undefined
+>f2 : <T>(x: (T & string) | (T & undefined)) => void
+>x : (T & string) | (T & undefined)
 
     if (x !== undefined) {
 >x !== undefined : boolean
->x : T & string | T & undefined
+>x : (T & string) | (T & undefined)
 >undefined : undefined
 
         x;  // Should narrow to T & string
@@ -32,13 +32,13 @@ function f2<T>(x: T & string | T & undefined) {
 }
 
 function f3<T>(x: T & string | T & number) {
->f3 : <T>(x: T & string | T & number) => void
->x : T & string | T & number
+>f3 : <T>(x: (T & string) | (T & number)) => void
+>x : (T & string) | (T & number)
 
     if (typeof x === "string") {
 >typeof x === "string" : boolean
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
->x : T & string | T & number
+>x : (T & string) | (T & number)
 >"string" : "string"
 
         x;  // Should narrow to T & string
@@ -51,11 +51,11 @@ function f3<T>(x: T & string | T & number) {
 }
 
 function f4<T>(x: T & 1 | T & 2) {
->f4 : <T>(x: T & 1 | T & 2) => void
->x : T & 1 | T & 2
+>f4 : <T>(x: (T & 1) | (T & 2)) => void
+>x : (T & 1) | (T & 2)
 
     switch (x) {
->x : T & 1 | T & 2
+>x : (T & 1) | (T & 2)
 
         case 1: x; break;  // T & 1
 >1 : 1

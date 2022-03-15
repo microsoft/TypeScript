@@ -13,8 +13,8 @@ export class Beta {
 }
 
 const arr = [Alpha, Beta];
->arr : typeof Alpha[]
->[Alpha, Beta] : typeof Alpha[]
+>arr : (typeof Alpha)[]
+>[Alpha, Beta] : (typeof Alpha)[]
 >Alpha : typeof Alpha
 >Beta : typeof Beta
 

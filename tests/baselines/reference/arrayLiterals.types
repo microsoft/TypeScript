@@ -65,14 +65,14 @@ var classArr = [new C(), new C()];
 >C : typeof C
 
 var classTypeArray = [C, C, C];
->classTypeArray : typeof C[]
->[C, C, C] : typeof C[]
+>classTypeArray : (typeof C)[]
+>[C, C, C] : (typeof C)[]
 >C : typeof C
 >C : typeof C
 >C : typeof C
 
 var classTypeArray: Array<typeof C>; // Should OK, not be a parse error
->classTypeArray : typeof C[]
+>classTypeArray : (typeof C)[]
 >C : typeof C
 
 // Contextual type C with numeric index signature makes array literal of EveryType E of type BCT(E,C)[]

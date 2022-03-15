@@ -104,7 +104,7 @@ var Foo = /** @class */ (function () {
 
 //// [spreadObjectOrFalsy.d.ts]
 declare function f1<T>(a: T & undefined): any;
-declare function f2<T>(a: T | T & undefined): T | T & undefined;
+declare function f2<T>(a: T | T & undefined): T | (T & undefined);
 declare function f3<T extends undefined>(a: T): any;
 declare function f4<T extends undefined>(a: object | T): {};
 declare function f5<S, T extends undefined>(a: S | T): S | T;

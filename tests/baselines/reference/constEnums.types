@@ -184,25 +184,25 @@ const enum Comments {
 >Comments : Comments
 
     "//",
->"//" : typeof Comments["//"]
+>"//" : (typeof Comments)["//"]
 
     "/*",
->"/*" : typeof Comments["/*"]
+>"/*" : (typeof Comments)["/*"]
 
     "*/",
->"*/" : typeof Comments["*/"]
+>"*/" : (typeof Comments)["*/"]
 
     "///",
->"///" : typeof Comments["///"]
+>"///" : (typeof Comments)["///"]
 
     "#",
->"#" : typeof Comments["#"]
+>"#" : (typeof Comments)["#"]
 
     "<!--",
->"<!--" : typeof Comments["<!--"]
+>"<!--" : (typeof Comments)["<!--"]
 
     "-->",
->"-->" : typeof Comments["-->"]
+>"-->" : (typeof Comments)["-->"]
 }
 
 module A {
@@ -624,37 +624,37 @@ function baz(c: Comments) {
 >c : Comments
 
         case Comments["//"]:
->Comments["//"] : typeof Comments["//"]
+>Comments["//"] : (typeof Comments)["//"]
 >Comments : typeof Comments
 >"//" : "//"
 
         case Comments["/*"]:
->Comments["/*"] : typeof Comments["/*"]
+>Comments["/*"] : (typeof Comments)["/*"]
 >Comments : typeof Comments
 >"/*" : "/*"
 
         case Comments["*/"]:
->Comments["*/"] : typeof Comments["*/"]
+>Comments["*/"] : (typeof Comments)["*/"]
 >Comments : typeof Comments
 >"*/" : "*/"
 
         case Comments["///"]:
->Comments["///"] : typeof Comments["///"]
+>Comments["///"] : (typeof Comments)["///"]
 >Comments : typeof Comments
 >"///" : "///"
 
         case Comments["#"]:
->Comments["#"] : typeof Comments["#"]
+>Comments["#"] : (typeof Comments)["#"]
 >Comments : typeof Comments
 >"#" : "#"
 
         case Comments["<!--"]:
->Comments["<!--"] : typeof Comments["<!--"]
+>Comments["<!--"] : (typeof Comments)["<!--"]
 >Comments : typeof Comments
 >"<!--" : "<!--"
 
         case Comments["-->"]:
->Comments["-->"] : typeof Comments["-->"]
+>Comments["-->"] : (typeof Comments)["-->"]
 >Comments : typeof Comments
 >"-->" : "-->"
 

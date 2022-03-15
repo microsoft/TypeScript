@@ -201,12 +201,12 @@ class Conestoga extends Wagon {
     // should error since others is not optional
     static circle(others: (typeof Wagon)[]) {
 >circle : (others: (typeof Wagon)[]) => number
->others : typeof Wagon[]
+>others : (typeof Wagon)[]
 >Wagon : typeof Wagon
 
         return others.length
 >others.length : number
->others : typeof Wagon[]
+>others : (typeof Wagon)[]
 >length : number
     }
 }

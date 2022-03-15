@@ -7158,6 +7158,8 @@ namespace ts {
     export interface NodeFactory {
         /* @internal */ readonly parenthesizer: ParenthesizerRules;
         /* @internal */ readonly converters: NodeConverters;
+        /* @internal */ readonly baseFactory: BaseNodeFactory;
+        /* @internal */ readonly flags: NodeFactoryFlags;
         createNodeArray<T extends Node>(elements?: readonly T[], hasTrailingComma?: boolean): NodeArray<T>;
 
         //

@@ -564,8 +564,8 @@ function multipleGenericFuse<X extends L | number, Y extends R | number>(xy: X |
 
         case 'number': return [xy]
 >'number' : "number"
->[xy] : [X & number | Y & number]
->xy : X & number | Y & number
+>[xy] : [(X & number) | (Y & number)]
+>xy : (X & number) | (Y & number)
     }
 }
 
@@ -1104,8 +1104,8 @@ function multipleGenericFuseWithBoth<X extends L | number, Y extends R | number>
 
         case `number`: return [xy]
 >`number` : "number"
->[xy] : [X & number | Y & number]
->xy : X & number | Y & number
+>[xy] : [(X & number) | (Y & number)]
+>xy : (X & number) | (Y & number)
     }
 }
 
