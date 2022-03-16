@@ -1037,7 +1037,6 @@ namespace ts {
         unverified?: boolean;
         /* @internal */ isLocal?: boolean;
         /* @internal */ isAmbient?: boolean;
-        /* @internal */ isAliasTarget?: boolean;
         /* @internal */ failedAliasResolution?: boolean;
     }
 

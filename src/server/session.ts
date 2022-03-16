@@ -1184,7 +1184,6 @@ namespace ts.server {
                     containerName: info.containerName,
                     kind: info.kind,
                     name: info.name,
-                    isAliasTarget: info.isAliasTarget,
                     failedAliasResolution: info.failedAliasResolution,
                     ...info.unverified && { unverified: info.unverified },
                 };
@@ -1236,7 +1235,7 @@ namespace ts.server {
             }
 
             let definitions = this.mapDefinitionInfoLocations(unmappedDefinitionAndBoundSpan.definitions, project).slice();
-            const needsJsResolution = !some(definitions, d => !!d.isAliasTarget && !d.isAmbient) || some(definitions, d => !!d.failedAliasResolution);
+            const needsJsResolution = !some(definitions, d => toNormalizedPath(d.fileName) !== file && !d.isAmbient) || some(definitions, d => !!d.failedAliasResolution);
             if (needsJsResolution) {
                 project.withAuxiliaryProjectForFiles([file], auxiliaryProject => {
                     const ls = auxiliaryProject.getLanguageService();
