@@ -12222,8 +12222,7 @@ namespace ts {
             let objectType;
             return !!(type.flags & TypeFlags.IndexedAccess && getObjectFlags(objectType = (type as IndexedAccessType).objectType) & ObjectFlags.Mapped &&
                 !isGenericMappedType(objectType) && isGenericIndexType((type as IndexedAccessType).indexType) &&
-                !(getMappedTypeModifiers(objectType as MappedType) & (MappedTypeModifiers.IncludeOptional | MappedTypeModifiers.ExcludeOptional)) &&
-                !(getNameTypeFromMappedType(objectType as MappedType)));
+                !(objectType as MappedType).declaration.questionToken && !(objectType as MappedType).declaration.nameType);
         }
 
         /**
@@ -15659,7 +15658,7 @@ namespace ts {
             // If the object type is a mapped type { [P in K]: E }, where K is generic, instantiate E using a mapper
             // that substitutes the index type for P. For example, for an index access { [P in K]: Box<T[P]> }[X], we
             // construct the type Box<T[X]>.
-            if (isGenericMappedType(objectType)) {
+            if (isGenericMappedType(objectType) && !objectType.declaration.nameType) {
                 return type[cache] = mapType(substituteIndexedMappedType(objectType, type.indexType), t => getSimplifiedType(t, writing));
             }
             return type[cache] = type;
@@ -18107,7 +18106,8 @@ namespace ts {
                     return true;
                 }
             }
-            else {
+            else if (!((source.flags | target.flags) & (TypeFlags.UnionOrIntersection | TypeFlags.IndexedAccess | TypeFlags.Conditional | TypeFlags.Substitution))) {
+                // We have excluded types that may simplify to other forms, so types must have identical flags
                 if (source.flags !== target.flags) return false;
                 if (source.flags & TypeFlags.Singleton) return true;
             }
@@ -24474,7 +24474,7 @@ namespace ts {
             }
 
             function getCandidateDiscriminantPropertyAccess(expr: Expression) {
-                if (isBindingPattern(reference) || isFunctionExpressionOrArrowFunction(reference)) {
+                if (isBindingPattern(reference) || isFunctionExpressionOrArrowFunction(reference) || isObjectLiteralMethod(reference)) {
                     // When the reference is a binding pattern or function or arrow expression, we are narrowing a pesudo-reference in
                     // getNarrowedTypeOfSymbol. An identifier for a destructuring variable declared in the same binding pattern or
                     // parameter declared in the same parameter list is a candidate.
@@ -26652,7 +26652,7 @@ namespace ts {
 
         function getTypeOfPropertyOfContextualType(type: Type, name: __String, nameType?: Type) {
             return mapType(type, t => {
-                if (isGenericMappedType(t)) {
+                if (isGenericMappedType(t) && !t.declaration.nameType) {
                     const constraint = getConstraintTypeFromMappedType(t);
                     const constraintOfConstraint = getBaseConstraintOfType(constraint) || constraint;
                     const propertyNameType = nameType || getStringLiteralType(unescapeLeadingUnderscores(name));
@@ -32191,6 +32191,9 @@ namespace ts {
                     }
                     assignBindingElementTypes(declaration.name, links.type);
                 }
+            }
+            else if (type) {
+                Debug.assertEqual(links.type, type, "Parameter symbol already has a cached type which differs from newly assigned type");
             }
         }
 

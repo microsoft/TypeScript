@@ -6216,6 +6216,63 @@ namespace ts {
         return scriptKind === ScriptKind.TSX || scriptKind === ScriptKind.JSX || scriptKind === ScriptKind.JS || scriptKind === ScriptKind.JSON ? LanguageVariant.JSX : LanguageVariant.Standard;
     }
 
+    /**
+     * This is a somewhat unavoidable full tree walk to locate a JSX tag - `import.meta` requires the same,
+     * but we avoid that walk (or parts of it) if at all possible using the `PossiblyContainsImportMeta` node flag.
+     * Unfortunately, there's no `NodeFlag` space to do the same for JSX.
+     */
+    function walkTreeForJSXTags(node: Node): Node | undefined {
+        if (!(node.transformFlags & TransformFlags.ContainsJsx)) return undefined;
+        return isJsxOpeningLikeElement(node) || isJsxFragment(node) ? node : forEachChild(node, walkTreeForJSXTags);
+    }
+
+    function isFileModuleFromUsingJSXTag(file: SourceFile): Node | undefined {
+        // Excludes declaration files - they still require an explicit `export {}` or the like
+        // for back compat purposes. (not that declaration files should contain JSX tags!)
+        return !file.isDeclarationFile ? walkTreeForJSXTags(file) : undefined;
+    }
+
+    /**
+     * Note that this requires file.impliedNodeFormat be set already; meaning it must be set very early on
+     * in SourceFile construction.
+     */
+    function isFileForcedToBeModuleByFormat(file: SourceFile): true | undefined {
+        // Excludes declaration files - they still require an explicit `export {}` or the like
+        // for back compat purposes.
+        return file.impliedNodeFormat === ModuleKind.ESNext && !file.isDeclarationFile ? true : undefined;
+    }
+
+    export function getSetExternalModuleIndicator(options: CompilerOptions): (file: SourceFile) => void {
+        // TODO: Should this callback be cached?
+        switch (getEmitModuleDetectionKind(options)) {
+            case ModuleDetectionKind.Force:
+                // All non-declaration files are modules, declaration files still do the usual isFileProbablyExternalModule
+                return (file: SourceFile) => {
+                    file.externalModuleIndicator = !file.isDeclarationFile || isFileProbablyExternalModule(file);
+                };
+            case ModuleDetectionKind.Legacy:
+                // Files are modules if they have imports, exports, or import.meta
+                return (file: SourceFile) => {
+                    file.externalModuleIndicator = isFileProbablyExternalModule(file);
+                };
+            case ModuleDetectionKind.Auto:
+                // If module is nodenext or node12, all esm format files are modules
+                // If jsx is react-jsx or react-jsxdev then jsx tags force module-ness
+                // otherwise, the presence of import or export statments (or import.meta) implies module-ness
+                const checks: ((file: SourceFile) => Node | true | undefined)[] = [isFileProbablyExternalModule];
+                if (options.jsx === JsxEmit.ReactJSX || options.jsx === JsxEmit.ReactJSXDev) {
+                    checks.push(isFileModuleFromUsingJSXTag);
+                }
+                const moduleKind = getEmitModuleKind(options);
+                if (moduleKind === ModuleKind.Node12 || moduleKind === ModuleKind.NodeNext) {
+                    checks.push(isFileForcedToBeModuleByFormat);
+                }
+                const combined = or(...checks);
+                const callback = (file: SourceFile) => void (file.externalModuleIndicator = combined(file));
+                return callback;
+        }
+    }
+
     export function getEmitScriptTarget(compilerOptions: {module?: CompilerOptions["module"], target?: CompilerOptions["target"]}) {
         return compilerOptions.target ||
             (compilerOptions.module === ModuleKind.Node12 && ScriptTarget.ES2020) ||
@@ -6248,6 +6305,10 @@ namespace ts {
             }
         }
         return moduleResolution;
+    }
+
+    export function getEmitModuleDetectionKind(options: CompilerOptions) {
+        return options.moduleDetection || ModuleDetectionKind.Auto;
     }
 
     export function hasJsonModuleEmitEnabled(options: CompilerOptions) {

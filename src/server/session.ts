@@ -299,6 +299,10 @@ namespace ts.server {
         navigateToItems: readonly NavigateToItem[];
     };
 
+    function createDocumentSpanSet(): Set<DocumentSpan> {
+        return createSet(({textSpan}) => textSpan.start + 100003 * textSpan.length, documentSpansEqual);
+    }
+
     function combineProjectOutputForRenameLocations(
         projects: Projects,
         defaultProject: Project,
@@ -308,6 +312,7 @@ namespace ts.server {
         { providePrefixAndSuffixTextForRename }: UserPreferences
     ): readonly RenameLocation[] {
         const outputs: RenameLocation[] = [];
+        const seen = createDocumentSpanSet();
         combineProjectOutputWorker(
             projects,
             defaultProject,
@@ -316,7 +321,8 @@ namespace ts.server {
                 const projectOutputs = project.getLanguageService().findRenameLocations(location.fileName, location.pos, findInStrings, findInComments, providePrefixAndSuffixTextForRename);
                 if (projectOutputs) {
                     for (const output of projectOutputs) {
-                        if (!contains(outputs, output, documentSpansEqual) && !tryAddToTodo(project, documentSpanLocation(output))) {
+                        if (!seen.has(output) && !tryAddToTodo(project, documentSpanLocation(output))) {
+                            seen.add(output);
                             outputs.push(output);
                         }
                     }
@@ -1558,6 +1564,7 @@ namespace ts.server {
             const fileName = args.file;
 
             const references: ReferenceEntry[] = [];
+            const seen = createDocumentSpanSet();
 
             forEachProjectInProjects(projects, /*path*/ undefined, project => {
                 if (project.getCancellationToken().isCancellationRequested()) return;
@@ -1565,8 +1572,9 @@ namespace ts.server {
                 const projectOutputs = project.getLanguageService().getFileReferences(fileName);
                 if (projectOutputs) {
                     for (const referenceEntry of projectOutputs) {
-                        if (!contains(references, referenceEntry, documentSpansEqual)) {
+                        if (!seen.has(referenceEntry)) {
                             references.push(referenceEntry);
+                            seen.add(referenceEntry);
                         }
                     }
                 }
