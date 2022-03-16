@@ -2164,7 +2164,7 @@
           "name": "substr",
           "kind": "method",
           "kindModifiers": "deprecated,declare",
-          "sortText": "19",
+          "sortText": "20",
           "displayParts": [
             {
               "text": "(",

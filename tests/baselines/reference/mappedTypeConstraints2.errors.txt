@@ -1,0 +1,44 @@
+tests/cases/conformance/types/mapped/mappedTypeConstraints2.ts(10,11): error TS2322: Type 'Mapped2<K>[`get${K}`]' is not assignable to type '{ a: K; }'.
+  Type 'Mapped2<K>[`get${string}`]' is not assignable to type '{ a: K; }'.
+tests/cases/conformance/types/mapped/mappedTypeConstraints2.ts(16,11): error TS2322: Type 'Mapped3<K>[Uppercase<K>]' is not assignable to type '{ a: K; }'.
+  Type 'Mapped3<K>[string]' is not assignable to type '{ a: K; }'.
+tests/cases/conformance/types/mapped/mappedTypeConstraints2.ts(25,57): error TS2322: Type 'Foo<T>[`get${T}`]' is not assignable to type 'T'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to 'Foo<T>[`get${T}`]'.
+
+
+==== tests/cases/conformance/types/mapped/mappedTypeConstraints2.ts (3 errors) ====
+    type Mapped1<K extends string> = { [P in K]: { a: P } };
+    
+    function f1<K extends string>(obj: Mapped1<K>, key: K) {
+        const x: { a: K } = obj[key];
+    }
+    
+    type Mapped2<K extends string> = { [P in K as `get${P}`]: { a: P } };
+    
+    function f2<K extends string>(obj: Mapped2<K>, key: `get${K}`) {
+        const x: { a: K } = obj[key];  // Error
+              ~
+!!! error TS2322: Type 'Mapped2<K>[`get${K}`]' is not assignable to type '{ a: K; }'.
+!!! error TS2322:   Type 'Mapped2<K>[`get${string}`]' is not assignable to type '{ a: K; }'.
+    }
+    
+    type Mapped3<K extends string> = { [P in K as Uppercase<P>]: { a: P } };
+    
+    function f3<K extends string>(obj: Mapped3<K>, key: Uppercase<K>) {
+        const x: { a: K } = obj[key];  // Error
+              ~
+!!! error TS2322: Type 'Mapped3<K>[Uppercase<K>]' is not assignable to type '{ a: K; }'.
+!!! error TS2322:   Type 'Mapped3<K>[string]' is not assignable to type '{ a: K; }'.
+    }
+    
+    // Repro from #47794
+    
+    type Foo<T extends string> = {
+        [RemappedT in T as `get${RemappedT}`]: RemappedT;
+    };
+    
+    const get = <T extends string>(t: T, foo: Foo<T>): T => foo[`get${t}`];  // Type 'Foo<T>[`get${T}`]' is not assignable to type 'T'
+                                                            ~~~~~~~~~~~~~~
+!!! error TS2322: Type 'Foo<T>[`get${T}`]' is not assignable to type 'T'.
+!!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'Foo<T>[`get${T}`]'.
+    

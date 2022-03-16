@@ -28,12 +28,12 @@ verify.completions({
     includes: [
         {
             name: "met",
-            sortText: completion.SortText.LocationPriority,
+            sortText: completion.SortText.ClassMemberSnippets,
             insertText: "met(n: string): void {\n}",
         },
         {
             name: "met2",
-            sortText: completion.SortText.LocationPriority,
+            sortText: completion.SortText.ClassMemberSnippets,
             insertText: "met2(n: number): void {\n}",
         }
     ],
@@ -50,13 +50,13 @@ verify.completions({
     includes: [
         {
             name: "met",
-            sortText: completion.SortText.LocationPriority,
+            sortText: completion.SortText.ClassMemberSnippets,
             replacementSpan: test.ranges()[0],
             insertText: "abstract met(n: string): void;",
         },
         {
             name: "met2",
-            sortText: completion.SortText.LocationPriority,
+            sortText: completion.SortText.ClassMemberSnippets,
             replacementSpan: test.ranges()[0],
             insertText: "abstract met2(n: number): void;",
         }
@@ -74,13 +74,13 @@ verify.completions({
     includes: [
         {
             name: "met",
-            sortText: completion.SortText.LocationPriority,
+            sortText: completion.SortText.ClassMemberSnippets,
             replacementSpan: test.ranges()[1],
             insertText: "abstract met(n: string): void;",
         },
         {
             name: "met2",
-            sortText: completion.SortText.LocationPriority,
+            sortText: completion.SortText.ClassMemberSnippets,
             replacementSpan: test.ranges()[1],
             insertText: "abstract met2(n: number): void;",
         }
