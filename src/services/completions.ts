@@ -17,6 +17,7 @@ namespace ts.Completions {
         SuggestedClassMembers = "14",
         GlobalsOrKeywords = "15",
         AutoImportSuggestions = "16",
+        ClassMemberSnippets = "16",
         JavascriptIdentifiers = "17",
         DeprecatedLocalDeclarationPriority = "18",
         DeprecatedLocationPriority = "19",
@@ -769,7 +770,7 @@ namespace ts.Completions {
             isClassLikeMemberCompletion(symbol, location)) {
             let importAdder;
             ({ insertText, isSnippet, importAdder, replacementSpan } = getEntryForMemberCompletion(host, program, options, preferences, name, symbol, location, contextToken, formatContext));
-            sortText = SortText.AutoImportSuggestions; // sortText has to be lower priority than the sortText for keywords. See #47852.
+            sortText = SortText.ClassMemberSnippets; // sortText has to be lower priority than the sortText for keywords. See #47852.
             if (importAdder?.hasFixes()) {
                 hasAction = true;
                 source = CompletionSource.ClassMemberSnippet;

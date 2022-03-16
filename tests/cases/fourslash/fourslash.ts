@@ -846,6 +846,7 @@ declare namespace completion {
         SuggestedClassMembers = "14",
         GlobalsOrKeywords = "15",
         AutoImportSuggestions = "16",
+        ClassMemberSnippets = "16",
         JavascriptIdentifiers = "17",
         DeprecatedLocalDeclarationPriority = "18",
         DeprecatedLocationPriority = "19",

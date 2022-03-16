@@ -22,12 +22,12 @@ verify.completions({
     includes: [
         {
             name: "a",
-            sortText: completion.SortText.AutoImportSuggestions,
+            sortText: completion.SortText.ClassMemberSnippets,
             insertText: "a?: number;"
         },
         {
             name: "b",
-            sortText: completion.SortText.AutoImportSuggestions,
+            sortText: completion.SortText.ClassMemberSnippets,
             insertText: "b(x: number): void {\n}"
         },
     ],

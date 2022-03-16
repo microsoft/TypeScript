@@ -25,7 +25,7 @@ verify.completions({
     includes: [
         {
             name: "foo",
-            sortText: completion.SortText.AutoImportSuggestions,
+            sortText: completion.SortText.ClassMemberSnippets,
             insertText: "protected foo: string;",
         }
     ],

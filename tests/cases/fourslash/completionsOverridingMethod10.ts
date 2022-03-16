@@ -25,19 +25,19 @@ verify.completions({
     includes: [
         {
             name: "a",
-            sortText: completion.SortText.AutoImportSuggestions,
+            sortText: completion.SortText.ClassMemberSnippets,
             insertText: "a: string;",
         },
         {
             name: "b",
-            sortText: completion.SortText.AutoImportSuggestions,
+            sortText: completion.SortText.ClassMemberSnippets,
             insertText:
 `b(a: string): void {
 }`,
         },
         {
             name: "c",
-            sortText: completion.SortText.AutoImportSuggestions,
+            sortText: completion.SortText.ClassMemberSnippets,
             insertText:
 `c(a: string): string;
 c(a: number): number;

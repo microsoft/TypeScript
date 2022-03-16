@@ -24,7 +24,7 @@ verify.completions({
     includes: [
         {
             name: "foo",
-            sortText: completion.SortText.AutoImportSuggestions,
+            sortText: completion.SortText.ClassMemberSnippets,
             insertText: "override foo(a: string): void {\n}",
         }
     ],
