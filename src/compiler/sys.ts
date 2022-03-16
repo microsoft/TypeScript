@@ -1859,11 +1859,18 @@ namespace ts {
             }
 
             function getModifiedTime(path: string) {
+                // Since the error thrown by fs.statSync isn't used, we can avoid collecting a stack trace to improve
+                // the CPU time performance.
+                const originalStackTraceLimit = Error.stackTraceLimit;
+                Error.stackTraceLimit = 0;
                 try {
                     return statSync(path)?.mtime;
                 }
                 catch (e) {
                     return undefined;
+                }
+                finally {
+                    Error.stackTraceLimit = originalStackTraceLimit;
                 }
             }
 
