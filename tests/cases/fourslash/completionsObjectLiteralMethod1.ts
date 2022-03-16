@@ -46,7 +46,7 @@ verify.completions({
         },
         {
             name: "bar",
-            sortText: completion.SortText.OptionalMember,
+            sortText: completion.SortText.LocationPriority,
             source: completion.CompletionSource.ObjectLiteralMethodSnippet,
             insertText: "bar(x: number): void {\n},",
         },
@@ -66,7 +66,7 @@ verify.completions({
         },
         {
             name: "bar",
-            sortText: completion.SortText.OptionalMember,
+            sortText: completion.SortText.LocationPriority,
             source: completion.CompletionSource.ObjectLiteralMethodSnippet,
             insertText: "bar(x: number): void {\n},",
         },
@@ -77,7 +77,7 @@ verify.completions({
         },
         {
             name: "foo",
-            sortText: completion.SortText.OptionalMember,
+            sortText: completion.SortText.LocationPriority,
             source: completion.CompletionSource.ObjectLiteralMethodSnippet,
             insertText: "foo(x: string): string {\n},",
         },
@@ -112,7 +112,7 @@ verify.completions({
         },
         {
             name: "\"space bar\"",
-            sortText: completion.SortText.OptionalMember,
+            sortText: completion.SortText.LocationPriority,
             source: completion.CompletionSource.ObjectLiteralMethodSnippet,
             insertText: "\"space bar\"(): string {\n},",
         },
@@ -132,7 +132,7 @@ verify.completions({
         },
         {
             name: "bar",
-            sortText: completion.SortText.OptionalMember,
+            sortText: completion.SortText.LocationPriority,
             source: completion.CompletionSource.ObjectLiteralMethodSnippet,
             isSnippet: true,
             insertText: "bar(x: number): void {\n    $0\n},",

@@ -791,7 +791,7 @@ namespace ts.Completions {
             }
             ({ insertText, isSnippet, importAdder, sourceDisplay } = entry);
             source = CompletionSource.ObjectLiteralMethodSnippet;
-            sortText = SortText.OptionalMember;
+            // sortText = SortText.OptionalMember;
             if (importAdder.hasFixes()) {
                 hasAction = true;
             }
