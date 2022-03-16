@@ -1,0 +1,43 @@
+=== tests/cases/compiler/interfaceInGenericFunctionOuterParameterVarianceMeasurement.ts ===
+function f<T>() {
+>f : <T>() => A<T>
+
+    interface A<U> {
+        co: U;
+>co : U
+
+        contra: (x: T) => unknown;
+>contra : (x: T) => unknown
+>x : T
+    }
+
+    return (null as any as A<T>);
+>(null as any as A<T>) : A<T>
+>null as any as A<T> : A<T>
+>null as any : any
+>null : null
+}
+
+function g<T, TSub extends T>() {
+>g : <T, TSub extends T>() => void
+
+    let a = f<T>();
+>a : f<T>.A<T>
+>f<T>() : f<T>.A<T>
+>f : <T>() => A<T>
+
+    let b = f<TSub>();
+>b : f<TSub>.A<TSub>
+>f<TSub>() : f<TSub>.A<TSub>
+>f : <T>() => A<T>
+
+    a = b;
+>a = b : f<TSub>.A<TSub>
+>a : f<T>.A<T>
+>b : f<TSub>.A<TSub>
+
+    b = a;
+>b = a : f<T>.A<T>
+>b : f<TSub>.A<TSub>
+>a : f<T>.A<T>
+}

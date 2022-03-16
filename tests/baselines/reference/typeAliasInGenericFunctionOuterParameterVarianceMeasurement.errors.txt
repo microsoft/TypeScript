@@ -1,0 +1,33 @@
+tests/cases/compiler/typeAliasInGenericFunctionOuterParameterVarianceMeasurement.ts(14,5): error TS2322: Type 'A<TSub>' is not assignable to type 'A<T>'.
+  Type 'T' is not assignable to type 'TSub'.
+    'TSub' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+tests/cases/compiler/typeAliasInGenericFunctionOuterParameterVarianceMeasurement.ts(15,5): error TS2322: Type 'A<T>' is not assignable to type 'A<TSub>'.
+  Type 'T' is not assignable to type 'TSub'.
+    'TSub' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+
+
+==== tests/cases/compiler/typeAliasInGenericFunctionOuterParameterVarianceMeasurement.ts (2 errors) ====
+    function f<T>() {
+        type A<U> = {
+            co: U;
+            contra: (x: T) => unknown;
+        }
+    
+        return (null as any as A<T>);
+    }
+    
+    function g<T, TSub extends T>() {
+        let a = f<T>();
+        let b = f<TSub>();
+    
+        a = b;
+        ~
+!!! error TS2322: Type 'A<TSub>' is not assignable to type 'A<T>'.
+!!! error TS2322:   Type 'T' is not assignable to type 'TSub'.
+!!! error TS2322:     'TSub' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+        b = a;
+        ~
+!!! error TS2322: Type 'A<T>' is not assignable to type 'A<TSub>'.
+!!! error TS2322:   Type 'T' is not assignable to type 'TSub'.
+!!! error TS2322:     'TSub' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+    }

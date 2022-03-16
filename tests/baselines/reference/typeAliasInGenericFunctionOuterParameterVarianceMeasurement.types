@@ -1,0 +1,45 @@
+=== tests/cases/compiler/typeAliasInGenericFunctionOuterParameterVarianceMeasurement.ts ===
+function f<T>() {
+>f : <T>() => { co: T; contra: (x: T) => unknown; }
+
+    type A<U> = {
+>A : { co: U; contra: (x: T) => unknown; }
+
+        co: U;
+>co : U
+
+        contra: (x: T) => unknown;
+>contra : (x: T) => unknown
+>x : T
+    }
+
+    return (null as any as A<T>);
+>(null as any as A<T>) : { co: T; contra: (x: T) => unknown; }
+>null as any as A<T> : { co: T; contra: (x: T) => unknown; }
+>null as any : any
+>null : null
+}
+
+function g<T, TSub extends T>() {
+>g : <T, TSub extends T>() => void
+
+    let a = f<T>();
+>a : { co: T; contra: (x: T) => unknown; }
+>f<T>() : { co: T; contra: (x: T) => unknown; }
+>f : <T>() => { co: T; contra: (x: T) => unknown; }
+
+    let b = f<TSub>();
+>b : { co: TSub; contra: (x: TSub) => unknown; }
+>f<TSub>() : { co: TSub; contra: (x: TSub) => unknown; }
+>f : <T>() => { co: T; contra: (x: T) => unknown; }
+
+    a = b;
+>a = b : { co: TSub; contra: (x: TSub) => unknown; }
+>a : { co: T; contra: (x: T) => unknown; }
+>b : { co: TSub; contra: (x: TSub) => unknown; }
+
+    b = a;
+>b = a : { co: T; contra: (x: T) => unknown; }
+>b : { co: TSub; contra: (x: TSub) => unknown; }
+>a : { co: T; contra: (x: T) => unknown; }
+}

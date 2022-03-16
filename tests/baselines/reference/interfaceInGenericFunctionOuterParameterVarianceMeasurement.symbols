@@ -1,0 +1,48 @@
+=== tests/cases/compiler/interfaceInGenericFunctionOuterParameterVarianceMeasurement.ts ===
+function f<T>() {
+>f : Symbol(f, Decl(interfaceInGenericFunctionOuterParameterVarianceMeasurement.ts, 0, 0))
+>T : Symbol(T, Decl(interfaceInGenericFunctionOuterParameterVarianceMeasurement.ts, 0, 11))
+
+    interface A<U> {
+>A : Symbol(A, Decl(interfaceInGenericFunctionOuterParameterVarianceMeasurement.ts, 0, 17))
+>U : Symbol(U, Decl(interfaceInGenericFunctionOuterParameterVarianceMeasurement.ts, 1, 16))
+
+        co: U;
+>co : Symbol(A.co, Decl(interfaceInGenericFunctionOuterParameterVarianceMeasurement.ts, 1, 20))
+>U : Symbol(U, Decl(interfaceInGenericFunctionOuterParameterVarianceMeasurement.ts, 1, 16))
+
+        contra: (x: T) => unknown;
+>contra : Symbol(A.contra, Decl(interfaceInGenericFunctionOuterParameterVarianceMeasurement.ts, 2, 14))
+>x : Symbol(x, Decl(interfaceInGenericFunctionOuterParameterVarianceMeasurement.ts, 3, 17))
+>T : Symbol(T, Decl(interfaceInGenericFunctionOuterParameterVarianceMeasurement.ts, 0, 11))
+    }
+
+    return (null as any as A<T>);
+>A : Symbol(A, Decl(interfaceInGenericFunctionOuterParameterVarianceMeasurement.ts, 0, 17))
+>T : Symbol(T, Decl(interfaceInGenericFunctionOuterParameterVarianceMeasurement.ts, 0, 11))
+}
+
+function g<T, TSub extends T>() {
+>g : Symbol(g, Decl(interfaceInGenericFunctionOuterParameterVarianceMeasurement.ts, 7, 1))
+>T : Symbol(T, Decl(interfaceInGenericFunctionOuterParameterVarianceMeasurement.ts, 9, 11))
+>TSub : Symbol(TSub, Decl(interfaceInGenericFunctionOuterParameterVarianceMeasurement.ts, 9, 13))
+>T : Symbol(T, Decl(interfaceInGenericFunctionOuterParameterVarianceMeasurement.ts, 9, 11))
+
+    let a = f<T>();
+>a : Symbol(a, Decl(interfaceInGenericFunctionOuterParameterVarianceMeasurement.ts, 10, 7))
+>f : Symbol(f, Decl(interfaceInGenericFunctionOuterParameterVarianceMeasurement.ts, 0, 0))
+>T : Symbol(T, Decl(interfaceInGenericFunctionOuterParameterVarianceMeasurement.ts, 9, 11))
+
+    let b = f<TSub>();
+>b : Symbol(b, Decl(interfaceInGenericFunctionOuterParameterVarianceMeasurement.ts, 11, 7))
+>f : Symbol(f, Decl(interfaceInGenericFunctionOuterParameterVarianceMeasurement.ts, 0, 0))
+>TSub : Symbol(TSub, Decl(interfaceInGenericFunctionOuterParameterVarianceMeasurement.ts, 9, 13))
+
+    a = b;
+>a : Symbol(a, Decl(interfaceInGenericFunctionOuterParameterVarianceMeasurement.ts, 10, 7))
+>b : Symbol(b, Decl(interfaceInGenericFunctionOuterParameterVarianceMeasurement.ts, 11, 7))
+
+    b = a;
+>b : Symbol(b, Decl(interfaceInGenericFunctionOuterParameterVarianceMeasurement.ts, 11, 7))
+>a : Symbol(a, Decl(interfaceInGenericFunctionOuterParameterVarianceMeasurement.ts, 10, 7))
+}

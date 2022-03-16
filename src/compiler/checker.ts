@@ -8616,7 +8616,7 @@ namespace ts {
                 if (!omitTypeAlias) {
                     return errorType;
                 }
-                return getTypeAliasInstantiation(omitTypeAlias, [source, omitKeyType]);
+                return getGlobalTypeAliasInstantiation(omitTypeAlias, [source, omitKeyType]);
             }
             const members = createSymbolTable();
             for (const prop of spreadableProperties) {
@@ -10491,7 +10491,7 @@ namespace ts {
                     }
                 }
                 if (memberTypeList.length) {
-                    const enumType = getUnionType(memberTypeList, UnionReduction.Literal, symbol, /*aliasTypeArguments*/ undefined);
+                    const enumType = getUnionType(memberTypeList, UnionReduction.Literal, symbol, /*aliasTypeArguments*/ undefined, /*aliasMapper*/ undefined);
                     if (enumType.flags & TypeFlags.Union) {
                         enumType.flags |= TypeFlags.EnumLiteral;
                         enumType.symbol = symbol;
@@ -13418,7 +13418,7 @@ namespace ts {
             return type;
         }
 
-        function createDeferredTypeReference(target: GenericType, node: TypeReferenceNode | ArrayTypeNode | TupleTypeNode, mapper?: TypeMapper, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]): DeferredTypeReference {
+        function createDeferredTypeReference(target: GenericType, node: TypeReferenceNode | ArrayTypeNode | TupleTypeNode, mapper?: TypeMapper, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[], aliasMapper?: TypeMapper): DeferredTypeReference {
             if (!aliasSymbol) {
                 aliasSymbol = getAliasSymbolForTypeNode(node);
                 const localAliasTypeArguments = getTypeArgumentsForAliasSymbol(aliasSymbol);
@@ -13430,6 +13430,7 @@ namespace ts {
             type.mapper = mapper;
             type.aliasSymbol = aliasSymbol;
             type.aliasTypeArguments = aliasTypeArguments;
+            type.aliasMapper = aliasMapper;
             return type;
         }
 
@@ -13503,7 +13504,7 @@ namespace ts {
             return checkNoTypeArguments(node, symbol) ? type : errorType;
         }
 
-        function getTypeAliasInstantiation(symbol: Symbol, typeArguments: readonly Type[] | undefined, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]): Type {
+        function getGlobalTypeAliasInstantiation(symbol: Symbol, typeArguments: readonly Type[] | undefined, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]): Type {
             const type = getDeclaredTypeOfSymbol(symbol);
             if (type === intrinsicMarkerType && intrinsicTypeKinds.has(symbol.escapedName as string) && typeArguments && typeArguments.length === 1) {
                 return getStringMappingType(symbol, typeArguments[0]);
@@ -13518,6 +13519,34 @@ namespace ts {
                     aliasSymbol, aliasTypeArguments));
             }
             return instantiation;
+        }
+
+        function getLocalTypeAliasInstantiation(symbol: Symbol, typeArguments: readonly Type[] | undefined, outerTypeParameterMapper: TypeMapper | undefined, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]): Type {
+            const type = getDeclaredTypeOfSymbol(symbol);
+            if (type === intrinsicMarkerType && intrinsicTypeKinds.has(symbol.escapedName as string) && typeArguments && typeArguments.length === 1) {
+                return getStringMappingType(symbol, typeArguments[0]);
+            }
+            const links = getSymbolLinks(symbol);
+            const outerTypeParameters = getOuterTypeParametersOfAlias(symbol);
+            const mappedOuterParams = outerTypeParameterMapper && outerTypeParameters && instantiateTypes(outerTypeParameters, outerTypeParameterMapper);
+            const typeParameters = links.typeParameters!;
+            const id = getTypeListId(concatenate(mappedOuterParams, typeArguments)) + getAliasId(aliasSymbol, aliasTypeArguments);
+            let instantiation = links.instantiations!.get(id);
+            if (!instantiation) {
+                const outerTypeArgumentMapper = outerTypeParameters && mappedOuterParams && createTypeMapper(outerTypeParameters, mappedOuterParams);
+                const argumentMapper = createTypeMapper(typeParameters, fillMissingTypeArguments(typeArguments, typeParameters, getMinTypeArgumentCount(typeParameters), isInJSFile(symbol.valueDeclaration)));
+                const combinedMapper = outerTypeArgumentMapper ? combineTypeMappers(argumentMapper, outerTypeArgumentMapper) : argumentMapper;
+                links.instantiations!.set(id, instantiation = instantiateTypeWithAlias(type, combinedMapper, aliasSymbol, aliasTypeArguments));
+            }
+            return instantiation;
+        }
+
+        function getOuterTypeParametersOfAlias(symbol: Symbol) {
+            const links = getSymbolLinks(symbol);
+            if (!links.outerTypeParameters) {
+                links.outerTypeParameters = symbol.declarations?.[0] && getOuterTypeParameters(symbol.declarations[0]!, /*includeThisTypes*/ true);
+            }
+            return links.outerTypeParameters;
         }
 
         /**
@@ -13559,7 +13588,7 @@ namespace ts {
                 // a .d.ts file. See #43622 for an example.
                 const aliasSymbol = getAliasSymbolForTypeNode(node);
                 const newAliasSymbol = aliasSymbol && (isLocalTypeAlias(symbol) || !isLocalTypeAlias(aliasSymbol)) ? aliasSymbol : undefined;
-                return getTypeAliasInstantiation(symbol, typeArgumentsFromTypeReferenceNode(node), newAliasSymbol, getTypeArgumentsForAliasSymbol(newAliasSymbol));
+                return getGlobalTypeAliasInstantiation(symbol, typeArgumentsFromTypeReferenceNode(node), newAliasSymbol, getTypeArgumentsForAliasSymbol(newAliasSymbol));
             }
             return checkNoTypeArguments(node, symbol) ? type : errorType;
         }
@@ -14563,7 +14592,9 @@ namespace ts {
         // expression constructs such as array literals and the || and ?: operators). Named types can
         // circularly reference themselves and therefore cannot be subtype reduced during their declaration.
         // For example, "type Item = string | (() => Item" is a named type that circularly references itself.
-        function getUnionType(types: readonly Type[], unionReduction: UnionReduction = UnionReduction.Literal, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[], origin?: Type): Type {
+        function getUnionType(types: readonly Type[], unionReduction: UnionReduction, aliasSymbol: Symbol | undefined, aliasTypeArguments: readonly Type[] | undefined, aliasMapper: TypeMapper | undefined, origin?: Type): Type;
+        function getUnionType(types: readonly Type[], unionReduction?: UnionReduction): Type;
+        function getUnionType(types: readonly Type[], unionReduction: UnionReduction = UnionReduction.Literal, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[], aliasMapper?: TypeMapper, origin?: Type): Type {
             if (types.length === 0) {
                 return neverType;
             }
@@ -14626,7 +14657,7 @@ namespace ts {
             }
             const objectFlags = (includes & TypeFlags.NotPrimitiveUnion ? 0 : ObjectFlags.PrimitiveUnion) |
                 (includes & TypeFlags.Intersection ? ObjectFlags.ContainsIntersections : 0);
-            return getUnionTypeFromSortedList(typeSet, objectFlags, aliasSymbol, aliasTypeArguments, origin);
+            return getUnionTypeFromSortedList(typeSet, objectFlags, aliasSymbol, aliasTypeArguments, aliasMapper, origin);
         }
 
         function getUnionOrIntersectionTypePredicate(signatures: readonly Signature[], kind: TypeFlags | undefined): TypePredicate | undefined {
@@ -14667,7 +14698,7 @@ namespace ts {
         }
 
         // This function assumes the constituent type list is sorted and deduplicated.
-        function getUnionTypeFromSortedList(types: Type[], objectFlags: ObjectFlags, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[], origin?: Type): Type {
+        function getUnionTypeFromSortedList(types: Type[], objectFlags: ObjectFlags, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[], aliasMapper?: TypeMapper, origin?: Type): Type {
             if (types.length === 0) {
                 return neverType;
             }
@@ -14687,6 +14718,7 @@ namespace ts {
                 type.origin = origin;
                 type.aliasSymbol = aliasSymbol;
                 type.aliasTypeArguments = aliasTypeArguments;
+                type.aliasMapper = aliasMapper;
                 if (types.length === 2 && types[0].flags & TypeFlags.BooleanLiteral && types[1].flags & TypeFlags.BooleanLiteral) {
                     type.flags |= TypeFlags.Boolean;
                     (type as UnionType & IntrinsicType).intrinsicName = "boolean";
@@ -14701,7 +14733,7 @@ namespace ts {
             if (!links.resolvedType) {
                 const aliasSymbol = getAliasSymbolForTypeNode(node);
                 links.resolvedType = getUnionType(map(node.types, getTypeFromTypeNode), UnionReduction.Literal,
-                    aliasSymbol, getTypeArgumentsForAliasSymbol(aliasSymbol));
+                    aliasSymbol, getTypeArgumentsForAliasSymbol(aliasSymbol), /*aliasMapper*/ undefined);
             }
             return links.resolvedType;
         }
@@ -14863,12 +14895,13 @@ namespace ts {
             return true;
         }
 
-        function createIntersectionType(types: Type[], aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]) {
+        function createIntersectionType(types: Type[], aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[], aliasMapper?: TypeMapper) {
             const result = createType(TypeFlags.Intersection) as IntersectionType;
             result.objectFlags = getPropagatingFlagsOfTypes(types, /*excludeKinds*/ TypeFlags.Nullable);
             result.types = types;
             result.aliasSymbol = aliasSymbol;
             result.aliasTypeArguments = aliasTypeArguments;
+            result.aliasMapper = aliasMapper;
             return result;
         }
 
@@ -14882,7 +14915,9 @@ namespace ts {
         // a type alias of the form "type List<T> = T & { next: List<T> }" cannot be reduced during its declaration.
         // Also, unlike union types, the order of the constituent types is preserved in order that overload resolution
         // for intersections of types with signatures can be deterministic.
-        function getIntersectionType(types: readonly Type[], aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]): Type {
+        function getIntersectionType(types: readonly Type[], aliasSymbol: Symbol | undefined, aliasTypeArguments: readonly Type[] | undefined, aliasMapper: TypeMapper | undefined): Type;
+        function getIntersectionType(types: readonly Type[]): Type;
+        function getIntersectionType(types: readonly Type[], aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[], aliasMapper?: TypeMapper): Type {
             const typeMembershipMap: ESMap<string, Type> = new Map();
             const includes = addTypesToIntersection(typeMembershipMap, 0, types);
             const typeSet: Type[] = arrayFrom(typeMembershipMap.values());
@@ -14942,16 +14977,16 @@ namespace ts {
                         // When the intersection creates a reduced set (which might mean that *all* union types have
                         // disappeared), we restart the operation to get a new set of combined flags. Once we have
                         // reduced we'll never reduce again, so this occurs at most once.
-                        result = getIntersectionType(typeSet, aliasSymbol, aliasTypeArguments);
+                        result = getIntersectionType(typeSet, aliasSymbol, aliasTypeArguments, aliasMapper);
                     }
                     else if (eachIsUnionContaining(typeSet, TypeFlags.Undefined)) {
                         const undefinedOrMissingType = exactOptionalPropertyTypes && some(typeSet, t => containsType((t as UnionType).types, missingType)) ? missingType : undefinedType;
                         removeFromEach(typeSet, TypeFlags.Undefined);
-                        result = getUnionType([getIntersectionType(typeSet), undefinedOrMissingType], UnionReduction.Literal, aliasSymbol, aliasTypeArguments);
+                        result = getUnionType([getIntersectionType(typeSet), undefinedOrMissingType], UnionReduction.Literal, aliasSymbol, aliasTypeArguments, aliasMapper);
                     }
                     else if (eachIsUnionContaining(typeSet, TypeFlags.Null)) {
                         removeFromEach(typeSet, TypeFlags.Null);
-                        result = getUnionType([getIntersectionType(typeSet), nullType], UnionReduction.Literal, aliasSymbol, aliasTypeArguments);
+                        result = getUnionType([getIntersectionType(typeSet), nullType], UnionReduction.Literal, aliasSymbol, aliasTypeArguments, aliasMapper);
                     }
                     else {
                         // We are attempting to construct a type of the form X & (A | B) & (C | D). Transform this into a type of
@@ -14964,7 +14999,7 @@ namespace ts {
                         // We attach a denormalized origin type when at least one constituent of the cross-product union is an
                         // intersection (i.e. when the intersection didn't just reduce one or more unions to smaller unions).
                         const origin = some(constituents, t => !!(t.flags & TypeFlags.Intersection)) ? createOriginUnionOrIntersectionType(TypeFlags.Intersection, typeSet) : undefined;
-                        result = getUnionType(constituents, UnionReduction.Literal, aliasSymbol, aliasTypeArguments, origin);
+                        result = getUnionType(constituents, UnionReduction.Literal, aliasSymbol, aliasTypeArguments, aliasMapper, origin);
                     }
                 }
                 else {
@@ -15014,7 +15049,7 @@ namespace ts {
             if (!links.resolvedType) {
                 const aliasSymbol = getAliasSymbolForTypeNode(node);
                 links.resolvedType = getIntersectionType(map(node.types, getTypeFromTypeNode),
-                    aliasSymbol, getTypeArgumentsForAliasSymbol(aliasSymbol));
+                    aliasSymbol, getTypeArgumentsForAliasSymbol(aliasSymbol), /*aliasMapper*/ undefined);
             }
             return links.resolvedType;
         }
@@ -15144,7 +15179,7 @@ namespace ts {
             const indexKeyTypes = map(getIndexInfosOfType(type), info => info !== enumNumberIndexInfo && isKeyTypeIncluded(info.keyType, include) ?
                 info.keyType === stringType && include & TypeFlags.Number ? stringOrNumberType : info.keyType : neverType);
             return getUnionType(concatenate(propertyTypes, indexKeyTypes), UnionReduction.Literal,
-                /*aliasSymbol*/ undefined, /*aliasTypeArguments*/ undefined, origin);
+                /*aliasSymbol*/ undefined, /*aliasTypeArguments*/ undefined, /*aliasMapper*/ undefined, origin);
         }
 
         /**
@@ -15180,7 +15215,7 @@ namespace ts {
                 return type;
             }
             const extractTypeAlias = getGlobalExtractSymbol();
-            return extractTypeAlias ? getTypeAliasInstantiation(extractTypeAlias, [type, stringType]) : stringType;
+            return extractTypeAlias ? getGlobalTypeAliasInstantiation(extractTypeAlias, [type, stringType]) : stringType;
         }
 
         function getIndexTypeOrString(type: Type): Type {
@@ -15323,13 +15358,14 @@ namespace ts {
             return result;
         }
 
-        function createIndexedAccessType(objectType: Type, indexType: Type, accessFlags: AccessFlags, aliasSymbol: Symbol | undefined, aliasTypeArguments: readonly Type[] | undefined) {
+        function createIndexedAccessType(objectType: Type, indexType: Type, accessFlags: AccessFlags, aliasSymbol: Symbol | undefined, aliasTypeArguments: readonly Type[] | undefined, aliasMapper: TypeMapper | undefined) {
             const type = createType(TypeFlags.IndexedAccess) as IndexedAccessType;
             type.objectType = objectType;
             type.indexType = indexType;
             type.accessFlags = accessFlags;
             type.aliasSymbol = aliasSymbol;
             type.aliasTypeArguments = aliasTypeArguments;
+            type.aliasMapper = aliasMapper;
             return type;
         }
 
@@ -15714,8 +15750,10 @@ namespace ts {
             return instantiateType(getTemplateTypeFromMappedType(objectType), templateMapper);
         }
 
-        function getIndexedAccessType(objectType: Type, indexType: Type, accessFlags = AccessFlags.None, accessNode?: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | BindingName | SyntheticExpression, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]): Type {
-            return getIndexedAccessTypeOrUndefined(objectType, indexType, accessFlags, accessNode, aliasSymbol, aliasTypeArguments) || (accessNode ? errorType : unknownType);
+        function getIndexedAccessType(objectType: Type, indexType: Type, accessFlags: AccessFlags | undefined, accessNode: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | BindingName | SyntheticExpression | undefined, aliasSymbol: Symbol | undefined, aliasTypeArguments: readonly Type[] | undefined, aliasMapper: TypeMapper | undefined): Type;
+        function getIndexedAccessType(objectType: Type, indexType: Type, accessFlags?: AccessFlags, accessNode?: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | BindingName | SyntheticExpression): Type;
+        function getIndexedAccessType(objectType: Type, indexType: Type, accessFlags = AccessFlags.None, accessNode?: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | BindingName | SyntheticExpression, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[], aliasMapper?: TypeMapper): Type {
+            return getIndexedAccessTypeOrUndefined(objectType, indexType, accessFlags, accessNode, aliasSymbol, aliasTypeArguments, aliasMapper) || (accessNode ? errorType : unknownType);
         }
 
         function indexTypeLessThan(indexType: Type, limit: number) {
@@ -15731,7 +15769,9 @@ namespace ts {
             });
         }
 
-        function getIndexedAccessTypeOrUndefined(objectType: Type, indexType: Type, accessFlags = AccessFlags.None, accessNode?: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | BindingName | SyntheticExpression, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]): Type | undefined {
+        function getIndexedAccessTypeOrUndefined(objectType: Type, indexType: Type, accessFlags: AccessFlags | undefined, accessNode: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | BindingName | SyntheticExpression | undefined, aliasSymbol: Symbol | undefined, aliasTypeArguments: readonly Type[] | undefined, aliasMapper: TypeMapper | undefined): Type | undefined;
+        function getIndexedAccessTypeOrUndefined(objectType: Type, indexType: Type, accessFlags?: AccessFlags, accessNode?: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | BindingName | SyntheticExpression): Type | undefined;
+        function getIndexedAccessTypeOrUndefined(objectType: Type, indexType: Type, accessFlags = AccessFlags.None, accessNode?: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | BindingName | SyntheticExpression, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[], aliasMapper?: TypeMapper): Type | undefined {
             if (objectType === wildcardType || indexType === wildcardType) {
                 return wildcardType;
             }
@@ -15760,7 +15800,7 @@ namespace ts {
                 const id = objectType.id + "," + indexType.id + "," + persistentAccessFlags + getAliasId(aliasSymbol, aliasTypeArguments);
                 let type = indexedAccessTypes.get(id);
                 if (!type) {
-                    indexedAccessTypes.set(id, type = createIndexedAccessType(objectType, indexType, persistentAccessFlags, aliasSymbol, aliasTypeArguments));
+                    indexedAccessTypes.set(id, type = createIndexedAccessType(objectType, indexType, persistentAccessFlags, aliasSymbol, aliasTypeArguments, aliasMapper));
                 }
 
                 return type;
@@ -15790,8 +15830,8 @@ namespace ts {
                     return undefined;
                 }
                 return accessFlags & AccessFlags.Writing
-                    ? getIntersectionType(propTypes, aliasSymbol, aliasTypeArguments)
-                    : getUnionType(propTypes, UnionReduction.Literal, aliasSymbol, aliasTypeArguments);
+                    ? getIntersectionType(propTypes, aliasSymbol, aliasTypeArguments, aliasMapper)
+                    : getUnionType(propTypes, UnionReduction.Literal, aliasSymbol, aliasTypeArguments, aliasMapper);
             }
             return getPropertyTypeForIndexType(objectType, apparentObjectType, indexType, indexType, accessNode, accessFlags | AccessFlags.CacheSymbol | AccessFlags.ReportDeprecated);
         }
@@ -15802,7 +15842,7 @@ namespace ts {
                 const objectType = getTypeFromTypeNode(node.objectType);
                 const indexType = getTypeFromTypeNode(node.indexType);
                 const potentialAlias = getAliasSymbolForTypeNode(node);
-                const resolved = getIndexedAccessType(objectType, indexType, AccessFlags.None, node, potentialAlias, getTypeArgumentsForAliasSymbol(potentialAlias));
+                const resolved = getIndexedAccessType(objectType, indexType, AccessFlags.None, node, potentialAlias, getTypeArgumentsForAliasSymbol(potentialAlias), /*aliasMapper*/ undefined);
                 links.resolvedType = resolved.flags & TypeFlags.IndexedAccess &&
                     (resolved as IndexedAccessType).objectType === objectType &&
                     (resolved as IndexedAccessType).indexType === indexType ?
@@ -15981,6 +16021,7 @@ namespace ts {
                 result.combinedMapper = combinedMapper;
                 result.aliasSymbol = aliasSymbol || root.aliasSymbol;
                 result.aliasTypeArguments = aliasSymbol ? aliasTypeArguments : instantiateTypes(root.aliasTypeArguments, mapper!); // TODO: GH#18217
+                result.aliasMapper = result.aliasSymbol ? mapper : undefined;
                 break;
             }
             return extraTypes ? getUnionType(append(extraTypes, result)) : result;
@@ -16839,7 +16880,7 @@ namespace ts {
                 let result = target.instantiations.get(id);
                 if (!result) {
                     const newMapper = createTypeMapper(typeParameters, typeArguments);
-                    result = target.objectFlags & ObjectFlags.Reference ? createDeferredTypeReference((type as DeferredTypeReference).target, (type as DeferredTypeReference).node, newMapper, newAliasSymbol, newAliasTypeArguments) :
+                    result = target.objectFlags & ObjectFlags.Reference ? createDeferredTypeReference((type as DeferredTypeReference).target, (type as DeferredTypeReference).node, newMapper, newAliasSymbol, newAliasTypeArguments, mapper) :
                         target.objectFlags & ObjectFlags.Mapped ? instantiateMappedType(target as MappedType, newMapper, newAliasSymbol, newAliasTypeArguments) :
                         instantiateAnonymousType(target, newMapper, newAliasSymbol, newAliasTypeArguments);
                     target.instantiations.set(id, result);
@@ -16932,7 +16973,7 @@ namespace ts {
                             return instantiateAnonymousType(type, prependTypeMapping(typeVariable, t, mapper));
                         }
                         return t;
-                    }, aliasSymbol, aliasTypeArguments);
+                    }, aliasSymbol, aliasTypeArguments, mapper);
                 }
             }
             // If the constraint type of the instantiation is the wildcard type, return the wildcard type.
@@ -17006,6 +17047,7 @@ namespace ts {
             result.mapper = mapper;
             result.aliasSymbol = aliasSymbol || type.aliasSymbol;
             result.aliasTypeArguments = aliasSymbol ? aliasTypeArguments : instantiateTypes(type.aliasTypeArguments, mapper);
+            result.aliasMapper = mapper;
             return result;
         }
 
@@ -17026,7 +17068,7 @@ namespace ts {
                     // distributive conditional type T extends U ? X : Y is instantiated with A | B for T, the
                     // result is (A extends U ? X : Y) | (B extends U ? X : Y).
                     result = distributionType && checkType !== distributionType && distributionType.flags & (TypeFlags.Union | TypeFlags.Never) ?
-                        mapTypeWithAlias(getReducedType(distributionType), t => getConditionalType(root, prependTypeMapping(checkType, t, newMapper)), aliasSymbol, aliasTypeArguments) :
+                        mapTypeWithAlias(getReducedType(distributionType), t => getConditionalType(root, prependTypeMapping(checkType, t, newMapper)), aliasSymbol, aliasTypeArguments, mapper) :
                         getConditionalType(root, newMapper, aliasSymbol, aliasTypeArguments);
                     root.instantiations!.set(id, result);
                 }
@@ -17091,8 +17133,8 @@ namespace ts {
                 const newAliasSymbol = aliasSymbol || type.aliasSymbol;
                 const newAliasTypeArguments = aliasSymbol ? aliasTypeArguments : instantiateTypes(type.aliasTypeArguments, mapper);
                 return flags & TypeFlags.Intersection || origin && origin.flags & TypeFlags.Intersection ?
-                    getIntersectionType(newTypes, newAliasSymbol, newAliasTypeArguments) :
-                    getUnionType(newTypes, UnionReduction.Literal, newAliasSymbol, newAliasTypeArguments);
+                    getIntersectionType(newTypes, newAliasSymbol, newAliasTypeArguments, mapper) :
+                    getUnionType(newTypes, UnionReduction.Literal, newAliasSymbol, newAliasTypeArguments, mapper);
             }
             if (flags & TypeFlags.Index) {
                 return getIndexType(instantiateType((type as IndexType).type, mapper));
@@ -17106,7 +17148,7 @@ namespace ts {
             if (flags & TypeFlags.IndexedAccess) {
                 const newAliasSymbol = aliasSymbol || type.aliasSymbol;
                 const newAliasTypeArguments = aliasSymbol ? aliasTypeArguments : instantiateTypes(type.aliasTypeArguments, mapper);
-                return getIndexedAccessType(instantiateType((type as IndexedAccessType).objectType, mapper), instantiateType((type as IndexedAccessType).indexType, mapper), (type as IndexedAccessType).accessFlags, /*accessNode*/ undefined, newAliasSymbol, newAliasTypeArguments);
+                return getIndexedAccessType(instantiateType((type as IndexedAccessType).objectType, mapper), instantiateType((type as IndexedAccessType).indexType, mapper), (type as IndexedAccessType).accessFlags, /*accessNode*/ undefined, newAliasSymbol, newAliasTypeArguments, mapper);
             }
             if (flags & TypeFlags.Conditional) {
                 return getConditionalTypeInstantiation(type as ConditionalType, combineTypeMappers((type as ConditionalType).mapper, mapper), aliasSymbol, aliasTypeArguments);
@@ -19234,7 +19276,10 @@ namespace ts {
                     if (variances === emptyArray) {
                         return Ternary.Unknown;
                     }
-                    const varianceResult = relateVariances(source.aliasTypeArguments, target.aliasTypeArguments, variances, intersectionState);
+                    const outerTypeParameters = getOuterTypeParametersOfAlias(source.aliasSymbol);
+                    const sourceArgs = outerTypeParameters && source.aliasMapper ? concatenate(source.aliasTypeArguments, instantiateTypes(outerTypeParameters, source.aliasMapper)) : source.aliasTypeArguments;
+                    const targetArgs = outerTypeParameters && target.aliasMapper ? concatenate(target.aliasTypeArguments, instantiateTypes(outerTypeParameters, target.aliasMapper)) : target.aliasTypeArguments;
+                    const varianceResult = relateVariances(sourceArgs, targetArgs, variances, intersectionState);
                     if (varianceResult !== undefined) {
                         return varianceResult;
                     }
@@ -20569,8 +20614,11 @@ namespace ts {
 
         function getAliasVariances(symbol: Symbol) {
             const links = getSymbolLinks(symbol);
-            return getVariancesWorker(links.typeParameters, links, (_links, param, marker) => {
-                const type = getTypeAliasInstantiation(symbol, instantiateTypes(links.typeParameters!, makeUnaryTypeMapper(param, marker)));
+            // outer type parameter aliases are last so they can be easily ignored by, eg, inference
+            const params = concatenate(links.typeParameters, getOuterTypeParametersOfAlias(symbol));
+            return getVariancesWorker(params, links, (_links, param, marker) => {
+                const mapper = makeUnaryTypeMapper(param, marker);
+                const type = getLocalTypeAliasInstantiation(symbol, instantiateTypes(links.typeParameters!, mapper), mapper);
                 type.aliasTypeArgumentsContainsMarker = true;
                 return type;
             });
@@ -21274,7 +21322,7 @@ namespace ts {
             }
             // If the NonNullable<T> type is available, return an instantiation. Otherwise just return the reduced type.
             return deferredGlobalNonNullableTypeAlias !== unknownSymbol ?
-                getTypeAliasInstantiation(deferredGlobalNonNullableTypeAlias, [reducedType]) :
+                getGlobalTypeAliasInstantiation(deferredGlobalNonNullableTypeAlias, [reducedType]) :
                 reducedType;
         }
 
@@ -23601,7 +23649,7 @@ namespace ts {
                         newOrigin = createOriginUnionOrIntersectionType(TypeFlags.Union, originFiltered);
                     }
                 }
-                return getUnionTypeFromSortedList(filtered, (type as UnionType).objectFlags, /*aliasSymbol*/ undefined, /*aliasTypeArguments*/ undefined, newOrigin);
+                return getUnionTypeFromSortedList(filtered, (type as UnionType).objectFlags, /*aliasSymbol*/ undefined, /*aliasTypeArguments*/ undefined, /*aliasMapper*/ undefined, newOrigin);
             }
             return type.flags & TypeFlags.Never || f(type) ? type : neverType;
         }
@@ -23645,9 +23693,9 @@ namespace ts {
             return changed ? mappedTypes && getUnionType(mappedTypes, noReductions ? UnionReduction.None : UnionReduction.Literal) : type;
         }
 
-        function mapTypeWithAlias(type: Type, mapper: (t: Type) => Type, aliasSymbol: Symbol | undefined, aliasTypeArguments: readonly Type[] | undefined) {
+        function mapTypeWithAlias(type: Type, mapper: (t: Type) => Type, aliasSymbol: Symbol | undefined, aliasTypeArguments: readonly Type[] | undefined, aliasMapper: TypeMapper | undefined) {
             return type.flags & TypeFlags.Union && aliasSymbol ?
-                getUnionType(map((type as UnionType).types, mapper), UnionReduction.Literal, aliasSymbol, aliasTypeArguments) :
+                getUnionType(map((type as UnionType).types, mapper), UnionReduction.Literal, aliasSymbol, aliasTypeArguments, aliasMapper) :
                 mapType(type, mapper);
         }
 
@@ -27091,7 +27139,7 @@ namespace ts {
                     const params = getSymbolLinks(managedSym).typeParameters;
                     if (length(params) >= 2) {
                         const args = fillMissingTypeArguments([ctorType, attributesType], params, 2, isInJSFile(context));
-                        return getTypeAliasInstantiation(managedSym, args);
+                        return getGlobalTypeAliasInstantiation(managedSym, args);
                     }
                 }
                 if (length((declaredManagedType as GenericType).typeParameters) >= 2) {
@@ -36145,7 +36193,7 @@ namespace ts {
                     if (awaitedSymbol) {
                         // Unwrap unions that may contain `Awaited<T>`, otherwise its possible to manufacture an `Awaited<Awaited<T> | U>` where
                         // an `Awaited<T | U>` would suffice.
-                        return getTypeAliasInstantiation(awaitedSymbol, [unwrapAwaitedType(type)]);
+                        return getGlobalTypeAliasInstantiation(awaitedSymbol, [unwrapAwaitedType(type)]);
                     }
                 }
             }
