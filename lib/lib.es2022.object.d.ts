@@ -18,7 +18,7 @@ and limitations under the License.
 /// <reference no-default-lib="true"/>
 
 
-interface Object {
+interface ObjectConstructor {
     /**
      * Determines whether an object has a property with the specified name.
      * @param o An object.
