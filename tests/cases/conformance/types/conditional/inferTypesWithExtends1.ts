@@ -108,5 +108,20 @@ type X16<T> = T extends { [P in infer U extends keyof T]: 1; } ? 1 : 0; // ok, p
 type X17<T> = T extends { [P in keyof T as infer U extends P ? 1 : 0]: 1; } ? 1 : 0; // ok, parsed as conditional
 type X18<T> = T extends { [P in keyof T as infer U extends P]: 1; } ? 1 : 0; // ok, parsed as `infer..extends` (no trailing `?`)
 
+type X19<T extends string | number> = T extends (infer U extends number) ? [T, U] : never;
+type X19_T1 = X19<"a">; // never
+type X19_T2 = X19<1>; // [1, 1]
+type X19_T3 = X19<1 | "a">; // [1, 1]
+
+type X20<T> = T extends (infer U extends number) ? T extends (infer V extends U) ? [T, U, V] : never : never;
+type X20_T1 = X20<1 | "a">; // [1, 1, 1]
+
+type X21<T, N extends number> = T extends (infer U extends N) ? [T, U] : never;
+type X21_T1 = X21<1, 1>; // [1, 1]
+type X21_T2 = X21<1 | "a", 1>; // [1, 1]
+type X21_T3 = X21<1 | 2, 1>; // [1, 1]
+type X21_T4 = X21<1 | 2, 2 | 3>; // [2, 2]
+type X21_T5 = X21<1 | 2, 3>; // never
+
 // from mongoose
 type IfEquals<X, Y, A, B> = (<T>() => T extends X ? 1 : 2) extends <T>() => T extends Y ? 1 : 2 ? A : B;
