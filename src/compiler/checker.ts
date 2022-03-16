@@ -17903,7 +17903,7 @@ namespace ts {
                 const targetReturnType = isResolvingReturnTypeOfSignature(target) ? anyType
                     : target.declaration && isJSConstructor(target.declaration) ? getDeclaredTypeOfClassOrInterface(getMergedSymbol(target.declaration.symbol))
                     : getReturnTypeOfSignature(target);
-                if (targetReturnType === voidType) {
+                if (targetReturnType === voidType || targetReturnType === anyType) {
                     return result;
                 }
                 const sourceReturnType = isResolvingReturnTypeOfSignature(source) ? anyType
