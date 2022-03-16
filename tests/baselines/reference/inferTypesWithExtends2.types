@@ -1,7 +1,7 @@
 === tests/cases/conformance/types/conditional/inferTypesWithExtends2.ts ===
 // infer twice with different constraints (same behavior as class/interface)
-type X10<T> =
->X10 : X10<T>
+type X1<T> =
+>X1 : X1<T>
 
     T extends { a: infer U extends string, b: infer U extends number } ? U :
 >a : U
@@ -9,3 +9,12 @@ type X10<T> =
 
     never;
 
+// infer cannot reference type params in same 'extends' clause
+type X2<T> =
+>X2 : X2<T>
+
+    T extends { a: infer U, b: infer V extends U } ? [U, V] :
+>a : U
+>b : V
+
+    never;
