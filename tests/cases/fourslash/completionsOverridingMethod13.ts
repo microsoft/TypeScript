@@ -3,11 +3,12 @@
 // @Filename: a.ts
 // @newline: LF
 
-////interface IFoo {
-////    a?: number;
-////    b?(x: number): void;
+////class A {
+////    protected foo(): void {
+////        return;
+////    }
 ////}
-////class Foo implements IFoo {
+////class B extends A {
 ////    /**/
 ////}
 
@@ -19,16 +20,12 @@ verify.completions({
         includeCompletionsWithSnippetText: false,
         includeCompletionsWithClassMemberSnippets: true,
     },
-    includes: [
+    exact: [
+        ...completion.classElementKeywords,
         {
-            name: "a",
+            name: "foo",
             sortText: completion.SortText.ClassMemberSnippets,
-            insertText: "a?: number;"
-        },
-        {
-            name: "b",
-            sortText: completion.SortText.ClassMemberSnippets,
-            insertText: "b(x: number): void {\n}"
+            insertText: "protected foo(): void {\n}",
         },
     ],
 });

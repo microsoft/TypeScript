@@ -17,14 +17,15 @@ namespace ts.Completions {
         SuggestedClassMembers = "14",
         GlobalsOrKeywords = "15",
         AutoImportSuggestions = "16",
-        JavascriptIdentifiers = "17",
-        DeprecatedLocalDeclarationPriority = "18",
-        DeprecatedLocationPriority = "19",
-        DeprecatedOptionalMember = "20",
-        DeprecatedMemberDeclaredBySpreadAssignment = "21",
-        DeprecatedSuggestedClassMembers = "22",
-        DeprecatedGlobalsOrKeywords = "23",
-        DeprecatedAutoImportSuggestions = "24"
+        ClassMemberSnippets = "17",
+        JavascriptIdentifiers = "18",
+        DeprecatedLocalDeclarationPriority = "19",
+        DeprecatedLocationPriority = "20",
+        DeprecatedOptionalMember = "21",
+        DeprecatedMemberDeclaredBySpreadAssignment = "22",
+        DeprecatedSuggestedClassMembers = "23",
+        DeprecatedGlobalsOrKeywords = "24",
+        DeprecatedAutoImportSuggestions = "25"
     }
 
     const enum SortTextId {
@@ -37,8 +38,8 @@ namespace ts.Completions {
         AutoImportSuggestions = 16,
 
         // Don't use these directly.
-        _JavaScriptIdentifiers = 17,
-        _DeprecatedStart = 18,
+        _JavaScriptIdentifiers = 18,
+        _DeprecatedStart = 19,
         _First = LocalDeclarationPriority,
 
         DeprecatedOffset = _DeprecatedStart - _First,
@@ -769,6 +770,7 @@ namespace ts.Completions {
             isClassLikeMemberCompletion(symbol, location)) {
             let importAdder;
             ({ insertText, isSnippet, importAdder, replacementSpan } = getEntryForMemberCompletion(host, program, options, preferences, name, symbol, location, contextToken, formatContext));
+            sortText = SortText.ClassMemberSnippets; // sortText has to be lower priority than the sortText for keywords. See #47852.
             if (importAdder?.hasFixes()) {
                 hasAction = true;
                 source = CompletionSource.ClassMemberSnippet;
