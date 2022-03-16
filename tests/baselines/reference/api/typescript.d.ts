@@ -13,6 +13,7 @@ See the Apache Version 2.0 License for specific language governing permissions
 and limitations under the License.
 ***************************************************************************** */
 
+// Test change.
 declare namespace ts {
     const versionMajorMinor = "4.7";
     /** The version of the TypeScript compiler release */
