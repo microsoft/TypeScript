@@ -416,6 +416,7 @@ namespace ts.refactor {
             return undefined;
         }
 
+        Debug.assertIsDefined(symbol.valueDeclaration);
         if (node.pos < symbol.valueDeclaration.pos) {
             return undefined;
         }

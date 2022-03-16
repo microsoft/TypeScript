@@ -533,6 +533,13 @@ namespace ts {
     }
 
     /**
+     * @internal
+     */
+    export function rangeContainsSkipTrivia(r1: TextRange, node: Node, file: SourceFile): boolean {
+        return rangeContainsStartEnd(r1, skipTrivia(file.text, node.pos), node.end);
+    }
+
+    /**
      * Assumes `candidate.start <= position` holds.
      */
     export function positionBelongsToNode(candidate: Node, position: number, sourceFile: SourceFile): boolean {
