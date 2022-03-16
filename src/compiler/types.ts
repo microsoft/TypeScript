@@ -5244,7 +5244,7 @@ namespace ts {
         pattern?: DestructuringPattern;  // Destructuring pattern represented by type (if any)
         aliasSymbol?: Symbol;            // Alias associated with type
         aliasTypeArguments?: readonly Type[]; // Alias type arguments (if any)
-        aliasMapper?: TypeMapper | undefined; // Mapper used to instantiate alias (if any)
+        /* @internal */ aliasMapper?: TypeMapper | undefined; // Mapper used to instantiate alias (if any)
         /* @internal */ aliasTypeArgumentsContainsMarker?: boolean; // Alias type arguments (if any)
         /* @internal */
         permissiveInstantiation?: Type;  // Instantiation with type parameters mapped to wildcard type
