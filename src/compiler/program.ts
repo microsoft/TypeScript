@@ -58,22 +58,14 @@ namespace ts {
         return getPathFromPathComponents(commonPathComponents);
     }
 
-    interface OutputFingerprint {
-        hash: string;
-        byteOrderMark: boolean;
-        mtime: Date;
-    }
-
     export function createCompilerHost(options: CompilerOptions, setParentNodes?: boolean): CompilerHost {
         return createCompilerHostWorker(options, setParentNodes);
     }
 
     /*@internal*/
-    // TODO(shkamat): update this after reworking ts build API
     export function createCompilerHostWorker(options: CompilerOptions, setParentNodes?: boolean, system = sys): CompilerHost {
         const existingDirectories = new Map<string, boolean>();
         const getCanonicalFileName = createGetCanonicalFileName(system.useCaseSensitiveFileNames);
-        const computeHash = maybeBind(system, system.createHash) || generateDjb2Hash;
         function getSourceFile(fileName: string, languageVersionOrOptions: ScriptTarget | CreateSourceFileOptions, onError?: (message: string) => void): SourceFile | undefined {
             let text: string | undefined;
             try {
@@ -113,7 +105,7 @@ namespace ts {
                     fileName,
                     data,
                     writeByteOrderMark,
-                    (path, data, writeByteOrderMark) => writeFileWorker(path, data, writeByteOrderMark),
+                    (path, data, writeByteOrderMark) => system.writeFile(path, data, writeByteOrderMark),
                     path => (compilerHost.createDirectory || system.createDirectory)(path),
                     path => directoryExists(path));
 
@@ -125,42 +117,6 @@ namespace ts {
                     onError(e.message);
                 }
             }
-        }
-
-        let outputFingerprints: ESMap<string, OutputFingerprint>;
-        function writeFileWorker(fileName: string, data: string, writeByteOrderMark: boolean) {
-            if (!isWatchSet(options) || !system.getModifiedTime) {
-                system.writeFile(fileName, data, writeByteOrderMark);
-                return;
-            }
-
-            if (!outputFingerprints) {
-                outputFingerprints = new Map<string, OutputFingerprint>();
-            }
-
-            const hash = computeHash(data);
-            const mtimeBefore = system.getModifiedTime(fileName);
-
-            if (mtimeBefore) {
-                const fingerprint = outputFingerprints.get(fileName);
-                // If output has not been changed, and the file has no external modification
-                if (fingerprint &&
-                    fingerprint.byteOrderMark === writeByteOrderMark &&
-                    fingerprint.hash === hash &&
-                    fingerprint.mtime.getTime() === mtimeBefore.getTime()) {
-                    return;
-                }
-            }
-
-            system.writeFile(fileName, data, writeByteOrderMark);
-
-            const mtimeAfter = system.getModifiedTime(fileName) || missingFileModifiedTime;
-
-            outputFingerprints.set(fileName, {
-                hash,
-                byteOrderMark: writeByteOrderMark,
-                mtime: mtimeAfter
-            });
         }
 
         function getDefaultLibLocation(): string {
