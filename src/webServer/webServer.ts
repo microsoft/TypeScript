@@ -101,11 +101,11 @@ namespace ts.server {
                 default:
                     Debug.assertNever(type);
             }
-            this.host.writeMessage(<LoggingMessage>{
+            this.host.writeMessage({
                 type: "log",
                 level,
                 body,
-            });
+            } as LoggingMessage);
         }
     }
 
@@ -122,7 +122,6 @@ namespace ts.server {
                 const webPath = getWebPath(path);
                 return webPath && host.readFile(webPath);
             },
-
             write: host.writeMessage.bind(host),
             watchFile: returnNoopFileWatcher,
             watchDirectory: returnNoopFileWatcher,
@@ -131,10 +130,10 @@ namespace ts.server {
             getCurrentDirectory: returnEmptyString, // For inferred project root if projectRoot path is not set, normalizing the paths
 
             /* eslint-disable no-restricted-globals */
-            setTimeout,
-            clearTimeout,
+            setTimeout: (cb, ms, ...args) => setTimeout(cb, ms, ...args),
+            clearTimeout: handle => clearTimeout(handle),
             setImmediate: x => setTimeout(x, 0),
-            clearImmediate: clearTimeout,
+            clearImmediate: handle => clearTimeout(handle),
             /* eslint-enable no-restricted-globals */
 
             require: () => ({ module: undefined, error: new Error("Not implemented") }),
@@ -188,7 +187,7 @@ namespace ts.server {
                 byteLength: notImplemented, // Formats the message text in send of Session which is overriden in this class so not needed
                 hrtime,
                 logger,
-                canUseEvents: false,
+                canUseEvents: true,
             });
         }
 
@@ -206,7 +205,7 @@ namespace ts.server {
         }
 
         protected parseMessage(message: {}): protocol.Request {
-            return <protocol.Request>message;
+            return message as protocol.Request;
         }
 
         protected toStringMessage(message: {}) {

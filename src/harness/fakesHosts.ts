@@ -32,6 +32,9 @@ namespace fakes {
             this._env = env;
         }
 
+        private testTerminalWidth = Number.parseInt(this.getEnvironmentVariable("TS_TEST_TERMINAL_WIDTH"));
+        getWidthOfTerminal = Number.isNaN(this.testTerminalWidth) ? undefined : () => this.testTerminalWidth;
+
         // Pretty output
         writeOutputIsTTY() {
             return true;

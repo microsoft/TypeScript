@@ -8,9 +8,9 @@ class Abcde {
 }
 
 module.exports = {
->module.exports : Symbol("/test", Decl(test.js, 0, 0), Decl(index.ts, 0, 31))
+>module.exports : Symbol("/test.js", Decl(test.js, 0, 0), Decl(index.ts, 0, 31))
 >module : Symbol(module, Decl(test.js, 3, 1))
->exports : Symbol("/test", Decl(test.js, 0, 0), Decl(index.ts, 0, 31))
+>exports : Symbol("/test.js", Decl(test.js, 0, 0), Decl(index.ts, 0, 31))
 
   Abcde
 >Abcde : Symbol(Abcde, Decl(test.js, 5, 18))

@@ -13,9 +13,9 @@ const thing = a + m
 >m : Symbol(m, Decl(index.js, 0, 9))
 
 module.exports = {
->module.exports : Symbol("tests/cases/conformance/jsdoc/declarations/index", Decl(index.js, 0, 0))
+>module.exports : Symbol(module.exports, Decl(index.js, 0, 0))
 >module : Symbol(module, Decl(index.js, 2, 19))
->exports : Symbol("tests/cases/conformance/jsdoc/declarations/index", Decl(index.js, 0, 0))
+>exports : Symbol(module.exports, Decl(index.js, 0, 0))
 
     thing
 >thing : Symbol(thing, Decl(index.js, 4, 18))

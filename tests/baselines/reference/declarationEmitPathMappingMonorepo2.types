@@ -1,0 +1,50 @@
+=== tests/cases/compiler/packages/core/src/index.d.ts ===
+export * from "./utils";
+export { default as SvgIcon } from "./SvgIcon";
+>default : import("tests/cases/compiler/packages/core/src/SvgIcon").SomeInterface
+>SvgIcon : import("tests/cases/compiler/packages/core/src/SvgIcon").SomeInterface
+
+=== tests/cases/compiler/packages/core/src/SvgIcon.d.ts ===
+import { StyledComponentProps } from "@ts-bug/styles";
+>StyledComponentProps : any
+
+export interface SvgIconProps extends StyledComponentProps<"root"> {
+    children?: string[];
+>children : string[]
+}
+export interface SomeInterface {
+    myProp: string;
+>myProp : string
+}
+declare const SvgIcon: SomeInterface;
+>SvgIcon : SomeInterface
+
+export default SvgIcon;
+>SvgIcon : SomeInterface
+
+=== tests/cases/compiler/packages/core/src/utils.d.ts ===
+import SvgIcon from "./SvgIcon";
+>SvgIcon : import("tests/cases/compiler/packages/core/src/SvgIcon").SomeInterface
+
+export function createSvgIcon(path: string, displayName: string): typeof SvgIcon;
+>createSvgIcon : (path: string, displayName: string) => typeof SvgIcon
+>path : string
+>displayName : string
+>SvgIcon : import("tests/cases/compiler/packages/core/src/SvgIcon").SomeInterface
+
+=== tests/cases/compiler/packages/styles/src/index.d.ts ===
+export interface StyledComponentProps<ClassKey extends string> {
+    classes?: Record<ClassKey, string>;
+>classes : Record<ClassKey, string>
+}
+
+=== tests/cases/compiler/packages/lab/src/index.ts ===
+import { createSvgIcon } from "@ts-bug/core/utils";
+>createSvgIcon : (path: string, displayName: string) => import("tests/cases/compiler/packages/core/src/SvgIcon").SomeInterface
+
+export default createSvgIcon("Hello", "ArrowLeft");
+>createSvgIcon("Hello", "ArrowLeft") : import("tests/cases/compiler/packages/core/src/SvgIcon").SomeInterface
+>createSvgIcon : (path: string, displayName: string) => import("tests/cases/compiler/packages/core/src/SvgIcon").SomeInterface
+>"Hello" : "Hello"
+>"ArrowLeft" : "ArrowLeft"
+

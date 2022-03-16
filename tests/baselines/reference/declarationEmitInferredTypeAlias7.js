@@ -23,5 +23,5 @@ exports.v = v;
 //// [0.d.ts]
 export declare type Data = string | boolean;
 //// [1.d.ts]
-declare let v: import("./0").Data;
+declare let v: string | boolean;
 export { v };

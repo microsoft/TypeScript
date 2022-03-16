@@ -65,21 +65,25 @@ function foo() {
 >C : typeof C
 
         v // Validator & Partial<OnChanges> & C
->v : Validator & Partial<OnChanges> & C
+>v : C
     }
     v // Validator & Partial<OnChanges> via subtype reduction
->v : Validator & Partial<OnChanges>
+>v : C | (Validator & Partial<OnChanges>)
 
+    // In 4.1, we introduced a change which _fixed_ a bug with CFA
+    // correctly setting this to be the right object. With 4.2,
+    // we reverted that fix in #42231 which brought behavior back to
+    // before 4.1.
     if (v.onChanges) {
->v.onChanges : ((changes: Record<string, unknown>) => void) | undefined
->v : Validator & Partial<OnChanges>
->onChanges : ((changes: Record<string, unknown>) => void) | undefined
+>v.onChanges : any
+>v : C | (Validator & Partial<OnChanges>)
+>onChanges : any
 
         v.onChanges({});
->v.onChanges({}) : void
->v.onChanges : (changes: Record<string, unknown>) => void
->v : Validator & Partial<OnChanges>
->onChanges : (changes: Record<string, unknown>) => void
+>v.onChanges({}) : any
+>v.onChanges : any
+>v : C | (Validator & Partial<OnChanges>)
+>onChanges : any
 >{} : {}
     }
 }

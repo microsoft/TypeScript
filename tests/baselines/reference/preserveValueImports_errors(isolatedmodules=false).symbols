@@ -1,0 +1,95 @@
+=== tests/cases/conformance/externalModules/typeOnly/a.ts ===
+export type A = {};
+>A : Symbol(A, Decl(a.ts, 0, 0))
+
+export type { A as default };
+>A : Symbol(A, Decl(a.ts, 0, 0))
+>default : Symbol(default, Decl(a.ts, 1, 13))
+
+=== tests/cases/conformance/externalModules/typeOnly/b.ts ===
+class B {};
+>B : Symbol(B, Decl(b.ts, 0, 0))
+
+export type { B, B as default };
+>B : Symbol(B, Decl(b.ts, 1, 13))
+>B : Symbol(B, Decl(b.ts, 0, 0))
+>default : Symbol(default, Decl(b.ts, 1, 16))
+
+=== tests/cases/conformance/externalModules/typeOnly/c.ts ===
+import DefaultA from "./a";
+>DefaultA : Symbol(DefaultA, Decl(c.ts, 0, 6))
+
+import { A } from "./a";
+>A : Symbol(A, Decl(c.ts, 1, 8))
+
+import DefaultB from "./b";
+>DefaultB : Symbol(DefaultB, Decl(c.ts, 2, 6))
+
+import { B } from "./b";
+>B : Symbol(B, Decl(c.ts, 3, 8))
+
+=== tests/cases/conformance/externalModules/typeOnly/c.fixed.ts ===
+import type DefaultA from "./a";
+>DefaultA : Symbol(DefaultA, Decl(c.fixed.ts, 0, 6))
+
+import type { A } from "./a";
+>A : Symbol(A, Decl(c.fixed.ts, 1, 13))
+
+import type DefaultB from "./b";
+>DefaultB : Symbol(DefaultB, Decl(c.fixed.ts, 2, 6))
+
+import type { B } from "./b";
+>B : Symbol(B, Decl(c.fixed.ts, 3, 13))
+
+=== tests/cases/conformance/externalModules/typeOnly/d.ts ===
+export { A as AA } from "./a";
+>A : Symbol(A, Decl(a.ts, 0, 0))
+>AA : Symbol(AA, Decl(d.ts, 0, 8))
+
+export { B as BB } from "./b";
+>B : Symbol(B, Decl(b.ts, 1, 13))
+>BB : Symbol(BB, Decl(d.ts, 1, 8))
+
+=== tests/cases/conformance/externalModules/typeOnly/d.fixed.ts ===
+export type { A as AA } from "./a";
+>A : Symbol(A, Decl(a.ts, 0, 0))
+>AA : Symbol(AA, Decl(d.fixed.ts, 0, 13))
+
+export type { B as BB } from "./b";
+>B : Symbol(B, Decl(b.ts, 1, 13))
+>BB : Symbol(BB, Decl(d.fixed.ts, 1, 13))
+
+=== tests/cases/conformance/externalModules/typeOnly/e.ts ===
+import { AA, BB } from "./d";
+>AA : Symbol(AA, Decl(e.ts, 0, 8))
+>BB : Symbol(BB, Decl(e.ts, 0, 12))
+
+=== tests/cases/conformance/externalModules/typeOnly/e.fixed.ts ===
+import type { AA, BB } from "./d";
+>AA : Symbol(AA, Decl(e.fixed.ts, 0, 13))
+>BB : Symbol(BB, Decl(e.fixed.ts, 0, 17))
+
+=== tests/cases/conformance/externalModules/typeOnly/f.ts ===
+import type { A } from "./a";
+>A : Symbol(A, Decl(f.ts, 0, 13))
+
+import type { B } from "./b";
+>B : Symbol(B, Decl(f.ts, 1, 13))
+
+export { A, B as BB };
+>A : Symbol(A, Decl(f.ts, 2, 8))
+>B : Symbol(B, Decl(f.ts, 1, 13))
+>BB : Symbol(BB, Decl(f.ts, 2, 11))
+
+=== tests/cases/conformance/externalModules/typeOnly/f.fixed.ts ===
+import type { A } from "./a";
+>A : Symbol(A, Decl(f.fixed.ts, 0, 13))
+
+import type { B } from "./b";
+>B : Symbol(B, Decl(f.fixed.ts, 1, 13))
+
+export type { A, B as BB };
+>A : Symbol(A, Decl(f.fixed.ts, 2, 13))
+>B : Symbol(B, Decl(f.fixed.ts, 1, 13))
+>BB : Symbol(BB, Decl(f.fixed.ts, 2, 16))
+

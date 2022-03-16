@@ -36,6 +36,8 @@ var Foo = /** @class */ (function () {
         var a = this.y;
         var b = this.x;
     };
-    Foo.y = this;
+    var _a;
+    _a = Foo;
+    Foo.y = _a;
     return Foo;
 }());

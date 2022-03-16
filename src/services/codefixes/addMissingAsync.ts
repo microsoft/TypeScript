@@ -11,7 +11,7 @@ namespace ts.codefix {
     registerCodeFix({
         fixIds: [fixId],
         errorCodes,
-        getCodeActions: context => {
+        getCodeActions: function getCodeActionsToAddMissingAsync(context) {
             const { sourceFile, errorCode, cancellationToken, program, span } = context;
             const diagnostic = find(program.getDiagnosticsProducingTypeChecker().getDiagnostics(sourceFile, cancellationToken), getIsMatchingAsyncError(span, errorCode));
             const directSpan = diagnostic && diagnostic.relatedInformation && find(diagnostic.relatedInformation, r => r.code === Diagnostics.Did_you_mean_to_mark_this_function_as_async.code) as TextSpan | undefined;

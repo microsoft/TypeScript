@@ -1,0 +1,41 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameStaticAccessors.ts ===
+class A1 {
+>A1 : Symbol(A1, Decl(privateNameStaticAccessors.ts, 0, 0))
+
+    static get #prop() { return ""; }
+>#prop : Symbol(A1.#prop, Decl(privateNameStaticAccessors.ts, 0, 10), Decl(privateNameStaticAccessors.ts, 1, 37))
+
+    static set #prop(param: string) { }
+>#prop : Symbol(A1.#prop, Decl(privateNameStaticAccessors.ts, 0, 10), Decl(privateNameStaticAccessors.ts, 1, 37))
+>param : Symbol(param, Decl(privateNameStaticAccessors.ts, 2, 21))
+
+    static get #roProp() { return ""; }
+>#roProp : Symbol(A1.#roProp, Decl(privateNameStaticAccessors.ts, 2, 39))
+
+    constructor(name: string) {
+>name : Symbol(name, Decl(privateNameStaticAccessors.ts, 6, 16))
+
+        A1.#prop = "";
+>A1.#prop : Symbol(A1.#prop, Decl(privateNameStaticAccessors.ts, 0, 10), Decl(privateNameStaticAccessors.ts, 1, 37))
+>A1 : Symbol(A1, Decl(privateNameStaticAccessors.ts, 0, 0))
+
+        A1.#roProp = ""; // Error
+>A1.#roProp : Symbol(A1.#roProp, Decl(privateNameStaticAccessors.ts, 2, 39))
+>A1 : Symbol(A1, Decl(privateNameStaticAccessors.ts, 0, 0))
+
+        console.log(A1.#prop);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>A1.#prop : Symbol(A1.#prop, Decl(privateNameStaticAccessors.ts, 0, 10), Decl(privateNameStaticAccessors.ts, 1, 37))
+>A1 : Symbol(A1, Decl(privateNameStaticAccessors.ts, 0, 0))
+
+        console.log(A1.#roProp);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>A1.#roProp : Symbol(A1.#roProp, Decl(privateNameStaticAccessors.ts, 2, 39))
+>A1 : Symbol(A1, Decl(privateNameStaticAccessors.ts, 0, 0))
+    }
+}
+

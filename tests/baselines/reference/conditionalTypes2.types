@@ -500,7 +500,7 @@ declare type GetPropertyNamesOfType<T, RestrictToType> = {
 }[Extract<keyof T, string>];
 
 declare type GetAllPropertiesOfType<T, RestrictToType> = Pick<
->GetAllPropertiesOfType : Pick<T, GetPropertyNamesOfType<Required<T>, RestrictToType>>
+>GetAllPropertiesOfType : GetAllPropertiesOfType<T, RestrictToType>
 
 	T,
 	GetPropertyNamesOfType<Required<T>, RestrictToType>

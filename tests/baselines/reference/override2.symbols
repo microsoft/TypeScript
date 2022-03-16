@@ -1,0 +1,62 @@
+=== tests/cases/conformance/override/override2.ts ===
+abstract class AB {
+>AB : Symbol(AB, Decl(override2.ts, 0, 0))
+
+    abstract foo(v: string): void;
+>foo : Symbol(AB.foo, Decl(override2.ts, 0, 19))
+>v : Symbol(v, Decl(override2.ts, 1, 17))
+
+    abstract bar(v: string): void;
+>bar : Symbol(AB.bar, Decl(override2.ts, 1, 34))
+>v : Symbol(v, Decl(override2.ts, 3, 17))
+
+    abstract baz(v: string): void;
+>baz : Symbol(AB.baz, Decl(override2.ts, 3, 34))
+>v : Symbol(v, Decl(override2.ts, 4, 17))
+}
+
+abstract class AD1 extends AB {
+>AD1 : Symbol(AD1, Decl(override2.ts, 5, 1))
+>AB : Symbol(AB, Decl(override2.ts, 0, 0))
+
+}
+
+abstract class AD2 extends AB {
+>AD2 : Symbol(AD2, Decl(override2.ts, 9, 1))
+>AB : Symbol(AB, Decl(override2.ts, 0, 0))
+
+    abstract foo(v: ''): void // need override?
+>foo : Symbol(AD2.foo, Decl(override2.ts, 11, 31))
+>v : Symbol(v, Decl(override2.ts, 12, 17))
+}
+
+abstract class AD3 extends AB {
+>AD3 : Symbol(AD3, Decl(override2.ts, 13, 1))
+>AB : Symbol(AB, Decl(override2.ts, 0, 0))
+
+    override foo(v: ''): void { } // need override?
+>foo : Symbol(AD3.foo, Decl(override2.ts, 15, 31))
+>v : Symbol(v, Decl(override2.ts, 16, 17))
+
+    abstract bar(): void;
+>bar : Symbol(AD3.bar, Decl(override2.ts, 16, 33))
+
+    baz(): void { }
+>baz : Symbol(AD3.baz, Decl(override2.ts, 17, 25))
+}
+
+class D4 extends AB {
+>D4 : Symbol(D4, Decl(override2.ts, 19, 1))
+>AB : Symbol(AB, Decl(override2.ts, 0, 0))
+
+    override foo(v: ''): void {}
+>foo : Symbol(D4.foo, Decl(override2.ts, 21, 21))
+>v : Symbol(v, Decl(override2.ts, 22, 17))
+
+    override bar(v: ''): void {}
+>bar : Symbol(D4.bar, Decl(override2.ts, 22, 32))
+>v : Symbol(v, Decl(override2.ts, 23, 17))
+
+    baz(): void { }
+>baz : Symbol(D4.baz, Decl(override2.ts, 23, 32))
+}

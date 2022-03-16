@@ -1,4 +1,4 @@
-=== tests/cases/conformance/esnext/logicalAssignment/logicalAssignment1.ts ===
+=== tests/cases/conformance/es2021/logicalAssignment/logicalAssignment1.ts ===
 declare let a: string | undefined
 >a : string | undefined
 

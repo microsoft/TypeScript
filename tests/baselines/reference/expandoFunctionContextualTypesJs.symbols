@@ -72,7 +72,7 @@ function foo() {
  * @type {MyComponentProps}
  */
 module.exports = {
->module.exports : Symbol("tests/cases/compiler/input", Decl(input.js, 0, 0))
+>module.exports : Symbol(module.exports, Decl(input.js, 0, 0))
 >module : Symbol(export=, Decl(input.js, 42, 1))
 >exports : Symbol(export=, Decl(input.js, 42, 1))
 
@@ -83,7 +83,7 @@ module.exports = {
 expectLiteral({ props: module.exports });
 >expectLiteral : Symbol(expectLiteral, Decl(input.js, 27, 27))
 >props : Symbol(props, Decl(input.js, 51, 15))
->module.exports : Symbol("tests/cases/compiler/input", Decl(input.js, 0, 0))
+>module.exports : Symbol(module.exports, Decl(input.js, 0, 0))
 >module : Symbol(module, Decl(input.js, 42, 1), Decl(input.js, 51, 22))
->exports : Symbol("tests/cases/compiler/input", Decl(input.js, 0, 0))
+>exports : Symbol(module.exports, Decl(input.js, 0, 0))
 

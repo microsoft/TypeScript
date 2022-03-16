@@ -8,12 +8,12 @@ namespace Test1 {
     }
 
     var x: Foo.bar = "";
->x : any
+>x : Foo.bar
 >Foo : any
 >"" : ""
 
     var y: Test1.Foo.bar = "";
->y : any
+>y : Test1.Foo.bar
 >Test1 : any
 >Foo : any
 >"" : ""
@@ -30,12 +30,12 @@ namespace Test2 {
     }
 
     var x: Foo.bar = "";
->x : any
+>x : Foo.bar
 >Foo : any
 >"" : ""
 
     var y: Test2.Foo.bar = "";
->y : any
+>y : Test2.Foo.bar
 >Test2 : any
 >Foo : any
 >"" : ""
@@ -52,12 +52,12 @@ namespace Test3 {
     }
 
     var x: Foo.bar = "";
->x : any
+>x : Foo.bar
 >Foo : any
 >"" : ""
 
     var y: Test3.Foo.bar = "";
->y : any
+>y : Test3.Foo.bar
 >Test3 : any
 >Foo : any
 >"" : ""
@@ -74,12 +74,12 @@ namespace Test4 {
 >bar : string
 
     var x: Foo.bar = "";
->x : any
+>x : Foo.bar
 >Foo : any
 >"" : ""
 
     var y: Test4.Foo.bar = "";
->y : any
+>y : Test4.Foo.bar
 >Test4 : any
 >Foo : any
 >"" : ""
@@ -96,12 +96,12 @@ namespace Test5 {
 >wat : string
 
     var x: Foo.bar = "";
->x : any
+>x : Foo.bar
 >Foo : any
 >"" : ""
 
     var y: Test5.Foo.bar = "";
->y : any
+>y : Test5.Foo.bar
 >Test5 : any
 >Foo : any
 >"" : ""

@@ -203,6 +203,7 @@ var b: { [x: number]: string; } = {
 
     f: <Myn>null, 
 >f : Symbol(f, Decl(numericIndexerConstrainsPropertyDeclarations.ts, 86, 13))
+>Myn : Symbol(Myn)
 
     get X() { 
 >X : Symbol(X, Decl(numericIndexerConstrainsPropertyDeclarations.ts, 87, 17), Decl(numericIndexerConstrainsPropertyDeclarations.ts, 91, 6))

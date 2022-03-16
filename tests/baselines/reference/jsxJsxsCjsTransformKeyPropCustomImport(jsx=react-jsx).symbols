@@ -6,17 +6,17 @@ const props = { answer: 42 }
 
 const a = <div key="foo" {...props}>text</div>;
 >a : Symbol(a, Decl(jsxJsxsCjsTransformKeyPropCustomImport.tsx, 2, 5))
->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2420, 114))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
 >key : Symbol(key, Decl(jsxJsxsCjsTransformKeyPropCustomImport.tsx, 2, 14))
 >props : Symbol(props, Decl(jsxJsxsCjsTransformKeyPropCustomImport.tsx, 1, 5))
->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2420, 114))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
 
 const b = <div {...props} key="bar">text</div>;
 >b : Symbol(b, Decl(jsxJsxsCjsTransformKeyPropCustomImport.tsx, 3, 5))
->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2420, 114))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
 >props : Symbol(props, Decl(jsxJsxsCjsTransformKeyPropCustomImport.tsx, 1, 5))
 >key : Symbol(key, Decl(jsxJsxsCjsTransformKeyPropCustomImport.tsx, 3, 25))
->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2420, 114))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
 
 export {};
 

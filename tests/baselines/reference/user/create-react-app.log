@@ -1,12 +1,8 @@
 Exit Code: 2
 Standard output:
 test/fixtures/issue-5176-flow-class-properties/src/App.js(5,8): error TS8010: Type annotations can only be used in TypeScript files.
-test/fixtures/issue-5176-flow-class-properties/src/App.js(5,13): error TS1005: ';' expected.
-test/fixtures/webpack-message-formatting/src/AppBabel.js(6,8): error TS17008: JSX element 'div' has no corresponding closing tag.
-test/fixtures/webpack-message-formatting/src/AppBabel.js(8,7): error TS17002: Expected corresponding JSX closing tag for 'span'.
-test/fixtures/webpack-message-formatting/src/AppBabel.js(10,3): error TS1381: Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
-test/fixtures/webpack-message-formatting/src/AppBabel.js(11,1): error TS1381: Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
-test/fixtures/webpack-message-formatting/src/AppBabel.js(14,1): error TS1005: '</' expected.
+test/fixtures/issue-5176-flow-class-properties/src/App.js(5,13): error TS1442: Expected '=' for property initializer.
+test/fixtures/webpack-message-formatting/src/AppBabel.js(7,10): error TS17008: JSX element 'span' has no corresponding closing tag.
 
 
 

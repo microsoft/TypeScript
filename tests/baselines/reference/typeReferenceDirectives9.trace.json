@@ -18,10 +18,7 @@
     "======== Resolving module './main' from '/mod1.ts'. ========",
     "Resolution for module './main' was found in cache from location '/'.",
     "======== Module name './main' was successfully resolved to '/main.ts'. ========",
-    "======== Resolving type reference directive 'lib', containing file '/__inferred type names__.ts', root directory '/types'. ========",
-    "Resolving with primary search path '/types'.",
-    "File '/types/lib/package.json' does not exist.",
-    "File '/types/lib/index.d.ts' exist - use it as a name resolution result.",
-    "Resolving real path for '/types/lib/index.d.ts', result '/types/lib/index.d.ts'.",
+    "======== Resolving type reference directive 'lib', containing file '/__inferred type names__.ts'. ========",
+    "Resolution for type reference directive 'lib' was found in cache from location '/'.",
     "======== Type reference directive 'lib' was successfully resolved to '/types/lib/index.d.ts', primary: true. ========"
 ]

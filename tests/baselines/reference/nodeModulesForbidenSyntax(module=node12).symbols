@@ -1,0 +1,120 @@
+=== tests/cases/conformance/node/subfolder/index.ts ===
+// cjs format file
+const x = <T>() => <T><any>(void 0);
+>x : Symbol(x, Decl(index.ts, 1, 5))
+>T : Symbol(T, Decl(index.ts, 1, 11))
+>T : Symbol(T, Decl(index.ts, 1, 11))
+
+export {x};
+>x : Symbol(x, Decl(index.ts, 2, 8))
+
+=== tests/cases/conformance/node/subfolder/index.cts ===
+// cjs format file
+const x = <T>() => <T><any>(void 0);
+>x : Symbol(x, Decl(index.cts, 1, 5))
+>T : Symbol(T, Decl(index.cts, 1, 11))
+>T : Symbol(T, Decl(index.cts, 1, 11))
+
+export {x};
+>x : Symbol(x, Decl(index.cts, 2, 8))
+
+=== tests/cases/conformance/node/subfolder/index.mts ===
+// esm format file
+const x = <T>() => <T><any>(void 0);
+>x : Symbol(x, Decl(index.mts, 1, 5))
+>T : Symbol(T, Decl(index.mts, 1, 11))
+>T : Symbol(T, Decl(index.mts, 1, 11))
+
+export {x};
+>x : Symbol(x, Decl(index.mts, 2, 8))
+
+=== tests/cases/conformance/node/subfolder2/index.ts ===
+// cjs format file
+const x = <T>() => <T><any>(void 0);
+>x : Symbol(x, Decl(index.ts, 1, 5))
+>T : Symbol(T, Decl(index.ts, 1, 11))
+>T : Symbol(T, Decl(index.ts, 1, 11))
+
+export {x};
+>x : Symbol(x, Decl(index.ts, 2, 8))
+
+=== tests/cases/conformance/node/subfolder2/index.cts ===
+// cjs format file
+const x = <T>() => <T><any>(void 0);
+>x : Symbol(x, Decl(index.cts, 1, 5))
+>T : Symbol(T, Decl(index.cts, 1, 11))
+>T : Symbol(T, Decl(index.cts, 1, 11))
+
+export {x};
+>x : Symbol(x, Decl(index.cts, 2, 8))
+
+=== tests/cases/conformance/node/subfolder2/index.mts ===
+// esm format file
+const x = <T>() => <T><any>(void 0);
+>x : Symbol(x, Decl(index.mts, 1, 5))
+>T : Symbol(T, Decl(index.mts, 1, 11))
+>T : Symbol(T, Decl(index.mts, 1, 11))
+
+export {x};
+>x : Symbol(x, Decl(index.mts, 2, 8))
+
+=== tests/cases/conformance/node/subfolder2/another/index.ts ===
+// esm format file
+const x = <T>() => <T><any>(void 0);
+>x : Symbol(x, Decl(index.ts, 1, 5))
+>T : Symbol(T, Decl(index.ts, 1, 11))
+>T : Symbol(T, Decl(index.ts, 1, 11))
+
+export {x};
+>x : Symbol(x, Decl(index.ts, 2, 8))
+
+=== tests/cases/conformance/node/subfolder2/another/index.mts ===
+// esm format file
+const x = <T>() => <T><any>(void 0);
+>x : Symbol(x, Decl(index.mts, 1, 5))
+>T : Symbol(T, Decl(index.mts, 1, 11))
+>T : Symbol(T, Decl(index.mts, 1, 11))
+
+export {x};
+>x : Symbol(x, Decl(index.mts, 2, 8))
+
+=== tests/cases/conformance/node/subfolder2/another/index.cts ===
+// cjs format file
+const x = <T>() => <T><any>(void 0);
+>x : Symbol(x, Decl(index.cts, 1, 5))
+>T : Symbol(T, Decl(index.cts, 1, 11))
+>T : Symbol(T, Decl(index.cts, 1, 11))
+
+export {x};
+>x : Symbol(x, Decl(index.cts, 2, 8))
+
+=== tests/cases/conformance/node/index.mts ===
+// esm format file
+const x = <T>() => <T><any>(void 0);
+>x : Symbol(x, Decl(index.mts, 1, 5))
+>T : Symbol(T, Decl(index.mts, 1, 11))
+>T : Symbol(T, Decl(index.mts, 1, 11))
+
+export {x};
+>x : Symbol(x, Decl(index.mts, 2, 8))
+
+=== tests/cases/conformance/node/index.cts ===
+// cjs format file
+const x = <T>() => <T><any>(void 0);
+>x : Symbol(x, Decl(index.cts, 1, 5))
+>T : Symbol(T, Decl(index.cts, 1, 11))
+>T : Symbol(T, Decl(index.cts, 1, 11))
+
+export {x};
+>x : Symbol(x, Decl(index.cts, 2, 8))
+
+=== tests/cases/conformance/node/index.ts ===
+// esm format file
+const x = <T>() => <T><any>(void 0);
+>x : Symbol(x, Decl(index.ts, 1, 5))
+>T : Symbol(T, Decl(index.ts, 1, 11))
+>T : Symbol(T, Decl(index.ts, 1, 11))
+
+export {x};
+>x : Symbol(x, Decl(index.ts, 2, 8))
+

@@ -24,7 +24,7 @@ namespace ts.server.typingsInstaller {
         }
         catch (e) {
             if (log.isEnabled()) {
-                log.writeLine(`Failed to resolve ${packageName} in folder '${cachePath}': ${(<Error>e).message}`);
+                log.writeLine(`Failed to resolve ${packageName} in folder '${cachePath}': ${(e as Error).message}`);
             }
             return undefined;
         }
@@ -223,8 +223,8 @@ namespace ts.server.typingsInstaller {
                 this.log.writeLine(`Trying to find '${packageJson}'...`);
             }
             if (this.installTypingHost.fileExists(packageJson) && this.installTypingHost.fileExists(packageLockJson)) {
-                const npmConfig = <NpmConfig>JSON.parse(this.installTypingHost.readFile(packageJson)!); // TODO: GH#18217
-                const npmLock = <NpmLock>JSON.parse(this.installTypingHost.readFile(packageLockJson)!); // TODO: GH#18217
+                const npmConfig = JSON.parse(this.installTypingHost.readFile(packageJson)!) as NpmConfig; // TODO: GH#18217
+                const npmLock = JSON.parse(this.installTypingHost.readFile(packageLockJson)!) as NpmLock; // TODO: GH#18217
                 if (this.log.isEnabled()) {
                     this.log.writeLine(`Loaded content of '${packageJson}': ${JSON.stringify(npmConfig)}`);
                     this.log.writeLine(`Loaded content of '${packageLockJson}'`);
@@ -334,14 +334,14 @@ namespace ts.server.typingsInstaller {
             this.installRunCount++;
 
             // send progress event
-            this.sendResponse(<BeginInstallTypes>{
+            this.sendResponse({
                 kind: EventBeginInstallTypes,
                 eventId: requestId,
                 // qualified explicitly to prevent occasional shadowing
                 // eslint-disable-next-line @typescript-eslint/no-unnecessary-qualifier
                 typingsInstallerVersion: ts.version,
                 projectName: req.projectName
-            });
+            } as BeginInstallTypes);
 
             const scopedTypings = filteredTypings.map(typingsName);
             this.installTypingsAsync(requestId, scopedTypings, cachePath, ok => {

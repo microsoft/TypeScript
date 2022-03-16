@@ -2,7 +2,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInFunction.ts",
-      "position": 9
+      "position": 9,
+      "name": "1"
     },
     "quickInfo": {
       "kind": "function",
@@ -79,7 +80,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInFunction.ts",
-      "position": 13
+      "position": 13,
+      "name": "2"
     },
     "quickInfo": {
       "kind": "type parameter",
@@ -180,7 +182,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInFunction.ts",
-      "position": 16
+      "position": 16,
+      "name": "3"
     },
     "quickInfo": {
       "kind": "parameter",
@@ -229,7 +232,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInFunction.ts",
-      "position": 19
+      "position": 19,
+      "name": "4"
     },
     "quickInfo": {
       "kind": "type parameter",
@@ -330,7 +334,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInFunction.ts",
-      "position": 35
+      "position": 35,
+      "name": "5"
     },
     "quickInfo": {
       "kind": "parameter",
@@ -379,7 +384,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInFunction.ts",
-      "position": 40
+      "position": 40,
+      "name": "6"
     },
     "quickInfo": {
       "kind": "function",
@@ -456,7 +462,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInFunction.ts",
-      "position": 63
+      "position": 63,
+      "name": "7"
     },
     "quickInfo": {
       "kind": "function",
@@ -549,7 +556,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInFunction.ts",
-      "position": 68
+      "position": 68,
+      "name": "8"
     },
     "quickInfo": {
       "kind": "type parameter",
@@ -666,7 +674,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInFunction.ts",
-      "position": 86
+      "position": 86,
+      "name": "9"
     },
     "quickInfo": {
       "kind": "parameter",
@@ -731,7 +740,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInFunction.ts",
-      "position": 89
+      "position": 89,
+      "name": "10"
     },
     "quickInfo": {
       "kind": "type parameter",
@@ -848,7 +858,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInFunction.ts",
-      "position": 105
+      "position": 105,
+      "name": "11"
     },
     "quickInfo": {
       "kind": "parameter",
@@ -913,7 +924,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInFunction.ts",
-      "position": 110
+      "position": 110,
+      "name": "12"
     },
     "quickInfo": {
       "kind": "function",

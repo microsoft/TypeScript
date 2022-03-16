@@ -1,5 +1,5 @@
 // @strict: true
-// @jsx: react-jsx
+// @jsx: preserve,react-jsx
 // @jsxImportSource: @emotion/react
 // @filename: /node_modules/react/index.d.ts
 export = React;

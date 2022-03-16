@@ -1,0 +1,269 @@
+// === /tests/cases/fourslash/referencesForInheritedProperties8.ts ===
+// interface C extends D {
+//     /*FIND ALL REFS*/[|propD|]: number;
+// }
+// interface D extends C {
+//     [|propD|]: string;
+//     propC: number;
+// }
+// var d: D;
+// d.[|propD|];
+// d.propC;
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/referencesForInheritedProperties8.ts",
+      "kind": "property",
+      "name": "(property) C.propD: number",
+      "textSpan": {
+        "start": 28,
+        "length": 5
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "C",
+          "kind": "interfaceName"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "propD",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 28,
+        "length": 14
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 28,
+          "length": 5
+        },
+        "fileName": "/tests/cases/fourslash/referencesForInheritedProperties8.ts",
+        "contextSpan": {
+          "start": 28,
+          "length": 14
+        },
+        "isWriteAccess": false,
+        "isDefinition": true
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/referencesForInheritedProperties8.ts",
+      "kind": "property",
+      "name": "(property) D.propD: string",
+      "textSpan": {
+        "start": 73,
+        "length": 5
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "D",
+          "kind": "interfaceName"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "propD",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 73,
+        "length": 14
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 73,
+          "length": 5
+        },
+        "fileName": "/tests/cases/fourslash/referencesForInheritedProperties8.ts",
+        "contextSpan": {
+          "start": 73,
+          "length": 14
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 121,
+          "length": 5
+        },
+        "fileName": "/tests/cases/fourslash/referencesForInheritedProperties8.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/referencesForInheritedProperties8.ts ===
+// interface C extends D {
+//     propD: number;
+// }
+// interface D extends C {
+//     propD: string;
+//     /*FIND ALL REFS*/[|propC|]: number;
+// }
+// var d: D;
+// d.propD;
+// d.[|propC|];
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/referencesForInheritedProperties8.ts",
+      "kind": "property",
+      "name": "(property) D.propC: number",
+      "textSpan": {
+        "start": 92,
+        "length": 5
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "D",
+          "kind": "interfaceName"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "propC",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 92,
+        "length": 14
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 92,
+          "length": 5
+        },
+        "fileName": "/tests/cases/fourslash/referencesForInheritedProperties8.ts",
+        "contextSpan": {
+          "start": 92,
+          "length": 14
+        },
+        "isWriteAccess": false,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 130,
+          "length": 5
+        },
+        "fileName": "/tests/cases/fourslash/referencesForInheritedProperties8.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]

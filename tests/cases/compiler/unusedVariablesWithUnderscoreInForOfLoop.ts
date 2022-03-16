@@ -1,6 +1,6 @@
-//@noUnusedLocals:true
+// @noUnusedLocals: true
 
-function f() {
+function t1() {
     for (const [_a, b] of [['key', 1]]) {
         console.log(b);
     }
@@ -10,4 +10,21 @@ function f() {
     }
 
     for (const [_a, _b] of [['key', 1]]) {}
+}
+
+
+function t2() {
+    for (const [_a, b] of [['key', 1]]) {}
+
+    for (const [a, _b] of [['key', 1]]) {}
+
+    for (const [a, b] of [['key', 1]]) {}
+}
+
+function t3() {
+    for (const [[[_a, b]]] of [[[['key', 1]]]]) {}
+
+    for (const [[[a, _b]]] of [[[['key', 1]]]]) {}
+
+    for (const [[[a, b]]] of [[[['key', 1]]]]) {}
 }

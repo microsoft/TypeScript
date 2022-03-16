@@ -192,7 +192,7 @@ function A(stats: StatsBase<any>) {
 >console.log : (...data: any[]) => void
 >console : Console
 >log : (...data: any[]) => void
->`[Directory] ${stats.ctime}` : `[Directory] ${number}`
+>`[Directory] ${stats.ctime}` : string
 >stats.ctime : number
 >stats : StatsBase<any>
 >ctime : number

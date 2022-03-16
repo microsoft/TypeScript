@@ -76,11 +76,11 @@ function test<T extends 'foo' | 'bar'>(name: `get${Capitalize<T>}`) {
 
     let s1: string = name;
 >s1 : string
->name : `get${Capitalize<T>}`
+>name : "getFoo" | "getBar"
 
     let s2: 'getFoo' | 'getBar' = name;
 >s2 : "getFoo" | "getBar"
->name : `get${Capitalize<T>}`
+>name : "getFoo" | "getBar"
 }
 
 function fa1<T>(x: T, y: { [P in keyof T]: T[P] }, z: { [P in keyof T & string as `p_${P}`]: T[P] }) {
@@ -419,7 +419,7 @@ type Foo<T> = T extends `*${infer S}*` ? S : never;
 >Foo : Foo<T>
 
 type TF1 = Foo<any>;      // never
->TF1 : never
+>TF1 : string
 
 type TF2 = Foo<string>;   // never
 >TF2 : never
@@ -593,4 +593,29 @@ let make = getProp2(obj2, 'cars.1.make');  // 'Trabant'
 >getProp2 : <T, P extends PathKeys<T>>(obj: T, path: P) => PropType<T, P>
 >obj2 : { readonly name: "John"; readonly age: 42; readonly cars: readonly [{ readonly make: "Ford"; readonly age: 10; }, { readonly make: "Trabant"; readonly age: 35; }]; }
 >'cars.1.make' : "cars.1.make"
+
+// Repro from #46480
+
+export type Spacing =
+>Spacing : Spacing
+
+    | `0`
+    | `${number}px`
+    | `${number}rem`
+    | `s${1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20}`;
+
+const spacing: Spacing = "s12"
+>spacing : Spacing
+>"s12" : "s12"
+
+export type SpacingShorthand =
+>SpacingShorthand : any
+
+    | `${Spacing} ${Spacing}`
+    | `${Spacing} ${Spacing} ${Spacing}`
+    | `${Spacing} ${Spacing} ${Spacing} ${Spacing}`;
+
+const test1: SpacingShorthand = "0 0 0";
+>test1 : any
+>"0 0 0" : "0 0 0"
 

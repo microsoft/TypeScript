@@ -1,5 +1,5 @@
 tests/cases/conformance/es6/Symbols/symbolProperty34.ts(1,18): error TS2449: Class 'C2' used before its declaration.
-tests/cases/conformance/es6/Symbols/symbolProperty34.ts(7,6): error TS1023: An index signature parameter type must be either 'string' or 'number'.
+tests/cases/conformance/es6/Symbols/symbolProperty34.ts(2,5): error TS2411: Property '[Symbol.toStringTag]' of type '() => { x: string; }' is not assignable to 'symbol' index type '() => { x: number; }'.
 
 
 ==== tests/cases/conformance/es6/Symbols/symbolProperty34.ts (2 errors) ====
@@ -8,11 +8,11 @@ tests/cases/conformance/es6/Symbols/symbolProperty34.ts(7,6): error TS1023: An i
 !!! error TS2449: Class 'C2' used before its declaration.
 !!! related TS2728 tests/cases/conformance/es6/Symbols/symbolProperty34.ts:6:7: 'C2' is declared here.
         [Symbol.toStringTag]() {
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2411: Property '[Symbol.toStringTag]' of type '() => { x: string; }' is not assignable to 'symbol' index type '() => { x: number; }'.
             return { x: "" };
         }
     }
     class C2 {
         [s: symbol]: () => { x: number };
-         ~
-!!! error TS1023: An index signature parameter type must be either 'string' or 'number'.
     }

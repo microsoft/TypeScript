@@ -27,6 +27,7 @@ module TypeScript {
 >outfile : Symbol(PrintContext.outfile, Decl(parserRealSource5.ts, 13, 21))
 >ITextWriter : Symbol(ITextWriter, Decl(lib.scripthost.d.ts, --, --))
 >parser : Symbol(PrintContext.parser, Decl(parserRealSource5.ts, 13, 49))
+>Parser : Symbol(Parser)
         }
 
         public increaseIndent() {
@@ -150,8 +151,11 @@ module TypeScript {
     export function prePrintAST(ast: AST, parent: AST, walker: IAstWalker) {
 >prePrintAST : Symbol(prePrintAST, Decl(parserRealSource5.ts, 49, 5))
 >ast : Symbol(ast, Decl(parserRealSource5.ts, 51, 32))
+>AST : Symbol(AST)
 >parent : Symbol(parent, Decl(parserRealSource5.ts, 51, 41))
+>AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource5.ts, 51, 54))
+>IAstWalker : Symbol(IAstWalker)
 
         var pc: PrintContext = <PrintContext>walker.state;
 >pc : Symbol(pc, Decl(parserRealSource5.ts, 52, 11))
@@ -176,8 +180,11 @@ module TypeScript {
     export function postPrintAST(ast: AST, parent: AST, walker: IAstWalker) {
 >postPrintAST : Symbol(postPrintAST, Decl(parserRealSource5.ts, 57, 5))
 >ast : Symbol(ast, Decl(parserRealSource5.ts, 60, 33))
+>AST : Symbol(AST)
 >parent : Symbol(parent, Decl(parserRealSource5.ts, 60, 42))
+>AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource5.ts, 60, 55))
+>IAstWalker : Symbol(IAstWalker)
 
         var pc: PrintContext = <PrintContext>walker.state;
 >pc : Symbol(pc, Decl(parserRealSource5.ts, 61, 11))

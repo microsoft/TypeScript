@@ -17,14 +17,14 @@ class Container {
 }
 
 module.exports = Container;
->module.exports : Symbol("tests/cases/conformance/jsdoc/declarations/index", Decl(index.js, 0, 0))
+>module.exports : Symbol(module.exports, Decl(index.js, 0, 0))
 >module : Symbol(export=, Decl(index.js, 6, 1))
 >exports : Symbol(export=, Decl(index.js, 6, 1))
 >Container : Symbol(Container, Decl(index.js, 0, 29))
 
 === tests/cases/conformance/jsdoc/declarations/obj.js ===
 module.exports = class Obj {
->module.exports : Symbol("tests/cases/conformance/jsdoc/declarations/obj", Decl(obj.js, 0, 0))
+>module.exports : Symbol(module.exports, Decl(obj.js, 0, 0))
 >module : Symbol(export=, Decl(obj.js, 0, 0))
 >exports : Symbol(export=, Decl(obj.js, 0, 0))
 >Obj : Symbol(Obj, Decl(obj.js, 0, 16))

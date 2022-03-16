@@ -10,7 +10,7 @@ namespace ts.codefix {
     ];
     registerCodeFix({
         errorCodes,
-        getCodeActions: context => {
+        getCodeActions: function getCodeActionsToFixNotFoundModule(context) {
             const { host, sourceFile, span: { start } } = context;
             const packageName = tryGetImportedPackageName(sourceFile, start);
             if (packageName === undefined) return undefined;
@@ -44,7 +44,9 @@ namespace ts.codefix {
     }
 
     function tryGetImportedPackageName(sourceFile: SourceFile, pos: number): string | undefined {
-        const moduleName = cast(getTokenAtPosition(sourceFile, pos), isStringLiteral).text;
+        const moduleSpecifierText = tryCast(getTokenAtPosition(sourceFile, pos), isStringLiteral);
+        if (!moduleSpecifierText) return undefined;
+        const moduleName = moduleSpecifierText.text;
         const { packageName } = parsePackageName(moduleName);
         return isExternalModuleNameRelative(packageName) ? undefined : packageName;
     }

@@ -9,8 +9,9 @@
      * @template T
      * @template V
        ~~~~~~~~~~~
-!!! error TS6133: 'V' is declared but its value is never read.
      */
+    ~
+!!! error TS6133: 'V' is declared but its value is never read.
     class C1 {
         constructor() {
             /** @type {T} */
@@ -21,8 +22,9 @@
     /**
      * @template T,V
        ~~~~~~~~~~~~~
-!!! error TS6205: All type parameters are unused.
      */
+    ~
+!!! error TS6205: All type parameters are unused.
     class C2 {
         constructor() { }
     }

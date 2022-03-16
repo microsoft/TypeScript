@@ -76,3 +76,7 @@ if(/** @type {numOrStr is string} */(numOrStr === undefined)) { // Error
 }
 
 
+var asConst1 = /** @type {const} */(1);
+var asConst2 = /** @type {const} */({
+    x: 1
+});

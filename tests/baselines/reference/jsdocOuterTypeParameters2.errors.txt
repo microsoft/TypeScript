@@ -1,0 +1,24 @@
+error TS5055: Cannot write file 'tests/cases/conformance/jsdoc/jsdocOuterTypeParameters1.js' because it would overwrite input file.
+  Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig.
+tests/cases/conformance/jsdoc/jsdocOuterTypeParameters1.js(1,14): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+tests/cases/conformance/jsdoc/jsdocOuterTypeParameters1.js(7,35): error TS2339: Property 'foo' does not exist on type 'Bar'.
+
+
+!!! error TS5055: Cannot write file 'tests/cases/conformance/jsdoc/jsdocOuterTypeParameters1.js' because it would overwrite input file.
+!!! error TS5055:   Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig.
+==== tests/cases/conformance/jsdoc/jsdocOuterTypeParameters1.js (2 errors) ====
+    /** @return {T} */
+                 ~
+!!! error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+    const dedupingMixin = function(mixin) {};
+    
+     /** @template T */
+    const PropertyAccessors = dedupingMixin(() => {
+      class Bar {
+        static bar() { this.prototype.foo(); }
+                                      ~~~
+!!! error TS2339: Property 'foo' does not exist on type 'Bar'.
+      }
+    });
+    
+    

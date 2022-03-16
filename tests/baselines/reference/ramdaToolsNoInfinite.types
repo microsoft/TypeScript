@@ -83,7 +83,7 @@ declare namespace Tools {
 >Cast : Cast<X, Y>
 
     type Pos<I extends any[]> =
->Pos : Length<I>
+>Pos : Pos<I>
 
         Length<I>;
 
@@ -93,7 +93,7 @@ declare namespace Tools {
         Prepend<any, I>;
 
     type Prev<I extends any[]> =
->Prev : Tail<I>
+>Prev : Prev<I>
 
         Tail<I>;
 
@@ -116,7 +116,7 @@ declare namespace Tools {
 >Reverse : Reverse<T, R, I>
 
         0: Reverse<T, Prepend<T[Pos<I>], R>, Next<I>>;
->0 : Reverse<T, [head: T[Length<I>], ...args: R], [head: any, ...args: I]>
+>0 : Reverse<T, [head: T[Pos<I>], ...args: R], [head: any, ...args: I]>
 
         1: R;
 >1 : R
@@ -128,12 +128,12 @@ declare namespace Tools {
     ];
 
     type Concat<T1 extends any[], T2 extends any[]> =
->Concat : Reverse<Reverse<T1, [], []> extends infer R ? Cast<R, any[]> : never, T2, []>
+>Concat : Concat<T1, T2>
 
         Reverse<Reverse<T1> extends infer R ? Cast<R, any[]> : never, T2>;
 
     type Append<E, T extends any[]> =
->Append : Reverse<Reverse<T, [], []> extends infer R ? Cast<R, any[]> : never, [E], []>
+>Append : Append<E, T>
 
         Concat<T, [E]>;
 
@@ -168,7 +168,7 @@ declare namespace Curry {
 >Tools : any
 
         1: Tools.Concat<TN, Tools.Drop<Tools.Pos<I>, T2> extends infer D ? Tools.Cast<D, any[]> : never>;
->1 : Tools.Reverse<Tools.Reverse<TN, [], []> extends infer R ? Tools.Cast<R, any[]> : never, Tools.Drop<Tools.Length<I>, T2, []> extends infer D ? Tools.Cast<D, any[]> : never, []>
+>1 : Tools.Concat<TN, Tools.Drop<Tools.Pos<I>, T2, []> extends infer D ? Tools.Cast<D, any[]> : never>
 >Tools : any
 >Tools : any
 >Tools : any

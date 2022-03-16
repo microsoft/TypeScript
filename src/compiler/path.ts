@@ -452,6 +452,11 @@ namespace ts {
      * Normalize path separators, converting `\` into `/`.
      */
     export function normalizeSlashes(path: string): string {
+        const index = path.indexOf("\\");
+        if (index === -1) {
+            return path;
+        }
+        backslashRegExp.lastIndex = index; // prime regex with known position
         return path.replace(backslashRegExp, directorySeparator);
     }
 
@@ -547,6 +552,19 @@ namespace ts {
 
     export function normalizePath(path: string): string {
         path = normalizeSlashes(path);
+        // Most paths don't require normalization
+        if (!relativePathSegmentRegExp.test(path)) {
+            return path;
+        }
+        // Some paths only require cleanup of `/./` or leading `./`
+        const simplified = path.replace(/\/\.\//g, "/").replace(/^\.\//, "");
+        if (simplified !== path) {
+            path = simplified;
+            if (!relativePathSegmentRegExp.test(path)) {
+                return path;
+            }
+        }
+        // Other paths require full normalization
         const normalized = getPathFromPathComponents(reducePathComponents(getPathComponents(path)));
         return normalized && hasTrailingDirectorySeparator(path) ? ensureTrailingDirectorySeparator(normalized) : normalized;
     }
@@ -564,19 +582,7 @@ namespace ts {
         const nonCanonicalizedPath = isRootedDiskPath(fileName)
             ? normalizePath(fileName)
             : getNormalizedAbsolutePath(fileName, basePath);
-        return <Path>getCanonicalFileName(nonCanonicalizedPath);
-    }
-
-    export function normalizePathAndParts(path: string): { path: string, parts: string[] } {
-        path = normalizeSlashes(path);
-        const [root, ...parts] = reducePathComponents(getPathComponents(path));
-        if (parts.length) {
-            const joinedParts = root + parts.join(directorySeparator);
-            return { path: hasTrailingDirectorySeparator(path) ? ensureTrailingDirectorySeparator(joinedParts) : joinedParts, parts };
-        }
-        else {
-            return { path: root, parts };
-        }
+        return getCanonicalFileName(nonCanonicalizedPath) as Path;
     }
 
     //// Path Mutation
@@ -658,7 +664,7 @@ namespace ts {
     //// Path Comparisons
 
     // check path for these segments: '', '.'. '..'
-    const relativePathSegmentRegExp = /(^|\/)\.{0,2}($|\/)/;
+    const relativePathSegmentRegExp = /(?:\/\/)|(?:^|\/)\.\.?(?:$|\/)/;
 
     function comparePathsWorker(a: string, b: string, componentComparer: (a: string, b: string) => Comparison) {
         if (a === b) return Comparison.EqualTo;
@@ -762,7 +768,7 @@ namespace ts {
      * Determines whether `fileName` starts with the specified `directoryName` using the provided path canonicalization callback.
      * Comparison is case-sensitive between the canonical paths.
      *
-     * @deprecated Use `containsPath` if possible.
+     * Use `containsPath` if file names are not already reduced and absolute.
      */
     export function startsWithDirectory(fileName: string, directoryName: string, getCanonicalFileName: GetCanonicalFileName): boolean {
         const canonicalFileName = getCanonicalFileName(fileName);

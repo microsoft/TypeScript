@@ -132,3 +132,30 @@ function d<T extends string>(data: string | T): never {
     }
 }
 
+interface I<T> {
+  p: T;
+>p : T
+}
+function e(x: I<"A" | "B">) {
+>e : (x: I<"A" | "B">) => void
+>x : I<"A" | "B">
+
+    if (x.p === "A") {
+>x.p === "A" : boolean
+>x.p : "A" | "B"
+>x : I<"A" | "B">
+>p : "A" | "B"
+>"A" : "A"
+
+        let a: "A" = (null as unknown as typeof x.p)
+>a : "A"
+>(null as unknown as typeof x.p) : "A"
+>null as unknown as typeof x.p : "A"
+>null as unknown : unknown
+>null : null
+>x.p : "A"
+>x : I<"A" | "B">
+>p : "A"
+    }
+}
+

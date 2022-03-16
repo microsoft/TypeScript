@@ -43,8 +43,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.vb = exports.va = void 0;
 const ext_1 = require("ext");
 const other_1 = require("ext/other");
-exports.va = ext_1.fa();
-exports.vb = other_1.fb();
+exports.va = (0, ext_1.fa)();
+exports.vb = (0, other_1.fb)();
 
 
 //// [main.d.ts]

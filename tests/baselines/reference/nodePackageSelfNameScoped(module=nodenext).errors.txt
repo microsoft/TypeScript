@@ -1,0 +1,24 @@
+tests/cases/conformance/node/index.cts(2,23): error TS1471: Module '@scope/package' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+
+
+==== tests/cases/conformance/node/index.ts (0 errors) ====
+    // esm format file
+    import * as self from "@scope/package";
+    self;
+==== tests/cases/conformance/node/index.mts (0 errors) ====
+    // esm format file
+    import * as self from "@scope/package";
+    self;
+==== tests/cases/conformance/node/index.cts (1 errors) ====
+    // cjs format file
+    import * as self from "@scope/package";
+                          ~~~~~~~~~~~~~~~~
+!!! error TS1471: Module '@scope/package' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+    self;
+==== tests/cases/conformance/node/package.json (0 errors) ====
+    {
+        "name": "@scope/package",
+        "private": true,
+        "type": "module",
+        "exports": "./index.js"
+    }

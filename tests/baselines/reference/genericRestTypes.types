@@ -25,7 +25,7 @@ type Bind1<T extends (head: any, ...tail: any[]) => any> = (...args: Tail<Parame
 >args : Tail<Parameters<T>>
 
 type Generic = Bind1<MyFunctionType>; // (bar: string) => boolean
->Generic : Bind1<MyFunctionType>
+>Generic : Generic
 
 function assignmentWithComplexRest<T extends any[]>() {
 >assignmentWithComplexRest : <T extends any[]>() => void

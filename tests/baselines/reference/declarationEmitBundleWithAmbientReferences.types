@@ -14,7 +14,7 @@ import { Result } from "lib/result";
 >Result : any
 
 export type T<T> = Result<Error, T>;
->T : Result<Error, T>
+>T : import("tests/cases/compiler/src/datastore_result").T<T>
 
 === tests/cases/compiler/src/conditional_directive_field.ts ===
 import * as DatastoreResult from "src/datastore_result";

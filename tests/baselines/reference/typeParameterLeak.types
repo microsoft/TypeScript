@@ -28,7 +28,7 @@ declare const f: BoxFactoryFactory<BoxTypes>;
 const b = f({ x: "", y: "" })?.getBox();
 >b : Box<{ x: string; }> | Box<{ y: string; }> | undefined
 >f({ x: "", y: "" })?.getBox() : Box<{ x: string; }> | Box<{ y: string; }> | undefined
->f({ x: "", y: "" })?.getBox : (() => Box<{ x: string; }>) | (() => Box<{ y: string; }>) | undefined
+>f({ x: "", y: "" })?.getBox : (() => Box<{ y: string; }>) | (() => Box<{ x: string; }>) | undefined
 >f({ x: "", y: "" }) : BoxFactory<Box<{ x: string; }>> | BoxFactory<Box<{ y: string; }>> | undefined
 >f : ((arg: { x: string; }) => BoxFactory<Box<{ x: string; }>> | undefined) | ((arg: { y: string; }) => BoxFactory<Box<{ y: string; }>> | undefined)
 >{ x: "", y: "" } : { x: string; y: string; }
@@ -36,7 +36,7 @@ const b = f({ x: "", y: "" })?.getBox();
 >"" : ""
 >y : string
 >"" : ""
->getBox : (() => Box<{ x: string; }>) | (() => Box<{ y: string; }>) | undefined
+>getBox : (() => Box<{ y: string; }>) | (() => Box<{ x: string; }>) | undefined
 
 if (b) {
 >b : Box<{ x: string; }> | Box<{ y: string; }> | undefined
@@ -44,7 +44,7 @@ if (b) {
   const x = b.data;
 >x : { x: string; } | { y: string; }
 >b.data : { x: string; } | { y: string; }
->b : BoxTypes
+>b : Box<{ x: string; }> | Box<{ y: string; }>
 >data : { x: string; } | { y: string; }
 }
 

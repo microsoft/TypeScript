@@ -733,35 +733,35 @@ declare var events: EventType<Record1>;
 
 events.emit('move', 10, 'left');
 >events.emit('move', 10, 'left') : void
->events.emit : <K extends "move" | "jump" | "stop" | "done" = "move" | "jump" | "stop" | "done">(e: K, ...payload: Record1[K] extends any[] ? Record1[K] : [Record1[K]]) => void
+>events.emit : <K extends keyof Record1 = keyof Record1>(e: K, ...payload: Record1[K] extends any[] ? Record1[K] : [Record1[K]]) => void
 >events : EventType<Record1>
->emit : <K extends "move" | "jump" | "stop" | "done" = "move" | "jump" | "stop" | "done">(e: K, ...payload: Record1[K] extends any[] ? Record1[K] : [Record1[K]]) => void
+>emit : <K extends keyof Record1 = keyof Record1>(e: K, ...payload: Record1[K] extends any[] ? Record1[K] : [Record1[K]]) => void
 >'move' : "move"
 >10 : 10
 >'left' : "left"
 
 events.emit('jump', 20, 'up');
 >events.emit('jump', 20, 'up') : void
->events.emit : <K extends "move" | "jump" | "stop" | "done" = "move" | "jump" | "stop" | "done">(e: K, ...payload: Record1[K] extends any[] ? Record1[K] : [Record1[K]]) => void
+>events.emit : <K extends keyof Record1 = keyof Record1>(e: K, ...payload: Record1[K] extends any[] ? Record1[K] : [Record1[K]]) => void
 >events : EventType<Record1>
->emit : <K extends "move" | "jump" | "stop" | "done" = "move" | "jump" | "stop" | "done">(e: K, ...payload: Record1[K] extends any[] ? Record1[K] : [Record1[K]]) => void
+>emit : <K extends keyof Record1 = keyof Record1>(e: K, ...payload: Record1[K] extends any[] ? Record1[K] : [Record1[K]]) => void
 >'jump' : "jump"
 >20 : 20
 >'up' : "up"
 
 events.emit('stop', 'Bye!');
 >events.emit('stop', 'Bye!') : void
->events.emit : <K extends "move" | "jump" | "stop" | "done" = "move" | "jump" | "stop" | "done">(e: K, ...payload: Record1[K] extends any[] ? Record1[K] : [Record1[K]]) => void
+>events.emit : <K extends keyof Record1 = keyof Record1>(e: K, ...payload: Record1[K] extends any[] ? Record1[K] : [Record1[K]]) => void
 >events : EventType<Record1>
->emit : <K extends "move" | "jump" | "stop" | "done" = "move" | "jump" | "stop" | "done">(e: K, ...payload: Record1[K] extends any[] ? Record1[K] : [Record1[K]]) => void
+>emit : <K extends keyof Record1 = keyof Record1>(e: K, ...payload: Record1[K] extends any[] ? Record1[K] : [Record1[K]]) => void
 >'stop' : "stop"
 >'Bye!' : "Bye!"
 
 events.emit('done');
 >events.emit('done') : void
->events.emit : <K extends "move" | "jump" | "stop" | "done" = "move" | "jump" | "stop" | "done">(e: K, ...payload: Record1[K] extends any[] ? Record1[K] : [Record1[K]]) => void
+>events.emit : <K extends keyof Record1 = keyof Record1>(e: K, ...payload: Record1[K] extends any[] ? Record1[K] : [Record1[K]]) => void
 >events : EventType<Record1>
->emit : <K extends "move" | "jump" | "stop" | "done" = "move" | "jump" | "stop" | "done">(e: K, ...payload: Record1[K] extends any[] ? Record1[K] : [Record1[K]]) => void
+>emit : <K extends keyof Record1 = keyof Record1>(e: K, ...payload: Record1[K] extends any[] ? Record1[K] : [Record1[K]]) => void
 >'done' : "done"
 
 // Repro from #25871

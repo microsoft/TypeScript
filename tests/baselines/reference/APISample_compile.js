@@ -66,10 +66,10 @@ function compile(fileNames, options) {
             return;
         }
         var _a = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start), line = _a.line, character = _a.character;
-        console.log(diagnostic.file.fileName + " (" + (line + 1) + "," + (character + 1) + "): " + message);
+        console.log("".concat(diagnostic.file.fileName, " (").concat(line + 1, ",").concat(character + 1, "): ").concat(message));
     });
     var exitCode = emitResult.emitSkipped ? 1 : 0;
-    console.log("Process exiting with code '" + exitCode + "'.");
+    console.log("Process exiting with code '".concat(exitCode, "'."));
     process.exit(exitCode);
 }
 exports.compile = compile;

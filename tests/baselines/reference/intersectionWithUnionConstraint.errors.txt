@@ -1,13 +1,8 @@
 tests/cases/conformance/types/intersection/intersectionWithUnionConstraint.ts(7,9): error TS2322: Type 'T & U' is not assignable to type 'string | number'.
-  Type 'T & U' is not assignable to type 'number'.
 tests/cases/conformance/types/intersection/intersectionWithUnionConstraint.ts(8,9): error TS2322: Type 'T & U' is not assignable to type 'string | null'.
-  Type 'T & U' is not assignable to type 'string'.
 tests/cases/conformance/types/intersection/intersectionWithUnionConstraint.ts(10,9): error TS2322: Type 'T & U' is not assignable to type 'number | null'.
-  Type 'T & U' is not assignable to type 'number'.
 tests/cases/conformance/types/intersection/intersectionWithUnionConstraint.ts(11,9): error TS2322: Type 'T & U' is not assignable to type 'number | undefined'.
-  Type 'T & U' is not assignable to type 'number'.
 tests/cases/conformance/types/intersection/intersectionWithUnionConstraint.ts(12,9): error TS2322: Type 'T & U' is not assignable to type 'null | undefined'.
-  Type 'T & U' is not assignable to type 'null'.
 
 
 ==== tests/cases/conformance/types/intersection/intersectionWithUnionConstraint.ts (5 errors) ====
@@ -20,24 +15,19 @@ tests/cases/conformance/types/intersection/intersectionWithUnionConstraint.ts(12
         let y1: string | number = x;     // Error
             ~~
 !!! error TS2322: Type 'T & U' is not assignable to type 'string | number'.
-!!! error TS2322:   Type 'T & U' is not assignable to type 'number'.
         let y2: string | null = x;       // Error
             ~~
 !!! error TS2322: Type 'T & U' is not assignable to type 'string | null'.
-!!! error TS2322:   Type 'T & U' is not assignable to type 'string'.
         let y3: string | undefined = x;
         let y4: number | null = x;       // Error
             ~~
 !!! error TS2322: Type 'T & U' is not assignable to type 'number | null'.
-!!! error TS2322:   Type 'T & U' is not assignable to type 'number'.
         let y5: number | undefined = x;  // Error
             ~~
 !!! error TS2322: Type 'T & U' is not assignable to type 'number | undefined'.
-!!! error TS2322:   Type 'T & U' is not assignable to type 'number'.
         let y6: null | undefined = x;    // Error
             ~~
 !!! error TS2322: Type 'T & U' is not assignable to type 'null | undefined'.
-!!! error TS2322:   Type 'T & U' is not assignable to type 'null'.
     }
     
     type T1 = (string | number | undefined) & (string | null | undefined);  // string | undefined

@@ -6,15 +6,15 @@ type BugHelper<T, TAll> = T extends any ? Exclude<UnionKeys<TAll>, keyof T> : ne
 >BugHelper : BugHelper<T, TAll>
 
 type Bug<TAll> =  BugHelper<TAll, TAll>
->Bug : BugHelper<TAll, TAll>
+>Bug : Bug<TAll>
 
 type Q = UnionKeys<{ a : any } | { b: any }>    // should be "a" | "b"
->Q : "a" | "b"
+>Q : Q
 >a : any
 >b : any
 
 type R = Bug<{ a : any } | { b: any }>          // should be "a" | "b"
->R : "a" | "b"
+>R : R
 >a : any
 >b : any
 
