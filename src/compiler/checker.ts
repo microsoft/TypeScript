@@ -12219,8 +12219,10 @@ namespace ts {
         }
 
         function isMappedTypeGenericIndexedAccess(type: Type) {
-            return type.flags & TypeFlags.IndexedAccess && getObjectFlags((type as IndexedAccessType).objectType) & ObjectFlags.Mapped &&
-                !isGenericMappedType((type as IndexedAccessType).objectType) && isGenericIndexType((type as IndexedAccessType).indexType);
+            let objectType;
+            return !!(type.flags & TypeFlags.IndexedAccess && getObjectFlags(objectType = (type as IndexedAccessType).objectType) & ObjectFlags.Mapped &&
+                !isGenericMappedType(objectType) && isGenericIndexType((type as IndexedAccessType).indexType) &&
+                !(objectType as MappedType).declaration.questionToken && !(objectType as MappedType).declaration.nameType);
         }
 
         /**
@@ -15656,7 +15658,7 @@ namespace ts {
             // If the object type is a mapped type { [P in K]: E }, where K is generic, instantiate E using a mapper
             // that substitutes the index type for P. For example, for an index access { [P in K]: Box<T[P]> }[X], we
             // construct the type Box<T[X]>.
-            if (isGenericMappedType(objectType)) {
+            if (isGenericMappedType(objectType) && !objectType.declaration.nameType) {
                 return type[cache] = mapType(substituteIndexedMappedType(objectType, type.indexType), t => getSimplifiedType(t, writing));
             }
             return type[cache] = type;
@@ -17901,7 +17903,7 @@ namespace ts {
                 const targetReturnType = isResolvingReturnTypeOfSignature(target) ? anyType
                     : target.declaration && isJSConstructor(target.declaration) ? getDeclaredTypeOfClassOrInterface(getMergedSymbol(target.declaration.symbol))
                     : getReturnTypeOfSignature(target);
-                if (targetReturnType === voidType) {
+                if (targetReturnType === voidType || targetReturnType === anyType) {
                     return result;
                 }
                 const sourceReturnType = isResolvingReturnTypeOfSignature(source) ? anyType
@@ -26650,7 +26652,7 @@ namespace ts {
 
         function getTypeOfPropertyOfContextualType(type: Type, name: __String, nameType?: Type) {
             return mapType(type, t => {
-                if (isGenericMappedType(t)) {
+                if (isGenericMappedType(t) && !t.declaration.nameType) {
                     const constraint = getConstraintTypeFromMappedType(t);
                     const constraintOfConstraint = getBaseConstraintOfType(constraint) || constraint;
                     const propertyNameType = nameType || getStringLiteralType(unescapeLeadingUnderscores(name));

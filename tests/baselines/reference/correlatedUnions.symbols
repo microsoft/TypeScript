@@ -753,3 +753,74 @@ function func<K extends keyof MyObj>(k: K): MyObj[K]['name'] | undefined {
 >undefined : Symbol(undefined)
 }
 
+// Repro from #48157
+
+interface Foo {
+>Foo : Symbol(Foo, Decl(correlatedUnions.ts, 209, 1))
+
+    bar?: string
+>bar : Symbol(Foo.bar, Decl(correlatedUnions.ts, 213, 15))
+}
+
+function foo<T extends keyof Foo>(prop: T, f: Required<Foo>) {
+>foo : Symbol(foo, Decl(correlatedUnions.ts, 215, 1))
+>T : Symbol(T, Decl(correlatedUnions.ts, 217, 13))
+>Foo : Symbol(Foo, Decl(correlatedUnions.ts, 209, 1))
+>prop : Symbol(prop, Decl(correlatedUnions.ts, 217, 34))
+>T : Symbol(T, Decl(correlatedUnions.ts, 217, 13))
+>f : Symbol(f, Decl(correlatedUnions.ts, 217, 42))
+>Required : Symbol(Required, Decl(lib.es5.d.ts, --, --))
+>Foo : Symbol(Foo, Decl(correlatedUnions.ts, 209, 1))
+
+    bar(f[prop]);
+>bar : Symbol(bar, Decl(correlatedUnions.ts, 219, 1))
+>f : Symbol(f, Decl(correlatedUnions.ts, 217, 42))
+>prop : Symbol(prop, Decl(correlatedUnions.ts, 217, 34))
+}
+
+declare function bar(t: string): void;
+>bar : Symbol(bar, Decl(correlatedUnions.ts, 219, 1))
+>t : Symbol(t, Decl(correlatedUnions.ts, 221, 21))
+
+// Repro from #48246
+
+declare function makeCompleteLookupMapping<T extends ReadonlyArray<any>, Attr extends keyof T[number]>(
+>makeCompleteLookupMapping : Symbol(makeCompleteLookupMapping, Decl(correlatedUnions.ts, 221, 38))
+>T : Symbol(T, Decl(correlatedUnions.ts, 225, 43))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+>Attr : Symbol(Attr, Decl(correlatedUnions.ts, 225, 72))
+>T : Symbol(T, Decl(correlatedUnions.ts, 225, 43))
+
+    ops: T, attr: Attr): { [Item in T[number]as Item[Attr]]: Item };
+>ops : Symbol(ops, Decl(correlatedUnions.ts, 225, 103))
+>T : Symbol(T, Decl(correlatedUnions.ts, 225, 43))
+>attr : Symbol(attr, Decl(correlatedUnions.ts, 226, 11))
+>Attr : Symbol(Attr, Decl(correlatedUnions.ts, 225, 72))
+>Item : Symbol(Item, Decl(correlatedUnions.ts, 226, 28))
+>T : Symbol(T, Decl(correlatedUnions.ts, 225, 43))
+>Item : Symbol(Item, Decl(correlatedUnions.ts, 226, 28))
+>Attr : Symbol(Attr, Decl(correlatedUnions.ts, 225, 72))
+>Item : Symbol(Item, Decl(correlatedUnions.ts, 226, 28))
+
+const ALL_BARS = [{ name: 'a'}, {name: 'b'}] as const;
+>ALL_BARS : Symbol(ALL_BARS, Decl(correlatedUnions.ts, 228, 5))
+>name : Symbol(name, Decl(correlatedUnions.ts, 228, 19))
+>name : Symbol(name, Decl(correlatedUnions.ts, 228, 33))
+>const : Symbol(const)
+
+const BAR_LOOKUP = makeCompleteLookupMapping(ALL_BARS, 'name');
+>BAR_LOOKUP : Symbol(BAR_LOOKUP, Decl(correlatedUnions.ts, 230, 5))
+>makeCompleteLookupMapping : Symbol(makeCompleteLookupMapping, Decl(correlatedUnions.ts, 221, 38))
+>ALL_BARS : Symbol(ALL_BARS, Decl(correlatedUnions.ts, 228, 5))
+
+type BarLookup = typeof BAR_LOOKUP;
+>BarLookup : Symbol(BarLookup, Decl(correlatedUnions.ts, 230, 63))
+>BAR_LOOKUP : Symbol(BAR_LOOKUP, Decl(correlatedUnions.ts, 230, 5))
+
+type Baz = { [K in keyof BarLookup]: BarLookup[K]['name'] };
+>Baz : Symbol(Baz, Decl(correlatedUnions.ts, 232, 35))
+>K : Symbol(K, Decl(correlatedUnions.ts, 234, 14))
+>BarLookup : Symbol(BarLookup, Decl(correlatedUnions.ts, 230, 63))
+>BarLookup : Symbol(BarLookup, Decl(correlatedUnions.ts, 230, 63))
+>K : Symbol(K, Decl(correlatedUnions.ts, 234, 14))
+

@@ -15,7 +15,7 @@
         "category": "Error",
         "code": 1006
     },
-    "The parser expected to find a '}' to match the '{' token here.": {
+    "The parser expected to find a '{1}' to match the '{0}' token here.": {
         "category": "Error",
         "code": 1007
     },
