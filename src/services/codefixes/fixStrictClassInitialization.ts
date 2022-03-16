@@ -109,6 +109,7 @@ namespace ts.codefix {
     }
 
     function addInitializer(changeTracker: textChanges.ChangeTracker, propertyDeclarationSourceFile: SourceFile, propertyDeclaration: PropertyDeclaration, initializer: Expression): void {
+        suppressLeadingAndTrailingTrivia(propertyDeclaration);
         const property = factory.updatePropertyDeclaration(
             propertyDeclaration,
             propertyDeclaration.decorators,
