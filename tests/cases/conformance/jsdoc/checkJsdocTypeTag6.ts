@@ -21,3 +21,20 @@ function add2(a, b) { return a + b; }
 // TODO: Should be an error since signature doesn't match.
 /** @type {(a: number, b: number, c: number) => number} */
 function add3(a, b) { return a + b; }
+
+// Confirm initializers are compatible.
+// They can't have more parameters than the type/context.
+
+/** @type {() => void} */
+function func(more) {} // error
+
+/** @type {() => void} */
+const variable = function (more) {}; // error
+
+/** @type {() => void} */
+const arrow = (more) => {}; // error
+
+({
+  /** @type {() => void} */
+  method(more) {}, // error
+});

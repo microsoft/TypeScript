@@ -12760,8 +12760,6 @@ namespace ts {
         }
 
         function getSignatureFromDeclaration(declaration: SignatureDeclaration | JSDocSignature): Signature {
-            const signature = getSignatureOfTypeTag(declaration);
-            if (signature) return signature;
             const links = getNodeLinks(declaration);
             if (!links.resolvedSignature) {
                 const parameters: Symbol[] = [];
@@ -12941,7 +12939,15 @@ namespace ts {
                         continue;
                     }
                 }
-                result.push(getSignatureFromDeclaration(decl));
+                // If this is a function or method declaration, get the accurate minArgumentCount from the @type tag, if present.
+                // If this is a variable or property declaration, apply the @type tag to it
+                // (getTypeForVariableLikeDeclaration()), not to the initializer.
+                result.push(
+                    (!isFunctionExpressionOrArrowFunction(decl) &&
+                        !isObjectLiteralMethod(decl) &&
+                        getSignatureOfTypeTag(decl)) ||
+                        getSignatureFromDeclaration(decl)
+                );
             }
             return result;
         }
