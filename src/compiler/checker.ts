@@ -12219,9 +12219,10 @@ namespace ts {
         }
 
         function isMappedTypeGenericIndexedAccess(type: Type) {
-            return type.flags & TypeFlags.IndexedAccess && getObjectFlags((type as IndexedAccessType).objectType) & ObjectFlags.Mapped &&
-                !((type as IndexedAccessType).objectType as MappedType).declaration.nameType &&
-                !isGenericMappedType((type as IndexedAccessType).objectType) && isGenericIndexType((type as IndexedAccessType).indexType);
+            let objectType;
+            return !!(type.flags & TypeFlags.IndexedAccess && getObjectFlags(objectType = (type as IndexedAccessType).objectType) & ObjectFlags.Mapped &&
+                !isGenericMappedType(objectType) && isGenericIndexType((type as IndexedAccessType).indexType) &&
+                !(objectType as MappedType).declaration.questionToken && !(objectType as MappedType).declaration.nameType);
         }
 
         /**
