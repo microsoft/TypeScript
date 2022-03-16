@@ -345,6 +345,42 @@ namespace ts {
                     break;
                 }
 
+                if (scanner.getToken() === SyntaxKind.TemplateHead) {
+                    const stack = [scanner.getToken()];
+                    let token = scanner.scan();
+                    loop: while (length(stack)) {
+                        switch (token) {
+                            case SyntaxKind.EndOfFileToken:
+                                break loop;
+                            case SyntaxKind.ImportKeyword:
+                                tryConsumeImport();
+                                break;
+                            case SyntaxKind.TemplateHead:
+                                stack.push(token);
+                                break;
+                            case SyntaxKind.OpenBraceToken:
+                                if (length(stack)) {
+                                    stack.push(token);
+                                }
+                                break;
+                            case SyntaxKind.CloseBraceToken:
+                                if (length(stack)) {
+                                    if (lastOrUndefined(stack) === SyntaxKind.TemplateHead) {
+                                        if (scanner.reScanTemplateToken(/* isTaggedTemplate */ false) === SyntaxKind.TemplateTail) {
+                                            stack.pop();
+                                        }
+                                    }
+                                    else {
+                                        stack.pop();
+                                    }
+                                }
+                                break;
+                        }
+                        token = scanner.scan();
+                    }
+                    nextToken();
+                }
+
                 // check if at least one of alternative have moved scanner forward
                 if (tryConsumeDeclare() ||
                     tryConsumeImport() ||
