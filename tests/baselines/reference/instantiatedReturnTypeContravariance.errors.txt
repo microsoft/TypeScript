@@ -1,0 +1,42 @@
+tests/cases/compiler/instantiatedReturnTypeContravariance.ts(21,1): error TS2416: Property 'foo' in type 'd' is not assignable to the same property in base type 'c'.
+  Type '() => B<number>' is not assignable to type '() => B<void>'.
+    Type 'B<number>' is not assignable to type 'B<void>'.
+      Type 'number' is not assignable to type 'void'.
+
+
+==== tests/cases/compiler/instantiatedReturnTypeContravariance.ts (1 errors) ====
+    interface B<T> {
+    
+    name: string;
+    
+    x(): T;
+    
+    }
+     
+    class c {
+    
+    foo(): B<void> {
+    
+    return null;
+    
+    }
+    
+    }
+     
+    class d extends c {
+    
+    foo(): B<number> {
+    ~~~
+!!! error TS2416: Property 'foo' in type 'd' is not assignable to the same property in base type 'c'.
+!!! error TS2416:   Type '() => B<number>' is not assignable to type '() => B<void>'.
+!!! error TS2416:     Type 'B<number>' is not assignable to type 'B<void>'.
+!!! error TS2416:       Type 'number' is not assignable to type 'void'.
+    
+    return null;
+    
+    }
+    
+    }
+    
+     
+    

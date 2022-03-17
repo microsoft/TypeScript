@@ -1,0 +1,34 @@
+tests/cases/compiler/unwitnessedTypeParameterVariance.ts(11,11): error TS2322: Type 'CalcObj<unknown>' is not assignable to type 'CalcObj<O>'.
+  Types of property 'read' are incompatible.
+    Type '(origin: unknown) => CalcValue<unknown>' is not assignable to type '(origin: O) => CalcValue<O>'.
+
+
+==== tests/cases/compiler/unwitnessedTypeParameterVariance.ts (1 errors) ====
+    // Repros from #33872
+    
+    export interface CalcObj<O> {
+        read: (origin: O) => CalcValue<O>;
+    }
+    
+    export type CalcValue<O> = CalcObj<O>;
+    
+    function foo<O>() {
+        const unk: CalcObj<unknown> = { read: (origin: unknown) => unk }
+        const x: CalcObj<O> = unk;
+              ~
+!!! error TS2322: Type 'CalcObj<unknown>' is not assignable to type 'CalcObj<O>'.
+!!! error TS2322:   Types of property 'read' are incompatible.
+!!! error TS2322:     Type '(origin: unknown) => CalcValue<unknown>' is not assignable to type '(origin: O) => CalcValue<O>'.
+    }
+    
+    type A<T> = B<T>;
+    
+    interface B<T> {
+        prop: A<T>;
+    }
+    
+    declare let a: A<number>;
+    declare let b: A<3>;
+     
+    b = a;
+    

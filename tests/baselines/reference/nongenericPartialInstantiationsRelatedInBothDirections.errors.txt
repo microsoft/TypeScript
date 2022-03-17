@@ -1,0 +1,27 @@
+tests/cases/compiler/nongenericPartialInstantiationsRelatedInBothDirections.ts(11,1): error TS2322: Type 'ObjectContaining<{ a: number; foo: number; }>' is not assignable to type 'ObjectContaining<Foo>'.
+  Type '{ a: number; foo: number; }' is missing the following properties from type 'Foo': b, bar
+tests/cases/compiler/nongenericPartialInstantiationsRelatedInBothDirections.ts(12,1): error TS2322: Type 'ObjectContaining<Foo>' is not assignable to type 'ObjectContaining<{ a: number; foo: number; }>'.
+  Property 'foo' is missing in type 'Foo' but required in type '{ a: number; foo: number; }'.
+
+
+==== tests/cases/compiler/nongenericPartialInstantiationsRelatedInBothDirections.ts (2 errors) ====
+    interface Foo {
+        a: number;
+        b: number;
+        bar: string;
+    }
+    interface ObjectContaining<T> {
+      new (sample: Partial<T>): Partial<T>
+    }
+    declare let cafoo: ObjectContaining<{ a: number, foo: number }>;
+    declare let cfoo: ObjectContaining<Foo>;
+    cfoo = cafoo;
+    ~~~~
+!!! error TS2322: Type 'ObjectContaining<{ a: number; foo: number; }>' is not assignable to type 'ObjectContaining<Foo>'.
+!!! error TS2322:   Type '{ a: number; foo: number; }' is missing the following properties from type 'Foo': b, bar
+    cafoo = cfoo;
+    ~~~~~
+!!! error TS2322: Type 'ObjectContaining<Foo>' is not assignable to type 'ObjectContaining<{ a: number; foo: number; }>'.
+!!! error TS2322:   Property 'foo' is missing in type 'Foo' but required in type '{ a: number; foo: number; }'.
+!!! related TS2728 tests/cases/compiler/nongenericPartialInstantiationsRelatedInBothDirections.ts:9:50: 'foo' is declared here.
+    

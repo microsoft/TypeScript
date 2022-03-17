@@ -64,8 +64,7 @@ tests/cases/compiler/strictFunctionTypesErrors.ts(111,1): error TS2322: Type 'Co
 tests/cases/compiler/strictFunctionTypesErrors.ts(126,1): error TS2322: Type 'Crate<Dog>' is not assignable to type 'Crate<Animal>'.
   Types of property 'onSetItem' are incompatible.
     Type '(item: Dog) => void' is not assignable to type '(item: Animal) => void'.
-      Types of parameters 'item' and 'item' are incompatible.
-        Type 'Animal' is not assignable to type 'Dog'.
+      Type 'Animal' is not assignable to type 'Dog'.
 tests/cases/compiler/strictFunctionTypesErrors.ts(127,1): error TS2322: Type 'Crate<Animal>' is not assignable to type 'Crate<Dog>'.
   Types of property 'item' are incompatible.
     Type 'Animal' is not assignable to type 'Dog'.
@@ -309,8 +308,7 @@ tests/cases/compiler/strictFunctionTypesErrors.ts(155,5): error TS2322: Type '(c
 !!! error TS2322: Type 'Crate<Dog>' is not assignable to type 'Crate<Animal>'.
 !!! error TS2322:   Types of property 'onSetItem' are incompatible.
 !!! error TS2322:     Type '(item: Dog) => void' is not assignable to type '(item: Animal) => void'.
-!!! error TS2322:       Types of parameters 'item' and 'item' are incompatible.
-!!! error TS2322:         Type 'Animal' is not assignable to type 'Dog'.
+!!! error TS2322:       Type 'Animal' is not assignable to type 'Dog'.
     dogCrate = animalCrate;  // Error
     ~~~~~~~~
 !!! error TS2322: Type 'Crate<Animal>' is not assignable to type 'Crate<Dog>'.
