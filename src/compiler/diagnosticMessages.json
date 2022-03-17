@@ -879,6 +879,10 @@
         "category": "Error",
         "code": 1271
     },
+    "A type referenced in a decorated signature must be imported with 'import type' or a namespace import when 'isolatedModules' and 'emitDecoratorMetadata' are enabled.": {
+        "category": "Error",
+        "code": 1272
+    },
 
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
@@ -7173,6 +7177,7 @@
         "category": "Message",
         "code": 95173
     },
+
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",
