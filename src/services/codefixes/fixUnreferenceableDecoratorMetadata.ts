@@ -65,6 +65,6 @@ namespace ts.codefix {
     }
 
     function doNamespaceImportChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, importDeclaration: ImportSpecifier, program: Program) {
-        refactor.doChangeNamedToNamespace(sourceFile, program.getTypeChecker(), changes, importDeclaration.parent);
+        refactor.doChangeNamedToNamespaceOrDefault(sourceFile, program, changes, importDeclaration.parent);
     }
 }

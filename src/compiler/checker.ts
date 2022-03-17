@@ -36438,7 +36438,7 @@ namespace ts {
 
             const rootName = getFirstIdentifier(typeName);
             const meaning = (typeName.kind === SyntaxKind.Identifier ? SymbolFlags.Type : SymbolFlags.Namespace) | SymbolFlags.Alias;
-            const rootSymbol = resolveName(rootName, rootName.escapedText, meaning, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined, /*isRefernce*/ true);
+            const rootSymbol = resolveName(rootName, rootName.escapedText, meaning, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined, /*isReference*/ true);
             if (rootSymbol && rootSymbol.flags & SymbolFlags.Alias) {
                 if (symbolIsValue(rootSymbol)
                     && !isConstEnumOrConstEnumOnlyModule(resolveAlias(rootSymbol))
