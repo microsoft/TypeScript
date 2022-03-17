@@ -1,0 +1,150 @@
+tests/cases/compiler/satisfiesScenarios.ts(7,22): error TS1360: Type '{ a: string; b: string; }' does not satisfy the expected type 'A'.
+  Object literal may only specify known properties, and 'b' does not exist in type 'A'.
+tests/cases/compiler/satisfiesScenarios.ts(16,9): error TS1360: Type '{ a: number; b: string; x: number; }' does not satisfy the expected type 'Partial<Record<Keys, unknown>>'.
+  Object literal may only specify known properties, and 'x' does not exist in type 'Partial<Record<Keys, unknown>>'.
+tests/cases/compiler/satisfiesScenarios.ts(23,15): error TS2339: Property 'd' does not exist on type '{ a: number; b: string; x: number; }'.
+tests/cases/compiler/satisfiesScenarios.ts(32,9): error TS1360: Type '{ a: number; b: string; x: number; }' does not satisfy the expected type 'Record<Keys, unknown>'.
+  Object literal may only specify known properties, and 'x' does not exist in type 'Record<Keys, unknown>'.
+tests/cases/compiler/satisfiesScenarios.ts(39,15): error TS2339: Property 'd' does not exist on type '{ a: number; b: string; x: number; }'.
+tests/cases/compiler/satisfiesScenarios.ts(55,19): error TS2339: Property 'z' does not exist on type '{ m: boolean; }'.
+tests/cases/compiler/satisfiesScenarios.ts(65,9): error TS2322: Type 'string' is not assignable to type 'boolean'.
+tests/cases/compiler/satisfiesScenarios.ts(75,30): error TS2322: Type '{ r: number; g: number; d: number; }' is not assignable to type 'Color'.
+  Object literal may only specify known properties, and 'd' does not exist in type 'Color'.
+tests/cases/compiler/satisfiesScenarios.ts(101,15): error TS2339: Property 'y' does not exist on type '{ x: number; }'.
+
+
+==== tests/cases/compiler/satisfiesScenarios.ts (9 errors) ====
+    const x = [1, 2] satisfies [number, number];
+    
+    interface A {
+        a: string
+    }
+    let d = { a: 'test' } satisfies A;
+    let e = { a: 'test', b: 'test' } satisfies A;
+                         ~~~~~~~~~
+!!! error TS1360: Type '{ a: string; b: string; }' does not satisfy the expected type 'A'.
+!!! error TS1360:   Object literal may only specify known properties, and 'b' does not exist in type 'A'.
+    
+    // Most examples from #47920
+    namespace PropNameConstraining {
+        type Keys = 'a' | 'b' | 'c' | 'd';
+    
+        const p = {
+            a: 0,
+            b: "hello",
+            x: 8 // Should error, 'x' isn't in 'Keys'
+            ~~~~
+!!! error TS1360: Type '{ a: number; b: string; x: number; }' does not satisfy the expected type 'Partial<Record<Keys, unknown>>'.
+!!! error TS1360:   Object literal may only specify known properties, and 'x' does not exist in type 'Partial<Record<Keys, unknown>>'.
+        } satisfies Partial<Record<Keys, unknown>>;
+    
+        // Should be OK -- retain info that a is number and b is string
+        let a = p.a.toFixed();
+        let b = p.b.substring(1);
+        // Should error even though 'd' is in 'Keys'
+        let d = p.d;
+                  ~
+!!! error TS2339: Property 'd' does not exist on type '{ a: number; b: string; x: number; }'.
+    }
+    
+    namespace PropertyNameFulfillment {
+        type Keys = 'a' | 'b' | 'c' | 'd';
+    
+        const p = {
+            a: 0,
+            b: "hello",
+            x: 8 // Should error, 'x' isn't in 'Keys'
+            ~~~~
+!!! error TS1360: Type '{ a: number; b: string; x: number; }' does not satisfy the expected type 'Record<Keys, unknown>'.
+!!! error TS1360:   Object literal may only specify known properties, and 'x' does not exist in type 'Record<Keys, unknown>'.
+        } satisfies Record<Keys, unknown>;
+    
+        // Should be OK -- retain info that a is number and b is string
+        let a = p.a.toFixed();
+        let b = p.b.substr(1);
+        // Should error even though 'd' is in 'Keys'
+        let d = p.d;
+                  ~
+!!! error TS2339: Property 'd' does not exist on type '{ a: number; b: string; x: number; }'.
+    }
+    
+    namespace PropertyValueConformance {
+        type Facts = { [key: string]: boolean };
+        declare function checkTruths(x: Facts): void;
+        declare function checkM(x: { m: boolean }): void;
+        const x = {
+            m: true
+        };
+    
+        // Should be OK
+        checkTruths(x);
+        // Should be OK
+        checkM(x);
+        // Should fail under --noIndexSignaturePropertyAccess
+        console.log(x.z);
+                      ~
+!!! error TS2339: Property 'z' does not exist on type '{ m: boolean; }'.
+        // Should be OK under --noUncheckedIndexedAccess
+        const m: boolean = x.m;
+    
+        // Should be 'm'
+        type M = keyof typeof x;
+    
+        // Should be able to detect a failure here
+        const x2 = {
+            m: true,
+            s: "false"
+            ~
+!!! error TS2322: Type 'string' is not assignable to type 'boolean'.
+!!! related TS6501 tests/cases/compiler/satisfiesScenarios.ts:43:20: The expected type comes from this index signature.
+        } satisfies Facts;
+    }
+    
+    namespace PropertyValueConformance2 {
+        export type Color = { r: number, g: number, b: number };
+    
+        // All of these should be Colors, but I only use some of them here.
+        export const Palette = {
+            white: { r: 255, g: 255, b: 255 },
+            black: { r: 0, g: 0, d: 0 }, // <- oops! 'd' in place of 'b'
+                                 ~~~~
+!!! error TS2322: Type '{ r: number; g: number; d: number; }' is not assignable to type 'Color'.
+!!! error TS2322:   Object literal may only specify known properties, and 'd' does not exist in type 'Color'.
+            blue: { r: 0, g: 0, b: 255 },
+        } satisfies Record<string, Color>;
+    }
+    
+    namespace EnsureInterfaceImpl {
+        type Movable = {
+            move(distance: number): void;
+        };
+    
+        const car = {
+            start() { },
+            move(d) {
+                // d should be number
+            },
+            stop() { }
+        } satisfies Movable & Record<string, unknown>;
+    }
+    
+    namespace OptionalMemberConformance {
+        type Point2d = { x: number, y: number };
+        // Undesirable behavior today with type annotation
+        const a = { x: 10 } satisfies Partial<Point2d>;
+        // Should OK
+        console.log(a.x.toFixed());
+        // Should error
+        let p = a.y;    
+                  ~
+!!! error TS2339: Property 'y' does not exist on type '{ x: number; }'.
+    }
+    
+    namespace ContextualTyping {
+        type Predicates = { [s: string]: (n: number) => boolean };
+    
+        const p: Predicates = {
+            isEven: n => n % 2 === 0,
+            isOdd: n => n % 2 === 1
+        };
+    }
