@@ -1013,7 +1013,7 @@ getModifiedTime:: {
  "/src/app/file4.ts": 1,
  "/src/app/module.js": 1,
  "/src/app/module.js.map": 1,
- "/src/app/module.d.ts": 3,
+ "/src/app/module.d.ts": 2,
  "/src/app/module.d.ts.map": 1,
  "/src/app/module.tsbuildinfo": 1,
  "/src/app/tsconfig.json": 1

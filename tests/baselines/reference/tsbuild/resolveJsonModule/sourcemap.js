@@ -241,7 +241,7 @@ getModifiedTime:: {
  "/src/src/hello.json": 1,
  "/src/dist/src/index.js": 1,
  "/src/dist/src/index.js.map": 1,
- "/src/dist/src/index.d.ts": 2,
+ "/src/dist/src/index.d.ts": 1,
  "/src/dist/src/hello.json": 1,
  "/src/dist/tsconfig_withFiles.tsbuildinfo": 1,
  "/src/tsconfig_withFiles.json": 1

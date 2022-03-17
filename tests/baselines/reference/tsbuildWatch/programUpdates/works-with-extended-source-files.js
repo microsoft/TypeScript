@@ -330,9 +330,9 @@ getModifiedTimes:: {
  "/a/b/commonfile1.ts": 1,
  "/a/b/commonfile2.ts": 1,
  "/a/b/commonfile1.js": 1,
- "/a/b/commonfile1.d.ts": 3,
+ "/a/b/commonfile1.d.ts": 2,
  "/a/b/commonfile2.js": 1,
- "/a/b/commonfile2.d.ts": 3,
+ "/a/b/commonfile2.d.ts": 2,
  "/a/b/project1.tsconfig.tsbuildinfo": 1,
  "/a/b/project1.tsconfig.json": 1,
  "/a/b/alpha.tsconfig.json": 1
@@ -419,7 +419,7 @@ directoryExists:: {
 getModifiedTimes:: {
  "/a/b/other.ts": 1,
  "/a/b/other.js": 1,
- "/a/b/other.d.ts": 3,
+ "/a/b/other.d.ts": 2,
  "/a/b/project2.tsconfig.tsbuildinfo": 1,
  "/a/b/project2.tsconfig.json": 1,
  "/a/b/bravo.tsconfig.json": 1,
@@ -514,7 +514,7 @@ directoryExists:: {
 getModifiedTimes:: {
  "/a/b/other.ts": 1,
  "/a/b/other.js": 1,
- "/a/b/other.d.ts": 3,
+ "/a/b/other.d.ts": 2,
  "/a/b/project2.tsconfig.tsbuildinfo": 1,
  "/a/b/project2.tsconfig.json": 1,
  "/a/b/bravo.tsconfig.json": 1
@@ -721,9 +721,9 @@ getModifiedTimes:: {
  "/a/b/commonfile1.ts": 1,
  "/a/b/commonfile2.ts": 1,
  "/a/b/commonfile1.js": 1,
- "/a/b/commonfile1.d.ts": 3,
+ "/a/b/commonfile1.d.ts": 2,
  "/a/b/commonfile2.js": 1,
- "/a/b/commonfile2.d.ts": 3,
+ "/a/b/commonfile2.d.ts": 2,
  "/a/b/project1.tsconfig.tsbuildinfo": 1,
  "/a/b/project1.tsconfig.json": 1,
  "/a/b/alpha.tsconfig.json": 1

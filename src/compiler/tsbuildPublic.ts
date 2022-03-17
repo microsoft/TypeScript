@@ -1412,8 +1412,7 @@ namespace ts {
                 // had its file touched but not had its contents changed - this allows us
                 // to skip a downstream typecheck
                 if (isDeclarationFileName(output)) {
-                    const outputModifiedTime = getModifiedTime(host, output);
-                    newestDeclarationFileContentChangedTime = newer(newestDeclarationFileContentChangedTime, outputModifiedTime);
+                    newestDeclarationFileContentChangedTime = newer(newestDeclarationFileContentChangedTime, outputTime);
                 }
             }
         }

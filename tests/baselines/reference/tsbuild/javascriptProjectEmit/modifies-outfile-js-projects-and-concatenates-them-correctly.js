@@ -513,7 +513,7 @@ exitCode:: ExitStatus.Success
 getModifiedTime:: {
  "/src/common/nominal.js": 1,
  "/src/common/common.js": 1,
- "/src/common/common.d.ts": 2,
+ "/src/common/common.d.ts": 1,
  "/src/common/common.tsbuildinfo": 1,
  "/src/common/tsconfig.json": 1,
  "/src/tsconfig.base.json": 2,
@@ -522,7 +522,7 @@ getModifiedTime:: {
  "/src/sub-project/sub-project.d.ts": 1,
  "/src/sub-project-2/index.js": 1,
  "/src/sub-project-2/sub-project-2.js": 1,
- "/src/sub-project-2/sub-project-2.d.ts": 3,
+ "/src/sub-project-2/sub-project-2.d.ts": 2,
  "/src/sub-project-2/sub-project-2.tsbuildinfo": 1,
  "/src/sub-project-2/tsconfig.json": 1
 }

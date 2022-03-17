@@ -445,7 +445,7 @@ directoryExists:: {
 getModifiedTimes:: {
  "/user/username/projects/transitivereferences/a/index.ts": 1,
  "/user/username/projects/transitivereferences/a/index.js": 1,
- "/user/username/projects/transitivereferences/a/index.d.ts": 2,
+ "/user/username/projects/transitivereferences/a/index.d.ts": 1,
  "/user/username/projects/transitivereferences/a/tsconfig.tsbuildinfo": 1,
  "/user/username/projects/transitivereferences/a/tsconfig.json": 1,
  "/user/username/projects/transitivereferences/b/index.ts": 1,
