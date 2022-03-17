@@ -2774,7 +2774,9 @@ namespace ts.Completions {
             if (isInJSFile(location)) {
                 return;
             }
-            members = members.slice(); // Needed in case `symbol` and `members` are the same array.
+            if (members === symbols) {
+                members = members.slice();
+            }
             for (const member of members) {
                 if (!isObjectLiteralMethodSymbol(member)) {
                     continue;
