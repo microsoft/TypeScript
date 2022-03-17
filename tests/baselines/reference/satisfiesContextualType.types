@@ -1,0 +1,20 @@
+=== tests/cases/compiler/satisfiesContextualType.ts ===
+let obj: { f(s: string): void } & Record<string, unknown> = {
+>obj : { f(s: string): void; } & Record<string, unknown>
+>f : (s: string) => void
+>s : string
+>{    f(s) { }, // "incorrect" implicit any on 's'    g(s) { }} satisfies { g(s: string): void } & Record<string, unknown> : { f(s: any): void; g(s: string): void; }
+>{    f(s) { }, // "incorrect" implicit any on 's'    g(s) { }} : { f(s: any): void; g(s: string): void; }
+
+    f(s) { }, // "incorrect" implicit any on 's'
+>f : (s: any) => void
+>s : any
+
+    g(s) { }
+>g : (s: string) => void
+>s : string
+
+} satisfies { g(s: string): void } & Record<string, unknown>;
+>g : (s: string) => void
+>s : string
+
