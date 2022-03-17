@@ -40540,7 +40540,7 @@ namespace ts {
                 return;
             }
 
-            if (!checkGrammarDecoratorsAndModifiers(node) && hasEffectiveModifiers(node)) {
+            if (!checkGrammarDecoratorsAndModifiers(node) && hasSyntacticModifiers(node)) {
                 grammarErrorOnFirstToken(node, Diagnostics.An_export_declaration_cannot_have_modifiers);
             }
 
