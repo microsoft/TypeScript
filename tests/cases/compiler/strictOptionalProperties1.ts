@@ -182,3 +182,57 @@ function aa(input: Bar): void {
 }
 
 declare function bb(input: number): void;
+
+interface U1 {
+    name: string
+    email?: string | number | undefined
+}
+interface U2 {
+    name: string
+    email?: string | number
+}
+declare const e: string | boolean | undefined
+declare const u1: U1
+declare let u2: U2
+u1.email = e // error, but only because boolean isn't in email's type
+u2.email = e // error, and suggest adding undefined
+u2 = {
+    name: 'hi',
+    email: undefined
+}
+
+// Repro from #44437
+
+declare var a: {[x: string]: number | string }
+declare var b: {a: number, b: string}
+declare var c: {a: number, b?: string}
+declare var d: {a: number, b: string | undefined }
+declare var e: {a: number, b?: string | undefined }
+
+a = b;
+a = c;
+a = d;  // Error
+a = e;  // Error
+
+// Repro from #46004
+
+interface PropsFromReact {
+    onClick?: () => void;
+}
+
+interface PropsFromMaterialUI {
+    onClick?: (() => void) | undefined;
+}
+
+type TheTypeFromMaterialUI = PropsFromReact & PropsFromMaterialUI;
+
+interface NavBottomListItem extends TheTypeFromMaterialUI {
+    value: string;
+}
+
+// Repro from #46004
+
+type UA = undefined;  // Explicit undefined type
+type UB = { x?: never }['x'];  // undefined from missing property
+
+type UC = UA & UB;  // undefined

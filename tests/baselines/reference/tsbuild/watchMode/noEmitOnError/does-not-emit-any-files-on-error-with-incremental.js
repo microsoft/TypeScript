@@ -56,11 +56,6 @@ Output::
 [7m4[0m ;
 [7m [0m [91m~[0m
 
-  [96msrc/main.ts[0m:[93m2[0m:[93m11[0m
-    [7m2[0m const a = {
-    [7m [0m [96m          ~[0m
-    The parser expected to find a '}' to match the '{' token here.
-
 [[90m12:00:35 AM[0m] Found 1 error. Watching for file changes.
 
 
@@ -114,11 +109,6 @@ Output::
 
 [7m4[0m ;
 [7m [0m [91m~[0m
-
-  [96msrc/main.ts[0m:[93m2[0m:[93m11[0m
-    [7m2[0m const a = {
-    [7m [0m [96m          ~[0m
-    The parser expected to find a '}' to match the '{' token here.
 
 [[90m12:00:42 AM[0m] Found 1 error. Watching for file changes.
 

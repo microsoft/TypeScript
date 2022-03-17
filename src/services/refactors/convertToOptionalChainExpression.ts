@@ -10,11 +10,11 @@ namespace ts.refactor.convertToOptionalChainExpression {
     };
     registerRefactor(refactorName, {
         kinds: [toOptionalChainAction.kind],
-        getAvailableActions,
-        getEditsForAction
+        getEditsForAction: getRefactorEditsToConvertToOptionalChain,
+        getAvailableActions: getRefactorActionsToConvertToOptionalChain,
     });
 
-    function getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
+    function getRefactorActionsToConvertToOptionalChain(context: RefactorContext): readonly ApplicableRefactorInfo[] {
         const info = getInfo(context, context.triggerReason === "invoked");
         if (!info) return emptyArray;
 
@@ -36,7 +36,7 @@ namespace ts.refactor.convertToOptionalChainExpression {
         return emptyArray;
     }
 
-    function getEditsForAction(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
+    function getRefactorEditsToConvertToOptionalChain(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
         const info = getInfo(context);
         Debug.assert(info && !isRefactorErrorInfo(info), "Expected applicable refactor info");
         const edits = textChanges.ChangeTracker.with(context, t =>

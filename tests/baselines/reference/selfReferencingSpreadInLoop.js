@@ -13,7 +13,7 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
             ar[i] = from[i];
         }
     }
-    return to.concat(ar || from);
+    return to.concat(ar || Array.prototype.slice.call(from));
 };
 var additional = [];
 for (var _i = 0, _a = [1, 2, 3]; _i < _a.length; _i++) {

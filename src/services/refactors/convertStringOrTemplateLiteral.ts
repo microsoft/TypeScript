@@ -10,11 +10,11 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
     };
     registerRefactor(refactorName, {
         kinds: [convertStringAction.kind],
-        getEditsForAction,
-        getAvailableActions
+        getEditsForAction: getRefactorEditsToConvertToTemplateString,
+        getAvailableActions: getRefactorActionsToConvertToTemplateString
     });
 
-    function getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
+    function getRefactorActionsToConvertToTemplateString(context: RefactorContext): readonly ApplicableRefactorInfo[] {
         const { file, startPosition } = context;
         const node = getNodeOrParentOfParentheses(file, startPosition);
         const maybeBinary = getParentBinaryExpression(node);
@@ -48,7 +48,7 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
         return node;
     }
 
-    function getEditsForAction(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
+    function getRefactorEditsToConvertToTemplateString(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
         const { file, startPosition } = context;
         const node = getNodeOrParentOfParentheses(file, startPosition);
 
@@ -147,14 +147,13 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
         }
     };
 
-    function escapeStringForTemplate(s: string) {
+    function escapeRawStringForTemplate(s: string) {
         // Escaping for $s in strings that are to be used in template strings
-        // Naive implementation: replace \x by itself and otherwise $ by \$.
+        // Naive implementation: replace \x by itself and otherwise $ and ` by \$ and \`.
         // But to complicate it a bit, this should work for raw strings too.
-        // And another bit: escape the $ in the replacement for JS's .replace().
-        return s.replace(/\\.|\$/g, m => m === "$" ? "\\\$" : m);
+        return s.replace(/\\.|[$`]/g, m => m[0] === "\\" ? m : "\\" + m);
         // Finally, a less-backslash-happy version can work too, doing only ${ instead of all $s:
-        //     s.replace(/\\.|\${/g, m => m === "${" ? "\\\${" : m);
+        //     s.replace(/\\.|\${|`/g, m => m[0] === "\\" ? m : "\\" + m);
         // but `\$${foo}` is likely more clear than the more-confusing-but-still-working `$${foo}`.
     }
 
@@ -170,8 +169,8 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
         while (index < nodes.length) {
             const node = nodes[index];
             if (isStringLiteralLike(node)) { // includes isNoSubstitutionTemplateLiteral(node)
-                text += escapeStringForTemplate(node.text);
-                rawText += escapeStringForTemplate(getTextOfNode(node).slice(1, -1));
+                text += node.text;
+                rawText += escapeRawStringForTemplate(getTextOfNode(node).slice(1, -1));
                 indexes.push(index);
                 index++;
             }
@@ -216,7 +215,7 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
                     const isLastSpan = index === currentNode.templateSpans.length - 1;
                     const text = span.literal.text + (isLastSpan ? subsequentText : "");
                     const rawText = getRawTextOfTemplate(span.literal) + (isLastSpan ? rawSubsequentText : "");
-                    return factory.createTemplateSpan(span.expression, isLast
+                    return factory.createTemplateSpan(span.expression, isLast && isLastSpan
                         ? factory.createTemplateTail(text, rawText)
                         : factory.createTemplateMiddle(text, rawText));
                 });

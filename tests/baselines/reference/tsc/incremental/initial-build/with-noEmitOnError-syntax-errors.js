@@ -47,13 +47,8 @@ Output::
 [7m4[0m ;
 [7m [0m [91m~[0m
 
-  [96msrc/src/main.ts[0m:[93m2[0m:[93m11[0m
-    [7m2[0m const a = {
-    [7m [0m [96m          ~[0m
-    The parser expected to find a '}' to match the '{' token here.
 
-
-Found 1 error.
+Found 1 error in src/src/main.ts[90m:4[0m
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 Program root files: ["/src/shared/types/db.ts","/src/src/main.ts","/src/src/other.ts"]
@@ -166,13 +161,8 @@ Output::
 [7m4[0m ;
 [7m [0m [91m~[0m
 
-  [96msrc/src/main.ts[0m:[93m2[0m:[93m11[0m
-    [7m2[0m const a = {
-    [7m [0m [96m          ~[0m
-    The parser expected to find a '}' to match the '{' token here.
 
-
-Found 1 error.
+Found 1 error in src/src/main.ts[90m:4[0m
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 Program root files: ["/src/shared/types/db.ts","/src/src/main.ts","/src/src/other.ts"]

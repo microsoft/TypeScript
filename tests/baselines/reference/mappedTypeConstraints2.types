@@ -1,0 +1,70 @@
+=== tests/cases/conformance/types/mapped/mappedTypeConstraints2.ts ===
+type Mapped1<K extends string> = { [P in K]: { a: P } };
+>Mapped1 : Mapped1<K>
+>a : P
+
+function f1<K extends string>(obj: Mapped1<K>, key: K) {
+>f1 : <K extends string>(obj: Mapped1<K>, key: K) => void
+>obj : Mapped1<K>
+>key : K
+
+    const x: { a: K } = obj[key];
+>x : { a: K; }
+>a : K
+>obj[key] : Mapped1<K>[K]
+>obj : Mapped1<K>
+>key : K
+}
+
+type Mapped2<K extends string> = { [P in K as `get${P}`]: { a: P } };
+>Mapped2 : Mapped2<K>
+>a : P
+
+function f2<K extends string>(obj: Mapped2<K>, key: `get${K}`) {
+>f2 : <K extends string>(obj: Mapped2<K>, key: `get${K}`) => void
+>obj : Mapped2<K>
+>key : `get${K}`
+
+    const x: { a: K } = obj[key];  // Error
+>x : { a: K; }
+>a : K
+>obj[key] : Mapped2<K>[`get${K}`]
+>obj : Mapped2<K>
+>key : `get${K}`
+}
+
+type Mapped3<K extends string> = { [P in K as Uppercase<P>]: { a: P } };
+>Mapped3 : Mapped3<K>
+>a : P
+
+function f3<K extends string>(obj: Mapped3<K>, key: Uppercase<K>) {
+>f3 : <K extends string>(obj: Mapped3<K>, key: Uppercase<K>) => void
+>obj : Mapped3<K>
+>key : Uppercase<K>
+
+    const x: { a: K } = obj[key];  // Error
+>x : { a: K; }
+>a : K
+>obj[key] : Mapped3<K>[Uppercase<K>]
+>obj : Mapped3<K>
+>key : Uppercase<K>
+}
+
+// Repro from #47794
+
+type Foo<T extends string> = {
+>Foo : Foo<T>
+
+    [RemappedT in T as `get${RemappedT}`]: RemappedT;
+};
+
+const get = <T extends string>(t: T, foo: Foo<T>): T => foo[`get${t}`];  // Type 'Foo<T>[`get${T}`]' is not assignable to type 'T'
+>get : <T extends string>(t: T, foo: Foo<T>) => T
+><T extends string>(t: T, foo: Foo<T>): T => foo[`get${t}`] : <T extends string>(t: T, foo: Foo<T>) => T
+>t : T
+>foo : Foo<T>
+>foo[`get${t}`] : Foo<T>[`get${T}`]
+>foo : Foo<T>
+>`get${t}` : `get${T}`
+>t : T
+

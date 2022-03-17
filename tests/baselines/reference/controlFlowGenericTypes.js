@@ -175,6 +175,42 @@ class TableBaseEnum<
     }
 }
 
+// Repros from #45145
+
+function f10<T extends { a: string } | undefined>(x: T, y: Partial<T>) {
+    y = x;
+}
+
+type SqlInsertSet<T> = T extends undefined ? object : { [P in keyof T]: unknown };
+
+class SqlTable<T> {
+    protected validateRow(_row: Partial<SqlInsertSet<T>>): void {
+    }
+    public insertRow(row: SqlInsertSet<T>) {
+        this.validateRow(row);
+    }
+}
+
+// Repro from #46495
+
+interface Button {
+    type: "button";
+    text: string;
+}
+
+interface Checkbox {
+    type: "checkbox";
+    isChecked: boolean;
+}
+
+type Control = Button | Checkbox;
+
+function update<T extends Control, K extends keyof T>(control : T | undefined, key: K, value: T[K]): void {
+    if (control !== undefined) {
+        control[key] = value;
+    }
+}
+
 
 //// [controlFlowGenericTypes.js]
 "use strict";
@@ -313,3 +349,22 @@ var TableBaseEnum = /** @class */ (function () {
     };
     return TableBaseEnum;
 }());
+// Repros from #45145
+function f10(x, y) {
+    y = x;
+}
+var SqlTable = /** @class */ (function () {
+    function SqlTable() {
+    }
+    SqlTable.prototype.validateRow = function (_row) {
+    };
+    SqlTable.prototype.insertRow = function (row) {
+        this.validateRow(row);
+    };
+    return SqlTable;
+}());
+function update(control, key, value) {
+    if (control !== undefined) {
+        control[key] = value;
+    }
+}

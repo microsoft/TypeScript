@@ -24,7 +24,7 @@ namespace ts.refactor {
             extractToInterfaceAction.kind,
             extractToTypeDefAction.kind
         ],
-        getAvailableActions(context): readonly ApplicableRefactorInfo[] {
+        getAvailableActions: function getRefactorActionsToExtractType(context): readonly ApplicableRefactorInfo[] {
             const info = getRangeToExtract(context, context.triggerReason === "invoked");
             if (!info) return emptyArray;
 
@@ -51,7 +51,7 @@ namespace ts.refactor {
 
             return emptyArray;
         },
-        getEditsForAction(context, actionName): RefactorEditInfo {
+        getEditsForAction: function getRefactorEditsToExtractType(context, actionName): RefactorEditInfo {
             const { file, } = context;
             const info = getRangeToExtract(context);
             Debug.assert(info && !isRefactorErrorInfo(info), "Expected to find a range to extract");
@@ -144,11 +144,20 @@ namespace ts.refactor {
         function visitor(node: Node): true | undefined {
             if (isTypeReferenceNode(node)) {
                 if (isIdentifier(node.typeName)) {
-                    const symbol = checker.resolveName(node.typeName.text, node.typeName, SymbolFlags.TypeParameter, /* excludeGlobals */ true);
-                    if (symbol?.declarations) {
-                        const declaration = cast(first(symbol.declarations), isTypeParameterDeclaration);
-                        if (rangeContainsSkipTrivia(statement, declaration, file) && !rangeContainsSkipTrivia(selection, declaration, file)) {
-                            pushIfUnique(result, declaration);
+                    const typeName = node.typeName;
+                    const symbol = checker.resolveName(typeName.text, typeName, SymbolFlags.TypeParameter, /* excludeGlobals */ true);
+                    for (const decl of symbol?.declarations || emptyArray) {
+                        if (isTypeParameterDeclaration(decl) && decl.getSourceFile() === file) {
+                            // skip extraction if the type node is in the range of the type parameter declaration.
+                            // function foo<T extends { a?: /**/T }>(): void;
+                            if (decl.name.escapedText === typeName.escapedText && rangeContainsSkipTrivia(decl, selection, file)) {
+                                return true;
+                            }
+
+                            if (rangeContainsSkipTrivia(statement, decl, file) && !rangeContainsSkipTrivia(selection, decl, file)) {
+                                pushIfUnique(result, decl);
+                                break;
+                            }
                         }
                     }
                 }

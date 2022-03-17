@@ -24,7 +24,7 @@ function foo(x) {
     var y = x; // Ok
 }
 foo(5);
-foo(0 /* A */);
+foo(0 /* E.A */);
 var A = /** @class */ (function () {
     function A() {
     }

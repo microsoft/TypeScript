@@ -17,6 +17,9 @@ verify.completions({
     isSnippet: true,
     replacementSpan: test.ranges()[0],
     sourceDisplay: "./mod",
+  }, {
+    name: "type",
+    sortText: completion.SortText.GlobalsOrKeywords,
   }],
   preferences: {
     includeCompletionsForImportStatements: true,

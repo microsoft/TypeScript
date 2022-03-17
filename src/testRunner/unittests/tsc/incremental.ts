@@ -418,5 +418,36 @@ declare global {
             incrementalScenarios: noChangeOnlyRuns,
             baselinePrograms: true
         });
+
+        verifyTscSerializedIncrementalEdits({
+            scenario: "incremental",
+            subScenario: "serializing error chains",
+            commandLineArgs: ["-p", `src/project`],
+            fs: () => loadProjectFromFiles({
+                "/src/project/tsconfig.json": JSON.stringify({
+                    compilerOptions: {
+                        incremental: true,
+                        strict: true,
+                        jsx: "react",
+                        module: "esnext",
+                    },
+                }),
+                "/src/project/index.tsx": Utils.dedent`
+                    declare namespace JSX {
+                        interface ElementChildrenAttribute { children: {}; }
+                        interface IntrinsicElements { div: {} }
+                    }
+
+                    declare var React: any;
+
+                    declare function Component(props: never): any;
+                    declare function Component(props: { children?: number }): any;
+                    (<Component>
+                        <div />
+                        <div />
+                    </Component>)`
+            }, `\ninterface ReadonlyArray<T> { readonly length: number }`),
+            incrementalScenarios: noChangeOnlyRuns,
+        });
     });
 }

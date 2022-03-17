@@ -1,0 +1,22 @@
+=== tests/cases/conformance/node/allowJs/subfolder/index.js ===
+// cjs format file
+const x = import.meta.url;
+>x : Symbol(x, Decl(index.js, 1, 5))
+>import.meta.url : Symbol(ImportMeta.url, Decl(lib.dom.d.ts, --, --))
+>import.meta : Symbol(ImportMeta, Decl(lib.es5.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>url : Symbol(ImportMeta.url, Decl(lib.dom.d.ts, --, --))
+
+export {x};
+>x : Symbol(x, Decl(index.js, 2, 8))
+
+=== tests/cases/conformance/node/allowJs/index.js ===
+// esm format file
+const x = import.meta.url;
+>x : Symbol(x, Decl(index.js, 1, 5))
+>import.meta.url : Symbol(ImportMeta.url, Decl(lib.dom.d.ts, --, --))
+>import.meta : Symbol(ImportMeta, Decl(lib.es5.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>url : Symbol(ImportMeta.url, Decl(lib.dom.d.ts, --, --))
+
+export {x};
+>x : Symbol(x, Decl(index.js, 2, 8))
+

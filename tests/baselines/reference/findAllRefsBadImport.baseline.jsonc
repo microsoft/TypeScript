@@ -1,0 +1,53 @@
+undefined
+
+// === /tests/cases/fourslash/findAllRefsBadImport.ts ===
+// import { ab as /*FIND ALL REFS*/[|cd|] } from "doesNotExist";
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsBadImport.ts",
+      "kind": "alias",
+      "name": "import cd",
+      "textSpan": {
+        "start": 15,
+        "length": 2
+      },
+      "displayParts": [
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "cd",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 40
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 15,
+          "length": 2
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsBadImport.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 40
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      }
+    ]
+  }
+]

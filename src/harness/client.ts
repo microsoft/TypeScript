@@ -110,14 +110,12 @@ namespace ts.server {
                 }
             }
 
-            // verify the sequence numbers
-            Debug.assert(response.request_seq === request.seq, "Malformed response: response sequence number did not match request sequence number.");
-
             // unmarshal errors
             if (!response.success) {
                 throw new Error("Error " + response.message);
             }
 
+            Debug.assert(response.request_seq === request.seq, "Malformed response: response sequence number did not match request sequence number.");
             Debug.assert(expectEmptyBody || !!response.body, "Malformed response: Unexpected empty response body.");
             Debug.assert(!expectEmptyBody || !response.body, "Malformed response: Unexpected non-empty response body.");
 
@@ -136,6 +134,13 @@ namespace ts.server {
             const args: protocol.ConfigureRequestArguments = { formatOptions };
             const request = this.processRequest(CommandNames.Configure, args);
             this.processResponse(request, /*expectEmptyBody*/ true);
+        }
+
+        /*@internal*/
+        setCompilerOptionsForInferredProjects(options: protocol.CompilerOptions) {
+            const args: protocol.SetCompilerOptionsForInferredProjectsArgs = { options };
+            const request = this.processRequest(CommandNames.CompilerOptionsForInferredProjects, args);
+            this.processResponse(request, /*expectEmptyBody*/ false);
         }
 
         openFile(file: string, fileContent?: string, scriptKindName?: "TS" | "JS" | "TSX" | "JSX"): void {
@@ -653,7 +658,7 @@ namespace ts.server {
 
             return response.body!.map(item => ({ // TODO: GH#18217
                 ...item,
-                kind: item.kind as InlayHintKind | undefined,
+                kind: item.kind as InlayHintKind,
                 position: this.lineOffsetToPosition(file, item.position),
             }));
         }
