@@ -5812,6 +5812,10 @@ namespace ts {
         isolatedSignatureType?: ObjectType; // A manufactured type that just contains the signature for purposes of signature comparison
         /* @internal */
         instantiations?: ESMap<string, Signature>;    // Generic signature instantiation cache
+        /* @internal */
+        variances?: VarianceFlags[]; // Calculated variances for all type parameters referenced in signature
+        /* @internal */
+        allTypeParameters?: readonly TypeParameter[]; // typeParameters of signature followed by outer type parameters of signature
     }
 
     export const enum IndexKind {

@@ -16741,6 +16741,19 @@ namespace ts {
             return createTypePredicate(predicate.kind, predicate.parameterName, predicate.parameterIndex, instantiateType(predicate.type, mapper));
         }
 
+        /**
+         * Traverses a Signature's .target chain and combines all mappers found along the way, creating a composite
+         * mapper suitable for instantiating outer type parameters found at the signature's declaration site to the same
+         * degree as the signature is currently instantiated to
+         */
+        function getCompositeMapperForSignature(signature: Signature | undefined): TypeMapper | undefined {
+            let mapper: TypeMapper | undefined;
+            do {
+                mapper = signature?.mapper ? mapper ? combineTypeMappers(signature?.mapper, mapper) : signature.mapper : mapper;
+            } while (signature = signature?.target);
+            return mapper;
+        }
+
         function instantiateSignature(signature: Signature, mapper: TypeMapper, eraseTypeParameters?: boolean): Signature {
             let freshTypeParameters: TypeParameter[] | undefined;
             if (signature.typeParameters && !eraseTypeParameters) {
@@ -20174,6 +20187,88 @@ namespace ts {
                 return result;
             }
 
+            function getOriginalSignature(signature: Signature) {
+                let original = signature;
+                while (original.target) {
+                    original = original.target;
+                }
+                return original;
+            }
+
+            function getAllTypeParametersOfSignature(signature: Signature) {
+                signature = getOriginalSignature(signature);
+                if (!signature.allTypeParameters) {
+                    signature.allTypeParameters = !signature.declaration ? signature.typeParameters : concatenate(signature.typeParameters, getOuterTypeParameters(signature.declaration, /*includeThisTypes*/ true));
+                }
+                return signature.allTypeParameters;
+            }
+
+            function getSignatureVariances(signature: Signature) {
+                signature = getOriginalSignature(signature);
+                return getVariancesWorker(getAllTypeParametersOfSignature(signature), signature, (signature, param, marker) => {
+                    return instantiateSignature(signature, makeUnaryTypeMapper(param, marker), /*eraseTypeParameters*/ true);
+                }, (a, b) => {
+                    return !!compareSignaturesRelated(a, b, 0 as SignatureCheckMode, /*reportErrors*/ false, /*errorReporter*/ undefined, /*incompatibleErrorReporter*/ undefined, compareTypesAssignable, makeFunctionTypeMapper(reportUnreliableMarkers));
+                });
+            }
+
+            function instantiationsOfSameSignatureRelated(source: Signature, target: Signature, reportErrors: boolean): Ternary | undefined {
+                // the actual type arguments would only be directly instantiated when working with inference or instantiation expressions
+                // Usually, it is the outer type parameters which are more interesting.
+                const parameters = getAllTypeParametersOfSignature(source);
+                if (!parameters) {
+                    return Ternary.True; // Absent inner or outer type parameters, two instantiations of the same signature should be identical (question: how are there two instantiations when signatures are cached?)
+                }
+                const variances = getSignatureVariances(source);
+                const sourceMapper = getCompositeMapperForSignature(source);
+                const sourceTypeArguments = sourceMapper ? instantiateTypes(parameters, sourceMapper) : parameters;
+                const targetMapper = getCompositeMapperForSignature(target);
+                let targetTypeArguments = targetMapper ? instantiateTypes(parameters, targetMapper) : parameters;
+                if (source.typeParameters && target.typeParameters) {
+                    // instantiate the target in the context of the source if need be
+                    targetTypeArguments = instantiateTypes(targetTypeArguments, createTypeMapper(target.typeParameters, source.typeParameters));
+                }
+                if (sourceTypeArguments === targetTypeArguments) {
+                    return Ternary.True; // Both signatures are unaffected by instantiation and are thus identical
+                }
+                const saveErrorInfo = captureErrorCalculationState();
+                let result: Ternary | undefined;
+                if (result = typeArgumentsRelatedTo(sourceTypeArguments, targetTypeArguments, variances, reportErrors, IntersectionState.None)) {
+                    return result;
+                }
+                // TODO: Unify with `relateVariances`
+                if (some(variances, v => !!(v & VarianceFlags.AllowsStructuralFallback))) {
+                    // If some type parameter was `Unmeasurable` or `Unreliable`, and we couldn't pass by assuming it was identical, then we
+                    // have to allow a structural fallback check
+                    resetErrorInfo(saveErrorInfo);
+                    return undefined;
+                }
+                const allowStructuralFallback = targetTypeArguments && hasCovariantVoidArgument(targetTypeArguments, variances);
+                const varianceCheckFailed = !allowStructuralFallback;
+                // The type arguments did not relate appropriately, but it may be because we have no variance
+                // information (in which case typeArgumentsRelatedTo defaulted to covariance for all type
+                // arguments). It might also be the case that the target type has a 'void' type argument for
+                // a covariant type parameter that is only used in return positions within the generic type
+                // (in which case any type argument is permitted on the source side). In those cases we proceed
+                // with a structural comparison. Otherwise, we know for certain the instantiations aren't
+                // related and we can return here.
+                if (variances !== emptyArray && !allowStructuralFallback) {
+                    // In some cases generic types that are covariant in regular type checking mode become
+                    // invariant in --strictFunctionTypes mode because one or more type parameters are used in
+                    // both co- and contravariant positions. In order to make it easier to diagnose *why* such
+                    // types are invariant, if any of the type parameters are invariant we reset the reported
+                    // errors and instead force a structural comparison (which will include elaborations that
+                    // reveal the reason).
+                    // We can switch on `reportErrors` here, since varianceCheckFailed guarantees we return `False`,
+                    // we can return `False` early here to skip calculating the structural error message we don't need.
+                    if (varianceCheckFailed && !(reportErrors && some(variances, v => (v & VarianceFlags.VarianceMask) === VarianceFlags.Invariant))) {
+                        return Ternary.False;
+                    }
+                    resetErrorInfo(saveErrorInfo);
+                }
+                return result;
+            }
+
             function signaturesRelatedTo(source: Type, target: Type, kind: SignatureKind, reportErrors: boolean): Ternary {
                 if (relation === identityRelation) {
                     return signaturesIdenticalTo(source, target, kind);
@@ -20219,7 +20314,11 @@ namespace ts {
                     // of the much more expensive N * M comparison matrix we explore below. We erase type parameters
                     // as they are known to always be the same.
                     for (let i = 0; i < targetSignatures.length; i++) {
-                        const related = signatureRelatedTo(sourceSignatures[i], targetSignatures[i], /*erase*/ true, reportErrors, incompatibleReporter(sourceSignatures[i], targetSignatures[i]));
+                        let related = instantiationsOfSameSignatureRelated(sourceSignatures[i], targetSignatures[i], reportErrors);
+                        if (related === undefined) {
+                            // Variance analysis indicated we need to fall back to a structural check
+                            related = signatureRelatedTo(sourceSignatures[i], targetSignatures[i], /*erase*/ true, reportErrors, incompatibleReporter(sourceSignatures[i], targetSignatures[i]));
+                        }
                         if (!related) {
                             return Ternary.False;
                         }
@@ -20581,7 +20680,9 @@ namespace ts {
         // generic type are structurally compared. We infer the variance information by comparing
         // instantiations of the generic type for type arguments with known relations. The function
         // returns the emptyArray singleton when invoked recursively for the given generic type.
-        function getVariancesWorker<TCache extends { variances?: VarianceFlags[] }>(typeParameters: readonly TypeParameter[] = emptyArray, cache: TCache, createMarkerType: (input: TCache, param: TypeParameter, marker: Type) => Type): VarianceFlags[] {
+        function getVariancesWorker<TCache extends { variances?: VarianceFlags[] }>(typeParameters: readonly TypeParameter[] | undefined, cache: TCache, createMarkerType: (input: TCache, param: TypeParameter, marker: Type) => Type): VarianceFlags[];
+        function getVariancesWorker<TCache extends { variances?: VarianceFlags[] }, TRelatable>(typeParameters: readonly TypeParameter[] | undefined, cache: TCache, createMarkerType: (input: TCache, param: TypeParameter, marker: Type) => TRelatable, relate: (a: TRelatable, b: TRelatable) => boolean): VarianceFlags[];
+        function getVariancesWorker<TCache extends { variances?: VarianceFlags[] }, TRelatable>(typeParameters: readonly TypeParameter[] = emptyArray, cache: TCache, createMarkerType: (input: TCache, param: TypeParameter, marker: Type) => TRelatable, relate: (a: TRelatable, b: TRelatable) => boolean = isTypeAssignableTo as () => boolean as (a: TRelatable, b: TRelatable) => boolean): VarianceFlags[] {
             let variances = cache.variances;
             if (!variances) {
                 tracing?.push(tracing.Phase.CheckTypes, "getVariancesWorker", { arity: typeParameters.length, id: (cache as any).id ?? (cache as any).declaredType?.id ?? -1 });
@@ -20598,13 +20699,13 @@ namespace ts {
                     // invariance, covariance, contravariance or bivariance.
                     const typeWithSuper = createMarkerType(cache, tp, markerSuperType);
                     const typeWithSub = createMarkerType(cache, tp, markerSubType);
-                    let variance = (isTypeAssignableTo(typeWithSub, typeWithSuper) ? VarianceFlags.Covariant : 0) |
-                        (isTypeAssignableTo(typeWithSuper, typeWithSub) ? VarianceFlags.Contravariant : 0);
+                    let variance = (relate(typeWithSub, typeWithSuper) ? VarianceFlags.Covariant : 0) |
+                        (relate(typeWithSuper, typeWithSub) ? VarianceFlags.Contravariant : 0);
                     // If the instantiations appear to be related bivariantly it may be because the
                     // type parameter is independent (i.e. it isn't witnessed anywhere in the generic
                     // type). To determine this we compare instantiations where the type parameter is
                     // replaced with marker types that are known to be unrelated.
-                    if (variance === VarianceFlags.Bivariant && isTypeAssignableTo(createMarkerType(cache, tp, markerOtherType), typeWithSuper)) {
+                    if (variance === VarianceFlags.Bivariant && relate(createMarkerType(cache, tp, markerOtherType), typeWithSuper)) {
                         variance = VarianceFlags.Independent;
                     }
                     outofbandVarianceMarkerHandler = oldHandler;
