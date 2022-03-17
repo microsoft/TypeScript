@@ -624,3 +624,132 @@ function f4<K extends keyof ArgMap>(x: Funcs[keyof ArgMap], y: Funcs[K]) {
 >y : Funcs[K]
 }
 
+// Repro from #47890
+
+interface MyObj {
+    someKey: {
+>someKey : { name: string; }
+
+      name: string;
+>name : string
+    }
+    someOtherKey: {
+>someOtherKey : { name: number; }
+
+      name: number;
+>name : number
+    }
+}
+
+const ref: MyObj = {
+>ref : MyObj
+>{    someKey: { name: "" },    someOtherKey: { name: 42 }} : { someKey: { name: string; }; someOtherKey: { name: number; }; }
+
+    someKey: { name: "" },
+>someKey : { name: string; }
+>{ name: "" } : { name: string; }
+>name : string
+>"" : ""
+
+    someOtherKey: { name: 42 }
+>someOtherKey : { name: number; }
+>{ name: 42 } : { name: number; }
+>name : number
+>42 : 42
+
+};
+
+function func<K extends keyof MyObj>(k: K): MyObj[K]['name'] | undefined {
+>func : <K extends keyof MyObj>(k: K) => MyObj[K]['name'] | undefined
+>k : K
+
+    const myObj: Partial<MyObj>[K] = ref[k];
+>myObj : Partial<MyObj>[K]
+>ref[k] : MyObj[K]
+>ref : MyObj
+>k : K
+
+    if (myObj) {
+>myObj : Partial<MyObj>[K]
+
+      return myObj.name;
+>myObj.name : string | number
+>myObj : { name: string; } | { name: number; }
+>name : string | number
+    }
+    const myObj2: Partial<MyObj>[keyof MyObj] = ref[k];
+>myObj2 : { name: string; } | { name: number; } | undefined
+>ref[k] : { name: string; } | { name: number; }
+>ref : MyObj
+>k : K
+
+    if (myObj2) {
+>myObj2 : { name: string; } | { name: number; }
+
+      return myObj2.name;
+>myObj2.name : string | number
+>myObj2 : { name: string; } | { name: number; }
+>name : string | number
+    }
+    return undefined;
+>undefined : undefined
+}
+
+// Repro from #48157
+
+interface Foo {
+    bar?: string
+>bar : string | undefined
+}
+
+function foo<T extends keyof Foo>(prop: T, f: Required<Foo>) {
+>foo : <T extends "bar">(prop: T, f: Required<Foo>) => void
+>prop : T
+>f : Required<Foo>
+
+    bar(f[prop]);
+>bar(f[prop]) : void
+>bar : (t: string) => void
+>f[prop] : Required<Foo>[T]
+>f : Required<Foo>
+>prop : T
+}
+
+declare function bar(t: string): void;
+>bar : (t: string) => void
+>t : string
+
+// Repro from #48246
+
+declare function makeCompleteLookupMapping<T extends ReadonlyArray<any>, Attr extends keyof T[number]>(
+>makeCompleteLookupMapping : <T extends readonly any[], Attr extends keyof T[number]>(ops: T, attr: Attr) => { [Item in T[number] as Item[Attr]]: Item; }
+
+    ops: T, attr: Attr): { [Item in T[number]as Item[Attr]]: Item };
+>ops : T
+>attr : Attr
+
+const ALL_BARS = [{ name: 'a'}, {name: 'b'}] as const;
+>ALL_BARS : readonly [{ readonly name: "a"; }, { readonly name: "b"; }]
+>[{ name: 'a'}, {name: 'b'}] as const : readonly [{ readonly name: "a"; }, { readonly name: "b"; }]
+>[{ name: 'a'}, {name: 'b'}] : readonly [{ readonly name: "a"; }, { readonly name: "b"; }]
+>{ name: 'a'} : { readonly name: "a"; }
+>name : "a"
+>'a' : "a"
+>{name: 'b'} : { readonly name: "b"; }
+>name : "b"
+>'b' : "b"
+
+const BAR_LOOKUP = makeCompleteLookupMapping(ALL_BARS, 'name');
+>BAR_LOOKUP : { a: { readonly name: "a"; }; b: { readonly name: "b"; }; }
+>makeCompleteLookupMapping(ALL_BARS, 'name') : { a: { readonly name: "a"; }; b: { readonly name: "b"; }; }
+>makeCompleteLookupMapping : <T extends readonly any[], Attr extends keyof T[number]>(ops: T, attr: Attr) => { [Item in T[number] as Item[Attr]]: Item; }
+>ALL_BARS : readonly [{ readonly name: "a"; }, { readonly name: "b"; }]
+>'name' : "name"
+
+type BarLookup = typeof BAR_LOOKUP;
+>BarLookup : { a: { readonly name: "a"; }; b: { readonly name: "b"; }; }
+>BAR_LOOKUP : { a: { readonly name: "a"; }; b: { readonly name: "b"; }; }
+
+type Baz = { [K in keyof BarLookup]: BarLookup[K]['name'] };
+>Baz : Baz
+

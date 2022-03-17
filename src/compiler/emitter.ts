@@ -1596,7 +1596,7 @@ namespace ts {
                         return emitRestOrJSDocVariadicType(node as RestTypeNode | JSDocVariadicType);
                     case SyntaxKind.JSDocNamepathType:
                         return;
-                    case SyntaxKind.JSDocComment:
+                    case SyntaxKind.JSDoc:
                         return emitJSDoc(node as JSDoc);
                     case SyntaxKind.JSDocTypeLiteral:
                         return emitJSDocTypeLiteral(node as JSDocTypeLiteral);
@@ -2391,6 +2391,19 @@ namespace ts {
             writeKeyword("import");
             writePunctuation("(");
             emit(node.argument);
+            if (node.assertions) {
+                writePunctuation(",");
+                writeSpace();
+                writePunctuation("{");
+                writeSpace();
+                writeKeyword("assert");
+                writePunctuation(":");
+                writeSpace();
+                const elements = node.assertions.assertClause.elements;
+                emitList(node.assertions.assertClause, elements, ListFormat.ImportClauseEntries);
+                writeSpace();
+                writePunctuation("}");
+            }
             writePunctuation(")");
             if (node.qualifier) {
                 writePunctuation(".");
@@ -3117,7 +3130,7 @@ namespace ts {
             emit(node.name);
             emit(node.exclamationToken);
             emitTypeAnnotation(node.type);
-            emitInitializer(node.initializer, node.type ? node.type.end : node.name.end, node, parenthesizer.parenthesizeExpressionForDisallowedComma);
+            emitInitializer(node.initializer, node.type?.end ?? node.name.emitNode?.typeNode?.end ?? node.name.end, node, parenthesizer.parenthesizeExpressionForDisallowedComma);
         }
 
         function emitVariableDeclarationList(node: VariableDeclarationList) {
@@ -5343,6 +5356,10 @@ namespace ts {
                 commentsDisabled = false;
             }
             emitTrailingCommentsOfNode(node, emitFlags, commentRange.pos, commentRange.end, savedContainerPos, savedContainerEnd, savedDeclarationListContainerEnd);
+            const typeNode = getTypeNode(node);
+            if (typeNode) {
+                emitTrailingCommentsOfNode(node, emitFlags, typeNode.pos, typeNode.end, savedContainerPos, savedContainerEnd, savedDeclarationListContainerEnd);
+            }
         }
 
         function emitLeadingCommentsOfNode(node: Node, emitFlags: EmitFlags, pos: number, end: number) {

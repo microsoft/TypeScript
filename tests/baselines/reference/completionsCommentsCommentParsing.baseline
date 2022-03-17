@@ -5479,7 +5479,7 @@
           "name": "escape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "23",
+          "sortText": "24",
           "displayParts": [
             {
               "text": "function",
@@ -5569,7 +5569,7 @@
           "name": "unescape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "23",
+          "sortText": "24",
           "displayParts": [
             {
               "text": "function",
@@ -11934,7 +11934,7 @@
           "name": "escape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "23",
+          "sortText": "24",
           "displayParts": [
             {
               "text": "function",
@@ -12024,7 +12024,7 @@
           "name": "unescape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "23",
+          "sortText": "24",
           "displayParts": [
             {
               "text": "function",
@@ -17569,7 +17569,7 @@
           "name": "escape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "23",
+          "sortText": "24",
           "displayParts": [
             {
               "text": "function",
@@ -17659,7 +17659,7 @@
           "name": "unescape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "23",
+          "sortText": "24",
           "displayParts": [
             {
               "text": "function",
@@ -23281,7 +23281,7 @@
           "name": "escape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "23",
+          "sortText": "24",
           "displayParts": [
             {
               "text": "function",
@@ -23371,7 +23371,7 @@
           "name": "unescape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "23",
+          "sortText": "24",
           "displayParts": [
             {
               "text": "function",
@@ -29035,7 +29035,7 @@
           "name": "escape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "23",
+          "sortText": "24",
           "displayParts": [
             {
               "text": "function",
@@ -29125,7 +29125,7 @@
           "name": "unescape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "23",
+          "sortText": "24",
           "displayParts": [
             {
               "text": "function",
@@ -35490,7 +35490,7 @@
           "name": "escape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "23",
+          "sortText": "24",
           "displayParts": [
             {
               "text": "function",
@@ -35580,7 +35580,7 @@
           "name": "unescape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "23",
+          "sortText": "24",
           "displayParts": [
             {
               "text": "function",
@@ -41202,7 +41202,7 @@
           "name": "escape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "23",
+          "sortText": "24",
           "displayParts": [
             {
               "text": "function",
@@ -41292,7 +41292,7 @@
           "name": "unescape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "23",
+          "sortText": "24",
           "displayParts": [
             {
               "text": "function",

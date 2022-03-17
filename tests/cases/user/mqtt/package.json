@@ -6,6 +6,8 @@
   "author": "",
   "license": "Apache-2.0",
   "dependencies": {
+    "@types/node": "latest",
+    "@types/ws": "latest",
     "mqtt": "latest"
   }
 }
