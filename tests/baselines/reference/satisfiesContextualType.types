@@ -3,12 +3,12 @@ let obj: { f(s: string): void } & Record<string, unknown> = {
 >obj : { f(s: string): void; } & Record<string, unknown>
 >f : (s: string) => void
 >s : string
->{    f(s) { }, // "incorrect" implicit any on 's'    g(s) { }} satisfies { g(s: string): void } & Record<string, unknown> : { f(s: any): void; g(s: string): void; }
->{    f(s) { }, // "incorrect" implicit any on 's'    g(s) { }} : { f(s: any): void; g(s: string): void; }
+>{    f(s) { }, // "incorrect" implicit any on 's'    g(s) { }} satisfies { g(s: string): void } & Record<string, unknown> : { f(s: string): void; g(s: string): void; }
+>{    f(s) { }, // "incorrect" implicit any on 's'    g(s) { }} : { f(s: string): void; g(s: string): void; }
 
     f(s) { }, // "incorrect" implicit any on 's'
->f : (s: any) => void
->s : any
+>f : (s: string) => void
+>s : string
 
     g(s) { }
 >g : (s: string) => void
