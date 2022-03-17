@@ -18,3 +18,13 @@ let obj: { f(s: string): void } & Record<string, unknown> = {
 >g : (s: string) => void
 >s : string
 
+// This needs to not crash (outer node is not expression)
+({ f(x) { } }) satisfies { f(s: string): void };
+>({ f(x) { } }) satisfies { f(s: string): void } : { f(x: string): void; }
+>({ f(x) { } }) : { f(x: string): void; }
+>{ f(x) { } } : { f(x: string): void; }
+>f : (x: string) => void
+>x : string
+>f : (s: string) => void
+>s : string
+

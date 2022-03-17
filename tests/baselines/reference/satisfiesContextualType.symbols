@@ -18,3 +18,10 @@ let obj: { f(s: string): void } & Record<string, unknown> = {
 >s : Symbol(s, Decl(satisfiesContextualType.ts, 3, 16))
 >Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
 
+// This needs to not crash (outer node is not expression)
+({ f(x) { } }) satisfies { f(s: string): void };
+>f : Symbol(f, Decl(satisfiesContextualType.ts, 6, 2))
+>x : Symbol(x, Decl(satisfiesContextualType.ts, 6, 5))
+>f : Symbol(f, Decl(satisfiesContextualType.ts, 6, 26))
+>s : Symbol(s, Decl(satisfiesContextualType.ts, 6, 29))
+
