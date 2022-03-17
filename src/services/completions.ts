@@ -1157,7 +1157,10 @@ namespace ts.Completions {
                     // We don't support overloads in object literals.
                     return undefined;
                 }
-                let typeNode: FunctionTypeNode | TypeNode | undefined = checker.typeToTypeNode(type, enclosingDeclaration, builderFlags, codefix.getNoopSymbolTrackerWithResolver({ program, host }));
+                const effectiveType = type.flags & TypeFlags.Union && (type as UnionType).types.length < 10
+                    ? checker.getUnionType((type as UnionType).types, UnionReduction.Subtype)
+                    : type;
+                let typeNode = checker.typeToTypeNode(effectiveType, enclosingDeclaration, builderFlags, codefix.getNoopSymbolTrackerWithResolver({ program, host }));
                 if (!typeNode || !isFunctionTypeNode(typeNode)) {
                     return undefined;
                 }
