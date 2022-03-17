@@ -111,8 +111,7 @@ exitCode:: ExitStatus.Success
 getModifiedTime:: {
  "/src/src/index.ts": 1,
  "/src/src/hello.json": 1,
- "/src/src/index.js": 1,
- "/src/src/index.d.ts": 1
+ "/src/src/index.js": 1
 }
 
 setModifiedTime:: {}

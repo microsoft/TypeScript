@@ -290,7 +290,6 @@ getModifiedTimes:: {
  "/user/username/projects/reexport/src/pure/index.ts": 1,
  "/user/username/projects/reexport/src/pure/session.ts": 1,
  "/user/username/projects/reexport/out/pure/index.js": 1,
- "/user/username/projects/reexport/out/pure/session.d.ts": 1,
  "/user/username/projects/reexport/src/main/index.ts": 1,
  "/user/username/projects/reexport/out/main/index.js": 1
 } 
@@ -495,8 +494,7 @@ directoryExists:: {
 getModifiedTimes:: {
  "/user/username/projects/reexport/src/pure/index.ts": 1,
  "/user/username/projects/reexport/src/pure/session.ts": 1,
- "/user/username/projects/reexport/out/pure/index.js": 1,
- "/user/username/projects/reexport/out/pure/session.d.ts": 1
+ "/user/username/projects/reexport/out/pure/index.js": 1
 } 
 
 setModifiedTimes:: {} 
@@ -691,8 +689,7 @@ directoryExists:: {
 getModifiedTimes:: {
  "/user/username/projects/reexport/src/pure/index.ts": 1,
  "/user/username/projects/reexport/src/pure/session.ts": 1,
- "/user/username/projects/reexport/out/pure/index.js": 1,
- "/user/username/projects/reexport/out/pure/session.d.ts": 1
+ "/user/username/projects/reexport/out/pure/index.js": 1
 } 
 
 setModifiedTimes:: {

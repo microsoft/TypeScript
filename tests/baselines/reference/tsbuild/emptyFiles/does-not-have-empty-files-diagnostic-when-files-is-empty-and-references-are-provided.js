@@ -65,8 +65,7 @@ exitCode:: ExitStatus.Success
 
 getModifiedTime:: {
  "/src/core/index.ts": 1,
- "/src/core/index.js": 1,
- "/src/core/index.d.ts": 1
+ "/src/core/index.js": 1
 }
 
 setModifiedTime:: {}

@@ -314,7 +314,6 @@ getModifiedTimes:: {
  "/user/username/projects/myproject/packages/pkg2/const.cts": 1,
  "/user/username/projects/myproject/packages/pkg2/index.ts": 1,
  "/user/username/projects/myproject/packages/pkg2/build/const.cjs": 1,
- "/user/username/projects/myproject/packages/pkg2/build/const.d.cts": 1,
  "/user/username/projects/myproject/packages/pkg1/index.ts": 1,
  "/user/username/projects/myproject/packages/pkg1/build/index.js": 1
 } 
@@ -1036,7 +1035,6 @@ getModifiedTimes:: {
  "/user/username/projects/myproject/packages/pkg2/const.cts": 1,
  "/user/username/projects/myproject/packages/pkg2/index.cts": 1,
  "/user/username/projects/myproject/packages/pkg2/build/const.cjs": 1,
- "/user/username/projects/myproject/packages/pkg2/build/index.d.cts": 1,
  "/user/username/projects/myproject/packages/pkg2/build/const.d.cts": 1
 } 
 

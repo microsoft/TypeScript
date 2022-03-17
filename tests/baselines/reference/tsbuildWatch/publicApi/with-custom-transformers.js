@@ -267,10 +267,8 @@ directoryExists:: {
 getModifiedTimes:: {
  "/user/username/projects/myproject/shared/index.ts": 1,
  "/user/username/projects/myproject/shared/index.js": 1,
- "/user/username/projects/myproject/shared/index.d.ts": 1,
  "/user/username/projects/myproject/webpack/index.ts": 1,
- "/user/username/projects/myproject/webpack/index.js": 1,
- "/user/username/projects/myproject/webpack/index.d.ts": 1
+ "/user/username/projects/myproject/webpack/index.js": 1
 } 
 
 setModifiedTimes:: {} 
@@ -449,7 +447,6 @@ directoryExists:: {
 getModifiedTimes:: {
  "/user/username/projects/myproject/shared/index.ts": 1,
  "/user/username/projects/myproject/shared/index.js": 1,
- "/user/username/projects/myproject/shared/index.d.ts": 1,
  "/user/username/projects/myproject/webpack/index.d.ts": 1
 } 
 

@@ -169,8 +169,7 @@ directoryExists:: {
 getModifiedTimes:: {
  "/user/username/projects/solution/app/filewitherror.ts": 1,
  "/user/username/projects/solution/app/filewithouterror.ts": 1,
- "/user/username/projects/solution/app/filewitherror.js": 1,
- "/user/username/projects/solution/app/filewitherror.d.ts": 1
+ "/user/username/projects/solution/app/filewitherror.js": 1
 } 
 
 setModifiedTimes:: {} 

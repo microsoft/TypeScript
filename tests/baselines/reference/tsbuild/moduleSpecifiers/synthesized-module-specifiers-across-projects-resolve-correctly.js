@@ -144,14 +144,12 @@ getModifiedTime:: {
  "/src/src-types/dogconfig.ts": 1,
  "/src/src-types/index.ts": 1,
  "/src/src-types/dogconfig.js": 1,
- "/src/src-types/dogconfig.d.ts": 1,
  "/src/src-dogs/dog.ts": 1,
  "/src/src-dogs/dogconfig.ts": 1,
  "/src/src-dogs/index.ts": 1,
  "/src/src-dogs/lassie/lassieconfig.ts": 1,
  "/src/src-dogs/lassie/lassiedog.ts": 1,
- "/src/src-dogs/dog.js": 1,
- "/src/src-dogs/dogconfig.d.ts": 1
+ "/src/src-dogs/dog.js": 1
 }
 
 setModifiedTime:: {}

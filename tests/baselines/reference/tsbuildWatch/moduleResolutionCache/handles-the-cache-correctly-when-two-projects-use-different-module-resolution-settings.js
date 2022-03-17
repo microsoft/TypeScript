@@ -314,10 +314,8 @@ directoryExists:: {
 getModifiedTimes:: {
  "/user/username/projects/myproject/project1/index.ts": 1,
  "/user/username/projects/myproject/project1/index.js": 1,
- "/user/username/projects/myproject/project1/index.d.ts": 1,
  "/user/username/projects/myproject/project2/index.ts": 1,
- "/user/username/projects/myproject/project2/index.js": 1,
- "/user/username/projects/myproject/project2/index.d.ts": 1
+ "/user/username/projects/myproject/project2/index.js": 1
 } 
 
 setModifiedTimes:: {} 

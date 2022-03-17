@@ -100,8 +100,7 @@ getModifiedTime:: {
  "/src/strings/foo.json": 1,
  "/src/strings/tsconfig.tsbuildinfo": 1,
  "/src/main/index.ts": 1,
- "/src/main/index.js": 1,
- "/src/main/index.d.ts": 1
+ "/src/main/index.js": 1
 }
 
 setModifiedTime:: {}

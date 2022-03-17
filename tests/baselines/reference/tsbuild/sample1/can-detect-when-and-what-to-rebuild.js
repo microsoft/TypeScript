@@ -474,8 +474,7 @@ getModifiedTime:: {
  "/src/logic/tsconfig.tsbuildinfo": 1,
  "/src/logic/tsconfig.json": 1,
  "/src/tests/index.ts": 1,
- "/src/tests/index.js": 1,
- "/src/tests/index.d.ts": 1
+ "/src/tests/index.js": 1
 }
 
 setModifiedTime:: {}

@@ -498,13 +498,10 @@ getModifiedTimes:: {
  "/user/username/projects/sample1/core/anothermodule.ts": 1,
  "/user/username/projects/sample1/core/index.ts": 1,
  "/user/username/projects/sample1/core/anothermodule.js": 1,
- "/user/username/projects/sample1/core/anothermodule.d.ts": 1,
  "/user/username/projects/sample1/logic/index.ts": 1,
  "/user/username/projects/sample1/logic/index.js": 1,
- "/user/username/projects/sample1/logic/index.d.ts": 1,
  "/user/username/projects/sample1/tests/index.ts": 1,
- "/user/username/projects/sample1/tests/index.js": 1,
- "/user/username/projects/sample1/tests/index.d.ts": 1
+ "/user/username/projects/sample1/tests/index.js": 1
 } 
 
 setModifiedTimes:: {} 
@@ -660,7 +657,6 @@ getModifiedTimes:: {
  "/user/username/projects/sample1/core/index.ts": 1,
  "/user/username/projects/sample1/core/newfile.ts": 1,
  "/user/username/projects/sample1/core/anothermodule.js": 1,
- "/user/username/projects/sample1/core/newfile.d.ts": 1,
  "/user/username/projects/sample1/core/anothermodule.d.ts": 1,
  "/user/username/projects/sample1/core/index.d.ts": 1
 } 
@@ -1008,7 +1004,6 @@ getModifiedTimes:: {
  "/user/username/projects/sample1/core/index.ts": 1,
  "/user/username/projects/sample1/core/newfile.ts": 1,
  "/user/username/projects/sample1/core/anothermodule.js": 1,
- "/user/username/projects/sample1/core/newfile.d.ts": 1,
  "/user/username/projects/sample1/core/anothermodule.d.ts": 1,
  "/user/username/projects/sample1/core/index.d.ts": 1
 } 

@@ -96,10 +96,8 @@ exitCode:: ExitStatus.Success
 getModifiedTime:: {
  "/src/first/first_PART1.ts": 1,
  "/src/first/bin/first-output.js": 1,
- "/src/first/bin/first-output.d.ts": 1,
  "/src/third/third_part1.ts": 1,
- "/src/third/thirdjs/output/third-output.js": 1,
- "/src/third/thirdjs/output/third-output.d.ts": 1
+ "/src/third/thirdjs/output/third-output.js": 1
 }
 
 setModifiedTime:: {}

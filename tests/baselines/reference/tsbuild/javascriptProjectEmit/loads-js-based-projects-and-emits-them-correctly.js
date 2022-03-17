@@ -120,13 +120,10 @@ exitCode:: ExitStatus.Success
 getModifiedTime:: {
  "/src/common/nominal.js": 1,
  "/lib/common/nominal.js": 1,
- "/lib/common/nominal.d.ts": 1,
  "/src/sub-project/index.js": 1,
  "/lib/sub-project/index.js": 1,
- "/lib/sub-project/index.d.ts": 1,
  "/src/sub-project-2/index.js": 1,
- "/lib/sub-project-2/index.js": 1,
- "/lib/sub-project-2/index.d.ts": 1
+ "/lib/sub-project-2/index.js": 1
 }
 
 setModifiedTime:: {}

@@ -84,8 +84,7 @@ getModifiedTime:: {
  "/src/src/b.ts": 1,
  "/src/src/c.ts": 1,
  "/src/src/index.ts": 1,
- "/src/lib/a.d.ts": 1,
- "/src/lib/c.d.ts": 1
+ "/src/lib/a.d.ts": 1
 }
 
 setModifiedTime:: {}
@@ -268,7 +267,7 @@ getModifiedTime:: {
  "/src/src/b.ts": 1,
  "/src/src/c.ts": 1,
  "/src/src/index.ts": 1,
- "/src/lib/a.d.ts": 2,
+ "/src/lib/a.d.ts": 1,
  "/src/lib/b.d.ts": 1,
  "/src/lib/c.d.ts": 1,
  "/src/lib/index.d.ts": 1

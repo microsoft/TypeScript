@@ -387,13 +387,10 @@ getModifiedTimes:: {
  "/user/username/projects/sample1/core/index.ts": 1,
  "/user/username/projects/sample1/core/some_decl.d.ts": 1,
  "/user/username/projects/sample1/core/anothermodule.js": 1,
- "/user/username/projects/sample1/core/anothermodule.d.ts": 1,
  "/user/username/projects/sample1/logic/index.ts": 1,
  "/user/username/projects/sample1/logic/index.js": 1,
- "/user/username/projects/sample1/logic/index.d.ts": 1,
  "/user/username/projects/sample1/tests/index.ts": 1,
- "/user/username/projects/sample1/tests/index.js": 1,
- "/user/username/projects/sample1/tests/index.d.ts": 1
+ "/user/username/projects/sample1/tests/index.js": 1
 } 
 
 setModifiedTimes:: {} 
@@ -845,8 +842,7 @@ getModifiedTimes:: {
  "/user/username/projects/sample1/core/tsconfig.tsbuildinfo": 1,
  "/user/username/projects/sample1/core/tsconfig.json": 1,
  "/user/username/projects/sample1/logic/index.ts": 1,
- "/user/username/projects/sample1/logic/index.js": 1,
- "/user/username/projects/sample1/logic/index.d.ts": 1
+ "/user/username/projects/sample1/logic/index.js": 1
 } 
 
 setModifiedTimes:: {} 
@@ -1151,7 +1147,7 @@ getModifiedTimes:: {
  "/user/username/projects/sample1/core/tsconfig.json": 1,
  "/user/username/projects/sample1/logic/index.ts": 1,
  "/user/username/projects/sample1/logic/index.js": 1,
- "/user/username/projects/sample1/logic/decls/index.d.ts": 2
+ "/user/username/projects/sample1/logic/decls/index.d.ts": 1
 } 
 
 setModifiedTimes:: {} 

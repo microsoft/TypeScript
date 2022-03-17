@@ -89,11 +89,9 @@ getModifiedTime:: {
  "/src/lib/file2.ts": 1,
  "/src/lib/global.ts": 1,
  "/src/module.js": 1,
- "/src/module.d.ts": 1,
  "/src/app/file3.ts": 1,
  "/src/app/file4.ts": 1,
- "/src/app/module.js": 1,
- "/src/app/module.d.ts": 1
+ "/src/app/module.js": 1
 }
 
 setModifiedTime:: {}

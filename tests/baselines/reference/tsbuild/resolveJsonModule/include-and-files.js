@@ -118,8 +118,7 @@ exitCode:: ExitStatus.Success
 getModifiedTime:: {
  "/src/src/hello.json": 1,
  "/src/src/index.ts": 1,
- "/src/dist/src/hello.json": 1,
- "/src/dist/src/index.d.ts": 1
+ "/src/dist/src/hello.json": 1
 }
 
 setModifiedTime:: {}

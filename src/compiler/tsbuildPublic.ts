@@ -970,9 +970,8 @@ namespace ts {
                 let priorChangeTime: Date | undefined;
                 if (!anyDtsChanged && isDeclarationFileName(name)) {
                     // Check for unchanged .d.ts files
-                    const modifiedTime = getModifiedTime(host, name);
-                    if (modifiedTime !== missingFileModifiedTime && state.readFileWithCache(name) === text) {
-                        priorChangeTime = modifiedTime;
+                    if (state.readFileWithCache(name) === text) {
+                        priorChangeTime = getModifiedTime(host, name);
                     }
                     else {
                         resultFlags &= ~BuildResultFlags.DeclarationOutputUnchanged;

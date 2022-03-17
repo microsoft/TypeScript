@@ -59,10 +59,8 @@ exitCode:: ExitStatus.Success
 getModifiedTime:: {
  "/src/packages/pkg1/src/index.ts": 1,
  "/src/packages/pkg1/lib/src/index.js": 1,
- "/src/packages/pkg1/lib/src/index.d.ts": 1,
  "/src/packages/pkg2/src/index.ts": 1,
- "/src/packages/pkg2/lib/src/index.js": 1,
- "/src/packages/pkg2/lib/src/index.d.ts": 1
+ "/src/packages/pkg2/lib/src/index.js": 1
 }
 
 setModifiedTime:: {}
