@@ -1157,25 +1157,24 @@ namespace ts.Completions {
                     // We don't support overloads in object literals.
                     return undefined;
                 }
-                let typeNode = checker.typeToTypeNode(type, enclosingDeclaration, builderFlags, codefix.getNoopSymbolTrackerWithResolver({ program, host }));
+                let typeNode: FunctionTypeNode | TypeNode | undefined = checker.typeToTypeNode(type, enclosingDeclaration, builderFlags, codefix.getNoopSymbolTrackerWithResolver({ program, host }));
+                if (!typeNode || !isFunctionTypeNode(typeNode)) {
+                    return undefined;
+                }
                 const importableReference = codefix.tryGetAutoImportableReferenceFromTypeNode(typeNode, scriptTarget);
                 if (importableReference) {
                     typeNode = importableReference.typeNode;
                     codefix.importSymbols(importAdder, importableReference.symbols);
                 }
-                if (!typeNode) {
-                    return undefined;
-                }
-                Debug.assertNode(typeNode, isFunctionTypeNode);
                 return factory.createMethodDeclaration(
                     /*decorators*/ undefined,
                     /*modifiers*/ undefined,
                     /*asteriskToken*/ undefined,
                     name,
                     /*questionToken*/ undefined,
-                    typeNode.typeParameters,
-                    typeNode.parameters,
-                    typeNode.type,
+                    (typeNode as FunctionTypeNode).typeParameters,
+                    (typeNode as FunctionTypeNode).parameters,
+                    (typeNode as FunctionTypeNode).type,
                     body);
                 }
             default:
