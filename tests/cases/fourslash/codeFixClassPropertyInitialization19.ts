@@ -4,14 +4,14 @@
 
 //// class T {
 ////     // comment
-////     a: string;
+////     a: 2;
 //// }
 
 verify.codeFix({
-    description: `Add 'undefined' type to property 'a'`,
+    description: `Add initializer to property 'a'`,
     newFileContent: `class T {
     // comment
-    a: string | undefined;
+    a: 2 = 2;
 }`,
-    index: 0
+    index: 2
 })
