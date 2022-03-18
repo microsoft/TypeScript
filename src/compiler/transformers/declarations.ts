@@ -1140,6 +1140,9 @@ namespace ts {
                         const varDecl = factory.createVariableDeclaration(newId, /*exclamationToken*/ undefined, resolver.createTypeOfExpression(input.expression, input, declarationEmitNodeBuilderFlags, symbolTracker), /*initializer*/ undefined);
                         errorFallbackNode = undefined;
                         const statement = factory.createVariableStatement(needsDeclare ? [factory.createModifier(SyntaxKind.DeclareKeyword)] : [], factory.createVariableDeclarationList([varDecl], NodeFlags.Const));
+
+                        preserveJsDoc(statement, input);
+                        removeAllComments(input);
                         return [statement, factory.updateExportAssignment(input, input.decorators, input.modifiers, newId)];
                     }
                 }
