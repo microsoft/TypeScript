@@ -64,8 +64,8 @@ namespace ts {
         return existingValue || newValue!;
     }
 
-    function getOrCreateValueMapFromConfigFileMap<T>(configFileMap: ESMap<ResolvedConfigFilePath, ESMap<string, T>>, resolved: ResolvedConfigFilePath): ESMap<string, T> {
-        return getOrCreateValueFromConfigFileMap<ESMap<string, T>>(configFileMap, resolved, () => new Map());
+    function getOrCreateValueMapFromConfigFileMap<K extends string, V>(configFileMap: ESMap<ResolvedConfigFilePath, ESMap<K, V>>, resolved: ResolvedConfigFilePath): ESMap<K, V> {
+        return getOrCreateValueFromConfigFileMap(configFileMap, resolved, () => new Map());
     }
 
     function newer(date1: Date | undefined, date2: Date): Date | undefined {
@@ -212,6 +212,12 @@ namespace ts {
         originalGetSourceFile: CompilerHost["getSourceFile"];
     }
 
+    interface FileWatcherWithModifiedTime {
+        callbacks: FileWatcherCallback[];
+        watcher: FileWatcher;
+        modifiedTime: Date | undefined;
+    }
+
     interface SolutionBuilderState<T extends BuilderProgram = BuilderProgram> extends WatchFactory<WatchType, ResolvedConfigFileName> {
         readonly host: SolutionBuilderHost<T>;
         readonly hostWithWatch: SolutionBuilderWithWatchHost<T>;
@@ -259,6 +265,8 @@ namespace ts {
         readonly allWatchedConfigFiles: ESMap<ResolvedConfigFilePath, FileWatcher>;
         readonly allWatchedExtendedConfigFiles: ESMap<Path, SharedExtendedConfigFileWatcher<ResolvedConfigFilePath>>;
         readonly allWatchedPackageJsonFiles: ESMap<ResolvedConfigFilePath, ESMap<Path, FileWatcher>>;
+        readonly filesWatched: ESMap<Path, FileWatcherWithModifiedTime | Date>;
+
         readonly lastCachedPackageJsonLookups: ESMap<ResolvedConfigFilePath, readonly (readonly [Path, object | boolean])[] | undefined>;
 
         timerToBuildInvalidatedProject: any;
@@ -341,6 +349,8 @@ namespace ts {
             allWatchedConfigFiles: new Map(),
             allWatchedExtendedConfigFiles: new Map(),
             allWatchedPackageJsonFiles: new Map(),
+            filesWatched: new Map(),
+
             lastCachedPackageJsonLookups: new Map(),
 
             timerToBuildInvalidatedProject: undefined,
@@ -969,7 +979,7 @@ namespace ts {
                 if (resultFlags === BuildResultFlags.DeclarationOutputUnchanged && isDeclarationFileName(name)) {
                     // Check for unchanged .d.ts files
                     if (state.readFileWithCache(name) === text) {
-                        newestDeclarationFileContentChangedTime = newer(newestDeclarationFileContentChangedTime, getModifiedTime(host, name));
+                        newestDeclarationFileContentChangedTime = newer(newestDeclarationFileContentChangedTime, ts.getModifiedTime(host, name));
                     }
                     else {
                         resultFlags &= ~BuildResultFlags.DeclarationOutputUnchanged;
@@ -1323,9 +1333,66 @@ namespace ts {
         return { buildResult, step: BuildStep.QueueReferencingProjects };
     }
 
+    function isFileWatcherWithModifiedTime(value: FileWatcherWithModifiedTime | Date): value is FileWatcherWithModifiedTime {
+        return !!(value as FileWatcherWithModifiedTime).watcher;
+    }
+
+    function getModifiedTime(state: SolutionBuilderState, fileName: string): Date {
+        const path = toPath(state, fileName);
+        const existing = state.filesWatched.get(path);
+        if (state.watch && !!existing) {
+            if (!isFileWatcherWithModifiedTime(existing)) return existing;
+            if (existing.modifiedTime) return existing.modifiedTime;
+        }
+        const result = ts.getModifiedTime(state.host, fileName);
+        if (state.watch) {
+            if (existing) (existing as FileWatcherWithModifiedTime).modifiedTime = result;
+            else state.filesWatched.set(path, result);
+        }
+        return result;
+    }
+
+    function watchFile(state: SolutionBuilderState, file: string, callback: FileWatcherCallback, pollingInterval: PollingInterval, options: WatchOptions | undefined, watchType: WatchType, project?: ResolvedConfigFileName): FileWatcher {
+        const path = toPath(state, file);
+        const existing = state.filesWatched.get(path);
+        if (existing && isFileWatcherWithModifiedTime(existing)) {
+            existing.callbacks.push(callback);
+        }
+        else {
+            const watcher = state.watchFile(
+                file,
+                (fileName, eventKind, modifiedTime) => {
+                    const existing = Debug.checkDefined(state.filesWatched.get(path));
+                    Debug.assert(isFileWatcherWithModifiedTime(existing));
+                    existing.modifiedTime = modifiedTime;
+                    existing.callbacks.forEach(cb => cb(fileName, eventKind, modifiedTime));
+                },
+                pollingInterval,
+                options,
+                watchType,
+                project
+            );
+            state.filesWatched.set(path, { callbacks: [callback], watcher, modifiedTime: existing });
+        }
+
+        return {
+            close: () => {
+                const existing = Debug.checkDefined(state.filesWatched.get(path));
+                Debug.assert(isFileWatcherWithModifiedTime(existing));
+                if (existing.callbacks.length === 1) {
+                    state.filesWatched.delete(path);
+                    closeFileWatcherOf(existing);
+                }
+                else {
+                    unorderedRemoveItem(existing.callbacks, callback);
+                }
+            }
+        };
+    }
+
     function checkConfigFileUpToDateStatus(state: SolutionBuilderState, configFile: string, oldestOutputFileTime: Date, oldestOutputFileName: string): Status.OutOfDateWithSelf | undefined {
         // Check tsconfig time
-        const tsconfigTime = getModifiedTime(state.host, configFile);
+        const tsconfigTime = getModifiedTime(state, configFile);
         if (oldestOutputFileTime < tsconfigTime) {
             return {
                 type: UpToDateStatusType.OutOfDateWithSelf,
@@ -1387,7 +1454,7 @@ namespace ts {
         const { host } = state;
         // Get timestamps of input files
         for (const inputFile of project.fileNames) {
-            const inputTime = getModifiedTime(host, inputFile);
+            const inputTime = getModifiedTime(state, inputFile);
             if (inputTime === missingFileModifiedTime) {
                 return {
                     type: UpToDateStatusType.Unbuildable,
@@ -1413,7 +1480,7 @@ namespace ts {
         if (!force) {
             for (const output of outputs) {
                 // Output is missing; can stop checking
-                const outputTime = getModifiedTime(host, output);
+                const outputTime = ts.getModifiedTime(host, output);
                 if (outputTime === missingFileModifiedTime) {
                     return {
                         type: UpToDateStatusType.OutputMissing,
@@ -1556,7 +1623,7 @@ namespace ts {
                 }
 
                 if (!anyDtsChange && isDeclarationFileName(file)) {
-                    newestDeclarationFileContentChangedTime = newer(newestDeclarationFileContentChangedTime, getModifiedTime(host, file));
+                    newestDeclarationFileContentChangedTime = newer(newestDeclarationFileContentChangedTime, ts.getModifiedTime(host, file));
                 }
 
                 host.setModifiedTime(file, now);
@@ -1778,11 +1845,10 @@ namespace ts {
 
     function watchConfigFile(state: SolutionBuilderState, resolved: ResolvedConfigFileName, resolvedPath: ResolvedConfigFilePath, parsed: ParsedCommandLine | undefined) {
         if (!state.watch || state.allWatchedConfigFiles.has(resolvedPath)) return;
-        state.allWatchedConfigFiles.set(resolvedPath, state.watchFile(
+        state.allWatchedConfigFiles.set(resolvedPath, watchFile(
+            state,
             resolved,
-            () => {
-                invalidateProjectAndScheduleBuilds(state, resolvedPath, ConfigFileProgramReloadLevel.Full);
-            },
+            () => invalidateProjectAndScheduleBuilds(state, resolvedPath, ConfigFileProgramReloadLevel.Full),
             PollingInterval.High,
             parsed?.watchOptions,
             WatchType.ConfigFile,
@@ -1795,11 +1861,11 @@ namespace ts {
             resolvedPath,
             parsed?.options,
             state.allWatchedExtendedConfigFiles,
-            (extendedConfigFileName, extendedConfigFilePath) => state.watchFile(
+            (extendedConfigFileName, extendedConfigFilePath) => watchFile(
+                state,
                 extendedConfigFileName,
                 () => state.allWatchedExtendedConfigFiles.get(extendedConfigFilePath)?.projects.forEach(projectConfigFilePath =>
-                    invalidateProjectAndScheduleBuilds(state, projectConfigFilePath, ConfigFileProgramReloadLevel.Full)
-                ),
+                        invalidateProjectAndScheduleBuilds(state, projectConfigFilePath, ConfigFileProgramReloadLevel.Full)),
                 PollingInterval.High,
                 parsed?.watchOptions,
                 WatchType.ExtendedConfigFile,
@@ -1845,7 +1911,8 @@ namespace ts {
             getOrCreateValueMapFromConfigFileMap(state.allWatchedInputFiles, resolvedPath),
             arrayToMap(parsed.fileNames, fileName => toPath(state, fileName)),
             {
-                createNewValue: (_path, input) => state.watchFile(
+                createNewValue: (_path, input) => watchFile(
+                    state,
                     input,
                     () => invalidateProjectAndScheduleBuilds(state, resolvedPath, ConfigFileProgramReloadLevel.None),
                     PollingInterval.Low,
@@ -1864,7 +1931,8 @@ namespace ts {
             getOrCreateValueMapFromConfigFileMap(state.allWatchedPackageJsonFiles, resolvedPath),
             new Map(state.lastCachedPackageJsonLookups.get(resolvedPath)),
             {
-                createNewValue: (path, _input) => state.watchFile(
+                createNewValue: (path, _input) => watchFile(
+                    state,
                     path,
                     () => invalidateProjectAndScheduleBuilds(state, resolvedPath, ConfigFileProgramReloadLevel.Full),
                     PollingInterval.High,

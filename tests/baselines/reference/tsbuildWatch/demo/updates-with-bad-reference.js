@@ -752,7 +752,6 @@ directoryExists:: {
 } 
 
 getModifiedTimes:: {
- "/user/username/projects/demo/core/utilities.ts": 1,
  "/user/username/projects/demo/lib/core/utilities.js": 1
 } 
 

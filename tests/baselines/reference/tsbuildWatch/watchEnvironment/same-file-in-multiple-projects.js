@@ -162,9 +162,6 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/pkg0/index.ts","pollingInterval":250}
 /user/username/projects/myproject/typings/xterm.d.ts:
   {"fileName":"/user/username/projects/myproject/typings/xterm.d.ts","pollingInterval":250}
-  {"fileName":"/user/username/projects/myproject/typings/xterm.d.ts","pollingInterval":250}
-  {"fileName":"/user/username/projects/myproject/typings/xterm.d.ts","pollingInterval":250}
-  {"fileName":"/user/username/projects/myproject/typings/xterm.d.ts","pollingInterval":250}
 /user/username/projects/myproject/pkg1/tsconfig.json:
   {"fileName":"/user/username/projects/myproject/pkg1/tsconfig.json","pollingInterval":250}
 /user/username/projects/myproject/pkg1/index.ts:
@@ -239,7 +236,7 @@ directoryExists:: {
 
 getModifiedTimes:: {
  "/user/username/projects/myproject/pkg0/index.ts": 1,
- "/user/username/projects/myproject/typings/xterm.d.ts": 4,
+ "/user/username/projects/myproject/typings/xterm.d.ts": 1,
  "/user/username/projects/myproject/pkg0/index.js": 1,
  "/user/username/projects/myproject/pkg1/index.ts": 1,
  "/user/username/projects/myproject/pkg1/index.js": 1,
@@ -361,9 +358,6 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/pkg0/index.ts","pollingInterval":250}
 /user/username/projects/myproject/typings/xterm.d.ts:
   {"fileName":"/user/username/projects/myproject/typings/xterm.d.ts","pollingInterval":250}
-  {"fileName":"/user/username/projects/myproject/typings/xterm.d.ts","pollingInterval":250}
-  {"fileName":"/user/username/projects/myproject/typings/xterm.d.ts","pollingInterval":250}
-  {"fileName":"/user/username/projects/myproject/typings/xterm.d.ts","pollingInterval":250}
 /user/username/projects/myproject/pkg1/tsconfig.json:
   {"fileName":"/user/username/projects/myproject/pkg1/tsconfig.json","pollingInterval":250}
 /user/username/projects/myproject/pkg1/index.ts:
@@ -413,14 +407,9 @@ directoryExists:: {
 } 
 
 getModifiedTimes:: {
- "/user/username/projects/myproject/pkg0/index.ts": 1,
- "/user/username/projects/myproject/typings/xterm.d.ts": 4,
  "/user/username/projects/myproject/pkg0/index.js": 1,
- "/user/username/projects/myproject/pkg1/index.ts": 1,
  "/user/username/projects/myproject/pkg1/index.js": 1,
- "/user/username/projects/myproject/pkg2/index.ts": 1,
  "/user/username/projects/myproject/pkg2/index.js": 1,
- "/user/username/projects/myproject/pkg3/index.ts": 1,
  "/user/username/projects/myproject/pkg3/index.js": 1
 } 
 
@@ -460,8 +449,6 @@ WatchedFiles::
 /user/username/projects/myproject/pkg0/index.ts:
   {"fileName":"/user/username/projects/myproject/pkg0/index.ts","pollingInterval":250}
 /user/username/projects/myproject/typings/xterm.d.ts:
-  {"fileName":"/user/username/projects/myproject/typings/xterm.d.ts","pollingInterval":250}
-  {"fileName":"/user/username/projects/myproject/typings/xterm.d.ts","pollingInterval":250}
   {"fileName":"/user/username/projects/myproject/typings/xterm.d.ts","pollingInterval":250}
 /user/username/projects/myproject/pkg1/tsconfig.json:
   {"fileName":"/user/username/projects/myproject/pkg1/tsconfig.json","pollingInterval":250}
@@ -585,8 +572,6 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/pkg0/index.ts","pollingInterval":250}
 /user/username/projects/myproject/typings/xterm.d.ts:
   {"fileName":"/user/username/projects/myproject/typings/xterm.d.ts","pollingInterval":250}
-  {"fileName":"/user/username/projects/myproject/typings/xterm.d.ts","pollingInterval":250}
-  {"fileName":"/user/username/projects/myproject/typings/xterm.d.ts","pollingInterval":250}
 /user/username/projects/myproject/pkg1/tsconfig.json:
   {"fileName":"/user/username/projects/myproject/pkg1/tsconfig.json","pollingInterval":250}
 /user/username/projects/myproject/pkg1/index.ts:
@@ -628,12 +613,8 @@ directoryExists:: {
 } 
 
 getModifiedTimes:: {
- "/user/username/projects/myproject/pkg0/index.ts": 1,
- "/user/username/projects/myproject/typings/xterm.d.ts": 3,
  "/user/username/projects/myproject/pkg0/index.js": 1,
- "/user/username/projects/myproject/pkg1/index.ts": 1,
  "/user/username/projects/myproject/pkg1/index.js": 1,
- "/user/username/projects/myproject/pkg2/index.ts": 1,
  "/user/username/projects/myproject/pkg2/index.js": 1
 } 
 

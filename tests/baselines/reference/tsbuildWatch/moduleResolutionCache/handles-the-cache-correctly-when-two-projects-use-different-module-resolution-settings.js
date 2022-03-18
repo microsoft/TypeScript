@@ -122,12 +122,9 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/project1/index.ts","pollingInterval":250}
 /user/username/projects/myproject/project1/node_modules/file/package.json:
   {"fileName":"/user/username/projects/myproject/project1/node_modules/file/package.json","pollingInterval":250}
-  {"fileName":"/user/username/projects/myproject/project1/node_modules/file/package.json","pollingInterval":250}
 /user/username/projects/myproject/node_modules/@types/foo/package.json:
   {"fileName":"/user/username/projects/myproject/node_modules/@types/foo/package.json","pollingInterval":250}
-  {"fileName":"/user/username/projects/myproject/node_modules/@types/foo/package.json","pollingInterval":250}
 /user/username/projects/myproject/node_modules/@types/bar/package.json:
-  {"fileName":"/user/username/projects/myproject/node_modules/@types/bar/package.json","pollingInterval":250}
   {"fileName":"/user/username/projects/myproject/node_modules/@types/bar/package.json","pollingInterval":250}
 /user/username/projects/myproject/project2/tsconfig.json:
   {"fileName":"/user/username/projects/myproject/project2/tsconfig.json","pollingInterval":250}
@@ -370,12 +367,9 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/project1/index.ts","pollingInterval":250}
 /user/username/projects/myproject/project1/node_modules/file/package.json:
   {"fileName":"/user/username/projects/myproject/project1/node_modules/file/package.json","pollingInterval":250}
-  {"fileName":"/user/username/projects/myproject/project1/node_modules/file/package.json","pollingInterval":250}
 /user/username/projects/myproject/node_modules/@types/foo/package.json:
   {"fileName":"/user/username/projects/myproject/node_modules/@types/foo/package.json","pollingInterval":250}
-  {"fileName":"/user/username/projects/myproject/node_modules/@types/foo/package.json","pollingInterval":250}
 /user/username/projects/myproject/node_modules/@types/bar/package.json:
-  {"fileName":"/user/username/projects/myproject/node_modules/@types/bar/package.json","pollingInterval":250}
   {"fileName":"/user/username/projects/myproject/node_modules/@types/bar/package.json","pollingInterval":250}
 /user/username/projects/myproject/project2/tsconfig.json:
   {"fileName":"/user/username/projects/myproject/project2/tsconfig.json","pollingInterval":250}
@@ -488,7 +482,6 @@ directoryExists:: {
 } 
 
 getModifiedTimes:: {
- "/user/username/projects/myproject/project1/index.ts": 1,
  "/user/username/projects/myproject/project1/index.js": 1,
  "/user/username/projects/myproject/project1/index.d.ts": 1
 } 

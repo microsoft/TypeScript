@@ -154,7 +154,6 @@ directoryExists:: {
 } 
 
 getModifiedTimes:: {
- "/user/username/projects/myproject/index.ts": 1,
  "/user/username/projects/myproject/index.js": 1
 } 
 

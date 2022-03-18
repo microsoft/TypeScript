@@ -28,6 +28,7 @@ namespace ts.tscWatch {
                 const host = createSolutionBuilderWithWatchHostForBaseline(sys, cb);
                 const solutionBuilder = createSolutionBuilderWithWatch(host, ["tsconfig.json"], { watch: true, verbose: true });
                 solutionBuilder.build();
+                // TODO: (shkamat): Need different test where we check single watch per file
                 runWatchBaseline({
                     scenario: "watchEnvironment",
                     subScenario: `same file in multiple projects${singleWatchPerFile ? " with single watcher per file" : ""}`,
