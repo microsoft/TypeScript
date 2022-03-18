@@ -1576,6 +1576,10 @@ namespace ts {
 
     /** Return the file if it exists. */
     function tryFile(fileName: string, onlyRecordFailures: boolean, state: ModuleResolutionState): string | undefined {
+        if (!state.compilerOptions.moduleSuffixes) {
+            return tryFileLookup(fileName, onlyRecordFailures, state);
+        }
+
         const ext = tryGetExtensionFromPath(fileName) ?? "";
         const fileNameNoExtension = ext ? removeExtension(fileName, ext) : fileName;
 
@@ -1583,13 +1587,14 @@ namespace ts {
             state.compilerOptions.moduleSuffixes.length > 0 ? state.compilerOptions.moduleSuffixes : [""];
         for (const suffix of suffixes) {
             const name = fileNameNoExtension + suffix + ext;
-            if (tryFileWithSuffix(name, onlyRecordFailures, state)) {
+            if (tryFileLookup(name, onlyRecordFailures, state)) {
                 return name;
             }
         };
+        return undefined;
     }
 
-    function tryFileWithSuffix(fileName: string, onlyRecordFailures: boolean, state: ModuleResolutionState): string | undefined {
+    function tryFileLookup(fileName: string, onlyRecordFailures: boolean, state: ModuleResolutionState): string | undefined {
         if (!onlyRecordFailures) {
             if (state.host.fileExists(fileName)) {
                 if (state.traceEnabled) {
