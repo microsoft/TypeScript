@@ -1489,6 +1489,159 @@ namespace ts {
     }
 
     /**
+     * Creates a Set with custom equality and hash code functionality.  This is useful when you
+     * want to use something looser than object identity - e.g. "has the same span".
+     *
+     * If `equals(a, b)`, it must be the case that `getHashCode(a) === getHashCode(b)`.
+     * The converse is not required.
+     *
+     * To facilitate a perf optimization (lazy allocation of bucket arrays), `TElement` is
+     * assumed not to be an array type.
+     */
+    export function createSet<TElement, THash = number>(getHashCode: (element: TElement) => THash, equals: EqualityComparer<TElement>): Set<TElement> {
+        const multiMap = new Map<THash, TElement | TElement[]>();
+        let size = 0;
+
+        function getElementIterator(): Iterator<TElement> {
+            const valueIt = multiMap.values();
+            let arrayIt: Iterator<TElement> | undefined;
+            return {
+                next: () => {
+                    while (true) {
+                        if (arrayIt) {
+                            const n = arrayIt.next();
+                            if (!n.done) {
+                                return { value: n.value };
+                            }
+                            arrayIt = undefined;
+                        }
+                        else {
+                            const n = valueIt.next();
+                            if (n.done) {
+                                return { value: undefined, done: true };
+                            }
+                            if (!isArray(n.value)) {
+                                return { value: n.value };
+                            }
+                            arrayIt = arrayIterator(n.value);
+                        }
+                    }
+                }
+            };
+        }
+
+        const set: Set<TElement> = {
+            has(element: TElement): boolean {
+                const hash = getHashCode(element);
+                if (!multiMap.has(hash)) return false;
+                const candidates = multiMap.get(hash)!;
+                if (!isArray(candidates)) return equals(candidates, element);
+
+                for (const candidate of candidates) {
+                    if (equals(candidate, element)) {
+                        return true;
+                    }
+                }
+                return false;
+            },
+            add(element: TElement): Set<TElement> {
+                const hash = getHashCode(element);
+                if (multiMap.has(hash)) {
+                    const values = multiMap.get(hash)!;
+                    if (isArray(values)) {
+                        if (!contains(values, element, equals)) {
+                            values.push(element);
+                            size++;
+                        }
+                    }
+                    else {
+                        const value = values;
+                        if (!equals(value, element)) {
+                            multiMap.set(hash, [ value, element ]);
+                            size++;
+                        }
+                    }
+                }
+                else {
+                    multiMap.set(hash, element);
+                    size++;
+                }
+
+                return this;
+            },
+            delete(element: TElement): boolean {
+                const hash = getHashCode(element);
+                if (!multiMap.has(hash)) return false;
+                const candidates = multiMap.get(hash)!;
+                if (isArray(candidates)) {
+                    for (let i = 0; i < candidates.length; i++) {
+                        if (equals(candidates[i], element)) {
+                            if (candidates.length === 1) {
+                                multiMap.delete(hash);
+                            }
+                            else if (candidates.length === 2) {
+                                multiMap.set(hash, candidates[1 - i]);
+                            }
+                            else {
+                                unorderedRemoveItemAt(candidates, i);
+                            }
+                            size--;
+                            return true;
+                        }
+                    }
+                }
+                else {
+                    const candidate = candidates;
+                    if (equals(candidate, element)) {
+                        multiMap.delete(hash);
+                        size--;
+                        return true;
+                    }
+                }
+
+                return false;
+            },
+            clear(): void {
+                multiMap.clear();
+                size = 0;
+            },
+            get size() {
+                return size;
+            },
+            forEach(action: (value: TElement, key: TElement) => void): void {
+                for (const elements of arrayFrom(multiMap.values())) {
+                    if (isArray(elements)) {
+                        for (const element of elements) {
+                            action(element, element);
+                        }
+                    }
+                    else {
+                        const element = elements;
+                        action(element, element);
+                    }
+                }
+            },
+            keys(): Iterator<TElement> {
+                return getElementIterator();
+            },
+            values(): Iterator<TElement> {
+                return getElementIterator();
+            },
+            entries(): Iterator<[TElement, TElement]> {
+                const it = getElementIterator();
+                return {
+                    next: () => {
+                        const n = it.next();
+                        return n.done ? n : { value: [ n.value, n.value ] };
+                    }
+                };
+            },
+        };
+
+        return set;
+    }
+
+    /**
      * Tests whether a value is an array.
      */
     export function isArray(value: any): value is readonly {}[] {
@@ -2156,14 +2309,16 @@ namespace ts {
         return (arg: T) => f(arg) && g(arg);
     }
 
-    export function or<T extends unknown[]>(...fs: ((...args: T) => boolean)[]): (...args: T) => boolean {
+    export function or<T extends unknown[], U>(...fs: ((...args: T) => U)[]): (...args: T) => U {
         return (...args) => {
+            let lastResult: U;
             for (const f of fs) {
-                if (f(...args)) {
-                    return true;
+                lastResult = f(...args);
+                if (lastResult) {
+                    return lastResult;
                 }
             }
-            return false;
+            return lastResult!;
         };
     }
 

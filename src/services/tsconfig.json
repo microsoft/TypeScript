@@ -88,6 +88,7 @@
         "codefixes/fixForgottenThisPropertyAccess.ts",
         "codefixes/fixInvalidJsxCharacters.ts",
         "codefixes/fixUnmatchedParameter.ts",
+        "codefixes/fixUnreferenceableDecoratorMetadata.ts",
         "codefixes/fixUnusedIdentifier.ts",
         "codefixes/fixUnreachableCode.ts",
         "codefixes/fixUnusedLabel.ts",
