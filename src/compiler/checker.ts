@@ -15117,47 +15117,41 @@ namespace ts {
             }
             return type;
 
-            function addSpans(texts: readonly string[], types: readonly Type[]): boolean {
+            function addSpans(texts: readonly string[] | string, types: readonly Type[]): boolean {
+                const isTextsArray = isArray(texts);
                 for (let i = 0; i < types.length; i++) {
                     const t = types[i];
+                    const addText = isTextsArray ? texts[i + 1] : texts;
                     if (t.flags & (TypeFlags.Literal | TypeFlags.Null | TypeFlags.Undefined)) {
                         text += getTemplateStringForType(t) || "";
-                        text += texts[i + 1];
+                        text += addText;
+                        if (!isTextsArray) return true;
                     }
                     else if (t.flags & TypeFlags.TemplateLiteral) {
                         text += (t as TemplateLiteralType).texts[0];
                         if (!addSpans((t as TemplateLiteralType).texts, (t as TemplateLiteralType).types)) return false;
-                        text += texts[i + 1];
+                        text += addText;
+                        if (!isTextsArray) return true;
                     }
                     else if (isGenericIndexType(t) || isPatternLiteralPlaceholderType(t)) {
                         newTypes.push(t);
                         newTexts.push(text);
-                        text = texts[i + 1];
+                        text = addText;
                     }
-                    else if (t.flags & TypeFlags.Intersection){
-                        const addText = getTemplateStringForInterSectionType((t as IntersectionType));
+                    else if (t.flags & TypeFlags.Intersection) {
+                        const addText = addSpans(texts[i + 1], (t as IntersectionType).types);
                         if (!addText) return false;
-                        text += addText;
-                        text += texts[i + 1];
                     }
                     else {
-                        return false;
+                        if (isTextsArray) {
+                            return false;
+                        }
+                        else {
+                            continue;
+                        }
                     }
                 }
                 return true;
-            }
-
-            function getTemplateStringForInterSectionType(type: IntersectionType): string | undefined {
-                for (const t of type.types) {
-                    if (t.flags & (TypeFlags.Literal | TypeFlags.Null | TypeFlags.Undefined)) {
-                        return getTemplateStringForType(t) || "";
-                    }
-                    else if (t.flags & TypeFlags.TemplateLiteral) {
-                        if (!addSpans((t as TemplateLiteralType).texts, (t as TemplateLiteralType).types)) continue;
-                        return (t as TemplateLiteralType).texts[0];
-                    }
-                }
-                return undefined;
             }
         }
 
