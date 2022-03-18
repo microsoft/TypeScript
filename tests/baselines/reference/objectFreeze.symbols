@@ -37,13 +37,14 @@ a[0] = a[2].toString();
 >a : Symbol(a, Decl(objectFreeze.ts, 7, 5))
 >toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 
-const o = Object.freeze({ a: 1, b: "string" });
+const o = Object.freeze({ a: 1, b: "string", c: true });
 >o : Symbol(o, Decl(objectFreeze.ts, 10, 5))
 >Object.freeze : Symbol(ObjectConstructor.freeze, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >freeze : Symbol(ObjectConstructor.freeze, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >a : Symbol(a, Decl(objectFreeze.ts, 10, 25))
 >b : Symbol(b, Decl(objectFreeze.ts, 10, 31))
+>c : Symbol(c, Decl(objectFreeze.ts, 10, 44))
 
 o.b = o.a.toString();
 >o.b : Symbol(b, Decl(objectFreeze.ts, 10, 31))

@@ -12225,8 +12225,10 @@ namespace ts {
         }
 
         function isMappedTypeGenericIndexedAccess(type: Type) {
-            return type.flags & TypeFlags.IndexedAccess && getObjectFlags((type as IndexedAccessType).objectType) & ObjectFlags.Mapped &&
-                !isGenericMappedType((type as IndexedAccessType).objectType) && isGenericIndexType((type as IndexedAccessType).indexType);
+            let objectType;
+            return !!(type.flags & TypeFlags.IndexedAccess && getObjectFlags(objectType = (type as IndexedAccessType).objectType) & ObjectFlags.Mapped &&
+                !isGenericMappedType(objectType) && isGenericIndexType((type as IndexedAccessType).indexType) &&
+                !(objectType as MappedType).declaration.questionToken && !(objectType as MappedType).declaration.nameType);
         }
 
         /**
@@ -12866,7 +12868,19 @@ namespace ts {
                 p.typeExpression && isJSDocVariadicType(p.typeExpression.type) ? p.typeExpression.type : undefined);
 
             const syntheticArgsSymbol = createSymbol(SymbolFlags.Variable, "args" as __String, CheckFlags.RestParameter);
-            syntheticArgsSymbol.type = lastParamVariadicType ? createArrayType(getTypeFromTypeNode(lastParamVariadicType.type)) : anyArrayType;
+            if (lastParamVariadicType) {
+                // Parameter has effective annotation, lock in type
+                syntheticArgsSymbol.type = createArrayType(getTypeFromTypeNode(lastParamVariadicType.type));
+            }
+            else {
+                // Parameter has no annotation
+                // By using a `DeferredType` symbol, we allow the type of this rest arg to be overriden by contextual type assignment so long as its type hasn't been
+                // cached by `getTypeOfSymbol` yet.
+                syntheticArgsSymbol.checkFlags |= CheckFlags.DeferredType;
+                syntheticArgsSymbol.deferralParent = neverType;
+                syntheticArgsSymbol.deferralConstituents = [anyArrayType];
+                syntheticArgsSymbol.deferralWriteConstituents = [anyArrayType];
+            }
             if (lastParamVariadicType) {
                 // Replace the last parameter with a rest parameter.
                 parameters.pop();
@@ -15662,7 +15676,7 @@ namespace ts {
             // If the object type is a mapped type { [P in K]: E }, where K is generic, instantiate E using a mapper
             // that substitutes the index type for P. For example, for an index access { [P in K]: Box<T[P]> }[X], we
             // construct the type Box<T[X]>.
-            if (isGenericMappedType(objectType)) {
+            if (isGenericMappedType(objectType) && !objectType.declaration.nameType) {
                 return type[cache] = mapType(substituteIndexedMappedType(objectType, type.indexType), t => getSimplifiedType(t, writing));
             }
             return type[cache] = type;
@@ -17907,7 +17921,7 @@ namespace ts {
                 const targetReturnType = isResolvingReturnTypeOfSignature(target) ? anyType
                     : target.declaration && isJSConstructor(target.declaration) ? getDeclaredTypeOfClassOrInterface(getMergedSymbol(target.declaration.symbol))
                     : getReturnTypeOfSignature(target);
-                if (targetReturnType === voidType) {
+                if (targetReturnType === voidType || targetReturnType === anyType) {
                     return result;
                 }
                 const sourceReturnType = isResolvingReturnTypeOfSignature(source) ? anyType
@@ -18110,7 +18124,8 @@ namespace ts {
                     return true;
                 }
             }
-            else {
+            else if (!((source.flags | target.flags) & (TypeFlags.UnionOrIntersection | TypeFlags.IndexedAccess | TypeFlags.Conditional | TypeFlags.Substitution))) {
+                // We have excluded types that may simplify to other forms, so types must have identical flags
                 if (source.flags !== target.flags) return false;
                 if (source.flags & TypeFlags.Singleton) return true;
             }
@@ -24486,7 +24501,7 @@ namespace ts {
             }
 
             function getCandidateDiscriminantPropertyAccess(expr: Expression) {
-                if (isBindingPattern(reference) || isFunctionExpressionOrArrowFunction(reference)) {
+                if (isBindingPattern(reference) || isFunctionExpressionOrArrowFunction(reference) || isObjectLiteralMethod(reference)) {
                     // When the reference is a binding pattern or function or arrow expression, we are narrowing a pesudo-reference in
                     // getNarrowedTypeOfSymbol. An identifier for a destructuring variable declared in the same binding pattern or
                     // parameter declared in the same parameter list is a candidate.
@@ -26664,7 +26679,7 @@ namespace ts {
 
         function getTypeOfPropertyOfContextualType(type: Type, name: __String, nameType?: Type) {
             return mapType(type, t => {
-                if (isGenericMappedType(t)) {
+                if (isGenericMappedType(t) && !t.declaration.nameType) {
                     const constraint = getConstraintTypeFromMappedType(t);
                     const constraintOfConstraint = getBaseConstraintOfType(constraint) || constraint;
                     const propertyNameType = nameType || getStringLiteralType(unescapeLeadingUnderscores(name));
@@ -32175,7 +32190,12 @@ namespace ts {
             if (signatureHasRestParameter(signature)) {
                 // parameter might be a transient symbol generated by use of `arguments` in the function body.
                 const parameter = last(signature.parameters);
-                if (isTransientSymbol(parameter) || !getEffectiveTypeAnnotationNode(parameter.valueDeclaration as ParameterDeclaration)) {
+                if (parameter.valueDeclaration
+                    ? !getEffectiveTypeAnnotationNode(parameter.valueDeclaration as ParameterDeclaration)
+                    // a declarationless parameter may still have a `.type` already set by its construction logic
+                    // (which may pull a type from a jsdoc) - only allow fixing on `DeferredType` parameters with a fallback type
+                    : !!(getCheckFlags(parameter) & CheckFlags.DeferredType)
+                ) {
                     const contextualParameterType = getRestTypeAtPosition(context, len);
                     assignParameterType(parameter, contextualParameterType);
                 }
@@ -32194,15 +32214,18 @@ namespace ts {
         function assignParameterType(parameter: Symbol, type?: Type) {
             const links = getSymbolLinks(parameter);
             if (!links.type) {
-                const declaration = parameter.valueDeclaration as ParameterDeclaration;
-                links.type = type || getWidenedTypeForVariableLikeDeclaration(declaration, /*reportErrors*/ true);
-                if (declaration.name.kind !== SyntaxKind.Identifier) {
+                const declaration = parameter.valueDeclaration as ParameterDeclaration | undefined;
+                links.type = type || (declaration ? getWidenedTypeForVariableLikeDeclaration(declaration, /*reportErrors*/ true) : getTypeOfSymbol(parameter));
+                if (declaration && declaration.name.kind !== SyntaxKind.Identifier) {
                     // if inference didn't come up with anything but unknown, fall back to the binding pattern if present.
                     if (links.type === unknownType) {
                         links.type = getTypeFromBindingPattern(declaration.name);
                     }
                     assignBindingElementTypes(declaration.name, links.type);
                 }
+            }
+            else if (type) {
+                Debug.assertEqual(links.type, type, "Parameter symbol already has a cached type which differs from newly assigned type");
             }
         }
 
@@ -36435,21 +36458,32 @@ namespace ts {
          * marked as referenced to prevent import elision.
          */
         function markTypeNodeAsReferenced(node: TypeNode) {
-            markEntityNameOrEntityExpressionAsReference(node && getEntityNameFromTypeNode(node));
+            markEntityNameOrEntityExpressionAsReference(node && getEntityNameFromTypeNode(node), /*forDecoratorMetadata*/ false);
         }
 
-        function markEntityNameOrEntityExpressionAsReference(typeName: EntityNameOrEntityNameExpression | undefined) {
+        function markEntityNameOrEntityExpressionAsReference(typeName: EntityNameOrEntityNameExpression | undefined, forDecoratorMetadata: boolean) {
             if (!typeName) return;
 
             const rootName = getFirstIdentifier(typeName);
             const meaning = (typeName.kind === SyntaxKind.Identifier ? SymbolFlags.Type : SymbolFlags.Namespace) | SymbolFlags.Alias;
             const rootSymbol = resolveName(rootName, rootName.escapedText, meaning, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined, /*isReference*/ true);
-            if (rootSymbol
-                && rootSymbol.flags & SymbolFlags.Alias
-                && symbolIsValue(rootSymbol)
-                && !isConstEnumOrConstEnumOnlyModule(resolveAlias(rootSymbol))
-                && !getTypeOnlyAliasDeclaration(rootSymbol)) {
-                markAliasSymbolAsReferenced(rootSymbol);
+            if (rootSymbol && rootSymbol.flags & SymbolFlags.Alias) {
+                if (symbolIsValue(rootSymbol)
+                    && !isConstEnumOrConstEnumOnlyModule(resolveAlias(rootSymbol))
+                    && !getTypeOnlyAliasDeclaration(rootSymbol)) {
+                    markAliasSymbolAsReferenced(rootSymbol);
+                }
+                else if (forDecoratorMetadata
+                    && compilerOptions.isolatedModules
+                    && getEmitModuleKind(compilerOptions) >= ModuleKind.ES2015
+                    && !symbolIsValue(rootSymbol)
+                    && !some(rootSymbol.declarations, isTypeOnlyImportOrExportDeclaration)) {
+                    const diag = error(typeName, Diagnostics.A_type_referenced_in_a_decorated_signature_must_be_imported_with_import_type_or_a_namespace_import_when_isolatedModules_and_emitDecoratorMetadata_are_enabled);
+                    const aliasDeclaration = find(rootSymbol.declarations || emptyArray, isAliasSymbolDeclaration);
+                    if (aliasDeclaration) {
+                        addRelatedInfo(diag, createDiagnosticForNode(aliasDeclaration, Diagnostics._0_was_imported_here, idText(rootName)));
+                    }
+                }
             }
         }
 
@@ -36463,7 +36497,7 @@ namespace ts {
         function markDecoratorMedataDataTypeNodeAsReferenced(node: TypeNode | undefined): void {
             const entityName = getEntityNameForDecoratorMetadata(node);
             if (entityName && isEntityName(entityName)) {
-                markEntityNameOrEntityExpressionAsReference(entityName);
+                markEntityNameOrEntityExpressionAsReference(entityName, /*forDecoratorMetadata*/ true);
             }
         }
 
@@ -40534,7 +40568,7 @@ namespace ts {
                 return;
             }
 
-            if (!checkGrammarDecoratorsAndModifiers(node) && hasEffectiveModifiers(node)) {
+            if (!checkGrammarDecoratorsAndModifiers(node) && hasSyntacticModifiers(node)) {
                 grammarErrorOnFirstToken(node, Diagnostics.An_export_declaration_cannot_have_modifiers);
             }
 
@@ -44020,13 +44054,11 @@ namespace ts {
                 if (node.type.kind !== SyntaxKind.SymbolKeyword) {
                     return grammarErrorOnNode(node.type, Diagnostics._0_expected, tokenToString(SyntaxKind.SymbolKeyword));
                 }
-
                 let parent = walkUpParenthesizedTypes(node.parent);
                 if (isInJSFile(parent) && isJSDocTypeExpression(parent)) {
-                    parent = parent.parent;
-                    if (isJSDocTypeTag(parent)) {
-                        // walk up past JSDoc comment node
-                        parent = parent.parent.parent;
+                    const host = getJSDocHost(parent);
+                    if (host) {
+                        parent = getSingleVariableOfVariableStatement(host) || host;
                     }
                 }
                 switch (parent.kind) {

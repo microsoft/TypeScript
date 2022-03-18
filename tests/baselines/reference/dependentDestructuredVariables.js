@@ -226,9 +226,100 @@ const reducer: (...args: ReducerArgs) => void = (op, args) => {
 reducer("add", { a: 1, b: 3 });
 reducer("concat", { firstArr: [1, 2], secondArr: [3, 4] });
 
+// repro from https://github.com/microsoft/TypeScript/pull/47190#issuecomment-1057603588
+
+type FooMethod = {
+  method(...args:
+    [type: "str", cb: (e: string) => void] |
+    [type: "num", cb: (e: number) => void]
+  ): void;
+}
+
+let fooM: FooMethod = {
+  method(type, cb) {
+    if (type == 'num') {
+      cb(123)
+    } else {
+      cb("abc")
+    }
+  }
+};
+
+type FooAsyncMethod = {
+  method(...args:
+    [type: "str", cb: (e: string) => void] |
+    [type: "num", cb: (e: number) => void]
+  ): Promise<any>;
+}
+
+let fooAsyncM: FooAsyncMethod = {
+  async method(type, cb) {
+    if (type == 'num') {
+      cb(123)
+    } else {
+      cb("abc")
+    }
+  }
+};
+
+type FooGenMethod = {
+  method(...args:
+    [type: "str", cb: (e: string) => void] |
+    [type: "num", cb: (e: number) => void]
+  ): Generator<any, any, any>;
+}
+
+let fooGenM: FooGenMethod = {
+  *method(type, cb) {
+    if (type == 'num') {
+      cb(123)
+    } else {
+      cb("abc")
+    }
+  }
+};
+
+type FooAsyncGenMethod = {
+  method(...args:
+    [type: "str", cb: (e: string) => void] |
+    [type: "num", cb: (e: number) => void]
+  ): AsyncGenerator<any, any, any>;
+}
+
+let fooAsyncGenM: FooAsyncGenMethod = {
+  async *method(type, cb) {
+    if (type == 'num') {
+      cb(123)
+    } else {
+      cb("abc")
+    }
+  }
+};
+
 
 //// [dependentDestructuredVariables.js]
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __await = (this && this.__await) || function (v) { return this instanceof __await ? (this.v = v, this) : new __await(v); }
+var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _arguments, generator) {
+    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+    var g = generator.apply(thisArg, _arguments || []), i, q = [];
+    return i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i;
+    function verb(n) { if (g[n]) i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; }
+    function resume(n, v) { try { step(g[n](v)); } catch (e) { settle(q[0][3], e); } }
+    function step(r) { r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r); }
+    function fulfill(value) { resume("next", value); }
+    function reject(value) { resume("throw", value); }
+    function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
+};
 function f10({ kind, payload }) {
     if (kind === 'A') {
         payload.toFixed();
@@ -394,6 +485,50 @@ const reducer = (op, args) => {
 };
 reducer("add", { a: 1, b: 3 });
 reducer("concat", { firstArr: [1, 2], secondArr: [3, 4] });
+let fooM = {
+    method(type, cb) {
+        if (type == 'num') {
+            cb(123);
+        }
+        else {
+            cb("abc");
+        }
+    }
+};
+let fooAsyncM = {
+    method(type, cb) {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (type == 'num') {
+                cb(123);
+            }
+            else {
+                cb("abc");
+            }
+        });
+    }
+};
+let fooGenM = {
+    *method(type, cb) {
+        if (type == 'num') {
+            cb(123);
+        }
+        else {
+            cb("abc");
+        }
+    }
+};
+let fooAsyncGenM = {
+    method(type, cb) {
+        return __asyncGenerator(this, arguments, function* method_1() {
+            if (type == 'num') {
+                cb(123);
+            }
+            else {
+                cb("abc");
+            }
+        });
+    }
+};
 
 
 //// [dependentDestructuredVariables.d.ts]
@@ -469,3 +604,43 @@ declare type ReducerArgs = ["add", {
     secondArr: any[];
 }];
 declare const reducer: (...args: ReducerArgs) => void;
+declare type FooMethod = {
+    method(...args: [
+        type: "str",
+        cb: (e: string) => void
+    ] | [
+        type: "num",
+        cb: (e: number) => void
+    ]): void;
+};
+declare let fooM: FooMethod;
+declare type FooAsyncMethod = {
+    method(...args: [
+        type: "str",
+        cb: (e: string) => void
+    ] | [
+        type: "num",
+        cb: (e: number) => void
+    ]): Promise<any>;
+};
+declare let fooAsyncM: FooAsyncMethod;
+declare type FooGenMethod = {
+    method(...args: [
+        type: "str",
+        cb: (e: string) => void
+    ] | [
+        type: "num",
+        cb: (e: number) => void
+    ]): Generator<any, any, any>;
+};
+declare let fooGenM: FooGenMethod;
+declare type FooAsyncGenMethod = {
+    method(...args: [
+        type: "str",
+        cb: (e: string) => void
+    ] | [
+        type: "num",
+        cb: (e: number) => void
+    ]): AsyncGenerator<any, any, any>;
+};
+declare let fooAsyncGenM: FooAsyncGenMethod;
