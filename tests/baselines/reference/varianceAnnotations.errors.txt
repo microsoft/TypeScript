@@ -36,14 +36,14 @@ tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotati
   Types of property 'f' are incompatible.
     Type 'FooFn2<sub-T>' is not assignable to type 'FooFn2<super-T>'.
       Type 'super-T' is not assignable to type 'sub-T'.
-tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(95,10): error TS1272: 'public' modifier cannot appear on a type parameter
+tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(95,10): error TS1273: 'public' modifier cannot appear on a type parameter
 tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(96,17): error TS1030: 'in' modifier already seen.
 tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(97,17): error TS1030: 'out' modifier already seen.
 tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(98,14): error TS1029: 'in' modifier must precede 'out' modifier.
-tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(100,21): error TS1273: 'in' modifier can only appear on a type parameter of a class, interface or type alias
-tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(101,21): error TS1273: 'out' modifier can only appear on a type parameter of a class, interface or type alias
-tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(104,5): error TS1273: 'in' modifier can only appear on a type parameter of a class, interface or type alias
-tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(105,5): error TS1273: 'out' modifier can only appear on a type parameter of a class, interface or type alias
+tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(100,21): error TS1274: 'in' modifier can only appear on a type parameter of a class, interface or type alias
+tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(101,21): error TS1274: 'out' modifier can only appear on a type parameter of a class, interface or type alias
+tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(104,5): error TS1274: 'in' modifier can only appear on a type parameter of a class, interface or type alias
+tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(105,5): error TS1274: 'out' modifier can only appear on a type parameter of a class, interface or type alias
 tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(116,1): error TS2322: Type 'Baz<string>' is not assignable to type 'Baz<unknown>'.
   Type 'unknown' is not assignable to type 'string'.
 tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(117,1): error TS2322: Type 'Baz<unknown>' is not assignable to type 'Baz<string>'.
@@ -206,7 +206,7 @@ tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotati
     
     type T20<public T> = T;  // Error
              ~~~~~~
-!!! error TS1272: 'public' modifier cannot appear on a type parameter
+!!! error TS1273: 'public' modifier cannot appear on a type parameter
     type T21<in out in T> = T;  // Error
                     ~~
 !!! error TS1030: 'in' modifier already seen.
@@ -219,18 +219,18 @@ tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotati
     
     declare function f1<in T>(x: T): void;  // Error
                         ~~
-!!! error TS1273: 'in' modifier can only appear on a type parameter of a class, interface or type alias
+!!! error TS1274: 'in' modifier can only appear on a type parameter of a class, interface or type alias
     declare function f2<out T>(): T;  // Error
                         ~~~
-!!! error TS1273: 'out' modifier can only appear on a type parameter of a class, interface or type alias
+!!! error TS1274: 'out' modifier can only appear on a type parameter of a class, interface or type alias
     
     class C {
         in a = 0;  // Error
         ~~
-!!! error TS1273: 'in' modifier can only appear on a type parameter of a class, interface or type alias
+!!! error TS1274: 'in' modifier can only appear on a type parameter of a class, interface or type alias
         out b = 0;  // Error
         ~~~
-!!! error TS1273: 'out' modifier can only appear on a type parameter of a class, interface or type alias
+!!! error TS1274: 'out' modifier can only appear on a type parameter of a class, interface or type alias
     }
     
     // Interface merging
