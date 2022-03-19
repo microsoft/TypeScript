@@ -3412,7 +3412,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Circularity detected while resolving configuration: {0}]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[構成: {0} の解決中に循環が検出されました]]></Val>
+            <Val><![CDATA[構成: {0} の解決中に循環が検出されました。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6667,7 +6667,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Found 1 error in {1}]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[{1} で 1 件のエラーが見つかりました]]></Val>
+            <Val><![CDATA[{1} で 1 件のエラーが見つかりました。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7303,7 +7303,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Imported via {0} from file '{1}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[ファイル '{1}' から {0} を介してインポートされました]]></Val>
+            <Val><![CDATA[ファイル '{1}' から {0} を介してインポートされました。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7312,7 +7312,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Imported via {0} from file '{1}' to import 'importHelpers' as specified in compilerOptions]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[compilerOptions で指定された 'importHelpers' をインポートするため、ファイル '{1}' から {0} を介してインポートされました]]></Val>
+            <Val><![CDATA[compilerOptions で指定された 'importHelpers' をインポートするため、ファイル '{1}' から {0} を介してインポートされました。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7321,7 +7321,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Imported via {0} from file '{1}' to import 'jsx' and 'jsxs' factory functions]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['jsx' および 'jsxs' ファクトリ関数をインポートするため、ファイル '{1}' から {0} を介してインポートされました]]></Val>
+            <Val><![CDATA['jsx' および 'jsxs' ファクトリ関数をインポートするため、ファイル '{1}' から {0} を介してインポートされました。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7330,7 +7330,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Imported via {0} from file '{1}' with packageId '{2}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[packageId が '{2}' のファイル '{1}' から {0} を介してインポートされました]]></Val>
+            <Val><![CDATA[packageId が '{2}' のファイル '{1}' から {0} を介してインポートされました。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7339,7 +7339,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Imported via {0} from file '{1}' with packageId '{2}' to import 'importHelpers' as specified in compilerOptions]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[compilerOptions で指定されているように 'importHelpers' をインポートするため、packageId が '{2}' のファイル '{1}' から {0} を介してインポートされました]]></Val>
+            <Val><![CDATA[compilerOptions で指定されているように 'importHelpers' をインポートするため、packageId が '{2}' のファイル '{1}' から {0} を介してインポートされました。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7348,7 +7348,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Imported via {0} from file '{1}' with packageId '{2}' to import 'jsx' and 'jsxs' factory functions]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['jsx' および 'jsxs' ファクトリ関数をインポートするため、packageId が '{2}' のファイル '{1}' から {0} を介してインポートされました]]></Val>
+            <Val><![CDATA['jsx' および 'jsxs' ファクトリ関数をインポートするため、packageId が '{2}' のファイル '{1}' から {0} を介してインポートされました。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8083,7 +8083,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Library '{0}' specified in compilerOptions]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[compilerOptions でライブラリ '{0}' が指定されました]]></Val>
+            <Val><![CDATA[compilerOptions でライブラリ '{0}' が指定されました。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8092,7 +8092,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Library referenced via '{0}' from file '{1}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[ファイル '{1}' から '{0}' を介してライブラリが参照されました]]></Val>
+            <Val><![CDATA[ファイル '{1}' から '{0}' を介してライブラリが参照されました。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9301,7 +9301,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Output from referenced project '{0}' included because '{1}' specified]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{1}' が指定されたため、参照先プロジェクト '{0}' から出力がインクルードされました]]></Val>
+            <Val><![CDATA['{1}' が指定されたため、参照先プロジェクト '{0}' から出力がインクルードされました。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9310,7 +9310,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Output from referenced project '{0}' included because '--module' is specified as 'none']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['--module' が 'none' として指定されたため、参照先プロジェクト '{0}' から出力がインクルードされました]]></Val>
+            <Val><![CDATA['--module' が 'none' として指定されたため、参照先プロジェクト '{0}' から出力がインクルードされました。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11572,7 +11572,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Scoped package detected, looking in '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{0}' 内を検索して、スコープ パッケージが検出されました]]></Val>
+            <Val><![CDATA['{0}' 内を検索して、スコープ パッケージが検出されました。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11743,7 +11743,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Source from referenced project '{0}' included because '{1}' specified]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{1}' が指定されたため、参照先プロジェクト '{0}' からソースがインクルードされました]]></Val>
+            <Val><![CDATA['{1}' が指定されたため、参照先プロジェクト '{0}' からソースがインクルードされました。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11752,7 +11752,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Source from referenced project '{0}' included because '--module' is specified as 'none']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['--module' が 'none' として指定されたため、参照先プロジェクト '{0}' からソースがインクルードされました]]></Val>
+            <Val><![CDATA['--module' が 'none' として指定されたため、参照先プロジェクト '{0}' からソースがインクルードされました。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
