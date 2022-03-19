@@ -1045,6 +1045,7 @@ namespace ts.server {
          * @returns: true if set of files in the project stays the same and false - otherwise.
          */
         updateGraph(): boolean {
+            tracing?.push(tracing.Phase.Session, "updateGraph", { name: this.projectName, kind: ProjectKind[this.projectKind] });
             perfLogger.logStartUpdateGraph();
             this.resolutionCache.startRecordingFilesWithChangedResolutions();
 
@@ -1092,6 +1093,7 @@ namespace ts.server {
                 this.getPackageJsonAutoImportProvider();
             }
             perfLogger.logStopUpdateGraph();
+            tracing?.pop();
             return !hasNewProgram;
         }
 
@@ -1128,7 +1130,9 @@ namespace ts.server {
             this.resolutionCache.startCachingPerDirectoryResolution();
             this.program = this.languageService.getProgram(); // TODO: GH#18217
             this.dirty = false;
+            tracing?.push(tracing.Phase.Session, "finishCachingPerDirectoryResolution");
             this.resolutionCache.finishCachingPerDirectoryResolution();
+            tracing?.pop();
 
             Debug.assert(oldProgram === undefined || this.program !== undefined);
 
@@ -1747,13 +1751,16 @@ namespace ts.server {
 
             const dependencySelection = this.includePackageJsonAutoImports();
             if (dependencySelection) {
+                tracing?.push(tracing.Phase.Session, "getPackageJsonAutoImportProvider");
                 const start = timestamp();
                 this.autoImportProviderHost = AutoImportProviderProject.create(dependencySelection, this, this.getModuleResolutionHostForAutoImportProvider(), this.documentRegistry);
                 if (this.autoImportProviderHost) {
                     updateProjectIfDirty(this.autoImportProviderHost);
                     this.sendPerformanceEvent("CreatePackageJsonAutoImportProvider", timestamp() - start);
+                    tracing?.pop();
                     return this.autoImportProviderHost.getCurrentProgram();
                 }
+                tracing?.pop();
             }
         }
 
@@ -1776,9 +1783,13 @@ namespace ts.server {
     }
 
     function getUnresolvedImports(program: Program, cachedUnresolvedImportsPerFile: ESMap<Path, readonly string[]>): SortedReadonlyArray<string> {
+        const sourceFiles = program.getSourceFiles();
+        tracing?.push(tracing.Phase.Session, "getUnresolvedImports", { count: sourceFiles.length });
         const ambientModules = program.getTypeChecker().getAmbientModules().map(mod => stripQuotes(mod.getName()));
-        return sortAndDeduplicate(flatMap(program.getSourceFiles(), sourceFile =>
+        const result = sortAndDeduplicate(flatMap(sourceFiles, sourceFile =>
             extractUnresolvedImportsFromSourceFile(sourceFile, ambientModules, cachedUnresolvedImportsPerFile)));
+        tracing?.pop();
+        return result;
     }
     function extractUnresolvedImportsFromSourceFile(file: SourceFile, ambientModules: readonly string[], cachedUnresolvedImportsPerFile: ESMap<Path, readonly string[]>): readonly string[] {
         return getOrUpdate(cachedUnresolvedImportsPerFile, file.path, () => {
