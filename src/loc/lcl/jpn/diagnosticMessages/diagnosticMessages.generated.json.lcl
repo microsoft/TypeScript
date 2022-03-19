@@ -1039,7 +1039,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add '{0}.' to unresolved variable]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{0}' を未解決の変数に追加します]]></Val>
+            <Val><![CDATA['{0}' を未解決の変数に追加します。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1057,7 +1057,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add all missing 'async' modifiers]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[不足しているすべての 'async' 修飾子を追加します]]></Val>
+            <Val><![CDATA[不足しているすべての 'async' 修飾子を追加します。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1075,7 +1075,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add all missing call parentheses]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[見つからない呼び出しのかっこをすべて追加します]]></Val>
+            <Val><![CDATA[見つからない呼び出しのかっこをすべて追加します。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1084,7 +1084,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add all missing function declarations]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[不足しているすべての関数宣言を追加します]]></Val>
+            <Val><![CDATA[不足しているすべての関数宣言を追加します。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1102,7 +1102,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add all missing members]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[不足しているすべてのメンバーを追加します]]></Val>
+            <Val><![CDATA[不足しているすべてのメンバーを追加します。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1138,7 +1138,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add all missing super calls]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[不足しているすべての super の呼び出しを追加します]]></Val>
+            <Val><![CDATA[不足しているすべての super の呼び出しを追加します。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1147,7 +1147,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add async modifier to containing function]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[含まれている関数に async 修飾子を追加します]]></Val>
+            <Val><![CDATA[含まれている関数に async 修飾子を追加します。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1183,7 +1183,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add braces to arrow function]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[アロー関数に中かっこを追加します]]></Val>
+            <Val><![CDATA[アロー関数に中かっこを追加します。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1210,7 +1210,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add definite assignment assertion to property '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[プロパティ '{0}' に限定代入アサーションを追加します]]></Val>
+            <Val><![CDATA[プロパティ '{0}' に限定代入アサーションを追加します。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1219,7 +1219,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add definite assignment assertions to all uninitialized properties]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[初期化されていないすべてのプロパティに限定代入アサーションを追加します]]></Val>
+            <Val><![CDATA[初期化されていないすべてのプロパティに限定代入アサーションを追加します。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1258,7 +1258,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add initializer to property '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[プロパティ '{0}' に初期化子を追加します]]></Val>
+            <Val><![CDATA[プロパティ '{0}' に初期化子を追加します。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1267,7 +1267,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add initializers to all uninitialized properties]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[初期化されていないすべてのプロパティに初期化子を追加します]]></Val>
+            <Val><![CDATA[初期化されていないすべてのプロパティに初期化子を追加します。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1285,7 +1285,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add missing call parentheses]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[見つからない呼び出しのかっこを追加します]]></Val>
+            <Val><![CDATA[見つからない呼び出しのかっこを追加します。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1303,7 +1303,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add missing function declaration '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[不足している関数宣言 '{0}' を追加します]]></Val>
+            <Val><![CDATA[不足している関数宣言 '{0}' を追加します。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1351,7 +1351,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add missing 'typeof']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[不足している 'typeof' を追加します]]></Val>
+            <Val><![CDATA[不足している 'typeof' を追加します。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1369,7 +1369,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add or remove braces in an arrow function]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[アロー関数内の中かっこを追加または削除します]]></Val>
+            <Val><![CDATA[アロー関数内の中かっこを追加または削除します。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1396,7 +1396,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add qualifier to all unresolved variables matching a member name]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[メンバー名と一致するすべての未解決の変数に修飾子を追加します]]></Val>
+            <Val><![CDATA[メンバー名と一致するすべての未解決の変数に修飾子を追加します。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1405,7 +1405,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add '()' to all uncalled decorators]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[呼び出されていないすべてのデコレーターに '()' を追加します]]></Val>
+            <Val><![CDATA[呼び出されていないすべてのデコレーターに '()' を追加します。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1414,7 +1414,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add '@ts-ignore' to all error messages]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[すべてのエラー メッセージに '@ts-ignore' を追加します]]></Val>
+            <Val><![CDATA[すべてのエラー メッセージに '@ts-ignore' を追加します。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1432,7 +1432,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add 'undefined' to optional property type]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[省略可能なプロパティ型に 'undefined' を追加します]]></Val>
+            <Val><![CDATA[省略可能なプロパティ型に 'undefined' を追加します。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1441,7 +1441,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add undefined type to all uninitialized properties]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[初期化されていないすべてのプロパティに未定義の型を追加します]]></Val>
+            <Val><![CDATA[初期化されていないすべてのプロパティに未定義の型を追加します。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1450,7 +1450,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add 'undefined' type to property '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[プロパティ '{0}' に '未定義' の型を追加します]]></Val>
+            <Val><![CDATA[プロパティ '{0}' に '未定義' の型を追加します。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1477,7 +1477,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add 'void' to Promise resolved without a value]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[値なしで解決された Promise に 'void' を追加します]]></Val>
+            <Val><![CDATA[値なしで解決された Promise に 'void' を追加します。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1486,7 +1486,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add 'void' to all Promises resolved without a value]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[値なしで解決されたすべての Promise に 'void' を追加します]]></Val>
+            <Val><![CDATA[値なしで解決されたすべての Promise に 'void' を追加します。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2464,7 +2464,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Build all projects, including those that appear to be up to date]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[最新の状態であると思われるものを含むすべてのプロジェクトをビルドします]]></Val>
+            <Val><![CDATA[最新の状態であると思われるものを含むすべてのプロジェクトをビルドします。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2473,7 +2473,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Build one or more projects and their dependencies, if out of date]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[最新でない場合は、1 つ以上のプロジェクトとその依存関係をビルドします]]></Val>
+            <Val><![CDATA[最新でない場合は、1 つ以上のプロジェクトとその依存関係をビルドします。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3325,7 +3325,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Change all extended interfaces to 'implements']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[拡張されたすべてのインターフェイスを 'implements' に変更します]]></Val>
+            <Val><![CDATA[拡張されたすべてのインターフェイスを 'implements' に変更します。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3334,7 +3334,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Change all jsdoc-style types to TypeScript]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[jsdoc スタイルのすべての型を TypeScript に変更します]]></Val>
+            <Val><![CDATA[jsdoc スタイルのすべての型を TypeScript に変更します。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3892,7 +3892,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Convert '{0}' to '{1} in {0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{0}' を '{0} の {1}' に変換します]]></Val>
+            <Val><![CDATA['{0}' を '{0} の {1}' に変換します。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3910,7 +3910,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Convert all constructor functions to classes]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[すべてのコンストラクター関数をクラスに変換します]]></Val>
+            <Val><![CDATA[すべてのコンストラクター関数をクラスに変換します。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3973,7 +3973,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Convert all to default imports]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[すべてを既定のインポートに変換します]]></Val>
+            <Val><![CDATA[すべてを既定のインポートに変換します。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3982,7 +3982,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Convert all type literals to mapped type]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[すべての型リテラルをマップされた型に変換します]]></Val>
+            <Val><![CDATA[すべての型リテラルをマップされた型に変換します。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4036,7 +4036,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Convert function to an ES2015 class]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[関数を ES2015 クラスに変換します]]></Val>
+            <Val><![CDATA[関数を ES2015 クラスに変換します。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4072,7 +4072,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Convert named imports to namespace import]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[名前付きインポートを名前空間インポートに変換します]]></Val>
+            <Val><![CDATA[名前付きインポートを名前空間インポートに変換します。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4081,7 +4081,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Convert namespace import to named imports]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[名前空間インポートを名前付きインポートに変換します]]></Val>
+            <Val><![CDATA[名前空間インポートを名前付きインポートに変換します。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4180,7 +4180,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Convert to optional chain expression]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[オプションのチェーン式に変換します]]></Val>
+            <Val><![CDATA[オプションのチェーン式に変換します。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4510,7 +4510,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Declare private property '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[プライベート プロパティ '{0}' を宣言します]]></Val>
+            <Val><![CDATA[プライベート プロパティ '{0}' を宣言します。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4645,7 +4645,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Delete all unused declarations]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[未使用の宣言をすべて削除します]]></Val>
+            <Val><![CDATA[未使用の宣言をすべて削除します。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4654,7 +4654,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Delete all unused imports]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[未使用の import をすべて削除します]]></Val>
+            <Val><![CDATA[未使用の import をすべて削除します。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4663,7 +4663,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Delete all unused '@param' tags]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[未使用の '@param' タグをすべて削除します]]></Val>
+            <Val><![CDATA[未使用の '@param' タグをすべて削除します。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4672,7 +4672,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Delete the outputs of all projects]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[すべてのプロジェクトの出力を削除します]]></Val>
+            <Val><![CDATA[すべてのプロジェクトの出力を削除します。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4681,7 +4681,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Delete unused '@param' tag '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[未使用の '@param' タグ '{0}' を削除します]]></Val>
+            <Val><![CDATA[未使用の '@param' タグ '{0}' を削除します。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4690,7 +4690,7 @@
         <Str Cat="Text">
           <Val><![CDATA[[Deprecated]5D; Use '--jsxFactory' instead. Specify the object invoked for createElement when targeting 'react' JSX emit]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[[非推奨]5D; 代わりに '--jsxFactory' を使います。'react' JSX 発行を対象とするときに、createElement に対して呼び出されたオブジェクトを指定します]]></Val>
+            <Val><![CDATA[[非推奨]5D; 代わりに '--jsxFactory' を使います。'react' JSX 発行を対象とするときに、createElement に対して呼び出されたオブジェクトを指定します。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4699,7 +4699,7 @@
         <Str Cat="Text">
           <Val><![CDATA[[Deprecated]5D; Use '--outFile' instead. Concatenate and emit output to single file]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[[非推奨]5D; 代わりに '--outFile' を使います。出力を連結して 1 つのファイルを生成します]]></Val>
+            <Val><![CDATA[[非推奨]5D; 代わりに '--outFile' を使います。出力を連結して 1 つのファイルを生成します。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4927,7 +4927,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Disable preferring source files instead of declaration files when referencing composite projects]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[複合プロジェクトを参照するときに宣言ファイルではなくソース ファイルを優先することを無効にします]]></Val>
+            <Val><![CDATA[複合プロジェクトを参照するときに宣言ファイルではなくソース ファイルを優先することを無効にします。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5590,7 +5590,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Enable project compilation]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[プロジェクトのコンパイルを有効にします]]></Val>
+            <Val><![CDATA[プロジェクトのコンパイルを有効にします。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5662,7 +5662,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Enable verbose logging]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[詳細ログを有効にします]]></Val>
+            <Val><![CDATA[詳細ログを有効にします。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6568,7 +6568,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Fix all detected spelling errors]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[検出されたすべてのスペル ミスを修正します]]></Val>
+            <Val><![CDATA[検出されたすべてのスペル ミスを修正します。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6595,7 +6595,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Fix all incorrect return type of an async functions]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[非同期関数の無効な戻り値の型をすべて修正します]]></Val>
+            <Val><![CDATA[非同期関数の無効な戻り値の型をすべて修正します。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6640,7 +6640,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Found {0} errors in the same file, starting at: {1}]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[同じファイル内に {0} 件のエラーが見つかりました。{1} から開始します]]></Val>
+            <Val><![CDATA[同じファイル内に {0} 件のエラーが見つかりました。{1} から開始します。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6838,7 +6838,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Generate 'get' and 'set' accessors for all overriding properties]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[すべてのオーバーライドするプロパティに対して 'get' および 'set' アクセサーを生成します]]></Val>
+            <Val><![CDATA[すべてのオーバーライドするプロパティに対して 'get' および 'set' アクセサーを生成します。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7111,7 +7111,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Implement all inherited abstract classes]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[継承されたすべての抽象クラスを実装します]]></Val>
+            <Val><![CDATA[継承されたすべての抽象クラスを実装します。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7120,7 +7120,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Implement all unimplemented interfaces]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[実装されていないすべてのインターフェイスを実装します]]></Val>
+            <Val><![CDATA[実装されていないすべてのインターフェイスを実装します。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7474,7 +7474,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Infer all types from usage]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[使用法からすべての型を推論します]]></Val>
+            <Val><![CDATA[使用法からすべての型を推論します。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7483,7 +7483,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Infer function return type]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[関数の戻り値の型を推論します]]></Val>
+            <Val><![CDATA[関数の戻り値の型を推論します。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7612,7 +7612,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Install all missing types packages]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[不足しているすべての型のパッケージをインストールします]]></Val>
+            <Val><![CDATA[不足しているすべての型のパッケージをインストールします。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8218,7 +8218,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Make all 'super()' calls the first statement in their constructor]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[すべての 'super()' 呼び出しをそのコンストラクターの最初のステートメントにします]]></Val>
+            <Val><![CDATA[すべての 'super()' 呼び出しをそのコンストラクターの最初のステートメントにします。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8596,7 +8596,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Move to a new file]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[新しいファイルへ移動します]]></Val>
+            <Val><![CDATA[新しいファイルへ移動します。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10732,7 +10732,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Remove all unreachable code]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[到達できないコードをすべて削除します]]></Val>
+            <Val><![CDATA[到達できないコードをすべて削除します。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10741,7 +10741,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Remove all unused labels]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[すべての未使用のラベルを削除します]]></Val>
+            <Val><![CDATA[すべての未使用のラベルを削除します。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10750,7 +10750,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Remove braces from all arrow function bodies with relevant issues]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[関連する問題のあるすべてのアロー関数本体から中かっこを削除します]]></Val>
+            <Val><![CDATA[関連する問題のあるすべてのアロー関数本体から中かっこを削除します。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10759,7 +10759,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Remove braces from arrow function]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[アロー関数から中かっこを削除します]]></Val>
+            <Val><![CDATA[アロー関数から中かっこを削除します。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10768,7 +10768,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Remove braces from arrow function body]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[アロー関数本体から中かっこを削除します]]></Val>
+            <Val><![CDATA[アロー関数本体から中かっこを削除します。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10822,7 +10822,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Remove 'type' from import declaration from "{0}"]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA["{0}" からインポート宣言から `type` を削除します]]></Val>
+            <Val><![CDATA["{0}" からインポート宣言から `type` を削除します。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10831,7 +10831,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Remove 'type' from import of '{0}' from "{1}"]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA["{1}" から `{0}` のインポートから `type` を削除します]]></Val>
+            <Val><![CDATA["{1}" から `{0}` のインポートから `type` を削除します。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10858,7 +10858,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Remove unreachable code]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[到達できないコードを削除します]]></Val>
+            <Val><![CDATA[到達できないコードを削除します。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10894,7 +10894,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Remove unused label]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[未使用のラベルを削除します]]></Val>
+            <Val><![CDATA[未使用のラベルを削除します。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10903,7 +10903,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Remove variable statement]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[変数のステートメントを削除します]]></Val>
+            <Val><![CDATA[変数のステートメントを削除します。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10912,7 +10912,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Rename '@param' tag name '{0}' to '{1}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['@param' タグ名の名前を '{0}' から '{1}' に変更します]]></Val>
+            <Val><![CDATA['@param' タグ名の名前を '{0}' から '{1}' に変更します。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13672,7 +13672,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Try `npm i --save-dev @types/{1}` if it exists or add a new declaration (.d.ts) file containing `declare module '{0}';`]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[存在する場合は `npm i --save-dev @types/{1}` を試すか、`declare module '{0}';` を含む新しい宣言 (.d.ts) ファイルを追加します]]></Val>
+            <Val><![CDATA[存在する場合は `npm i --save-dev @types/{1}` を試すか、`declare module '{0}';` を含む新しい宣言 (.d.ts) ファイルを追加します。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14827,7 +14827,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Use element access for '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{0}' に要素アクセスを使用します]]></Val>
+            <Val><![CDATA['{0}' に要素アクセスを使用します。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
