@@ -14131,7 +14131,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type catch clause variables as 'unknown' instead of 'any'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[catch 句の変数を '任意' ではなく '不明' として入力してください。]]></Val>
+            <Val><![CDATA[catch 句の変数を 'any' ではなく 'unknown' として入力してください。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
