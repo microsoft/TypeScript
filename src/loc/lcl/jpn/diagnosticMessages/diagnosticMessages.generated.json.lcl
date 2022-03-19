@@ -2593,7 +2593,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Can only convert property with modifier]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[修飾子を伴うプロパティの変換のみ可能です]]></Val>
+            <Val><![CDATA[修飾子を伴うプロパティの変換のみ可能です。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2602,7 +2602,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Can only convert string concatenation]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[変換できるのは文字列の連結のみです]]></Val>
+            <Val><![CDATA[変換できるのは文字列の連結のみです。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4789,7 +4789,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Digit expected.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[数値が必要です]]></Val>
+            <Val><![CDATA[数値が必要です。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6490,7 +6490,7 @@
         <Str Cat="Text">
           <Val><![CDATA[File is output of project reference source '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[ファイルはプロジェクト参照ソース '{0}' の出力です]]></Val>
+            <Val><![CDATA[ファイルはプロジェクト参照ソース '{0}' の出力です。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8632,7 +8632,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Name is not valid]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[名前が無効です]]></Val>
+            <Val><![CDATA[名前が無効です。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10033,7 +10033,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Project '{0}' is up to date]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[プロジェクト '{0}' は最新の状態です]]></Val>
+            <Val><![CDATA[プロジェクト '{0}' は最新の状態です。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10042,7 +10042,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Project '{0}' is up to date because newest input '{1}' is older than oldest output '{2}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[プロジェクト '{0}' は最新の入力 '{1}' が最も古い出力 '{2}' より古いため最新の状態です]]></Val>
+            <Val><![CDATA[プロジェクト '{0}' は最新の入力 '{1}' が最も古い出力 '{2}' より古いため最新の状態です。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10051,7 +10051,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Project '{0}' is up to date with .d.ts files from its dependencies]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[プロジェクト '{0}' はその依存関係からの .d.ts ファイルで最新の状態です]]></Val>
+            <Val><![CDATA[プロジェクト '{0}' はその依存関係からの .d.ts ファイルで最新の状態です。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15115,7 +15115,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Wrap the following body with parentheses which should be an object literal]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[次の本体をかっこで囲みます。これはオブジェクト リテラルです]]></Val>
+            <Val><![CDATA[次の本体をかっこで囲みます。これはオブジェクト リテラルです。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
