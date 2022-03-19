@@ -424,7 +424,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A get accessor must be at least as accessible as the setter]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[get アクセサーは、少なくともセッターと同程度にアクセス可能である必要があります]]></Val>
+            <Val><![CDATA[get アクセサーは、少なくともセッターと同程度にアクセス可能である必要があります。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -550,7 +550,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A non-dry build would build project '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[非 -dry ビルドを実行した場合、プロジェクト '{0}' がビルドされます]]></Val>
+            <Val><![CDATA[非 -dry ビルドを実行した場合、プロジェクト '{0}' がビルドされます。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -568,7 +568,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A non-dry build would update output of project '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[non-dry build では、プロジェクト '{0}' の出力が更新されます]]></Val>
+            <Val><![CDATA[non-dry build では、プロジェクト '{0}' の出力が更新されます。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -577,7 +577,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A non-dry build would update timestamps for output of project '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[non-dry build では、プロジェクト '{0}' の出力のタイムスタンプが更新されます]]></Val>
+            <Val><![CDATA[non-dry build では、プロジェクト '{0}' の出力のタイムスタンプが更新されます。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2200,7 +2200,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Annotate everything with types from JSDoc]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[すべてに JSDoc の型で注釈を付けます]]></Val>
+            <Val><![CDATA[すべてに JSDoc の型で注釈を付けます。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2209,7 +2209,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Annotate with type from JSDoc]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[JSDoc の型で注釈を付けます]]></Val>
+            <Val><![CDATA[JSDoc の型で注釈を付けます。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2575,7 +2575,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Can only convert logical AND access chains]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[論理 AND のアクセス チェーンのみを変換できます]]></Val>
+            <Val><![CDATA[論理 AND のアクセス チェーンのみを変換できます。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2584,7 +2584,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Can only convert named export]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[名前付きエクスポートのみを変換できます]]></Val>
+            <Val><![CDATA[名前付きエクスポートのみを変換できます。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5311,7 +5311,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Dynamic imports can only accept a module specifier and an optional assertion as arguments]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[動的インポートでは、引数として、モジュール指定子とオプションのアサーションのみを受け取ることができます]]></Val>
+            <Val><![CDATA[動的インポートでは、引数として、モジュール指定子とオプションのアサーションのみを受け取ることができます。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6532,7 +6532,7 @@
         <Str Cat="Text">
           <Val><![CDATA[File redirects to file '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[ファイルはファイル '{0}' にリダイレクトされます]]></Val>
+            <Val><![CDATA[ファイルはファイル '{0}' にリダイレクトされます。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7420,7 +7420,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Include 'undefined' in index signature results]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[インデックス署名の結果に '未定義' を含めます]]></Val>
+            <Val><![CDATA[インデックス署名の結果に '未定義' を含めます。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8257,7 +8257,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Matched by include pattern '{0}' in '{1}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{1}' のインクルード パターン '{0}' に一致しています]]></Val>
+            <Val><![CDATA['{1}' のインクルード パターン '{0}' に一致しています。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8356,7 +8356,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Module '{0}' can only be default-imported using the '{1}' flag]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[モジュール '{0}' は、'{1}' フラグを使用して既定でのみインポートできます]]></Val>
+            <Val><![CDATA[モジュール '{0}' は、'{1}' フラグを使用して既定でのみインポートできます。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9778,7 +9778,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Prefix all unused declarations with '_' where possible]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[可能な場合は、使用されていないすべての宣言にプレフィックスとして '_' を付けます]]></Val>
+            <Val><![CDATA[可能な場合は、使用されていないすべての宣言にプレフィックスとして '_' を付けます。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9922,7 +9922,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Private identifiers are only allowed in class bodies and may only be used as part of a class member declaration, property access, or on the left-hand-side of an 'in' expression]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[プライベート識別子はクラス本体でのみ許可され、クラス メンバー宣言、プロパティ アクセス、または 'in' 式の左側でのみ使用できます]]></Val>
+            <Val><![CDATA[プライベート識別子はクラス本体でのみ許可され、クラス メンバー宣言、プロパティ アクセス、または 'in' 式の左側でのみ使用できます。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9979,7 +9979,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Project '{0}' is being forcibly rebuilt]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[プロジェクト '{0}' が強制的にリビルドされています]]></Val>
+            <Val><![CDATA[プロジェクト '{0}' が強制的にリビルドされています。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10669,7 +10669,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Referenced via '{0}' from file '{1}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[ファイル '{1}' から '{0}' を介して参照されています]]></Val>
+            <Val><![CDATA[ファイル '{1}' から '{0}' を介して参照されています。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11179,7 +11179,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Return type must be inferred from a function]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[戻り値の型は関数から推論される必要があります]]></Val>
+            <Val><![CDATA[戻り値の型は関数から推論される必要があります。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11515,7 +11515,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Rewrite all as indexed access types]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[すべてをインデックス付きアクセス型として書き換えます]]></Val>
+            <Val><![CDATA[すべてをインデックス付きアクセス型として書き換えます。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11725,7 +11725,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Skipping build of project '{0}' because its dependency '{1}' has errors]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[プロジェクト '{0}' のビルドは、その依存関係 '{1}' にエラーがあるため、スキップしています]]></Val>
+            <Val><![CDATA[プロジェクト '{0}' のビルドは、その依存関係 '{1}' にエラーがあるため、スキップしています。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11734,7 +11734,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Skipping build of project '{0}' because its dependency '{1}' was not built]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[依存関係 '{1}' がビルドされていないため、プロジェクト '{0}' のビルドをスキップしています]]></Val>
+            <Val><![CDATA[依存関係 '{1}' がビルドされていないため、プロジェクト '{0}' のビルドをスキップしています。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12604,7 +12604,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The declaration of '{0}' that you probably intended to use is defined here]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[使用するつもりだったと思われる '{0}' の宣言はここで定義されています]]></Val>
+            <Val><![CDATA[使用するつもりだったと思われる '{0}' の宣言はここで定義されています。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12622,7 +12622,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The expected type comes from property '{0}' which is declared here on type '{1}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[予期された型は、型 '{1}' に対してここで宣言されたプロパティ '{0}' から取得されています]]></Val>
+            <Val><![CDATA[予期された型は、型 '{1}' に対してここで宣言されたプロパティ '{0}' から取得されています。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13048,7 +13048,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The return type of a 'get' accessor must be assignable to its 'set' accessor type]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['get' アクセサーの戻り値の型は、その 'set' アクセサーの型に割り当て可能である必要があります]]></Val>
+            <Val><![CDATA['get' アクセサーの戻り値の型は、その 'set' アクセサーの型に割り当て可能である必要があります。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13138,7 +13138,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The shadowing declaration of '{0}' is defined here]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{0}' のシャドウ宣言はここで定義されています]]></Val>
+            <Val><![CDATA['{0}' のシャドウ宣言はここで定義されています。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13402,7 +13402,7 @@
         <Str Cat="Text">
           <Val><![CDATA[This file already has a default export]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[このファイルには、既に既定のエクスポートがあります]]></Val>
+            <Val><![CDATA[このファイルには、既に既定のエクスポートがあります。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15079,7 +15079,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Wrap all object literal with parentheses]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[すべてのオブジェクト リテラルをかっこで囲みます]]></Val>
+            <Val><![CDATA[すべてのオブジェクト リテラルをかっこで囲みます。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
