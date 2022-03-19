@@ -15,7 +15,6 @@ namespace ts.OrganizeImports {
         preferences: UserPreferences,
         skipDestructiveCodeActions?: boolean
     ) {
-
         const changeTracker = textChanges.ChangeTracker.fromContext({ host, formatContext, preferences });
 
         const coalesceAndOrganizeImports = (importGroup: readonly ImportDeclaration[]) => stableSort(
@@ -23,8 +22,8 @@ namespace ts.OrganizeImports {
             (s1, s2) => compareImportsOrRequireStatements(s1, s2));
 
         // All of the old ImportDeclarations in the file, in syntactic order.
-        const topLevelImportDecls = sourceFile.statements.filter(isImportDeclaration);
-        organizeImportsWorker(topLevelImportDecls, coalesceAndOrganizeImports);
+        const topLevelImportGroupDecls = groupImportsByNewlineContiguous(sourceFile.statements.filter(isImportDeclaration), host, formatContext);
+        topLevelImportGroupDecls.forEach(topLevelImportGroupDecl => organizeImportsWorker(topLevelImportGroupDecl, coalesceAndOrganizeImports));
 
         // All of the old ExportDeclarations in the file, in syntactic order.
         const topLevelExportDecls = sourceFile.statements.filter(isExportDeclaration);
@@ -33,8 +32,8 @@ namespace ts.OrganizeImports {
         for (const ambientModule of sourceFile.statements.filter(isAmbientModule)) {
             if (!ambientModule.body) continue;
 
-            const ambientModuleImportDecls = ambientModule.body.statements.filter(isImportDeclaration);
-            organizeImportsWorker(ambientModuleImportDecls, coalesceAndOrganizeImports);
+            const ambientModuleImportGroupDecls = groupImportsByNewlineContiguous(ambientModule.body.statements.filter(isImportDeclaration), host, formatContext);
+            ambientModuleImportGroupDecls.forEach(ambientModuleImportGroupDecl => organizeImportsWorker(ambientModuleImportGroupDecl, coalesceAndOrganizeImports));
 
             const ambientModuleExportDecls = ambientModule.body.statements.filter(isExportDeclaration);
             organizeImportsWorker(ambientModuleExportDecls, coalesceExports);
@@ -86,6 +85,31 @@ namespace ts.OrganizeImports {
                 }, hasTrailingComment);
             }
         }
+    }
+
+    function groupImportsByNewlineContiguous(importDecls: ImportDeclaration[], host: LanguageServiceHost, formatContext: formatting.FormatContext): ImportDeclaration[][] {
+        const groupImports: ImportDeclaration[][] = [];
+        const newLine = getNewLineOrDefaultFromHost(host, formatContext.options);
+        const prefixCond = `${newLine}${newLine}`;
+
+        for(let importIndex = 0, groupIndex = 0, length = importDecls.length; importIndex < length ; ++importIndex) {
+            const topLevelImportDecl = importDecls[importIndex];
+            const leadingText = topLevelImportDecl.getFullText().substring(
+                0,
+                topLevelImportDecl.getStart() - topLevelImportDecl.getFullStart());
+
+            if (startsWith(leadingText, prefixCond)) {
+                groupIndex++;
+            }
+
+            if (!groupImports[groupIndex]) {
+                groupImports[groupIndex] = [];
+            }
+
+            groupImports[groupIndex].push(topLevelImportDecl);
+        }
+
+        return groupImports;
     }
 
     function removeUnusedImports(oldImports: readonly ImportDeclaration[], sourceFile: SourceFile, program: Program, skipDestructiveCodeActions: boolean | undefined) {
