@@ -4225,7 +4225,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Could not convert to anonymous function]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[匿名関数に変換できませんでした]]></Val>
+            <Val><![CDATA[匿名関数に変換できませんでした。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4234,7 +4234,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Could not convert to arrow function]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[アロー関数に変換できませんでした]]></Val>
+            <Val><![CDATA[アロー関数に変換できませんでした。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4243,7 +4243,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Could not convert to named function]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[名前付き関数に変換できませんでした]]></Val>
+            <Val><![CDATA[名前付き関数に変換できませんでした。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4252,7 +4252,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Could not determine function return type]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[関数の戻り値の型を特定できませんでした]]></Val>
+            <Val><![CDATA[関数の戻り値の型を特定できませんでした。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4261,7 +4261,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Could not find a containing arrow function]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[含まれているアロー関数が見つかりませんでした]]></Val>
+            <Val><![CDATA[含まれているアロー関数が見つかりませんでした。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4279,7 +4279,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Could not find convertible access expression]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[変換可能なアクセス式が見つかりませんでした]]></Val>
+            <Val><![CDATA[変換可能なアクセス式が見つかりませんでした。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4288,7 +4288,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Could not find export statement]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[export ステートメントが見つかりませんでした]]></Val>
+            <Val><![CDATA[export ステートメントが見つかりませんでした。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4297,7 +4297,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Could not find import clause]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[インポート句が見つかりませんでした]]></Val>
+            <Val><![CDATA[インポート句が見つかりませんでした。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4306,7 +4306,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Could not find matching access expressions]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[一致するアクセス式が見つかりませんでした]]></Val>
+            <Val><![CDATA[一致するアクセス式が見つかりませんでした。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4324,7 +4324,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Could not find namespace import or named imports]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[名前空間のインポートまたは名前付きインポートが見つかりませんでした]]></Val>
+            <Val><![CDATA[名前空間のインポートまたは名前付きインポートが見つかりませんでした。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4333,7 +4333,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Could not find property for which to generate accessor]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[アクセサーを生成するプロパティが見つかりませんでした]]></Val>
+            <Val><![CDATA[アクセサーを生成するプロパティが見つかりませんでした。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8758,7 +8758,7 @@
         <Str Cat="Text">
           <Val><![CDATA[No type could be extracted from this type node]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[この型ノードからは型を抽出できませんでした]]></Val>
+            <Val><![CDATA[この型ノードからは型を抽出できませんでした。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
