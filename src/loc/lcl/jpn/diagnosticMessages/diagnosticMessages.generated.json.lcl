@@ -7066,7 +7066,7 @@
         <Str Cat="Text">
           <Val><![CDATA[If the '{0}' package actually exposes this module, consider sending a pull request to amend 'https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/{1}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{0}' パッケージが実際にこのモジュールを公開する場合は、pull request を送信して 'https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/{1}' を修正することを検討してください]]></Val>
+            <Val><![CDATA['{0}' パッケージが実際にこのモジュールを公開する場合は、pull request を送信して 'https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/{1}' を修正することを検討してください。]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[If the '{0}' package actually exposes this module, consider sending a pull request to amend 'https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/{1}`]]></Val>
@@ -10876,7 +10876,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Remove unused declarations for: '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{0}' に対する使用されていない宣言を削除してください]]></Val>
+            <Val><![CDATA['{0}' に対する使用されていない宣言を削除してください。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10885,7 +10885,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Remove unused destructuring declaration]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[使用されていない非構造化宣言を削除してください]]></Val>
+            <Val><![CDATA[使用されていない非構造化宣言を削除してください。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12415,7 +12415,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Switch each misused '{0}' to '{1}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[誤用されている各 '{0}' を '{1}' に切り替えてください]]></Val>
+            <Val><![CDATA[誤用されている各 '{0}' を '{1}' に切り替えてください。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14998,7 +14998,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Visit https://aka.ms/tsconfig to read more about this file]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[このファイルの詳細については、https://aka.ms/tsconfig をご覧ください]]></Val>
+            <Val><![CDATA[このファイルの詳細については、https://aka.ms/tsconfig をご覧ください。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
