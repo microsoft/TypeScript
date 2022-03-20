@@ -19,7 +19,7 @@ namespace ts.codefix {
         errorCodes,
         getCodeActions(context) {
             const typeChecker = context.program.getTypeChecker();
-            const info = getInfo(context.sourceFile, context.span.start, context.errorCode, typeChecker, context.program);
+            const info = getInfo(context.sourceFile, context.span.start, context.errorCode, typeChecker, context.program, context.formatContext);
             if (!info) {
                 return undefined;
             }
@@ -50,7 +50,7 @@ namespace ts.codefix {
 
             return createCombinedCodeActions(textChanges.ChangeTracker.with(context, changes => {
                 eachDiagnostic(context, errorCodes, diag => {
-                    const info = getInfo(diag.file, diag.start, diag.code, checker, context.program);
+                    const info = getInfo(diag.file, diag.start, diag.code, checker, context.program, context.formatContext);
                     if (!info || !addToSeen(seen, getNodeId(info.parentDeclaration) + "#" + info.token.text)) {
                         return;
                     }
@@ -141,6 +141,7 @@ namespace ts.codefix {
         readonly properties: Symbol[];
         readonly parentDeclaration: ObjectLiteralExpression;
         readonly indentation?: number;
+        readonly trimLeadingWhiteSpaces?: boolean;
     }
 
     interface JsxAttributesInfo {
@@ -150,7 +151,7 @@ namespace ts.codefix {
         readonly parentDeclaration: JsxOpeningLikeElement;
     }
 
-    function getInfo(sourceFile: SourceFile, tokenPos: number, errorCode: number, checker: TypeChecker, program: Program): Info | undefined {
+    function getInfo(sourceFile: SourceFile, tokenPos: number, errorCode: number, checker: TypeChecker, program: Program, formatContext: formatting.FormatContext): Info | undefined {
         // The identifier of the missing property. eg:
         // this.missing = 1;
         //      ^^^^^^^
@@ -171,7 +172,10 @@ namespace ts.codefix {
 
             const properties = arrayFrom(checker.getUnmatchedProperties(checker.getTypeAtLocation(parent), checker.getTypeAtLocation(param), /* requireOptionalProperties */ false, /* matchDiscriminantProperties */ false));
             if (!length(properties)) return undefined;
-            return { kind: InfoKind.ObjectLiteral, token: param.name, properties, indentation: 0, parentDeclaration: parent };
+
+            const formatOptions = getFormatCodeSettingsForWriting(formatContext, sourceFile);
+            const indentation = formatting.SmartIndenter.getIndentation(getLineStartPositionForPosition(tokenPos, sourceFile), sourceFile, formatOptions, getLineStartPositionForPosition(tokenPos, sourceFile) === tokenPos);
+            return { kind: InfoKind.ObjectLiteral, token: param.name, properties, indentation, trimLeadingWhiteSpaces: true, parentDeclaration: parent };
         }
 
         if (!isMemberName(token)) return undefined;
@@ -490,7 +494,8 @@ namespace ts.codefix {
         const options = {
             leadingTriviaOption: textChanges.LeadingTriviaOption.Exclude,
             trailingTriviaOption: textChanges.TrailingTriviaOption.Exclude,
-            indentation: info.indentation
+            indentation: info.indentation,
+            trimLeadingWhiteSpaces: info.trimLeadingWhiteSpaces,
         };
         changes.replaceNode(context.sourceFile, info.parentDeclaration, factory.createObjectLiteralExpression([...info.parentDeclaration.properties, ...props], /*multiLine*/ true), options);
     }
