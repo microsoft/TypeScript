@@ -76,7 +76,12 @@ namespace ts {
         return fileExtensionIs(fileName, Extension.Dts);
     }
 
-    export type ReportEmitErrorSummary = (errorCount: number) => void;
+    export type ReportEmitErrorSummary = (errorCount: number, filesInError: (ReportFileInError | undefined)[]) => void;
+
+    export interface ReportFileInError {
+        fileName: string;
+        line: number;
+    }
 
     export interface SolutionBuilderHostBase<T extends BuilderProgram> extends ProgramHost<T> {
         createDirectory?(path: string): void;
@@ -85,6 +90,7 @@ namespace ts {
          * writeFileCallback
          */
         writeFile?(path: string, data: string, writeByteOrderMark?: boolean): void;
+        getCustomTransformers?: (project: string) => CustomTransformers | undefined;
 
         getModifiedTime(fileName: string): Date | undefined;
         setModifiedTime(fileName: string, date: Date): void;
@@ -131,9 +137,9 @@ namespace ts {
     }
 
     export interface SolutionBuilder<T extends BuilderProgram> {
-        build(project?: string, cancellationToken?: CancellationToken): ExitStatus;
+        build(project?: string, cancellationToken?: CancellationToken, writeFile?: WriteFileCallback, getCustomTransformers?: (project: string) => CustomTransformers): ExitStatus;
         clean(project?: string): ExitStatus;
-        buildReferences(project: string, cancellationToken?: CancellationToken): ExitStatus;
+        buildReferences(project: string, cancellationToken?: CancellationToken, writeFile?: WriteFileCallback, getCustomTransformers?: (project: string) => CustomTransformers): ExitStatus;
         cleanReferences(project?: string): ExitStatus;
         getNextInvalidatedProject(cancellationToken?: CancellationToken): InvalidatedProject<T> | undefined;
 
@@ -256,6 +262,8 @@ namespace ts {
         readonly allWatchedInputFiles: ESMap<ResolvedConfigFilePath, ESMap<Path, FileWatcher>>;
         readonly allWatchedConfigFiles: ESMap<ResolvedConfigFilePath, FileWatcher>;
         readonly allWatchedExtendedConfigFiles: ESMap<Path, SharedExtendedConfigFileWatcher<ResolvedConfigFilePath>>;
+        readonly allWatchedPackageJsonFiles: ESMap<ResolvedConfigFilePath, ESMap<Path, FileWatcher>>;
+        readonly lastCachedPackageJsonLookups: ESMap<ResolvedConfigFilePath, readonly (readonly [Path, object | boolean])[] | undefined>;
 
         timerToBuildInvalidatedProject: any;
         reportFileChangeDetected: boolean;
@@ -278,14 +286,15 @@ namespace ts {
         const moduleResolutionCache = !compilerHost.resolveModuleNames ? createModuleResolutionCache(currentDirectory, getCanonicalFileName) : undefined;
         const typeReferenceDirectiveResolutionCache = !compilerHost.resolveTypeReferenceDirectives ? createTypeReferenceDirectiveResolutionCache(currentDirectory, getCanonicalFileName, /*options*/ undefined, moduleResolutionCache?.getPackageJsonInfoCache()) : undefined;
         if (!compilerHost.resolveModuleNames) {
-            const loader = (moduleName: string, containingFile: string, redirectedReference: ResolvedProjectReference | undefined) => resolveModuleName(moduleName, containingFile, state.projectCompilerOptions, compilerHost, moduleResolutionCache, redirectedReference).resolvedModule!;
-            compilerHost.resolveModuleNames = (moduleNames, containingFile, _reusedNames, redirectedReference) =>
-                loadWithLocalCache<ResolvedModuleFull>(Debug.checkEachDefined(moduleNames), containingFile, redirectedReference, loader);
+            const loader = (moduleName: string, resolverMode: ModuleKind.CommonJS | ModuleKind.ESNext | undefined, containingFile: string, redirectedReference: ResolvedProjectReference | undefined) => resolveModuleName(moduleName, containingFile, state.projectCompilerOptions, compilerHost, moduleResolutionCache, redirectedReference, resolverMode).resolvedModule!;
+            compilerHost.resolveModuleNames = (moduleNames, containingFile, _reusedNames, redirectedReference, _options, containingSourceFile) =>
+                loadWithModeAwareCache<ResolvedModuleFull>(Debug.checkEachDefined(moduleNames), Debug.checkDefined(containingSourceFile), containingFile, redirectedReference, loader);
+            compilerHost.getModuleResolutionCache = () => moduleResolutionCache;
         }
         if (!compilerHost.resolveTypeReferenceDirectives) {
-            const loader = (moduleName: string, containingFile: string, redirectedReference: ResolvedProjectReference | undefined) => resolveTypeReferenceDirective(moduleName, containingFile, state.projectCompilerOptions, compilerHost, redirectedReference, state.typeReferenceDirectiveResolutionCache).resolvedTypeReferenceDirective!;
-            compilerHost.resolveTypeReferenceDirectives = (typeReferenceDirectiveNames, containingFile, redirectedReference) =>
-                loadWithLocalCache<ResolvedTypeReferenceDirective>(Debug.checkEachDefined(typeReferenceDirectiveNames), containingFile, redirectedReference, loader);
+            const loader = (moduleName: string, containingFile: string, redirectedReference: ResolvedProjectReference | undefined, containingFileMode: SourceFile["impliedNodeFormat"] | undefined) => resolveTypeReferenceDirective(moduleName, containingFile, state.projectCompilerOptions, compilerHost, redirectedReference, state.typeReferenceDirectiveResolutionCache, containingFileMode).resolvedTypeReferenceDirective!;
+            compilerHost.resolveTypeReferenceDirectives = (typeReferenceDirectiveNames, containingFile, redirectedReference, _options, containingFileMode) =>
+                loadWithTypeDirectiveCache<ResolvedTypeReferenceDirective>(Debug.checkEachDefined(typeReferenceDirectiveNames), containingFile, redirectedReference, containingFileMode, loader);
         }
 
         const { watchFile, watchDirectory, writeLog } = createWatchFactory<ResolvedConfigFileName>(hostWithWatch, options);
@@ -335,6 +344,8 @@ namespace ts {
             allWatchedInputFiles: new Map(),
             allWatchedConfigFiles: new Map(),
             allWatchedExtendedConfigFiles: new Map(),
+            allWatchedPackageJsonFiles: new Map(),
+            lastCachedPackageJsonLookups: new Map(),
 
             timerToBuildInvalidatedProject: undefined,
             reportFileChangeDetected: false,
@@ -497,6 +508,12 @@ namespace ts {
                 currentProjects,
                 { onDeleteValue: existingMap => existingMap.forEach(closeFileWatcher) }
             );
+
+            mutateMapSkippingNewValues(
+                state.allWatchedPackageJsonFiles,
+                currentProjects,
+                { onDeleteValue: existingMap => existingMap.forEach(closeFileWatcher) }
+            );
         }
         return state.buildOrder = buildOrder;
     }
@@ -590,7 +607,7 @@ namespace ts {
         // Set initial build if not already built
         if (!state.allProjectBuildPending) return;
         state.allProjectBuildPending = false;
-        if (state.options.watch) { reportWatchStatus(state, Diagnostics.Starting_compilation_in_watch_mode); }
+        if (state.options.watch) reportWatchStatus(state, Diagnostics.Starting_compilation_in_watch_mode);
         enableCache(state);
         const buildOrder = getBuildOrderFromAnyBuildOrder(getBuildOrder(state));
         buildOrder.forEach(configFileName =>
@@ -785,7 +802,7 @@ namespace ts {
                 emit: (targetSourceFile, writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers) => {
                     if (targetSourceFile || emitOnlyDtsFiles) {
                         return withProgramOrUndefined(
-                            program => program.emit(targetSourceFile, writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers)
+                            program => program.emit(targetSourceFile, writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers || state.host.getCustomTransformers?.(project))
                         );
                     }
                     executeSteps(BuildStep.SemanticDiagnostics, cancellationToken);
@@ -849,6 +866,7 @@ namespace ts {
             state.projectCompilerOptions = config.options;
             // Update module resolution cache if needed
             state.moduleResolutionCache?.update(config.options);
+            state.typeReferenceDirectiveResolutionCache?.update(config.options);
 
             // Create program
             program = host.createProgram(
@@ -860,6 +878,11 @@ namespace ts {
                 config.projectReferences
             );
             if (state.watch) {
+                state.lastCachedPackageJsonLookups.set(projectPath, state.moduleResolutionCache && map(
+                    state.moduleResolutionCache.getPackageJsonInfoCache().entries(),
+                    ([path, data]) => ([state.host.realpath && data ? toPath(state, state.host.realpath(path)) : path, data] as const)
+                ));
+
                 state.builderPrograms.set(projectPath, program);
             }
             step++;
@@ -920,7 +943,7 @@ namespace ts {
                 (name, text, writeByteOrderMark) => outputFiles.push({ name, text, writeByteOrderMark }),
                 cancellationToken,
                 /*emitOnlyDts*/ false,
-                customTransformers
+                customTransformers || state.host.getCustomTransformers?.(project)
             );
             // Don't emit .d.ts if there are decl file errors
             if (declDiagnostics) {
@@ -1059,7 +1082,7 @@ namespace ts {
                     const refName = resolveProjectName(state, ref.path);
                     return parseConfigFile(state, refName, toResolvedConfigFilePath(state, refName));
                 },
-                customTransformers
+                customTransformers || state.host.getCustomTransformers?.(project)
             );
 
             if (isString(outputFiles)) {
@@ -1125,7 +1148,7 @@ namespace ts {
                         break;
 
                     case BuildStep.BuildInvalidatedProjectOfBundle:
-                        Debug.checkDefined(invalidatedProjectOfBundle).done(cancellationToken);
+                        Debug.checkDefined(invalidatedProjectOfBundle).done(cancellationToken, writeFile, customTransformers);
                         step = BuildStep.Done;
                         break;
 
@@ -1190,12 +1213,14 @@ namespace ts {
                 watchExtendedConfigFiles(state, projectPath, config);
                 watchWildCardDirectories(state, project, projectPath, config);
                 watchInputFiles(state, project, projectPath, config);
+                watchPackageJsonFiles(state, project, projectPath, config);
             }
             else if (reloadLevel === ConfigFileProgramReloadLevel.Partial) {
                 // Update file names
                 config.fileNames = getFileNamesFromConfigSpecs(config.options.configFile!.configFileSpecs!, getDirectoryPath(project), config.options, state.parseConfigFileHost);
                 updateErrorForNoInputFiles(config.fileNames, project, config.options.configFile!.configFileSpecs!, config.errors, canJsonReportNoInputFiles(config.raw));
                 watchInputFiles(state, project, projectPath, config);
+                watchPackageJsonFiles(state, project, projectPath, config);
             }
 
             const status = getUpToDateStatus(state, config, projectPath);
@@ -1339,7 +1364,7 @@ namespace ts {
             }
 
             if (!force) {
-                const inputTime = getModifiedTime(host, inputFile); host.getModifiedTime(inputFile);
+                const inputTime = getModifiedTime(host, inputFile);
                 if (inputTime > newestInputFileTime) {
                     newestInputFileName = inputFile;
                     newestInputFileTime = inputTime;
@@ -1488,6 +1513,13 @@ namespace ts {
             // Check extended config time
             const extendedConfigStatus = forEach(project.options.configFile!.extendedSourceFiles || emptyArray, configFile => checkConfigFileUpToDateStatus(state, configFile, oldestOutputFileTime, oldestOutputFileName));
             if (extendedConfigStatus) return extendedConfigStatus;
+
+            // Check package file time
+            const dependentPackageFileStatus = forEach(
+                state.lastCachedPackageJsonLookups.get(resolvedPath) || emptyArray,
+                ([path]) => checkConfigFileUpToDateStatus(state, path, oldestOutputFileTime, oldestOutputFileName)
+            );
+            if (dependentPackageFileStatus) return dependentPackageFileStatus;
         }
 
         if (!force && !state.buildInfoChecked.has(resolvedPath)) {
@@ -1541,6 +1573,7 @@ namespace ts {
     }
 
     function updateOutputTimestampsWorker(state: SolutionBuilderState, proj: ParsedCommandLine, priorNewestUpdateTime: Date, verboseMessage: DiagnosticMessage, skipOutputs?: ESMap<Path, string>) {
+        if (proj.options.noEmit) return priorNewestUpdateTime;
         const { host } = state;
         const outputs = getAllProjectOutputs(proj, !host.useCaseSensitiveFileNames());
         if (!skipOutputs || outputs.length !== skipOutputs.size) {
@@ -1649,7 +1682,7 @@ namespace ts {
         }
     }
 
-    function build(state: SolutionBuilderState, project?: string, cancellationToken?: CancellationToken, onlyReferences?: boolean): ExitStatus {
+    function build(state: SolutionBuilderState, project?: string, cancellationToken?: CancellationToken, writeFile?: WriteFileCallback, getCustomTransformers?: (project: string) => CustomTransformers, onlyReferences?: boolean): ExitStatus {
         const buildOrder = getBuildOrderFor(state, project, onlyReferences);
         if (!buildOrder) return ExitStatus.InvalidProject_OutputsSkipped;
 
@@ -1661,7 +1694,7 @@ namespace ts {
             const invalidatedProject = getNextInvalidatedProject(state, buildOrder, reportQueue);
             if (!invalidatedProject) break;
             reportQueue = false;
-            invalidatedProject.done(cancellationToken);
+            invalidatedProject.done(cancellationToken, writeFile, getCustomTransformers?.(invalidatedProject.project));
             if (!state.diagnostics.has(invalidatedProject.projectPath)) successfulProjects++;
         }
 
@@ -1859,6 +1892,25 @@ namespace ts {
         );
     }
 
+    function watchPackageJsonFiles(state: SolutionBuilderState, resolved: ResolvedConfigFileName, resolvedPath: ResolvedConfigFilePath, parsed: ParsedCommandLine) {
+        if (!state.watch || !state.lastCachedPackageJsonLookups) return;
+        mutateMap(
+            getOrCreateValueMapFromConfigFileMap(state.allWatchedPackageJsonFiles, resolvedPath),
+            new Map(state.lastCachedPackageJsonLookups.get(resolvedPath)),
+            {
+                createNewValue: (path, _input) => state.watchFile(
+                    path,
+                    () => invalidateProjectAndScheduleBuilds(state, resolvedPath, ConfigFileProgramReloadLevel.Full),
+                    PollingInterval.High,
+                    parsed?.watchOptions,
+                    WatchType.PackageJson,
+                    resolved
+                ),
+                onDeleteValue: closeFileWatcher,
+            }
+        );
+    }
+
     function startWatching(state: SolutionBuilderState, buildOrder: AnyBuildOrder) {
         if (!state.watchAllProjectsPending) return;
         state.watchAllProjectsPending = false;
@@ -1874,6 +1926,9 @@ namespace ts {
 
                 // Watch input files
                 watchInputFiles(state, resolved, resolvedPath, cfg);
+
+                // Watch package json files
+                watchPackageJsonFiles(state, resolved, resolvedPath, cfg);
             }
         }
     }
@@ -1883,6 +1938,7 @@ namespace ts {
         clearMap(state.allWatchedExtendedConfigFiles, closeFileWatcherOf);
         clearMap(state.allWatchedWildcardDirectories, watchedWildcardDirectories => clearMap(watchedWildcardDirectories, closeFileWatcherOf));
         clearMap(state.allWatchedInputFiles, watchedWildcardDirectories => clearMap(watchedWildcardDirectories, closeFileWatcher));
+        clearMap(state.allWatchedPackageJsonFiles, watchedPacageJsonFiles => clearMap(watchedPacageJsonFiles, closeFileWatcher));
     }
 
     /**
@@ -1894,9 +1950,9 @@ namespace ts {
     function createSolutionBuilderWorker<T extends BuilderProgram>(watch: boolean, hostOrHostWithWatch: SolutionBuilderHost<T> | SolutionBuilderWithWatchHost<T>, rootNames: readonly string[], options: BuildOptions, baseWatchOptions?: WatchOptions): SolutionBuilder<T> {
         const state = createSolutionBuilderState(watch, hostOrHostWithWatch, rootNames, options, baseWatchOptions);
         return {
-            build: (project, cancellationToken) => build(state, project, cancellationToken),
+            build: (project, cancellationToken, writeFile, getCustomTransformers) => build(state, project, cancellationToken, writeFile, getCustomTransformers),
             clean: project => clean(state, project),
-            buildReferences: (project, cancellationToken) => build(state, project, cancellationToken, /*onlyReferences*/ true),
+            buildReferences: (project, cancellationToken, writeFile, getCustomTransformers) => build(state, project, cancellationToken, writeFile, getCustomTransformers, /*onlyReferences*/ true),
             cleanReferences: project => clean(state, project, /*onlyReferences*/ true),
             getNextInvalidatedProject: cancellationToken => {
                 setupInitialBuild(state, cancellationToken);
@@ -1952,10 +2008,12 @@ namespace ts {
         const canReportSummary = state.watch || !!state.host.reportErrorSummary;
         const { diagnostics } = state;
         let totalErrors = 0;
+        let filesInError: (ReportFileInError | undefined)[] = [];
         if (isCircularBuildOrder(buildOrder)) {
             reportBuildQueue(state, buildOrder.buildOrder);
             reportErrors(state, buildOrder.circularDiagnostics);
             if (canReportSummary) totalErrors += getErrorCountForSummary(buildOrder.circularDiagnostics);
+            if (canReportSummary) filesInError = [...filesInError, ...getFilesInErrorForSummary(buildOrder.circularDiagnostics)];
         }
         else {
             // Report errors from the other projects
@@ -1966,13 +2024,14 @@ namespace ts {
                 }
             });
             if (canReportSummary) diagnostics.forEach(singleProjectErrors => totalErrors += getErrorCountForSummary(singleProjectErrors));
+            if (canReportSummary) diagnostics.forEach(singleProjectErrors => [...filesInError, ...getFilesInErrorForSummary(singleProjectErrors)]);
         }
 
         if (state.watch) {
             reportWatchStatus(state, getWatchErrorSummaryDiagnosticMessage(totalErrors), totalErrors);
         }
         else if (state.host.reportErrorSummary) {
-            state.host.reportErrorSummary(totalErrors);
+            state.host.reportErrorSummary(totalErrors, filesInError);
         }
     }
 

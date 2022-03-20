@@ -30,7 +30,7 @@ Output::
 [7m [0m [91m      ~[0m
 
 
-Found 1 error.
+Found 1 error in file2.ts[90m:1[0m
 
 
 
@@ -46,6 +46,11 @@ Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 /users/username/projects/project/file1.ts
 /users/username/projects/project/file2.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/users/username/projects/project/file1.ts (used version)
+/users/username/projects/project/file2.ts (used version)
 
 WatchedFiles::
 
@@ -130,7 +135,7 @@ Output::
 [7m [0m [91m      ~[0m
 
 
-Found 1 error.
+Found 1 error in file2.ts[90m:1[0m
 
 
 
@@ -146,6 +151,10 @@ Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 /users/username/projects/project/file1.ts
 /users/username/projects/project/file2.ts
+
+Shape signatures in builder refreshed for::
+/users/username/projects/project/file1.ts (computed .d.ts)
+/users/username/projects/project/file2.ts (computed .d.ts)
 
 WatchedFiles::
 

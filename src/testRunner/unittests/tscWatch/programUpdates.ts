@@ -640,6 +640,34 @@ export class A {
 
         verifyTscWatch({
             scenario,
+            subScenario: "file in files is deleted",
+            commandLineArgs: ["-w", "-p", configFilePath],
+            sys: () => {
+                const file1 = {
+                    path: "/a/b/f1.ts",
+                    content: "let x = 1"
+                };
+                const file2 = {
+                    path: "/a/b/f2.ts",
+                    content: "let y = 1"
+                };
+                const configFile = {
+                    path: configFilePath,
+                    content: JSON.stringify({ compilerOptions: {}, files: ["f1.ts", "f2.ts"] })
+                };
+                return createWatchedSystem([file1, file2, libFile, configFile]);
+            },
+            changes: [
+                {
+                    caption: "Delete f2",
+                    change: sys => sys.deleteFile("/a/b/f2.ts"),
+                    timeouts: checkSingleTimeoutQueueLengthAndRun,
+                }
+            ]
+        });
+
+        verifyTscWatch({
+            scenario,
             subScenario: "config file is deleted",
             commandLineArgs: ["-w", "-p", configFilePath],
             sys: () => {
@@ -1811,6 +1839,30 @@ import { x } from "../b";`),
                 {
                     caption: "Add output of class3",
                     change: sys => sys.writeFile(`${projectRoot}/projects/project1/class3.d.ts`, `declare class class3 {}`),
+                    timeouts: checkSingleTimeoutQueueLengthAndRun,
+                },
+            ]
+        });
+
+        verifyTscWatch({
+            scenario,
+            subScenario: "when creating extensionless file",
+            commandLineArgs: ["-w", "-p", ".", "--extendedDiagnostics"],
+            sys: () => {
+                const module1: File = {
+                    path: `${projectRoot}/index.ts`,
+                    content: ``
+                };
+                const config: File = {
+                    path: `${projectRoot}/tsconfig.json`,
+                    content: `{}`
+                };
+                return createWatchedSystem([module1, config, libFile], { currentDirectory: projectRoot });
+            },
+            changes: [
+                {
+                    caption: "Create foo in project root",
+                    change: sys => sys.writeFile(`${projectRoot}/foo`, ``),
                     timeouts: checkSingleTimeoutQueueLengthAndRun,
                 },
             ]

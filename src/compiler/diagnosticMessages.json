@@ -75,10 +75,6 @@
         "category": "Error",
         "code": 1022
     },
-    "An index signature parameter type must be either 'string' or 'number'.": {
-        "category": "Error",
-        "code": 1023
-    },
     "'readonly' modifier can only appear on a property declaration or index signature.": {
         "category": "Error",
         "code": 1024
@@ -127,25 +123,13 @@
         "category": "Error",
         "code": 1040
     },
-    "'{0}' modifier cannot be used with a class declaration.": {
-        "category": "Error",
-        "code": 1041
-    },
     "'{0}' modifier cannot be used here.": {
         "category": "Error",
         "code": 1042
     },
-    "'{0}' modifier cannot appear on a data property.": {
-        "category": "Error",
-        "code": 1043
-    },
     "'{0}' modifier cannot appear on a module or namespace element.": {
         "category": "Error",
         "code": 1044
-    },
-    "A '{0}' modifier cannot be used with an interface declaration.": {
-        "category": "Error",
-        "code": 1045
     },
     "Top-level declarations in .d.ts files must start with either a 'declare' or 'export' modifier.": {
         "category": "Error",
@@ -186,10 +170,6 @@
     "Accessors are only available when targeting ECMAScript 5 and higher.": {
         "category": "Error",
         "code": 1056
-    },
-    "An async function or method must have a valid awaitable return type.": {
-        "category": "Error",
-        "code": 1057
     },
     "The return type of an async function must either be a valid promise or must not contain a callable 'then' member.": {
         "category": "Error",
@@ -319,6 +299,10 @@
         "category": "Error",
         "code": 1105
     },
+    "The left-hand side of a 'for...of' statement may not be 'async'.": {
+        "category": "Error",
+        "code": 1106
+    },
     "Jump target cannot cross function boundary.": {
         "category": "Error",
         "code": 1107
@@ -351,7 +335,7 @@
         "category": "Error",
         "code": 1116
     },
-    "An object literal cannot have multiple properties with the same name in strict mode.": {
+    "An object literal cannot have multiple properties with the same name.": {
         "category": "Error",
         "code": 1117
     },
@@ -663,7 +647,7 @@
         "category": "Error",
         "code": 1208
     },
-    "Invalid use of '{0}'. Class definitions are automatically in strict mode.": {
+    "Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of '{0}'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.": {
         "category": "Error",
         "code": 1210
     },
@@ -698,10 +682,6 @@
     "Experimental support for decorators is a feature that is subject to change in a future release. Set the 'experimentalDecorators' option in your 'tsconfig' or 'jsconfig' to remove this warning.": {
         "category": "Error",
         "code": 1219
-    },
-    "Generators are only available when targeting ECMAScript 2015 or higher.": {
-        "category": "Error",
-        "code": 1220
     },
     "Generators are not allowed in an ambient context.": {
         "category": "Error",
@@ -743,15 +723,15 @@
         "category": "Error",
         "code": 1230
     },
-    "An export assignment can only be used in a module.": {
+    "An export assignment must be at the top level of a file or module declaration.": {
         "category": "Error",
         "code": 1231
     },
-    "An import declaration can only be used in a namespace or module.": {
+    "An import declaration can only be used at the top level of a namespace or module.": {
         "category": "Error",
         "code": 1232
     },
-    "An export declaration can only be used in a module.": {
+    "An export declaration can only be used at the top level of a namespace or module.": {
         "category": "Error",
         "code": 1233
     },
@@ -759,7 +739,7 @@
         "category": "Error",
         "code": 1234
     },
-    "A namespace declaration is only allowed in a namespace or module.": {
+    "A namespace declaration is only allowed at the top level of a namespace or module.": {
         "category": "Error",
         "code": 1235
     },
@@ -831,10 +811,6 @@
         "category": "Error",
         "code": 1252
     },
-    "'{0}' tag cannot be used independently as a top level JSDoc tag.": {
-        "category": "Error",
-        "code": 1253
-    },
     "A 'const' initializer in an ambient context must be a string or numeric literal or literal enum reference.": {
         "category": "Error",
         "code": 1254
@@ -846,6 +822,10 @@
     "A required element cannot follow an optional element.": {
         "category": "Error",
         "code": 1257
+    },
+    "A default export must be at the top level of a file or module declaration.": {
+        "category": "Error",
+        "code": 1258
     },
     "Module '{0}' can only be default-imported using the '{1}' flag": {
         "category": "Error",
@@ -878,6 +858,30 @@
     "An optional element cannot follow a rest element.": {
         "category": "Error",
         "code": 1266
+    },
+    "Property '{0}' cannot have an initializer because it is marked abstract.": {
+        "category": "Error",
+        "code": 1267
+    },
+    "An index signature parameter type must be 'string', 'number', 'symbol', or a template literal type.": {
+        "category": "Error",
+        "code": 1268
+    },
+    "Cannot use 'export import' on a type or type-only namespace when the '--isolatedModules' flag is provided.": {
+        "category": "Error",
+        "code": 1269
+    },
+    "Decorator function return type '{0}' is not assignable to type '{1}'.": {
+        "category": "Error",
+        "code": 1270
+    },
+    "Decorator function return type is '{0}' but is expected to be 'void' or 'any'.": {
+        "category": "Error",
+        "code": 1271
+    },
+    "A type referenced in a decorated signature must be imported with 'import type' or a namespace import when 'isolatedModules' and 'emitDecoratorMetadata' are enabled.": {
+        "category": "Error",
+        "code": 1272
     },
 
     "'with' statements are not allowed in an async function block.": {
@@ -932,15 +936,15 @@
         "category": "Error",
         "code": 1322
     },
-    "Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'esnext', 'commonjs', 'amd', 'system', or 'umd'.": {
+    "Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node12', or 'nodenext'.": {
         "category": "Error",
         "code": 1323
     },
-    "Dynamic import must have one specifier as an argument.": {
+    "Dynamic imports only support a second argument when the '--module' option is set to 'esnext' or 'nodenext'.": {
         "category": "Error",
         "code": 1324
     },
-    "Specifier of dynamic import cannot be spread element.": {
+    "Argument of dynamic import cannot be spread element.": {
         "category": "Error",
         "code": 1325
     },
@@ -984,11 +988,7 @@
         "category": "Error",
         "code": 1335
     },
-    "An index signature parameter type cannot be a type alias. Consider writing '[{0}: {1}]: {2}' instead.": {
-        "category": "Error",
-        "code": 1336
-    },
-    "An index signature parameter type cannot be a union type. Consider using a mapped object type instead.": {
+    "An index signature parameter type cannot be a literal type or generic type. Consider using a mapped object type instead.": {
         "category": "Error",
         "code": 1337
     },
@@ -1008,7 +1008,7 @@
         "category": "Error",
         "code": 1342
     },
-    "The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'esnext', or 'system'.": {
+    "The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node12', or 'nodenext'.": {
         "category": "Error",
         "code": 1343
     },
@@ -1076,10 +1076,6 @@
         "category": "Error",
         "code": 1359
     },
-    "Did you mean to parenthesize this function type?": {
-        "category": "Error",
-        "code": 1360
-    },
     "'{0}' cannot be used as a value because it was imported using 'import type'.": {
         "category": "Error",
         "code": 1361
@@ -1107,10 +1103,6 @@
     "Split all invalid type-only imports": {
         "category": "Message",
         "code": 1367
-    },
-    "Specify emit/checking behavior for imports that are only used for types": {
-        "category": "Message",
-        "code": 1368
     },
     "Did you mean '{0}'?": {
         "category": "Message",
@@ -1140,7 +1132,7 @@
         "category": "Message",
         "code": 1377
     },
-    "Top-level 'await' expressions are only allowed when the 'module' option is set to 'esnext' or 'system', and the 'target' option is set to 'es2017' or higher.": {
+    "Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', or 'nodenext', and the 'target' option is set to 'es2017' or higher.": {
         "category": "Error",
         "code": 1378
     },
@@ -1164,10 +1156,6 @@
         "category": "Error",
         "code": 1383
     },
-    "A 'new' expression with type arguments must always be followed by a parenthesized argument list.": {
-        "category": "Error",
-        "code": 1384
-    },
     "Function type notation must be parenthesized when used in a union type.": {
         "category": "Error",
         "code": 1385
@@ -1188,13 +1176,9 @@
         "category": "Error",
         "code": 1389
     },
-    "Provides a root package name when using outFile with declarations.": {
-        "category": "Message",
-        "code": 1390
-    },
-    "The `bundledPackageName` option must be provided when using outFile and node module resolution with declaration emit.": {
+    "'{0}' is not allowed as a parameter name.": {
         "category": "Error",
-        "code": 1391
+        "code": 1390
     },
     "An import alias cannot use 'import type'": {
         "category": "Error",
@@ -1356,13 +1340,126 @@
         "category": "Error",
         "code": 1431
     },
-    "Top-level 'for await' loops are only allowed when the 'module' option is set to 'esnext' or 'system', and the 'target' option is set to 'es2017' or higher.": {
+    "Top-level 'for await' loops are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', or 'nodenext', and the 'target' option is set to 'es2017' or higher.": {
         "category": "Error",
         "code": 1432
     },
     "Decorators may not be applied to 'this' parameters.": {
         "category": "Error",
         "code": 1433
+    },
+    "Unexpected keyword or identifier.": {
+        "category": "Error",
+        "code": 1434
+    },
+    "Unknown keyword or identifier. Did you mean '{0}'?": {
+        "category": "Error",
+        "code": 1435
+    },
+    "Decorators must precede the name and all keywords of property declarations.": {
+        "category": "Error",
+        "code": 1436
+    },
+    "Namespace must be given a name.": {
+        "category": "Error",
+        "code": 1437
+    },
+    "Interface must be given a name.": {
+        "category": "Error",
+        "code": 1438
+    },
+    "Type alias must be given a name.": {
+        "category": "Error",
+        "code": 1439
+    },
+    "Variable declaration not allowed at this location.": {
+        "category": "Error",
+        "code": 1440
+    },
+    "Cannot start a function call in a type annotation.": {
+        "category": "Error",
+        "code": 1441
+    },
+    "Expected '=' for property initializer.": {
+        "category": "Error",
+        "code": 1442
+    },
+    "Module declaration names may only use ' or \" quoted strings.": {
+        "category": "Error",
+        "code": 1443
+    },
+    "'{0}' is a type and must be imported using a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.": {
+        "category": "Error",
+        "code": 1444
+    },
+    "'{0}' resolves to a type-only declaration and must be imported using a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.": {
+        "category": "Error",
+        "code": 1446
+    },
+    "'{0}' resolves to a type-only declaration and must be re-exported using a type-only re-export when 'isolatedModules' is enabled.": {
+        "category": "Error",
+        "code": 1448
+    },
+    "Preserve unused imported values in the JavaScript output that would otherwise be removed.": {
+        "category": "Message",
+        "code": 1449
+    },
+    "Dynamic imports can only accept a module specifier and an optional assertion as arguments": {
+        "category": "Message",
+        "code": 1450
+    },
+    "Private identifiers are only allowed in class bodies and may only be used as part of a class member declaration, property access, or on the left-hand-side of an 'in' expression": {
+        "category": "Error",
+        "code": 1451
+    },
+    "Resolution modes are only supported when `moduleResolution` is `node12` or `nodenext`.": {
+        "category": "Error",
+        "code": 1452
+    },
+    "`resolution-mode` should be either `require` or `import`.": {
+        "category": "Error",
+        "code": 1453
+    },
+    "`resolution-mode` can only be set for type-only imports.": {
+        "category": "Error",
+        "code": 1454
+    },
+    "`resolution-mode` is the only valid key for type import assertions.": {
+        "category": "Error",
+        "code": 1455
+    },
+    "Type import assertions should have exactly one key - `resolution-mode` - with value `import` or `require`.": {
+        "category": "Error",
+        "code": 1456
+    },
+
+    "The 'import.meta' meta-property is not allowed in files which will build into CommonJS output.": {
+        "category": "Error",
+        "code": 1470
+    },
+    "Module '{0}' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.": {
+        "category": "Error",
+        "code": 1471
+    },
+    "'catch' or 'finally' expected.": {
+        "category": "Error",
+        "code": 1472
+    },
+    "An import declaration can only be used at the top level of a module.": {
+        "category": "Error",
+        "code": 1473
+    },
+    "An export declaration can only be used at the top level of a module.": {
+        "category": "Error",
+        "code": 1474
+    },
+    "Control what method is used to detect module-format JS files.": {
+        "category": "Message",
+        "code": 1475
+    },
+    "\"auto\": Treat files with imports, exports, import.meta, jsx (with jsx: react-jsx), or esm format (with module: node12+) as modules.": {
+        "category": "Message",
+        "code": 1476
     },
 
     "The types of '{0}' are incompatible between these types.": {
@@ -1392,6 +1489,14 @@
         "category": "Error",
         "code": 2205,
         "elidedInCompatabilityPyramid": true
+    },
+    "The 'type' modifier cannot be used on a named import when 'import type' is used on its import statement.": {
+        "category": "Error",
+        "code": 2206
+    },
+    "The 'type' modifier cannot be used on a named export when 'export type' is used on its export statement.": {
+        "category": "Error",
+        "code": 2207
     },
 
     "Duplicate identifier '{0}'.": {
@@ -1438,7 +1543,7 @@
         "category": "Error",
         "code": 2310
     },
-    "A class may only extend another class.": {
+    "Cannot find name '{0}'. Did you mean to write this in an async function?": {
         "category": "Error",
         "code": 2311
     },
@@ -1510,11 +1615,11 @@
         "category": "Error",
         "code": 2328
     },
-    "Index signature is missing in type '{0}'.": {
+    "Index signature for type '{0}' is missing in type '{1}'.": {
         "category": "Error",
         "code": 2329
     },
-    "Index signatures are incompatible.": {
+    "'{0}' and '{1}' index signatures are incompatible.": {
         "category": "Error",
         "code": 2330
     },
@@ -1561,10 +1666,6 @@
     "Property '{0}' is private and only accessible within class '{1}'.": {
         "category": "Error",
         "code": 2341
-    },
-    "An index expression argument must be of type 'string', 'number', 'symbol', or 'any'.": {
-        "category": "Error",
-        "code": 2342
     },
     "This syntax requires an imported helper named '{1}' which does not exist in '{0}'. Consider upgrading your version of '{0}'.": {
         "category": "Error",
@@ -1634,7 +1735,7 @@
         "category": "Error",
         "code": 2359
     },
-    "The left-hand side of an 'in' expression must be of type 'any', 'string', 'number', or 'symbol'.": {
+    "The left-hand side of an 'in' expression must be a private identifier or of type 'any', 'string', 'number', or 'symbol'.": {
         "category": "Error",
         "code": 2360
     },
@@ -1690,15 +1791,15 @@
         "category": "Error",
         "code": 2373
     },
-    "Duplicate string index signature.": {
+    "Duplicate index signature for type '{0}'.": {
         "category": "Error",
         "code": 2374
     },
-    "Duplicate number index signature.": {
+    "Type '{0}' is not assignable to type '{1}' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.": {
         "category": "Error",
         "code": 2375
     },
-    "A 'super' call must be the first statement in the constructor when a class contains initialized properties, parameter properties, or private identifiers.": {
+    "A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.": {
         "category": "Error",
         "code": 2376
     },
@@ -1710,17 +1811,13 @@
         "category": "Error",
         "code": 2378
     },
+    "Argument of type '{0}' is not assignable to parameter of type '{1}' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.": {
+        "category": "Error",
+        "code": 2379
+    },
     "The return type of a 'get' accessor must be assignable to its 'set' accessor type": {
         "category": "Error",
         "code": 2380
-    },
-    "A signature with an implementation cannot use a string literal type.": {
-        "category": "Error",
-        "code": 2381
-    },
-    "Specialized overload signature is not assignable to any non-specialized signature.": {
-        "category": "Error",
-        "code": 2382
     },
     "Overload signatures must all be exported or non-exported.": {
         "category": "Error",
@@ -1794,7 +1891,7 @@
         "category": "Error",
         "code": 2400
     },
-    "Duplicate identifier '_super'. Compiler uses '_super' to capture base class reference.": {
+    "A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.": {
         "category": "Error",
         "code": 2401
     },
@@ -1834,15 +1931,15 @@
         "category": "Error",
         "code": 2410
     },
-    "Property '{0}' of type '{1}' is not assignable to string index type '{2}'.": {
-        "category": "Error",
-        "code": 2411
-    },
-    "Property '{0}' of type '{1}' is not assignable to numeric index type '{2}'.": {
+    "Type '{0}' is not assignable to type '{1}' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the type of the target.": {
         "category": "Error",
         "code": 2412
     },
-    "Numeric index type '{0}' is not assignable to string index type '{1}'.": {
+    "Property '{0}' of type '{1}' is not assignable to '{2}' index type '{3}'.": {
+        "category": "Error",
+        "code": 2411
+    },
+    "'{0}' index type '{1}' is not assignable to '{2}' index type '{3}'.": {
         "category": "Error",
         "code": 2413
     },
@@ -1990,17 +2087,9 @@
         "category": "Error",
         "code": 2452
     },
-    "The type argument for type parameter '{0}' cannot be inferred from the usage. Consider specifying the type arguments explicitly.": {
-        "category": "Error",
-        "code": 2453
-    },
     "Variable '{0}' is used before being assigned.": {
         "category": "Error",
         "code": 2454
-    },
-    "Type argument candidate '{1}' is not a valid type argument because it is not a supertype of candidate '{0}'.": {
-        "category": "Error",
-        "code": 2455
     },
     "Type alias '{0}' circularly references itself.": {
         "category": "Error",
@@ -2058,14 +2147,6 @@
         "category": "Error",
         "code": 2469
     },
-    "'Symbol' reference does not refer to the global Symbol constructor object.": {
-        "category": "Error",
-        "code": 2470
-    },
-    "A computed property name of the form '{0}' must be of type 'symbol'.": {
-        "category": "Error",
-        "code": 2471
-    },
     "Spread operator in 'new' expressions is only available when targeting ECMAScript 5 and higher.": {
         "category": "Error",
         "code": 2472
@@ -2093,10 +2174,6 @@
     "'const' enum member initializer was evaluated to disallowed value 'NaN'.": {
         "category": "Error",
         "code": 2478
-    },
-    "Property '{0}' does not exist on 'const' enum '{1}'.": {
-        "category": "Error",
-        "code": 2479
     },
     "'let' is not allowed to be used as a name in 'let' or 'const' declarations.": {
         "category": "Error",
@@ -2222,10 +2299,6 @@
         "category": "Error",
         "code": 2513
     },
-    "Classes containing abstract methods must be marked abstract.": {
-        "category": "Error",
-        "code": 2514
-    },
     "Non-abstract class '{0}' does not implement inherited abstract member '{1}' from class '{2}'.": {
         "category": "Error",
         "code": 2515
@@ -2249,10 +2322,6 @@
     "Duplicate identifier '{0}'. Compiler uses declaration '{1}' to support async functions.": {
         "category": "Error",
         "code": 2520
-    },
-    "Expression resolves to variable declaration '{0}' that compiler uses to support async functions.": {
-        "category": "Error",
-        "code": 2521
     },
     "The 'arguments' object cannot be referenced in an async function or method in ES3 and ES5. Consider using a standard function or method.": {
         "category": "Error",
@@ -2330,10 +2399,6 @@
         "category": "Error",
         "code": 2540
     },
-    "The target of an assignment must be a variable or a property access.": {
-        "category": "Error",
-        "code": 2541
-    },
     "Index signature in type '{0}' only permits reading.": {
         "category": "Error",
         "code": 2542
@@ -2362,7 +2427,7 @@
         "category": "Error",
         "code": 2549
     },
-    "Property '{0}' does not exist on type '{1}'. Do you need to change your target library? Try changing the `lib` compiler option to '{2}' or later.": {
+    "Property '{0}' does not exist on type '{1}'. Do you need to change your target library? Try changing the 'lib' compiler option to '{2}' or later.": {
         "category": "Error",
         "code": 2550
     },
@@ -2386,13 +2451,9 @@
         "category": "Error",
         "code": 2555
     },
-    "Expected {0} arguments, but got {1} or more.": {
+    "A spread argument must either have a tuple type or be passed to a rest parameter.": {
         "category": "Error",
         "code": 2556
-    },
-    "Expected at least {0} arguments, but got {1} or more.": {
-        "category": "Error",
-        "code": 2557
     },
     "Expected {0} type arguments, but got {1}.": {
         "category": "Error",
@@ -2434,21 +2495,21 @@
         "category": "Error",
         "code": 2567
     },
+    "Property '{0}' may not exist on type '{1}'. Did you mean '{2}'?": {
+        "category": "Error",
+        "code": 2568
+    },
     "Type '{0}' is not an array type or a string type. Use compiler option '--downlevelIteration' to allow iterating of iterators.": {
         "category": "Error",
         "code": 2569
     },
+    "Could not find name '{0}'. Did you mean '{1}'?": {
+        "category": "Error",
+        "code": 2570
+    },
     "Object is of type 'unknown'.": {
         "category": "Error",
         "code": 2571
-    },
-    "Rest signatures are incompatible.": {
-        "category": "Error",
-        "code": 2572
-    },
-    "Property '{0}' is incompatible with rest element type.": {
-        "category": "Error",
-        "code": 2573
     },
     "A rest element type must be an array type.": {
         "category": "Error",
@@ -2482,25 +2543,17 @@
         "category": "Error",
         "code": 2582
     },
-    "Cannot find name '{0}'. Do you need to change your target library? Try changing the `lib` compiler option to '{1}' or later.": {
+    "Cannot find name '{0}'. Do you need to change your target library? Try changing the 'lib' compiler option to '{1}' or later.": {
         "category": "Error",
         "code": 2583
     },
-    "Cannot find name '{0}'. Do you need to change your target library? Try changing the `lib` compiler option to include 'dom'.": {
+    "Cannot find name '{0}'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'.": {
         "category": "Error",
         "code": 2584
     },
-    "'{0}' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the `lib` compiler option to es2015 or later.": {
+    "'{0}' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.": {
         "category": "Error",
         "code": 2585
-    },
-    "Enum type '{0}' circularly references itself.": {
-        "category": "Error",
-        "code": 2586
-    },
-    "JSDoc type '{0}' circularly references itself.": {
-        "category": "Error",
-        "code": 2587
     },
     "Cannot assign to '{0}' because it is a constant.": {
         "category": "Error",
@@ -2514,15 +2567,15 @@
         "category": "Error",
         "code": 2590
     },
-    "Cannot find name '{0}'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add `node` to the types field in your tsconfig.": {
+    "Cannot find name '{0}'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.": {
         "category": "Error",
         "code": 2591
     },
-    "Cannot find name '{0}'. Do you need to install type definitions for jQuery? Try `npm i --save-dev @types/jquery` and then add `jquery` to the types field in your tsconfig.": {
+    "Cannot find name '{0}'. Do you need to install type definitions for jQuery? Try `npm i --save-dev @types/jquery` and then add 'jquery' to the types field in your tsconfig.": {
         "category": "Error",
         "code": 2592
     },
-    "Cannot find name '{0}'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha` and then add `jest` or `mocha` to the types field in your tsconfig.": {
+    "Cannot find name '{0}'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha` and then add 'jest' or 'mocha' to the types field in your tsconfig.": {
         "category": "Error",
         "code": 2593
     },
@@ -2546,14 +2599,6 @@
         "category": "Error",
         "code": 2598
     },
-    "JSX element attributes type '{0}' may not be a union type.": {
-        "category": "Error",
-        "code": 2600
-    },
-    "The return type of a JSX element constructor must return an object type.": {
-        "category": "Error",
-        "code": 2601
-    },
     "JSX element implicitly has type 'any' because the global type 'JSX.Element' does not exist.": {
         "category": "Error",
         "code": 2602
@@ -2565,10 +2610,6 @@
     "JSX element type '{0}' does not have any construct or call signatures.": {
         "category": "Error",
         "code": 2604
-    },
-    "JSX element type '{0}' is not a constructor function for JSX elements.": {
-        "category": "Error",
-        "code": 2605
     },
     "Property '{0}' of JSX spread attribute is not assignable to target property.": {
         "category": "Error",
@@ -2678,6 +2719,14 @@
         "category": "Error",
         "code": 2633
     },
+    "'{0}' index signatures are incompatible.": {
+        "category": "Error",
+        "code": 2634
+    },
+    "Type '{0}' has no signatures for which the type argument list is applicable.": {
+        "category": "Error",
+        "code": 2635
+    },
 
     "Cannot augment module '{0}' with value exports because it resolves to a non-module entity.": {
         "category": "Error",
@@ -2694,14 +2743,6 @@
     "Non-abstract class expression does not implement inherited abstract member '{0}' from class '{1}'.": {
         "category": "Error",
         "code": 2653
-    },
-    "Exported external package typings file cannot contain tripleslash references. Please contact the package author to update the package definition.": {
-        "category": "Error",
-        "code": 2654
-    },
-    "Exported external package typings file '{0}' is not a module. Please contact the package author to update the package definition.": {
-        "category": "Error",
-        "code": 2656
     },
     "JSX expressions must have one parent element.": {
         "category": "Error",
@@ -2803,10 +2844,6 @@
         "category": "Error",
         "code": 2681
     },
-    "'get' and 'set' accessor must have the same 'this' type.": {
-        "category": "Error",
-        "code": 2682
-    },
     "'this' implicitly has type 'any' because it does not have a type annotation.": {
         "category": "Error",
         "code": 2683
@@ -2864,7 +2901,7 @@
         "category": "Error",
         "code": 2696
     },
-    "An async function or method must return a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your `--lib` option.": {
+    "An async function or method must return a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your '--lib' option.": {
         "category": "Error",
         "code": 2697
     },
@@ -2896,7 +2933,7 @@
         "category": "Error",
         "code": 2704
     },
-    "An async function or method in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your `--lib` option.": {
+    "An async function or method in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.": {
         "category": "Error",
         "code": 2705
     },
@@ -2920,11 +2957,11 @@
         "category": "Error",
         "code": 2710
     },
-    "A dynamic import call returns a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your `--lib` option.": {
+    "A dynamic import call returns a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your '--lib' option.": {
         "category": "Error",
         "code": 2711
     },
-    "A dynamic import call in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your `--lib` option.": {
+    "A dynamic import call in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.": {
         "category": "Error",
         "code": 2712
     },
@@ -3296,10 +3333,6 @@
         "category": "Error",
         "code": 2804
     },
-    "Static fields with private names can't have initializers when the '--useDefineForClassFields' flag is not specified with a '--target' of 'esnext'. Consider adding the '--useDefineForClassFields' flag.": {
-        "category": "Error",
-        "code": 2805
-    },
     "Private accessor was defined without a getter.": {
         "category": "Error",
         "code": 2806
@@ -3316,10 +3349,6 @@
         "category": "Error",
         "code": 2809
     },
-    "Property '{0}' may not be used in a static property's initializer in the same class when 'target' is 'esnext' and 'useDefineForClassFields' is 'false'.": {
-        "category": "Error",
-        "code": 2810
-    },
     "Initializer for property '{0}'": {
         "category": "Error",
         "code": 2811
@@ -3327,6 +3356,66 @@
     "Property '{0}' does not exist on type '{1}'. Try changing the 'lib' compiler option to include 'dom'.": {
         "category": "Error",
         "code": 2812
+    },
+    "Class declaration cannot implement overload list for '{0}'.": {
+        "category": "Error",
+        "code": 2813
+    },
+    "Function with bodies can only merge with classes that are ambient.": {
+        "category": "Error",
+        "code": 2814
+    },
+    "'arguments' cannot be referenced in property initializers.": {
+        "category": "Error",
+        "code": 2815
+    },
+    "Cannot use 'this' in a static property initializer of a decorated class.": {
+        "category": "Error",
+        "code": 2816
+    },
+    "Property '{0}' has no initializer and is not definitely assigned in a class static block.": {
+        "category": "Error",
+        "code": 2817
+    },
+    "Duplicate identifier '{0}'. Compiler reserves name '{1}' when emitting 'super' references in static initializers.": {
+        "category": "Error",
+        "code": 2818
+    },
+    "Namespace name cannot be '{0}'.": {
+        "category": "Error",
+        "code": 2819
+    },
+    "Type '{0}' is not assignable to type '{1}'. Did you mean '{2}'?": {
+        "category": "Error",
+        "code": 2820
+    },
+    "Import assertions are only supported when the '--module' option is set to 'esnext' or 'nodenext'.": {
+        "category": "Error",
+        "code": 2821
+    },
+    "Import assertions cannot be used with type-only imports or exports.": {
+        "category": "Error",
+        "code": 2822
+    },
+    "Cannot find namespace '{0}'. Did you mean '{1}'?": {
+        "category": "Error",
+        "code": 2833
+    },
+    "Relative import paths need explicit file extensions in EcmaScript imports when '--moduleResolution' is 'node12' or 'nodenext'. Consider adding an extension to the import path.": {
+        "category": "Error",
+        "code": 2834
+    },
+    "Relative import paths need explicit file extensions in EcmaScript imports when '--moduleResolution' is 'node12' or 'nodenext'. Did you mean '{0}'?": {
+        "category": "Error",
+        "code": 2835
+    },
+    "Import assertions are not allowed on statements that transpile to commonjs 'require' calls.": {
+        "category": "Error",
+        "code": 2836
+    },
+    "Import assertion values must be string literal expressions.": {
+        "category": "Error",
+        "code": 2837
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -3717,13 +3806,45 @@
         "category": "Error",
         "code": 4114
     },
-    "This parameter property must be rewritten as a property declaration with an 'override' modifier because it overrides a member in base class '{0}'.": {
+    "This parameter property must have an 'override' modifier because it overrides a member in base class '{0}'.": {
         "category": "Error",
         "code": 4115
     },
     "This member must have an 'override' modifier because it overrides an abstract method that is declared in the base class '{0}'.": {
         "category": "Error",
         "code": 4116
+    },
+    "This member cannot have an 'override' modifier because it is not declared in the base class '{0}'. Did you mean '{1}'?": {
+        "category": "Error",
+        "code": 4117
+    },
+    "The type of this node cannot be serialized because its property '{0}' cannot be serialized.": {
+        "category": "Error",
+        "code": 4118
+    },
+    "This member must have a JSDoc comment with an '@override' tag because it overrides a member in the base class '{0}'.": {
+        "category": "Error",
+        "code": 4119
+    },
+    "This parameter property must have a JSDoc comment with an '@override' tag because it overrides a member in the base class '{0}'.": {
+        "category": "Error",
+        "code": 4120
+    },
+    "This member cannot have a JSDoc comment with an '@override' tag because its containing class '{0}' does not extend another class.": {
+        "category": "Error",
+        "code": 4121
+    },
+    "This member cannot have a JSDoc comment with an '@override' tag because it is not declared in the base class '{0}'.": {
+        "category": "Error",
+        "code": 4122
+    },
+    "This member cannot have a JSDoc comment with an 'override' tag because it is not declared in the base class '{0}'. Did you mean '{1}'?": {
+        "category": "Error",
+        "code": 4123
+    },
+    "Compiler option '{0}' of value '{1}' is unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.": {
+        "category": "Error",
+        "code": 4124
     },
 
     "The current host does not support the '{0}' option.": {
@@ -3862,7 +3983,7 @@
         "category": "Error",
         "code": 5073
     },
-    "Option '--incremental' can only be specified using tsconfig, emitting to single file or when option `--tsBuildInfoFile` is specified.": {
+    "Option '--incremental' can only be specified using tsconfig, emitting to single file or when option '--tsBuildInfoFile' is specified.": {
         "category": "Error",
         "code": 5074
     },
@@ -3914,7 +4035,7 @@
         "category": "Error",
         "code": 5086
     },
-    "A labeled tuple element is declared as rest with a `...` before the name, rather than before the type.": {
+    "A labeled tuple element is declared as rest with a '...' before the name, rather than before the type.": {
         "category": "Error",
         "code": 5087
     },
@@ -3946,6 +4067,10 @@
         "category": "Error",
         "code": 5094
     },
+    "Option 'preserveValueImports' can only be used when 'module' is set to 'es2015' or later.": {
+        "category": "Error",
+        "code": 5095
+    },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
         "category": "Message",
@@ -3958,10 +4083,6 @@
     "Generates corresponding '.d.ts' file.": {
         "category": "Message",
         "code": 6002
-    },
-    "Specify the location where debugger should locate map files instead of generated locations.": {
-        "category": "Message",
-        "code": 6003
     },
     "Specify the location where debugger should locate TypeScript files instead of source locations.": {
         "category": "Message",
@@ -4007,11 +4128,11 @@
         "category": "Message",
         "code": 6014
     },
-    "Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019', 'ES2020', 'ES2021', or 'ESNEXT'.": {
+    "Specify ECMAScript target version.": {
         "category": "Message",
         "code": 6015
     },
-    "Specify module code generation: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', 'es2020', or 'ESNext'.": {
+    "Specify module code generation.": {
         "category": "Message",
         "code": 6016
     },
@@ -4091,6 +4212,11 @@
         "category": "Message",
         "code": 6040
     },
+    "Errors  Files": {
+        "_locale_notes": "There is a double space, and the order cannot be changed (they're table headings) ^",
+        "category": "Message",
+        "code": 6041
+    },
     "Generates corresponding '.map' file.": {
         "category": "Message",
         "code": 6043
@@ -4110,10 +4236,6 @@
     "Locale must be of the form <language> or <language>-<territory>. For example '{0}' or '{1}'.": {
         "category": "Error",
         "code": 6048
-    },
-    "Unsupported locale '{0}'.": {
-        "category": "Error",
-        "code": 6049
     },
     "Unable to open file '{0}'.": {
         "category": "Error",
@@ -4171,10 +4293,6 @@
         "category": "Message",
         "code": 6066
     },
-    "Enables experimental support for ES7 async functions.": {
-        "category": "Message",
-        "code": 6068
-    },
     "Specify module resolution strategy: 'node' (Node.js) or 'classic' (TypeScript pre-1.6).": {
         "category": "Message",
         "code": 6069
@@ -4219,7 +4337,7 @@
         "category": "Message",
         "code": 6079
     },
-    "Specify JSX code generation: 'preserve', 'react-native', 'react', 'react-jsx' or 'react-jsxdev'.": {
+    "Specify JSX code generation.": {
         "category": "Message",
         "code": 6080
     },
@@ -4311,10 +4429,6 @@
         "category": "Message",
         "code": 6102
     },
-    "Option '{0}' should have array of strings as a value.": {
-        "category": "Error",
-        "code": 6103
-    },
     "Checking if '{0}' is the longest matching prefix for '{1}' - '{2}'.": {
         "category": "Message",
         "code": 6104
@@ -4366,14 +4480,6 @@
     "======== Resolving type reference directive '{0}', containing file '{1}', root directory '{2}'. ========": {
         "category": "Message",
         "code": 6116
-    },
-    "Resolving using primary search paths...": {
-        "category": "Message",
-        "code": 6117
-    },
-    "Resolving from node_modules folder...": {
-        "category": "Message",
-        "code": 6118
     },
     "======== Type reference directive '{0}' was successfully resolved to '{1}', primary: {2}. ========": {
         "category": "Message",
@@ -4549,10 +4655,6 @@
         "category": "Message",
         "code": 6163
     },
-    "Emit a UTF-8 Byte Order Mark (BOM) in the beginning of output files.": {
-        "category": "Message",
-        "code": 6164
-    },
     "Do not truncate error messages.": {
         "category": "Message",
         "code": 6165
@@ -4581,34 +4683,6 @@
         "category": "Message",
         "code": 6171
     },
-    "Basic Options": {
-        "category": "Message",
-        "code": 6172
-    },
-    "Strict Type-Checking Options": {
-        "category": "Message",
-        "code": 6173
-    },
-    "Module Resolution Options": {
-        "category": "Message",
-        "code": 6174
-    },
-    "Source Map Options": {
-        "category": "Message",
-        "code": 6175
-    },
-    "Additional Checks": {
-        "category": "Message",
-        "code": 6176
-    },
-    "Experimental Options": {
-        "category": "Message",
-        "code": 6177
-    },
-    "Advanced Options": {
-        "category": "Message",
-        "code": 6178
-    },
     "Provide full support for iterables in 'for-of', spread, and destructuring when targeting 'ES5' or 'ES3'.": {
         "category": "Message",
         "code": 6179
@@ -4617,25 +4691,17 @@
         "category": "Message",
         "code": 6180
     },
-    "List of language service plugins.": {
-        "category": "Message",
-        "code": 6181
-    },
     "Scoped package detected, looking in '{0}'": {
         "category": "Message",
         "code": 6182
     },
-    "Reusing resolution of module '{0}' to file '{1}' from old program.": {
+    "Reusing resolution of module '{0}' from '{1}' of old program, it was successfully resolved to '{2}'.": {
         "category": "Message",
         "code": 6183
     },
-    "Reusing module resolutions originating in '{0}' since resolutions are unchanged from old program.": {
+    "Reusing resolution of module '{0}' from '{1}' of old program, it was successfully resolved to '{2}' with Package ID '{3}'.": {
         "category": "Message",
         "code": 6184
-    },
-    "Disable strict checking of generic signatures in function types.": {
-        "category": "Message",
-        "code": 6185
     },
     "Enable strict checking of function types.": {
         "category": "Message",
@@ -4805,10 +4871,6 @@
         "category": "Message",
         "code": 6227
     },
-    "Synchronously call callbacks and update the state of directory watchers on platforms that don't support recursive watching natively.": {
-        "category": "Message",
-        "code": 6228
-    },
     "Tag '{0}' expects at least '{1}' arguments, but the JSX factory '{2}' provides at most '{3}'.": {
         "category": "Error",
         "code": 6229
@@ -4845,7 +4907,7 @@
         "category": "Message",
         "code": 6237
     },
-    "Specify the module specifier to be used to import the `jsx` and `jsxs` factory functions from. eg, react": {
+    "Specify the module specifier to be used to import the 'jsx' and 'jsxs' factory functions from. eg, react": {
         "category": "Error",
         "code": 6238
     },
@@ -4865,16 +4927,117 @@
         "category": "Message",
         "code": 6242
     },
-
-    "Projects to reference": {
+    "Interpret optional property types as written, rather than adding 'undefined'.": {
         "category": "Message",
-        "code": 6300
+        "code": 6243
     },
+
+    "Modules": {
+        "category": "Message",
+        "code": 6244
+    },
+    "File Management": {
+        "category": "Message",
+        "code": 6245
+    },
+    "Emit": {
+        "category": "Message",
+        "code": 6246
+    },
+    "JavaScript Support": {
+        "category": "Message",
+        "code": 6247
+    },
+    "Type Checking": {
+        "category": "Message",
+        "code": 6248
+    },
+    "Editor Support": {
+        "category": "Message",
+        "code": 6249
+    },
+    "Watch and Build Modes": {
+        "category": "Message",
+        "code": 6250
+    },
+    "Compiler Diagnostics": {
+        "category": "Message",
+        "code": 6251
+    },
+    "Interop Constraints": {
+        "category": "Message",
+        "code": 6252
+    },
+    "Backwards Compatibility": {
+        "category": "Message",
+        "code": 6253
+    },
+    "Language and Environment": {
+        "category": "Message",
+        "code": 6254
+    },
+    "Projects": {
+        "category": "Message",
+        "code": 6255
+    },
+    "Output Formatting": {
+        "category": "Message",
+        "code": 6256
+    },
+    "Completeness": {
+        "category": "Message",
+        "code": 6257
+    },
+    "'{0}' should be set inside the 'compilerOptions' object of the config json file": {
+        "category": "Error",
+        "code": 6258
+    },
+      "Found 1 error in {1}": {
+        "category": "Message",
+        "code": 6259
+    },
+    "Found {0} errors in the same file, starting at: {1}": {
+        "category": "Message",
+        "code": 6260
+    },
+    "Found {0} errors in {1} files.": {
+        "category": "Message",
+        "code": 6261
+    },
+
+    "Directory '{0}' has no containing package.json scope. Imports will not resolve.": {
+        "category": "Message",
+        "code": 6270
+    },
+    "Import specifier '{0}' does not exist in package.json scope at path '{1}'.": {
+        "category": "Message",
+        "code": 6271
+    },
+    "Invalid import specifier '{0}' has no possible resolutions.": {
+        "category": "Message",
+        "code": 6272
+    },
+    "package.json scope '{0}' has no imports defined.": {
+        "category": "Message",
+        "code": 6273
+    },
+    "package.json scope '{0}' explicitly maps specifier '{1}' to null.": {
+        "category": "Message",
+        "code": 6274
+    },
+    "package.json scope '{0}' has invalid type for target of specifier '{1}'": {
+        "category": "Message",
+        "code": 6275
+    },
+    "Export specifier '{0}' does not exist in package.json scope at path '{1}'.": {
+        "category": "Message",
+        "code": 6276
+    },
+
     "Enable project compilation": {
         "category": "Message",
         "code": 6302
     },
-
     "Composite projects may not disable declaration emit.": {
         "category": "Error",
         "code": 6304
@@ -4943,10 +5106,6 @@
         "category": "Message",
         "code": 6359
     },
-    "delete this - Project '{0}' is up to date because it was previously built": {
-        "category": "Message",
-        "code": 6360
-    },
     "Project '{0}' is up to date": {
         "category": "Message",
         "code": 6361
@@ -4963,21 +5122,13 @@
         "category": "Message",
         "code": 6364
     },
-    "Delete the outputs of all projects": {
+    "Delete the outputs of all projects.": {
         "category": "Message",
         "code": 6365
-    },
-    "Enable verbose logging": {
-        "category": "Message",
-        "code": 6366
     },
     "Show what would be built (or deleted, if specified with '--clean')": {
         "category": "Message",
         "code": 6367
-    },
-    "Build all projects, including those that appear to be up to date": {
-        "category": "Message",
-        "code": 6368
     },
     "Option '--build' must be the first command line argument.": {
         "category": "Error",
@@ -5014,10 +5165,6 @@
     "Cannot write file '{0}' because it will overwrite '.tsbuildinfo' file generated by referenced project '{1}'": {
         "category": "Error",
         "code": 6377
-    },
-    "Enable incremental compilation": {
-        "category": "Message",
-        "code": 6378
     },
     "Composite projects may not disable incremental compilation.": {
         "category": "Error",
@@ -5061,6 +5208,46 @@
         "category": "Message",
         "code": 6388
     },
+    "Reusing resolution of module '{0}' from '{1}' of old program, it was not resolved.": {
+        "category": "Message",
+        "code": 6389
+    },
+    "Reusing resolution of type reference directive '{0}' from '{1}' of old program, it was successfully resolved to '{2}'.": {
+        "category": "Message",
+        "code": 6390
+    },
+    "Reusing resolution of type reference directive '{0}' from '{1}' of old program, it was successfully resolved to '{2}' with Package ID '{3}'.": {
+        "category": "Message",
+        "code": 6391
+    },
+    "Reusing resolution of type reference directive '{0}' from '{1}' of old program, it was not resolved.": {
+        "category": "Message",
+        "code": 6392
+    },
+    "Reusing resolution of module '{0}' from '{1}' found in cache from location '{2}', it was successfully resolved to '{3}'.": {
+        "category": "Message",
+        "code": 6393
+    },
+    "Reusing resolution of module '{0}' from '{1}' found in cache from location '{2}', it was successfully resolved to '{3}' with Package ID '{4}'.": {
+        "category": "Message",
+        "code": 6394
+    },
+    "Reusing resolution of module '{0}' from '{1}' found in cache from location '{2}', it was not resolved.": {
+        "category": "Message",
+        "code": 6395
+    },
+    "Reusing resolution of type reference directive '{0}' from '{1}' found in cache from location '{2}', it was successfully resolved to '{3}'.": {
+        "category": "Message",
+        "code": 6396
+    },
+    "Reusing resolution of type reference directive '{0}' from '{1}' found in cache from location '{2}', it was successfully resolved to '{3}' with Package ID '{4}'.": {
+        "category": "Message",
+        "code": 6397
+    },
+    "Reusing resolution of type reference directive '{0}' from '{1}' found in cache from location '{2}', it was not resolved.": {
+        "category": "Message",
+        "code": 6398
+    },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {
         "category": "Message",
@@ -5086,18 +5273,594 @@
         "category": "Message",
         "code": 6505
     },
-
-    "Include 'undefined' in index signature results": {
+    "Consider adding a 'declare' modifier to this class.": {
         "category": "Message",
-        "code": 6800
+        "code": 6506
     },
-    "Ensure overriding members in derived classes are marked with an 'override' modifier.": {
+    "Allow JavaScript files to be a part of your program. Use the 'checkJS' option to get errors from these files.": {
         "category": "Message",
-        "code": 6801
+        "code": 6600
+    },
+    "Allow 'import x from y' when a module doesn't have a default export.": {
+        "category": "Message",
+        "code": 6601
+    },
+    "Allow accessing UMD globals from modules.": {
+        "category": "Message",
+        "code": 6602
+    },
+    "Disable error reporting for unreachable code.": {
+        "category": "Message",
+        "code": 6603
+    },
+    "Disable error reporting for unused labels.": {
+        "category": "Message",
+        "code": 6604
+    },
+    "Ensure 'use strict' is always emitted.": {
+        "category": "Message",
+        "code": 6605
+    },
+    "Have recompiles in projects that use 'incremental' and 'watch' mode assume that changes within a file will only affect files directly depending on it.": {
+        "category": "Message",
+        "code": 6606
+    },
+    "Specify the base directory to resolve non-relative module names.": {
+        "category": "Message",
+        "code": 6607
+    },
+    "No longer supported. In early versions, manually set the text encoding for reading files.": {
+        "category": "Message",
+        "code": 6608
+    },
+    "Enable error reporting in type-checked JavaScript files.": {
+        "category": "Message",
+        "code": 6609
+    },
+    "Enable constraints that allow a TypeScript project to be used with project references.": {
+        "category": "Message",
+        "code": 6611
+    },
+    "Generate .d.ts files from TypeScript and JavaScript files in your project.": {
+        "category": "Message",
+        "code": 6612
+    },
+    "Specify the output directory for generated declaration files.": {
+        "category": "Message",
+        "code": 6613
+    },
+    "Create sourcemaps for d.ts files.": {
+        "category": "Message",
+        "code": 6614
+    },
+    "Output compiler performance information after building.": {
+        "category": "Message",
+        "code": 6615
+    },
+    "Disables inference for type acquisition by looking at filenames in a project.": {
+        "category": "Message",
+        "code": 6616
+    },
+    "Reduce the number of projects loaded automatically by TypeScript.": {
+        "category": "Message",
+        "code": 6617
+    },
+    "Remove the 20mb cap on total source code size for JavaScript files in the TypeScript language server.": {
+        "category": "Message",
+        "code": 6618
+    },
+    "Opt a project out of multi-project reference checking when editing.": {
+        "category": "Message",
+        "code": 6619
+    },
+    "Disable preferring source files instead of declaration files when referencing composite projects.": {
+        "category": "Message",
+        "code": 6620
+    },
+    "Emit more compliant, but verbose and less performant JavaScript for iteration.": {
+        "category": "Message",
+        "code": 6621
+    },
+    "Emit a UTF-8 Byte Order Mark (BOM) in the beginning of output files.": {
+        "category": "Message",
+        "code": 6622
+    },
+    "Only output d.ts files and not JavaScript files.": {
+        "category": "Message",
+        "code": 6623
+    },
+    "Emit design-type metadata for decorated declarations in source files.": {
+        "category": "Message",
+        "code": 6624
+    },
+    "Disable the type acquisition for JavaScript projects": {
+        "category": "Message",
+        "code": 6625
+    },
+    "Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility.": {
+        "category": "Message",
+        "code": 6626
+    },
+    "Filters results from the `include` option.": {
+        "category": "Message",
+        "code": 6627
+    },
+    "Remove a list of directories from the watch process.": {
+        "category": "Message",
+        "code": 6628
+    },
+    "Remove a list of files from the watch mode's processing.": {
+        "category": "Message",
+        "code": 6629
+    },
+    "Enable experimental support for TC39 stage 2 draft decorators.": {
+        "category": "Message",
+        "code": 6630
+    },
+    "Print files read during the compilation including why it was included.": {
+        "category": "Message",
+        "code": 6631
+    },
+    "Output more detailed compiler performance information after building.": {
+        "category": "Message",
+        "code": 6632
+    },
+    "Specify one or more path or node module references to base configuration files from which settings are inherited.": {
+        "category": "Message",
+        "code": 6633
+    },
+    "Specify what approach the watcher should use if the system runs out of native file watchers.": {
+        "category": "Message",
+        "code": 6634
+    },
+    "Include a list of files. This does not support glob patterns, as opposed to `include`.": {
+        "category": "Message",
+        "code": 6635
+    },
+    "Build all projects, including those that appear to be up to date.": {
+        "category": "Message",
+        "code": 6636
+    },
+    "Ensure that casing is correct in imports.": {
+        "category": "Message",
+        "code": 6637
+    },
+    "Emit a v8 CPU profile of the compiler run for debugging.": {
+        "category": "Message",
+        "code": 6638
+    },
+    "Allow importing helper functions from tslib once per project, instead of including them per-file.": {
+        "category": "Message",
+        "code": 6639
+    },
+    "Specify a list of glob patterns that match files to be included in compilation.": {
+        "category": "Message",
+        "code": 6641
+    },
+    "Save .tsbuildinfo files to allow for incremental compilation of projects.": {
+        "category": "Message",
+        "code": 6642
+    },
+    "Include sourcemap files inside the emitted JavaScript.": {
+        "category": "Message",
+        "code": 6643
+    },
+    "Include source code in the sourcemaps inside the emitted JavaScript.": {
+        "category": "Message",
+        "code": 6644
+    },
+    "Ensure that each file can be safely transpiled without relying on other imports.": {
+        "category": "Message",
+        "code": 6645
+    },
+    "Specify what JSX code is generated.": {
+        "category": "Message",
+        "code": 6646
+    },
+    "Specify the JSX factory function used when targeting React JSX emit, e.g. 'React.createElement' or 'h'.": {
+        "category": "Message",
+        "code": 6647
+    },
+    "Specify the JSX Fragment reference used for fragments when targeting React JSX emit e.g. 'React.Fragment' or 'Fragment'.": {
+        "category": "Message",
+        "code": 6648
+    },
+    "Specify module specifier used to import the JSX factory functions when using 'jsx: react-jsx*'.": {
+        "category": "Message",
+        "code": 6649
+    },
+    "Make keyof only return strings instead of string, numbers or symbols. Legacy option.": {
+        "category": "Message",
+        "code": 6650
+    },
+    "Specify a set of bundled library declaration files that describe the target runtime environment.": {
+        "category": "Message",
+        "code": 6651
+    },
+    "Print the names of emitted files after a compilation.": {
+        "category": "Message",
+        "code": 6652
+    },
+    "Print all of the files read during the compilation.": {
+        "category": "Message",
+        "code": 6653
+    },
+    "Set the language of the messaging from TypeScript. This does not affect emit.": {
+        "category": "Message",
+        "code": 6654
+    },
+    "Specify the location where debugger should locate map files instead of generated locations.": {
+        "category": "Message",
+        "code": 6655
+    },
+    "Specify the maximum folder depth used for checking JavaScript files from 'node_modules'. Only applicable with 'allowJs'.": {
+        "category": "Message",
+        "code": 6656
+    },
+    "Specify what module code is generated.": {
+        "category": "Message",
+        "code": 6657
+    },
+    "Specify how TypeScript looks up a file from a given module specifier.": {
+        "category": "Message",
+        "code": 6658
+    },
+    "Set the newline character for emitting files.": {
+        "category": "Message",
+        "code": 6659
+    },
+    "Disable emitting files from a compilation.": {
+        "category": "Message",
+        "code": 6660
+    },
+    "Disable generating custom helper functions like '__extends' in compiled output.": {
+        "category": "Message",
+        "code": 6661
+    },
+    "Disable emitting files if any type checking errors are reported.": {
+        "category": "Message",
+        "code": 6662
+    },
+    "Disable truncating types in error messages.": {
+        "category": "Message",
+        "code": 6663
+    },
+    "Enable error reporting for fallthrough cases in switch statements.": {
+        "category": "Message",
+        "code": 6664
+    },
+    "Enable error reporting for expressions and declarations with an implied 'any' type.": {
+        "category": "Message",
+        "code": 6665
+    },
+    "Ensure overriding members in derived classes are marked with an override modifier.": {
+        "category": "Message",
+        "code": 6666
+    },
+    "Enable error reporting for codepaths that do not explicitly return in a function.": {
+        "category": "Message",
+        "code": 6667
+    },
+    "Enable error reporting when 'this' is given the type 'any'.": {
+        "category": "Message",
+        "code": 6668
+    },
+    "Disable adding 'use strict' directives in emitted JavaScript files.": {
+        "category": "Message",
+        "code": 6669
+    },
+    "Disable including any library files, including the default lib.d.ts.": {
+        "category": "Message",
+        "code": 6670
+    },
+    "Enforces using indexed accessors for keys declared using an indexed type.": {
+        "category": "Message",
+        "code": 6671
+    },
+    "Disallow 'import's, 'require's or '<reference>'s from expanding the number of files TypeScript should add to a project.": {
+        "category": "Message",
+        "code": 6672
+    },
+    "Disable strict checking of generic signatures in function types.": {
+        "category": "Message",
+        "code": 6673
+    },
+    "Add 'undefined' to a type when accessed using an index.": {
+        "category": "Message",
+        "code": 6674
+    },
+    "Enable error reporting when local variables aren't read.": {
+        "category": "Message",
+        "code": 6675
+    },
+    "Raise an error when a function parameter isn't read.": {
+        "category": "Message",
+        "code": 6676
+    },
+    "Deprecated setting. Use 'outFile' instead.": {
+        "category": "Message",
+        "code": 6677
+    },
+    "Specify an output folder for all emitted files.": {
+        "category": "Message",
+        "code": 6678
+    },
+    "Specify a file that bundles all outputs into one JavaScript file. If 'declaration' is true, also designates a file that bundles all .d.ts output.": {
+        "category": "Message",
+        "code": 6679
+    },
+    "Specify a set of entries that re-map imports to additional lookup locations.": {
+        "category": "Message",
+        "code": 6680
+    },
+    "Specify a list of language service plugins to include.": {
+        "category": "Message",
+        "code": 6681
+    },
+    "Disable erasing 'const enum' declarations in generated code.": {
+        "category": "Message",
+        "code": 6682
+    },
+    "Disable resolving symlinks to their realpath. This correlates to the same flag in node.": {
+        "category": "Message",
+        "code": 6683
+    },
+    "Disable wiping the console in watch mode.": {
+        "category": "Message",
+        "code": 6684
+    },
+    "Enable color and formatting in TypeScript's output to make compiler errors easier to read.": {
+        "category": "Message",
+        "code": 6685
+    },
+    "Specify the object invoked for 'createElement'. This only applies when targeting 'react' JSX emit.": {
+        "category": "Message",
+        "code": 6686
+    },
+    "Specify an array of objects that specify paths for projects. Used in project references.": {
+        "category": "Message",
+        "code": 6687
+    },
+    "Disable emitting comments.": {
+        "category": "Message",
+        "code": 6688
+    },
+    "Enable importing .json files.": {
+        "category": "Message",
+        "code": 6689
+    },
+    "Specify the root folder within your source files.": {
+        "category": "Message",
+        "code": 6690
+    },
+    "Allow multiple folders to be treated as one when resolving modules.": {
+        "category": "Message",
+        "code": 6691
+    },
+    "Skip type checking .d.ts files that are included with TypeScript.": {
+        "category": "Message",
+        "code": 6692
+    },
+    "Skip type checking all .d.ts files.": {
+        "category": "Message",
+        "code": 6693
+    },
+    "Create source map files for emitted JavaScript files.": {
+        "category": "Message",
+        "code": 6694
+    },
+    "Specify the root path for debuggers to find the reference source code.": {
+        "category": "Message",
+        "code": 6695
+    },
+    "Check that the arguments for 'bind', 'call', and 'apply' methods match the original function.": {
+        "category": "Message",
+        "code": 6697
+    },
+    "When assigning functions, check to ensure parameters and the return values are subtype-compatible.": {
+        "category": "Message",
+        "code": 6698
+    },
+    "When type checking, take into account 'null' and 'undefined'.": {
+        "category": "Message",
+        "code": 6699
+    },
+    "Check for class properties that are declared but not set in the constructor.": {
+        "category": "Message",
+        "code": 6700
+    },
+    "Disable emitting declarations that have '@internal' in their JSDoc comments.": {
+        "category": "Message",
+        "code": 6701
+    },
+    "Disable reporting of excess property errors during the creation of object literals.": {
+        "category": "Message",
+        "code": 6702
+    },
+    "Suppress 'noImplicitAny' errors when indexing objects that lack index signatures.": {
+        "category": "Message",
+        "code": 6703
+    },
+    "Synchronously call callbacks and update the state of directory watchers on platforms that don`t support recursive watching natively.": {
+        "category": "Message",
+        "code": 6704
+    },
+    "Set the JavaScript language version for emitted JavaScript and include compatible library declarations.": {
+        "category": "Message",
+        "code": 6705
+    },
+    "Log paths used during the 'moduleResolution' process.": {
+        "category": "Message",
+        "code": 6706
+    },
+    "Specify the folder for .tsbuildinfo incremental compilation files.": {
+        "category": "Message",
+        "code": 6707
+    },
+    "Specify options for automatic acquisition of declaration files.": {
+        "category": "Message",
+        "code": 6709
+    },
+    "Specify multiple folders that act like './node_modules/@types'.": {
+        "category": "Message",
+        "code": 6710
+    },
+    "Specify type package names to be included without being referenced in a source file.": {
+        "category": "Message",
+        "code": 6711
+    },
+    "Emit ECMAScript-standard-compliant class fields.": {
+        "category": "Message",
+        "code": 6712
+    },
+    "Enable verbose logging.": {
+        "category": "Message",
+        "code": 6713
+    },
+    "Specify how directories are watched on systems that lack recursive file-watching functionality.": {
+        "category": "Message",
+        "code": 6714
+    },
+    "Specify how the TypeScript watch mode works.": {
+        "category": "Message",
+        "code": 6715
     },
     "Require undeclared properties from index signatures to use element accesses.": {
         "category": "Message",
-        "code": 6802
+        "code": 6717
+    },
+    "Specify emit/checking behavior for imports that are only used for types.": {
+        "category": "Message",
+        "code": 6718
+    },
+    "Default catch clause variables as 'unknown' instead of 'any'.": {
+        "category": "Message",
+        "code": 6803
+    },
+
+    "one of:": {
+        "category": "Message",
+        "code": 6900
+    },
+    "one or more:": {
+        "category": "Message",
+        "code": 6901
+    },
+    "type:": {
+        "category": "Message",
+        "code": 6902
+    },
+    "default:": {
+        "category": "Message",
+        "code": 6903
+    },
+    "module === \"system\" or esModuleInterop": {
+        "category": "Message",
+        "code": 6904
+    },
+    "`false`, unless `strict` is set": {
+        "category": "Message",
+        "code": 6905
+    },
+    "`false`, unless `composite` is set": {
+        "category": "Message",
+        "code": 6906
+    },
+    "`[\"node_modules\", \"bower_components\", \"jspm_packages\"]`, plus the value of `outDir` if one is specified.": {
+        "category": "Message",
+        "code": 6907
+    },
+    "`[]` if `files` is specified, otherwise `[\"**/*\"]`": {
+        "category": "Message",
+        "code": 6908
+    },
+    "`true` if `composite`, `false` otherwise": {
+        "category": "Message",
+        "code": 6909
+    },
+    "module === `AMD` or `UMD` or `System` or `ES6`, then `Classic`, Otherwise `Node`": {
+        "category": "Message",
+        "code": 69010
+    },
+    "Computed from the list of input files": {
+        "category": "Message",
+        "code": 6911
+    },
+    "Platform specific": {
+        "category": "Message",
+        "code": 6912
+    },
+    "You can learn about all of the compiler options at {0}": {
+        "category": "Message",
+        "code": 6913
+    },
+    "Including --watch, -w will start watching the current project for the file changes. Once set, you can config watch mode with:": {
+        "category": "Message",
+        "code": 6914
+    },
+    "Using --build, -b will make tsc behave more like a build orchestrator than a compiler. This is used to trigger building composite projects which you can learn more about at {0}": {
+        "category": "Message",
+        "code": 6915
+    },
+    "COMMON COMMANDS": {
+        "category": "Message",
+        "code": 6916
+    },
+    "ALL COMPILER OPTIONS": {
+        "category": "Message",
+        "code": 6917
+    },
+    "WATCH OPTIONS": {
+        "category": "Message",
+        "code": 6918
+    },
+    "BUILD OPTIONS": {
+        "category": "Message",
+        "code": 6919
+    },
+    "COMMON COMPILER OPTIONS": {
+        "category": "Message",
+        "code": 6920
+    },
+    "COMMAND LINE FLAGS": {
+        "category": "Message",
+        "code": 6921
+    },
+    "tsc: The TypeScript Compiler": {
+        "category": "Message",
+        "code": 6922
+    },
+    "Compiles the current project (tsconfig.json in the working directory.)": {
+        "category": "Message",
+        "code": 6923
+    },
+    "Ignoring tsconfig.json, compiles the specified files with default compiler options.": {
+        "category": "Message",
+        "code": 6924
+    },
+    "Build a composite project in the working directory.": {
+        "category": "Message",
+        "code": 6925
+    },
+    "Creates a tsconfig.json with the recommended settings in the working directory.": {
+        "category": "Message",
+        "code": 6926
+    },
+    "Compiles the TypeScript project located at the specified path.": {
+        "category": "Message",
+        "code": 6927
+    },
+    "An expanded version of this information, showing all possible compiler options": {
+        "category": "Message",
+        "code": 6928
+    },
+    "Compiles the current project, with additional settings.": {
+        "category": "Message",
+        "code": 6929
+    },
+    "`true` for ES2022 and above, including ESNext.": {
+        "category": "Message",
+        "code": 6930
     },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
@@ -5230,7 +5993,7 @@
         "category": "Error",
         "code": 7039
     },
-    "If the '{0}' package actually exposes this module, consider sending a pull request to amend 'https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/{1}`": {
+    "If the '{0}' package actually exposes this module, consider sending a pull request to amend 'https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/{1}'": {
         "category": "Error",
         "code": 7040
     },
@@ -5301,6 +6064,26 @@
     "'yield' expression implicitly results in an 'any' type because its containing generator lacks a return-type annotation.": {
         "category": "Error",
         "code": 7057
+    },
+    "If the '{0}' package actually exposes this module, try adding a new declaration (.d.ts) file containing `declare module '{1}';`": {
+        "category": "Error",
+        "code": 7058
+    },
+    "This syntax is reserved in files with the .mts or .cts extension. Use an `as` expression instead.": {
+        "category": "Error",
+        "code": 7059
+    },
+    "This syntax is reserved in files with the .mts or .cts extension. Add a trailing comma or explicit constraint.": {
+        "category": "Error",
+        "code": 7060
+    },
+    "A mapped type may not declare properties or methods.": {
+        "category": "Error",
+        "code": 7061
+    },
+    "JSON imports are experimental in ES module mode imports.": {
+        "category": "Error",
+        "code": 7062
     },
 
     "You cannot rename this element.": {
@@ -5391,7 +6174,7 @@
         "category": "Error",
         "code": 8024
     },
-    "Class declarations cannot have more than one `@augments` or `@extends` tag.": {
+    "Class declarations cannot have more than one '@augments' or '@extends' tag.": {
         "category": "Error",
         "code": 8025
     },
@@ -5431,18 +6214,6 @@
         "category": "Error",
         "code": 8034
     },
-    "Only identifiers/qualified-names with optional type arguments are currently supported in a class 'extends' clause.": {
-        "category": "Error",
-        "code": 9002
-    },
-    "'class' expressions are not currently supported.": {
-        "category": "Error",
-        "code": 9003
-    },
-    "Language service is disabled.": {
-        "category": "Error",
-        "code": 9004
-    },
     "Declaration emit for this file requires using private name '{0}'. An explicit type annotation may unblock declaration emit.": {
         "category": "Error",
         "code": 9005
@@ -5462,10 +6233,6 @@
     "Expected corresponding JSX closing tag for '{0}'.": {
         "category": "Error",
         "code": 17002
-    },
-    "JSX attribute expected.": {
-        "category": "Error",
-        "code": 17003
     },
     "Cannot use JSX unless the '--jsx' flag is provided.": {
         "category": "Error",
@@ -5531,10 +6298,6 @@
         "category": "Error",
         "code": 18000
     },
-    "A path in an 'extends' option must be relative or rooted, but '{0}' is not.": {
-        "category": "Error",
-        "code": 18001
-    },
     "The 'files' list in config file '{0}' is empty.": {
         "category": "Error",
         "code": 18002
@@ -5544,7 +6307,7 @@
         "code": 18003
     },
 
-    "File is a CommonJS module; it may be converted to an ES6 module.": {
+    "File is a CommonJS module; it may be converted to an ES module.": {
         "category": "Suggestion",
         "code": 80001
     },
@@ -5621,17 +6384,13 @@
         "category": "Message",
         "code": 90012
     },
-    "Import '{0}' from module \"{1}\"": {
+    "Import '{0}' from \"{1}\"": {
         "category": "Message",
         "code": 90013
     },
     "Change '{0}' to '{1}'": {
         "category": "Message",
         "code": 90014
-    },
-    "Add '{0}' to existing import declaration from \"{1}\"": {
-        "category": "Message",
-        "code": 90015
     },
     "Declare property '{0}'": {
         "category": "Message",
@@ -5697,14 +6456,6 @@
         "category": "Message",
         "code": 90031
     },
-    "Import default '{0}' from module \"{1}\"": {
-        "category": "Message",
-        "code": 90032
-    },
-    "Add default import '{0}' to existing import declaration from \"{1}\"": {
-        "category": "Message",
-        "code": 90033
-    },
     "Add parameter name": {
         "category": "Message",
         "code": 90034
@@ -5737,13 +6488,30 @@
         "category": "Message",
         "code": 90053
     },
+    "Includes imports of types referenced by '{0}'": {
+        "category": "Message",
+        "code": 90054
+    },
+    "Remove 'type' from import declaration from \"{0}\"": {
+        "category": "Message",
+        "code": 90055
+    },
+    "Remove 'type' from import of '{0}' from \"{1}\"": {
+        "category": "Message",
+        "code": 90056
+    },
+    "Add import from \"{0}\"": {
+        "category": "Message",
+        "code": 90057
+    },
+    "Update import from \"{0}\"": {
+        "category": "Message",
+        "code": 90058
+    },
+
     "Convert function to an ES2015 class": {
         "category": "Message",
         "code": 95001
-    },
-    "Convert function '{0}' to class": {
-        "category": "Message",
-        "code": 95002
     },
     "Convert '{0}' to '{1} in {0}'": {
         "category": "Message",
@@ -5773,10 +6541,6 @@
         "category": "Message",
         "code": 95009
     },
-    "Annotate with types from JSDoc": {
-        "category": "Message",
-        "code": 95010
-    },
     "Infer type of '{0}' from usage": {
         "category": "Message",
         "code": 95011
@@ -5801,7 +6565,7 @@
         "category": "Message",
         "code": 95016
     },
-    "Convert to ES6 module": {
+    "Convert to ES module": {
         "category": "Message",
         "code": 95017
     },
@@ -6037,10 +6801,6 @@
         "category": "Message",
         "code": 95075
     },
-    "Allow accessing UMD globals from modules.": {
-        "category": "Message",
-        "code": 95076
-    },
     "Extract type": {
         "category": "Message",
         "code": 95077
@@ -6141,18 +6901,6 @@
         "category": "Message",
         "code": 95101
     },
-    "Add '@class' tag": {
-        "category": "Message",
-        "code": 95102
-    },
-    "Add '@this' tag": {
-        "category": "Message",
-        "code": 95103
-    },
-    "Add 'this' parameter.": {
-        "category": "Message",
-        "code": 95104
-    },
     "Convert function expression '{0}' to arrow function": {
         "category": "Message",
         "code": 95105
@@ -6173,7 +6921,7 @@
         "category": "Message",
         "code": 95109
     },
-    "Visit https://aka.ms/tsconfig.json to read more about this file": {
+    "Visit https://aka.ms/tsconfig to read more about this file": {
         "category": "Message",
         "code": 95110
     },
@@ -6389,6 +7137,47 @@
         "category": "Message",
         "code": 95163
     },
+    "Can only convert named export": {
+        "category": "Message",
+        "code": 95164
+    },
+    "Add missing properties": {
+        "category": "Message",
+        "code": 95165
+    },
+    "Add all missing properties": {
+        "category": "Message",
+        "code": 95166
+    },
+    "Add missing attributes": {
+        "category": "Message",
+        "code": 95167
+    },
+    "Add all missing attributes": {
+        "category": "Message",
+        "code": 95168
+    },
+    "Add 'undefined' to optional property type": {
+        "category": "Message",
+        "code": 95169
+    },
+    "Convert named imports to default import": {
+        "category": "Message",
+        "code": 95170
+    },
+    "Delete unused '@param' tag '{0}'": {
+        "category": "Message",
+        "code": 95171
+    },
+    "Delete all unused '@param' tags": {
+        "category": "Message",
+        "code": 95172
+    },
+    "Rename '@param' tag name '{0}' to '{1}'": {
+        "category": "Message",
+        "code": 95173
+    },
+
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",
@@ -6493,5 +7282,21 @@
     "Class decorators can't be used with static private identifier. Consider removing the experimental decorator.": {
         "category": "Error",
         "code": 18036
+    },
+    "Await expression cannot be used inside a class static block.": {
+        "category": "Error",
+        "code": 18037
+    },
+    "'For await' loops cannot be used inside a class static block.": {
+        "category": "Error",
+        "code": 18038
+    },
+    "Invalid use of '{0}'. It cannot be used inside a class static block.": {
+        "category": "Error",
+        "code": 18039
+    },
+    "A 'return' statement cannot be used inside a class static block.": {
+        "category": "Error",
+        "code": 18041
     }
 }

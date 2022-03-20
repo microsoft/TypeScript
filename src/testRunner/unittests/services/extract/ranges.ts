@@ -9,7 +9,7 @@ namespace ts {
             }
             const result = refactor.extractSymbol.getRangeToExtract(file, createTextSpanFromRange(selectionRange), /*userRequested*/ false);
             assert(result.targetRange === undefined, "failure expected");
-            const sortedErrors = result.errors!.map(e => <string>e.messageText).sort();
+            const sortedErrors = result.errors!.map(e => e.messageText as string).sort();
             assert.deepEqual(sortedErrors, expectedErrors.sort(), "unexpected errors");
         });
     }
@@ -191,7 +191,7 @@ namespace ts {
             testExtractRange("extractRange28", `[#|return [$|1|];|]`);
 
             // For statements
-            testExtractRange("extractRange29", `for ([#|var i = 1|]; i < 2; i++) {}`);
+            testExtractRange("extractRange29", `for ([#|var i = [$|1|]|]; i < 2; i++) {}`);
             testExtractRange("extractRange30", `for (var i = [#|[$|1|]|]; i < 2; i++) {}`);
         });
 

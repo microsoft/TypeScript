@@ -92,9 +92,20 @@ namespace ts.JsDoc {
         // from Array<T> - Array<string> and Array<number>
         const parts: SymbolDisplayPart[][] = [];
         forEachUnique(declarations, declaration => {
-            for (const { comment } of getCommentHavingNodes(declaration)) {
-                if (comment === undefined) continue;
-                const newparts = getDisplayPartsFromComment(comment, checker);
+            for (const jsdoc of getCommentHavingNodes(declaration)) {
+                // skip comments containing @typedefs since they're not associated with particular declarations
+                // Exceptions:
+                // - @typedefs are themselves declarations with associated comments
+                // - @param or @return indicate that the author thinks of it as a 'local' @typedef that's part of the function documentation
+                if (jsdoc.comment === undefined
+                    || isJSDoc(jsdoc)
+                       && declaration.kind !== SyntaxKind.JSDocTypedefTag && declaration.kind !== SyntaxKind.JSDocCallbackTag
+                       && jsdoc.tags
+                       && jsdoc.tags.some(t => t.kind === SyntaxKind.JSDocTypedefTag || t.kind === SyntaxKind.JSDocCallbackTag)
+                       && !jsdoc.tags.some(t => t.kind === SyntaxKind.JSDocParameterTag || t.kind === SyntaxKind.JSDocReturnTag)) {
+                    continue;
+                }
+                const newparts = getDisplayPartsFromComment(jsdoc.comment, checker);
                 if (!contains(parts, newparts, isIdenticalListOfDisplayParts)) {
                     parts.push(newparts);
                 }
@@ -122,23 +133,40 @@ namespace ts.JsDoc {
 
     export function getJsDocTagsFromDeclarations(declarations?: Declaration[], checker?: TypeChecker): JSDocTagInfo[] {
         // Only collect doc comments from duplicate declarations once.
-        const tags: JSDocTagInfo[] = [];
+        const infos: JSDocTagInfo[] = [];
         forEachUnique(declarations, declaration => {
-            for (const tag of getJSDocTags(declaration)) {
-                tags.push({ name: tag.tagName.text, text: getCommentDisplayParts(tag, checker) });
+            const tags = getJSDocTags(declaration);
+            // skip comments containing @typedefs since they're not associated with particular declarations
+            // Exceptions:
+            // - @param or @return indicate that the author thinks of it as a 'local' @typedef that's part of the function documentation
+            if (tags.some(t => t.kind === SyntaxKind.JSDocTypedefTag || t.kind === SyntaxKind.JSDocCallbackTag)
+                && !tags.some(t => t.kind === SyntaxKind.JSDocParameterTag || t.kind === SyntaxKind.JSDocReturnTag)) {
+                return;
+            }
+            for (const tag of tags) {
+                infos.push({ name: tag.tagName.text, text: getCommentDisplayParts(tag, checker) });
             }
         });
-        return tags;
+        return infos;
     }
 
-    function getDisplayPartsFromComment(comment: string | readonly (JSDocText | JSDocLink)[], checker: TypeChecker | undefined): SymbolDisplayPart[] {
+    function getDisplayPartsFromComment(comment: string | readonly JSDocComment[], checker: TypeChecker | undefined): SymbolDisplayPart[] {
         if (typeof comment === "string") {
-            return [textPart(comment)];
+            return [textPart(skipSeparatorFromComment(comment))];
         }
         return flatMap(
             comment,
-            node => node.kind === SyntaxKind.JSDocText ? [textPart(node.text)] : buildLinkParts(node, checker)
+            node => node.kind === SyntaxKind.JSDocText ? [textPart(skipSeparatorFromComment(node.text))] : buildLinkParts(node, checker)
         ) as SymbolDisplayPart[];
+    }
+
+    function skipSeparatorFromComment(text: string) {
+        let pos = 0;
+        if (text.charCodeAt(pos++) === CharacterCodes.minus) {
+            while (pos < text.length && text.charCodeAt(pos) === CharacterCodes.space) pos++;
+            return text.slice(pos);
+        }
+        return text;
     }
 
     function getCommentDisplayParts(tag: JSDocTag, checker?: TypeChecker): SymbolDisplayPart[] | undefined {
@@ -150,7 +178,27 @@ namespace ts.JsDoc {
             case SyntaxKind.JSDocAugmentsTag:
                 return withNode((tag as JSDocAugmentsTag).class);
             case SyntaxKind.JSDocTemplateTag:
-                return addComment((tag as JSDocTemplateTag).typeParameters.map(tp => tp.getText()).join(", "));
+                const templateTag = tag as JSDocTemplateTag;
+                const displayParts: SymbolDisplayPart[] = [];
+                if (templateTag.constraint) {
+                    displayParts.push(textPart(templateTag.constraint.getText()));
+                }
+                if (length(templateTag.typeParameters)) {
+                    if (length(displayParts)) {
+                        displayParts.push(spacePart());
+                    }
+                    const lastTypeParameter = templateTag.typeParameters[templateTag.typeParameters.length - 1];
+                    forEach(templateTag.typeParameters, tp => {
+                        displayParts.push(namePart(tp.getText()));
+                        if (lastTypeParameter !== tp) {
+                            displayParts.push(...[punctuationPart(SyntaxKind.CommaToken), spacePart()]);
+                        }
+                    });
+                }
+                if (comment) {
+                    displayParts.push(...[spacePart(), ...getDisplayPartsFromComment(comment, checker)]);
+                }
+                return displayParts;
             case SyntaxKind.JSDocTypeTag:
                 return withNode((tag as JSDocTypeTag).typeExpression);
             case SyntaxKind.JSDocTypedefTag:
@@ -159,7 +207,9 @@ namespace ts.JsDoc {
             case SyntaxKind.JSDocParameterTag:
             case SyntaxKind.JSDocSeeTag:
                 const { name } = tag as JSDocTypedefTag | JSDocCallbackTag | JSDocPropertyTag | JSDocParameterTag | JSDocSeeTag;
-                return name ? withNode(name) : comment === undefined ? undefined : getDisplayPartsFromComment(comment, checker);
+                return name ? withNode(name)
+                    : comment === undefined ? undefined
+                    : getDisplayPartsFromComment(comment, checker);
             default:
                 return comment === undefined ? undefined : getDisplayPartsFromComment(comment, checker);
         }
@@ -169,9 +219,17 @@ namespace ts.JsDoc {
         }
 
         function addComment(s: string) {
-            return comment
-                ? [namePart(s), spacePart(), ...getDisplayPartsFromComment(comment, checker)]
-                : [textPart(s)];
+            if (comment) {
+                if (s.match(/^https?$/)) {
+                    return [textPart(s), ...getDisplayPartsFromComment(comment, checker)];
+                }
+                else {
+                    return [namePart(s), spacePart(), ...getDisplayPartsFromComment(comment, checker)];
+                }
+            }
+            else {
+                return [textPart(s)];
+            }
         }
     }
 
@@ -384,7 +442,7 @@ namespace ts.JsDoc {
                 return { commentOwner };
 
             case SyntaxKind.VariableStatement: {
-                const varStatement = <VariableStatement>commentOwner;
+                const varStatement = commentOwner as VariableStatement;
                 const varDeclarations = varStatement.declarationList.declarations;
                 const host = varDeclarations.length === 1 && varDeclarations[0].initializer
                     ? getRightHandSideOfAssignment(varDeclarations[0].initializer)
@@ -430,13 +488,13 @@ namespace ts.JsDoc {
 
     function getRightHandSideOfAssignment(rightHandSide: Expression): FunctionExpression | ArrowFunction | ConstructorDeclaration | undefined {
         while (rightHandSide.kind === SyntaxKind.ParenthesizedExpression) {
-            rightHandSide = (<ParenthesizedExpression>rightHandSide).expression;
+            rightHandSide = (rightHandSide as ParenthesizedExpression).expression;
         }
 
         switch (rightHandSide.kind) {
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.ArrowFunction:
-                return (<FunctionExpression>rightHandSide);
+                return (rightHandSide as FunctionExpression);
             case SyntaxKind.ClassExpression:
                 return find((rightHandSide as ClassExpression).members, isConstructorDeclaration);
         }

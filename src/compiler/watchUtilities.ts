@@ -356,6 +356,25 @@ namespace ts {
     }
 
     /**
+     * Updates watchers based on the package json files used in module resolution
+     */
+    export function updatePackageJsonWatch(
+        lookups: readonly (readonly [Path, object | boolean])[],
+        packageJsonWatches: ESMap<Path, FileWatcher>,
+        createPackageJsonWatch: (packageJsonPath: Path, data: object | boolean) => FileWatcher,
+    ) {
+        const newMap = new Map(lookups);
+        mutateMap(
+            packageJsonWatches,
+            newMap,
+            {
+                createNewValue: createPackageJsonWatch,
+                onDeleteValue: closeFileWatcher
+            }
+        );
+    }
+
+    /**
      * Updates the existing missing file watches with the new set of missing files after new program is created
      */
     export function updateMissingFilePathsWatch(
@@ -473,14 +492,14 @@ namespace ts {
 
         // We want to ignore emit file check if file is not going to be emitted next to source file
         // In that case we follow config file inclusion rules
-        if (options.outFile || options.outDir) return false;
+        if (outFile(options) || options.outDir) return false;
 
         // File if emitted next to input needs to be ignored
         if (fileExtensionIs(fileOrDirectoryPath, Extension.Dts)) {
             // If its declaration directory: its not ignored if not excluded by config
             if (options.declarationDir) return false;
         }
-        else if (!fileExtensionIsOneOf(fileOrDirectoryPath, supportedJSExtensions)) {
+        else if (!fileExtensionIsOneOf(fileOrDirectoryPath, supportedJSExtensionsFlat)) {
             return false;
         }
 

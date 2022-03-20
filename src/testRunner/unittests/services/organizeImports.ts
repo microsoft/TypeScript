@@ -206,6 +206,13 @@ namespace ts {
                 assertListEqual(actualCoalescedExports, expectedCoalescedExports);
             });
 
+            it("Sort specifiers - type-only", () => {
+                const sortedImports = parseImports(`import { type z, y, type x, c, type b, a } from "lib";`);
+                const actualCoalescedImports = OrganizeImports.coalesceImports(sortedImports);
+                const expectedCoalescedImports = parseImports(`import { a, c, y, type b, type x, type z } from "lib";`);
+                assertListEqual(actualCoalescedImports, expectedCoalescedImports);
+            });
+
             it("Combine namespace re-exports", () => {
                 const sortedExports = parseExports(
                     `export * from "lib";`,

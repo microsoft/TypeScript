@@ -16,18 +16,18 @@ module B {
 }
 
 var a: A;
->a : any
+>a : A
 
 var b: B;
->b : any
+>b : B
 
 a = b;
->a = b : any
->a : any
->b : any
+>a = b : B
+>a : A
+>b : B
 
 b = a; // error
->b = a : any
->b : any
->a : any
+>b = a : A
+>b : B
+>a : A
 

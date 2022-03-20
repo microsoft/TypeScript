@@ -261,7 +261,7 @@ namespace ts {
         for (let i = 0; i < dense.length; i += 3) {
             const start = dense[i];
             const length = dense[i + 1];
-            const type = <ClassificationType>dense[i + 2];
+            const type = dense[i + 2] as ClassificationType;
 
             // Make a whitespace entry between the last item and this one.
             if (lastEnd >= 0) {
@@ -735,7 +735,7 @@ namespace ts {
                             commentStart = prop.isNameFirst && prop.typeExpression?.end || prop.name.end;
                             break;
                         case SyntaxKind.JSDocTemplateTag:
-                            processJSDocTemplateTag(<JSDocTemplateTag>tag);
+                            processJSDocTemplateTag(tag as JSDocTemplateTag);
                             pos = tag.end;
                             commentStart = (tag as JSDocTemplateTag).typeParameters.end;
                             break;
@@ -747,7 +747,7 @@ namespace ts {
                             commentStart = (tag as JSDocCallbackTag).typeExpression.end;
                             break;
                         case SyntaxKind.JSDocTypeTag:
-                            processElement((<JSDocTypeTag>tag).typeExpression);
+                            processElement((tag as JSDocTypeTag).typeExpression);
                             pos = tag.end;
                             commentStart = (tag as JSDocTypeTag).typeExpression.end;
                             break;
@@ -756,7 +756,7 @@ namespace ts {
                             commentStart = (tag as JSDocThisTag | JSDocEnumTag).typeExpression.end;
                             break;
                         case SyntaxKind.JSDocReturnTag:
-                            processElement((<JSDocReturnTag>tag).typeExpression);
+                            processElement((tag as JSDocReturnTag).typeExpression);
                             pos = tag.end;
                             commentStart = (tag as JSDocReturnTag).typeExpression?.end || commentStart;
                             break;
@@ -806,7 +806,8 @@ namespace ts {
 
         function tryClassifyTripleSlashComment(start: number, width: number): boolean {
             const tripleSlashXMLCommentRegEx = /^(\/\/\/\s*)(<)(?:(\S+)((?:[^/]|\/[^>])*)(\/>)?)?/im;
-            const attributeRegex = /(\S+)(\s*)(=)(\s*)('[^']+'|"[^"]+")/img;
+            // Require a leading whitespace character (the parser already does) to prevent terrible backtracking performance
+            const attributeRegex = /(\s)(\S+)(\s*)(=)(\s*)('[^']+'|"[^"]+")/img;
 
             const text = sourceFile.text.substr(start, width);
             const match = tripleSlashXMLCommentRegEx.exec(text);
@@ -842,30 +843,30 @@ namespace ts {
                     break;
                 }
 
-                const newAttrPos = pos + attrMatch.index;
+                const newAttrPos = pos + attrMatch.index + attrMatch[1].length; // whitespace
                 if (newAttrPos > attrPos) {
                     pushCommentRange(attrPos, newAttrPos - attrPos);
                     attrPos = newAttrPos;
                 }
 
-                pushClassification(attrPos, attrMatch[1].length, ClassificationType.jsxAttribute); // attribute name
-                attrPos += attrMatch[1].length;
+                pushClassification(attrPos, attrMatch[2].length, ClassificationType.jsxAttribute); // attribute name
+                attrPos += attrMatch[2].length;
 
-                if (attrMatch[2].length) {
-                    pushCommentRange(attrPos, attrMatch[2].length); // whitespace
-                    attrPos += attrMatch[2].length;
+                if (attrMatch[3].length) {
+                    pushCommentRange(attrPos, attrMatch[3].length); // whitespace
+                    attrPos += attrMatch[3].length;
                 }
 
-                pushClassification(attrPos, attrMatch[3].length, ClassificationType.operator); // =
-                attrPos += attrMatch[3].length;
+                pushClassification(attrPos, attrMatch[4].length, ClassificationType.operator); // =
+                attrPos += attrMatch[4].length;
 
-                if (attrMatch[4].length) {
-                    pushCommentRange(attrPos, attrMatch[4].length); // whitespace
-                    attrPos += attrMatch[4].length;
+                if (attrMatch[5].length) {
+                    pushCommentRange(attrPos, attrMatch[5].length); // whitespace
+                    attrPos += attrMatch[5].length;
                 }
 
-                pushClassification(attrPos, attrMatch[5].length, ClassificationType.jsxAttributeStringLiteralValue); // attribute value
-                attrPos += attrMatch[5].length;
+                pushClassification(attrPos, attrMatch[6].length, ClassificationType.jsxAttributeStringLiteralValue); // attribute value
+                attrPos += attrMatch[6].length;
             }
 
             pos += match[4].length;
@@ -956,22 +957,22 @@ namespace ts {
         function tryClassifyJsxElementName(token: Node): ClassificationType | undefined {
             switch (token.parent && token.parent.kind) {
                 case SyntaxKind.JsxOpeningElement:
-                    if ((<JsxOpeningElement>token.parent).tagName === token) {
+                    if ((token.parent as JsxOpeningElement).tagName === token) {
                         return ClassificationType.jsxOpenTagName;
                     }
                     break;
                 case SyntaxKind.JsxClosingElement:
-                    if ((<JsxClosingElement>token.parent).tagName === token) {
+                    if ((token.parent as JsxClosingElement).tagName === token) {
                         return ClassificationType.jsxCloseTagName;
                     }
                     break;
                 case SyntaxKind.JsxSelfClosingElement:
-                    if ((<JsxSelfClosingElement>token.parent).tagName === token) {
+                    if ((token.parent as JsxSelfClosingElement).tagName === token) {
                         return ClassificationType.jsxSelfClosingTagName;
                     }
                     break;
                 case SyntaxKind.JsxAttribute:
-                    if ((<JsxAttribute>token.parent).name === token) {
+                    if ((token.parent as JsxAttribute).name === token) {
                         return ClassificationType.jsxAttribute;
                     }
                     break;
@@ -1044,35 +1045,39 @@ namespace ts {
                 if (token) {
                     switch (token.parent.kind) {
                         case SyntaxKind.ClassDeclaration:
-                            if ((<ClassDeclaration>token.parent).name === token) {
+                            if ((token.parent as ClassDeclaration).name === token) {
                                 return ClassificationType.className;
                             }
                             return;
                         case SyntaxKind.TypeParameter:
-                            if ((<TypeParameterDeclaration>token.parent).name === token) {
+                            if ((token.parent as TypeParameterDeclaration).name === token) {
                                 return ClassificationType.typeParameterName;
                             }
                             return;
                         case SyntaxKind.InterfaceDeclaration:
-                            if ((<InterfaceDeclaration>token.parent).name === token) {
+                            if ((token.parent as InterfaceDeclaration).name === token) {
                                 return ClassificationType.interfaceName;
                             }
                             return;
                         case SyntaxKind.EnumDeclaration:
-                            if ((<EnumDeclaration>token.parent).name === token) {
+                            if ((token.parent as EnumDeclaration).name === token) {
                                 return ClassificationType.enumName;
                             }
                             return;
                         case SyntaxKind.ModuleDeclaration:
-                            if ((<ModuleDeclaration>token.parent).name === token) {
+                            if ((token.parent as ModuleDeclaration).name === token) {
                                 return ClassificationType.moduleName;
                             }
                             return;
                         case SyntaxKind.Parameter:
-                            if ((<ParameterDeclaration>token.parent).name === token) {
+                            if ((token.parent as ParameterDeclaration).name === token) {
                                 return isThisIdentifier(token) ? ClassificationType.keyword : ClassificationType.parameterName;
                             }
                             return;
+                    }
+
+                    if (isConstTypeReference(token.parent)) {
+                        return ClassificationType.keyword;
                     }
                 }
                 return ClassificationType.identifier;

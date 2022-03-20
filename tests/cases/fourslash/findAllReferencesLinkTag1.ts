@@ -1,5 +1,5 @@
 /// <reference path="fourslash.ts" />
-//// class C {
+//// class C/*7*/ {
 ////     m/*1*/() { }
 ////     n/*2*/ = 1
 ////     static s/*3*/() { }
@@ -34,7 +34,7 @@
 ////     r() { }
 //// }
 ////
-//// interface I {
+//// interface I/*8*/ {
 ////     a/*4*/()
 ////     b/*5*/: 1
 ////     /**
@@ -42,6 +42,8 @@
 ////      * @see {a}
 ////      * {@link I.a}
 ////      * @see {I.a}
+////      * {@link I#a}
+////      * @see {I#a}
 ////      */
 ////     c()
 ////     /**
@@ -61,4 +63,4 @@
 ////     function r2/*6*/() { }
 //// }
 
-verify.baselineFindAllReferences('1', '2', '3', '4', '5', '6')
+verify.baselineFindAllReferences('1', '2', '3', '4', '5', '6', '7', '8')

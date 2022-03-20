@@ -1,7 +1,7 @@
 /* @internal */
 namespace ts.refactor.convertParamsToDestructuredObject {
     const refactorName = "Convert parameters to destructured object";
-    const minimumParameterLength = 2;
+    const minimumParameterLength = 1;
     const refactorDescription = getLocaleSpecificMessage(Diagnostics.Convert_parameters_to_destructured_object);
 
     const toDestructuredAction = {
@@ -11,11 +11,11 @@ namespace ts.refactor.convertParamsToDestructuredObject {
     };
     registerRefactor(refactorName, {
         kinds: [toDestructuredAction.kind],
-        getEditsForAction,
-        getAvailableActions
+        getEditsForAction: getRefactorEditsToConvertParametersToDestructuredObject,
+        getAvailableActions: getRefactorActionsToConvertParametersToDestructuredObject
     });
 
-    function getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
+    function getRefactorActionsToConvertParametersToDestructuredObject(context: RefactorContext): readonly ApplicableRefactorInfo[] {
         const { file, startPosition } = context;
         const isJSFile = isSourceFileJS(file);
         if (isJSFile) return emptyArray; // TODO: GH#30113
@@ -29,7 +29,7 @@ namespace ts.refactor.convertParamsToDestructuredObject {
         }];
     }
 
-    function getEditsForAction(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
+    function getRefactorEditsToConvertParametersToDestructuredObject(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
         Debug.assert(actionName === refactorName, "Unexpected action name");
         const { file, startPosition, program, cancellationToken, host } = context;
         const functionDeclaration = getFunctionDeclarationAtPosition(file, startPosition, program.getTypeChecker());
@@ -220,7 +220,7 @@ namespace ts.refactor.convertParamsToDestructuredObject {
     function getSymbolForContextualType(node: Node, checker: TypeChecker): Symbol | undefined {
         const element = getContainingObjectLiteralElement(node);
         if (element) {
-            const contextualType = checker.getContextualTypeForObjectLiteralElement(<ObjectLiteralElementLike>element);
+            const contextualType = checker.getContextualTypeForObjectLiteralElement(element as ObjectLiteralElementLike);
             const symbol = contextualType?.getSymbol();
             if (symbol && !(getCheckFlags(symbol) & CheckFlags.Synthetic)) {
                 return symbol;

@@ -1,3 +1,5 @@
+/// <reference lib="es2020.intl" />
+
 interface BigIntToLocaleStringOptions {
     /**
      * The locale matching algorithm to use.The default is "best fit". For information about this option, see the {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl#Locale_negotiation Intl page}.
@@ -92,7 +94,7 @@ interface BigInt {
     toString(radix?: number): string;
 
     /** Returns a string representation appropriate to the host environment's current locale. */
-    toLocaleString(locales?: string, options?: BigIntToLocaleStringOptions): string;
+    toLocaleString(locales?: Intl.LocalesArgument, options?: BigIntToLocaleStringOptions): string;
 
     /** Returns the primitive value of the specified object. */
     valueOf(): bigint;
@@ -164,7 +166,7 @@ interface BigInt64Array {
     every(predicate: (value: bigint, index: number, array: BigInt64Array) => boolean, thisArg?: any): boolean;
 
     /**
-     * Returns the this object after filling the section identified by start and end with value
+     * Changes all array elements from `start` to `end` index to a static `value` and returns the modified array
      * @param value value to fill array section with
      * @param start index to start filling the array at. If start is negative, it is treated as
      * length+start where length is the length of the array.
@@ -436,7 +438,7 @@ interface BigUint64Array {
     every(predicate: (value: bigint, index: number, array: BigUint64Array) => boolean, thisArg?: any): boolean;
 
     /**
-     * Returns the this object after filling the section identified by start and end with value
+     * Changes all array elements from `start` to `end` index to a static `value` and returns the modified array
      * @param value value to fill array section with
      * @param start index to start filling the array at. If start is negative, it is treated as
      * length+start where length is the length of the array.

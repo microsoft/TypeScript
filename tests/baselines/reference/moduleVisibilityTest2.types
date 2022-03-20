@@ -140,9 +140,9 @@ module M {
 }
 
 var cprime : M.I = <M.I>null;
->cprime : any
+>cprime : M.I
 >M : any
-><M.I>null : any
+><M.I>null : M.I
 >M : any
 >null : null
 

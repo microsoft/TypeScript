@@ -355,3 +355,231 @@ function get<K extends keyof A>(key: K, obj: A): number {
 
 };
 
+// Repro from #44093
+
+class EventEmitter<ET> {
+>EventEmitter : EventEmitter<ET>
+
+    off<K extends keyof ET>(...args: [K, number] | [unknown, string]):void {}
+>off : <K extends keyof ET>(...args: [K, number] | [unknown, string]) => void
+>args : [K, number] | [unknown, string]
+}
+function once<ET, T extends EventEmitter<ET>>(emittingObject: T, eventName: keyof ET): void {
+>once : <ET, T extends EventEmitter<ET>>(emittingObject: T, eventName: keyof ET) => void
+>emittingObject : T
+>eventName : keyof ET
+
+    emittingObject.off(eventName, 0);
+>emittingObject.off(eventName, 0) : void
+>emittingObject.off : <K extends keyof ET>(...args: [unknown, string] | [K, number]) => void
+>emittingObject : T
+>off : <K extends keyof ET>(...args: [unknown, string] | [K, number]) => void
+>eventName : keyof ET
+>0 : 0
+
+    emittingObject.off(eventName as typeof eventName, 0);
+>emittingObject.off(eventName as typeof eventName, 0) : void
+>emittingObject.off : <K extends keyof ET>(...args: [unknown, string] | [K, number]) => void
+>emittingObject : T
+>off : <K extends keyof ET>(...args: [unknown, string] | [K, number]) => void
+>eventName as typeof eventName : keyof ET
+>eventName : keyof ET
+>eventName : keyof ET
+>0 : 0
+}
+
+// In an element access obj[x], we consider obj to be in a constraint position, except when obj is of
+// a generic type without a nullable constraint and x is a generic type. This is because when both obj
+// and x are of generic types T and K, we want the resulting type to be T[K].
+
+function fx1<T, K extends keyof T>(obj: T, key: K) {
+>fx1 : <T, K extends keyof T>(obj: T, key: K) => void
+>obj : T
+>key : K
+
+    const x1 = obj[key];
+>x1 : T[K]
+>obj[key] : T[K]
+>obj : T
+>key : K
+
+    const x2 = obj && obj[key];
+>x2 : T[K]
+>obj && obj[key] : T[K]
+>obj : T
+>obj[key] : T[K]
+>obj : T
+>key : K
+}
+
+function fx2<T extends Record<keyof T, string>, K extends keyof T>(obj: T, key: K) {
+>fx2 : <T extends Record<keyof T, string>, K extends keyof T>(obj: T, key: K) => void
+>obj : T
+>key : K
+
+    const x1 = obj[key];
+>x1 : T[K]
+>obj[key] : T[K]
+>obj : T
+>key : K
+
+    const x2 = obj && obj[key];
+>x2 : T[K]
+>obj && obj[key] : T[K]
+>obj : T
+>obj[key] : T[K]
+>obj : T
+>key : K
+}
+
+function fx3<T extends Record<keyof T, string> | undefined, K extends keyof T>(obj: T, key: K) {
+>fx3 : <T extends Record<keyof T, string> | undefined, K extends keyof T>(obj: T, key: K) => void
+>obj : T
+>key : K
+
+    const x1 = obj[key];  // Error
+>x1 : NonNullable<Record<keyof T, string>>[K]
+>obj[key] : NonNullable<Record<keyof T, string>>[K]
+>obj : Record<keyof T, string> | undefined
+>key : K
+
+    const x2 = obj && obj[key];
+>x2 : Record<keyof T, string>[K]
+>obj && obj[key] : Record<keyof T, string>[K]
+>obj : T
+>obj[key] : Record<keyof T, string>[K]
+>obj : Record<keyof T, string>
+>key : K
+}
+
+// Repro from #44166
+
+class TableBaseEnum<
+>TableBaseEnum : TableBaseEnum<PublicSpec, InternalSpec>
+
+    PublicSpec extends Record<keyof InternalSpec, any>,
+    InternalSpec extends Record<keyof PublicSpec, any>  | undefined = undefined> {
+    m() {
+>m : () => void
+
+        let iSpec = null! as InternalSpec;
+>iSpec : InternalSpec
+>null! as InternalSpec : InternalSpec
+>null! : never
+>null : null
+
+        iSpec[null! as keyof InternalSpec];  // Error, object possibly undefined
+>iSpec[null! as keyof InternalSpec] : NonNullable<Record<keyof PublicSpec, any>>[keyof InternalSpec]
+>iSpec : Record<keyof PublicSpec, any> | undefined
+>null! as keyof InternalSpec : keyof InternalSpec
+>null! : never
+>null : null
+
+        iSpec[null! as keyof PublicSpec];    // Error, object possibly undefined
+>iSpec[null! as keyof PublicSpec] : NonNullable<Record<keyof PublicSpec, any>>[keyof PublicSpec]
+>iSpec : Record<keyof PublicSpec, any> | undefined
+>null! as keyof PublicSpec : keyof PublicSpec
+>null! : never
+>null : null
+
+        if (iSpec === undefined) {
+>iSpec === undefined : boolean
+>iSpec : InternalSpec
+>undefined : undefined
+
+            return;
+        }
+        iSpec[null! as keyof InternalSpec];
+>iSpec[null! as keyof InternalSpec] : Record<keyof PublicSpec, any>[keyof InternalSpec]
+>iSpec : Record<keyof PublicSpec, any>
+>null! as keyof InternalSpec : keyof InternalSpec
+>null! : never
+>null : null
+
+        iSpec[null! as keyof PublicSpec];
+>iSpec[null! as keyof PublicSpec] : Record<keyof PublicSpec, any>[keyof PublicSpec]
+>iSpec : Record<keyof PublicSpec, any>
+>null! as keyof PublicSpec : keyof PublicSpec
+>null! : never
+>null : null
+    }
+}
+
+// Repros from #45145
+
+function f10<T extends { a: string } | undefined>(x: T, y: Partial<T>) {
+>f10 : <T extends { a: string; } | undefined>(x: T, y: Partial<T>) => void
+>a : string
+>x : T
+>y : Partial<T>
+
+    y = x;
+>y = x : T
+>y : Partial<T>
+>x : T
+}
+
+type SqlInsertSet<T> = T extends undefined ? object : { [P in keyof T]: unknown };
+>SqlInsertSet : SqlInsertSet<T>
+
+class SqlTable<T> {
+>SqlTable : SqlTable<T>
+
+    protected validateRow(_row: Partial<SqlInsertSet<T>>): void {
+>validateRow : (_row: Partial<SqlInsertSet<T>>) => void
+>_row : Partial<SqlInsertSet<T>>
+    }
+    public insertRow(row: SqlInsertSet<T>) {
+>insertRow : (row: SqlInsertSet<T>) => void
+>row : SqlInsertSet<T>
+
+        this.validateRow(row);
+>this.validateRow(row) : void
+>this.validateRow : (_row: Partial<SqlInsertSet<T>>) => void
+>this : this
+>validateRow : (_row: Partial<SqlInsertSet<T>>) => void
+>row : SqlInsertSet<T>
+    }
+}
+
+// Repro from #46495
+
+interface Button {
+    type: "button";
+>type : "button"
+
+    text: string;
+>text : string
+}
+
+interface Checkbox {
+    type: "checkbox";
+>type : "checkbox"
+
+    isChecked: boolean;
+>isChecked : boolean
+}
+
+type Control = Button | Checkbox;
+>Control : Control
+
+function update<T extends Control, K extends keyof T>(control : T | undefined, key: K, value: T[K]): void {
+>update : <T extends Control, K extends keyof T>(control: T | undefined, key: K, value: T[K]) => void
+>control : T | undefined
+>key : K
+>value : T[K]
+
+    if (control !== undefined) {
+>control !== undefined : boolean
+>control : T | undefined
+>undefined : undefined
+
+        control[key] = value;
+>control[key] = value : T[K]
+>control[key] : T[K]
+>control : T
+>key : K
+>value : T[K]
+    }
+}
+

@@ -71,4 +71,4 @@ verify.completions(
     { marker: "catAge", includes: "toExponential" },
 );
 
-verify.quickInfoAt("AnimalType", "type Animal = {\n    animalName: string;\n    animalAge: number;\n}", "- think Giraffes");
+verify.quickInfoAt("AnimalType", "type Animal = {\n    animalName: string;\n    animalAge: number;\n}", "think Giraffes");

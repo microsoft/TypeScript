@@ -1,0 +1,35 @@
+=== tests/cases/compiler/index.ts ===
+import * as ip from 'ip';
+>ip : Symbol(ip, Decl(index.ts, 0, 6))
+
+import nullthrows from 'nullthrows'; // shouldn't be callable, `nullthrows` is a cjs package, so the `default` is the module itself
+>nullthrows : Symbol(nullthrows, Decl(index.ts, 1, 6))
+
+export function getAddress(): string {
+>getAddress : Symbol(getAddress, Decl(index.ts, 1, 36))
+
+  return nullthrows(ip.address());
+>nullthrows : Symbol(nullthrows, Decl(index.ts, 1, 6))
+>ip.address : Symbol(ip.address, Decl(index.d.ts, 0, 0))
+>ip : Symbol(ip, Decl(index.ts, 0, 6))
+>address : Symbol(ip.address, Decl(index.d.ts, 0, 0))
+}
+=== tests/cases/compiler/node_modules/@types/ip/index.d.ts ===
+export function address(): string;
+>address : Symbol(address, Decl(index.d.ts, 0, 0))
+
+=== tests/cases/compiler/node_modules/nullthrows/nullthrows.d.ts ===
+declare function nullthrows(x: any): any;
+>nullthrows : Symbol(nullthrows, Decl(nullthrows.d.ts, 0, 0), Decl(nullthrows.d.ts, 0, 41))
+>x : Symbol(x, Decl(nullthrows.d.ts, 0, 28))
+
+declare namespace nullthrows {
+>nullthrows : Symbol(nullthrows, Decl(nullthrows.d.ts, 0, 0), Decl(nullthrows.d.ts, 0, 41))
+
+    export {nullthrows as default};
+>nullthrows : Symbol(nullthrows, Decl(nullthrows.d.ts, 0, 0), Decl(nullthrows.d.ts, 0, 41))
+>default : Symbol(default, Decl(nullthrows.d.ts, 2, 12))
+}
+export = nullthrows;
+>nullthrows : Symbol(nullthrows, Decl(nullthrows.d.ts, 0, 0), Decl(nullthrows.d.ts, 0, 41))
+

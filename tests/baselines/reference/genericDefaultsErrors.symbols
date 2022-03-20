@@ -131,6 +131,7 @@ type i09t04 = i09<1, 2, 3, 4>; // error
 interface i10 { x: T; } // error
 >i10 : Symbol(i10, Decl(genericDefaultsErrors.ts, 35, 30), Decl(genericDefaultsErrors.ts, 37, 23))
 >x : Symbol(i10.x, Decl(genericDefaultsErrors.ts, 37, 15))
+>T : Symbol(T)
 
 interface i10<T = number> {}
 >i10 : Symbol(i10, Decl(genericDefaultsErrors.ts, 35, 30), Decl(genericDefaultsErrors.ts, 37, 23))

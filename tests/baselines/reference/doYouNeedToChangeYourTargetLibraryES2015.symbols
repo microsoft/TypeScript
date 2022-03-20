@@ -197,9 +197,11 @@ const testMathCbrt = Math.cbrt(0);
 
 const testMap: Map<any, any> = null as any;
 >testMap : Symbol(testMap, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 55, 5))
+>Map : Symbol(Map)
 
 const testSet: Set<any> = null as any;
 >testSet : Symbol(testSet, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 56, 5))
+>Set : Symbol(Set)
 
 const testPromiseAll = Promise.all([]);
 >testPromiseAll : Symbol(testPromiseAll, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 57, 5))
@@ -222,15 +224,19 @@ const testSymbolKeyFor = Symbol.keyFor(testSymbolFor);
 
 const testWeakMap: WeakMap<any, any> = null as any;
 >testWeakMap : Symbol(testWeakMap, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 63, 5))
+>WeakMap : Symbol(WeakMap)
 
 const testWeakSet: WeakMap<any, any> = null as any;
 >testWeakSet : Symbol(testWeakSet, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 64, 5))
+>WeakMap : Symbol(WeakMap)
 
 const testIterator: Iterator<any, any, any> = null as any;
 >testIterator : Symbol(testIterator, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 65, 5))
+>Iterator : Symbol(Iterator)
 
 const testAsyncIterator: AsyncIterator<any, any, any> = null as any;
 >testAsyncIterator : Symbol(testAsyncIterator, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 66, 5))
+>AsyncIterator : Symbol(AsyncIterator)
 
 const testStringCodePointAt = "".codePointAt(0);
 >testStringCodePointAt : Symbol(testStringCodePointAt, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 67, 5))

@@ -1,0 +1,28 @@
+=== tests/cases/conformance/importAssertion/0.ts ===
+export const a = 1;
+>a : Symbol(a, Decl(0.ts, 0, 12))
+
+export const b = 2;
+>b : Symbol(b, Decl(0.ts, 1, 12))
+
+=== tests/cases/conformance/importAssertion/1.ts ===
+export {} from './0' assert { type: "json" }
+export { a, b } from './0' assert { type: "json" }
+>a : Symbol(a, Decl(1.ts, 1, 8))
+>b : Symbol(b, Decl(1.ts, 1, 11))
+
+export * from './0' assert { type: "json" }
+export * as ns from './0' assert { type: "json" }
+>ns : Symbol(ns, Decl(1.ts, 3, 6))
+
+=== tests/cases/conformance/importAssertion/2.ts ===
+export { a, b } from './0' assert {}
+>a : Symbol(a, Decl(2.ts, 0, 8))
+>b : Symbol(b, Decl(2.ts, 0, 11))
+
+export { a as c, b as d } from './0' assert { a: "a", b: "b", c: "c" }
+>a : Symbol(a, Decl(0.ts, 0, 12))
+>c : Symbol(c, Decl(2.ts, 1, 8))
+>b : Symbol(b, Decl(0.ts, 1, 12))
+>d : Symbol(d, Decl(2.ts, 1, 16))
+

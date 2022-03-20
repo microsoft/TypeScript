@@ -1,0 +1,25 @@
+=== tests/cases/compiler/noRepeatedPropertyNames.ts ===
+// https://github.com/microsoft/TypeScript/issues/46815
+const first = { a: 1, a: 2 };
+>first : Symbol(first, Decl(noRepeatedPropertyNames.ts, 1, 5))
+>a : Symbol(a, Decl(noRepeatedPropertyNames.ts, 1, 15), Decl(noRepeatedPropertyNames.ts, 1, 21))
+>a : Symbol(a, Decl(noRepeatedPropertyNames.ts, 1, 15), Decl(noRepeatedPropertyNames.ts, 1, 21))
+
+class C {
+>C : Symbol(C, Decl(noRepeatedPropertyNames.ts, 1, 29))
+
+    m() {
+>m : Symbol(C.m, Decl(noRepeatedPropertyNames.ts, 2, 9))
+
+        const second = { a: 1, a: 2 };
+>second : Symbol(second, Decl(noRepeatedPropertyNames.ts, 4, 13))
+>a : Symbol(a, Decl(noRepeatedPropertyNames.ts, 4, 24), Decl(noRepeatedPropertyNames.ts, 4, 30))
+>a : Symbol(a, Decl(noRepeatedPropertyNames.ts, 4, 24), Decl(noRepeatedPropertyNames.ts, 4, 30))
+
+        return second.a;
+>second.a : Symbol(a, Decl(noRepeatedPropertyNames.ts, 4, 24), Decl(noRepeatedPropertyNames.ts, 4, 30))
+>second : Symbol(second, Decl(noRepeatedPropertyNames.ts, 4, 13))
+>a : Symbol(a, Decl(noRepeatedPropertyNames.ts, 4, 24), Decl(noRepeatedPropertyNames.ts, 4, 30))
+    }
+}
+

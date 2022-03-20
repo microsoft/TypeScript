@@ -1,0 +1,382 @@
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoForJSDocWithHttpLinks.js",
+      "position": 22,
+      "name": "1"
+    },
+    "quickInfo": {
+      "kind": "type",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 22,
+        "length": 5
+      },
+      "displayParts": [
+        {
+          "text": "type",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "https",
+          "kind": "aliasName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=",
+          "kind": "operator"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "://wat",
+          "kind": "text"
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoForJSDocWithHttpLinks.js",
+      "position": 88,
+      "name": "2"
+    },
+    "quickInfo": {
+      "kind": "property",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 88,
+        "length": 5
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "https",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "://wass",
+          "kind": "text"
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoForJSDocWithHttpLinks.js",
+      "position": 120,
+      "name": "3"
+    },
+    "quickInfo": {
+      "kind": "type",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 120,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "type",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "http",
+          "kind": "aliasName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=",
+          "kind": "operator"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=>",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "://vad",
+          "kind": "text"
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoForJSDocWithHttpLinks.js",
+      "position": 164,
+      "name": "4"
+    },
+    "quickInfo": {
+      "kind": "var",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 164,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "see1",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "boolean",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [],
+      "tags": [
+        {
+          "name": "see",
+          "text": [
+            {
+              "text": "https",
+              "kind": "text"
+            },
+            {
+              "text": "://hvad",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoForJSDocWithHttpLinks.js",
+      "position": 213,
+      "name": "5"
+    },
+    "quickInfo": {
+      "kind": "var",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 213,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "see2",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "boolean",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [],
+      "tags": [
+        {
+          "name": "see",
+          "text": [
+            {
+              "text": "",
+              "kind": "text"
+            },
+            {
+              "text": "{@link ",
+              "kind": "link"
+            },
+            {
+              "text": "https",
+              "kind": "linkName",
+              "target": {
+                "fileName": "/tests/cases/fourslash/quickInfoForJSDocWithHttpLinks.js",
+                "textSpan": {
+                  "start": 4,
+                  "length": 30
+                }
+              }
+            },
+            {
+              "text": "://hva",
+              "kind": "linkText"
+            },
+            {
+              "text": "}",
+              "kind": "link"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoForJSDocWithHttpLinks.js",
+      "position": 258,
+      "name": "6"
+    },
+    "quickInfo": {
+      "kind": "var",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 258,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "see3",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "boolean",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "",
+          "kind": "text"
+        },
+        {
+          "text": "{@link ",
+          "kind": "link"
+        },
+        {
+          "text": "https",
+          "kind": "linkName",
+          "target": {
+            "fileName": "/tests/cases/fourslash/quickInfoForJSDocWithHttpLinks.js",
+            "textSpan": {
+              "start": 4,
+              "length": 30
+            }
+          }
+        },
+        {
+          "text": "://hvaD",
+          "kind": "linkText"
+        },
+        {
+          "text": "}",
+          "kind": "link"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,54 @@
+=== /imports.ts ===
+import { type, as, something, foo, bar } from "./exports.js";
+>type : Symbol(type, Decl(imports.ts, 0, 8))
+>as : Symbol(as, Decl(imports.ts, 0, 14))
+>something : Symbol(something, Decl(imports.ts, 0, 18))
+>foo : Symbol(foo, Decl(imports.ts, 0, 29))
+>bar : Symbol(bar, Decl(imports.ts, 0, 34))
+
+type;
+>type : Symbol(type, Decl(imports.ts, 0, 8))
+
+as; // Error (used in emitting position)
+>as : Symbol(as, Decl(imports.ts, 0, 14))
+
+something; // Error (used in emitting position)
+>something : Symbol(something, Decl(imports.ts, 0, 18))
+
+foo; // Error (used in emitting position)
+>foo : Symbol(foo, Decl(imports.ts, 0, 29))
+
+bar; // Error (used in emitting position)
+>bar : Symbol(bar, Decl(imports.ts, 0, 34))
+
+=== /exports.ts ===
+const type = 0;
+>type : Symbol(type, Decl(exports.ts, 0, 5))
+
+const as = 0;
+>as : Symbol(as, Decl(exports.ts, 1, 5))
+
+const something = 0;
+>something : Symbol(something, Decl(exports.ts, 2, 5))
+
+export { type };
+>type : Symbol(type, Decl(exports.ts, 3, 8))
+
+export { type as };
+>as : Symbol(as, Decl(exports.ts, 4, 8))
+
+export { type something };
+>something : Symbol(something, Decl(exports.ts, 5, 8))
+
+export { type type as foo };
+>type : Symbol(type, Decl(exports.ts, 0, 5))
+>foo : Symbol(foo, Decl(exports.ts, 6, 8))
+
+export { type as as bar };
+>as : Symbol(as, Decl(exports.ts, 1, 5))
+>bar : Symbol(bar, Decl(exports.ts, 7, 8))
+
+export type { type something as whatever }; // Error
+>something : Symbol(something, Decl(exports.ts, 2, 5))
+>whatever : Symbol(whatever, Decl(exports.ts, 8, 13))
+

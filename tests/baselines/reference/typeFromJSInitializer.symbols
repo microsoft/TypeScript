@@ -103,7 +103,7 @@ function f(a = null, b = n, l = []) {
 >n : Symbol(n, Decl(a.js, 21, 3))
 >l : Symbol(l, Decl(a.js, 24, 27))
 
-    // a should be any
+    // a should be null in strict mode
     a = undefined
 >a : Symbol(a, Decl(a.js, 24, 11))
 >undefined : Symbol(undefined)
@@ -186,7 +186,7 @@ const e = [1, undefined];
 >e : Symbol(e, Decl(a.js, 56, 5))
 >undefined : Symbol(undefined)
 
-// should be  undefined[]
+// should be undefined[]
 const g = e.filter(isUndef);
 >g : Symbol(g, Decl(a.js, 59, 5))
 >e.filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))

@@ -63,7 +63,7 @@ namespace ts.codefix {
             if (canDeleteEntireVariableStatement(sourceFile, token)) {
                 return [
                     createDeleteFix(textChanges.ChangeTracker.with(context, t =>
-                        deleteEntireVariableStatement(t, sourceFile, <VariableDeclarationList>token.parent)), Diagnostics.Remove_variable_statement)
+                        deleteEntireVariableStatement(t, sourceFile, token.parent as VariableDeclarationList)), Diagnostics.Remove_variable_statement)
                 ];
             }
 
@@ -132,7 +132,7 @@ namespace ts.codefix {
                             break;
                         }
                         else if (canDeleteEntireVariableStatement(sourceFile, token)) {
-                            deleteEntireVariableStatement(changes, sourceFile, <VariableDeclarationList>token.parent);
+                            deleteEntireVariableStatement(changes, sourceFile, token.parent as VariableDeclarationList);
                         }
                         else {
                             tryDeleteDeclaration(sourceFile, token, changes, checker, sourceFiles, program, cancellationToken, /*isFixAll*/ true);
@@ -315,6 +315,10 @@ namespace ts.codefix {
             case SyntaxKind.SetAccessor:
                 // Setter must have a parameter
                 return false;
+
+            case SyntaxKind.GetAccessor:
+                // Getter cannot have parameters
+                return true;
 
             default:
                 return Debug.failBadSyntaxKind(parent);

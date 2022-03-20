@@ -125,7 +125,7 @@ namespace ts.projectSystem {
             };
             const host = createServerHost([f]);
             const session = createSession(host);
-            session.executeCommand(<server.protocol.SetCompilerOptionsForInferredProjectsRequest>{
+            session.executeCommand({
                 seq: 1,
                 type: "request",
                 command: "compilerOptionsForInferredProjects",
@@ -134,8 +134,8 @@ namespace ts.projectSystem {
                         allowJs: true
                     }
                 }
-            });
-            session.executeCommand(<server.protocol.OpenRequest>{
+            } as server.protocol.SetCompilerOptionsForInferredProjectsRequest);
+            session.executeCommand({
                 seq: 2,
                 type: "request",
                 command: "open",
@@ -144,7 +144,7 @@ namespace ts.projectSystem {
                     fileContent: f.content,
                     scriptKindName: "JS"
                 }
-            });
+            } as server.protocol.OpenRequest);
             const projectService = session.getProjectService();
             checkNumberOfProjects(projectService, { inferredProjects: 1 });
             checkProjectActualFiles(projectService.inferredProjects[0], [f.path]);
@@ -160,7 +160,7 @@ namespace ts.projectSystem {
                 useSingleInferredProject: true,
                 useInferredProjectPerProjectRoot: true
             });
-            session.executeCommand(<server.protocol.SetCompilerOptionsForInferredProjectsRequest>{
+            session.executeCommand({
                 seq: 1,
                 type: "request",
                 command: CommandNames.CompilerOptionsForInferredProjects,
@@ -170,8 +170,8 @@ namespace ts.projectSystem {
                         target: ScriptTarget.ESNext
                     }
                 }
-            });
-            session.executeCommand(<server.protocol.SetCompilerOptionsForInferredProjectsRequest>{
+            } as server.protocol.SetCompilerOptionsForInferredProjectsRequest);
+            session.executeCommand({
                 seq: 2,
                 type: "request",
                 command: CommandNames.CompilerOptionsForInferredProjects,
@@ -182,8 +182,8 @@ namespace ts.projectSystem {
                     },
                     projectRootPath: "/b"
                 }
-            });
-            session.executeCommand(<server.protocol.OpenRequest>{
+            } as server.protocol.SetCompilerOptionsForInferredProjectsRequest);
+            session.executeCommand({
                 seq: 3,
                 type: "request",
                 command: CommandNames.Open,
@@ -193,8 +193,8 @@ namespace ts.projectSystem {
                     scriptKindName: "JS",
                     projectRootPath: file1.projectRootPath
                 }
-            });
-            session.executeCommand(<server.protocol.OpenRequest>{
+            } as server.protocol.OpenRequest);
+            session.executeCommand({
                 seq: 4,
                 type: "request",
                 command: CommandNames.Open,
@@ -204,8 +204,8 @@ namespace ts.projectSystem {
                     scriptKindName: "JS",
                     projectRootPath: file2.projectRootPath
                 }
-            });
-            session.executeCommand(<server.protocol.OpenRequest>{
+            } as server.protocol.OpenRequest);
+            session.executeCommand({
                 seq: 5,
                 type: "request",
                 command: CommandNames.Open,
@@ -215,8 +215,8 @@ namespace ts.projectSystem {
                     scriptKindName: "JS",
                     projectRootPath: file3.projectRootPath
                 }
-            });
-            session.executeCommand(<server.protocol.OpenRequest>{
+            } as server.protocol.OpenRequest);
+            session.executeCommand({
                 seq: 6,
                 type: "request",
                 command: CommandNames.Open,
@@ -225,7 +225,7 @@ namespace ts.projectSystem {
                     fileContent: file4.content,
                     scriptKindName: "JS"
                 }
-            });
+            } as server.protocol.OpenRequest);
 
             const projectService = session.getProjectService();
             checkNumberOfProjects(projectService, { inferredProjects: 3 });

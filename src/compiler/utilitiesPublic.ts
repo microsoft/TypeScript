@@ -11,9 +11,11 @@ namespace ts {
     }
 
     export function getDefaultLibFileName(options: CompilerOptions): string {
-        switch (options.target) {
+        switch (getEmitScriptTarget(options)) {
             case ScriptTarget.ESNext:
                 return "lib.esnext.full.d.ts";
+            case ScriptTarget.ES2022:
+                return "lib.es2022.full.d.ts";
             case ScriptTarget.ES2021:
                 return "lib.es2021.full.d.ts";
             case ScriptTarget.ES2020:
@@ -249,7 +251,7 @@ namespace ts {
         if (d && d.kind === SyntaxKind.TypeParameter) {
             for (let current: Node = d; current; current = current.parent) {
                 if (isFunctionLike(current) || isClassLike(current) || current.kind === SyntaxKind.InterfaceDeclaration) {
-                    return <Declaration>current;
+                    return current as Declaration;
                 }
             }
         }
@@ -619,7 +621,7 @@ namespace ts {
     export function getNameOfDeclaration(declaration: Declaration | Expression | undefined): DeclarationName | undefined {
         if (declaration === undefined) return undefined;
         return getNonAssignedNameOfDeclaration(declaration) ||
-            (isFunctionExpression(declaration) || isClassExpression(declaration) ? getAssignedName(declaration) : undefined);
+            (isFunctionExpression(declaration) || isArrowFunction(declaration) || isClassExpression(declaration) ? getAssignedName(declaration) : undefined);
     }
 
     /*@internal*/
@@ -901,10 +903,18 @@ namespace ts {
     }
 
     /** Gets the text of a jsdoc comment, flattening links to their text. */
-    export function getTextOfJSDocComment(comment?: string | NodeArray<JSDocText | JSDocLink>) {
+    export function getTextOfJSDocComment(comment?: string | NodeArray<JSDocComment>) {
         return typeof comment === "string" ? comment
-            : comment?.map(c =>
-                c.kind === SyntaxKind.JSDocText ? c.text : `{@link ${c.name ? entityNameToString(c.name) + " " : ""}${c.text}}`).join("");
+            : comment?.map(c => c.kind === SyntaxKind.JSDocText ? c.text : formatJSDocLink(c)).join("");
+    }
+
+    function formatJSDocLink(link: JSDocLink | JSDocLinkCode | JSDocLinkPlain) {
+        const kind = link.kind === SyntaxKind.JSDocLink ? "link"
+            : link.kind === SyntaxKind.JSDocLinkCode ? "linkcode"
+            : "linkplain";
+        const name = link.name ? entityNameToString(link.name) : "";
+        const space = link.name && link.text.startsWith("://") ? "" : " ";
+        return `{@${kind} ${name}${space}${link.text}}`;
     }
 
     /**
@@ -916,7 +926,7 @@ namespace ts {
             return emptyArray;
         }
         if (isJSDocTypeAlias(node)) {
-            Debug.assert(node.parent.kind === SyntaxKind.JSDocComment);
+            Debug.assert(node.parent.kind === SyntaxKind.JSDoc);
             return flatMap(node.parent.tags, tag => isJSDocTemplateTag(tag) ? tag.typeParameters : undefined);
         }
         if (node.typeParameters) {
@@ -1005,7 +1015,7 @@ namespace ts {
     }
 
     export function isNullishCoalesce(node: Node) {
-        return node.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>node).operatorToken.kind === SyntaxKind.QuestionQuestionToken;
+        return node.kind === SyntaxKind.BinaryExpression && (node as BinaryExpression).operatorToken.kind === SyntaxKind.QuestionQuestionToken;
     }
 
     export function isConstTypeReference(node: Node) {
@@ -1125,11 +1135,11 @@ namespace ts {
         return isImportSpecifier(node) || isExportSpecifier(node);
     }
 
-    export function isTypeOnlyImportOrExportDeclaration(node: Node): node is TypeOnlyCompatibleAliasDeclaration {
+    export function isTypeOnlyImportOrExportDeclaration(node: Node): node is TypeOnlyAliasDeclaration {
         switch (node.kind) {
             case SyntaxKind.ImportSpecifier:
             case SyntaxKind.ExportSpecifier:
-                return (node as ImportOrExportSpecifier).parent.parent.isTypeOnly;
+                return (node as ImportOrExportSpecifier).isTypeOnly || (node as ImportOrExportSpecifier).parent.parent.isTypeOnly;
             case SyntaxKind.NamespaceImport:
                 return (node as NamespaceImport).parent.isTypeOnly;
             case SyntaxKind.ImportClause:
@@ -1138,6 +1148,10 @@ namespace ts {
             default:
                 return false;
         }
+    }
+
+    export function isAssertionKey(node: Node): node is AssertionKey {
+        return isStringLiteral(node) || isIdentifier(node);
     }
 
     export function isStringTextContainingNode(node: Node): node is StringLiteral | TemplateLiteralToken {
@@ -1227,8 +1241,18 @@ namespace ts {
     }
 
     /* @internal */
+    export function isFunctionLikeOrClassStaticBlockDeclaration(node: Node | undefined): node is SignatureDeclaration | ClassStaticBlockDeclaration {
+        return !!node && (isFunctionLikeKind(node.kind) || isClassStaticBlockDeclaration(node));
+    }
+
+    /* @internal */
     export function isFunctionLikeDeclaration(node: Node): node is FunctionLikeDeclaration {
         return node && isFunctionLikeDeclarationKind(node.kind);
+    }
+
+    /* @internal */
+    export function isBooleanLiteral(node: Node): node is BooleanLiteral {
+        return node.kind === SyntaxKind.TrueKeyword || node.kind === SyntaxKind.FalseKeyword;
     }
 
     function isFunctionLikeDeclarationKind(kind: SyntaxKind): boolean {
@@ -1277,6 +1301,7 @@ namespace ts {
             || kind === SyntaxKind.GetAccessor
             || kind === SyntaxKind.SetAccessor
             || kind === SyntaxKind.IndexSignature
+            || kind === SyntaxKind.ClassStaticBlockDeclaration
             || kind === SyntaxKind.SemicolonClassElement;
     }
 
@@ -1413,6 +1438,18 @@ namespace ts {
         return false;
     }
 
+    /* @internal */
+    export function isObjectBindingOrAssignmentElement(node: Node): node is ObjectBindingOrAssignmentElement {
+        switch (node.kind) {
+            case SyntaxKind.BindingElement:
+            case SyntaxKind.PropertyAssignment: // AssignmentProperty
+            case SyntaxKind.ShorthandPropertyAssignment: // AssignmentProperty
+            case SyntaxKind.SpreadAssignment: // AssignmentRestProperty
+                return true;
+        }
+        return false;
+    }
+
     /**
      * Determines whether a node is an ArrayBindingOrAssignmentPattern
      */
@@ -1488,6 +1525,7 @@ namespace ts {
             case SyntaxKind.ClassExpression:
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.Identifier:
+            case SyntaxKind.PrivateIdentifier: // technically this is only an Expression if it's in a `#field in expr` BinaryExpression
             case SyntaxKind.RegularExpressionLiteral:
             case SyntaxKind.NumericLiteral:
             case SyntaxKind.BigIntLiteral:
@@ -1500,6 +1538,7 @@ namespace ts {
             case SyntaxKind.TrueKeyword:
             case SyntaxKind.SuperKeyword:
             case SyntaxKind.NonNullExpression:
+            case SyntaxKind.ExpressionWithTypeArguments:
             case SyntaxKind.MetaProperty:
             case SyntaxKind.ImportKeyword: // technically this is only an Expression if it's in a CallExpression
                 return true;
@@ -1534,8 +1573,8 @@ namespace ts {
             case SyntaxKind.PostfixUnaryExpression:
                 return true;
             case SyntaxKind.PrefixUnaryExpression:
-                return (<PrefixUnaryExpression>expr).operator === SyntaxKind.PlusPlusToken ||
-                    (<PrefixUnaryExpression>expr).operator === SyntaxKind.MinusMinusToken;
+                return (expr as PrefixUnaryExpression).operator === SyntaxKind.PlusPlusToken ||
+                    (expr as PrefixUnaryExpression).operator === SyntaxKind.MinusMinusToken;
             default:
                 return false;
         }
@@ -1592,7 +1631,7 @@ namespace ts {
             case SyntaxKind.WhileStatement:
                 return true;
             case SyntaxKind.LabeledStatement:
-                return lookInLabeledStatements && isIterationStatement((<LabeledStatement>node).statement, lookInLabeledStatements);
+                return lookInLabeledStatements && isIterationStatement((node as LabeledStatement).statement, lookInLabeledStatements);
         }
 
         return false;
@@ -1682,6 +1721,7 @@ namespace ts {
             || kind === SyntaxKind.BindingElement
             || kind === SyntaxKind.ClassDeclaration
             || kind === SyntaxKind.ClassExpression
+            || kind === SyntaxKind.ClassStaticBlockDeclaration
             || kind === SyntaxKind.Constructor
             || kind === SyntaxKind.EnumDeclaration
             || kind === SyntaxKind.EnumMember
@@ -1872,10 +1912,10 @@ namespace ts {
 
     /** True if node is of a kind that may contain comment text. */
     export function isJSDocCommentContainingNode(node: Node): boolean {
-        return node.kind === SyntaxKind.JSDocComment
+        return node.kind === SyntaxKind.JSDoc
             || node.kind === SyntaxKind.JSDocNamepathType
             || node.kind === SyntaxKind.JSDocText
-            || node.kind === SyntaxKind.JSDocLink
+            || isJSDocLinkLike(node)
             || isJSDocTag(node)
             || isJSDocTypeLiteral(node)
             || isJSDocSignature(node);
@@ -1968,5 +2008,8 @@ namespace ts {
         return node.kind === SyntaxKind.StringLiteral || node.kind === SyntaxKind.NoSubstitutionTemplateLiteral;
     }
 
+    export function isJSDocLinkLike(node: Node): node is JSDocLink | JSDocLinkCode | JSDocLinkPlain {
+        return node.kind === SyntaxKind.JSDocLink || node.kind === SyntaxKind.JSDocLinkCode || node.kind === SyntaxKind.JSDocLinkPlain;
+    }
     // #endregion
 }

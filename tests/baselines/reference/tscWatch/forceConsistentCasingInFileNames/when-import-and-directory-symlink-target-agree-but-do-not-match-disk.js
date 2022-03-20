@@ -45,7 +45,7 @@ Output::
 [7m [0m [91m                  ~~~~~~~~[0m
 
 ../../../../a/lib/lib.d.ts
-  Default library
+  Default library for target 'es3'
 Xy/a.ts
   Imported via "./Xy/a" from file 'b.ts'
   Matched by include pattern '**/*' in 'tsconfig.json'
@@ -67,6 +67,8 @@ Program files::
 /user/username/projects/myproject/b.ts
 
 No cached semantic diagnostics in the builder::
+
+No shapes updated in the builder::
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
@@ -161,7 +163,7 @@ Output::
 [7m [0m [91m                  ~~~~~~~~[0m
 
 ../../../../a/lib/lib.d.ts
-  Default library
+  Default library for target 'es3'
 Xy/a.ts
   Imported via "./Xy/a" from file 'b.ts'
   Matched by include pattern '**/*' in 'tsconfig.json'
@@ -183,6 +185,8 @@ Program files::
 /user/username/projects/myproject/b.ts
 
 No cached semantic diagnostics in the builder::
+
+No shapes updated in the builder::
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:

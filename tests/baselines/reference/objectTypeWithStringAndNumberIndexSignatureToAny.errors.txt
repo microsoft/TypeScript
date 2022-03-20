@@ -1,19 +1,19 @@
 tests/cases/conformance/types/members/objectTypeWithStringAndNumberIndexSignatureToAny.ts(43,5): error TS2322: Type 'Obj' is not assignable to type 'NumberTo<any>'.
-  Index signature is missing in type 'Obj'.
+  Index signature for type 'number' is missing in type 'Obj'.
 tests/cases/conformance/types/members/objectTypeWithStringAndNumberIndexSignatureToAny.ts(49,5): error TS2739: Type 'StringTo<any>' is missing the following properties from type 'Obj': hello, world
 tests/cases/conformance/types/members/objectTypeWithStringAndNumberIndexSignatureToAny.ts(50,5): error TS2739: Type 'NumberTo<any>' is missing the following properties from type 'Obj': hello, world
 tests/cases/conformance/types/members/objectTypeWithStringAndNumberIndexSignatureToAny.ts(51,5): error TS2739: Type 'StringAndNumberTo<any>' is missing the following properties from type 'Obj': hello, world
 tests/cases/conformance/types/members/objectTypeWithStringAndNumberIndexSignatureToAny.ts(61,5): error TS2322: Type 'Obj' is not assignable to type 'NumberTo<any>'.
 tests/cases/conformance/types/members/objectTypeWithStringAndNumberIndexSignatureToAny.ts(65,5): error TS2322: Type 'Obj' is not assignable to type 'StringTo<any> & NumberTo<any>'.
   Type 'Obj' is not assignable to type 'NumberTo<any>'.
-    Index signature is missing in type 'Obj'.
+    Index signature for type 'number' is missing in type 'Obj'.
 tests/cases/conformance/types/members/objectTypeWithStringAndNumberIndexSignatureToAny.ts(67,5): error TS2322: Type 'StringTo<any>' is not assignable to type 'Obj'.
 tests/cases/conformance/types/members/objectTypeWithStringAndNumberIndexSignatureToAny.ts(68,5): error TS2322: Type 'NumberTo<any>' is not assignable to type 'Obj'.
 tests/cases/conformance/types/members/objectTypeWithStringAndNumberIndexSignatureToAny.ts(69,5): error TS2739: Type 'StringTo<any> & NumberTo<any>' is missing the following properties from type 'Obj': hello, world
 tests/cases/conformance/types/members/objectTypeWithStringAndNumberIndexSignatureToAny.ts(84,5): error TS2322: Type 'Obj' is not assignable to type 'NumberToNumber'.
-  Index signature is missing in type 'Obj'.
+  Index signature for type 'number' is missing in type 'Obj'.
 tests/cases/conformance/types/members/objectTypeWithStringAndNumberIndexSignatureToAny.ts(88,5): error TS2322: Type 'Obj' is not assignable to type 'StringToAnyNumberToNumber'.
-  Index signature is missing in type 'Obj'.
+  Index signature for type 'number' is missing in type 'Obj'.
 tests/cases/conformance/types/members/objectTypeWithStringAndNumberIndexSignatureToAny.ts(90,5): error TS2322: Type 'StringTo<any>' is not assignable to type 'Obj'.
 tests/cases/conformance/types/members/objectTypeWithStringAndNumberIndexSignatureToAny.ts(91,5): error TS2739: Type 'NumberTo<number>' is missing the following properties from type 'Obj': hello, world
 
@@ -64,7 +64,7 @@ tests/cases/conformance/types/members/objectTypeWithStringAndNumberIndexSignatur
         nToAny = someObj;
         ~~~~~~
 !!! error TS2322: Type 'Obj' is not assignable to type 'NumberTo<any>'.
-!!! error TS2322:   Index signature is missing in type 'Obj'.
+!!! error TS2322:   Index signature for type 'number' is missing in type 'Obj'.
     
         bothToAny = sToAny;
         bothToAny = nToAny;
@@ -98,7 +98,7 @@ tests/cases/conformance/types/members/objectTypeWithStringAndNumberIndexSignatur
         ~~~~~~~~~
 !!! error TS2322: Type 'Obj' is not assignable to type 'StringTo<any> & NumberTo<any>'.
 !!! error TS2322:   Type 'Obj' is not assignable to type 'NumberTo<any>'.
-!!! error TS2322:     Index signature is missing in type 'Obj'.
+!!! error TS2322:     Index signature for type 'number' is missing in type 'Obj'.
     
         someObj = sToAny;
         ~~~~~~~
@@ -126,14 +126,14 @@ tests/cases/conformance/types/members/objectTypeWithStringAndNumberIndexSignatur
         nToNumber = someObj;
         ~~~~~~~~~
 !!! error TS2322: Type 'Obj' is not assignable to type 'NumberToNumber'.
-!!! error TS2322:   Index signature is missing in type 'Obj'.
+!!! error TS2322:   Index signature for type 'number' is missing in type 'Obj'.
     
         strToAnyNumToNum = sToAny;
         strToAnyNumToNum = nToNumber;
         strToAnyNumToNum = someObj;
         ~~~~~~~~~~~~~~~~
 !!! error TS2322: Type 'Obj' is not assignable to type 'StringToAnyNumberToNumber'.
-!!! error TS2322:   Index signature is missing in type 'Obj'.
+!!! error TS2322:   Index signature for type 'number' is missing in type 'Obj'.
     
         someObj = sToAny;
         ~~~~~~~

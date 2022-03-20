@@ -18,7 +18,7 @@ namespace ts.refactor {
             defaultToNamedAction.kind,
             namedToDefaultAction.kind
         ],
-        getAvailableActions(context): readonly ApplicableRefactorInfo[] {
+        getAvailableActions: function getRefactorActionsToConvertBetweenNamedAndDefaultExports(context): readonly ApplicableRefactorInfo[] {
             const info = getInfo(context, context.triggerReason === "invoked");
             if (!info) return emptyArray;
 
@@ -38,7 +38,7 @@ namespace ts.refactor {
 
             return emptyArray;
         },
-        getEditsForAction(context, actionName): RefactorEditInfo {
+        getEditsForAction: function getRefactorEditsToConvertBetweenNamedAndDefaultExports(context, actionName): RefactorEditInfo {
             Debug.assert(actionName === defaultToNamedAction.name || actionName === namedToDefaultAction.name, "Unexpected action name");
             const info = getInfo(context);
             Debug.assert(info && !isRefactorErrorInfo(info), "Expected applicable refactor info");
@@ -57,7 +57,7 @@ namespace ts.refactor {
     };
 
     function getInfo(context: RefactorContext, considerPartialSpans = true): ExportInfo | RefactorErrorInfo | undefined {
-        const { file } = context;
+        const { file, program } = context;
         const span = getRefactorContextSpan(context);
         const token = getTokenAtPosition(file, span.start);
         const exportNode = !!(token.parent && getSyntacticModifierFlags(token.parent) & ModifierFlags.Export) && considerPartialSpans ? token.parent : getParentNodeInSpan(token, file, span);
@@ -75,6 +75,11 @@ namespace ts.refactor {
             return { error: getLocaleSpecificMessage(Diagnostics.This_file_already_has_a_default_export) };
         }
 
+        const checker = program.getTypeChecker();
+        const noSymbolError = (id: Node) =>
+            (isIdentifier(id) && checker.getSymbolAtLocation(id)) ? undefined
+            : { error: getLocaleSpecificMessage(Diagnostics.Can_only_convert_named_export) };
+
         switch (exportNode.kind) {
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.ClassDeclaration:
@@ -83,7 +88,9 @@ namespace ts.refactor {
             case SyntaxKind.TypeAliasDeclaration:
             case SyntaxKind.ModuleDeclaration: {
                 const node = exportNode as FunctionDeclaration | ClassDeclaration | InterfaceDeclaration | EnumDeclaration | TypeAliasDeclaration | NamespaceDeclaration;
-                return node.name && isIdentifier(node.name) ? { exportNode: node, exportName: node.name, wasDefault, exportingModuleSymbol } : undefined;
+                if (!node.name) return undefined;
+                return noSymbolError(node.name)
+                    || { exportNode: node, exportName: node.name, wasDefault, exportingModuleSymbol };
             }
             case SyntaxKind.VariableStatement: {
                 const vs = exportNode as VariableStatement;
@@ -94,12 +101,14 @@ namespace ts.refactor {
                 const decl = first(vs.declarationList.declarations);
                 if (!decl.initializer) return undefined;
                 Debug.assert(!wasDefault, "Can't have a default flag here");
-                return isIdentifier(decl.name) ? { exportNode: vs, exportName: decl.name, wasDefault, exportingModuleSymbol } : undefined;
+                return noSymbolError(decl.name)
+                    || { exportNode: vs, exportName: decl.name as Identifier, wasDefault, exportingModuleSymbol };
             }
             case SyntaxKind.ExportAssignment: {
                 const node = exportNode as ExportAssignment;
-                const exp = node.expression as Identifier;
-                return node.isExportEquals ? undefined : { exportNode: node, exportName: exp, wasDefault, exportingModuleSymbol };
+                if (node.isExportEquals) return undefined;
+                return noSymbolError(node.expression)
+                    || { exportNode: node, exportName: node.expression as Identifier, wasDefault, exportingModuleSymbol };
             }
             default:
                 return undefined;
@@ -243,10 +252,10 @@ namespace ts.refactor {
     }
 
     function makeImportSpecifier(propertyName: string, name: string): ImportSpecifier {
-        return factory.createImportSpecifier(propertyName === name ? undefined : factory.createIdentifier(propertyName), factory.createIdentifier(name));
+        return factory.createImportSpecifier(/*isTypeOnly*/ false, propertyName === name ? undefined : factory.createIdentifier(propertyName), factory.createIdentifier(name));
     }
 
     function makeExportSpecifier(propertyName: string, name: string): ExportSpecifier {
-        return factory.createExportSpecifier(propertyName === name ? undefined : factory.createIdentifier(propertyName), factory.createIdentifier(name));
+        return factory.createExportSpecifier(/*isTypeOnly*/ false, propertyName === name ? undefined : factory.createIdentifier(propertyName), factory.createIdentifier(name));
     }
 }

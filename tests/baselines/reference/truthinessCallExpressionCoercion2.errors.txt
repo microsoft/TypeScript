@@ -86,8 +86,8 @@ tests/cases/compiler/truthinessCallExpressionCoercion2.ts(112,14): error TS2774:
     function checksConsole() {
         // error
         typeof window !== 'undefined' && window.console &&
-            ((window.console as any).firebug || (window.console.exception && window.console.table));
-                                                 ~~~~~~~~~~~~~~~~~~~~~~~~
+            ((window.console as any).firebug || (window.console.error && window.console.table));
+                                                 ~~~~~~~~~~~~~~~~~~~~
 !!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
     }
     

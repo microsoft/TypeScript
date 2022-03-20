@@ -4,11 +4,13 @@ tests/cases/conformance/override/override5.ts(20,21): error TS4113: This member 
 tests/cases/conformance/override/override5.ts(22,14): error TS1030: 'override' modifier already seen.
 tests/cases/conformance/override/override5.ts(25,14): error TS1029: 'public' modifier must precede 'override' modifier.
 tests/cases/conformance/override/override5.ts(27,5): error TS1089: 'override' modifier cannot appear on a constructor declaration.
+tests/cases/conformance/override/override5.ts(39,14): error TS1029: 'abstract' modifier must precede 'override' modifier.
+tests/cases/conformance/override/override5.ts(44,14): error TS1029: 'abstract' modifier must precede 'override' modifier.
 tests/cases/conformance/override/override5.ts(44,23): error TS4112: This member cannot have an 'override' modifier because its containing class 'AND' does not extend another class.
 tests/cases/conformance/override/override5.ts(45,23): error TS4112: This member cannot have an 'override' modifier because its containing class 'AND' does not extend another class.
 
 
-==== tests/cases/conformance/override/override5.ts (8 errors) ====
+==== tests/cases/conformance/override/override5.ts (10 errors) ====
     class B {
         p1: number = 1;
         p2: number = 2;
@@ -60,11 +62,15 @@ tests/cases/conformance/override/override5.ts(45,23): error TS4112: This member 
     
     abstract class AD extends AB {
         override abstract f(): void;
+                 ~~~~~~~~
+!!! error TS1029: 'abstract' modifier must precede 'override' modifier.
         abstract override b(): void;
     }
     
     abstract class AND {
         override abstract f(): void;
+                 ~~~~~~~~
+!!! error TS1029: 'abstract' modifier must precede 'override' modifier.
                           ~
 !!! error TS4112: This member cannot have an 'override' modifier because its containing class 'AND' does not extend another class.
         abstract override b(): void;

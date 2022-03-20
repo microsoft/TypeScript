@@ -4,9 +4,8 @@ abstract class Base {
     abstract bar(): void;
 }
 
-// No errors:
 abstract class Sub extends Base {
-    override abstract foo(): number;
+    abstract override foo(): number;
     bar() { }
 }
 
@@ -31,7 +30,6 @@ var Base = /** @class */ (function () {
     }
     return Base;
 }());
-// No errors:
 var Sub = /** @class */ (function (_super) {
     __extends(Sub, _super);
     function Sub() {

@@ -12,5 +12,6 @@ export type RowToColumns<TColumns> = {
 
     [TName in StringKeyOf<TColumns>]: any;
 >TName : Symbol(TName, Decl(FromFactor.ts, 1, 5))
+>StringKeyOf : Symbol(StringKeyOf)
 >TColumns : Symbol(TColumns, Decl(FromFactor.ts, 0, 25))
 }
