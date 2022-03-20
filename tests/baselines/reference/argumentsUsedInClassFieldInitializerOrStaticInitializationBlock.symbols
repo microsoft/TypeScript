@@ -186,3 +186,31 @@ function D5() {
   }
 }
 
+function D6() {
+>D6 : Symbol(D6, Decl(argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts, 97, 1))
+
+  return class T {
+>T : Symbol(T, Decl(argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts, 100, 8))
+
+     a = (x = arguments) => {}    // should error
+>a : Symbol(T.a, Decl(argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts, 100, 18))
+>x : Symbol(x, Decl(argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts, 101, 10))
+>arguments : Symbol(arguments)
+  }
+}
+
+function D7() {
+>D7 : Symbol(D7, Decl(argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts, 103, 1))
+
+  return class T {
+>T : Symbol(T, Decl(argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts, 106, 8))
+
+     a(x = arguments){  // ok
+>a : Symbol(T.a, Decl(argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts, 106, 18))
+>x : Symbol(x, Decl(argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts, 107, 7))
+>arguments : Symbol(arguments)
+
+     }
+  }
+}
+

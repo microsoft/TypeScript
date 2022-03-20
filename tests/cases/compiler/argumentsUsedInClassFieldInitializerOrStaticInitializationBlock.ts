@@ -96,3 +96,17 @@ function D5() {
      a = (() => { return arguments; })()  // should error
   }
 }
+
+function D6() {
+  return class T {
+     a = (x = arguments) => {}    // should error
+  }
+}
+
+function D7() {
+  return class T {
+     a(x = arguments){  // ok
+
+     }
+  }
+}

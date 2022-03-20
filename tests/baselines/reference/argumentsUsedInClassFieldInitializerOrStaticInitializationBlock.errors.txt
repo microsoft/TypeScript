@@ -11,9 +11,10 @@ tests/cases/compiler/argumentsUsedInClassFieldInitializerOrStaticInitializationB
 tests/cases/compiler/argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts(75,7): error TS2815: 'arguments' cannot be referenced in property initializers or class static initialization block.
 tests/cases/compiler/argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts(77,9): error TS2815: 'arguments' cannot be referenced in property initializers or class static initialization block.
 tests/cases/compiler/argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts(96,26): error TS2815: 'arguments' cannot be referenced in property initializers or class static initialization block.
+tests/cases/compiler/argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts(102,15): error TS2815: 'arguments' cannot be referenced in property initializers or class static initialization block.
 
 
-==== tests/cases/compiler/argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts (13 errors) ====
+==== tests/cases/compiler/argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts (14 errors) ====
     function A() {
       return class T {
          a = arguments
@@ -136,6 +137,22 @@ tests/cases/compiler/argumentsUsedInClassFieldInitializerOrStaticInitializationB
          a = (() => { return arguments; })()  // should error
                              ~~~~~~~~~
 !!! error TS2815: 'arguments' cannot be referenced in property initializers or class static initialization block.
+      }
+    }
+    
+    function D6() {
+      return class T {
+         a = (x = arguments) => {}    // should error
+                  ~~~~~~~~~
+!!! error TS2815: 'arguments' cannot be referenced in property initializers or class static initialization block.
+      }
+    }
+    
+    function D7() {
+      return class T {
+         a(x = arguments){  // ok
+    
+         }
       }
     }
     

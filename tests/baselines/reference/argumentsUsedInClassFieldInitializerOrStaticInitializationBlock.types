@@ -214,3 +214,34 @@ function D5() {
   }
 }
 
+function D6() {
+>D6 : () => typeof T
+
+  return class T {
+>class T {     a = (x = arguments) => {}    // should error  } : typeof T
+>T : typeof T
+
+     a = (x = arguments) => {}    // should error
+>a : (x?: any) => void
+>(x = arguments) => {} : (x?: any) => void
+>x : any
+>arguments : any
+  }
+}
+
+function D7() {
+>D7 : () => typeof T
+
+  return class T {
+>class T {     a(x = arguments){  // ok     }  } : typeof T
+>T : typeof T
+
+     a(x = arguments){  // ok
+>a : (x?: IArguments) => void
+>x : IArguments
+>arguments : IArguments
+
+     }
+  }
+}
+

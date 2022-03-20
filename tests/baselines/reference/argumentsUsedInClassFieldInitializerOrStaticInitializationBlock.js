@@ -98,6 +98,20 @@ function D5() {
   }
 }
 
+function D6() {
+  return class T {
+     a = (x = arguments) => {}    // should error
+  }
+}
+
+function D7() {
+  return class T {
+     a(x = arguments){  // ok
+
+     }
+  }
+}
+
 
 //// [argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.js]
 function A() {
@@ -222,6 +236,26 @@ function D5() {
         function T() {
             this.a = (function () { return arguments; })(); // should error
         }
+        return T;
+    }());
+}
+function D6() {
+    return /** @class */ (function () {
+        function T() {
+            this.a = function (x) {
+                if (x === void 0) { x = arguments; }
+            }; // should error
+        }
+        return T;
+    }());
+}
+function D7() {
+    return /** @class */ (function () {
+        function T() {
+        }
+        T.prototype.a = function (x) {
+            if (x === void 0) { x = arguments; }
+        };
         return T;
     }());
 }
