@@ -65,6 +65,7 @@ function foo1 () {
 class foo2 {
     static {
         this.b  // should error
+        let b: typeof this.b;   // ok
         if (1) {
             this.b; // should error
         }
@@ -229,6 +230,7 @@ var foo2 = /** @class */ (function () {
     _a = foo2;
     (function () {
         _a.b; // should error
+        var b; // ok
         if (1) {
             _a.b; // should error
         }

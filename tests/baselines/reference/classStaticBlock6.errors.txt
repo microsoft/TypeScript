@@ -14,7 +14,7 @@ tests/cases/conformance/classes/classStaticBlock/classStaticBlock6.ts(45,17): er
 tests/cases/conformance/classes/classStaticBlock/classStaticBlock6.ts(46,22): error TS1109: Expression expected.
 tests/cases/conformance/classes/classStaticBlock/classStaticBlock6.ts(55,13): error TS2815: 'arguments' cannot be referenced in property initializers or class static initialization block.
 tests/cases/conformance/classes/classStaticBlock/classStaticBlock6.ts(66,14): error TS2729: Property 'b' is used before its initialization.
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock6.ts(68,18): error TS2729: Property 'b' is used before its initialization.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock6.ts(69,18): error TS2729: Property 'b' is used before its initialization.
 
 
 ==== tests/cases/conformance/classes/classStaticBlock/classStaticBlock6.ts (17 errors) ====
@@ -116,12 +116,13 @@ tests/cases/conformance/classes/classStaticBlock/classStaticBlock6.ts(68,18): er
             this.b  // should error
                  ~
 !!! error TS2729: Property 'b' is used before its initialization.
-!!! related TS2728 tests/cases/conformance/classes/classStaticBlock/classStaticBlock6.ts:72:12: 'b' is declared here.
+!!! related TS2728 tests/cases/conformance/classes/classStaticBlock/classStaticBlock6.ts:73:12: 'b' is declared here.
+            let b: typeof this.b;   // ok
             if (1) {
                 this.b; // should error
                      ~
 !!! error TS2729: Property 'b' is used before its initialization.
-!!! related TS2728 tests/cases/conformance/classes/classStaticBlock/classStaticBlock6.ts:72:12: 'b' is declared here.
+!!! related TS2728 tests/cases/conformance/classes/classStaticBlock/classStaticBlock6.ts:73:12: 'b' is declared here.
             }
         }
     

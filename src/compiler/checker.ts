@@ -25347,7 +25347,7 @@ namespace ts {
             // To avoid that we will give an error to users if they use arguments objects in arrow function so that they
             // can explicitly bound arguments objects
             if (symbol === argumentsSymbol) {
-                if (isInPropertyInitializerOrClassStaticBlock(node, /* ignoreArrowFunctions */true)) {
+                if (isInPropertyInitializerOrClassStaticBlock(node, /* ignoreArrowFunctions */ true)) {
                     error(node, Diagnostics.arguments_cannot_be_referenced_in_property_initializers_or_class_static_initialization_block);
                     return errorType;
                 }
@@ -28874,28 +28874,16 @@ namespace ts {
                 switch (node.kind) {
                     case SyntaxKind.PropertyDeclaration:
                     case SyntaxKind.ClassStaticBlockDeclaration:
-                            return true;
-                    case SyntaxKind.PropertyAssignment:
-                    case SyntaxKind.MethodDeclaration:
-                    case SyntaxKind.GetAccessor:
-                    case SyntaxKind.SetAccessor:
-                    case SyntaxKind.SpreadAssignment:
-                    case SyntaxKind.ComputedPropertyName:
-                    case SyntaxKind.TemplateSpan:
-                    case SyntaxKind.JsxExpression:
-                    case SyntaxKind.JsxAttribute:
-                    case SyntaxKind.JsxAttributes:
-                    case SyntaxKind.JsxSpreadAttribute:
-                    case SyntaxKind.JsxOpeningElement:
-                    case SyntaxKind.ExpressionWithTypeArguments:
-                    case SyntaxKind.HeritageClause:
-                        return false;
+                        return true;
+                    case SyntaxKind.TypeQuery:
                     case SyntaxKind.JsxClosingElement:  // already reported in JsxOpeningElement
                         return "quit";
                     case SyntaxKind.ArrowFunction:
                         return ignoreArrowFunctions ? false : "quit";
+                    case SyntaxKind.Block:
+                        return isFunctionLikeDeclaration(node.parent) && node.parent.kind !== SyntaxKind.ArrowFunction ? "quit" : false;
                     default:
-                        return isFunctionLikeDeclaration(node) ? "quit" : false;
+                        return false;
                 }
             });
         }
