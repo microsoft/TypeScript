@@ -46,23 +46,7 @@ namespace ts {
         // Filename can be non-ts file.
         options.allowNonTsExtensions = true;
 
-        // if jsx is specified then treat file as .tsx
-        const inputFileName = transpileOptions.fileName || (transpileOptions.compilerOptions && transpileOptions.compilerOptions.jsx ? "module.tsx" : "module.ts");
-        const sourceFile = createSourceFile(inputFileName, input, getEmitScriptTarget(options));
-        if (transpileOptions.moduleName) {
-            sourceFile.moduleName = transpileOptions.moduleName;
-        }
-
-        if (transpileOptions.renamedDependencies) {
-            sourceFile.renamedDependencies = new Map(getEntries(transpileOptions.renamedDependencies));
-        }
-
         const newLine = getNewLineCharacter(options);
-
-        // Output
-        let outputText: string | undefined;
-        let sourceMapText: string | undefined;
-
         // Create a compilerHost object to allow the compiler to read and write files
         const compilerHost: CompilerHost = {
             getSourceFile: (fileName) => fileName === normalizePath(inputFileName) ? sourceFile : undefined,
@@ -86,6 +70,29 @@ namespace ts {
             directoryExists: () => true,
             getDirectories: () => []
         };
+
+        // if jsx is specified then treat file as .tsx
+        const inputFileName = transpileOptions.fileName || (transpileOptions.compilerOptions && transpileOptions.compilerOptions.jsx ? "module.tsx" : "module.ts");
+        const sourceFile = createSourceFile(
+            inputFileName,
+            input,
+            {
+                languageVersion: getEmitScriptTarget(options),
+                impliedNodeFormat: getImpliedNodeFormatForFile(toPath(inputFileName, "", compilerHost.getCanonicalFileName), /*cache*/ undefined, compilerHost, options),
+                setExternalModuleIndicator: getSetExternalModuleIndicator(options)
+            }
+        );
+        if (transpileOptions.moduleName) {
+            sourceFile.moduleName = transpileOptions.moduleName;
+        }
+
+        if (transpileOptions.renamedDependencies) {
+            sourceFile.renamedDependencies = new Map(getEntries(transpileOptions.renamedDependencies));
+        }
+
+        // Output
+        let outputText: string | undefined;
+        let sourceMapText: string | undefined;
 
         const program = createProgram([inputFileName], options, compilerHost);
 

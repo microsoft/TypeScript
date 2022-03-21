@@ -31,34 +31,19 @@ verify.completions({
     includes: [
         {
             name: "a",
-            sortText: completion.SortText.LocationPriority,
-            replacementSpan: {
-                fileName: "",
-                pos: 0,
-                end: 0,
-            },
+            sortText: completion.SortText.ClassMemberSnippets,
             insertText: "a: string",
         },
         {
             name: "b",
-            sortText: completion.SortText.LocationPriority,
-            replacementSpan: {
-                fileName: "",
-                pos: 0,
-                end: 0,
-            },
+            sortText: completion.SortText.ClassMemberSnippets,
             insertText:
 `b(a: string): void {
 }`,
         },
         {
             name: "c",
-            sortText: completion.SortText.LocationPriority,
-            replacementSpan: {
-                fileName: "",
-                pos: 0,
-                end: 0,
-            },
+            sortText: completion.SortText.ClassMemberSnippets,
             insertText:
 `c(a: string): string
 c(a: number): number

@@ -677,3 +677,181 @@ reducer("concat", { firstArr: [1, 2], secondArr: [3, 4] });
 >3 : 3
 >4 : 4
 
+// repro from https://github.com/microsoft/TypeScript/pull/47190#issuecomment-1057603588
+
+type FooMethod = {
+>FooMethod : FooMethod
+
+  method(...args:
+>method : (...args: [type: "str", cb: (e: string) => void] | [type: "num", cb: (e: number) => void]) => void
+>args : [type: "str", cb: (e: string) => void] | [type: "num", cb: (e: number) => void]
+
+    [type: "str", cb: (e: string) => void] |
+>e : string
+
+    [type: "num", cb: (e: number) => void]
+>e : number
+
+  ): void;
+}
+
+let fooM: FooMethod = {
+>fooM : FooMethod
+>{  method(type, cb) {    if (type == 'num') {      cb(123)    } else {      cb("abc")    }  }} : { method(type: "str" | "num", cb: ((e: string) => void) | ((e: number) => void)): void; }
+
+  method(type, cb) {
+>method : (type: "str" | "num", cb: ((e: string) => void) | ((e: number) => void)) => void
+>type : "str" | "num"
+>cb : ((e: string) => void) | ((e: number) => void)
+
+    if (type == 'num') {
+>type == 'num' : boolean
+>type : "str" | "num"
+>'num' : "num"
+
+      cb(123)
+>cb(123) : void
+>cb : (e: number) => void
+>123 : 123
+
+    } else {
+      cb("abc")
+>cb("abc") : void
+>cb : (e: string) => void
+>"abc" : "abc"
+    }
+  }
+};
+
+type FooAsyncMethod = {
+>FooAsyncMethod : FooAsyncMethod
+
+  method(...args:
+>method : (...args: [type: "str", cb: (e: string) => void] | [type: "num", cb: (e: number) => void]) => Promise<any>
+>args : [type: "str", cb: (e: string) => void] | [type: "num", cb: (e: number) => void]
+
+    [type: "str", cb: (e: string) => void] |
+>e : string
+
+    [type: "num", cb: (e: number) => void]
+>e : number
+
+  ): Promise<any>;
+}
+
+let fooAsyncM: FooAsyncMethod = {
+>fooAsyncM : FooAsyncMethod
+>{  async method(type, cb) {    if (type == 'num') {      cb(123)    } else {      cb("abc")    }  }} : { method(type: "str" | "num", cb: ((e: string) => void) | ((e: number) => void)): Promise<void>; }
+
+  async method(type, cb) {
+>method : (type: "str" | "num", cb: ((e: string) => void) | ((e: number) => void)) => Promise<void>
+>type : "str" | "num"
+>cb : ((e: string) => void) | ((e: number) => void)
+
+    if (type == 'num') {
+>type == 'num' : boolean
+>type : "str" | "num"
+>'num' : "num"
+
+      cb(123)
+>cb(123) : void
+>cb : (e: number) => void
+>123 : 123
+
+    } else {
+      cb("abc")
+>cb("abc") : void
+>cb : (e: string) => void
+>"abc" : "abc"
+    }
+  }
+};
+
+type FooGenMethod = {
+>FooGenMethod : FooGenMethod
+
+  method(...args:
+>method : (...args: [type: "str", cb: (e: string) => void] | [type: "num", cb: (e: number) => void]) => Generator<any, any, any>
+>args : [type: "str", cb: (e: string) => void] | [type: "num", cb: (e: number) => void]
+
+    [type: "str", cb: (e: string) => void] |
+>e : string
+
+    [type: "num", cb: (e: number) => void]
+>e : number
+
+  ): Generator<any, any, any>;
+}
+
+let fooGenM: FooGenMethod = {
+>fooGenM : FooGenMethod
+>{  *method(type, cb) {    if (type == 'num') {      cb(123)    } else {      cb("abc")    }  }} : { method(type: "str" | "num", cb: ((e: string) => void) | ((e: number) => void)): Generator<never, void, any>; }
+
+  *method(type, cb) {
+>method : (type: "str" | "num", cb: ((e: string) => void) | ((e: number) => void)) => Generator<never, void, any>
+>type : "str" | "num"
+>cb : ((e: string) => void) | ((e: number) => void)
+
+    if (type == 'num') {
+>type == 'num' : boolean
+>type : "str" | "num"
+>'num' : "num"
+
+      cb(123)
+>cb(123) : void
+>cb : (e: number) => void
+>123 : 123
+
+    } else {
+      cb("abc")
+>cb("abc") : void
+>cb : (e: string) => void
+>"abc" : "abc"
+    }
+  }
+};
+
+type FooAsyncGenMethod = {
+>FooAsyncGenMethod : FooAsyncGenMethod
+
+  method(...args:
+>method : (...args: [type: "str", cb: (e: string) => void] | [type: "num", cb: (e: number) => void]) => AsyncGenerator<any, any, any>
+>args : [type: "str", cb: (e: string) => void] | [type: "num", cb: (e: number) => void]
+
+    [type: "str", cb: (e: string) => void] |
+>e : string
+
+    [type: "num", cb: (e: number) => void]
+>e : number
+
+  ): AsyncGenerator<any, any, any>;
+}
+
+let fooAsyncGenM: FooAsyncGenMethod = {
+>fooAsyncGenM : FooAsyncGenMethod
+>{  async *method(type, cb) {    if (type == 'num') {      cb(123)    } else {      cb("abc")    }  }} : { method(type: "str" | "num", cb: ((e: string) => void) | ((e: number) => void)): AsyncGenerator<never, void, any>; }
+
+  async *method(type, cb) {
+>method : (type: "str" | "num", cb: ((e: string) => void) | ((e: number) => void)) => AsyncGenerator<never, void, any>
+>type : "str" | "num"
+>cb : ((e: string) => void) | ((e: number) => void)
+
+    if (type == 'num') {
+>type == 'num' : boolean
+>type : "str" | "num"
+>'num' : "num"
+
+      cb(123)
+>cb(123) : void
+>cb : (e: number) => void
+>123 : 123
+
+    } else {
+      cb("abc")
+>cb("abc") : void
+>cb : (e: string) => void
+>"abc" : "abc"
+    }
+  }
+};
+

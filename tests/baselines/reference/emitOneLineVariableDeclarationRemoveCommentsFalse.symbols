@@ -16,3 +16,13 @@ let d: any  /*[[${something}]]*/ = {};
 let e/*[[${something}]]*/: any   = {};
 >e : Symbol(e, Decl(emitOneLineVariableDeclarationRemoveCommentsFalse.ts, 4, 3))
 
+let f = /* comment1 */ d(e);
+>f : Symbol(f, Decl(emitOneLineVariableDeclarationRemoveCommentsFalse.ts, 5, 3))
+>d : Symbol(d, Decl(emitOneLineVariableDeclarationRemoveCommentsFalse.ts, 3, 3))
+>e : Symbol(e, Decl(emitOneLineVariableDeclarationRemoveCommentsFalse.ts, 4, 3))
+
+let g: any = /* comment2 */ d(e);
+>g : Symbol(g, Decl(emitOneLineVariableDeclarationRemoveCommentsFalse.ts, 6, 3))
+>d : Symbol(d, Decl(emitOneLineVariableDeclarationRemoveCommentsFalse.ts, 3, 3))
+>e : Symbol(e, Decl(emitOneLineVariableDeclarationRemoveCommentsFalse.ts, 4, 3))
+

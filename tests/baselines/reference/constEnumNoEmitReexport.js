@@ -47,13 +47,13 @@ exports.__esModule = true;
 //// [Usage1.js]
 "use strict";
 exports.__esModule = true;
-0 /* Foo */;
-0 /* Foo */;
+0 /* MyConstEnum1.Foo */;
+0 /* MyConstEnum2.Foo */;
 //// [Usage2.js]
 "use strict";
 exports.__esModule = true;
-0 /* Foo */;
+0 /* MyConstEnum.Foo */;
 //// [Usage3.js]
 "use strict";
 exports.__esModule = true;
-0 /* Foo */;
+0 /* MyConstEnum.Foo */;

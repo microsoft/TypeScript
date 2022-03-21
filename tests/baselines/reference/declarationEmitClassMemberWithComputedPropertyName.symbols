@@ -1,0 +1,139 @@
+=== tests/cases/compiler/declarationEmitClassMemberWithComputedPropertyName.ts ===
+const k1 = Symbol();
+>k1 : Symbol(k1, Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 0, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+
+const k2 = 'foo' as const;
+>k2 : Symbol(k2, Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 1, 5))
+>const : Symbol(const)
+
+const k3 = Symbol();
+>k3 : Symbol(k3, Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 3, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+
+const k4 = 'prop' as const;
+>k4 : Symbol(k4, Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 4, 5))
+>const : Symbol(const)
+
+class Foo {
+>Foo : Symbol(Foo, Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 4, 27))
+
+    static [k1](): number {
+>[k1] : Symbol(Foo[k1], Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 6, 11))
+>k1 : Symbol(k1, Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 0, 5))
+
+        return 1;
+    }
+    [k1](): string {
+>[k1] : Symbol(Foo[k1], Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 9, 5))
+>k1 : Symbol(k1, Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 0, 5))
+
+        return "";
+    }
+
+    static [k2]() {
+>[k2] : Symbol(Foo[k2], Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 12, 5))
+>k2 : Symbol(k2, Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 1, 5))
+
+        return 1;
+    }
+    [k2]() {
+>[k2] : Symbol(Foo[k2], Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 16, 5))
+>k2 : Symbol(k2, Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 1, 5))
+
+        return "";
+    }
+
+    static m1() {}
+>m1 : Symbol(Foo.m1, Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 19, 5))
+
+    m1() {}
+>m1 : Symbol(Foo.m1, Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 21, 18))
+
+    static [k3] = 1;
+>[k3] : Symbol(Foo[k3], Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 22, 11))
+>k3 : Symbol(k3, Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 3, 5))
+
+    [k3] = 1;
+>[k3] : Symbol(Foo[k3], Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 24, 20))
+>k3 : Symbol(k3, Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 3, 5))
+
+    static [k4] = 1;
+>[k4] : Symbol(Foo[k4], Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 25, 13))
+>k4 : Symbol(k4, Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 4, 5))
+
+    [k4] = 2;
+>[k4] : Symbol(Foo[k4], Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 27, 20))
+>k4 : Symbol(k4, Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 4, 5))
+
+    static p1 = 3;
+>p1 : Symbol(Foo.p1, Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 28, 13))
+
+    p1 = 4;
+>p1 : Symbol(Foo.p1, Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 30, 18))
+}
+
+export const t1 = Foo[k1];
+>t1 : Symbol(t1, Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 34, 12))
+>Foo : Symbol(Foo, Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 4, 27))
+>k1 : Symbol(k1, Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 0, 5))
+
+export const t2 = new Foo()[k1];
+>t2 : Symbol(t2, Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 35, 12))
+>Foo : Symbol(Foo, Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 4, 27))
+>k1 : Symbol(k1, Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 0, 5))
+
+export const t3 = Foo[k2];
+>t3 : Symbol(t3, Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 37, 12))
+>Foo : Symbol(Foo, Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 4, 27))
+>k2 : Symbol(k2, Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 1, 5))
+
+export const t4 = new Foo()[k2];
+>t4 : Symbol(t4, Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 38, 12))
+>Foo : Symbol(Foo, Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 4, 27))
+>k2 : Symbol(k2, Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 1, 5))
+
+export const t5 = Foo.m1;
+>t5 : Symbol(t5, Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 40, 12))
+>Foo.m1 : Symbol(Foo.m1, Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 19, 5))
+>Foo : Symbol(Foo, Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 4, 27))
+>m1 : Symbol(Foo.m1, Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 19, 5))
+
+export const t6 = new Foo().m1;
+>t6 : Symbol(t6, Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 41, 12))
+>new Foo().m1 : Symbol(Foo.m1, Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 21, 18))
+>Foo : Symbol(Foo, Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 4, 27))
+>m1 : Symbol(Foo.m1, Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 21, 18))
+
+export const t7 = Foo[k3];
+>t7 : Symbol(t7, Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 43, 12))
+>Foo : Symbol(Foo, Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 4, 27))
+>k3 : Symbol(k3, Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 3, 5))
+
+export const t8 = new Foo()[k3];
+>t8 : Symbol(t8, Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 44, 12))
+>Foo : Symbol(Foo, Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 4, 27))
+>k3 : Symbol(k3, Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 3, 5))
+
+export const t9 = Foo[k4];
+>t9 : Symbol(t9, Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 46, 12))
+>Foo : Symbol(Foo, Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 4, 27))
+>k4 : Symbol(k4, Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 4, 5))
+
+export const t10 = new Foo()[k4];
+>t10 : Symbol(t10, Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 47, 12))
+>Foo : Symbol(Foo, Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 4, 27))
+>k4 : Symbol(k4, Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 4, 5))
+
+export const t11 = Foo.p1;
+>t11 : Symbol(t11, Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 49, 12))
+>Foo.p1 : Symbol(Foo.p1, Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 28, 13))
+>Foo : Symbol(Foo, Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 4, 27))
+>p1 : Symbol(Foo.p1, Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 28, 13))
+
+export const t12 = new Foo().p1;
+>t12 : Symbol(t12, Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 50, 12))
+>new Foo().p1 : Symbol(Foo.p1, Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 30, 18))
+>Foo : Symbol(Foo, Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 4, 27))
+>p1 : Symbol(Foo.p1, Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 30, 18))
+

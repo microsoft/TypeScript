@@ -46,3 +46,9 @@ class C {
 >Symbol : SymbolConstructor
 }
 
+/** @type {unique symbol} */
+const a = Symbol();
+>a : symbol
+>Symbol() : unique symbol
+>Symbol : SymbolConstructor
+
