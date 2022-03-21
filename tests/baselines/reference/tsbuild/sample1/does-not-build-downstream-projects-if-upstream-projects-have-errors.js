@@ -144,9 +144,7 @@ getModifiedTime:: {
  "/src/core/some_decl.d.ts": 1,
  "/src/core/anotherModule.js": 1,
  "/src/logic/index.ts": 1,
- "/src/logic/index.js": 1,
- "/src/tests/index.ts": 1,
- "/src/tests/index.js": 1
+ "/src/logic/index.js": 1
 }
 
 setModifiedTime:: {}

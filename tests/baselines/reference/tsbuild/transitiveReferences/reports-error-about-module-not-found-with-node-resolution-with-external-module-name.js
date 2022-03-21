@@ -75,9 +75,7 @@ getModifiedTime:: {
  "/src/a.ts": 1,
  "/src/a.js": 1,
  "/src/b.ts": 1,
- "/src/b.js": 1,
- "/src/c.ts": 1,
- "/src/c.js": 1
+ "/src/b.js": 1
 }
 
 setModifiedTime:: {}

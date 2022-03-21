@@ -1346,83 +1346,19 @@ namespace ts {
     }
 
     function getUpToDateStatusWorker(state: SolutionBuilderState, project: ParsedCommandLine, resolvedPath: ResolvedConfigFilePath): UpToDateStatus {
-         // Container if no files are specified in the project
-         if (!project.fileNames.length && !canJsonReportNoInputFiles(project.raw)) {
+        // Container if no files are specified in the project
+        if (!project.fileNames.length && !canJsonReportNoInputFiles(project.raw)) {
             return {
                 type: UpToDateStatusType.ContainerOnly
             };
         }
 
+        // Fast check to see if reference projects are buildable
+        let referenceStatuses;
         const force = !!state.options.force;
-        let newestInputFileName: string = undefined!;
-        let newestInputFileTime = minimumDate;
-        const { host } = state;
-        // Get timestamps of input files
-        for (const inputFile of project.fileNames) {
-            const inputTime = getModifiedTime(host, inputFile);
-            if (inputTime === missingFileModifiedTime) {
-                return {
-                    type: UpToDateStatusType.Unbuildable,
-                    reason: `${inputFile} does not exist`
-                };
-            }
-
-            if (!force) {
-                if (inputTime > newestInputFileTime) {
-                    newestInputFileName = inputFile;
-                    newestInputFileTime = inputTime;
-                }
-            }
-        }
-
-        // Collect the expected outputs of this project
-        const outputs = getAllProjectOutputs(project, !host.useCaseSensitiveFileNames());
-
-        // Now see if all outputs are newer than the newest input
-        let oldestOutputFileName = "(none)";
-        let oldestOutputFileTime = maximumDate;
-        let missingOutputFileName: string | undefined;
-        let newestDeclarationFileContentChangedTime = minimumDate;
-        let isOutOfDateWithInputs = false;
-        if (!force) {
-            for (const output of outputs) {
-                // Output is missing; can stop checking
-                // Don't immediately return because we can still be upstream-blocked, which is a higher-priority status
-                const outputTime = getModifiedTime(host, output);
-                if (outputTime === missingFileModifiedTime) {
-                    missingOutputFileName = output;
-                    break;
-                }
-
-                if (outputTime < oldestOutputFileTime) {
-                    oldestOutputFileTime = outputTime;
-                    oldestOutputFileName = output;
-                }
-
-                // If an output is older than the newest input, we can stop checking
-                // Don't immediately return because we can still be upstream-blocked, which is a higher-priority status
-                if (outputTime < newestInputFileTime) {
-                    isOutOfDateWithInputs = true;
-                    break;
-                }
-
-                // Keep track of when the most recent time a .d.ts file was changed.
-                // In addition to file timestamps, we also keep track of when a .d.ts file
-                // had its file touched but not had its contents changed - this allows us
-                // to skip a downstream typecheck
-                if (isDeclarationFileName(output)) {
-                    newestDeclarationFileContentChangedTime = newer(newestDeclarationFileContentChangedTime, outputTime);
-                }
-            }
-        }
-
-        let pseudoUpToDate = false;
-        let usesPrepend = false;
-        let upstreamChangedProject: string | undefined;
         if (project.projectReferences) {
             state.projectStatus.set(resolvedPath, { type: UpToDateStatusType.ComputingUpstream });
             for (const ref of project.projectReferences) {
-                usesPrepend = usesPrepend || !!(ref.prepend);
                 const resolvedRef = resolveProjectReferencePath(ref);
                 const resolvedRefPath = toResolvedConfigFilePath(state, resolvedRef);
                 const refStatus = getUpToDateStatus(state, parseConfigFile(state, resolvedRef, resolvedRefPath), resolvedRefPath);
@@ -1451,64 +1387,118 @@ namespace ts {
                     };
                 }
 
-                // Check oldest output file name only if there is no missing output file name
-                // (a check we will have skipped if this is a forced build)
-                if (!force && !missingOutputFileName) {
-                    // If the upstream project's newest file is older than our oldest output, we
-                    // can't be out of date because of it
-                    if (refStatus.newestInputFileTime && refStatus.newestInputFileTime <= oldestOutputFileTime) {
-                        continue;
-                    }
+                if (!force) (referenceStatuses ||= []).push({ ref, refStatus });
+            }
+        }
 
-                    // If the upstream project has only change .d.ts files, and we've built
-                    // *after* those files, then we're "psuedo up to date" and eligible for a fast rebuild
-                    if (refStatus.newestDeclarationFileContentChangedTime && refStatus.newestDeclarationFileContentChangedTime <= oldestOutputFileTime) {
-                        pseudoUpToDate = true;
-                        upstreamChangedProject = ref.path;
-                        continue;
-                    }
+        // Check output files
+        let newestInputFileName: string = undefined!;
+        let newestInputFileTime = minimumDate;
+        const { host } = state;
+        // Get timestamps of input files
+        for (const inputFile of project.fileNames) {
+            const inputTime = getModifiedTime(host, inputFile);
+            if (inputTime === missingFileModifiedTime) {
+                return {
+                    type: UpToDateStatusType.Unbuildable,
+                    reason: `${inputFile} does not exist`
+                };
+            }
 
-                    // We have an output older than an upstream output - we are out of date
-                    Debug.assert(oldestOutputFileName !== undefined, "Should have an oldest output filename here");
-                    return {
-                        type: UpToDateStatusType.OutOfDateWithUpstream,
-                        outOfDateOutputFileName: oldestOutputFileName,
-                        newerProjectName: ref.path
-                    };
+            if (!force) {
+                if (inputTime > newestInputFileTime) {
+                    newestInputFileName = inputFile;
+                    newestInputFileTime = inputTime;
                 }
             }
         }
 
-        if (missingOutputFileName !== undefined) {
-            return {
-                type: UpToDateStatusType.OutputMissing,
-                missingOutputFileName
-            };
+        // Collect the expected outputs of this project
+        const outputs = getAllProjectOutputs(project, !host.useCaseSensitiveFileNames());
+
+        // Now see if all outputs are newer than the newest input
+        let oldestOutputFileName = "(none)";
+        let oldestOutputFileTime = maximumDate;
+        let newestDeclarationFileContentChangedTime = minimumDate;
+        if (!force) {
+            for (const output of outputs) {
+                // Output is missing; can stop checking
+                const outputTime = getModifiedTime(host, output);
+                if (outputTime === missingFileModifiedTime) {
+                    return {
+                        type: UpToDateStatusType.OutputMissing,
+                        missingOutputFileName: output
+                    };
+                }
+
+                if (outputTime < oldestOutputFileTime) {
+                    oldestOutputFileTime = outputTime;
+                    oldestOutputFileName = output;
+                }
+
+                // If an output is older than the newest input, we can stop checking
+                if (outputTime < newestInputFileTime) {
+                    return {
+                        type: UpToDateStatusType.OutOfDateWithSelf,
+                        outOfDateOutputFileName: oldestOutputFileName,
+                        newerInputFileName: newestInputFileName
+                    };
+                }
+
+                // Keep track of when the most recent time a .d.ts file was changed.
+                // In addition to file timestamps, we also keep track of when a .d.ts file
+                // had its file touched but not had its contents changed - this allows us
+                // to skip a downstream typecheck
+                if (isDeclarationFileName(output)) {
+                    newestDeclarationFileContentChangedTime = newer(newestDeclarationFileContentChangedTime, outputTime);
+                }
+            }
         }
 
-        if (isOutOfDateWithInputs) {
-            return {
-                type: UpToDateStatusType.OutOfDateWithSelf,
-                outOfDateOutputFileName: oldestOutputFileName,
-                newerInputFileName: newestInputFileName
-            };
-        }
-        else {
-            // Check tsconfig time
-            const configStatus = checkConfigFileUpToDateStatus(state, project.options.configFilePath!, oldestOutputFileTime, oldestOutputFileName);
-            if (configStatus) return configStatus;
+        let pseudoUpToDate = false;
+        let usesPrepend = false;
+        let upstreamChangedProject: string | undefined;
+        if (referenceStatuses) {
+            for (const { ref, refStatus } of referenceStatuses) {
+                usesPrepend = usesPrepend || !!(ref.prepend);
+                // If the upstream project's newest file is older than our oldest output, we
+                // can't be out of date because of it
+                if (refStatus.newestInputFileTime && refStatus.newestInputFileTime <= oldestOutputFileTime) {
+                    continue;
+                }
 
-            // Check extended config time
-            const extendedConfigStatus = forEach(project.options.configFile!.extendedSourceFiles || emptyArray, configFile => checkConfigFileUpToDateStatus(state, configFile, oldestOutputFileTime, oldestOutputFileName));
-            if (extendedConfigStatus) return extendedConfigStatus;
+                // If the upstream project has only change .d.ts files, and we've built
+                // *after* those files, then we're "psuedo up to date" and eligible for a fast rebuild
+                if (refStatus.newestDeclarationFileContentChangedTime && refStatus.newestDeclarationFileContentChangedTime <= oldestOutputFileTime) {
+                    pseudoUpToDate = true;
+                    upstreamChangedProject = ref.path;
+                    continue;
+                }
 
-            // Check package file time
-            const dependentPackageFileStatus = forEach(
-                state.lastCachedPackageJsonLookups.get(resolvedPath) || emptyArray,
-                ([path]) => checkConfigFileUpToDateStatus(state, path, oldestOutputFileTime, oldestOutputFileName)
-            );
-            if (dependentPackageFileStatus) return dependentPackageFileStatus;
+                // We have an output older than an upstream output - we are out of date
+                Debug.assert(oldestOutputFileName !== undefined, "Should have an oldest output filename here");
+                return {
+                    type: UpToDateStatusType.OutOfDateWithUpstream,
+                    outOfDateOutputFileName: oldestOutputFileName,
+                    newerProjectName: ref.path
+                };
+            }
         }
+
+        // Check tsconfig time
+        const configStatus = checkConfigFileUpToDateStatus(state, project.options.configFilePath!, oldestOutputFileTime, oldestOutputFileName);
+        if (configStatus) return configStatus;
+
+        // Check extended config time
+        const extendedConfigStatus = forEach(project.options.configFile!.extendedSourceFiles || emptyArray, configFile => checkConfigFileUpToDateStatus(state, configFile, oldestOutputFileTime, oldestOutputFileName));
+        if (extendedConfigStatus) return extendedConfigStatus;
+
+        // Check package file time
+        const dependentPackageFileStatus = forEach(
+            state.lastCachedPackageJsonLookups.get(resolvedPath) || emptyArray,
+            ([path]) => checkConfigFileUpToDateStatus(state, path, oldestOutputFileTime, oldestOutputFileName)
+        );
+        if (dependentPackageFileStatus) return dependentPackageFileStatus;
 
         if (!force && !state.buildInfoChecked.has(resolvedPath)) {
             state.buildInfoChecked.set(resolvedPath, true);

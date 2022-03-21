@@ -549,7 +549,7 @@ Output::
 >> Screen clear
 [[90m12:01:31 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:32 AM[0m] Project 'sample1/logic/tsconfig.json' is out of date because oldest output 'sample1/logic/index.js' is older than newest input 'sample1/core'
+[[90m12:01:32 AM[0m] Project 'sample1/logic/tsconfig.json' is out of date because oldest output 'sample1/logic/index.js' is older than newest input 'sample1/logic/index.ts'
 
 [[90m12:01:33 AM[0m] Building project '/user/username/projects/sample1/logic/tsconfig.json'...
 
@@ -746,7 +746,7 @@ Output::
 >> Screen clear
 [[90m12:01:56 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:57 AM[0m] Project 'sample1/logic/tsconfig.json' is out of date because oldest output 'sample1/logic/index.js' is older than newest input 'sample1/core'
+[[90m12:01:57 AM[0m] Project 'sample1/logic/tsconfig.json' is out of date because oldest output 'sample1/logic/index.js' is older than newest input 'sample1/logic/index.ts'
 
 [[90m12:01:58 AM[0m] Building project '/user/username/projects/sample1/logic/tsconfig.json'...
 
