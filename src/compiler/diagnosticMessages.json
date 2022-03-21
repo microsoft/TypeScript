@@ -1498,6 +1498,10 @@
         "category": "Error",
         "code": 2207
     },
+    "This type parameter likely needs an `extends object` constraint.": {
+        "category": "Error",
+        "code": 2208
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",

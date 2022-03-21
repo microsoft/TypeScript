@@ -60,8 +60,8 @@ function boxify<T>(obj: T): Boxified<T> {
 >result : Boxified<T>
 }
 
-function unboxify<T>(obj: Boxified<T>): T {
->unboxify : <T>(obj: Boxified<T>) => T
+function unboxify<T extends object>(obj: Boxified<T>): T {
+>unboxify : <T extends object>(obj: Boxified<T>) => T
 >obj : Boxified<T>
 
     let result = {} as T;
@@ -174,7 +174,7 @@ function f2() {
     let v = unboxify(b);
 >v : { a: number; b: string; c: boolean; }
 >unboxify(b) : { a: number; b: string; c: boolean; }
->unboxify : <T>(obj: Boxified<T>) => T
+>unboxify : <T extends object>(obj: Boxified<T>) => T
 >b : { a: Box<number>; b: Box<string>; c: Box<boolean>; }
 
     let x: number = v.a;
@@ -251,14 +251,14 @@ function f4() {
 >boxify(unboxify(b)) : Boxified<{ a: number; b: string; c: boolean; }>
 >boxify : <T>(obj: T) => Boxified<T>
 >unboxify(b) : { a: number; b: string; c: boolean; }
->unboxify : <T>(obj: Boxified<T>) => T
+>unboxify : <T extends object>(obj: Boxified<T>) => T
 >b : { a: Box<number>; b: Box<string>; c: Box<boolean>; }
 
     b = unboxify(boxify(b));
 >b = unboxify(boxify(b)) : { a: Box<number>; b: Box<string>; c: Box<boolean>; }
 >b : { a: Box<number>; b: Box<string>; c: Box<boolean>; }
 >unboxify(boxify(b)) : { a: Box<number>; b: Box<string>; c: Box<boolean>; }
->unboxify : <T>(obj: Boxified<T>) => T
+>unboxify : <T extends object>(obj: Boxified<T>) => T
 >boxify(b) : Boxified<{ a: Box<number>; b: Box<string>; c: Box<boolean>; }>
 >boxify : <T>(obj: T) => Boxified<T>
 >b : { a: Box<number>; b: Box<string>; c: Box<boolean>; }
@@ -304,7 +304,7 @@ function f5(s: string) {
     let v = unboxify(b);
 >v : { a: string | number | boolean; b: string | number | boolean; c: string | number | boolean; }
 >unboxify(b) : { a: string | number | boolean; b: string | number | boolean; c: string | number | boolean; }
->unboxify : <T>(obj: Boxified<T>) => T
+>unboxify : <T extends object>(obj: Boxified<T>) => T
 >b : { a: Box<number> | Box<string> | Box<boolean>; b: Box<number> | Box<string> | Box<boolean>; c: Box<number> | Box<string> | Box<boolean>; }
 
     let x: string | number | boolean = v.a;
@@ -355,7 +355,7 @@ function f6(s: string) {
     let v = unboxify(b);
 >v : { [x: string]: any; }
 >unboxify(b) : { [x: string]: any; }
->unboxify : <T>(obj: Boxified<T>) => T
+>unboxify : <T extends object>(obj: Boxified<T>) => T
 >b : { [x: string]: Box<number> | Box<string> | Box<boolean>; }
 
     let x: string | number | boolean = v[s];
