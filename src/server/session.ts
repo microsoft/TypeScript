@@ -1239,9 +1239,12 @@ namespace ts.server {
             if (needsJsResolution) {
                 project.withAuxiliaryProjectForFiles([file], auxiliaryProject => {
                     const ls = auxiliaryProject.getLanguageService();
-                    const jsDefinitions = ls.getDefinitionAndBoundSpan(file, position, /*aliasesOnly*/ true);
-                    if (some(jsDefinitions?.definitions)) {
-                        for (const jsDefinition of jsDefinitions!.definitions) {
+                    const jsDefinitions = ls
+                        .getDefinitionAndBoundSpan(file, position, /*aliasesOnly*/ true)
+                        ?.definitions
+                        ?.filter(d => toNormalizedPath(d.fileName) !== file);
+                    if (some(jsDefinitions)) {
+                        for (const jsDefinition of jsDefinitions) {
                             if (jsDefinition.unverified) {
                                 const refined = tryRefineDefinition(jsDefinition, project.getLanguageService().getProgram()!, ls.getProgram()!);
                                 if (some(refined)) {
@@ -1255,27 +1258,24 @@ namespace ts.server {
                         }
                     }
                     else {
-                        const ambientCandidates = definitions.filter(d => d.isAliasTarget && d.isAmbient);
+                        const ambientCandidates = definitions.filter(d => toNormalizedPath(d.fileName) !== file && d.isAmbient);
                         for (const candidate of ambientCandidates) {
-                            const candidateFileName = getEffectiveFileNameOfDefinition(candidate, project.getLanguageService().getProgram()!);
-                            if (candidateFileName) {
-                                const fileNameToSearch = findImplementationFileFromDtsFileName(candidateFileName, file, auxiliaryProject);
-                                const scriptInfo = fileNameToSearch ? auxiliaryProject.getScriptInfo(fileNameToSearch) : undefined;
-                                if (!scriptInfo) {
-                                    continue;
-                                }
-                                if (!auxiliaryProject.containsScriptInfo(scriptInfo)) {
-                                    auxiliaryProject.addRoot(scriptInfo);
-                                }
-                                const auxiliaryProgram = auxiliaryProject.getLanguageService().getProgram()!;
-                                const fileToSearch = Debug.checkDefined(auxiliaryProgram.getSourceFile(fileNameToSearch!));
-                                const matches = FindAllReferences.Core.getTopMostDeclarationNamesInFile(candidate.name, fileToSearch);
-                                for (const match of matches) {
-                                    const symbol = match.symbol || auxiliaryProgram.getTypeChecker().getSymbolAtLocation(match);
-                                    const decl = getDeclarationFromName(match);
-                                    if (symbol && decl) {
-                                        pushIfUnique(definitions, GoToDefinition.createDefinitionInfo(decl, auxiliaryProgram.getTypeChecker(), symbol, match));
-                                    }
+                            const fileNameToSearch = findImplementationFileFromDtsFileName(candidate.fileName, file, auxiliaryProject);
+                            const scriptInfo = fileNameToSearch ? auxiliaryProject.getScriptInfo(fileNameToSearch) : undefined;
+                            if (!scriptInfo) {
+                                continue;
+                            }
+                            if (!auxiliaryProject.containsScriptInfo(scriptInfo)) {
+                                auxiliaryProject.addRoot(scriptInfo);
+                            }
+                            const auxiliaryProgram = auxiliaryProject.getLanguageService().getProgram()!;
+                            const fileToSearch = Debug.checkDefined(auxiliaryProgram.getSourceFile(fileNameToSearch!));
+                            const matches = FindAllReferences.Core.getTopMostDeclarationNamesInFile(candidate.name, fileToSearch);
+                            for (const match of matches) {
+                                const symbol = match.symbol || auxiliaryProgram.getTypeChecker().getSymbolAtLocation(match);
+                                const decl = getDeclarationFromName(match);
+                                if (symbol && decl) {
+                                    pushIfUnique(definitions, GoToDefinition.createDefinitionInfo(decl, auxiliaryProgram.getTypeChecker(), symbol, match));
                                 }
                             }
                         }
@@ -1297,30 +1297,6 @@ namespace ts.server {
                 definitions: definitions.map(Session.mapToOriginalLocation),
                 textSpan,
             };
-
-            function getEffectiveFileNameOfDefinition(definition: DefinitionInfo, program: Program) {
-                const sourceFile = program.getSourceFile(definition.fileName)!;
-                const checker = program.getTypeChecker();
-                const symbol = checker.getSymbolAtLocation(getTouchingPropertyName(sourceFile, definition.textSpan.start));
-                if (symbol) {
-                    let parent = symbol.parent;
-                    while (parent && !isExternalModuleSymbol(parent)) {
-                        parent = parent.parent;
-                    }
-                    if (parent?.declarations && some(parent.declarations, isExternalModuleAugmentation)) {
-                        // Always CommonJS right now, but who knows in the future
-                        const mode = getModeForUsageLocation(sourceFile, find(parent.declarations, isExternalModuleAugmentation)!.name as StringLiteral);
-                        const fileName = sourceFile.resolvedModules?.get(stripQuotes(parent.name), mode)?.resolvedFileName;
-                        if (fileName) {
-                            return fileName;
-                        }
-                    }
-                    const fileName = tryCast(parent?.valueDeclaration, isSourceFile)?.fileName;
-                    if (fileName) {
-                        return fileName;
-                    }
-                }
-            }
 
             function findImplementationFileFromDtsFileName(fileName: string, resolveFromFile: string, auxiliaryProject: Project) {
                 const nodeModulesPathParts = getNodeModulePathParts(fileName);
