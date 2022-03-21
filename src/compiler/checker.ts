@@ -15139,8 +15139,8 @@ namespace ts {
                         text = addText;
                     }
                     else if (t.flags & TypeFlags.Intersection) {
-                        const addText = addSpans(texts[i + 1], (t as IntersectionType).types);
-                        if (!addText) return false;
+                        const added = addSpans(texts[i + 1], (t as IntersectionType).types);
+                        if (!added) return false;
                     }
                     else if (isTextsArray) {
                         return false;
