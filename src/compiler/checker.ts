@@ -42864,14 +42864,27 @@ namespace ts {
             // Initialize global symbol table
             let augmentations: (readonly (StringLiteral | Identifier)[])[] | undefined;
             for (const file of host.getSourceFiles()) {
-                if (file.redirectInfo) {
+                const mustBeBoundUpFront =
+                    // Globals must be bound up-front.
+                    // (With the global symbol scope, now our checker has some hope.)
+                    !isExternalModule(file) ||
+                    // JavaScript files *can* augment the global scope.
+                    // (To know whether they will today, we have to bind them anyway.)
+                    isInJSFile(file) ||
+                    // Module augmentations make the current and affected file global.
+                    // (If you add an augmentation, we'll be sure to make you patien(t)!)
+                    file.moduleAugmentations.length ||
+                    // Since binding sometimes takes a while, we'll check the top statements in `file`.
+                    // (Using outdated UMD references? No worries, we respect slow preferences!)
+                    find(file.statements, isNamespaceExportDeclaration);
+                if (mustBeBoundUpFront) {
                     bindSourceFile(file, compilerOptions);
+                }
 
+                if (file.redirectInfo) {
                     continue;
                 }
                 if (!isExternalOrCommonJsModule(file)) {
-                    bindSourceFile(file, compilerOptions);
-
                     // It is an error for a non-external-module (i.e. script) to declare its own `globalThis`.
                     // We can't use `builtinGlobals` for this due to synthetic expando-namespace generation in JS files.
                     const fileGlobalThisSymbol = file.locals!.get("globalThis" as __String);
@@ -42883,19 +42896,15 @@ namespace ts {
                     mergeSymbolTable(globals, file.locals!);
                 }
                 if (file.jsGlobalAugmentations) {
-                    bindSourceFile(file, compilerOptions);
                     mergeSymbolTable(globals, file.jsGlobalAugmentations);
                 }
                 if (file.patternAmbientModules && file.patternAmbientModules.length) {
-                    bindSourceFile(file, compilerOptions);
                     patternAmbientModules = concatenate(patternAmbientModules, file.patternAmbientModules);
                 }
                 if (file.moduleAugmentations.length) {
-                    bindSourceFile(file, compilerOptions);
                     (augmentations ||= []).push(file.moduleAugmentations);
                 }
                 if (file.symbol && file.symbol.globalExports) {
-                    bindSourceFile(file, compilerOptions);
                     // Merge in UMD exports with first-in-wins semantics (see #9771)
                     const source = file.symbol.globalExports;
                     source.forEach((sourceSymbol, id) => {
