@@ -966,6 +966,9 @@
       <Item ItemId=";A_type_referenced_in_a_decorated_signature_must_be_imported_with_import_type_or_a_namespace_import_w_1272" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[A type referenced in a decorated signature must be imported with 'import type' or a namespace import when 'isolatedModules' and 'emitDecoratorMetadata' are enabled.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[启用 “isolatedModules” 和 “emitDecoratorMetadata” 时，必须使用 “import type” 或命名空间导入来导入修饰签名中引用的类型。]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -1428,7 +1431,7 @@
       <Item ItemId=";Add_undefined_to_a_type_when_accessed_using_an_index_6674" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Add 'undefined' to a type when accessed using an index.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[使用索引访问时，将 “undefined” 添加到类型。]]></Val>
           </Tgt>
           <Prev Cat="Text">
@@ -1578,7 +1581,7 @@
       <Item ItemId=";Allow_JavaScript_files_to_be_a_part_of_your_program_Use_the_checkJS_option_to_get_errors_from_these__6600" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Allow JavaScript files to be a part of your program. Use the 'checkJS' option to get errors from these files.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[允许 JavaScript 文件成为程序的一部分。使用 “checkJS” 选项从这些文件中获取错误。]]></Val>
           </Tgt>
           <Prev Cat="Text">
@@ -2475,8 +2478,8 @@
       <Item ItemId=";Build_all_projects_including_those_that_appear_to_be_up_to_date_6636" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Build all projects, including those that appear to be up to date.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[生成所有项目，包括那些似乎已是最新的项目]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[生成所有项目，包括那些似乎是最新的项目。]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Build all projects, including those that appear to be up to date]]></Val>
@@ -3399,7 +3402,7 @@
       <Item ItemId=";Check_that_the_arguments_for_bind_call_and_apply_methods_match_the_original_function_6697" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Check that the arguments for 'bind', 'call', and 'apply' methods match the original function.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[检查 “bind”、“call” 和 “apply” 方法的参数是否与原始函数匹配。]]></Val>
           </Tgt>
           <Prev Cat="Text">
@@ -3900,6 +3903,9 @@
       <Item ItemId=";Control_what_method_is_used_to_detect_module_format_JS_files_1475" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Control what method is used to detect module-format JS files.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[控制用于检测模块格式 JS 文件的方法。]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -4632,6 +4638,9 @@
       <Item ItemId=";Default_catch_clause_variables_as_unknown_instead_of_any_6803" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Default catch clause variables as 'unknown' instead of 'any'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[将 catch 子句变量默认为 “unknown” 而不是 “any”。]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -4701,8 +4710,8 @@
       <Item ItemId=";Delete_the_outputs_of_all_projects_6365" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Delete the outputs of all projects.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[删除所有项目的输出]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[删除所有项目的输出。]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Delete the outputs of all projects]]></Val>
@@ -4749,7 +4758,7 @@
       <Item ItemId=";Deprecated_setting_Use_outFile_instead_6677" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Deprecated setting. Use 'outFile' instead.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[弃用的设置。请改用 “outFile”。]]></Val>
           </Tgt>
           <Prev Cat="Text">
@@ -4881,8 +4890,8 @@
       <Item ItemId=";Disable_emitting_declarations_that_have_internal_in_their_JSDoc_comments_6701" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Disable emitting declarations that have '@internal' in their JSDoc comments.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[禁用在其 JSDoc 注释中包含 “@internal” 的声明。]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[禁用在其 JSDoc 注释中包含 “@internal” 的发出声明。]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Disable emitting declarations that have `@internal` in their JSDoc comments.]]></Val>
@@ -4911,7 +4920,7 @@
       <Item ItemId=";Disable_erasing_const_enum_declarations_in_generated_code_6682" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Disable erasing 'const enum' declarations in generated code.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[在生成的代码中禁用擦除 “const enum” 声明。]]></Val>
           </Tgt>
           <Prev Cat="Text">
@@ -4941,7 +4950,7 @@
       <Item ItemId=";Disable_generating_custom_helper_functions_like_extends_in_compiled_output_6661" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Disable generating custom helper functions like '__extends' in compiled output.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[在已编译输出中禁用生成自定义帮助程序函数(如 “__extends”)。]]></Val>
           </Tgt>
           <Prev Cat="Text">
@@ -4971,8 +4980,8 @@
       <Item ItemId=";Disable_preferring_source_files_instead_of_declaration_files_when_referencing_composite_projects_6620" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Disable preferring source files instead of declaration files when referencing composite projects.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[在引用复合项目时禁用首选源文件而不是声明文件]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[在引用复合项目时禁用首选源文件而不是声明文件。]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Disable preferring source files instead of declaration files when referencing composite projects]]></Val>
@@ -5055,8 +5064,8 @@
       <Item ItemId=";Disable_wiping_the_console_in_watch_mode_6684" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Disable wiping the console in watch mode.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[禁用在监视模式下擦除控制台]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[禁用在监视模式下擦除控制台。]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Disable wiping the console in watch mode]]></Val>
@@ -5076,8 +5085,8 @@
       <Item ItemId=";Disallow_import_s_require_s_or_reference_s_from_expanding_the_number_of_files_TypeScript_should_add__6672" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Disallow 'import's, 'require's or '<reference>'s from expanding the number of files TypeScript should add to a project.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[禁止 “import”、“require” 或 “<引用>” 扩展 TypeScript 应添加到项目的文件数。]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[禁止 “import”、“require” 或 “<reference>” 扩展 TypeScript 应添加到项目的文件数。]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Disallow `import`s, `require`s or `<reference>`s from expanding the number of files TypeScript should add to a project.]]></Val>
@@ -5490,8 +5499,8 @@
       <Item ItemId=";Emit_additional_JavaScript_to_ease_support_for_importing_CommonJS_modules_This_enables_allowSyntheti_6626" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[发出其他 JavaScript 以便支持导入 CommonJS 模块。这将启用 “allowSyntheticDefaultImports” 以实现类型兼容性。]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[发出其他 JavaScript 以轻松支持导入 CommonJS 模块。这将启用 “allowSyntheticDefaultImports” 以实现类型兼容性。]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Emit additional JavaScript to ease support for importing CommonJS modules. This enables `allowSyntheticDefaultImports` for type compatibility.]]></Val>
@@ -5547,8 +5556,8 @@
       <Item ItemId=";Enable_color_and_formatting_in_TypeScript_s_output_to_make_compiler_errors_easier_to_read_6685" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Enable color and formatting in TypeScript's output to make compiler errors easier to read.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[在 TypeScript 输出中启用颜色和格式设置，使编译器错误更易于阅读]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[在 TypeScript 输出中启用颜色和格式设置，以使编译器错误更易于阅读。]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Enable color and formatting in TypeScript's output to make compiler errors easier to read]]></Val>
@@ -5577,7 +5586,7 @@
       <Item ItemId=";Enable_error_reporting_for_expressions_and_declarations_with_an_implied_any_type_6665" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Enable error reporting for expressions and declarations with an implied 'any' type.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[对具有隐式 “any” 类型的表达式和声明启用错误报告。]]></Val>
           </Tgt>
           <Prev Cat="Text">
@@ -5607,14 +5616,17 @@
       <Item ItemId=";Enable_error_reporting_when_local_variables_aren_t_read_6675" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Enable error reporting when local variables aren't read.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[在未读取局部变量时启用错误报告。]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Enable_error_reporting_when_this_is_given_the_type_any_6668" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Enable error reporting when 'this' is given the type 'any'.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[启用在 “this” 为 “any” 类型时进行错误报告。]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[在 “this” 的类型为 “any” 时启用错误报告。]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Enable error reporting when `this` is given the type `any`.]]></Val>
@@ -5634,8 +5646,8 @@
       <Item ItemId=";Enable_importing_json_files_6689" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Enable importing .json files.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[启用导入 .json 文件]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[启用导入 .json 文件。]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Enable importing .json files]]></Val>
@@ -5718,8 +5730,8 @@
       <Item ItemId=";Enable_verbose_logging_6713" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Enable verbose logging.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[启用详细日志记录]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[启用详细日志记录。]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Enable verbose logging]]></Val>
@@ -5757,8 +5769,8 @@
       <Item ItemId=";Enforces_using_indexed_accessors_for_keys_declared_using_an_indexed_type_6671" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Enforces using indexed accessors for keys declared using an indexed type.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[对使用索引类型声明的键强制使用索引访问器]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[对使用索引类型声明的键强制使用索引访问器。]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Enforces using indexed accessors for keys declared using an indexed type]]></Val>
@@ -7044,8 +7056,8 @@
       <Item ItemId=";Have_recompiles_in_projects_that_use_incremental_and_watch_mode_assume_that_changes_within_a_file_wi_6606" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Have recompiles in projects that use 'incremental' and 'watch' mode assume that changes within a file will only affect files directly depending on it.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[在使用 “incremental” 和 “watch” 模式的项目中重新编译假定文件中的更改将直接影响影响依赖于它的文件。]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[在使用 “incremental” 和 “watch” 模式的项目中具有重新编译会假定文件中的更改将仅直接影响依赖于它的文件。]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Have recompiles in projects that use `incremental` and `watch` mode assume that changes within a file will only affect files directly depending on it.]]></Val>
@@ -8232,7 +8244,7 @@
       <Item ItemId=";Log_paths_used_during_the_moduleResolution_process_6706" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Log paths used during the 'moduleResolution' process.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[在 “moduleResolution” 进程期间使用的日志路径。]]></Val>
           </Tgt>
           <Prev Cat="Text">
@@ -10647,8 +10659,8 @@
       <Item ItemId=";Raise_an_error_when_a_function_parameter_isn_t_read_6676" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Raise an error when a function parameter isn't read.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[在未读取函数参数时引发错误]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[在未读取函数参数时引发错误。]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Raise an error when a function parameter isn't read]]></Val>
@@ -11868,7 +11880,7 @@
       <Item ItemId=";Specify_a_file_that_bundles_all_outputs_into_one_JavaScript_file_If_declaration_is_true_also_designa_6679" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Specify a file that bundles all outputs into one JavaScript file. If 'declaration' is true, also designates a file that bundles all .d.ts output.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[指定将所有输出捆绑到一个 JavaScript 文件中的文件。如果 “declaration” 为 true，还要指定一个捆绑所有 .d.ts 输出的文件。]]></Val>
           </Tgt>
           <Prev Cat="Text">
@@ -11934,8 +11946,8 @@
       <Item ItemId=";Specify_emit_Slashchecking_behavior_for_imports_that_are_only_used_for_types_6718" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Specify emit/checking behavior for imports that are only used for types.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[指定仅用于类型的导入的发出/检查行为]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[指定仅用于类型的导入的发出/检查行为。]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Specify emit/checking behavior for imports that are only used for types]]></Val>
@@ -12009,7 +12021,7 @@
       <Item ItemId=";Specify_module_specifier_used_to_import_the_JSX_factory_functions_when_using_jsx_Colon_react_jsx_Ast_6649" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Specify module specifier used to import the JSX factory functions when using 'jsx: react-jsx*'.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[指定使用 “jsx: react-jsx*” 时用于导入 JSX 中心函数的模块说明符。]]></Val>
           </Tgt>
           <Prev Cat="Text">
@@ -12021,8 +12033,8 @@
       <Item ItemId=";Specify_multiple_folders_that_act_like_Slashnode_modules_Slash_types_6710" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Specify multiple folders that act like './node_modules/@types'.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[指定多个行为类似 “./node_modules/@types” 的文件夹。]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[指定多个行为类似于 “./node_modules/@types” 的文件夹。]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Specify multiple folders that act like `./node_modules/@types`.]]></Val>
@@ -12105,8 +12117,8 @@
       <Item ItemId=";Specify_the_JSX_factory_function_used_when_targeting_React_JSX_emit_e_g_React_createElement_or_h_6647" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Specify the JSX factory function used when targeting React JSX emit, e.g. 'React.createElement' or 'h'.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[指定在将 React JSX 发出设定为目标时要使用的 JSX 中心函数，例如 “react.createElement” 或 “h”]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[指定在将 React JSX 发出设定为目标时要使用的 JSX 中心函数，例如 “react.createElement” 或 “h”。]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Specify the JSX factory function used when targeting React JSX emit, e.g. 'React.createElement' or 'h']]></Val>
@@ -12171,7 +12183,7 @@
       <Item ItemId=";Specify_the_maximum_folder_depth_used_for_checking_JavaScript_files_from_node_modules_Only_applicabl_6656" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Specify the maximum folder depth used for checking JavaScript files from 'node_modules'. Only applicable with 'allowJs'.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[指定用于从 “node_modules” 检查 JavaScript 文件的最大文件夹深度。仅适用于 “allowJs”。]]></Val>
           </Tgt>
           <Prev Cat="Text">
@@ -12195,8 +12207,8 @@
       <Item ItemId=";Specify_the_object_invoked_for_createElement_This_only_applies_when_targeting_react_JSX_emit_6686" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Specify the object invoked for 'createElement'. This only applies when targeting 'react' JSX emit.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[指定为 “createElement” 调用的对象。这仅在将 “react” JSX 发出设定为目标时使用。]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[指定为 “createElement” 调用的对象。这仅适用于将 “react” JSX 发出设定为目标的情况。]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Specify the object invoked for `createElement`. This only applies when targeting `react` JSX emit.]]></Val>
@@ -12480,8 +12492,8 @@
       <Item ItemId=";Suppress_noImplicitAny_errors_when_indexing_objects_that_lack_index_signatures_6703" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Suppress 'noImplicitAny' errors when indexing objects that lack index signatures.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[在对缺少索引签名的对象编制索引时，禁止显示 “noImplicitAny” 错误。]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[在对缺少索引签名的对象编制索引时，抑制 “noImplicitAny” 错误。]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Suppress `noImplicitAny` errors when indexing objects that lack index signatures.]]></Val>
@@ -15120,7 +15132,7 @@
       <Item ItemId=";When_type_checking_take_into_account_null_and_undefined_6699" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[When type checking, take into account 'null' and 'undefined'.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[进行类型检查时，请考虑 “null” 和 “undefined”。]]></Val>
           </Tgt>
           <Prev Cat="Text">
@@ -15879,6 +15891,9 @@
       <Item ItemId=";auto_Colon_Treat_files_with_imports_exports_import_meta_jsx_with_jsx_Colon_react_jsx_or_esm_format_w_1476" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA["auto": Treat files with imports, exports, import.meta, jsx (with jsx: react-jsx), or esm format (with module: node12+) as modules.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[“auto”: 将导入、导出、import.meta、jsx (带有 jsx: react-jsx)或 esm 格式(带模块: node12+)的文件视为模块。]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
