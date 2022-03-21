@@ -963,6 +963,9 @@
       <Item ItemId=";A_type_referenced_in_a_decorated_signature_must_be_imported_with_import_type_or_a_namespace_import_w_1272" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[A type referenced in a decorated signature must be imported with 'import type' or a namespace import when 'isolatedModules' and 'emitDecoratorMetadata' are enabled.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Ein Typ, auf den in einer ergänzten Signatur verwiesen wird, muss mit „import type“ oder einem Namespaceimport importiert werden, wenn „isolatedModules“ und „emitDecoratorMetadata“ aktiviert sind.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -1425,8 +1428,8 @@
       <Item ItemId=";Add_undefined_to_a_type_when_accessed_using_an_index_6674" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Add 'undefined' to a type when accessed using an index.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[Fügen Sie einem Typ "undefined" hinzu, wenn über einen Index darauf zugegriffen wird.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Fügen Sie einem Typ „undefined“ hinzu, wenn über einen Index darauf zugegriffen wird.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Add `undefined` to a type when accessed using an index.]]></Val>
@@ -1575,8 +1578,8 @@
       <Item ItemId=";Allow_JavaScript_files_to_be_a_part_of_your_program_Use_the_checkJS_option_to_get_errors_from_these__6600" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Allow JavaScript files to be a part of your program. Use the 'checkJS' option to get errors from these files.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[Lassen Sie JavaScript-Dateien Teil Ihres Programms werden. Verwenden Sie die Option "checkJS", um Fehler aus diesen Dateien abzurufen.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Lassen Sie zu, dass JavaScript-Dateien Teil Ihres Programms werden. Verwenden Sie die Option „checkJS“, um Fehler aus diesen Dateien abzurufen.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Allow JavaScript files to be a part of your program. Use the `checkJS` option to get errors from these files.]]></Val>
@@ -2472,8 +2475,8 @@
       <Item ItemId=";Build_all_projects_including_those_that_appear_to_be_up_to_date_6636" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Build all projects, including those that appear to be up to date.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[Alle Projekte erstellen, einschließlich solcher, die anscheinend auf dem neuesten Stand sind]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Erstellen Sie alle Projekte, einschließlich der Projekte, die aktuell zu sein scheinen.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Build all projects, including those that appear to be up to date]]></Val>
@@ -3396,8 +3399,8 @@
       <Item ItemId=";Check_that_the_arguments_for_bind_call_and_apply_methods_match_the_original_function_6697" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Check that the arguments for 'bind', 'call', and 'apply' methods match the original function.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[Überprüfen Sie, ob die Argumente für die Methoden "bind", "call" und "apply" mit der ursprünglichen Funktion übereinstimmen.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Überprüfen Sie, ob die Argumente für die Methoden „bind“, „call“ und „apply“ mit der ursprünglichen Funktion übereinstimmen.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Check that the arguments for `bind`, `call`, and `apply` methods match the original function.]]></Val>
@@ -3897,6 +3900,9 @@
       <Item ItemId=";Control_what_method_is_used_to_detect_module_format_JS_files_1475" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Control what method is used to detect module-format JS files.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Steuern Sie, welche Methode zum Erkennen von JS-Dateien im Modulformat verwendet wird.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -4629,6 +4635,9 @@
       <Item ItemId=";Default_catch_clause_variables_as_unknown_instead_of_any_6803" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Default catch clause variables as 'unknown' instead of 'any'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Stellen Sie die Variablen der Catch-Klauseln standardmäßig als „unknown“ anstelle von „any“ ein.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -4698,8 +4707,8 @@
       <Item ItemId=";Delete_the_outputs_of_all_projects_6365" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Delete the outputs of all projects.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[Ausgaben aller Projekte löschen]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Löschen Sie die Ausgaben aller Projekte.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Delete the outputs of all projects]]></Val>
@@ -4746,8 +4755,8 @@
       <Item ItemId=";Deprecated_setting_Use_outFile_instead_6677" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Deprecated setting. Use 'outFile' instead.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[Veraltete Einstellung. Verwenden Sie stattdessen "outFile".]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Veraltete Einstellung. Verwenden Sie stattdessen „outFile“.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Deprecated setting. Use `outFile` instead.]]></Val>
@@ -4878,8 +4887,8 @@
       <Item ItemId=";Disable_emitting_declarations_that_have_internal_in_their_JSDoc_comments_6701" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Disable emitting declarations that have '@internal' in their JSDoc comments.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[Deaktivieren Sie das Ausgeben von Deklarationen mit "@internal" in ihren JSDoc-Kommentaren.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Deaktivieren Sie das Ausgeben von Deklarationen mit „@internal“ in ihren JSDoc-Kommentaren.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Disable emitting declarations that have `@internal` in their JSDoc comments.]]></Val>
@@ -4908,8 +4917,8 @@
       <Item ItemId=";Disable_erasing_const_enum_declarations_in_generated_code_6682" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Disable erasing 'const enum' declarations in generated code.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[Deaktivieren Sie das Löschen von "const enum"-Deklarationen in generiertem Code.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Deaktivieren Sie das Löschen von „const enum“-Deklarationen in generiertem Code.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Disable erasing `const enum` declarations in generated code.]]></Val>
@@ -4938,8 +4947,8 @@
       <Item ItemId=";Disable_generating_custom_helper_functions_like_extends_in_compiled_output_6661" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Disable generating custom helper functions like '__extends' in compiled output.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[Deaktivieren Sie das Generieren von benutzerdefinierten Hilfsfunktionen wie "__extends" in der kompilierten Ausgabe.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Deaktivieren Sie das Generieren von benutzerdefinierten Hilfsfunktionen wie „__extends“ in der kompilierten Ausgabe.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Disable generating custom helper functions like `__extends` in compiled output.]]></Val>
@@ -4968,8 +4977,8 @@
       <Item ItemId=";Disable_preferring_source_files_instead_of_declaration_files_when_referencing_composite_projects_6620" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Disable preferring source files instead of declaration files when referencing composite projects.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[Deaktivieren bevorzugter Quelldateien anstelle von Deklarationsdateien beim Verweisen auf zusammengesetzte Projekte]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Deaktivieren Sie bevorzugte Quelldateien anstelle von Deklarationsdateien, wenn Sie auf zusammengesetzte Projekte verweisen.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Disable preferring source files instead of declaration files when referencing composite projects]]></Val>
@@ -5052,7 +5061,7 @@
       <Item ItemId=";Disable_wiping_the_console_in_watch_mode_6684" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Disable wiping the console in watch mode.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Deaktivieren Sie das Zurücksetzen der Konsole im Überwachungsmodus.]]></Val>
           </Tgt>
           <Prev Cat="Text">
@@ -5073,8 +5082,8 @@
       <Item ItemId=";Disallow_import_s_require_s_or_reference_s_from_expanding_the_number_of_files_TypeScript_should_add__6672" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Disallow 'import's, 'require's or '<reference>'s from expanding the number of files TypeScript should add to a project.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[Hiermit wird verhindert, dass "import", "require" oder "<Reference>" die Anzahl der Dateien erweitern, die TypeScript einem Projekt hinzufügen soll.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Hiermit wird verhindert, dass „import“, „require“ oder „<reference>“ die Anzahl der Dateien erweitern, die TypeScript einem Projekt hinzufügen soll.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Disallow `import`s, `require`s or `<reference>`s from expanding the number of files TypeScript should add to a project.]]></Val>
@@ -5487,8 +5496,8 @@
       <Item ItemId=";Emit_additional_JavaScript_to_ease_support_for_importing_CommonJS_modules_This_enables_allowSyntheti_6626" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[Geben Sie ein zusätzliches JavaScript aus, um die Unterstützung beim Importieren von CommonJS-Modulen zu vereinfachen. Hiermit wird "allowSyntheticDefaultImports" für die Typkompatibilität aktiviert.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Geben Sie zusätzliches JavaScript aus, um die Unterstützung beim Importieren von CommonJS-Modulen zu vereinfachen. Dadurch wird „allowSyntheticDefaultImports“ für die Typkompatibilität aktiviert.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Emit additional JavaScript to ease support for importing CommonJS modules. This enables `allowSyntheticDefaultImports` for type compatibility.]]></Val>
@@ -5544,8 +5553,8 @@
       <Item ItemId=";Enable_color_and_formatting_in_TypeScript_s_output_to_make_compiler_errors_easier_to_read_6685" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Enable color and formatting in TypeScript's output to make compiler errors easier to read.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[Farb-und Formatierungsvorgänge in der TypeScript-Ausgabe aktivieren, um Compilerfehler leichter lesbar zu machen]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Aktivieren Sie Farbe und Formatierung in der TypeScript-Ausgabe, um Compilerfehler leichter zu lesen.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Enable color and formatting in TypeScript's output to make compiler errors easier to read]]></Val>
@@ -5574,8 +5583,8 @@
       <Item ItemId=";Enable_error_reporting_for_expressions_and_declarations_with_an_implied_any_type_6665" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Enable error reporting for expressions and declarations with an implied 'any' type.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[Aktivieren Sie die Fehlerberichterstattung für Ausdrücke und Deklarationen mit einem impliziten "any"-Typ.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Aktivieren Sie die Fehlerberichterstattung für Ausdrücke und Deklarationen mit einem impliziten „any“-Typ.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Enable error reporting for expressions and declarations with an implied `any` type..]]></Val>
@@ -5604,14 +5613,17 @@
       <Item ItemId=";Enable_error_reporting_when_local_variables_aren_t_read_6675" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Enable error reporting when local variables aren't read.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Aktivieren Sie die Fehlerberichterstattung, wenn lokale Variablen nicht gelesen werden.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Enable_error_reporting_when_this_is_given_the_type_any_6668" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Enable error reporting when 'this' is given the type 'any'.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[Aktivieren Sie die Fehlerberichterstattung, wenn "this" den Typ "any" erhält.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Aktivieren Sie die Fehlerberichterstattung, wenn „this“ den Typ „any“ erhält.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Enable error reporting when `this` is given the type `any`.]]></Val>
@@ -5631,8 +5643,8 @@
       <Item ItemId=";Enable_importing_json_files_6689" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Enable importing .json files.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[Importieren von JSON-Dateien aktivieren]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Aktivieren Sie das Importieren von JSON-Dateien.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Enable importing .json files]]></Val>
@@ -5715,8 +5727,8 @@
       <Item ItemId=";Enable_verbose_logging_6713" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Enable verbose logging.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[Ausführliche Protokollierung aktivieren]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Aktivieren Sie die ausführliche Protokollierung.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Enable verbose logging]]></Val>
@@ -5754,8 +5766,8 @@
       <Item ItemId=";Enforces_using_indexed_accessors_for_keys_declared_using_an_indexed_type_6671" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Enforces using indexed accessors for keys declared using an indexed type.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[Erzwingt die Verwendung indizierter Accessoren für Schlüssel, die mithilfe eines indizierten Typs deklariert werden.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Erzwingt die Verwendung indizierter Accessoren für Schlüssel, die mithilfe eines indizierten Typs deklariert wurden.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Enforces using indexed accessors for keys declared using an indexed type]]></Val>
@@ -7041,8 +7053,8 @@
       <Item ItemId=";Have_recompiles_in_projects_that_use_incremental_and_watch_mode_assume_that_changes_within_a_file_wi_6606" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Have recompiles in projects that use 'incremental' and 'watch' mode assume that changes within a file will only affect files directly depending on it.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[Bei Neukompilierungen in Projekten, die den Modus "incremental" und "watch" verwenden, wird davon ausgegangen, dass Änderungen innerhalb einer Datei sich nur auf die direkt davon abhängigen Dateien auswirken.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Bei Neukompilierungen in Projekten, die die Modi „incremental“ und „watch“ verwenden, wird davon ausgegangen, dass Änderungen innerhalb einer Datei sich nur direkt auf Dateien auswirken.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Have recompiles in projects that use `incremental` and `watch` mode assume that changes within a file will only affect files directly depending on it.]]></Val>
@@ -8229,8 +8241,8 @@
       <Item ItemId=";Log_paths_used_during_the_moduleResolution_process_6706" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Log paths used during the 'moduleResolution' process.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[Protokollpfade, die während des "moduleResolution"-Prozesses verwendet werden.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Protokollpfade, die während des „moduleResolution“-Prozesses verwendet werden.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Log paths used during the `moduleResolution` process.]]></Val>
@@ -10641,8 +10653,8 @@
       <Item ItemId=";Raise_an_error_when_a_function_parameter_isn_t_read_6676" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Raise an error when a function parameter isn't read.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[Auslösen eines Fehlers, wenn ein Funktionsparameter nicht gelesen wird]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Löst einen Fehler aus, wenn ein Funktionsparameter nicht gelesen wird.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Raise an error when a function parameter isn't read]]></Val>
@@ -11862,8 +11874,8 @@
       <Item ItemId=";Specify_a_file_that_bundles_all_outputs_into_one_JavaScript_file_If_declaration_is_true_also_designa_6679" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Specify a file that bundles all outputs into one JavaScript file. If 'declaration' is true, also designates a file that bundles all .d.ts output.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[Geben Sie eine Datei an, die alle Ausgaben in einer JavaScript-Datei bündelt. Wenn "declaration" TRUE ist, wird auch eine Datei festgelegt, die alle .d.ts-Ausgaben bündelt.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Geben Sie eine Datei an, die alle Ausgaben in einer JavaScript-Datei bündelt. Wenn „declaration“ TRUE ist, wird auch eine Datei festgelegt, die alle „.d.ts“-Ausgaben bündelt.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Specify a file that bundles all outputs into one JavaScript file. If `declaration` is true, also designates a file that bundles all .d.ts output.]]></Val>
@@ -11928,7 +11940,7 @@
       <Item ItemId=";Specify_emit_Slashchecking_behavior_for_imports_that_are_only_used_for_types_6718" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Specify emit/checking behavior for imports that are only used for types.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Geben Sie das Ausgabe-/Überprüfungsverhalten für Importe an, die nur für Typen verwendet werden.]]></Val>
           </Tgt>
           <Prev Cat="Text">
@@ -12003,8 +12015,8 @@
       <Item ItemId=";Specify_module_specifier_used_to_import_the_JSX_factory_functions_when_using_jsx_Colon_react_jsx_Ast_6649" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Specify module specifier used to import the JSX factory functions when using 'jsx: react-jsx*'.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[Geben Sie den Modulspezifizierer an, der zum Importieren der JSX-Factoryfunktionen verwendet wird, wenn "jsx: react-jsx*" verwendet wird.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Geben Sie den Modulspezifizierer an, der zum Importieren der JSX-Factoryfunktionen verwendet wird, wenn Sie „jsx: react-jsx*“ verwenden.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Specify module specifier used to import the JSX factory functions when using `jsx: react-jsx*`.`]]></Val>
@@ -12015,8 +12027,8 @@
       <Item ItemId=";Specify_multiple_folders_that_act_like_Slashnode_modules_Slash_types_6710" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Specify multiple folders that act like './node_modules/@types'.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[Geben Sie mehrere Ordner an, die als "./node_modules/@types" fungieren.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Geben Sie mehrere Ordner an, die als „./node_modules/@types“ fungieren.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Specify multiple folders that act like `./node_modules/@types`.]]></Val>
@@ -12099,8 +12111,8 @@
       <Item ItemId=";Specify_the_JSX_factory_function_used_when_targeting_React_JSX_emit_e_g_React_createElement_or_h_6647" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Specify the JSX factory function used when targeting React JSX emit, e.g. 'React.createElement' or 'h'.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[Geben Sie die JSX-Factoryfunktion an, die für eine react-JSX-Ausgabe verwendet werden soll, z. B. "React.createElement" oder "h".]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Geben Sie die JSX-Factoryfunktion an, die verwendet wird, wenn Sie die JSX-Ausgabe „react“ als Ziel verwenden, z. B. „React.createElement“ oder „h“.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Specify the JSX factory function used when targeting React JSX emit, e.g. 'React.createElement' or 'h']]></Val>
@@ -12165,8 +12177,8 @@
       <Item ItemId=";Specify_the_maximum_folder_depth_used_for_checking_JavaScript_files_from_node_modules_Only_applicabl_6656" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Specify the maximum folder depth used for checking JavaScript files from 'node_modules'. Only applicable with 'allowJs'.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[Geben Sie die maximale Ordnertiefe für die Überprüfung von JavaScript-Dateien von "node_modules" an. Nur gültig für "allowJs".]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Geben Sie die maximale Ordnertiefe an, die zum Überprüfen von JavaScript-Dateien aus „node_modules“ verwendet wird. Gilt nur für „allowJs“.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Specify the maximum folder depth used for checking JavaScript files from `node_modules`. Only applicable with `allowJs`.]]></Val>
@@ -12189,8 +12201,8 @@
       <Item ItemId=";Specify_the_object_invoked_for_createElement_This_only_applies_when_targeting_react_JSX_emit_6686" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Specify the object invoked for 'createElement'. This only applies when targeting 'react' JSX emit.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[Geben Sie das Objekt an, das für "createElement" aufgerufen wird. Dies gilt nur, wenn die JSX-Ausgabe "react" als Ziel verwendet wird.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Geben Sie das Objekt an, das für „createElement“ aufgerufen wird. Dies gilt nur, wenn die JSX-Ausgabe „react“ als Ziel verwendet wird.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Specify the object invoked for `createElement`. This only applies when targeting `react` JSX emit.]]></Val>
@@ -12474,8 +12486,8 @@
       <Item ItemId=";Suppress_noImplicitAny_errors_when_indexing_objects_that_lack_index_signatures_6703" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Suppress 'noImplicitAny' errors when indexing objects that lack index signatures.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[Unterdrücken Sie "noImplicitAny"-Fehler beim Indizieren von Objekten ohne Indexsignaturen.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Unterdrücken Sie „noImplicitAny“-Fehler beim Indizieren von Objekten ohne Indexsignaturen.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Suppress `noImplicitAny` errors when indexing objects that lack index signatures.]]></Val>
@@ -15114,8 +15126,8 @@
       <Item ItemId=";When_type_checking_take_into_account_null_and_undefined_6699" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[When type checking, take into account 'null' and 'undefined'.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[Berücksichtigen Sie bei der Typüberprüfung "null" und "undefined".]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Berücksichtigen Sie bei der Typüberprüfung „null“ und „undefined“.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[When type checking, take into account `null` and `undefined`.]]></Val>
@@ -15873,6 +15885,9 @@
       <Item ItemId=";auto_Colon_Treat_files_with_imports_exports_import_meta_jsx_with_jsx_Colon_react_jsx_or_esm_format_w_1476" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA["auto": Treat files with imports, exports, import.meta, jsx (with jsx: react-jsx), or esm format (with module: node12+) as modules.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[„auto“: Behandelt Dateien mit Importen, Exporten, import.meta, jsx (mit jsx: react-jsx) oder esm-Format (mit Modul: node12+) als Module.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
