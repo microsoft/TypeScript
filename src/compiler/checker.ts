@@ -3483,6 +3483,7 @@ namespace ts {
                 && (!resolutionDiagnostic || resolutionDiagnostic === Diagnostics.Module_0_was_resolved_to_1_but_jsx_is_not_set)
                 && host.getSourceFile(resolvedModule.resolvedFileName);
             if (sourceFile) {
+                bindSourceFile(sourceFile, compilerOptions);
                 // If there's a resolutionDiagnostic we need to report it even if a sourceFile is found.
                 if (resolutionDiagnostic) {
                     error(errorNode, resolutionDiagnostic, moduleReference, resolvedModule.resolvedFileName);
@@ -3946,11 +3947,16 @@ namespace ts {
             // No results from files already being imported by this file - expand search (expensive, but not location-specific, so cached)
             const otherFiles = host.getSourceFiles();
             for (const file of otherFiles) {
-                if (!isExternalModule(file)) continue;
-                const sym = getSymbolOfNode(file);
-                const ref = getAliasForSymbolInContainer(sym, symbol);
+                // We're only interested in modules that could possibly have put a container of interest in scope.
+                // Those files should always have been bound (because they *must* in order to correctly contribute to global symbol merging),
+                // so it's fine to piggy-back on this list of bound modules.
+                //
+                // TODO: all of that feels bad - maybe find a way to share some of this logic in initializeTypeChecker.
+                if (!isExternalModule(file) || !file.locals) continue;
+                const fileSym = getSymbolOfNode(file);
+                const ref = getAliasForSymbolInContainer(fileSym, symbol);
                 if (!ref) continue;
-                results = append(results, sym);
+                results = append(results, fileSym);
             }
             return links.extendedContainers = results || emptyArray;
         }
@@ -41142,6 +41148,8 @@ namespace ts {
         }
 
         function checkSourceFile(node: SourceFile) {
+            bindSourceFile(node, compilerOptions);
+
             tracing?.push(tracing.Phase.Check, "checkSourceFile", { path: node.path }, /*separateBeginAndEnd*/ true);
             performance.mark("beforeCheck");
             checkSourceFileWorker(node);
@@ -42851,20 +42859,19 @@ namespace ts {
         }
 
         function initializeTypeChecker() {
-            // Bind all source files and propagate errors
-            for (const file of host.getSourceFiles()) {
-                bindSourceFile(file, compilerOptions);
-            }
-
             amalgamatedDuplicates = new Map();
 
             // Initialize global symbol table
             let augmentations: (readonly (StringLiteral | Identifier)[])[] | undefined;
             for (const file of host.getSourceFiles()) {
                 if (file.redirectInfo) {
+                    bindSourceFile(file, compilerOptions);
+
                     continue;
                 }
                 if (!isExternalOrCommonJsModule(file)) {
+                    bindSourceFile(file, compilerOptions);
+
                     // It is an error for a non-external-module (i.e. script) to declare its own `globalThis`.
                     // We can't use `builtinGlobals` for this due to synthetic expando-namespace generation in JS files.
                     const fileGlobalThisSymbol = file.locals!.get("globalThis" as __String);
@@ -42876,15 +42883,19 @@ namespace ts {
                     mergeSymbolTable(globals, file.locals!);
                 }
                 if (file.jsGlobalAugmentations) {
+                    bindSourceFile(file, compilerOptions);
                     mergeSymbolTable(globals, file.jsGlobalAugmentations);
                 }
                 if (file.patternAmbientModules && file.patternAmbientModules.length) {
+                    bindSourceFile(file, compilerOptions);
                     patternAmbientModules = concatenate(patternAmbientModules, file.patternAmbientModules);
                 }
                 if (file.moduleAugmentations.length) {
-                    (augmentations || (augmentations = [])).push(file.moduleAugmentations);
+                    bindSourceFile(file, compilerOptions);
+                    (augmentations ||= []).push(file.moduleAugmentations);
                 }
                 if (file.symbol && file.symbol.globalExports) {
+                    bindSourceFile(file, compilerOptions);
                     // Merge in UMD exports with first-in-wins semantics (see #9771)
                     const source = file.symbol.globalExports;
                     source.forEach((sourceSymbol, id) => {

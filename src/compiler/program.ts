@@ -2168,8 +2168,18 @@ namespace ts {
                 // - external: files that are added by plugins
                 const includeBindAndCheckDiagnostics = !isTsNoCheck && (sourceFile.scriptKind === ScriptKind.TS || sourceFile.scriptKind === ScriptKind.TSX
                         || sourceFile.scriptKind === ScriptKind.External || isPlainJs || isCheckJs || sourceFile.scriptKind === ScriptKind.Deferred);
-                let bindDiagnostics: readonly Diagnostic[] = includeBindAndCheckDiagnostics ? sourceFile.bindDiagnostics : emptyArray;
-                let checkDiagnostics = includeBindAndCheckDiagnostics ? typeChecker.getDiagnostics(sourceFile, cancellationToken) : emptyArray;
+                let bindDiagnostics: readonly Diagnostic[];
+                let checkDiagnostics: readonly Diagnostic[];
+
+                if (includeBindAndCheckDiagnostics) {
+                    checkDiagnostics = typeChecker.getDiagnostics(sourceFile, cancellationToken);
+                    // We're expecting to indirectly bind in our call to getDiagnostics.
+                    bindDiagnostics = Debug.checkDefined(sourceFile.bindDiagnostics);
+                }
+                else {
+                    checkDiagnostics = bindDiagnostics = emptyArray;
+                }
+
                 if (isPlainJs) {
                     bindDiagnostics = filter(bindDiagnostics, d => plainJSErrors.has(d.code));
                     checkDiagnostics = filter(checkDiagnostics, d => plainJSErrors.has(d.code));
