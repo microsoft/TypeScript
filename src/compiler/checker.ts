@@ -34206,8 +34206,8 @@ namespace ts {
         function isLiteralOfContextualType(candidateType: Type, contextualType: Type | undefined): boolean {
             if (contextualType) {
                 if (contextualType.flags & TypeFlags.UnionOrIntersection) {
-                    const types = (contextualType as UnionType).types;
-                    return some(types, t => isLiteralOfContextualType(candidateType, t));
+                    const skipBooleanLiterals = containsBooleanType(contextualType);
+                    return some((contextualType as UnionType).types, t => !(skipBooleanLiterals && t.flags & TypeFlags.BooleanLiteral) && isLiteralOfContextualType(candidateType, t));
                 }
                 if (contextualType.flags & TypeFlags.InstantiableNonPrimitive) {
                     // If the contextual type is a type variable constrained to a primitive type, consider
@@ -34217,6 +34217,7 @@ namespace ts {
                     return maybeTypeOfKind(constraint, TypeFlags.String) && maybeTypeOfKind(candidateType, TypeFlags.StringLiteral) ||
                         maybeTypeOfKind(constraint, TypeFlags.Number) && maybeTypeOfKind(candidateType, TypeFlags.NumberLiteral) ||
                         maybeTypeOfKind(constraint, TypeFlags.BigInt) && maybeTypeOfKind(candidateType, TypeFlags.BigIntLiteral) ||
+                        containsBooleanType(constraint) && maybeTypeOfKind(candidateType, TypeFlags.BooleanLiteral) ||
                         maybeTypeOfKind(constraint, TypeFlags.ESSymbol) && maybeTypeOfKind(candidateType, TypeFlags.UniqueESSymbol) ||
                         isLiteralOfContextualType(candidateType, constraint);
                 }
@@ -34229,6 +34230,10 @@ namespace ts {
                     contextualType.flags & TypeFlags.UniqueESSymbol && maybeTypeOfKind(candidateType, TypeFlags.UniqueESSymbol));
             }
             return false;
+        }
+
+        function containsBooleanType(type: Type) {
+            return !!(type.flags & TypeFlags.Union) && containsType((type as UnionType).types, regularFalseType) && containsType((type as UnionType).types, regularTrueType);
         }
 
         function isConstContext(node: Expression): boolean {
