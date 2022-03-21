@@ -103,13 +103,13 @@ const a: DisjointDiscriminants = {
 
 };
 
-// This has no excess error because variant one and three are both applicable.
-const b: DisjointDiscriminants = {
->b : Symbol(b, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 45, 5))
+// This has excess error because variant three is the only applicable case.
+const b1: DisjointDiscriminants = {
+>b1 : Symbol(b1, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 45, 5))
 >DisjointDiscriminants : Symbol(DisjointDiscriminants, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 31, 1))
 
     p1: 'left',
->p1 : Symbol(p1, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 45, 34))
+>p1 : Symbol(p1, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 45, 35))
 
     p2: true,
 >p2 : Symbol(p2, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 46, 15))
@@ -122,22 +122,42 @@ const b: DisjointDiscriminants = {
 
 };
 
-// This has excess error because variant two is the only applicable case
-const c: DisjointDiscriminants = {
->c : Symbol(c, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 53, 5))
+// This has no excess error because variant one and three are both applicable.
+const b2: DisjointDiscriminants = {
+>b2 : Symbol(b2, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 53, 5))
 >DisjointDiscriminants : Symbol(DisjointDiscriminants, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 31, 1))
 
-    p1: 'right',
->p1 : Symbol(p1, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 53, 34))
+    p1: 'left',
+>p1 : Symbol(p1, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 53, 35))
 
-    p2: false,
->p2 : Symbol(p2, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 54, 16))
+    p2: true as const,
+>p2 : Symbol(p2, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 54, 15))
+>const : Symbol(const)
 
     p3: 42,
->p3 : Symbol(p3, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 55, 14))
+>p3 : Symbol(p3, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 55, 22))
 
     p4: "hello"
 >p4 : Symbol(p4, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 56, 11))
+
+};
+
+// This has excess error because variant two is the only applicable case
+const c: DisjointDiscriminants = {
+>c : Symbol(c, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 61, 5))
+>DisjointDiscriminants : Symbol(DisjointDiscriminants, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 31, 1))
+
+    p1: 'right',
+>p1 : Symbol(p1, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 61, 34))
+
+    p2: false,
+>p2 : Symbol(p2, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 62, 16))
+
+    p3: 42,
+>p3 : Symbol(p3, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 63, 14))
+
+    p4: "hello"
+>p4 : Symbol(p4, Decl(excessPropertyCheckWithMultipleDiscriminants.ts, 64, 11))
 
 };
 

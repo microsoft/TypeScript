@@ -42,10 +42,18 @@ const a: DisjointDiscriminants = {
     p4: "hello"
 };
 
-// This has no excess error because variant one and three are both applicable.
-const b: DisjointDiscriminants = {
+// This has excess error because variant three is the only applicable case.
+const b1: DisjointDiscriminants = {
     p1: 'left',
     p2: true,
+    p3: 42,
+    p4: "hello"
+};
+
+// This has no excess error because variant one and three are both applicable.
+const b2: DisjointDiscriminants = {
+    p1: 'left',
+    p2: true as const,
     p3: 42,
     p4: "hello"
 };
