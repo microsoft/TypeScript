@@ -119,21 +119,21 @@ declare function foo<T>(...args: T[]): T[];
 let b1: { x: boolean }[] = foo({ x: true }, { x: false });
 >b1 : { x: boolean; }[]
 >x : boolean
->foo({ x: true }, { x: false }) : ({ x: true; } | { x: false; })[]
+>foo({ x: true }, { x: false }) : { x: boolean; }[]
 >foo : <T>(...args: T[]) => T[]
->{ x: true } : { x: true; }
->x : true
+>{ x: true } : { x: boolean; }
+>x : boolean
 >true : true
->{ x: false } : { x: false; }
->x : false
+>{ x: false } : { x: boolean; }
+>x : boolean
 >false : false
 
 let b2: boolean[][] = foo([true], [false]);
 >b2 : boolean[][]
->foo([true], [false]) : (true[] | false[])[]
+>foo([true], [false]) : boolean[][]
 >foo : <T>(...args: T[]) => T[]
->[true] : true[]
+>[true] : boolean[]
 >true : true
->[false] : false[]
+>[false] : boolean[]
 >false : false
 

@@ -498,8 +498,8 @@ function f6() {
 >0 : 0
 >x3 : string
 >"foo" : "foo"
->{ x1: false, x2: 1, x3: "bar" } : { x1?: false; x2?: number; x3?: string; }
->x1 : false
+>{ x1: false, x2: 1, x3: "bar" } : { x1?: boolean; x2?: number; x3?: string; }
+>x1 : boolean
 >false : false
 >x2 : number
 >1 : 1

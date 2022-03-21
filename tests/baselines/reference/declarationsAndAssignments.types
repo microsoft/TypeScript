@@ -369,14 +369,14 @@ function f12() {
 >10 : 10
 >y : boolean
 >false : false
->[1, ["hello", { x: 5, y: true }]] : [number, [string, { x: number; y: true; }]]
+>[1, ["hello", { x: 5, y: true }]] : [number, [string, { x: number; y: boolean; }]]
 >1 : 1
->["hello", { x: 5, y: true }] : [string, { x: number; y: true; }]
+>["hello", { x: 5, y: true }] : [string, { x: number; y: boolean; }]
 >"hello" : "hello"
->{ x: 5, y: true } : { x: number; y: true; }
+>{ x: 5, y: true } : { x: number; y: boolean; }
 >x : number
 >5 : 5
->y : true
+>y : boolean
 >true : true
 
     var a: number;
@@ -439,14 +439,14 @@ function f14([a = 1, [b = "hello", { x, y: c = false }]]) {
 f14([2, ["abc", { x: 0, y: true }]]);
 >f14([2, ["abc", { x: 0, y: true }]]) : void
 >f14 : ([a, [b, { x, y: c }]]: [number, [string, { x: any; y?: boolean; }]]) => void
->[2, ["abc", { x: 0, y: true }]] : [number, [string, { x: number; y: true; }]]
+>[2, ["abc", { x: 0, y: true }]] : [number, [string, { x: number; y: boolean; }]]
 >2 : 2
->["abc", { x: 0, y: true }] : [string, { x: number; y: true; }]
+>["abc", { x: 0, y: true }] : [string, { x: number; y: boolean; }]
 >"abc" : "abc"
->{ x: 0, y: true } : { x: number; y: true; }
+>{ x: 0, y: true } : { x: number; y: boolean; }
 >x : number
 >0 : 0
->y : true
+>y : boolean
 >true : true
 
 f14([2, ["abc", { x: 0 }]]);
@@ -463,12 +463,12 @@ f14([2, ["abc", { x: 0 }]]);
 f14([2, ["abc", { y: false }]]);  // Error, no x
 >f14([2, ["abc", { y: false }]]) : void
 >f14 : ([a, [b, { x, y: c }]]: [number, [string, { x: any; y?: boolean; }]]) => void
->[2, ["abc", { y: false }]] : [number, [string, { y: false; }]]
+>[2, ["abc", { y: false }]] : [number, [string, { y: boolean; }]]
 >2 : 2
->["abc", { y: false }] : [string, { y: false; }]
+>["abc", { y: false }] : [string, { y: boolean; }]
 >"abc" : "abc"
->{ y: false } : { y: false; }
->y : false
+>{ y: false } : { y: boolean; }
+>y : boolean
 >false : false
 
 module M {
@@ -540,8 +540,8 @@ f17({ a: "hello" });
 f17({ c: true });
 >f17({ c: true }) : void
 >f17 : ({ a, b, c }: { a?: string; b?: number; c?: boolean; }) => void
->{ c: true } : { c: true; }
->c : true
+>{ c: true } : { c: boolean; }
+>c : boolean
 >true : true
 
 f17(f15());

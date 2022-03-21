@@ -2,8 +2,8 @@
 let x: { o: boolean } = { o: false }
 >x : { o: boolean; }
 >o : boolean
->{ o: false } : { o: false; }
->o : false
+>{ o: false } : { o: boolean; }
+>o : boolean
 >false : false
 
 if (x['o'] === false) {

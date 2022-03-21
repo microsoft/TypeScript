@@ -70,7 +70,7 @@ var b1 = f2(["string", true]);  // boolean
 >b1 : boolean
 >f2(["string", true]) : boolean
 >f2 : <T>(value: [string, T]) => T
->["string", true] : [string, true]
+>["string", true] : [string, boolean]
 >"string" : "string"
 >true : true
 

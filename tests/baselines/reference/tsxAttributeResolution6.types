@@ -37,7 +37,7 @@ declare module JSX {
 <test1 n={false} />;
 ><test1 n={false} /> : JSX.Element
 >test1 : any
->n : false
+>n : boolean
 >false : false
 
 <test2 n />;

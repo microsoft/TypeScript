@@ -61,7 +61,7 @@ const t2 = tup2(['hello'], [10, true]);
 >tup2 : <T extends unknown[], U extends unknown[]>(t: [...T], u: [...U]) => readonly [1, ...T, 2, ...U, 3]
 >['hello'] : [string]
 >'hello' : "hello"
->[10, true] : [number, true]
+>[10, true] : [number, boolean]
 >10 : 10
 >true : true
 
@@ -427,12 +427,12 @@ let tm1 = fm1([['abc'], [42], [true], ['def']]);  // [boolean, string]
 >tm1 : [boolean, string]
 >fm1([['abc'], [42], [true], ['def']]) : [boolean, string]
 >fm1 : <T extends unknown[]>(t: [string[], number[], ...Arrayify<T>]) => T
->[['abc'], [42], [true], ['def']] : [string[], number[], true[], string[]]
+>[['abc'], [42], [true], ['def']] : [string[], number[], boolean[], string[]]
 >['abc'] : string[]
 >'abc' : "abc"
 >[42] : number[]
 >42 : 42
->[true] : true[]
+>[true] : boolean[]
 >true : true
 >['def'] : string[]
 >'def' : "def"
@@ -1163,7 +1163,7 @@ curry2(fn10, ['hello', 42], [true]);
 >['hello', 42] : [string, number]
 >'hello' : "hello"
 >42 : 42
->[true] : [true]
+>[true] : [boolean]
 >true : true
 
 curry2(fn10, ['hello'], [42, true]);
@@ -1172,7 +1172,7 @@ curry2(fn10, ['hello'], [42, true]);
 >fn10 : (a: string, b: number, c: boolean) => string[]
 >['hello'] : [string]
 >'hello' : "hello"
->[42, true] : [number, true]
+>[42, true] : [number, boolean]
 >42 : 42
 >true : true
 
@@ -1397,7 +1397,7 @@ type Unbounded = [...Numbers, boolean];
 
 const data: Unbounded = [false, false];  // Error
 >data : [...number[], boolean]
->[false, false] : [false, false]
+>[false, false] : [boolean, boolean]
 >false : false
 >false : false
 

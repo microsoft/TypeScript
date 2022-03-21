@@ -79,11 +79,11 @@ class FieldFeedbackBeta<P extends Props = BaseProps> extends React.Component<P> 
 
   static defaultProps: BaseProps = {
 >defaultProps : BaseProps
->{    when: () => true  } : { when: () => true; }
+>{    when: () => true  } : { when: () => boolean; }
 
     when: () => true
->when : () => true
->() => true : () => true
+>when : () => boolean
+>() => true : () => boolean
 >true : true
 
   };

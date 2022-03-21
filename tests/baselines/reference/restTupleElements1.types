@@ -189,7 +189,7 @@ f0([1, 2, 3]);
 f0([1, "hello", true]);
 >f0([1, "hello", true]) : [number, string | boolean]
 >f0 : <T, U>(x: [T, ...U[]]) => [T, U]
->[1, "hello", true] : [number, string, true]
+>[1, "hello", true] : [number, string, boolean]
 >1 : 1
 >"hello" : "hello"
 >true : true

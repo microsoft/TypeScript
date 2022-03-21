@@ -10,8 +10,8 @@ let b: any = /*[[${something}]]*/ {};
 let c: { hoge: boolean } = /*[[${something}]]*/ { hoge: true };
 >c : { hoge: boolean; }
 >hoge : boolean
->{ hoge: true } : { hoge: true; }
->hoge : true
+>{ hoge: true } : { hoge: boolean; }
+>hoge : boolean
 >true : true
 
 let d: any  /*[[${something}]]*/ = {};

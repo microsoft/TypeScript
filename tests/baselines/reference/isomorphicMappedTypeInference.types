@@ -214,8 +214,8 @@ function f3() {
 >assignBoxified(b, { c: false }) : void
 >assignBoxified : <T>(obj: Boxified<T>, values: T) => void
 >b : { a: Box<number>; b: Box<string>; c: Box<boolean>; }
->{ c: false } : { c: false; }
->c : false
+>{ c: false } : { c: boolean; }
+>c : boolean
 >false : false
 }
 

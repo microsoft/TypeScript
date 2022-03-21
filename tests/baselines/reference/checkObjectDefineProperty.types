@@ -94,10 +94,10 @@ Object.defineProperty(x, "name", { value: "Charles", writable: true });
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >x : typeof x
 >"name" : "name"
->{ value: "Charles", writable: true } : { value: string; writable: true; }
+>{ value: "Charles", writable: true } : { value: string; writable: boolean; }
 >value : string
 >"Charles" : "Charles"
->writable : true
+>writable : boolean
 >true : true
 
 Object.defineProperty(x, "middleInit", { value: "H" });
@@ -118,10 +118,10 @@ Object.defineProperty(x, "lastName", { value: "Smith", writable: false });
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >x : typeof x
 >"lastName" : "lastName"
->{ value: "Smith", writable: false } : { value: string; writable: false; }
+>{ value: "Smith", writable: false } : { value: string; writable: boolean; }
 >value : string
 >"Smith" : "Smith"
->writable : false
+>writable : boolean
 >false : false
 
 Object.defineProperty(x, "zip", { get() { return 98122 }, set(_) { /*ignore*/ } });

@@ -64,10 +64,10 @@ Object.defineProperty(B, "NS", { value: "why though", writable: true });
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >B : typeof B
 >"NS" : "NS"
->{ value: "why though", writable: true } : { value: string; writable: true; }
+>{ value: "why though", writable: true } : { value: string; writable: boolean; }
 >value : string
 >"why though" : "why though"
->writable : true
+>writable : boolean
 >true : true
 
 module.exports = B;

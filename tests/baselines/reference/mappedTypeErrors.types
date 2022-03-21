@@ -475,10 +475,10 @@ type O = {x: number, y: boolean};
 
 let o: O = {x: 5, y: false};
 >o : O
->{x: 5, y: false} : { x: number; y: false; }
+>{x: 5, y: false} : { x: number; y: boolean; }
 >x : number
 >5 : 5
->y : false
+>y : boolean
 >false : false
 
 let f: Foo2<O, 'x'> = {

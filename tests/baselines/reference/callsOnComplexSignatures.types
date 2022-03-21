@@ -409,7 +409,7 @@ function test5() {
 >a : JSX.Element
 ><C p={true} /> : JSX.Element
 >C : React.ComponentType<P1> | React.ComponentType<P2>
->p : true
+>p : boolean
 >true : true
     }
 }

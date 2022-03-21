@@ -1528,14 +1528,14 @@ module Harness {
 
                     var metadata: IScenarioMetadata = { id: undefined, desc: this.description, pass: false, bugs: assert.bugIds };
 >metadata : IScenarioMetadata
->{ id: undefined, desc: this.description, pass: false, bugs: assert.bugIds } : { id: undefined; desc: any; pass: false; bugs: any; }
+>{ id: undefined, desc: this.description, pass: false, bugs: assert.bugIds } : { id: undefined; desc: any; pass: boolean; bugs: any; }
 >id : undefined
 >undefined : undefined
 >desc : any
 >this.description : any
 >this : any
 >description : any
->pass : false
+>pass : boolean
 >false : false
 >bugs : any
 >assert.bugIds : any

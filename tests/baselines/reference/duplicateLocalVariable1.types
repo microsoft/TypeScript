@@ -221,7 +221,7 @@ export var tests: TestRunner = (function () {
 >new TestCase("Basic test", function () { return true; }) : TestCase
 >TestCase : typeof TestCase
 >"Basic test" : "Basic test"
->function () { return true; } : () => true
+>function () { return true; } : () => boolean
 >true : true
 
     testRunner.addTest(new TestCase("Test for any error", function () { throw new Error(); return false; }, ""));
@@ -232,7 +232,7 @@ export var tests: TestRunner = (function () {
 >new TestCase("Test for any error", function () { throw new Error(); return false; }, "") : TestCase
 >TestCase : typeof TestCase
 >"Test for any error" : "Test for any error"
->function () { throw new Error(); return false; } : () => false
+>function () { throw new Error(); return false; } : () => boolean
 >new Error() : Error
 >Error : ErrorConstructor
 >false : false
@@ -246,7 +246,7 @@ export var tests: TestRunner = (function () {
 >new TestCase("Test RegEx error message match", function () { throw new Error("Should also pass"); return false; }, "Should [also]+ pass") : TestCase
 >TestCase : typeof TestCase
 >"Test RegEx error message match" : "Test RegEx error message match"
->function () { throw new Error("Should also pass"); return false; } : () => false
+>function () { throw new Error("Should also pass"); return false; } : () => boolean
 >new Error("Should also pass") : Error
 >Error : ErrorConstructor
 >"Should also pass" : "Should also pass"
@@ -1095,7 +1095,7 @@ export var tests: TestRunner = (function () {
 >"Check saving a file" : "Check saving a file"
 
         function () {
->function () {            var filename = TestFileDir + "\\tmpUTF16LE.txt";            var fb = new FileManager.FileBuffer(14);            fb.writeUtf16leBom();            var chars = [0x0054, 0x00E8, 0x1D23, 0x2020, 0x000D, 0x000A];            chars.forEach(function (val) { fb.writeUtf16CodePoint(val, false); });            fb.save(filename);            var savedFile = new FileManager.FileBuffer(filename);            if (savedFile.encoding !== 'utf16le') {                throw Error("Incorrect encoding");            }            var expectedBytes = [0xFF, 0xFE, 0x54, 0x00, 0xE8, 0x00, 0x23, 0x1D, 0x20, 0x20, 0x0D, 0x00, 0x0A, 0x00]            savedFile.index = 0;            expectedBytes.forEach(function (val) {                var byteVal = savedFile.readByte();                if (byteVal !== val) {                    throw Error("Incorrect byte value");                }            });            return true;        } : () => true
+>function () {            var filename = TestFileDir + "\\tmpUTF16LE.txt";            var fb = new FileManager.FileBuffer(14);            fb.writeUtf16leBom();            var chars = [0x0054, 0x00E8, 0x1D23, 0x2020, 0x000D, 0x000A];            chars.forEach(function (val) { fb.writeUtf16CodePoint(val, false); });            fb.save(filename);            var savedFile = new FileManager.FileBuffer(filename);            if (savedFile.encoding !== 'utf16le') {                throw Error("Incorrect encoding");            }            var expectedBytes = [0xFF, 0xFE, 0x54, 0x00, 0xE8, 0x00, 0x23, 0x1D, 0x20, 0x20, 0x0D, 0x00, 0x0A, 0x00]            savedFile.index = 0;            expectedBytes.forEach(function (val) {                var byteVal = savedFile.readByte();                if (byteVal !== val) {                    throw Error("Incorrect byte value");                }            });            return true;        } : () => boolean
 
             var filename = TestFileDir + "\\tmpUTF16LE.txt";
 >filename : string
@@ -1234,7 +1234,7 @@ export var tests: TestRunner = (function () {
 >"Check reading past buffer asserts" : "Check reading past buffer asserts"
 
     function () {
->function () {        var fb = new FileManager.FileBuffer(TestFileDir + "\\UTF8BOM.txt");        var result = fb.readByte(200);        return true;    } : () => true
+>function () {        var fb = new FileManager.FileBuffer(TestFileDir + "\\UTF8BOM.txt");        var result = fb.readByte(200);        return true;    } : () => boolean
 
         var fb = new FileManager.FileBuffer(TestFileDir + "\\UTF8BOM.txt");
 >fb : any
@@ -1270,7 +1270,7 @@ export var tests: TestRunner = (function () {
 >"Check writing past buffer asserts" : "Check writing past buffer asserts"
 
     function () {
->function () {        var fb = new FileManager.FileBuffer(TestFileDir + "\\UTF8BOM.txt");        fb.writeByte(5, 200);        return true;    } : () => true
+>function () {        var fb = new FileManager.FileBuffer(TestFileDir + "\\UTF8BOM.txt");        fb.writeByte(5, 200);        return true;    } : () => boolean
 
         var fb = new FileManager.FileBuffer(TestFileDir + "\\UTF8BOM.txt");
 >fb : any
@@ -1464,7 +1464,7 @@ export var tests: TestRunner = (function () {
 >"Write non-BMP utf8 chars" : "Write non-BMP utf8 chars"
 
         function () {
->function () {            var filename = TestFileDir + "\\tmpUTF8nonBmp.txt";            var fb = new FileManager.FileBuffer(15);            var chars = [0x10480, 0x10481, 0x10482, 0x54, 0x68, 0x69];            chars.forEach(function (val) { fb.writeUtf8CodePoint(val); });            fb.save(filename);            var savedFile = new FileManager.FileBuffer(filename);            if (savedFile.encoding !== 'utf8') {                throw Error("Incorrect encoding");            }            var expectedBytes = [0xF0, 0x90, 0x92, 0x80, 0xF0, 0x90, 0x92, 0x81, 0xF0, 0x90, 0x92, 0x82, 0x54, 0x68, 0x69];            expectedBytes.forEach(function (val) {                var byteVal = savedFile.readByte();                if (byteVal !== val) {                    throw Error("Incorrect byte value");                }            });            return true;        } : () => true
+>function () {            var filename = TestFileDir + "\\tmpUTF8nonBmp.txt";            var fb = new FileManager.FileBuffer(15);            var chars = [0x10480, 0x10481, 0x10482, 0x54, 0x68, 0x69];            chars.forEach(function (val) { fb.writeUtf8CodePoint(val); });            fb.save(filename);            var savedFile = new FileManager.FileBuffer(filename);            if (savedFile.encoding !== 'utf8') {                throw Error("Incorrect encoding");            }            var expectedBytes = [0xF0, 0x90, 0x92, 0x80, 0xF0, 0x90, 0x92, 0x81, 0xF0, 0x90, 0x92, 0x82, 0x54, 0x68, 0x69];            expectedBytes.forEach(function (val) {                var byteVal = savedFile.readByte();                if (byteVal !== val) {                    throw Error("Incorrect byte value");                }            });            return true;        } : () => boolean
 
             var filename = TestFileDir + "\\tmpUTF8nonBmp.txt";
 >filename : string
@@ -1590,7 +1590,7 @@ export var tests: TestRunner = (function () {
 >"Test invalid lead UTF8 byte" : "Test invalid lead UTF8 byte"
 
         function () {
->function () {            var filename = TestFileDir + "\\utf8BadLeadByte.txt";            var fb = new FileManager.FileBuffer(filename);            return true;        } : () => true
+>function () {            var filename = TestFileDir + "\\utf8BadLeadByte.txt";            var fb = new FileManager.FileBuffer(filename);            return true;        } : () => boolean
 
             var filename = TestFileDir + "\\utf8BadLeadByte.txt";
 >filename : string
@@ -1622,7 +1622,7 @@ export var tests: TestRunner = (function () {
 >"Test invalid tail UTF8 byte" : "Test invalid tail UTF8 byte"
 
         function () {
->function () {            var filename = TestFileDir + "\\utf8InvalidTail.txt";            var fb = new FileManager.FileBuffer(filename);            return true;        } : () => true
+>function () {            var filename = TestFileDir + "\\utf8InvalidTail.txt";            var fb = new FileManager.FileBuffer(filename);            return true;        } : () => boolean
 
             var filename = TestFileDir + "\\utf8InvalidTail.txt";
 >filename : string
@@ -1654,7 +1654,7 @@ export var tests: TestRunner = (function () {
 >"Test ANSI fails validation" : "Test ANSI fails validation"
 
         function () {
->function () {            var filename = TestFileDir + "\\ansi.txt";            var fb = new FileManager.FileBuffer(filename);            return true;        } : () => true
+>function () {            var filename = TestFileDir + "\\ansi.txt";            var fb = new FileManager.FileBuffer(filename);            return true;        } : () => boolean
 
             var filename = TestFileDir + "\\ansi.txt";
 >filename : string
@@ -1686,7 +1686,7 @@ export var tests: TestRunner = (function () {
 >"Test UTF-16LE with invalid surrogate trail fails" : "Test UTF-16LE with invalid surrogate trail fails"
 
         function () {
->function () {            var filename = TestFileDir + "\\utf16leInvalidSurrogate.txt";            var fb = new FileManager.FileBuffer(filename);            return true;        } : () => true
+>function () {            var filename = TestFileDir + "\\utf16leInvalidSurrogate.txt";            var fb = new FileManager.FileBuffer(filename);            return true;        } : () => boolean
 
             var filename = TestFileDir + "\\utf16leInvalidSurrogate.txt";
 >filename : string
@@ -1718,7 +1718,7 @@ export var tests: TestRunner = (function () {
 >"Test UTF-16BE with invalid surrogate head fails" : "Test UTF-16BE with invalid surrogate head fails"
 
         function () {
->function () {            var filename = TestFileDir + "\\UTF16BEInvalidSurrogate.txt";            var fb = new FileManager.FileBuffer(filename);            return true;        } : () => true
+>function () {            var filename = TestFileDir + "\\UTF16BEInvalidSurrogate.txt";            var fb = new FileManager.FileBuffer(filename);            return true;        } : () => boolean
 
             var filename = TestFileDir + "\\UTF16BEInvalidSurrogate.txt";
 >filename : string
@@ -1750,7 +1750,7 @@ export var tests: TestRunner = (function () {
 >"Test UTF-16LE with missing trail surrogate fails" : "Test UTF-16LE with missing trail surrogate fails"
 
         function () {
->function () {            var filename = TestFileDir + "\\utf16leMissingTrailSurrogate.txt";            var fb = new FileManager.FileBuffer(filename);            return true;        } : () => true
+>function () {            var filename = TestFileDir + "\\utf16leMissingTrailSurrogate.txt";            var fb = new FileManager.FileBuffer(filename);            return true;        } : () => boolean
 
             var filename = TestFileDir + "\\utf16leMissingTrailSurrogate.txt";
 >filename : string
@@ -1842,7 +1842,7 @@ export var tests: TestRunner = (function () {
 >"Test file with control character" : "Test file with control character"
 
         function () {
->function () {            var filename = TestFileDir + "\\controlChar.txt";            var fb = new FileManager.FileBuffer(filename);            return true;        } : () => true
+>function () {            var filename = TestFileDir + "\\controlChar.txt";            var fb = new FileManager.FileBuffer(filename);            return true;        } : () => boolean
 
             var filename = TestFileDir + "\\controlChar.txt";
 >filename : string

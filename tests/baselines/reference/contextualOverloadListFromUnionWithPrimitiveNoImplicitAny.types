@@ -22,15 +22,15 @@ type Rule = string | FullRule;
 const obj: {field: Rule} = {
 >obj : { field: Rule; }
 >field : Rule
->{    field: {        validate: (_t, _p, _s) => false,        normalize: match => match.x,    }} : { field: { validate: (_t: string, _p: number, _s: Rule) => false; normalize: (match: any) => any; }; }
+>{    field: {        validate: (_t, _p, _s) => false,        normalize: match => match.x,    }} : { field: { validate: (_t: string, _p: number, _s: Rule) => boolean; normalize: (match: any) => any; }; }
 
     field: {
->field : { validate: (_t: string, _p: number, _s: Rule) => false; normalize: (match: any) => any; }
->{        validate: (_t, _p, _s) => false,        normalize: match => match.x,    } : { validate: (_t: string, _p: number, _s: Rule) => false; normalize: (match: any) => any; }
+>field : { validate: (_t: string, _p: number, _s: Rule) => boolean; normalize: (match: any) => any; }
+>{        validate: (_t, _p, _s) => false,        normalize: match => match.x,    } : { validate: (_t: string, _p: number, _s: Rule) => boolean; normalize: (match: any) => any; }
 
         validate: (_t, _p, _s) => false,
->validate : (_t: string, _p: number, _s: Rule) => false
->(_t, _p, _s) => false : (_t: string, _p: number, _s: Rule) => false
+>validate : (_t: string, _p: number, _s: Rule) => boolean
+>(_t, _p, _s) => false : (_t: string, _p: number, _s: Rule) => boolean
 >_t : string
 >_p : number
 >_s : Rule

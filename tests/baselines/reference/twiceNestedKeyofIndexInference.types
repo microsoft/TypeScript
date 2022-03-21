@@ -43,7 +43,7 @@ interface State {
 
 const state: State = {
 >state : State
->{    a: {        b: "",        c: 0,    },    d: false,} : { a: { b: string; c: number; }; d: false; }
+>{    a: {        b: "",        c: 0,    },    d: false,} : { a: { b: string; c: number; }; d: boolean; }
 
     a: {
 >a : { b: string; c: number; }
@@ -59,7 +59,7 @@ const state: State = {
 
     },
     d: false,
->d : false
+>d : boolean
 >false : false
 
 };

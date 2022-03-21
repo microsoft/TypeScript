@@ -174,27 +174,27 @@ let test: View<TypeA>;
 >test : View<TypeA>
 
 test = { foo: true, bar: true, boo: true }
->test = { foo: true, bar: true, boo: true } : { foo: true; bar: true; boo: boolean; }
+>test = { foo: true, bar: true, boo: true } : { foo: boolean; bar: boolean; boo: boolean; }
 >test : View<TypeA>
->{ foo: true, bar: true, boo: true } : { foo: true; bar: true; boo: boolean; }
->foo : true
+>{ foo: true, bar: true, boo: true } : { foo: boolean; bar: boolean; boo: boolean; }
+>foo : boolean
 >true : true
->bar : true
+>bar : boolean
 >true : true
 >boo : boolean
 >true : true
 
 test = { foo: true, bar: { foo: true, bar: true, boo: true } }
->test = { foo: true, bar: { foo: true, bar: true, boo: true } } : { foo: true; bar: { foo: true; bar: true; boo: boolean; }; }
+>test = { foo: true, bar: { foo: true, bar: true, boo: true } } : { foo: boolean; bar: { foo: boolean; bar: boolean; boo: boolean; }; }
 >test : View<TypeA>
->{ foo: true, bar: { foo: true, bar: true, boo: true } } : { foo: true; bar: { foo: true; bar: true; boo: boolean; }; }
->foo : true
+>{ foo: true, bar: { foo: true, bar: true, boo: true } } : { foo: boolean; bar: { foo: boolean; bar: boolean; boo: boolean; }; }
+>foo : boolean
 >true : true
->bar : { foo: true; bar: true; boo: boolean; }
->{ foo: true, bar: true, boo: true } : { foo: true; bar: true; boo: boolean; }
->foo : true
+>bar : { foo: boolean; bar: boolean; boo: boolean; }
+>{ foo: true, bar: true, boo: true } : { foo: boolean; bar: boolean; boo: boolean; }
+>foo : boolean
 >true : true
->bar : true
+>bar : boolean
 >true : true
 >boo : boolean
 >true : true

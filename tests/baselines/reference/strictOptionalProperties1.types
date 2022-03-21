@@ -318,9 +318,9 @@ function f5(t: [number, string?, boolean?]) {
 >'abc' : "abc"
 
     t = [42, 'abc', true];
->t = [42, 'abc', true] : [number, string, true]
+>t = [42, 'abc', true] : [number, string, boolean]
 >t : [number, string?, boolean?]
->[42, 'abc', true] : [number, string, true]
+>[42, 'abc', true] : [number, string, boolean]
 >42 : 42
 >'abc' : "abc"
 >true : true
@@ -350,17 +350,17 @@ function f5(t: [number, string?, boolean?]) {
 > : undefined
 
     t = [, , true];  // Error
->t = [, , true] : [never?, never?, true?]
+>t = [, , true] : [never?, never?, boolean?]
 >t : [number, string?, boolean?]
->[, , true] : [never?, never?, true?]
+>[, , true] : [never?, never?, boolean?]
 > : undefined
 > : undefined
 >true : true
 
     t = [42, undefined, true];  // Error
->t = [42, undefined, true] : [number, undefined, true]
+>t = [42, undefined, true] : [number, undefined, boolean]
 >t : [number, string?, boolean?]
->[42, undefined, true] : [number, undefined, true]
+>[42, undefined, true] : [number, undefined, boolean]
 >42 : 42
 >undefined : undefined
 >true : true

@@ -181,10 +181,10 @@ Object.defineProperty(exports, "thing", { value: 42, writable: true });
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >exports : typeof import("tests/cases/conformance/jsdoc/mod1")
 >"thing" : "thing"
->{ value: 42, writable: true } : { value: number; writable: true; }
+>{ value: 42, writable: true } : { value: number; writable: boolean; }
 >value : number
 >42 : 42
->writable : true
+>writable : boolean
 >true : true
 
 Object.defineProperty(exports, "readonlyProp", { value: "Smith", writable: false });
@@ -194,10 +194,10 @@ Object.defineProperty(exports, "readonlyProp", { value: "Smith", writable: false
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >exports : typeof import("tests/cases/conformance/jsdoc/mod1")
 >"readonlyProp" : "readonlyProp"
->{ value: "Smith", writable: false } : { value: string; writable: false; }
+>{ value: "Smith", writable: false } : { value: string; writable: boolean; }
 >value : string
 >"Smith" : "Smith"
->writable : false
+>writable : boolean
 >false : false
 
 Object.defineProperty(exports, "rwAccessors", { get() { return 98122 }, set(_) { /*ignore*/ } });
@@ -259,10 +259,10 @@ Object.defineProperty(module.exports, "thing", { value: "yes", writable: true })
 >module : { exports: typeof module.exports; }
 >exports : typeof module.exports
 >"thing" : "thing"
->{ value: "yes", writable: true } : { value: string; writable: true; }
+>{ value: "yes", writable: true } : { value: string; writable: boolean; }
 >value : string
 >"yes" : "yes"
->writable : true
+>writable : boolean
 >true : true
 
 Object.defineProperty(module.exports, "readonlyProp", { value: "Smith", writable: false });
@@ -274,10 +274,10 @@ Object.defineProperty(module.exports, "readonlyProp", { value: "Smith", writable
 >module : { exports: typeof module.exports; }
 >exports : typeof module.exports
 >"readonlyProp" : "readonlyProp"
->{ value: "Smith", writable: false } : { value: string; writable: false; }
+>{ value: "Smith", writable: false } : { value: string; writable: boolean; }
 >value : string
 >"Smith" : "Smith"
->writable : false
+>writable : boolean
 >false : false
 
 Object.defineProperty(module.exports, "rwAccessors", { get() { return 98122 }, set(_) { /*ignore*/ } });

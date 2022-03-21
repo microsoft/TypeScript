@@ -33,13 +33,13 @@ const boundaryResult = withBoundary({
 });
 
 const withoutBoundaryResult = withoutBoundary({
->withoutBoundaryResult : { select: true; }
->withoutBoundary({  select: true,}) : { select: true; }
+>withoutBoundaryResult : { select: boolean; }
+>withoutBoundary({  select: true,}) : { select: boolean; }
 >withoutBoundary : <T extends UserArgs>(args?: T | undefined) => T
->{  select: true,} : { select: true; }
+>{  select: true,} : { select: boolean; }
 
   select: true,
->select : true
+>select : boolean
 >true : true
 
 });

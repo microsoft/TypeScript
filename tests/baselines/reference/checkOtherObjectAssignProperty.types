@@ -111,10 +111,10 @@ Object.defineProperty(exports, str, { value: 42, writable: true });
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >exports : typeof import("tests/cases/conformance/jsdoc/mod1")
 >str : string
->{ value: 42, writable: true } : { value: number; writable: true; }
+>{ value: 42, writable: true } : { value: number; writable: boolean; }
 >value : number
 >42 : 42
->writable : true
+>writable : boolean
 >true : true
 
 const propName = "prop"
@@ -128,10 +128,10 @@ Object.defineProperty(exports, propName, { value: 42, writable: true });
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >exports : typeof import("tests/cases/conformance/jsdoc/mod1")
 >propName : "prop"
->{ value: 42, writable: true } : { value: number; writable: true; }
+>{ value: 42, writable: true } : { value: number; writable: boolean; }
 >value : number
 >42 : 42
->writable : true
+>writable : boolean
 >true : true
 
 
@@ -164,7 +164,7 @@ Object.defineProperty(exports, "bad3", { writable: true });
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >exports : typeof import("tests/cases/conformance/jsdoc/mod1")
 >"bad3" : "bad3"
->{ writable: true } : { writable: true; }
->writable : true
+>{ writable: true } : { writable: boolean; }
+>writable : boolean
 >true : true
 

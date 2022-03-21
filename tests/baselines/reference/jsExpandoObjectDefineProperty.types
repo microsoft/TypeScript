@@ -10,10 +10,10 @@ Object.defineProperty(chrome, 'devtools', { value: {}, enumerable: true })
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >chrome : typeof chrome
 >'devtools' : "devtools"
->{ value: {}, enumerable: true } : { value: {}; enumerable: true; }
+>{ value: {}, enumerable: true } : { value: {}; enumerable: boolean; }
 >value : {}
 >{} : {}
->enumerable : true
+>enumerable : boolean
 >true : true
 
 chrome.devtools.inspectedWindow = {}

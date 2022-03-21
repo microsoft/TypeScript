@@ -3,8 +3,8 @@ var map = new Map([["", true], ["", 0]]);
 >map : Map<string, boolean>
 >new Map([["", true], ["", 0]]) : Map<string, boolean>
 >Map : MapConstructor
->[["", true], ["", 0]] : ([string, number] | [string, true])[]
->["", true] : [string, true]
+>[["", true], ["", 0]] : ([string, boolean] | [string, number])[]
+>["", true] : [string, boolean]
 >"" : ""
 >true : true
 >["", 0] : [string, number]

@@ -70,10 +70,10 @@ test({
 >bar : boolean
 
         return {
->{            bar: true        } : { bar: true; }
+>{            bar: true        } : { bar: boolean; }
 
             bar: true
->bar : true
+>bar : boolean
 >true : true
         }
     },

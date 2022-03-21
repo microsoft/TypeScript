@@ -62,8 +62,8 @@ f({ a: 12, b: 'hi', c: null }, undefined, { c: false, d: 12, b: undefined }, 101
 >c : null
 >null : null
 >undefined : undefined
->{ c: false, d: 12, b: undefined } : { c: false; d: number; b: undefined; }
->c : false
+>{ c: false, d: 12, b: undefined } : { c: boolean; d: number; b: undefined; }
+>c : boolean
 >false : false
 >d : number
 >12 : 12

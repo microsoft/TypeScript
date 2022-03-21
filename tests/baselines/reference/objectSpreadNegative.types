@@ -171,12 +171,12 @@ let combinedNested: { a: number, b: boolean, c: string, d: string } =
 >d : string
 
     { ...{ a: 4, ...{ b: false, c: 'overriden' } }, d: 'actually new', ...{ a: 5, d: 'maybe new' } }
->{ ...{ a: 4, ...{ b: false, c: 'overriden' } }, d: 'actually new', ...{ a: 5, d: 'maybe new' } } : { a: number; d: string; b: false; c: string; }
->{ a: 4, ...{ b: false, c: 'overriden' } } : { b: false; c: string; a: number; }
+>{ ...{ a: 4, ...{ b: false, c: 'overriden' } }, d: 'actually new', ...{ a: 5, d: 'maybe new' } } : { a: number; d: string; b: boolean; c: string; }
+>{ a: 4, ...{ b: false, c: 'overriden' } } : { b: boolean; c: string; a: number; }
 >a : number
 >4 : 4
->{ b: false, c: 'overriden' } : { b: false; c: string; }
->b : false
+>{ b: false, c: 'overriden' } : { b: boolean; c: string; }
+>b : boolean
 >false : false
 >c : string
 >'overriden' : "overriden"

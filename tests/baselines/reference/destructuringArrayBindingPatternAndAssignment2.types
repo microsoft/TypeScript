@@ -79,10 +79,10 @@ function foo(idx: number): F {
 >idx : number
 
     return {
->{        2: true    } : { 2: true; }
+>{        2: true    } : { 2: boolean; }
 
         2: true
->2 : true
+>2 : boolean
 >true : true
     }
 }

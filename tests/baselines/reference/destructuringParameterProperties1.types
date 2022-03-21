@@ -102,12 +102,12 @@ var c3 = new C3({x: 0, y: "", z: false});
 >c3 : C3
 >new C3({x: 0, y: "", z: false}) : C3
 >C3 : typeof C3
->{x: 0, y: "", z: false} : { x: number; y: string; z: false; }
+>{x: 0, y: "", z: false} : { x: number; y: string; z: boolean; }
 >x : number
 >0 : 0
 >y : string
 >"" : ""
->z : false
+>z : boolean
 >false : false
 
 c3 = new C3({x: 0, "y": "y", z: true});
@@ -115,12 +115,12 @@ c3 = new C3({x: 0, "y": "y", z: true});
 >c3 : C3
 >new C3({x: 0, "y": "y", z: true}) : C3
 >C3 : typeof C3
->{x: 0, "y": "y", z: true} : { x: number; y: string; z: true; }
+>{x: 0, "y": "y", z: true} : { x: number; y: string; z: boolean; }
 >x : number
 >0 : 0
 >"y" : string
 >"y" : "y"
->z : true
+>z : boolean
 >true : true
 
 var [c3_x, c3_y, c3_z] = [c3.x, c3.y, c3.z];

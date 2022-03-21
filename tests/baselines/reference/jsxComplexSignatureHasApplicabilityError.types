@@ -53,11 +53,11 @@ export function createReactSingleSelect<
 >props : Omit<Omit<WrappedProps, "multi">, keyof Omit<WrappedProps, "multi"> & keyof Props<ExtractValueType<WrappedProps>>> & Props<ExtractValueType<WrappedProps>> & { children?: React.ReactNode; }
 
                 multi={false}
->multi : false
+>multi : boolean
 >false : false
 
                 autosize={false}
->autosize : false
+>autosize : boolean
 >false : false
 
                 value={props.value}

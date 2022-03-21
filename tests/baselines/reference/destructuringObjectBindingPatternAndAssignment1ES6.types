@@ -67,10 +67,10 @@ function foo(): F {
 >foo : () => F
 
     return {
->{        1: true    } : { 1: true; }
+>{        1: true    } : { 1: boolean; }
 
         1: true
->1 : true
+>1 : boolean
 >true : true
 
     };
@@ -80,10 +80,10 @@ function bar(): F {
 >bar : () => F
 
     return {
->{        2: true    } : { 2: true; }
+>{        2: true    } : { 2: boolean; }
 
         2: true
->2 : true
+>2 : boolean
 >true : true
 
     };

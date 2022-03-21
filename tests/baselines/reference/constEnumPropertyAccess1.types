@@ -34,10 +34,10 @@ var o: {
 >idx : number
 
 } = {
->{        1: true    } : { 1: true; }
+>{        1: true    } : { 1: boolean; }
 
         1: true
->1 : true
+>1 : boolean
 >true : true
 
     };

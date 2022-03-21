@@ -271,7 +271,7 @@ function f12() {
 >a : Symbol(a, Decl(declarationsAndAssignments.ts, 86, 9), Decl(declarationsAndAssignments.ts, 87, 7))
 >b : Symbol(b, Decl(declarationsAndAssignments.ts, 86, 13), Decl(declarationsAndAssignments.ts, 88, 7))
 >x : Symbol(x, Decl(declarationsAndAssignments.ts, 86, 17), Decl(declarationsAndAssignments.ts, 89, 7))
->y : Symbol(y, Decl(declarationsAndAssignments.ts, 86, 47))
+>y : Symbol(y, Decl(declarationsAndAssignments.ts, 86, 84))
 >c : Symbol(c, Decl(declarationsAndAssignments.ts, 86, 20), Decl(declarationsAndAssignments.ts, 90, 7))
 >x : Symbol(x, Decl(declarationsAndAssignments.ts, 86, 40))
 >y : Symbol(y, Decl(declarationsAndAssignments.ts, 86, 47))

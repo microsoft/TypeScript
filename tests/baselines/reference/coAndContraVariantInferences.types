@@ -57,8 +57,8 @@ const actionA = { payload: 'any-string' } as Action<'ACTION_A', string>;
 const actionB = { payload: true } as Action<'ACTION_B', boolean>;
 >actionB : Action<"ACTION_B", boolean>
 >{ payload: true } as Action<'ACTION_B', boolean> : Action<"ACTION_B", boolean>
->{ payload: true } : { payload: true; }
->payload : true
+>{ payload: true } : { payload: boolean; }
+>payload : boolean
 >true : true
 
 function call<TName extends string,TPayload>(

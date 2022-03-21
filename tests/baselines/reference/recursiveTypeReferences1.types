@@ -60,7 +60,7 @@ type Json = string | number | boolean | null | Json[] | { [key: string]: Json };
 
 let data: Json = {
 >data : Json
->{    caption: "Test",    location: { x: 10, y: 20 },    values: [true, [10, 20], null]} : { caption: string; location: { x: number; y: number; }; values: (true | number[] | null)[]; }
+>{    caption: "Test",    location: { x: 10, y: 20 },    values: [true, [10, 20], null]} : { caption: string; location: { x: number; y: number; }; values: (boolean | number[] | null)[]; }
 
     caption: "Test",
 >caption : string
@@ -75,8 +75,8 @@ let data: Json = {
 >20 : 20
 
     values: [true, [10, 20], null]
->values : (true | number[] | null)[]
->[true, [10, 20], null] : (true | number[] | null)[]
+>values : (boolean | number[] | null)[]
+>[true, [10, 20], null] : (boolean | number[] | null)[]
 >true : true
 >[10, 20] : number[]
 >10 : 10

@@ -20,7 +20,7 @@ var s = $.extend({
 >$.extend : { <T>(target: T, ...objs: any[]): T; <T>(deep: boolean, target: T, ...objs: any[]): T; }
 >$ : Foo
 >extend : { <T>(target: T, ...objs: any[]): T; <T>(deep: boolean, target: T, ...objs: any[]): T; }
->{    type: "GET" ,    data: "data" ,    success: wrapSuccessCallback(requestContext, callback) ,    error: wrapErrorCallback(requestContext, errorCallback) ,    dataType: "json" ,    converters: { "text json": "" },    traditional: true ,    timeout: 12,    } : { type: string; data: string; success: any; error: any; dataType: string; converters: { "text json": string; }; traditional: true; timeout: number; }
+>{    type: "GET" ,    data: "data" ,    success: wrapSuccessCallback(requestContext, callback) ,    error: wrapErrorCallback(requestContext, errorCallback) ,    dataType: "json" ,    converters: { "text json": "" },    traditional: true ,    timeout: 12,    } : { type: string; data: string; success: any; error: any; dataType: string; converters: { "text json": string; }; traditional: boolean; timeout: number; }
 
     type: "GET" ,
 >type : string
@@ -55,7 +55,7 @@ var s = $.extend({
 >"" : ""
 
     traditional: true ,
->traditional : true
+>traditional : boolean
 >true : true
 
     timeout: 12,

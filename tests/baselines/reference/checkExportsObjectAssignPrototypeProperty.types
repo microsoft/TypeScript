@@ -136,10 +136,10 @@ Object.defineProperty(Person.prototype, "thing", { value: 42, writable: true });
 >Person : typeof Person
 >prototype : any
 >"thing" : "thing"
->{ value: 42, writable: true } : { value: number; writable: true; }
+>{ value: 42, writable: true } : { value: number; writable: boolean; }
 >value : number
 >42 : 42
->writable : true
+>writable : boolean
 >true : true
 
 Object.defineProperty(Person.prototype, "readonlyProp", { value: "Smith", writable: false });
@@ -151,10 +151,10 @@ Object.defineProperty(Person.prototype, "readonlyProp", { value: "Smith", writab
 >Person : typeof Person
 >prototype : any
 >"readonlyProp" : "readonlyProp"
->{ value: "Smith", writable: false } : { value: string; writable: false; }
+>{ value: "Smith", writable: false } : { value: string; writable: boolean; }
 >value : string
 >"Smith" : "Smith"
->writable : false
+>writable : boolean
 >false : false
 
 Object.defineProperty(Person.prototype, "rwAccessors", { get() { return 98122 }, set(_) { /*ignore*/ } });
