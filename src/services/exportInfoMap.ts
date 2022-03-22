@@ -59,6 +59,7 @@ namespace ts {
     export interface CacheableExportInfoMapHost {
         getCurrentProgram(): Program | undefined;
         getPackageJsonAutoImportProvider(): Program | undefined;
+        getGlobalTypingsCacheLocation(): string | undefined;
     }
 
     export function createCacheableExportInfoMap(host: CacheableExportInfoMapHost): ExportInfoMap {
@@ -99,7 +100,7 @@ namespace ts {
                         packageName = unmangleScopedPackageName(getPackageNameFromTypesPackageName(moduleFile.fileName.substring(topLevelPackageNameIndex + 1, packageRootIndex)));
                         if (startsWith(importingFile, moduleFile.path.substring(0, topLevelNodeModulesIndex))) {
                             const prevDeepestNodeModulesPath = packages.get(packageName);
-                            const nodeModulesPath = moduleFile.fileName.substring(0, topLevelPackageNameIndex);
+                            const nodeModulesPath = moduleFile.fileName.substring(0, topLevelPackageNameIndex + 1);
                             if (prevDeepestNodeModulesPath) {
                                 const prevDeepestNodeModulesIndex = prevDeepestNodeModulesPath.indexOf(nodeModulesPathPart);
                                 if (topLevelNodeModulesIndex > prevDeepestNodeModulesIndex) {
@@ -272,6 +273,8 @@ namespace ts {
 
         function isNotShadowedByDeeperNodeModulesPackage(info: SymbolExportInfo, packageName: string | undefined) {
             if (!packageName || !info.moduleFileName) return true;
+            const typingsCacheLocation = host.getGlobalTypingsCacheLocation();
+            if (typingsCacheLocation && startsWith(info.moduleFileName, typingsCacheLocation)) return true;
             const packageDeepestNodeModulesPath = packages.get(packageName);
             return !packageDeepestNodeModulesPath || startsWith(info.moduleFileName, packageDeepestNodeModulesPath);
         }
@@ -367,6 +370,7 @@ namespace ts {
         const cache = host.getCachedExportInfoMap?.() || createCacheableExportInfoMap({
             getCurrentProgram: () => program,
             getPackageJsonAutoImportProvider: () => host.getPackageJsonAutoImportProvider?.(),
+            getGlobalTypingsCacheLocation: () => host.getGlobalTypingsCacheLocation?.(),
         });
 
         if (cache.isUsableByFile(importingFile.path)) {
