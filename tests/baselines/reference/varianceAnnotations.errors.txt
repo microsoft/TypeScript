@@ -1,0 +1,307 @@
+tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(9,1): error TS2322: Type 'Covariant<unknown>' is not assignable to type 'Covariant<string>'.
+  Type 'unknown' is not assignable to type 'string'.
+tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(18,1): error TS2322: Type 'Contravariant<string>' is not assignable to type 'Contravariant<unknown>'.
+  Type 'unknown' is not assignable to type 'string'.
+tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(28,1): error TS2322: Type 'Invariant<string>' is not assignable to type 'Invariant<unknown>'.
+  Types of property 'f' are incompatible.
+    Type '(x: string) => string' is not assignable to type '(x: unknown) => unknown'.
+      Types of parameters 'x' and 'x' are incompatible.
+        Type 'unknown' is not assignable to type 'string'.
+tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(29,1): error TS2322: Type 'Invariant<unknown>' is not assignable to type 'Invariant<string>'.
+  The types returned by 'f(...)' are incompatible between these types.
+    Type 'unknown' is not assignable to type 'string'.
+tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(40,17): error TS2636: Type 'Covariant1<super-T>' is not assignable to type 'Covariant1<sub-T>' as implied by variance annotation.
+  Types of property 'x' are incompatible.
+    Type 'super-T' is not assignable to type 'sub-T'.
+tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(44,21): error TS2636: Type 'keyof sub-T' is not assignable to type 'keyof super-T' as implied by variance annotation.
+  Type 'string | number | symbol' is not assignable to type 'keyof super-T'.
+    Type 'string' is not assignable to type 'keyof super-T'.
+tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(46,21): error TS2636: Type 'Contravariant2<sub-T>' is not assignable to type 'Contravariant2<super-T>' as implied by variance annotation.
+  Types of property 'f' are incompatible.
+    Type '(x: sub-T) => void' is not assignable to type '(x: super-T) => void'.
+      Types of parameters 'x' and 'x' are incompatible.
+        Type 'super-T' is not assignable to type 'sub-T'.
+tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(50,17): error TS2636: Type 'Invariant1<super-T>' is not assignable to type 'Invariant1<sub-T>' as implied by variance annotation.
+  The types returned by 'f(...)' are incompatible between these types.
+    Type 'super-T' is not assignable to type 'sub-T'.
+tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(54,17): error TS2636: Type 'Invariant2<sub-T>' is not assignable to type 'Invariant2<super-T>' as implied by variance annotation.
+  Types of property 'f' are incompatible.
+    Type '(x: sub-T) => sub-T' is not assignable to type '(x: super-T) => super-T'.
+      Types of parameters 'x' and 'x' are incompatible.
+        Type 'super-T' is not assignable to type 'sub-T'.
+tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(60,11): error TS2636: Type 'Foo1<super-T>' is not assignable to type 'Foo1<sub-T>' as implied by variance annotation.
+  Types of property 'x' are incompatible.
+    Type 'super-T' is not assignable to type 'sub-T'.
+tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(71,11): error TS2636: Type 'Foo2<sub-T>' is not assignable to type 'Foo2<super-T>' as implied by variance annotation.
+  Types of property 'f' are incompatible.
+    Type 'FooFn2<sub-T>' is not assignable to type 'FooFn2<super-T>'.
+      Type 'super-T' is not assignable to type 'sub-T'.
+tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(95,10): error TS1273: 'public' modifier cannot appear on a type parameter
+tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(96,17): error TS1030: 'in' modifier already seen.
+tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(97,17): error TS1030: 'out' modifier already seen.
+tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(98,14): error TS1029: 'in' modifier must precede 'out' modifier.
+tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(100,21): error TS1274: 'in' modifier can only appear on a type parameter of a class, interface or type alias
+tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(101,21): error TS1274: 'out' modifier can only appear on a type parameter of a class, interface or type alias
+tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(104,5): error TS1274: 'in' modifier can only appear on a type parameter of a class, interface or type alias
+tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(105,5): error TS1274: 'out' modifier can only appear on a type parameter of a class, interface or type alias
+tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(116,1): error TS2322: Type 'Baz<string>' is not assignable to type 'Baz<unknown>'.
+  Type 'unknown' is not assignable to type 'string'.
+tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(117,1): error TS2322: Type 'Baz<unknown>' is not assignable to type 'Baz<string>'.
+  Type 'unknown' is not assignable to type 'string'.
+tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(136,7): error TS2322: Type 'Parent<unknown>' is not assignable to type 'Parent<string>'.
+  Type 'unknown' is not assignable to type 'string'.
+tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(160,68): error TS2345: Argument of type 'ActionObject<{ type: "PLAY"; value: number; }>' is not assignable to parameter of type 'ActionObject<{ type: "PLAY"; value: number; } | { type: "RESET"; }>'.
+  Types of property 'exec' are incompatible.
+    Type '(meta: StateNode<any, { type: "PLAY"; value: number; }>) => void' is not assignable to type '(meta: StateNode<any, { type: "PLAY"; value: number; } | { type: "RESET"; }>) => void'.
+      Types of parameters 'meta' and 'meta' are incompatible.
+        Type 'StateNode<any, { type: "PLAY"; value: number; } | { type: "RESET"; }>' is not assignable to type 'StateNode<any, { type: "PLAY"; value: number; }>'.
+          Types of property '_storedEvent' are incompatible.
+            Type '{ type: "PLAY"; value: number; } | { type: "RESET"; }' is not assignable to type '{ type: "PLAY"; value: number; }'.
+              Type '{ type: "RESET"; }' is not assignable to type '{ type: "PLAY"; value: number; }'.
+
+
+==== tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts (23 errors) ====
+    type Covariant<out T> = {
+        x: T;
+    }
+    
+    declare let super_covariant: Covariant<unknown>;
+    declare let sub_covariant: Covariant<string>;
+    
+    super_covariant = sub_covariant;
+    sub_covariant = super_covariant;  // Error
+    ~~~~~~~~~~~~~
+!!! error TS2322: Type 'Covariant<unknown>' is not assignable to type 'Covariant<string>'.
+!!! error TS2322:   Type 'unknown' is not assignable to type 'string'.
+    
+    type Contravariant<in T> = {
+        f: (x: T) => void;
+    }
+    
+    declare let super_contravariant: Contravariant<unknown>;
+    declare let sub_contravariant: Contravariant<string>;
+    
+    super_contravariant = sub_contravariant;  // Error
+    ~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'Contravariant<string>' is not assignable to type 'Contravariant<unknown>'.
+!!! error TS2322:   Type 'unknown' is not assignable to type 'string'.
+    sub_contravariant = super_contravariant;
+    
+    type Invariant<in out T> = {
+        f: (x: T) => T;
+    }
+    
+    declare let super_invariant: Invariant<unknown>;
+    declare let sub_invariant: Invariant<string>;
+    
+    super_invariant = sub_invariant;  // Error
+    ~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'Invariant<string>' is not assignable to type 'Invariant<unknown>'.
+!!! error TS2322:   Types of property 'f' are incompatible.
+!!! error TS2322:     Type '(x: string) => string' is not assignable to type '(x: unknown) => unknown'.
+!!! error TS2322:       Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2322:         Type 'unknown' is not assignable to type 'string'.
+    sub_invariant = super_invariant;  // Error
+    ~~~~~~~~~~~~~
+!!! error TS2322: Type 'Invariant<unknown>' is not assignable to type 'Invariant<string>'.
+!!! error TS2322:   The types returned by 'f(...)' are incompatible between these types.
+!!! error TS2322:     Type 'unknown' is not assignable to type 'string'.
+    
+    // Variance of various type constructors
+    
+    type T10<out T> = T;
+    type T11<in T> = keyof T;
+    type T12<out T, out K extends keyof T> = T[K];
+    type T13<in out T> = T[keyof T];
+    
+    // Variance annotation errors
+    
+    type Covariant1<in T> = {  // Error
+                    ~~~~
+!!! error TS2636: Type 'Covariant1<super-T>' is not assignable to type 'Covariant1<sub-T>' as implied by variance annotation.
+!!! error TS2636:   Types of property 'x' are incompatible.
+!!! error TS2636:     Type 'super-T' is not assignable to type 'sub-T'.
+        x: T;
+    }
+    
+    type Contravariant1<out T> = keyof T;  // Error
+                        ~~~~~
+!!! error TS2636: Type 'keyof sub-T' is not assignable to type 'keyof super-T' as implied by variance annotation.
+!!! error TS2636:   Type 'string | number | symbol' is not assignable to type 'keyof super-T'.
+!!! error TS2636:     Type 'string' is not assignable to type 'keyof super-T'.
+    
+    type Contravariant2<out T> = {  // Error
+                        ~~~~~
+!!! error TS2636: Type 'Contravariant2<sub-T>' is not assignable to type 'Contravariant2<super-T>' as implied by variance annotation.
+!!! error TS2636:   Types of property 'f' are incompatible.
+!!! error TS2636:     Type '(x: sub-T) => void' is not assignable to type '(x: super-T) => void'.
+!!! error TS2636:       Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2636:         Type 'super-T' is not assignable to type 'sub-T'.
+        f: (x: T) => void;
+    }
+    
+    type Invariant1<in T> = {  // Error
+                    ~~~~
+!!! error TS2636: Type 'Invariant1<super-T>' is not assignable to type 'Invariant1<sub-T>' as implied by variance annotation.
+!!! error TS2636:   The types returned by 'f(...)' are incompatible between these types.
+!!! error TS2636:     Type 'super-T' is not assignable to type 'sub-T'.
+        f: (x: T) => T;
+    }
+    
+    type Invariant2<out T> = {  // Error
+                    ~~~~~
+!!! error TS2636: Type 'Invariant2<sub-T>' is not assignable to type 'Invariant2<super-T>' as implied by variance annotation.
+!!! error TS2636:   Types of property 'f' are incompatible.
+!!! error TS2636:     Type '(x: sub-T) => sub-T' is not assignable to type '(x: super-T) => super-T'.
+!!! error TS2636:       Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2636:         Type 'super-T' is not assignable to type 'sub-T'.
+        f: (x: T) => T;
+    }
+    
+    // Variance in circular types
+    
+    type Foo1<in T> = {  // Error
+              ~~~~
+!!! error TS2636: Type 'Foo1<super-T>' is not assignable to type 'Foo1<sub-T>' as implied by variance annotation.
+!!! error TS2636:   Types of property 'x' are incompatible.
+!!! error TS2636:     Type 'super-T' is not assignable to type 'sub-T'.
+        x: T;
+        f: FooFn1<T>;
+    }
+    
+    type FooFn1<T> = (foo: Bar1<T[]>) => void;
+    
+    type Bar1<T> = {
+        value: Foo1<T[]>;
+    }
+    
+    type Foo2<out T> = {  // Error
+              ~~~~~
+!!! error TS2636: Type 'Foo2<sub-T>' is not assignable to type 'Foo2<super-T>' as implied by variance annotation.
+!!! error TS2636:   Types of property 'f' are incompatible.
+!!! error TS2636:     Type 'FooFn2<sub-T>' is not assignable to type 'FooFn2<super-T>'.
+!!! error TS2636:       Type 'super-T' is not assignable to type 'sub-T'.
+        x: T;
+        f: FooFn2<T>;
+    }
+    
+    type FooFn2<T> = (foo: Bar2<T[]>) => void;
+    
+    type Bar2<T> = {
+        value: Foo2<T[]>;
+    }
+    
+    type Foo3<in out T> = {
+        x: T;
+        f: FooFn3<T>;
+    }
+    
+    type FooFn3<T> = (foo: Bar3<T[]>) => void;
+    
+    type Bar3<T> = {
+        value: Foo3<T[]>;
+    }
+    
+    // Wrong modifier usage
+    
+    type T20<public T> = T;  // Error
+             ~~~~~~
+!!! error TS1273: 'public' modifier cannot appear on a type parameter
+    type T21<in out in T> = T;  // Error
+                    ~~
+!!! error TS1030: 'in' modifier already seen.
+    type T22<in out out T> = T;  // Error
+                    ~~~
+!!! error TS1030: 'out' modifier already seen.
+    type T23<out in T> = T;  // Error
+                 ~~
+!!! error TS1029: 'in' modifier must precede 'out' modifier.
+    
+    declare function f1<in T>(x: T): void;  // Error
+                        ~~
+!!! error TS1274: 'in' modifier can only appear on a type parameter of a class, interface or type alias
+    declare function f2<out T>(): T;  // Error
+                        ~~~
+!!! error TS1274: 'out' modifier can only appear on a type parameter of a class, interface or type alias
+    
+    class C {
+        in a = 0;  // Error
+        ~~
+!!! error TS1274: 'in' modifier can only appear on a type parameter of a class, interface or type alias
+        out b = 0;  // Error
+        ~~~
+!!! error TS1274: 'out' modifier can only appear on a type parameter of a class, interface or type alias
+    }
+    
+    // Interface merging
+    
+    interface Baz<out T> {}
+    interface Baz<in T> {}
+    
+    declare let baz1: Baz<unknown>;
+    declare let baz2: Baz<string>;
+    
+    baz1 = baz2;  // Error
+    ~~~~
+!!! error TS2322: Type 'Baz<string>' is not assignable to type 'Baz<unknown>'.
+!!! error TS2322:   Type 'unknown' is not assignable to type 'string'.
+    baz2 = baz1;  // Error
+    ~~~~
+!!! error TS2322: Type 'Baz<unknown>' is not assignable to type 'Baz<string>'.
+!!! error TS2322:   Type 'unknown' is not assignable to type 'string'.
+    
+    // Repro from #44572
+    
+    interface Parent<out A> {
+        child: Child<A> | null;
+        parent: Parent<A> | null;
+    }
+    
+    interface Child<A, B = unknown> extends Parent<A> {
+        readonly a: A;
+        readonly b: B;
+    }
+    
+    function fn<A>(inp: Child<A>) {
+        const a: Child<unknown> = inp;
+    }
+    
+    const pu: Parent<unknown> = { child: { a: 0, b: 0, child: null, parent: null }, parent: null };
+    const notString: Parent<string> = pu;  // Error
+          ~~~~~~~~~
+!!! error TS2322: Type 'Parent<unknown>' is not assignable to type 'Parent<string>'.
+!!! error TS2322:   Type 'unknown' is not assignable to type 'string'.
+    
+    // Repro from comment in #44572
+    
+    declare class StateNode<TContext, in out TEvent extends { type: string }> {
+        _storedEvent: TEvent;
+        _action: ActionObject<TEvent>;
+        _state: StateNode<TContext, any>;
+    }
+    
+    interface ActionObject<TEvent extends { type: string }> {
+        exec: (meta: StateNode<any, TEvent>) => void;
+    }
+    
+    declare function createMachine<TEvent extends { type: string }>(action: ActionObject<TEvent>): StateNode<any, any>;
+    
+    declare function interpret<TContext>(machine: StateNode<TContext, any>): void;
+    
+    const machine = createMachine({} as any);
+    
+    interpret(machine);
+    
+    declare const qq: ActionObject<{ type: "PLAY"; value: number }>;
+    
+    createMachine<{ type: "PLAY"; value: number } | { type: "RESET" }>(qq);  // Error
+                                                                       ~~
+!!! error TS2345: Argument of type 'ActionObject<{ type: "PLAY"; value: number; }>' is not assignable to parameter of type 'ActionObject<{ type: "PLAY"; value: number; } | { type: "RESET"; }>'.
+!!! error TS2345:   Types of property 'exec' are incompatible.
+!!! error TS2345:     Type '(meta: StateNode<any, { type: "PLAY"; value: number; }>) => void' is not assignable to type '(meta: StateNode<any, { type: "PLAY"; value: number; } | { type: "RESET"; }>) => void'.
+!!! error TS2345:       Types of parameters 'meta' and 'meta' are incompatible.
+!!! error TS2345:         Type 'StateNode<any, { type: "PLAY"; value: number; } | { type: "RESET"; }>' is not assignable to type 'StateNode<any, { type: "PLAY"; value: number; }>'.
+!!! error TS2345:           Types of property '_storedEvent' are incompatible.
+!!! error TS2345:             Type '{ type: "PLAY"; value: number; } | { type: "RESET"; }' is not assignable to type '{ type: "PLAY"; value: number; }'.
+!!! error TS2345:               Type '{ type: "RESET"; }' is not assignable to type '{ type: "PLAY"; value: number; }'.
+    
