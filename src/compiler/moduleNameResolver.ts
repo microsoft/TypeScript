@@ -1576,22 +1576,13 @@ namespace ts {
 
     /** Return the file if it exists. */
     function tryFile(fileName: string, onlyRecordFailures: boolean, state: ModuleResolutionState): string | undefined {
-        if (!state.compilerOptions.moduleSuffixes) {
+        if (!state.compilerOptions.moduleSuffixes?.length) {
             return tryFileLookup(fileName, onlyRecordFailures, state);
         }
 
         const ext = tryGetExtensionFromPath(fileName) ?? "";
         const fileNameNoExtension = ext ? removeExtension(fileName, ext) : fileName;
-
-        const suffixes = isArray(state.compilerOptions.moduleSuffixes) &&
-            state.compilerOptions.moduleSuffixes.length > 0 ? state.compilerOptions.moduleSuffixes : [""];
-        for (const suffix of suffixes) {
-            const name = fileNameNoExtension + suffix + ext;
-            if (tryFileLookup(name, onlyRecordFailures, state)) {
-                return name;
-            }
-        };
-        return undefined;
+        return forEach(state.compilerOptions.moduleSuffixes, suffix => tryFileLookup(fileNameNoExtension + suffix + ext, onlyRecordFailures, state));
     }
 
     function tryFileLookup(fileName: string, onlyRecordFailures: boolean, state: ModuleResolutionState): string | undefined {
