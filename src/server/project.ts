@@ -5,7 +5,7 @@ namespace ts.server {
         Configured,
         External,
         AutoImportProvider,
-        Auxiliary,
+        SingleCommand,
     }
 
     /* @internal */
@@ -1946,7 +1946,7 @@ namespace ts.server {
     class SingleCommandProject extends Project {
         constructor(projectService: ProjectService, documentRegistry: DocumentRegistry, compilerOptions: CompilerOptions) {
             super(projectService.newSingleCommandProjectName(),
-                ProjectKind.Auxiliary,
+                ProjectKind.SingleCommand,
                 projectService,
                 documentRegistry,
                 /*hasExplicitListOfFiles*/ false,

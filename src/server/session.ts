@@ -1240,7 +1240,7 @@ namespace ts.server {
                 project.withNoDtsResolutionProject([file], (noDtsProject, ensureRoot) => {
                     const ls = noDtsProject.getLanguageService();
                     const jsDefinitions = ls
-                        .getDefinitionAndBoundSpan(file, position, /*aliasesOnly*/ true)
+                        .getDefinitionAndBoundSpan(file, position, /*searchOtherFilesOnly*/ true)
                         ?.definitions
                         ?.filter(d => toNormalizedPath(d.fileName) !== file);
                     if (some(jsDefinitions)) {
@@ -1338,11 +1338,10 @@ namespace ts.server {
                 }
                 const initialNode = getTouchingPropertyName(program.getSourceFile(file)!, position);
                 const symbol = program.getTypeChecker().getSymbolAtLocation(initialNode);
-                if (!symbol || !symbol.declarations || some(symbol.declarations, isFreelyNameableImport)) {
-                    return undefined;
-                }
+                const importSpecifier = symbol && getDeclarationOfKind<ImportSpecifier>(symbol, SyntaxKind.ImportSpecifier);
+                if (!importSpecifier) return undefined;
 
-                const nameToSearch = find(symbol.declarations, isImportSpecifier)?.propertyName?.text || symbol.name;
+                const nameToSearch = importSpecifier.propertyName?.text || importSpecifier.name.text;
                 return searchForDeclaration(nameToSearch, fileToSearch, auxiliaryProgram);
             }
 

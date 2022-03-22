@@ -70,7 +70,7 @@ namespace ts {
         Json,       /** '.json' */
         TSConfig,   /** '.json' with `tsconfig` used instead of `index` */
         DtsOnly,    /** Only '.d.ts' */
-        TypeScriptButNotDts,
+        TsOnly,     /** '.[cm]tsx?' but not .d.ts variants */
     }
 
     interface PathAndPackageId {
@@ -1296,7 +1296,7 @@ namespace ts {
             extensions = tsconfigExtensions;
         }
         else if (compilerOptions.noDtsResolution) {
-            extensions = [Extensions.TypeScriptButNotDts];
+            extensions = [Extensions.TsOnly];
             if (compilerOptions.allowJs) extensions.push(Extensions.JavaScript);
             if (compilerOptions.resolveJsonModule) extensions.push(Extensions.Json);
         }
@@ -1551,7 +1551,7 @@ namespace ts {
                     default: return tryExtension(Extension.Dts);
                 }
             case Extensions.TypeScript:
-            case Extensions.TypeScriptButNotDts:
+            case Extensions.TsOnly:
                 const useDts = extensions === Extensions.TypeScript;
                 switch (originalExtension) {
                     case Extension.Mjs:
@@ -1823,7 +1823,7 @@ namespace ts {
             switch (extensions) {
                 case Extensions.JavaScript:
                 case Extensions.Json:
-                case Extensions.TypeScriptButNotDts:
+                case Extensions.TsOnly:
                     packageFile = readPackageJsonMainField(jsonContent, candidate, state);
                     break;
                 case Extensions.TypeScript:
@@ -1910,7 +1910,7 @@ namespace ts {
                 return extension === Extension.Json;
             case Extensions.TypeScript:
                 return extension === Extension.Ts || extension === Extension.Tsx || extension === Extension.Dts;
-            case Extensions.TypeScriptButNotDts:
+            case Extensions.TsOnly:
                 return extension === Extension.Ts || extension === Extension.Tsx;
             case Extensions.DtsOnly:
                 return extension === Extension.Dts;

@@ -1,6 +1,6 @@
 /* @internal */
 namespace ts.GoToDefinition {
-    export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile, position: number, aliasesOnly?: boolean): readonly DefinitionInfo[] | undefined {
+    export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile, position: number, searchOtherFilesOnly?: boolean): readonly DefinitionInfo[] | undefined {
         const resolvedRef = getReferenceAtPosition(sourceFile, position, program);
         const fileReferenceDefinition = resolvedRef && [getDefinitionInfoForFileReference(resolvedRef.reference.fileName, resolvedRef.fileName, resolvedRef.unverified)] || emptyArray;
         if (resolvedRef?.file) {
@@ -43,7 +43,7 @@ namespace ts.GoToDefinition {
         let { symbol, failedAliasResolution } = getSymbol(node, typeChecker);
         let fallbackNode = node;
 
-        if (aliasesOnly && failedAliasResolution) {
+        if (searchOtherFilesOnly && failedAliasResolution) {
             // We couldn't resolve the specific import, try on the module specifier.
             const importDeclaration = findAncestor(node, isAnyImportOrBareOrAccessedRequire);
             const moduleSpecifier = importDeclaration && tryGetModuleSpecifierFromDeclaration(importDeclaration);
@@ -78,7 +78,7 @@ namespace ts.GoToDefinition {
             return concatenate(fileReferenceDefinition, getDefinitionInfoForIndexSignatures(node, typeChecker));
         }
 
-        if (aliasesOnly && every(symbol.declarations, d => d.getSourceFile().fileName === sourceFile.fileName)) return undefined;
+        if (searchOtherFilesOnly && every(symbol.declarations, d => d.getSourceFile().fileName === sourceFile.fileName)) return undefined;
 
         const calledDeclaration = tryGetSignatureDeclaration(typeChecker, node);
         // Don't go to the component constructor definition for a JSX element, just go to the component definition.
@@ -265,8 +265,8 @@ namespace ts.GoToDefinition {
         return undefined;
     }
 
-    export function getDefinitionAndBoundSpan(program: Program, sourceFile: SourceFile, position: number, aliasesOnly?: boolean): DefinitionInfoAndBoundSpan | undefined {
-        const definitions = getDefinitionAtPosition(program, sourceFile, position, aliasesOnly);
+    export function getDefinitionAndBoundSpan(program: Program, sourceFile: SourceFile, position: number, searchOtherFilesOnly?: boolean): DefinitionInfoAndBoundSpan | undefined {
+        const definitions = getDefinitionAtPosition(program, sourceFile, position, searchOtherFilesOnly);
 
         if (!definitions || definitions.length === 0) {
             return undefined;
