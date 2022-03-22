@@ -1140,13 +1140,23 @@ namespace ts.Completions {
             case SyntaxKind.MethodSignature:
             case SyntaxKind.MethodDeclaration: {
                 const signatures = checker.getSignaturesOfType(type, SignatureKind.Call);
-                if (signatures.length > 1) {
+                if (signatures.length !== 1) {
                     // We don't support overloads in object literals.
                     return undefined;
                 }
-                const effectiveType = type.flags & TypeFlags.Union && (type as UnionType).types.length < 10
+                let effectiveType = type.flags & TypeFlags.Union && (type as UnionType).types.length < 10
                     ? checker.getUnionType((type as UnionType).types, UnionReduction.Subtype)
                     : type;
+                if (effectiveType.flags & TypeFlags.Union) {
+                    // Only offer the completion if there's a single function type component.
+                    const functionTypes = filter((effectiveType as UnionType).types, type => checker.getSignaturesOfType(type, SignatureKind.Call).length > 0);
+                    if (functionTypes.length === 1) {
+                        effectiveType = functionTypes[0];
+                    }
+                    else {
+                        return undefined;
+                    }
+                }
                 let typeNode = checker.typeToTypeNode(effectiveType, enclosingDeclaration, builderFlags, codefix.getNoopSymbolTrackerWithResolver({ program, host }));
                 if (!typeNode || !isFunctionTypeNode(typeNode)) {
                     return undefined;
