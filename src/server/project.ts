@@ -1974,19 +1974,26 @@ namespace ts.server {
                         }
                     }
 
-                    // 2. Try to load from the @types package.
-                    const typesPackageJson = resolvePackageNameToPackageJson(
-                        `@types/${name}`,
-                        hostProject.currentDirectory,
-                        compilerOptions,
-                        moduleResolutionHost,
-                        program.getModuleResolutionCache());
-                    if (typesPackageJson) {
-                        const entrypoints = getRootNamesFromPackageJson(typesPackageJson, program, symlinkCache);
-                        rootNames = concatenate(rootNames, entrypoints);
-                        dependenciesAdded += entrypoints?.length ? 1 : 0;
-                        continue;
-                    }
+                    // 2. Try to load from the @types package in the tree and in the global
+                    //    typings cache location, if enabled.
+                    const done = forEach([hostProject.currentDirectory, hostProject.getGlobalTypingsCacheLocation()], directory => {
+                        if (directory) {
+                            const typesPackageJson = resolvePackageNameToPackageJson(
+                                `@types/${name}`,
+                                directory,
+                                compilerOptions,
+                                moduleResolutionHost,
+                                program.getModuleResolutionCache());
+                            if (typesPackageJson) {
+                                const entrypoints = getRootNamesFromPackageJson(typesPackageJson, program, symlinkCache);
+                                rootNames = concatenate(rootNames, entrypoints);
+                                dependenciesAdded += entrypoints?.length ? 1 : 0;
+                                return true;
+                            }
+                        }
+                    });
+
+                    if (done) continue;
 
                     // 3. If the @types package did not exist and the user has settings that
                     //    allow processing JS from node_modules, go back to the implementation
