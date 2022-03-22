@@ -1591,3 +1591,35 @@ Promise.resolve(undefined as Promise<string> | number);
 >undefined as Promise<string> | number : number | Promise<string>
 >undefined : undefined
 
+Promise.resolve(undefined as Promise<Promise<number>>);
+>Promise.resolve(undefined as Promise<Promise<number>>) : Promise<number>
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise : PromiseConstructor
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>undefined as Promise<Promise<number>> : Promise<Promise<number>>
+>undefined : undefined
+
+Promise.resolve(undefined as string | Promise<Promise<number>>);
+>Promise.resolve(undefined as string | Promise<Promise<number>>) : Promise<string | number>
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise : PromiseConstructor
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>undefined as string | Promise<Promise<number>> : string | Promise<Promise<number>>
+>undefined : undefined
+
+Promise.resolve(undefined as Promise<string> | Promise<Promise<number>>);
+>Promise.resolve(undefined as Promise<string> | Promise<Promise<number>>) : Promise<string | number>
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise : PromiseConstructor
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>undefined as Promise<string> | Promise<Promise<number>> : Promise<string> | Promise<Promise<number>>
+>undefined : undefined
+
+Promise.resolve(undefined as Promise<string | Promise<Promise<number>>>);
+>Promise.resolve(undefined as Promise<string | Promise<Promise<number>>>) : Promise<string | number>
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise : PromiseConstructor
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>undefined as Promise<string | Promise<Promise<number>>> : Promise<string | Promise<Promise<number>>>
+>undefined : undefined
+

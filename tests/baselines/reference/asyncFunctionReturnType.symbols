@@ -285,4 +285,3 @@ async function fGenericIndexedTypeForExplicitPromiseOfKProp<TObj extends Obj, K 
 >obj : Symbol(obj, Decl(asyncFunctionReturnType.ts, 72, 100))
 >key : Symbol(key, Decl(asyncFunctionReturnType.ts, 72, 110))
 }
-

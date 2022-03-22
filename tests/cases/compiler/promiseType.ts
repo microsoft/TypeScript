@@ -219,3 +219,7 @@ const pc8 = p.then(() => Promise.reject("1"), () => Promise.resolve(1));
 const pc9 = p.then(() => Promise.reject("1"), () => Promise.reject(1));
 
 Promise.resolve(undefined as Promise<string> | number);
+Promise.resolve(undefined as Promise<Promise<number>>);
+Promise.resolve(undefined as string | Promise<Promise<number>>);
+Promise.resolve(undefined as Promise<string> | Promise<Promise<number>>);
+Promise.resolve(undefined as Promise<string | Promise<Promise<number>>>);

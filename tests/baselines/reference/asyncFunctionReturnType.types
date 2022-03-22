@@ -220,4 +220,3 @@ async function fGenericIndexedTypeForExplicitPromiseOfKProp<TObj extends Obj, K 
 >obj : TObj
 >key : K
 }
-
