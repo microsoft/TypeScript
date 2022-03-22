@@ -5693,7 +5693,7 @@
         "category": "Message",
         "code": 6706
     },
-    "Specify the path to .tsbuildinfo incremental compilation files.": {
+    "Specify the path to .tsbuildinfo incremental compilation file.": {
         "category": "Message",
         "code": 6707
     },
