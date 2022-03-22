@@ -19,7 +19,7 @@ namespace ts.codefix {
         errorCodes,
         getCodeActions(context) {
             const typeChecker = context.program.getTypeChecker();
-            const info = getInfo(context.sourceFile, context.span.start, context.errorCode, typeChecker, context.program, context.formatContext);
+            const info = getInfo(context.sourceFile, context.span.start, context.errorCode, typeChecker, context.program);
             if (!info) {
                 return undefined;
             }
@@ -50,7 +50,7 @@ namespace ts.codefix {
 
             return createCombinedCodeActions(textChanges.ChangeTracker.with(context, changes => {
                 eachDiagnostic(context, errorCodes, diag => {
-                    const info = getInfo(diag.file, diag.start, diag.code, checker, context.program, context.formatContext);
+                    const info = getInfo(diag.file, diag.start, diag.code, checker, context.program);
                     if (!info || !addToSeen(seen, getNodeId(info.parentDeclaration) + "#" + info.token.text)) {
                         return;
                     }
@@ -141,7 +141,6 @@ namespace ts.codefix {
         readonly properties: Symbol[];
         readonly parentDeclaration: ObjectLiteralExpression;
         readonly indentation?: number;
-        readonly trimLeadingWhiteSpaces?: boolean;
     }
 
     interface JsxAttributesInfo {
@@ -151,7 +150,7 @@ namespace ts.codefix {
         readonly parentDeclaration: JsxOpeningLikeElement;
     }
 
-    function getInfo(sourceFile: SourceFile, tokenPos: number, errorCode: number, checker: TypeChecker, program: Program, formatContext: formatting.FormatContext): Info | undefined {
+    function getInfo(sourceFile: SourceFile, tokenPos: number, errorCode: number, checker: TypeChecker, program: Program): Info | undefined {
         // The identifier of the missing property. eg:
         // this.missing = 1;
         //      ^^^^^^^
@@ -172,8 +171,7 @@ namespace ts.codefix {
 
             const properties = arrayFrom(checker.getUnmatchedProperties(checker.getTypeAtLocation(parent), checker.getTypeAtLocation(param), /* requireOptionalProperties */ false, /* matchDiscriminantProperties */ false));
             if (!length(properties)) return undefined;
-
-            return createObjectLiteralInfo(param.name, properties, parent);
+            return { kind: InfoKind.ObjectLiteral, token: param.name, properties, parentDeclaration: parent };
         }
 
         if (!isMemberName(token)) return undefined;
@@ -182,7 +180,7 @@ namespace ts.codefix {
             const properties = arrayFrom(checker.getUnmatchedProperties(checker.getTypeAtLocation(parent.initializer), checker.getTypeAtLocation(token), /* requireOptionalProperties */ false, /* matchDiscriminantProperties */ false));
             if (!length(properties)) return undefined;
 
-            return createObjectLiteralInfo(token, properties, parent.initializer);
+            return { kind: InfoKind.ObjectLiteral, token, properties, parentDeclaration: parent.initializer };
         }
 
         if (isIdentifier(token) && isJsxOpeningLikeElement(token.parent)) {
@@ -240,34 +238,6 @@ namespace ts.codefix {
         }
 
         return undefined;
-
-        // for object literal, we want to the indentation work like block
-        // if { starts in any position (can be in the middle of line)
-        // the following indentation should treat { as starting of that line (including leading whitespace)
-        // ```
-        //     const a: { x: undefined, y: undefined } = {}       // leading 4 whitespaces and { starts in the middle of line
-        // ->
-        //     const a: { x: undefined, y: undefined } = {
-        //         x: undefined,
-        //         y: undefined,
-        //     }
-        // ---------------------
-        //     const a: {x : undefined, y: undefined } =
-        //      {}
-        // ->
-        //     const a: { x: undefined, y: undefined } =
-        //      {                                                  // leading 5 whitespaces and { starts at 6 column
-        //          x: undefined,
-        //          y: undefined,
-        //      }
-        // ```
-        function createObjectLiteralInfo(token: Identifier, properties: Symbol[], parentDeclaration: ObjectLiteralExpression): Info {
-            const formatOptions = getFormatCodeSettingsForWriting(formatContext, sourceFile);
-            const lineStartPosition = getLineStartPositionForPosition(tokenPos, sourceFile);
-            const indentation = formatting.SmartIndenter.getIndentation(tokenPos, sourceFile, { ...formatOptions, indentStyle: IndentStyle.Block }, lineStartPosition === tokenPos);
-
-            return { kind: InfoKind.ObjectLiteral, token, properties, indentation, trimLeadingWhiteSpaces: true, parentDeclaration };
-        }
     }
 
     function isSourceFileFromLibrary(program: Program, node: SourceFile) {
@@ -522,8 +492,7 @@ namespace ts.codefix {
         const options = {
             leadingTriviaOption: textChanges.LeadingTriviaOption.Exclude,
             trailingTriviaOption: textChanges.TrailingTriviaOption.Exclude,
-            indentation: info.indentation,
-            trimLeadingWhiteSpaces: info.trimLeadingWhiteSpaces,
+            indentation: info.indentation
         };
         changes.replaceNode(context.sourceFile, info.parentDeclaration, factory.createObjectLiteralExpression([...info.parentDeclaration.properties, ...props], /*multiLine*/ true), options);
     }

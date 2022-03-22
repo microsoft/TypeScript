@@ -116,10 +116,6 @@ namespace ts.textChanges {
          * Text of inserted node will be formatted with this delta, otherwise delta will be inferred from the new node kind
          */
         delta?: number;
-        /**
-         * Trim leading white spaces in the edit range
-         */
-        trimLeadingWhiteSpaces?: boolean;
     }
 
     export interface ReplaceWithMultipleNodesOptions extends InsertNodeOptions {
@@ -1068,7 +1064,7 @@ namespace ts.textChanges {
                 ? change.nodes.map(n => removeSuffix(format(n), newLineCharacter)).join(change.options?.joiner || newLineCharacter)
                 : format(change.node);
             // strip initial indentation (spaces or tabs) if text will be inserted in the middle of the line
-            const noIndent = (options.trimLeadingWhiteSpaces || (options.indentation === undefined && getLineStartPositionForPosition(pos, sourceFile) !== pos)) ? text.replace(/^\s+/, "") : text;
+            const noIndent = (options.indentation !== undefined || getLineStartPositionForPosition(pos, sourceFile) === pos) ? text : text.replace(/^\s+/, "");
             return (options.prefix || "") + noIndent
                  + ((!options.suffix || endsWith(noIndent, options.suffix))
                     ? "" : options.suffix);
