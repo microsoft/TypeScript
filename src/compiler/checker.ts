@@ -22121,6 +22121,15 @@ namespace ts {
         }
 
         /**
+         * @param text a valid bigint string excluding a trailing `n`, but including a possible prefix `-`. Use `isValidBigIntString(text, roundTripOnly)` before calling this function.
+         */
+        function parseBigIntLiteralType(text: string) {
+            const negative = text.startsWith("-");
+            const base10Value = parsePseudoBigInt(`${negative ? text.slice(1) : text}n`);
+            return getBigIntLiteralType({ negative, base10Value });
+        }
+
+        /**
          * Tests whether the provided string can be parsed as a bigint.
          * @param s The string to test.
          * @param roundTripOnly Indicates the resulting bigint matches the input when converted back to a string.
@@ -22740,41 +22749,22 @@ namespace ts {
                         if (source.flags & TypeFlags.StringLiteral && target.flags & TypeFlags.TypeVariable) {
                             const inferenceContext = getInferenceInfoForType(target);
                             const constraint = inferenceContext ? getConstraintOfTypeParameter(inferenceContext.typeParameter) : undefined;
-                            if (inferenceContext && constraint) {
+                            if (constraint) {
                                 const str = (source as StringLiteralType).value;
                                 const constraintTypes = constraint.flags & TypeFlags.Union ? (constraint as UnionType).types : [constraint];
                                 for (const constraintType of constraintTypes) {
-                                    if (constraintType.flags & TypeFlags.StringLike) {
+                                    const sourceType =
+                                        constraintType.flags & TypeFlags.StringLike ? source :
+                                        constraintType.flags & TypeFlags.NumberLike && isValidNumberString(str, /*roundTripOnly*/ true) ? getNumberLiteralType(+str) :
+                                        constraintType.flags & TypeFlags.BigIntLike && isValidBigIntString(str, /*roundTripOnly*/ true) ? parseBigIntLiteralType(str) :
+                                        constraintType.flags & TypeFlags.BooleanLike && str === trueType.intrinsicName ? trueType :
+                                        constraintType.flags & TypeFlags.BooleanLike && str === falseType.intrinsicName ? falseType :
+                                        constraintType.flags & TypeFlags.Null && str === nullType.intrinsicName ? nullType :
+                                        constraintType.flags & TypeFlags.Undefined && str === undefinedType.intrinsicName ? undefinedType :
+                                        undefined;
+                                    if (sourceType) {
                                         sourceTypes ??= [];
-                                        sourceTypes.push(source);
-                                    }
-                                    if (constraintType.flags & TypeFlags.NumberLike && isValidNumberString(str, /*roundTripOnly*/ true)) {
-                                        sourceTypes ??= [];
-                                        sourceTypes.push(getNumberLiteralType(+str));
-                                    }
-                                    if (constraintType.flags & TypeFlags.BigIntLike && isValidBigIntString(str, /*roundTripOnly*/ true)) {
-                                        const negative = str.startsWith("-");
-                                        const base10Value = parsePseudoBigInt(`${negative ? str.slice(1) : str}n`);
-                                        sourceTypes ??= [];
-                                        sourceTypes.push(getBigIntLiteralType({ negative, base10Value }));
-                                    }
-                                    if (constraintType.flags & TypeFlags.BooleanLike) {
-                                        if (str === trueType.intrinsicName) {
-                                            sourceTypes ??= [];
-                                            sourceTypes.push(trueType);
-                                        }
-                                        else if (str === falseType.intrinsicName) {
-                                            sourceTypes ??= [];
-                                            sourceTypes.push(falseType);
-                                        }
-                                    }
-                                    if (constraintType.flags & TypeFlags.Null && str === nullType.intrinsicName) {
-                                        sourceTypes ??= [];
-                                        sourceTypes.push(nullType);
-                                    }
-                                    if (constraintType.flags & TypeFlags.Undefined && str === undefinedType.intrinsicName) {
-                                        sourceTypes ??= [];
-                                        sourceTypes.push(undefinedType);
+                                        sourceTypes.push(sourceType);
                                     }
                                 }
                             }
