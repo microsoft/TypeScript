@@ -97,6 +97,16 @@ p.setIndex(0, 0); // ok, 0 is a valid index
 p.setIndex(1, 0); // ok, 1 is a valid index
 p.setIndex(2, 3); // error, 2 is not a valid index
 
+declare function f1<T extends string | number>(s: `**${T}**`): T;
+f1("**123**"); // "123" | 123
+
+declare function f2<T extends string | bigint>(s: `**${T}**`): T;
+f2("**123**"); // "123" | 123n
+
+declare function f3<T extends string | boolean>(s: `**${T}**`): T;
+f3("**true**"); // true | "true"
+f3("**false**"); // false | "false"
+
 
 //// [templateLiteralTypes4.js]
 "use strict";
@@ -106,6 +116,10 @@ p.getIndex(2); // error, 2 is not a valid index
 p.setIndex(0, 0); // ok, 0 is a valid index
 p.setIndex(1, 0); // ok, 1 is a valid index
 p.setIndex(2, 3); // error, 2 is not a valid index
+f1("**123**"); // "123" | 123
+f2("**123**"); // "123" | 123n
+f3("**true**"); // true | "true"
+f3("**false**"); // false | "false"
 
 
 //// [templateLiteralTypes4.d.ts]
@@ -180,3 +194,6 @@ declare type Point = TypedObject<[
     }
 ]>;
 declare const p: Point;
+declare function f1<T extends string | number>(s: `**${T}**`): T;
+declare function f2<T extends string | bigint>(s: `**${T}**`): T;
+declare function f3<T extends string | boolean>(s: `**${T}**`): T;

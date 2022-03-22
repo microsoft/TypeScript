@@ -242,3 +242,35 @@ p.setIndex(2, 3); // error, 2 is not a valid index
 >2 : 2
 >3 : 3
 
+declare function f1<T extends string | number>(s: `**${T}**`): T;
+>f1 : <T extends string | number>(s: `**${T}**`) => T
+>s : `**${T}**`
+
+f1("**123**"); // "123" | 123
+>f1("**123**") : "123" | 123
+>f1 : <T extends string | number>(s: `**${T}**`) => T
+>"**123**" : "**123**"
+
+declare function f2<T extends string | bigint>(s: `**${T}**`): T;
+>f2 : <T extends string | bigint>(s: `**${T}**`) => T
+>s : `**${T}**`
+
+f2("**123**"); // "123" | 123n
+>f2("**123**") : "123" | 123n
+>f2 : <T extends string | bigint>(s: `**${T}**`) => T
+>"**123**" : "**123**"
+
+declare function f3<T extends string | boolean>(s: `**${T}**`): T;
+>f3 : <T extends string | boolean>(s: `**${T}**`) => T
+>s : `**${T}**`
+
+f3("**true**"); // true | "true"
+>f3("**true**") : true | "true"
+>f3 : <T extends string | boolean>(s: `**${T}**`) => T
+>"**true**" : "**true**"
+
+f3("**false**"); // false | "false"
+>f3("**false**") : false | "false"
+>f3 : <T extends string | boolean>(s: `**${T}**`) => T
+>"**false**" : "**false**"
+

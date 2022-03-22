@@ -22771,9 +22771,12 @@ namespace ts {
                         }
 
                         if (sourceTypes) {
+                            const savedPriority = priority;
+                            priority |= InferencePriority.TemplateLiteralPlaceholder;
                             for (const source of sourceTypes) {
                                 inferFromTypes(source, target);
                             }
+                            priority = savedPriority;
                         }
                         else {
                             inferFromTypes(source, target);

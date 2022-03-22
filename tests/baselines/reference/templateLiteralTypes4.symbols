@@ -400,3 +400,36 @@ p.setIndex(2, 3); // error, 2 is not a valid index
 >p : Symbol(p, Decl(templateLiteralTypes4.ts, 89, 13))
 >setIndex : Symbol(TypedObjectMembers.setIndex, Decl(templateLiteralTypes4.ts, 71, 104))
 
+declare function f1<T extends string | number>(s: `**${T}**`): T;
+>f1 : Symbol(f1, Decl(templateLiteralTypes4.ts, 96, 17))
+>T : Symbol(T, Decl(templateLiteralTypes4.ts, 98, 20))
+>s : Symbol(s, Decl(templateLiteralTypes4.ts, 98, 47))
+>T : Symbol(T, Decl(templateLiteralTypes4.ts, 98, 20))
+>T : Symbol(T, Decl(templateLiteralTypes4.ts, 98, 20))
+
+f1("**123**"); // "123" | 123
+>f1 : Symbol(f1, Decl(templateLiteralTypes4.ts, 96, 17))
+
+declare function f2<T extends string | bigint>(s: `**${T}**`): T;
+>f2 : Symbol(f2, Decl(templateLiteralTypes4.ts, 99, 14))
+>T : Symbol(T, Decl(templateLiteralTypes4.ts, 101, 20))
+>s : Symbol(s, Decl(templateLiteralTypes4.ts, 101, 47))
+>T : Symbol(T, Decl(templateLiteralTypes4.ts, 101, 20))
+>T : Symbol(T, Decl(templateLiteralTypes4.ts, 101, 20))
+
+f2("**123**"); // "123" | 123n
+>f2 : Symbol(f2, Decl(templateLiteralTypes4.ts, 99, 14))
+
+declare function f3<T extends string | boolean>(s: `**${T}**`): T;
+>f3 : Symbol(f3, Decl(templateLiteralTypes4.ts, 102, 14))
+>T : Symbol(T, Decl(templateLiteralTypes4.ts, 104, 20))
+>s : Symbol(s, Decl(templateLiteralTypes4.ts, 104, 48))
+>T : Symbol(T, Decl(templateLiteralTypes4.ts, 104, 20))
+>T : Symbol(T, Decl(templateLiteralTypes4.ts, 104, 20))
+
+f3("**true**"); // true | "true"
+>f3 : Symbol(f3, Decl(templateLiteralTypes4.ts, 102, 14))
+
+f3("**false**"); // false | "false"
+>f3 : Symbol(f3, Decl(templateLiteralTypes4.ts, 102, 14))
+
