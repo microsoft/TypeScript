@@ -950,8 +950,34 @@ namespace FourSlashInterface {
     }
 
     export namespace Completion {
-        export import SortText = ts.Completions.SortText;
+        import SortTextType = ts.Completions.SortText;
+        export type SortText = SortTextType;
         export import CompletionSource = ts.Completions.CompletionSource;
+
+        export const SortText = {
+            // Presets
+            LocalDeclarationPriority: "10" as SortText,
+            LocationPriority: "11" as SortText,
+            OptionalMember: "12" as SortText,
+            MemberDeclaredBySpreadAssignment: "13" as SortText,
+            SuggestedClassMembers: "14" as SortText,
+            GlobalsOrKeywords: "15" as SortText,
+            AutoImportSuggestions: "16" as SortText,
+            JavascriptIdentifiers: "17" as SortText,
+
+            // Transformations
+            Deprecated(sortText: SortText): SortText {
+                return "z" + sortText as SortText;
+            },
+
+            ObjectLiteralProperty(presetSortText: SortText, symbolDisplayName: string): SortText {
+                return `${presetSortText}\0${symbolDisplayName}\0` as SortText;
+            },
+
+            AddIsSnippetSuffix(sortText: SortText): SortText {
+                return sortText + "1" as SortText;
+            },
+        };
 
         const functionEntry = (name: string): ExpectedCompletionEntryObject => ({
             name,

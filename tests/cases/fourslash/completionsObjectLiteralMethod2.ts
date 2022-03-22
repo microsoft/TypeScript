@@ -27,12 +27,13 @@ verify.completions({
     includes: [
         {
             name: "foo",
-            sortText: completion.SortText.LocationPriority,
+            sortText: completion.SortText.ObjectLiteralProperty(completion.SortText.LocationPriority, "foo"),
             insertText: undefined,
         },
         {
             name: "foo",
-            sortText: completion.SortText.OptionalMember,
+            sortText: completion.SortText.AddIsSnippetSuffix(
+                completion.SortText.ObjectLiteralProperty(completion.SortText.LocationPriority, "foo")),
             source: completion.CompletionSource.ObjectLiteralMethodSnippet,
             insertText: "foo(f: IFoo): void {\n},",
             hasAction: true,

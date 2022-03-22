@@ -6,19 +6,31 @@ namespace ts.Completions {
 
     export type Log = (message: string) => void;
 
-    // NOTE: Make sure that each entry has the exact same number of digits
-    //       since many implementations will sort by string contents,
-    //       where "10" is considered less than "2".
-    export enum SortText {
-        LocalDeclarationPriority = "10",
-        LocationPriority = "11",
-        OptionalMember = "12",
-        MemberDeclaredBySpreadAssignment = "13",
-        SuggestedClassMembers = "14",
-        GlobalsOrKeywords = "15",
-        AutoImportSuggestions = "16",
-        JavascriptIdentifiers = "17",
-    }
+    export type SortText = string & { __sortText: any };
+    export const SortText = {
+        // Presets
+        LocalDeclarationPriority: "10" as SortText,
+        LocationPriority: "11" as SortText,
+        OptionalMember: "12" as SortText,
+        MemberDeclaredBySpreadAssignment: "13" as SortText,
+        SuggestedClassMembers: "14" as SortText,
+        GlobalsOrKeywords: "15" as SortText,
+        AutoImportSuggestions: "16" as SortText,
+        JavascriptIdentifiers: "17" as SortText,
+
+        // Transformations
+        Deprecated(sortText: SortText): SortText {
+            return "z" + sortText as SortText;
+        },
+
+        ObjectLiteralProperty(presetSortText: SortText, symbolDisplayName: string): SortText {
+            return `${presetSortText}\0${symbolDisplayName}\0` as SortText;
+        },
+
+        AddIsSnippetSuffix(sortText: SortText): SortText {
+            return sortText + "1" as SortText;
+        },
+    };
 
     /**
      * Special values for `CompletionInfo['source']` used to disambiguate
@@ -129,7 +141,6 @@ namespace ts.Completions {
 
     /**
      * Map from symbol index in `symbols` -> SymbolOriginInfo.
-     * Only populated for symbols that come from other modules.
      */
     type SymbolOriginInfoMap = Record<number, SymbolOriginInfo>;
 
@@ -767,7 +778,7 @@ namespace ts.Completions {
             }
             ({ insertText, isSnippet, importAdder, sourceDisplay } = entry);
             source = CompletionSource.ObjectLiteralMethodSnippet;
-            sortText = sortText + "1" as SortText;
+            sortText = SortText.AddIsSnippetSuffix(sortText);
             if (importAdder.hasFixes()) {
                 hasAction = true;
             }
@@ -1373,7 +1384,7 @@ namespace ts.Completions {
 
             const { name, needsConvertPropertyAccess } = info;
             const originalSortText = symbolToSortTextIdMap?.[getSymbolId(symbol)] ?? SortText.LocationPriority;
-            const sortText = (isDeprecated(symbol, typeChecker) ? "z" + originalSortText : originalSortText) as SortText;
+            const sortText = (isDeprecated(symbol, typeChecker) ? SortText.Deprecated(originalSortText) : originalSortText);
             const entry = createCompletionEntry(
                 symbol,
                 sortText,
@@ -2950,6 +2961,7 @@ namespace ts.Completions {
          * @returns true if 'symbols' was successfully populated; false otherwise.
          */
         function tryGetObjectLikeCompletionSymbols(): GlobalsSearch | undefined {
+            const symbolsStartIndex = symbols.length;
             const objectLikeContainer = tryGetObjectLikeCompletionContainer(contextToken);
             if (!objectLikeContainer) return GlobalsSearch.Continue;
 
@@ -3027,8 +3039,7 @@ namespace ts.Completions {
             }
             setSortTextToOptionalMember();
             if (objectLikeContainer.kind === SyntaxKind.ObjectLiteralExpression && preferences.includeCompletionsWithInsertText) {
-                // >> TODO: specify `symbols` range?
-                transformObjectLiteralMembersSortText();
+                transformObjectLiteralMembersSortText(symbolsStartIndex);
             }
 
             return GlobalsSearch.Success;
@@ -3568,9 +3579,9 @@ namespace ts.Completions {
             }
         }
 
-        function transformObjectLiteralMembersSortText(): void {
+        function transformObjectLiteralMembersSortText(start: number): void {
             const pastSymbolIds: Set<number> = new Set();
-            for (let i = 0; i < symbols.length; i++) {
+            for (let i = start; i < symbols.length; i++) {
                 const symbol = symbols[i];
                 const symbolId = getSymbolId(symbol);
                 if (pastSymbolIds.has(symbolId)) {
@@ -3588,7 +3599,7 @@ namespace ts.Completions {
                 if (displayName) {
                     const originalSortText = symbolToSortTextIdMap[symbolId] ?? SortText.LocationPriority;
                     const { name } = displayName;
-                    symbolToSortTextIdMap[symbolId] = `${originalSortText}\0${name}\0` as SortText;
+                    symbolToSortTextIdMap[symbolId] = SortText.ObjectLiteralProperty(originalSortText, name);
                 }
             }
         }

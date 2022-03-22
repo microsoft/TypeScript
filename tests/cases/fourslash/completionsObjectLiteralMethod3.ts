@@ -41,12 +41,13 @@ verify.completions({
     includes: [
         {
             name: "M",
-            sortText: completion.SortText.LocationPriority,
+            sortText: completion.SortText.ObjectLiteralProperty(completion.SortText.LocationPriority, "M"),
             insertText: undefined,
         },
         {
             name: "M",
-            sortText: completion.SortText.OptionalMember,
+            sortText: completion.SortText.AddIsSnippetSuffix(
+                completion.SortText.ObjectLiteralProperty(completion.SortText.LocationPriority, "M")),
             source: completion.CompletionSource.ObjectLiteralMethodSnippet,
             insertText: "M(x: number): void {\n},",
         },
@@ -61,7 +62,7 @@ verify.completions({
     includes: [
         {
             name: "M",
-            sortText: completion.SortText.LocationPriority,
+            sortText: completion.SortText.ObjectLiteralProperty(completion.SortText.LocationPriority, "M"),
             insertText: undefined,
         },
         // No signature completion because type of `M` is intersection type
@@ -76,7 +77,7 @@ verify.completions({
     exact: [
         {
             name: "M",
-            sortText: completion.SortText.LocationPriority,
+            sortText: completion.SortText.ObjectLiteralProperty(completion.SortText.LocationPriority, "M"),
             insertText: undefined,
         },
         // No signature completion because type of `M` is intersection type
@@ -91,34 +92,37 @@ verify.completions({
     includes: [
         {
             name: "M",
-            sortText: completion.SortText.OptionalMember,
+            sortText: completion.SortText.ObjectLiteralProperty(completion.SortText.OptionalMember, "M"),
             insertText: undefined,
         },
         {
             name: "M",
-            sortText: completion.SortText.OptionalMember,
+            sortText: completion.SortText.AddIsSnippetSuffix(
+                completion.SortText.ObjectLiteralProperty(completion.SortText.OptionalMember, "M")),
             source: completion.CompletionSource.ObjectLiteralMethodSnippet,
             insertText: "M(x: number): void {\n},",
         },
         {
             name: "N",
-            sortText: completion.SortText.LocationPriority,
+            sortText: completion.SortText.ObjectLiteralProperty(completion.SortText.LocationPriority, "N"),
             insertText: undefined,
         },
         {
             name: "N",
-            sortText: completion.SortText.OptionalMember,
+            sortText: completion.SortText.AddIsSnippetSuffix(
+                completion.SortText.ObjectLiteralProperty(completion.SortText.LocationPriority, "N")),
             source: completion.CompletionSource.ObjectLiteralMethodSnippet,
             insertText: "N(x: string): void {\n},",
         },
         {
             name: "O",
-            sortText: completion.SortText.OptionalMember,
+            sortText: completion.SortText.ObjectLiteralProperty(completion.SortText.OptionalMember, "O"),
             insertText: undefined,
         },
         {
             name: "O",
-            sortText: completion.SortText.OptionalMember,
+            sortText: completion.SortText.AddIsSnippetSuffix(
+                completion.SortText.ObjectLiteralProperty(completion.SortText.OptionalMember, "O")),
             source: completion.CompletionSource.ObjectLiteralMethodSnippet,
             insertText: "O(): void {\n},",
         },
