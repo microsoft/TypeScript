@@ -1775,7 +1775,8 @@ namespace ts.server {
             return this.projectService.getIncompleteCompletionsCache();
         }
 
-        withAuxiliaryProjectForFiles(fileNames: string[], cb: (project: AuxiliaryProject) => void) {
+        /*@internal*/
+        withNoDtsResolutionProject(rootFileNames: string[], cb: (project: Project, ensureRoot: (fileName: string) => boolean) => void) {
             const options: CompilerOptions = {
                 ...this.getCompilerOptions(),
                 noDtsResolution: true,
@@ -1788,12 +1789,22 @@ namespace ts.server {
                 lib: ts.emptyArray,
                 noLib: true,
             };
-            const project = new AuxiliaryProject(this.projectService, this.documentRegistry, options);
-            for (const fileName of fileNames) {
+            const project = new SingleCommandProject(this.projectService, this.documentRegistry, options);
+            for (const fileName of rootFileNames) {
                 project.addRoot(this.getScriptInfo(fileName)!);
             }
-            project.updateGraph();
-            cb(project);
+            cb(
+                project,
+                fileName => {
+                    const info = project.getScriptInfo(fileName);
+                    if (!info) return false;
+                    if (!project.containsScriptInfo(info)) {
+                        project.addRoot(info);
+                        project.updateGraph();
+                    }
+                    return true;
+                }
+            );
             project.close();
         }
     }
@@ -1932,31 +1943,27 @@ namespace ts.server {
         }
     }
 
-    export class AuxiliaryProject extends Project {
-        constructor(projectService: ProjectService, documentRegistry: DocumentRegistry, parentCompilerOptions: CompilerOptions) {
-            const options: CompilerOptions = {
-                ...parentCompilerOptions,
-                resolveJsOnly: true,
-                allowJs: true,
-                maxNodeModuleJsDepth: 3,
-                diagnostics: false,
-                skipLibCheck: true,
-                sourceMap: false,
-                types: ts.emptyArray,
-                lib: ts.emptyArray,
-                noLib: true,
-            };
-            super("js-analysis",
+    class SingleCommandProject extends Project {
+        constructor(projectService: ProjectService, documentRegistry: DocumentRegistry, compilerOptions: CompilerOptions) {
+            super(projectService.newSingleCommandProjectName(),
                 ProjectKind.Auxiliary,
                 projectService,
                 documentRegistry,
                 /*hasExplicitListOfFiles*/ false,
                 /*lastFileExceededProgramSize*/ undefined,
-                options,
+                compilerOptions,
                 /*compileOnSaveEnabled*/ false,
                 /*watchOptions*/ undefined,
                 projectService.host,
                 /*currentDirectory*/ undefined);
+        }
+
+        watchDirectoryOfFailedLookupLocation(): FileWatcher {
+            return noopFileWatcher;
+        }
+
+        watchTypeRootsDirectory(): FileWatcher {
+            return noopFileWatcher;
         }
     }
 

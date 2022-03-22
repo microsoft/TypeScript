@@ -715,6 +715,8 @@ namespace ts.server {
         readonly newInferredProjectName = createProjectNameFactoryWithCounter(makeInferredProjectName);
         /*@internal*/
         readonly newAutoImportProviderProjectName = createProjectNameFactoryWithCounter(makeAutoImportProviderProjectName);
+        /*@internal*/
+        readonly newSingleCommandProjectName = createProjectNameFactoryWithCounter(makeSingleCommandProjectName);
         /**
          * Open files: with value being project root path, and key being Path of the file that is open
          */

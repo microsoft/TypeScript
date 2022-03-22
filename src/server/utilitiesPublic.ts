@@ -122,6 +122,11 @@ namespace ts.server {
         return `/dev/null/autoImportProviderProject${counter}*`;
     }
 
+    /*@internal*/
+    export function makeSingleCommandProjectName(counter: number): string {
+        return `/dev/null/singleCommandProject${counter}*`;
+    }
+
     export function createSortedArray<T>(): SortedArray<T> {
         return [] as any as SortedArray<T>; // TODO: GH#19873
     }

@@ -10025,7 +10025,6 @@ declare namespace ts.server {
         private enableProxy;
         /** Starts a new check for diagnostics. Call this if some file has updated that would cause diagnostics to be changed. */
         refreshDiagnostics(): void;
-        withAuxiliaryProjectForFiles(fileNames: string[], cb: (project: AuxiliaryProject) => void): void;
     }
     /**
      * If a file is opened and no tsconfig (or jsconfig) is found,
@@ -10042,9 +10041,6 @@ declare namespace ts.server {
         isProjectWithSingleRoot(): boolean;
         close(): void;
         getTypeAcquisition(): TypeAcquisition;
-    }
-    class AuxiliaryProject extends Project {
-        constructor(projectService: ProjectService, documentRegistry: DocumentRegistry, parentCompilerOptions: CompilerOptions);
     }
     class AutoImportProviderProject extends Project {
         private hostProject;

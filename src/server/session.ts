@@ -1237,8 +1237,8 @@ namespace ts.server {
             let definitions = this.mapDefinitionInfoLocations(unmappedDefinitionAndBoundSpan.definitions, project).slice();
             const needsJsResolution = !some(definitions, d => toNormalizedPath(d.fileName) !== file && !d.isAmbient) || some(definitions, d => !!d.failedAliasResolution);
             if (needsJsResolution) {
-                project.withAuxiliaryProjectForFiles([file], auxiliaryProject => {
-                    const ls = auxiliaryProject.getLanguageService();
+                project.withNoDtsResolutionProject([file], (noDtsProject, ensureRoot) => {
+                    const ls = noDtsProject.getLanguageService();
                     const jsDefinitions = ls
                         .getDefinitionAndBoundSpan(file, position, /*aliasesOnly*/ true)
                         ?.definitions
@@ -1260,23 +1260,14 @@ namespace ts.server {
                     else {
                         const ambientCandidates = definitions.filter(d => toNormalizedPath(d.fileName) !== file && d.isAmbient);
                         for (const candidate of ambientCandidates) {
-                            const fileNameToSearch = findImplementationFileFromDtsFileName(candidate.fileName, file, auxiliaryProject);
-                            const scriptInfo = fileNameToSearch ? auxiliaryProject.getScriptInfo(fileNameToSearch) : undefined;
-                            if (!scriptInfo) {
+                            const fileNameToSearch = findImplementationFileFromDtsFileName(candidate.fileName, file, noDtsProject);
+                            if (!fileNameToSearch || !ensureRoot(fileNameToSearch)) {
                                 continue;
                             }
-                            if (!auxiliaryProject.containsScriptInfo(scriptInfo)) {
-                                auxiliaryProject.addRoot(scriptInfo);
-                            }
-                            const auxiliaryProgram = auxiliaryProject.getLanguageService().getProgram()!;
-                            const fileToSearch = Debug.checkDefined(auxiliaryProgram.getSourceFile(fileNameToSearch!));
-                            const matches = FindAllReferences.Core.getTopMostDeclarationNamesInFile(candidate.name, fileToSearch);
-                            for (const match of matches) {
-                                const symbol = match.symbol || auxiliaryProgram.getTypeChecker().getSymbolAtLocation(match);
-                                const decl = getDeclarationFromName(match);
-                                if (symbol && decl) {
-                                    pushIfUnique(definitions, GoToDefinition.createDefinitionInfo(decl, auxiliaryProgram.getTypeChecker(), symbol, match));
-                                }
+                            const auxiliaryProgram = ls.getProgram()!;
+                            const fileToSearch = Debug.checkDefined(auxiliaryProgram.getSourceFile(fileNameToSearch));
+                            for (const match of searchForDeclaration(candidate.name, fileToSearch, auxiliaryProgram)) {
+                                pushIfUnique(definitions, match, documentSpansEqual);
                             }
                         }
                     }
@@ -1363,7 +1354,7 @@ namespace ts.server {
                     if (symbol && decl) {
                         // I think the last argument to this is supposed to be the start node, but it doesn't seem important.
                         // Callers internal to GoToDefinition already get confused about this.
-                        return GoToDefinition.createDefinitionInfo(decl, auxiliaryProgram.getTypeChecker(), symbol, decl);
+                        return GoToDefinition.createDefinitionInfo(decl, auxiliaryProgram.getTypeChecker(), symbol, decl, /*unverified*/ true);
                     }
                 });
             }

@@ -36,7 +36,7 @@ namespace ts.GoToDefinition {
             return map(staticBlocks, staticBlock => {
                 let { pos } = moveRangePastModifiers(staticBlock);
                 pos = skipTrivia(sourceFile.text, pos);
-                return createDefinitionInfoFromName(typeChecker, staticBlock, ScriptElementKind.constructorImplementationElement, "static {}", containerName, failedAliasResolution, { start: pos, length: "static".length });
+                return createDefinitionInfoFromName(typeChecker, staticBlock, ScriptElementKind.constructorImplementationElement, "static {}", containerName, /*unverified*/ false, failedAliasResolution, { start: pos, length: "static".length });
             });
         }
 
@@ -103,7 +103,7 @@ namespace ts.GoToDefinition {
         // assignment. This case and others are handled by the following code.
         if (node.parent.kind === SyntaxKind.ShorthandPropertyAssignment) {
             const shorthandSymbol = typeChecker.getShorthandAssignmentValueSymbol(symbol.valueDeclaration);
-            const definitions = shorthandSymbol?.declarations ? shorthandSymbol.declarations.map(decl => createDefinitionInfo(decl, typeChecker, shorthandSymbol, node, failedAliasResolution)) : emptyArray;
+            const definitions = shorthandSymbol?.declarations ? shorthandSymbol.declarations.map(decl => createDefinitionInfo(decl, typeChecker, shorthandSymbol, node, /*unverified*/ false, failedAliasResolution)) : emptyArray;
             return concatenate(definitions, getDefinitionFromObjectLiteralElement(typeChecker, node) || emptyArray);
         }
 
@@ -360,7 +360,7 @@ namespace ts.GoToDefinition {
         const filteredDeclarations = filter(symbol.declarations, d => d !== excludeDeclaration);
         const withoutExpandos = filter(filteredDeclarations, d => !isExpandoDeclaration(d));
         const results = some(withoutExpandos) ? withoutExpandos : filteredDeclarations;
-        return getConstructSignatureDefinition() || getCallSignatureDefinition() || map(results, declaration => createDefinitionInfo(declaration, typeChecker, symbol, node, failedAliasResolution));
+        return getConstructSignatureDefinition() || getCallSignatureDefinition() || map(results, declaration => createDefinitionInfo(declaration, typeChecker, symbol, node, /*unverified*/ false, failedAliasResolution));
 
         function getConstructSignatureDefinition(): DefinitionInfo[] | undefined {
             // Applicable only if we are in a new expression, or we are on a constructor declaration
@@ -388,21 +388,21 @@ namespace ts.GoToDefinition {
             return declarations.length
                 ? declarationsWithBody.length !== 0
                     ? declarationsWithBody.map(x => createDefinitionInfo(x, typeChecker, symbol, node))
-                    : [createDefinitionInfo(last(declarations), typeChecker, symbol, node, failedAliasResolution)]
+                    : [createDefinitionInfo(last(declarations), typeChecker, symbol, node, /*unverified*/ false, failedAliasResolution)]
                 : undefined;
         }
     }
 
     /** Creates a DefinitionInfo from a Declaration, using the declaration's name if possible. */
-    export function createDefinitionInfo(declaration: Declaration, checker: TypeChecker, symbol: Symbol, node: Node, failedAliasResolution?: boolean): DefinitionInfo {
+    export function createDefinitionInfo(declaration: Declaration, checker: TypeChecker, symbol: Symbol, node: Node, unverified?: boolean, failedAliasResolution?: boolean): DefinitionInfo {
         const symbolName = checker.symbolToString(symbol); // Do not get scoped name, just the name of the symbol
         const symbolKind = SymbolDisplay.getSymbolKind(checker, symbol, node);
         const containerName = symbol.parent ? checker.symbolToString(symbol.parent, node) : "";
-        return createDefinitionInfoFromName(checker, declaration, symbolKind, symbolName, containerName, failedAliasResolution);
+        return createDefinitionInfoFromName(checker, declaration, symbolKind, symbolName, containerName, unverified, failedAliasResolution);
     }
 
     /** Creates a DefinitionInfo directly from the name of a declaration. */
-    function createDefinitionInfoFromName(checker: TypeChecker, declaration: Declaration, symbolKind: ScriptElementKind, symbolName: string, containerName: string, failedAliasResolution?: boolean, textSpan?: TextSpan): DefinitionInfo {
+    function createDefinitionInfoFromName(checker: TypeChecker, declaration: Declaration, symbolKind: ScriptElementKind, symbolName: string, containerName: string, unverified?: boolean, failedAliasResolution?: boolean, textSpan?: TextSpan): DefinitionInfo {
         const sourceFile = declaration.getSourceFile();
         if (!textSpan) {
             const name = getNameOfDeclaration(declaration) || declaration;
@@ -422,6 +422,7 @@ namespace ts.GoToDefinition {
             ),
             isLocal: !isDefinitionVisible(checker, declaration),
             isAmbient: !!(declaration.flags & NodeFlags.Ambient),
+            unverified,
             failedAliasResolution,
         };
     }
@@ -458,7 +459,7 @@ namespace ts.GoToDefinition {
     }
 
     function createDefinitionFromSignatureDeclaration(typeChecker: TypeChecker, decl: SignatureDeclaration, failedAliasResolution?: boolean): DefinitionInfo {
-        return createDefinitionInfo(decl, typeChecker, decl.symbol, decl, failedAliasResolution);
+        return createDefinitionInfo(decl, typeChecker, decl.symbol, decl, /*unverified*/ false, failedAliasResolution);
     }
 
     export function findReferenceInPosition(refs: readonly FileReference[], pos: number): FileReference | undefined {
