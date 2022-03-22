@@ -972,6 +972,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";A_type_referenced_in_a_decorated_signature_must_be_imported_with_import_type_or_a_namespace_import_w_1272" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[A type referenced in a decorated signature must be imported with 'import type' or a namespace import when 'isolatedModules' and 'emitDecoratorMetadata' are enabled.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Typ odkazovaný v dekorovaném podpisu musí být importován pomocí import type nebo importu oboru názvů, pokud jsou povoleny elementy isolatedModules a emitDecoratorMetadata.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";A_variable_whose_type_is_a_unique_symbol_type_must_be_const_1332" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[A variable whose type is a 'unique symbol' type must be 'const'.]]></Val>
@@ -1430,10 +1439,13 @@
       </Item>
       <Item ItemId=";Add_undefined_to_a_type_when_accessed_using_an_index_6674" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Add `undefined` to a type when accessed using an index.]]></Val>
+          <Val><![CDATA[Add 'undefined' to a type when accessed using an index.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Pokud k přístupu používáte index, přidejte k typu „undefined“.]]></Val>
+            <Val><![CDATA[Pokud k přístupu používáte index, přidejte k typu řetězec undefined.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Add `undefined` to a type when accessed using an index.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -1577,10 +1589,13 @@
       </Item>
       <Item ItemId=";Allow_JavaScript_files_to_be_a_part_of_your_program_Use_the_checkJS_option_to_get_errors_from_these__6600" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Allow JavaScript files to be a part of your program. Use the `checkJS` option to get errors from these files.]]></Val>
+          <Val><![CDATA[Allow JavaScript files to be a part of your program. Use the 'checkJS' option to get errors from these files.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Povolit, aby soubory JavaScriptu byly součástí vašeho programu. K získání informací o chybách v těchto souborech použijte možnost „checkJS“.]]></Val>
+            <Val><![CDATA[Povolte, aby se soubory JavaScriptu staly součástí programu. K získání informací o chybách v těchto souborech použít možnost checkJS.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Allow JavaScript files to be a part of your program. Use the `checkJS` option to get errors from these files.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -2471,10 +2486,13 @@
       </Item>
       <Item ItemId=";Build_all_projects_including_those_that_appear_to_be_up_to_date_6636" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Build all projects, including those that appear to be up to date]]></Val>
+          <Val><![CDATA[Build all projects, including those that appear to be up to date.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Sestavit všechny projekty včetně těch, které se zdají aktuální]]></Val>
+            <Val><![CDATA[Sestavujte všechny projekty včetně těch, které se zdají aktuální.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Build all projects, including those that appear to be up to date]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -3392,10 +3410,13 @@
       </Item>
       <Item ItemId=";Check_that_the_arguments_for_bind_call_and_apply_methods_match_the_original_function_6697" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Check that the arguments for `bind`, `call`, and `apply` methods match the original function.]]></Val>
+          <Val><![CDATA[Check that the arguments for 'bind', 'call', and 'apply' methods match the original function.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Zkontrolovat, jestli argumenty metod „bind“, „call“ a „apply“ odpovídají původní funkci.]]></Val>
+            <Val><![CDATA[Zkontrolujte, jestli argumenty metod bind, call a apply odpovídají původní funkci.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Check that the arguments for `bind`, `call`, and `apply` methods match the original function.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -3884,6 +3905,15 @@
           <Val><![CDATA[Containing function is not an arrow function]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Obsahující funkce není funkcí šipky.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Control_what_method_is_used_to_detect_module_format_JS_files_1475" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Control what method is used to detect module-format JS files.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Určete, která metoda se používá k detekci souborů JS ve formátu modulu.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4614,6 +4644,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Default_catch_clause_variables_as_unknown_instead_of_any_6803" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Default catch clause variables as 'unknown' instead of 'any'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Výchozí proměnné klauzule catch jako unknown namísto any.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Default_export_of_the_module_has_or_is_using_private_name_0_4082" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Default export of the module has or is using private name '{0}'.]]></Val>
@@ -4679,10 +4718,13 @@
       </Item>
       <Item ItemId=";Delete_the_outputs_of_all_projects_6365" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Delete the outputs of all projects]]></Val>
+          <Val><![CDATA[Delete the outputs of all projects.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Odstranit výstupy všech projektů]]></Val>
+            <Val><![CDATA[Odstraňte výstupy všech projektů.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Delete the outputs of all projects]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -4724,10 +4766,13 @@
       </Item>
       <Item ItemId=";Deprecated_setting_Use_outFile_instead_6677" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Deprecated setting. Use `outFile` instead.]]></Val>
+          <Val><![CDATA[Deprecated setting. Use 'outFile' instead.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Nastavení je zastaralé. Místo něj použijte „outFile“.]]></Val>
+            <Val><![CDATA[Nastavení je zastaralé. Místo něj použijte outFile.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Deprecated setting. Use `outFile` instead.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -4853,10 +4898,13 @@
       </Item>
       <Item ItemId=";Disable_emitting_declarations_that_have_internal_in_their_JSDoc_comments_6701" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Disable emitting declarations that have `@internal` in their JSDoc comments.]]></Val>
+          <Val><![CDATA[Disable emitting declarations that have '@internal' in their JSDoc comments.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Zakažte generování deklarací, které mají v komentářích JSDoc značku @internal.]]></Val>
+            <Val><![CDATA[Zakažte generování deklarací s příznakem „@internal“ v komentářích JSDoc.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Disable emitting declarations that have `@internal` in their JSDoc comments.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -4880,10 +4928,13 @@
       </Item>
       <Item ItemId=";Disable_erasing_const_enum_declarations_in_generated_code_6682" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Disable erasing `const enum` declarations in generated code.]]></Val>
+          <Val><![CDATA[Disable erasing 'const enum' declarations in generated code.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Zakázat v generovaném kódu mazání deklarací „const enum“.]]></Val>
+            <Val><![CDATA[Zakažte v generovaném kódu mazání deklarací const enum.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Disable erasing `const enum` declarations in generated code.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -4907,10 +4958,13 @@
       </Item>
       <Item ItemId=";Disable_generating_custom_helper_functions_like_extends_in_compiled_output_6661" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Disable generating custom helper functions like `__extends` in compiled output.]]></Val>
+          <Val><![CDATA[Disable generating custom helper functions like '__extends' in compiled output.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Zakázat v kompilovaném výstupu generování vlastních pomocných funkcí, jako je „__extends“.]]></Val>
+            <Val><![CDATA[Zakázat v kompilovaném výstupu generování vlastních pomocných funkcí, jako je __extends.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Disable generating custom helper functions like `__extends` in compiled output.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -4934,10 +4988,13 @@
       </Item>
       <Item ItemId=";Disable_preferring_source_files_instead_of_declaration_files_when_referencing_composite_projects_6620" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Disable preferring source files instead of declaration files when referencing composite projects]]></Val>
+          <Val><![CDATA[Disable preferring source files instead of declaration files when referencing composite projects.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Zakázat v odkazech na složené projekty upřednostňování zdrojových souborů místo deklaračních souborů]]></Val>
+            <Val><![CDATA[Zakažte v odkazech na složené projekty místo deklaračních souborů používat preferované zdrojové soubory.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Disable preferring source files instead of declaration files when referencing composite projects]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -5015,10 +5072,13 @@
       </Item>
       <Item ItemId=";Disable_wiping_the_console_in_watch_mode_6684" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Disable wiping the console in watch mode]]></Val>
+          <Val><![CDATA[Disable wiping the console in watch mode.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[V režimu sledování zakázat vymazání konzole]]></Val>
+            <Val><![CDATA[Zakažte vymazání konzole v režimu sledování.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Disable wiping the console in watch mode]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -5033,10 +5093,13 @@
       </Item>
       <Item ItemId=";Disallow_import_s_require_s_or_reference_s_from_expanding_the_number_of_files_TypeScript_should_add__6672" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Disallow `import`s, `require`s or `<reference>`s from expanding the number of files TypeScript should add to a project.]]></Val>
+          <Val><![CDATA[Disallow 'import's, 'require's or '<reference>'s from expanding the number of files TypeScript should add to a project.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Zakažte importům, požadavkům a odkazům, aby rozšiřovaly počet souborů přidaných TypeScriptem do projektu.]]></Val>
+            <Val><![CDATA[Zakázat import, require nebo <reference> zvětšování počtu souborů, které by typeScript měl přidat do projektu.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Disallow `import`s, `require`s or `<reference>`s from expanding the number of files TypeScript should add to a project.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -5444,10 +5507,13 @@
       </Item>
       <Item ItemId=";Emit_additional_JavaScript_to_ease_support_for_importing_CommonJS_modules_This_enables_allowSyntheti_6626" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Emit additional JavaScript to ease support for importing CommonJS modules. This enables `allowSyntheticDefaultImports` for type compatibility.]]></Val>
+          <Val><![CDATA[Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Vygenerujte další JavaScript, abyste usnadnili podporu importu modulů CommonJS. Tím povolíte příznak allowSyntheticDefaultImports kompatibility typů.]]></Val>
+            <Val><![CDATA[Vygenerujte další JavaScript, aby se podpora importování modulů CommonJS ulehčila. Tím se za účelem kompatibility typů povolí „allowSyntheticDefaultImports“.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Emit additional JavaScript to ease support for importing CommonJS modules. This enables `allowSyntheticDefaultImports` for type compatibility.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -5498,10 +5564,13 @@
       </Item>
       <Item ItemId=";Enable_color_and_formatting_in_TypeScript_s_output_to_make_compiler_errors_easier_to_read_6685" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Enable color and formatting in TypeScript's output to make compiler errors easier to read]]></Val>
+          <Val><![CDATA[Enable color and formatting in TypeScript's output to make compiler errors easier to read.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Povolte ve výstupu TypeScriptu barvu a formátování, aby byly chyby kompilátoru čitelnější.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Enable color and formatting in TypeScript's output to make compiler errors easier to read]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -5525,10 +5594,13 @@
       </Item>
       <Item ItemId=";Enable_error_reporting_for_expressions_and_declarations_with_an_implied_any_type_6665" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Enable error reporting for expressions and declarations with an implied `any` type..]]></Val>
+          <Val><![CDATA[Enable error reporting for expressions and declarations with an implied 'any' type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Povolit hlášení chyb u výrazů a deklarací s implicitním typem „any“.]]></Val>
+            <Val><![CDATA[Povolte hlášení chyb u výrazů a deklarací s implicitním typem any.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Enable error reporting for expressions and declarations with an implied `any` type..]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -5550,21 +5622,24 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Enable_error_reporting_when_a_local_variables_aren_t_read_6675" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Enable_error_reporting_when_local_variables_aren_t_read_6675" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Enable error reporting when a local variables aren't read.]]></Val>
+          <Val><![CDATA[Enable error reporting when local variables aren't read.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Povolte hlášení chyb, pokud místní proměnné nejdou přečíst.]]></Val>
+            <Val><![CDATA[Povolte hlášení chyb, když se místní proměnná nepřečte.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Enable_error_reporting_when_this_is_given_the_type_any_6668" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Enable error reporting when `this` is given the type `any`.]]></Val>
+          <Val><![CDATA[Enable error reporting when 'this' is given the type 'any'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Povolte hlášení chyb, pokud má „this“ určený typ „any“.]]></Val>
+            <Val><![CDATA[Povolte hlášení chyb, když má „this“ určený typ „any“.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Enable error reporting when `this` is given the type `any`.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -5579,19 +5654,13 @@
       </Item>
       <Item ItemId=";Enable_importing_json_files_6689" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Enable importing .json files]]></Val>
+          <Val><![CDATA[Enable importing .json files.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Povolit import souborů .json]]></Val>
+            <Val><![CDATA[Povolte importování souborů .json.]]></Val>
           </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Enable_incremental_compilation_6378" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Enable incremental compilation]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Povolit přírůstkovou kompilaci]]></Val>
-          </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Enable importing .json files]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -5669,10 +5738,13 @@
       </Item>
       <Item ItemId=";Enable_verbose_logging_6713" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Enable verbose logging]]></Val>
+          <Val><![CDATA[Enable verbose logging.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Povolit podrobné protokolování]]></Val>
+            <Val><![CDATA[Povolte podrobné protokolování.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Enable verbose logging]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -5705,10 +5777,13 @@
       </Item>
       <Item ItemId=";Enforces_using_indexed_accessors_for_keys_declared_using_an_indexed_type_6671" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Enforces using indexed accessors for keys declared using an indexed type]]></Val>
+          <Val><![CDATA[Enforces using indexed accessors for keys declared using an indexed type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Pro klíče deklarované pomocí indexovaného typu vynutí použití indexovaných přístupových objektů]]></Val>
+            <Val><![CDATA[Vynucuje použití indexovaných přístupových objektů pro klíče deklarované přes indexovaný typ.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Enforces using indexed accessors for keys declared using an indexed type]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -6989,10 +7064,13 @@
       </Item>
       <Item ItemId=";Have_recompiles_in_projects_that_use_incremental_and_watch_mode_assume_that_changes_within_a_file_wi_6606" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Have recompiles in projects that use `incremental` and `watch` mode assume that changes within a file will only affect files directly depending on it.]]></Val>
+          <Val><![CDATA[Have recompiles in projects that use 'incremental' and 'watch' mode assume that changes within a file will only affect files directly depending on it.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Opakované kompilace projektů, které používají režim „incremental“ nebo „watch“ budou předpokládat, že změny souboru ovlivní jenom ty soubory, které na něm přímo závisejí.]]></Val>
+            <Val><![CDATA[Opakované kompilace v projektech, které používají režimy „incremental“ a „watch“ předpokládají, že změny v souboru budou mít vliv pouze na soubory, které na daném souboru přímo závisejí.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Have recompiles in projects that use `incremental` and `watch` mode assume that changes within a file will only affect files directly depending on it.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -7421,15 +7499,6 @@
           <Val><![CDATA[Include sourcemap files inside the emitted JavaScript.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Zahrňte do generovaného JavaScriptu soubory sourcemap.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Include_undefined_in_index_signature_results_6716" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Include 'undefined' in index signature results]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Zahrnout položku undefined do výsledků signatury indexu]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8133,15 +8202,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";List_of_language_service_plugins_6181" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[List of language service plugins.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Seznam modulů plug-in služby jazyka]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";List_of_root_folders_whose_combined_content_represents_the_structure_of_the_project_at_runtime_6168" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[List of root folders whose combined content represents the structure of the project at runtime.]]></Val>
@@ -8192,10 +8252,13 @@
       </Item>
       <Item ItemId=";Log_paths_used_during_the_moduleResolution_process_6706" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Log paths used during the `moduleResolution` process.]]></Val>
+          <Val><![CDATA[Log paths used during the 'moduleResolution' process.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Cesty k protokolům používané v procesu moduleResolution.]]></Val>
+            <Val><![CDATA[Cesty protokolu používané v procesu moduleResolution.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Log paths used during the `moduleResolution` process.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -10604,10 +10667,13 @@
       </Item>
       <Item ItemId=";Raise_an_error_when_a_function_parameter_isn_t_read_6676" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Raise an error when a function parameter isn't read]]></Val>
+          <Val><![CDATA[Raise an error when a function parameter isn't read.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Oznámit chybu, pokud se parametr funkce nepodaří přečíst]]></Val>
+            <Val><![CDATA[Když se parametr funkce nepřečte, nahlaste chybu.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Raise an error when a function parameter isn't read]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -11822,10 +11888,13 @@
       </Item>
       <Item ItemId=";Specify_a_file_that_bundles_all_outputs_into_one_JavaScript_file_If_declaration_is_true_also_designa_6679" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Specify a file that bundles all outputs into one JavaScript file. If `declaration` is true, also designates a file that bundles all .d.ts output.]]></Val>
+          <Val><![CDATA[Specify a file that bundles all outputs into one JavaScript file. If 'declaration' is true, also designates a file that bundles all .d.ts output.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Zadejte soubor, který sloučí všechny výstupy do jediného souboru JavaScriptu. Pokud má „declaration“ hodnotu true, označte také soubor, do kterého se sloučí všechny výstupy .d.ts.]]></Val>
+            <Val><![CDATA[Zadejte soubor, který sloučí všechny výstupy do jediného souboru JavaScriptu. Pokud má „declaration“ pravdivou hodnotu,, určete soubor, který sloučí všechny výstupní soubory .d.ts.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Specify a file that bundles all outputs into one JavaScript file. If `declaration` is true, also designates a file that bundles all .d.ts output.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -11885,10 +11954,13 @@
       </Item>
       <Item ItemId=";Specify_emit_Slashchecking_behavior_for_imports_that_are_only_used_for_types_6718" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Specify emit/checking behavior for imports that are only used for types]]></Val>
+          <Val><![CDATA[Specify emit/checking behavior for imports that are only used for types.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Zadejte chování generování nebo kontroly pro importy, které se používají jen pro typy.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Specify emit/checking behavior for imports that are only used for types]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -11957,19 +12029,25 @@
       </Item>
       <Item ItemId=";Specify_module_specifier_used_to_import_the_JSX_factory_functions_when_using_jsx_Colon_react_jsx_Ast_6649" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Specify module specifier used to import the JSX factory functions when using `jsx: react-jsx*`.`]]></Val>
+          <Val><![CDATA[Specify module specifier used to import the JSX factory functions when using 'jsx: react-jsx*'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Zadejte specifikátor modulu, který se použije k importu továrních funkcí JSX při použití příkazu jsx: react-jsx.]]></Val>
+            <Val><![CDATA[Zadejte specifikátor modulu, který se použije k naimportování továrních funkcí JSX při použití „jsx: react-jsx“.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Specify module specifier used to import the JSX factory functions when using `jsx: react-jsx*`.`]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Specify_multiple_folders_that_act_like_Slashnode_modules_Slash_types_6710" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Specify multiple folders that act like `./node_modules/@types`.]]></Val>
+          <Val><![CDATA[Specify multiple folders that act like './node_modules/@types'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Zadejte více složek, které fungují jako ./node_modules/@types.]]></Val>
+            <Val><![CDATA[Zadejte více složek, které budou figurovat jako „node_modules/@types“.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Specify multiple folders that act like `./node_modules/@types`.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -12047,10 +12125,13 @@
       </Item>
       <Item ItemId=";Specify_the_JSX_factory_function_used_when_targeting_React_JSX_emit_e_g_React_createElement_or_h_6647" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Specify the JSX factory function used when targeting React JSX emit, e.g. 'React.createElement' or 'h']]></Val>
+          <Val><![CDATA[Specify the JSX factory function used when targeting React JSX emit, e.g. 'React.createElement' or 'h'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Zadejte tovární funkci JSX, která se použije při cíleném generování kódu JSX pro React, např.„React.createElement“ nebo „h“.]]></Val>
+            <Val><![CDATA[Zadejte funkci objektu pro vytváření JSX použitou při cílení na generování React JSX, např. React.createElement nebo h.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Specify the JSX factory function used when targeting React JSX emit, e.g. 'React.createElement' or 'h']]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -12110,10 +12191,13 @@
       </Item>
       <Item ItemId=";Specify_the_maximum_folder_depth_used_for_checking_JavaScript_files_from_node_modules_Only_applicabl_6656" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Specify the maximum folder depth used for checking JavaScript files from `node_modules`. Only applicable with `allowJs`.]]></Val>
+          <Val><![CDATA[Specify the maximum folder depth used for checking JavaScript files from 'node_modules'. Only applicable with 'allowJs'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Zadejte maximální hloubku složky, která se použije pro kontrolu souborů JavaScriptu z „node_modules“. Platí pouze s možností „allowJs“.]]></Val>
+            <Val><![CDATA[Zadejte maximální hloubku složky, která se použije pro kontrolu souborů JavaScriptu z node_modules. Platí pouze pro allowJs.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Specify the maximum folder depth used for checking JavaScript files from `node_modules`. Only applicable with `allowJs`.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -12131,10 +12215,13 @@
       </Item>
       <Item ItemId=";Specify_the_object_invoked_for_createElement_This_only_applies_when_targeting_react_JSX_emit_6686" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Specify the object invoked for `createElement`. This only applies when targeting `react` JSX emit.]]></Val>
+          <Val><![CDATA[Specify the object invoked for 'createElement'. This only applies when targeting 'react' JSX emit.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Zadejte objekt vyvolaný pro „createElement“. To platí jenom při cíleném generování kódu JSX pro React.]]></Val>
+            <Val><![CDATA[Zadejte objekt vyvolaný pro createElement. To platí pouze při cílení na generování JSX react.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Specify the object invoked for `createElement`. This only applies when targeting `react` JSX emit.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -12413,10 +12500,13 @@
       </Item>
       <Item ItemId=";Suppress_noImplicitAny_errors_when_indexing_objects_that_lack_index_signatures_6703" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Suppress `noImplicitAny` errors when indexing objects that lack index signatures.]]></Val>
+          <Val><![CDATA[Suppress 'noImplicitAny' errors when indexing objects that lack index signatures.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Při indexování objektů bez signatur indexu potlačte chyby „noImplicitAny“.]]></Val>
+            <Val><![CDATA[Při indexování objektů bez podpisů indexování potlačte chyby „noImplicitAny“.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Suppress `noImplicitAny` errors when indexing objects that lack index signatures.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -13035,11 +13125,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";The_parser_expected_to_find_a_to_match_the_token_here_1007" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";The_parser_expected_to_find_a_1_to_match_the_0_token_here_1007" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[The parser expected to find a '}' to match the '{' token here.]]></Val>
+          <Val><![CDATA[The parser expected to find a '{1}' to match the '{0}' token here.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Parser očekával, že najde token }, který by odpovídal zdejšímu tokenu {.]]></Val>
+            <Val><![CDATA[Parser očekával, že najde token {1}, který by odpovídal tokenu {0} tady.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14136,15 +14226,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Type_catch_clause_variables_as_unknown_instead_of_any_6803" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Type catch clause variables as 'unknown' instead of 'any'.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Proměnné klauzule catch zapište jako „unknown“ namísto „any“.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Type_declaration_files_to_be_included_in_compilation_6124" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Type declaration files to be included in compilation.]]></Val>
@@ -15059,10 +15140,13 @@
       </Item>
       <Item ItemId=";When_type_checking_take_into_account_null_and_undefined_6699" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[When type checking, take into account `null` and `undefined`.]]></Val>
+          <Val><![CDATA[When type checking, take into account 'null' and 'undefined'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Při kontrole typů zahrňte také hodnoty „null“ a „undefined“.]]></Val>
+            <Val><![CDATA[Při kontrole typů berte v potaz i hodnoty „null“ a „undefined“.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[When type checking, take into account `null` and `undefined`.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -15809,6 +15893,15 @@
           <Val><![CDATA['arguments' cannot be referenced in property initializers.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Na argumenty nejde odkazovat v inicializátorech vlastností.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";auto_Colon_Treat_files_with_imports_exports_import_meta_jsx_with_jsx_Colon_react_jsx_or_esm_format_w_1476" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA["auto": Treat files with imports, exports, import.meta, jsx (with jsx: react-jsx), or esm format (with module: node12+) as modules.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[auto: Považovat soubory s importy, exporty, import.meta, jsx (s jsx: react-jsx) nebo formátem ESM (s modulem node12+) za moduly.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
