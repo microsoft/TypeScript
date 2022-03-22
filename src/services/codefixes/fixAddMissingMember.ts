@@ -173,9 +173,7 @@ namespace ts.codefix {
             const properties = arrayFrom(checker.getUnmatchedProperties(checker.getTypeAtLocation(parent), checker.getTypeAtLocation(param), /* requireOptionalProperties */ false, /* matchDiscriminantProperties */ false));
             if (!length(properties)) return undefined;
 
-            const formatOptions = getFormatCodeSettingsForWriting(formatContext, sourceFile);
-            const indentation = formatting.SmartIndenter.getIndentation(getLineStartPositionForPosition(tokenPos, sourceFile), sourceFile, formatOptions, getLineStartPositionForPosition(tokenPos, sourceFile) === tokenPos);
-            return { kind: InfoKind.ObjectLiteral, token: param.name, properties, indentation, trimLeadingWhiteSpaces: true, parentDeclaration: parent };
+            return createObjectLiteralInfo(param.name, properties, parent);
         }
 
         if (!isMemberName(token)) return undefined;
@@ -183,7 +181,8 @@ namespace ts.codefix {
         if (isIdentifier(token) && hasInitializer(parent) && parent.initializer && isObjectLiteralExpression(parent.initializer)) {
             const properties = arrayFrom(checker.getUnmatchedProperties(checker.getTypeAtLocation(parent.initializer), checker.getTypeAtLocation(token), /* requireOptionalProperties */ false, /* matchDiscriminantProperties */ false));
             if (!length(properties)) return undefined;
-            return { kind: InfoKind.ObjectLiteral, token, properties, indentation: undefined, parentDeclaration: parent.initializer };
+
+            return createObjectLiteralInfo(token, properties, parent.initializer);
         }
 
         if (isIdentifier(token) && isJsxOpeningLikeElement(token.parent)) {
@@ -239,7 +238,36 @@ namespace ts.codefix {
         if (enumDeclaration && !isPrivateIdentifier(token) && !isSourceFileFromLibrary(program, enumDeclaration.getSourceFile())) {
             return { kind: InfoKind.Enum, token, parentDeclaration: enumDeclaration };
         }
+
         return undefined;
+
+        // for object literal, we want to the indentation work like block
+        // if { starts in any position (can be in the middle of line)
+        // the following indentation should treat { as starting of that line (including leading whitespace)
+        // ```
+        //     const a: { x: undefined, y: undefined } = {}       // leading 4 whitespaces and { starts in the middle of line
+        // ->
+        //     const a: { x: undefined, y: undefined } = {
+        //         x: undefined,
+        //         y: undefined,
+        //     }
+        // ---------------------
+        //     const a: {x : undefined, y: undefined } =
+        //      {}
+        // ->
+        //     const a: { x: undefined, y: undefined } =
+        //      {                                                  // leading 5 whitespaces and { starts at 6 column
+        //          x: undefined,
+        //          y: undefined,
+        //      }
+        // ```
+        function createObjectLiteralInfo(token: Identifier, properties: Symbol[], parentDeclaration: ObjectLiteralExpression): Info {
+            const formatOptions = getFormatCodeSettingsForWriting(formatContext, sourceFile);
+            const lineStartPosition = getLineStartPositionForPosition(tokenPos, sourceFile);
+            const indentation = formatting.SmartIndenter.getIndentation(tokenPos, sourceFile, { ...formatOptions, indentStyle: IndentStyle.Block }, lineStartPosition === tokenPos);
+
+            return { kind: InfoKind.ObjectLiteral, token, properties, indentation, trimLeadingWhiteSpaces: true, parentDeclaration };
+        }
     }
 
     function isSourceFileFromLibrary(program: Program, node: SourceFile) {
