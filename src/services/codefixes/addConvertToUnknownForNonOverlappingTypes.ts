@@ -5,19 +5,29 @@ namespace ts.codefix {
     registerCodeFix({
         errorCodes,
         getCodeActions: function getCodeActionsToAddConvertToUnknownForNonOverlappingTypes(context) {
-            const changes = textChanges.ChangeTracker.with(context, t => makeChange(t, context.sourceFile, context.span.start));
+            const assertion = getAssertion(context.sourceFile, context.span.start);
+            if (assertion === undefined) return undefined;
+            const changes = textChanges.ChangeTracker.with(context, t => makeChange(t, context.sourceFile, assertion));
             return [createCodeFixAction(fixId, changes, Diagnostics.Add_unknown_conversion_for_non_overlapping_types, fixId, Diagnostics.Add_unknown_to_all_conversions_of_non_overlapping_types)];
         },
         fixIds: [fixId],
-        getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => makeChange(changes, diag.file, diag.start)),
+        getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
+            const assertion = getAssertion(diag.file, diag.start);
+            if (assertion) {
+                makeChange(changes, diag.file, assertion);
+            }
+        }),
     });
 
-    function makeChange(changeTracker: textChanges.ChangeTracker, sourceFile: SourceFile, pos: number) {
-        const token = getTokenAtPosition(sourceFile, pos);
-        const assertion = Debug.checkDefined(findAncestor(token, (n): n is AsExpression | TypeAssertion => isAsExpression(n) || isTypeAssertionExpression(n)), "Expected to find an assertion expression");
+    function makeChange(changeTracker: textChanges.ChangeTracker, sourceFile: SourceFile, assertion: AsExpression | TypeAssertion) {
         const replacement = isAsExpression(assertion)
             ? factory.createAsExpression(assertion.expression, factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword))
             : factory.createTypeAssertion(factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword), assertion.expression);
         changeTracker.replaceNode(sourceFile, assertion.expression, replacement);
+    }
+
+    function getAssertion(sourceFile: SourceFile, pos: number): AsExpression | TypeAssertion | undefined {
+        if (isInJSFile(sourceFile)) return undefined;
+        return findAncestor(getTokenAtPosition(sourceFile, pos), (n): n is AsExpression | TypeAssertion => isAsExpression(n) || isTypeAssertionExpression(n));
     }
 }

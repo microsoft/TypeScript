@@ -4,7 +4,7 @@ namespace ts.codefix {
     const errorCodes = [Diagnostics.this_implicitly_has_type_any_because_it_does_not_have_a_type_annotation.code];
     registerCodeFix({
         errorCodes,
-        getCodeActions(context) {
+        getCodeActions: function getCodeActionsToFixImplicitThis(context) {
             const { sourceFile, program, span } = context;
             let diagnostic: DiagnosticAndArguments | undefined;
             const changes = textChanges.ChangeTracker.with(context, t => {
@@ -20,7 +20,7 @@ namespace ts.codefix {
 
     function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, pos: number, checker: TypeChecker): DiagnosticAndArguments | undefined {
         const token = getTokenAtPosition(sourceFile, pos);
-        Debug.assert(token.kind === SyntaxKind.ThisKeyword);
+        if (!isThis(token)) return undefined;
 
         const fn = getThisContainer(token, /*includeArrowFunctions*/ false);
         if (!isFunctionDeclaration(fn) && !isFunctionExpression(fn)) return undefined;

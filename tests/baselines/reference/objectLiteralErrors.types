@@ -318,3 +318,21 @@ var g3 = { get a(): number { return undefined; }, set a(n: string) { } };
 >a : number
 >n : string
 
+// did you mean colon errors
+var h1 = {
+>h1 : { x: number; y: number; }
+>{    x = 1,    y = 2,    #z: 3} : { x: number; y: number; }
+
+    x = 1,
+>x : any
+>1 : 1
+
+    y = 2,
+>y : any
+>2 : 2
+
+    #z: 3
+>#z : number
+>3 : 3
+}
+

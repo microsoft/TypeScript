@@ -48,8 +48,8 @@
 
 verify.quickInfos({
     1: "function MainButton(linkProps: LinkProps): JSX.Element (+1 overload)",
-    2: "(JSX attribute) LinkProps.to: string",
+    2: "(property) LinkProps.to: string",
     3: "function MainButton(buttonProps: ButtonProps): JSX.Element (+1 overload)",
     4: "(method) ButtonProps.onClick(event?: React.MouseEvent<HTMLButtonElement>): void",
-    5: "(JSX attribute) extra-prop: true"
+    5: "(property) extra-prop: true"
 });

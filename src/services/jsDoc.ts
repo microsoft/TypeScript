@@ -152,12 +152,21 @@ namespace ts.JsDoc {
 
     function getDisplayPartsFromComment(comment: string | readonly JSDocComment[], checker: TypeChecker | undefined): SymbolDisplayPart[] {
         if (typeof comment === "string") {
-            return [textPart(comment)];
+            return [textPart(skipSeparatorFromComment(comment))];
         }
         return flatMap(
             comment,
-            node => node.kind === SyntaxKind.JSDocText ? [textPart(node.text)] : buildLinkParts(node, checker)
+            node => node.kind === SyntaxKind.JSDocText ? [textPart(skipSeparatorFromComment(node.text))] : buildLinkParts(node, checker)
         ) as SymbolDisplayPart[];
+    }
+
+    function skipSeparatorFromComment(text: string) {
+        let pos = 0;
+        if (text.charCodeAt(pos++) === CharacterCodes.minus) {
+            while (pos < text.length && text.charCodeAt(pos) === CharacterCodes.space) pos++;
+            return text.slice(pos);
+        }
+        return text;
     }
 
     function getCommentDisplayParts(tag: JSDocTag, checker?: TypeChecker): SymbolDisplayPart[] | undefined {
@@ -169,7 +178,27 @@ namespace ts.JsDoc {
             case SyntaxKind.JSDocAugmentsTag:
                 return withNode((tag as JSDocAugmentsTag).class);
             case SyntaxKind.JSDocTemplateTag:
-                return addComment((tag as JSDocTemplateTag).typeParameters.map(tp => tp.getText()).join(", "));
+                const templateTag = tag as JSDocTemplateTag;
+                const displayParts: SymbolDisplayPart[] = [];
+                if (templateTag.constraint) {
+                    displayParts.push(textPart(templateTag.constraint.getText()));
+                }
+                if (length(templateTag.typeParameters)) {
+                    if (length(displayParts)) {
+                        displayParts.push(spacePart());
+                    }
+                    const lastTypeParameter = templateTag.typeParameters[templateTag.typeParameters.length - 1];
+                    forEach(templateTag.typeParameters, tp => {
+                        displayParts.push(namePart(tp.getText()));
+                        if (lastTypeParameter !== tp) {
+                            displayParts.push(...[punctuationPart(SyntaxKind.CommaToken), spacePart()]);
+                        }
+                    });
+                }
+                if (comment) {
+                    displayParts.push(...[spacePart(), ...getDisplayPartsFromComment(comment, checker)]);
+                }
+                return displayParts;
             case SyntaxKind.JSDocTypeTag:
                 return withNode((tag as JSDocTypeTag).typeExpression);
             case SyntaxKind.JSDocTypedefTag:

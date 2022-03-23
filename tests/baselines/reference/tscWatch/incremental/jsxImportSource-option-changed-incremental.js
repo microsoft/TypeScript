@@ -96,7 +96,7 @@ exitCode:: ExitStatus.Success
 exports.__esModule = true;
 exports.App = void 0;
 var jsx_runtime_1 = require("react/jsx-runtime");
-var App = function () { return (0, jsx_runtime_1.jsx)("div", { propA: true }, void 0); };
+var App = function () { return (0, jsx_runtime_1.jsx)("div", { propA: true }); };
 exports.App = App;
 
 
@@ -178,7 +178,7 @@ node_modules/preact/jsx-runtime/index.d.ts
 index.tsx
   Matched by include pattern '**/*' in 'tsconfig.json'
 
-Found 1 error.
+Found 1 error in index.tsx[90m:1[0m
 
 
 
@@ -212,7 +212,7 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 exports.__esModule = true;
 exports.App = void 0;
 var jsx_runtime_1 = require("preact/jsx-runtime");
-var App = function () { return (0, jsx_runtime_1.jsx)("div", { propA: true }, void 0); };
+var App = function () { return (0, jsx_runtime_1.jsx)("div", { propA: true }); };
 exports.App = App;
 
 

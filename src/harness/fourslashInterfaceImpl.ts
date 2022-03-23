@@ -255,16 +255,16 @@ namespace FourSlashInterface {
             }
         }
 
-        public getInlayHints(expected: readonly VerifyInlayHintsOptions[], span: ts.TextSpan, preference?: ts.InlayHintsOptions) {
+        public getInlayHints(expected: readonly VerifyInlayHintsOptions[], span: ts.TextSpan, preference?: ts.UserPreferences) {
             this.state.verifyInlayHints(expected, span, preference);
         }
 
-        public quickInfoIs(expectedText: string, expectedDocumentation?: string) {
-            this.state.verifyQuickInfoString(expectedText, expectedDocumentation);
+        public quickInfoIs(expectedText: string, expectedDocumentation?: string, expectedTags?: { name: string; text: string; }[]) {
+            this.state.verifyQuickInfoString(expectedText, expectedDocumentation, expectedTags);
         }
 
-        public quickInfoAt(markerName: string | FourSlash.Range, expectedText: string, expectedDocumentation?: string) {
-            this.state.verifyQuickInfoAt(markerName, expectedText, expectedDocumentation);
+        public quickInfoAt(markerName: string | FourSlash.Range, expectedText: string, expectedDocumentation?: string, expectedTags?: { name: string; text: string; }[]) {
+            this.state.verifyQuickInfoAt(markerName, expectedText, expectedDocumentation, expectedTags);
         }
 
         public quickInfos(namesAndTexts: { [name: string]: string }) {
@@ -478,8 +478,8 @@ namespace FourSlashInterface {
             this.state.verifyImportFixAtPosition(expectedTextArray, errorCode, preferences);
         }
 
-        public importFixModuleSpecifiers(marker: string, moduleSpecifiers: string[]) {
-            this.state.verifyImportFixModuleSpecifiers(marker, moduleSpecifiers);
+        public importFixModuleSpecifiers(marker: string, moduleSpecifiers: string[], preferences?: ts.UserPreferences) {
+            this.state.verifyImportFixModuleSpecifiers(marker, moduleSpecifiers, preferences);
         }
 
         public navigationBar(json: any, options?: { checkSpans?: boolean }) {

@@ -31,8 +31,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.fs = void 0;
 const tslib_1 = require("tslib");
 // cjs format file
-(0, tslib_1.__exportStar)(require("fs"), exports);
-exports.fs = (0, tslib_1.__importStar)(require("fs"));
+tslib_1.__exportStar(require("fs"), exports);
+exports.fs = tslib_1.__importStar(require("fs"));
 //// [index.js]
 // esm format file
 export * from "fs";

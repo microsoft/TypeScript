@@ -26,7 +26,17 @@ class D extends C {
         var _this = "uh-oh?";
 >_this : Symbol(_this, Decl(underscoreThisInDerivedClass01.ts, 19, 11))
 
+        console.log("ruh-roh...");
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+
         super();
 >super : Symbol(C, Decl(underscoreThisInDerivedClass01.ts, 0, 0))
+
+        console.log("d'oh!");
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
     }
 }

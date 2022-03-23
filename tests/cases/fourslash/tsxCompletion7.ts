@@ -13,7 +13,7 @@
 verify.completions({
   marker: "",
   exact: [
-    { name: "TWO", kind: "JSX attribute", kindModifiers: "declare", sortText: completion.SortText.LocationPriority },
-    { name: "ONE", kind: "JSX attribute", kindModifiers: "declare", sortText: completion.SortText.MemberDeclaredBySpreadAssignment },
+    { name: "TWO", kind: "property", kindModifiers: "declare", sortText: completion.SortText.LocationPriority },
+    { name: "ONE", kind: "property", kindModifiers: "declare", sortText: completion.SortText.MemberDeclaredBySpreadAssignment },
   ]
 });
