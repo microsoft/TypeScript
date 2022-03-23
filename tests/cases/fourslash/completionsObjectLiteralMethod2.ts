@@ -33,7 +33,7 @@ verify.completions({
         },
         {
             name: "foo",
-            sortText: completion.SortText.AddIsSnippetSuffix(
+            sortText: completion.SortText.SortBelow(
                 completion.SortText.ObjectLiteralProperty(completion.SortText.LocationPriority, "foo")),
             source: completion.CompletionSource.ObjectLiteralMethodSnippet,
             insertText: "foo(f: IFoo): void {\n},",

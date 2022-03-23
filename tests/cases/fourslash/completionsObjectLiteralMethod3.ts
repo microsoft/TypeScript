@@ -47,7 +47,7 @@ verify.completions({
         },
         {
             name: "M",
-            sortText: completion.SortText.AddIsSnippetSuffix(
+            sortText: completion.SortText.SortBelow(
                 completion.SortText.ObjectLiteralProperty(completion.SortText.LocationPriority, "M")),
             source: completion.CompletionSource.ObjectLiteralMethodSnippet,
             insertText: "M(x: number): void {\n},",
@@ -101,7 +101,7 @@ verify.completions({
         },
         {
             name: "M",
-            sortText: completion.SortText.AddIsSnippetSuffix(
+            sortText: completion.SortText.SortBelow(
                 completion.SortText.ObjectLiteralProperty(completion.SortText.OptionalMember, "M")),
             source: completion.CompletionSource.ObjectLiteralMethodSnippet,
             insertText: "M(x: number): void {\n},",
@@ -113,7 +113,7 @@ verify.completions({
         },
         {
             name: "N",
-            sortText: completion.SortText.AddIsSnippetSuffix(
+            sortText: completion.SortText.SortBelow(
                 completion.SortText.ObjectLiteralProperty(completion.SortText.LocationPriority, "N")),
             source: completion.CompletionSource.ObjectLiteralMethodSnippet,
             insertText: "N(x: string): void {\n},",
@@ -125,7 +125,7 @@ verify.completions({
         },
         {
             name: "O",
-            sortText: completion.SortText.AddIsSnippetSuffix(
+            sortText: completion.SortText.SortBelow(
                 completion.SortText.ObjectLiteralProperty(completion.SortText.OptionalMember, "O")),
             source: completion.CompletionSource.ObjectLiteralMethodSnippet,
             insertText: "O(): void {\n},",

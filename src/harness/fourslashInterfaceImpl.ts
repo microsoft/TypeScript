@@ -975,7 +975,7 @@ namespace FourSlashInterface {
                 return `${presetSortText}\0${symbolDisplayName}\0` as SortText;
             },
 
-            AddIsSnippetSuffix(sortText: SortText): SortText {
+            SortBelow(sortText: SortText): SortText {
                 return sortText + "1" as SortText;
             },
         };

@@ -47,7 +47,7 @@ verify.completions({
         },
         {
             name: "bar",
-            sortText: completion.SortText.AddIsSnippetSuffix(
+            sortText: completion.SortText.SortBelow(
                 completion.SortText.ObjectLiteralProperty(completion.SortText.LocationPriority, "bar")),
             source: completion.CompletionSource.ObjectLiteralMethodSnippet,
             insertText: "bar(x: number): void {\n},",
@@ -69,7 +69,7 @@ verify.completions({
         },
         {
             name: "bar",
-            sortText: completion.SortText.AddIsSnippetSuffix(
+            sortText: completion.SortText.SortBelow(
                 completion.SortText.ObjectLiteralProperty(completion.SortText.LocationPriority, "bar")),
             source: completion.CompletionSource.ObjectLiteralMethodSnippet,
             insertText: "bar(x: number): void {\n},",
@@ -81,7 +81,7 @@ verify.completions({
         },
         {
             name: "foo",
-            sortText: completion.SortText.AddIsSnippetSuffix(
+            sortText: completion.SortText.SortBelow(
                 completion.SortText.ObjectLiteralProperty(completion.SortText.LocationPriority, "foo")),
             source: completion.CompletionSource.ObjectLiteralMethodSnippet,
             insertText: "foo(x: string): string {\n},",
@@ -119,7 +119,7 @@ verify.completions({
         },
         {
             name: "\"space bar\"",
-            sortText: completion.SortText.AddIsSnippetSuffix(
+            sortText: completion.SortText.SortBelow(
                 completion.SortText.ObjectLiteralProperty(completion.SortText.LocationPriority, "\"space bar\"")),
             source: completion.CompletionSource.ObjectLiteralMethodSnippet,
             insertText: "\"space bar\"(): string {\n},",
@@ -141,7 +141,7 @@ verify.completions({
         },
         {
             name: "bar",
-            sortText: completion.SortText.AddIsSnippetSuffix(
+            sortText: completion.SortText.SortBelow(
                 completion.SortText.ObjectLiteralProperty(completion.SortText.LocationPriority, "bar")),
             source: completion.CompletionSource.ObjectLiteralMethodSnippet,
             isSnippet: true,

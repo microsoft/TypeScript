@@ -28,7 +28,7 @@ namespace ts.Completions {
             return `${presetSortText}\0${symbolDisplayName}\0` as SortText;
         },
 
-        AddIsSnippetSuffix(sortText: SortText): SortText {
+        SortBelow(sortText: SortText): SortText {
             return sortText + "1" as SortText;
         },
     };
@@ -780,7 +780,7 @@ namespace ts.Completions {
             }
             ({ insertText, isSnippet, importAdder, sourceDisplay } = entry);
             source = CompletionSource.ObjectLiteralMethodSnippet;
-            sortText = SortText.AddIsSnippetSuffix(sortText);
+            sortText = SortText.SortBelow(sortText);
             if (importAdder.hasFixes()) {
                 hasAction = true;
             }

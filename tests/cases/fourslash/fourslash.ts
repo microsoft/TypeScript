@@ -853,7 +853,7 @@ declare namespace completion {
 
         Deprecated(sortText: SortText): SortText,
         ObjectLiteralProperty(presetSortText: SortText, symbolDisplayName: string): SortText,
-        AddIsSnippetSuffix(sortText: SortText): SortText,
+        SortBelow(sortText: SortText): SortText,
     };
 
     export const enum CompletionSource {
