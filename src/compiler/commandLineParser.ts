@@ -568,7 +568,7 @@ namespace ts {
             category: Diagnostics.Projects,
             transpileOptionValue: undefined,
             defaultValueDescription: ".tsbuildinfo",
-            description: Diagnostics.Specify_the_folder_for_tsbuildinfo_incremental_compilation_files,
+            description: Diagnostics.Specify_the_path_to_tsbuildinfo_incremental_compilation_file,
         },
         {
             name: "removeComments",
@@ -1241,6 +1241,18 @@ namespace ts {
             category: Diagnostics.Editor_Support,
 
         },
+        {
+            name: "moduleDetection",
+            type: new Map(getEntries({
+                auto: ModuleDetectionKind.Auto,
+                legacy: ModuleDetectionKind.Legacy,
+                force: ModuleDetectionKind.Force,
+            })),
+            affectsModuleResolution: true,
+            description: Diagnostics.Control_what_method_is_used_to_detect_module_format_JS_files,
+            category: Diagnostics.Language_and_Environment,
+            defaultValueDescription: Diagnostics.auto_Colon_Treat_files_with_imports_exports_import_meta_jsx_with_jsx_Colon_react_jsx_or_esm_format_with_module_Colon_node12_as_modules,
+        }
     ];
 
     /* @internal */
@@ -2579,7 +2591,10 @@ namespace ts {
      *    file to. e.g. outDir
      */
     export function parseJsonSourceFileConfigFileContent(sourceFile: TsConfigSourceFile, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[], extraFileExtensions?: readonly FileExtensionInfo[], extendedConfigCache?: Map<ExtendedConfigCacheEntry>, existingWatchOptions?: WatchOptions): ParsedCommandLine {
-        return parseJsonConfigFileContentWorker(/*json*/ undefined, sourceFile, host, basePath, existingOptions, existingWatchOptions, configFileName, resolutionStack, extraFileExtensions, extendedConfigCache);
+        tracing?.push(tracing.Phase.Parse, "parseJsonSourceFileConfigFileContent", { path: sourceFile.fileName });
+        const result = parseJsonConfigFileContentWorker(/*json*/ undefined, sourceFile, host, basePath, existingOptions, existingWatchOptions, configFileName, resolutionStack, extraFileExtensions, extendedConfigCache);
+        tracing?.pop();
+        return result;
     }
 
     /*@internal*/
@@ -3620,7 +3635,8 @@ namespace ts {
             case "boolean":
                 return true;
             case "string":
-                return option.isFilePath ? "./" : "";
+                const defaultValue = option.defaultValueDescription;
+                return option.isFilePath ? `./${defaultValue && typeof defaultValue === "string" ? defaultValue : ""}` : "";
             case "list":
                 return [];
             case "object":

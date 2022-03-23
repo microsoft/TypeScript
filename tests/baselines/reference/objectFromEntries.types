@@ -43,9 +43,9 @@ const o3 = Object.fromEntries(new Map([[Symbol("key"), "value"]]));
 const frozenArray = Object.freeze([['a', 1], ['b', 2], ['c', 3]]);
 >frozenArray : readonly (string | number)[][]
 >Object.freeze([['a', 1], ['b', 2], ['c', 3]]) : readonly (string | number)[][]
->Object.freeze : { <T>(a: T[]): readonly T[]; <T extends Function>(f: T): T; <T extends { [idx: string]: object | U; }, U extends string | number | bigint | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
+>Object.freeze : { <T>(a: T[]): readonly T[]; <T extends Function>(f: T): T; <T extends { [idx: string]: object | U; }, U extends string | number | bigint | boolean | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
 >Object : ObjectConstructor
->freeze : { <T>(a: T[]): readonly T[]; <T extends Function>(f: T): T; <T extends { [idx: string]: object | U; }, U extends string | number | bigint | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
+>freeze : { <T>(a: T[]): readonly T[]; <T extends Function>(f: T): T; <T extends { [idx: string]: object | U; }, U extends string | number | bigint | boolean | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
 >[['a', 1], ['b', 2], ['c', 3]] : (string | number)[][]
 >['a', 1] : (string | number)[]
 >'a' : "a"
@@ -68,9 +68,9 @@ const o4 = Object.fromEntries(frozenArray);
 const frozenArray2: readonly [string, number][] = Object.freeze([['a', 1], ['b', 2], ['c', 3]]);
 >frozenArray2 : readonly [string, number][]
 >Object.freeze([['a', 1], ['b', 2], ['c', 3]]) : readonly [string, number][]
->Object.freeze : { <T>(a: T[]): readonly T[]; <T extends Function>(f: T): T; <T extends { [idx: string]: object | U; }, U extends string | number | bigint | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
+>Object.freeze : { <T>(a: T[]): readonly T[]; <T extends Function>(f: T): T; <T extends { [idx: string]: object | U; }, U extends string | number | bigint | boolean | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
 >Object : ObjectConstructor
->freeze : { <T>(a: T[]): readonly T[]; <T extends Function>(f: T): T; <T extends { [idx: string]: object | U; }, U extends string | number | bigint | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
+>freeze : { <T>(a: T[]): readonly T[]; <T extends Function>(f: T): T; <T extends { [idx: string]: object | U; }, U extends string | number | bigint | boolean | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
 >[['a', 1], ['b', 2], ['c', 3]] : [string, number][]
 >['a', 1] : [string, number]
 >'a' : "a"

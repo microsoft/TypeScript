@@ -210,6 +210,31 @@ function func<K extends keyof MyObj>(k: K): MyObj[K]['name'] | undefined {
     return undefined;
 }
 
+// Repro from #48157
+
+interface Foo {
+    bar?: string
+}
+
+function foo<T extends keyof Foo>(prop: T, f: Required<Foo>) {
+    bar(f[prop]);
+}
+
+declare function bar(t: string): void;
+
+// Repro from #48246
+
+declare function makeCompleteLookupMapping<T extends ReadonlyArray<any>, Attr extends keyof T[number]>(
+    ops: T, attr: Attr): { [Item in T[number]as Item[Attr]]: Item };
+
+const ALL_BARS = [{ name: 'a'}, {name: 'b'}] as const;
+
+const BAR_LOOKUP = makeCompleteLookupMapping(ALL_BARS, 'name');
+
+type BarLookup = typeof BAR_LOOKUP;
+
+type Baz = { [K in keyof BarLookup]: BarLookup[K]['name'] };
+
 
 //// [correlatedUnions.js]
 "use strict";
@@ -325,6 +350,11 @@ function func(k) {
     }
     return undefined;
 }
+function foo(prop, f) {
+    bar(f[prop]);
+}
+var ALL_BARS = [{ name: 'a' }, { name: 'b' }];
+var BAR_LOOKUP = makeCompleteLookupMapping(ALL_BARS, 'name');
 
 
 //// [correlatedUnions.d.ts]
@@ -451,3 +481,28 @@ interface MyObj {
 }
 declare const ref: MyObj;
 declare function func<K extends keyof MyObj>(k: K): MyObj[K]['name'] | undefined;
+interface Foo {
+    bar?: string;
+}
+declare function foo<T extends keyof Foo>(prop: T, f: Required<Foo>): void;
+declare function bar(t: string): void;
+declare function makeCompleteLookupMapping<T extends ReadonlyArray<any>, Attr extends keyof T[number]>(ops: T, attr: Attr): {
+    [Item in T[number] as Item[Attr]]: Item;
+};
+declare const ALL_BARS: readonly [{
+    readonly name: "a";
+}, {
+    readonly name: "b";
+}];
+declare const BAR_LOOKUP: {
+    a: {
+        readonly name: "a";
+    };
+    b: {
+        readonly name: "b";
+    };
+};
+declare type BarLookup = typeof BAR_LOOKUP;
+declare type Baz = {
+    [K in keyof BarLookup]: BarLookup[K]['name'];
+};
