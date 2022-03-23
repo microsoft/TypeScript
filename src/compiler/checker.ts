@@ -18702,6 +18702,9 @@ namespace ts {
                     return;
                 }
                 reportRelationError(headMessage, source, target);
+                if (strictNullChecks && source.flags & TypeFlags.TypeVariable && source.symbol?.declarations?.[0] && !getConstraintOfType(source as TypeVariable) && isRelatedTo(emptyObjectType, extractTypesOfKind(target, ~TypeFlags.NonPrimitive))) {
+                    associateRelatedInfo(createDiagnosticForNode(source.symbol.declarations[0], Diagnostics.This_type_parameter_probably_needs_an_extends_object_constraint));
+                }
             }
 
             function traceUnionsOrIntersectionsTooLarge(source: Type, target: Type): void {
@@ -19492,7 +19495,7 @@ namespace ts {
                     // IndexedAccess comparisons are handled above in the `targetFlags & TypeFlage.IndexedAccess` branch
                     if (!(sourceFlags & TypeFlags.IndexedAccess && targetFlags & TypeFlags.IndexedAccess)) {
                         const constraint = getConstraintOfType(source as TypeVariable);
-                        if (!constraint || (sourceFlags & TypeFlags.TypeParameter && constraint.flags & TypeFlags.Any)) {
+                        if (!strictNullChecks && (!constraint || (sourceFlags & TypeFlags.TypeParameter && constraint.flags & TypeFlags.Any))) {
                             // A type variable with no constraint is not related to the non-primitive object type.
                             if (result = isRelatedTo(emptyObjectType, extractTypesOfKind(target, ~TypeFlags.NonPrimitive), RecursionFlags.Both)) {
                                 resetErrorInfo(saveErrorInfo);
@@ -19500,12 +19503,12 @@ namespace ts {
                             }
                         }
                         // hi-speed no-this-instantiation check (less accurate, but avoids costly `this`-instantiation when the constraint will suffice), see #28231 for report on why this is needed
-                        else if (result = isRelatedTo(constraint, target, RecursionFlags.Source, /*reportErrors*/ false, /*headMessage*/ undefined, intersectionState)) {
+                        else if (constraint && (result = isRelatedTo(constraint, target, RecursionFlags.Source, /*reportErrors*/ false, /*headMessage*/ undefined, intersectionState))) {
                             resetErrorInfo(saveErrorInfo);
                             return result;
                         }
                         // slower, fuller, this-instantiated check (necessary when comparing raw `this` types from base classes), see `subclassWithPolymorphicThisIsAssignable.ts` test for example
-                        else if (result = isRelatedTo(getTypeWithThisArgument(constraint, source), target, RecursionFlags.Source, reportErrors && !(targetFlags & sourceFlags & TypeFlags.TypeParameter), /*headMessage*/ undefined, intersectionState)) {
+                        else if (constraint && (result = isRelatedTo(getTypeWithThisArgument(constraint, source), target, RecursionFlags.Source, reportErrors && !(targetFlags & sourceFlags & TypeFlags.TypeParameter), /*headMessage*/ undefined, intersectionState))) {
                             resetErrorInfo(saveErrorInfo);
                             return result;
                         }
