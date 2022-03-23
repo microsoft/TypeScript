@@ -1,0 +1,25 @@
+=== tests/cases/compiler/typeGuardNarrowsIndexedAccessOfKnownProperty3.ts ===
+type Foo = (number | undefined)[] | undefined;
+>Foo : Symbol(Foo, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty3.ts, 0, 0))
+
+const foo: Foo = [1, 2, 3];
+>foo : Symbol(foo, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty3.ts, 2, 5))
+>Foo : Symbol(Foo, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty3.ts, 0, 0))
+
+const index = 1;
+>index : Symbol(index, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty3.ts, 3, 5))
+
+if (foo !== undefined && foo[index] !== undefined && foo[index] >= 0) {
+>foo : Symbol(foo, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty3.ts, 2, 5))
+>undefined : Symbol(undefined)
+>foo : Symbol(foo, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty3.ts, 2, 5))
+>index : Symbol(index, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty3.ts, 3, 5))
+>undefined : Symbol(undefined)
+>foo : Symbol(foo, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty3.ts, 2, 5))
+>index : Symbol(index, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty3.ts, 3, 5))
+
+    foo[index] // number
+>foo : Symbol(foo, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty3.ts, 2, 5))
+>index : Symbol(index, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty3.ts, 3, 5))
+}
+

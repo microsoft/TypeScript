@@ -1,0 +1,19 @@
+tests/cases/compiler/trivialSubtypeReductionNoStructuralCheck.ts(3,7): error TS7023: 'steps' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+
+
+==== tests/cases/compiler/trivialSubtypeReductionNoStructuralCheck.ts (1 errors) ====
+    declare const props: WizardStepProps;
+    export class Wizard {
+      get steps() {
+          ~~~~~
+!!! error TS7023: 'steps' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+        return {
+          wizard: this,
+          ...props,
+        } as WizardStepProps;
+      }
+    }
+    
+    export interface WizardStepProps {
+      wizard?: Wizard;
+    }

@@ -290,7 +290,7 @@ namespace ts {
             shortName: "i",
             type: "boolean",
             category: Diagnostics.Projects,
-            description: Diagnostics.Enable_incremental_compilation,
+            description: Diagnostics.Save_tsbuildinfo_files_to_allow_for_incremental_compilation_of_projects,
             transpileOptionValue: undefined,
             defaultValueDescription: Diagnostics.false_unless_composite_is_set
         },
@@ -568,7 +568,7 @@ namespace ts {
             category: Diagnostics.Projects,
             transpileOptionValue: undefined,
             defaultValueDescription: ".tsbuildinfo",
-            description: Diagnostics.Specify_the_folder_for_tsbuildinfo_incremental_compilation_files,
+            description: Diagnostics.Specify_the_path_to_tsbuildinfo_incremental_compilation_file,
         },
         {
             name: "removeComments",
@@ -695,7 +695,7 @@ namespace ts {
             affectsSemanticDiagnostics: true,
             strictFlag: true,
             category: Diagnostics.Type_Checking,
-            description: Diagnostics.Type_catch_clause_variables_as_unknown_instead_of_any,
+            description: Diagnostics.Default_catch_clause_variables_as_unknown_instead_of_any,
             defaultValueDescription: false,
         },
         {
@@ -714,7 +714,7 @@ namespace ts {
             type: "boolean",
             affectsSemanticDiagnostics: true,
             category: Diagnostics.Type_Checking,
-            description: Diagnostics.Enable_error_reporting_when_a_local_variables_aren_t_read,
+            description: Diagnostics.Enable_error_reporting_when_local_variables_aren_t_read,
             defaultValueDescription: false,
         },
         {
@@ -755,7 +755,7 @@ namespace ts {
             type: "boolean",
             affectsSemanticDiagnostics: true,
             category: Diagnostics.Type_Checking,
-            description: Diagnostics.Include_undefined_in_index_signature_results,
+            description: Diagnostics.Add_undefined_to_a_type_when_accessed_using_an_index,
             defaultValueDescription: false,
         },
         {
@@ -950,7 +950,8 @@ namespace ts {
             name: "jsxFragmentFactory",
             type: "string",
             category: Diagnostics.Language_and_Environment,
-            description: Diagnostics.Specify_the_JSX_Fragment_reference_used_for_fragments_when_targeting_React_JSX_emit_e_g_React_Fragment_or_Fragment
+            description: Diagnostics.Specify_the_JSX_Fragment_reference_used_for_fragments_when_targeting_React_JSX_emit_e_g_React_Fragment_or_Fragment,
+            defaultValueDescription: "React.Fragment",
         },
         {
             name: "jsxImportSource",
@@ -1236,10 +1237,22 @@ namespace ts {
                 name: "plugin",
                 type: "object"
             },
-            description: Diagnostics.List_of_language_service_plugins,
+            description: Diagnostics.Specify_a_list_of_language_service_plugins_to_include,
             category: Diagnostics.Editor_Support,
 
         },
+        {
+            name: "moduleDetection",
+            type: new Map(getEntries({
+                auto: ModuleDetectionKind.Auto,
+                legacy: ModuleDetectionKind.Legacy,
+                force: ModuleDetectionKind.Force,
+            })),
+            affectsModuleResolution: true,
+            description: Diagnostics.Control_what_method_is_used_to_detect_module_format_JS_files,
+            category: Diagnostics.Language_and_Environment,
+            defaultValueDescription: Diagnostics.auto_Colon_Treat_files_with_imports_exports_import_meta_jsx_with_jsx_Colon_react_jsx_or_esm_format_with_module_Colon_node12_as_modules,
+        }
     ];
 
     /* @internal */
@@ -2578,7 +2591,10 @@ namespace ts {
      *    file to. e.g. outDir
      */
     export function parseJsonSourceFileConfigFileContent(sourceFile: TsConfigSourceFile, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[], extraFileExtensions?: readonly FileExtensionInfo[], extendedConfigCache?: Map<ExtendedConfigCacheEntry>, existingWatchOptions?: WatchOptions): ParsedCommandLine {
-        return parseJsonConfigFileContentWorker(/*json*/ undefined, sourceFile, host, basePath, existingOptions, existingWatchOptions, configFileName, resolutionStack, extraFileExtensions, extendedConfigCache);
+        tracing?.push(tracing.Phase.Parse, "parseJsonSourceFileConfigFileContent", { path: sourceFile.fileName });
+        const result = parseJsonConfigFileContentWorker(/*json*/ undefined, sourceFile, host, basePath, existingOptions, existingWatchOptions, configFileName, resolutionStack, extraFileExtensions, extendedConfigCache);
+        tracing?.pop();
+        return result;
     }
 
     /*@internal*/
@@ -2755,7 +2771,7 @@ namespace ts {
         function getPropFromRaw<T>(prop: "files" | "include" | "exclude" | "references", validateElement: (value: unknown) => boolean, elementTypeName: string): PropOfRaw<T> {
             if (hasProperty(raw, prop) && !isNullOrUndefined(raw[prop])) {
                 if (isArray(raw[prop])) {
-                    const result = raw[prop];
+                    const result = raw[prop] as T[];
                     if (!sourceFile && !every(result, validateElement)) {
                         errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, prop, elementTypeName));
                     }
@@ -3619,7 +3635,8 @@ namespace ts {
             case "boolean":
                 return true;
             case "string":
-                return option.isFilePath ? "./" : "";
+                const defaultValue = option.defaultValueDescription;
+                return option.isFilePath ? `./${defaultValue && typeof defaultValue === "string" ? defaultValue : ""}` : "";
             case "list":
                 return [];
             case "object":
