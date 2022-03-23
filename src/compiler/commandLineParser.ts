@@ -1461,7 +1461,7 @@ namespace ts {
             case "number":
                 return mapDefined(values, v => validateJsonOptionValue(opt.element, parseInt(v), errors));
             case "string":
-                return mapDefined(values, v => validateJsonOptionValue(opt.element, opt.listPreserveFalsyValues ? v : (v || ""), errors));
+                return mapDefined(values, v => validateJsonOptionValue(opt.element, v || "", errors));
             default:
                 return mapDefined(values, v => parseCustomTypeOption(opt.element as CommandLineOptionOfCustomType, v, errors));
         }
