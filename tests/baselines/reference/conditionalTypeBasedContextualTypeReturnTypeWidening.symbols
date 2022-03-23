@@ -1,0 +1,59 @@
+=== tests/cases/compiler/conditionalTypeBasedContextualTypeReturnTypeWidening.ts ===
+declare function useState1<S>(initialState: (S extends (() => any) ? never : S) | (() => S)): S; // No args
+>useState1 : Symbol(useState1, Decl(conditionalTypeBasedContextualTypeReturnTypeWidening.ts, 0, 0))
+>S : Symbol(S, Decl(conditionalTypeBasedContextualTypeReturnTypeWidening.ts, 0, 27))
+>initialState : Symbol(initialState, Decl(conditionalTypeBasedContextualTypeReturnTypeWidening.ts, 0, 30))
+>S : Symbol(S, Decl(conditionalTypeBasedContextualTypeReturnTypeWidening.ts, 0, 27))
+>S : Symbol(S, Decl(conditionalTypeBasedContextualTypeReturnTypeWidening.ts, 0, 27))
+>S : Symbol(S, Decl(conditionalTypeBasedContextualTypeReturnTypeWidening.ts, 0, 27))
+>S : Symbol(S, Decl(conditionalTypeBasedContextualTypeReturnTypeWidening.ts, 0, 27))
+
+declare function useState2<S>(initialState: (S extends ((...args: any[]) => any) ? never : S) | (() => S)): S; // Any args
+>useState2 : Symbol(useState2, Decl(conditionalTypeBasedContextualTypeReturnTypeWidening.ts, 0, 96))
+>S : Symbol(S, Decl(conditionalTypeBasedContextualTypeReturnTypeWidening.ts, 1, 27))
+>initialState : Symbol(initialState, Decl(conditionalTypeBasedContextualTypeReturnTypeWidening.ts, 1, 30))
+>S : Symbol(S, Decl(conditionalTypeBasedContextualTypeReturnTypeWidening.ts, 1, 27))
+>args : Symbol(args, Decl(conditionalTypeBasedContextualTypeReturnTypeWidening.ts, 1, 57))
+>S : Symbol(S, Decl(conditionalTypeBasedContextualTypeReturnTypeWidening.ts, 1, 27))
+>S : Symbol(S, Decl(conditionalTypeBasedContextualTypeReturnTypeWidening.ts, 1, 27))
+>S : Symbol(S, Decl(conditionalTypeBasedContextualTypeReturnTypeWidening.ts, 1, 27))
+
+const func1 = useState1(() => () => 0);
+>func1 : Symbol(func1, Decl(conditionalTypeBasedContextualTypeReturnTypeWidening.ts, 3, 5))
+>useState1 : Symbol(useState1, Decl(conditionalTypeBasedContextualTypeReturnTypeWidening.ts, 0, 0))
+
+const func2 = useState2(() => () => 0);
+>func2 : Symbol(func2, Decl(conditionalTypeBasedContextualTypeReturnTypeWidening.ts, 4, 5))
+>useState2 : Symbol(useState2, Decl(conditionalTypeBasedContextualTypeReturnTypeWidening.ts, 0, 96))
+
+declare function useState3<S, T extends S>(initialState: (T extends (() => any) ? never : T) | (() => S)): S; // No args
+>useState3 : Symbol(useState3, Decl(conditionalTypeBasedContextualTypeReturnTypeWidening.ts, 4, 39))
+>S : Symbol(S, Decl(conditionalTypeBasedContextualTypeReturnTypeWidening.ts, 6, 27))
+>T : Symbol(T, Decl(conditionalTypeBasedContextualTypeReturnTypeWidening.ts, 6, 29))
+>S : Symbol(S, Decl(conditionalTypeBasedContextualTypeReturnTypeWidening.ts, 6, 27))
+>initialState : Symbol(initialState, Decl(conditionalTypeBasedContextualTypeReturnTypeWidening.ts, 6, 43))
+>T : Symbol(T, Decl(conditionalTypeBasedContextualTypeReturnTypeWidening.ts, 6, 29))
+>T : Symbol(T, Decl(conditionalTypeBasedContextualTypeReturnTypeWidening.ts, 6, 29))
+>S : Symbol(S, Decl(conditionalTypeBasedContextualTypeReturnTypeWidening.ts, 6, 27))
+>S : Symbol(S, Decl(conditionalTypeBasedContextualTypeReturnTypeWidening.ts, 6, 27))
+
+declare function useState4<S, T extends S>(initialState: (T extends ((...args: any[]) => any) ? never : T) | (() => S)): S; // Any args
+>useState4 : Symbol(useState4, Decl(conditionalTypeBasedContextualTypeReturnTypeWidening.ts, 6, 109))
+>S : Symbol(S, Decl(conditionalTypeBasedContextualTypeReturnTypeWidening.ts, 7, 27))
+>T : Symbol(T, Decl(conditionalTypeBasedContextualTypeReturnTypeWidening.ts, 7, 29))
+>S : Symbol(S, Decl(conditionalTypeBasedContextualTypeReturnTypeWidening.ts, 7, 27))
+>initialState : Symbol(initialState, Decl(conditionalTypeBasedContextualTypeReturnTypeWidening.ts, 7, 43))
+>T : Symbol(T, Decl(conditionalTypeBasedContextualTypeReturnTypeWidening.ts, 7, 29))
+>args : Symbol(args, Decl(conditionalTypeBasedContextualTypeReturnTypeWidening.ts, 7, 70))
+>T : Symbol(T, Decl(conditionalTypeBasedContextualTypeReturnTypeWidening.ts, 7, 29))
+>S : Symbol(S, Decl(conditionalTypeBasedContextualTypeReturnTypeWidening.ts, 7, 27))
+>S : Symbol(S, Decl(conditionalTypeBasedContextualTypeReturnTypeWidening.ts, 7, 27))
+
+const func3 = useState1(() => () => 0);
+>func3 : Symbol(func3, Decl(conditionalTypeBasedContextualTypeReturnTypeWidening.ts, 9, 5))
+>useState1 : Symbol(useState1, Decl(conditionalTypeBasedContextualTypeReturnTypeWidening.ts, 0, 0))
+
+const func4 = useState2(() => () => 0);
+>func4 : Symbol(func4, Decl(conditionalTypeBasedContextualTypeReturnTypeWidening.ts, 10, 5))
+>useState2 : Symbol(useState2, Decl(conditionalTypeBasedContextualTypeReturnTypeWidening.ts, 0, 96))
+

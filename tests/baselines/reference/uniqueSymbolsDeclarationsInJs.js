@@ -24,6 +24,9 @@ class C {
     readwriteCall = Symbol();
 }
 
+/** @type {unique symbol} */
+const a = Symbol();
+
 
 //// [uniqueSymbolsDeclarationsInJs-out.js]
 // classes
@@ -46,6 +49,8 @@ class C {
     static { this.readonlyStaticTypeAndCall = Symbol(); }
     static { this.readwriteStaticCall = Symbol(); }
 }
+/** @type {unique symbol} */
+const a = Symbol();
 
 
 //// [uniqueSymbolsDeclarationsInJs-out.d.ts]
@@ -71,3 +76,5 @@ declare class C {
     readonly readonlyCall: symbol;
     readwriteCall: symbol;
 }
+/** @type {unique symbol} */
+declare const a: unique symbol;

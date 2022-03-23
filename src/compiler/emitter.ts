@@ -2012,6 +2012,7 @@ namespace ts {
         //
 
         function emitTypeParameter(node: TypeParameterDeclaration) {
+            emitModifiers(node, node.modifiers);
             emit(node.name);
             if (node.constraint) {
                 writeSpace();
