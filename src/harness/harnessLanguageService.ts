@@ -994,7 +994,7 @@ namespace Harness.LanguageService {
                 cancellationToken: ts.server.nullCancellationToken,
                 useSingleInferredProject: false,
                 useInferredProjectPerProjectRoot: false,
-                typingsInstaller: undefined!, // TODO: GH#18217
+                typingsInstaller: { ...ts.server.nullTypingsInstaller, globalTypingsCacheLocation: "/Library/Caches/typescript" },
                 byteLength: Utils.byteLength,
                 hrtime: process.hrtime,
                 logger: serverHost,

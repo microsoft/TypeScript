@@ -373,6 +373,8 @@ namespace ts {
                 case SyntaxKind.ConstKeyword:
                 case SyntaxKind.DeclareKeyword:
                 case SyntaxKind.ReadonlyKeyword:
+                case SyntaxKind.InKeyword:
+                case SyntaxKind.OutKeyword:
                 // TypeScript accessibility and readonly modifiers are elided
                 // falls through
                 case SyntaxKind.ArrayType:

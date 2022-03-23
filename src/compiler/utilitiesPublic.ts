@@ -1187,11 +1187,13 @@ namespace ts {
             case SyntaxKind.DeclareKeyword:
             case SyntaxKind.DefaultKeyword:
             case SyntaxKind.ExportKeyword:
+            case SyntaxKind.InKeyword:
             case SyntaxKind.PublicKeyword:
             case SyntaxKind.PrivateKeyword:
             case SyntaxKind.ProtectedKeyword:
             case SyntaxKind.ReadonlyKeyword:
             case SyntaxKind.StaticKeyword:
+            case SyntaxKind.OutKeyword:
             case SyntaxKind.OverrideKeyword:
                 return true;
         }

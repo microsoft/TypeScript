@@ -385,6 +385,7 @@ namespace ts {
             case SyntaxKind.TypeParameter:
                 Debug.type<TypeParameterDeclaration>(node);
                 return factory.updateTypeParameterDeclaration(node,
+                    nodesVisitor(node.modifiers, visitor, isModifier),
                     nodeVisitor(node.name, visitor, isIdentifier),
                     nodeVisitor(node.constraint, visitor, isTypeNode),
                     nodeVisitor(node.default, visitor, isTypeNode));
