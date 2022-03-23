@@ -174,6 +174,43 @@ namespace ts.projectSystem {
             });
         });
 
+        it("export default anonymous function works with prefixText and suffixText when disabled", () => {
+            const aTs: File = { path: "/a.ts", content: "export default function() {}" };
+            const bTs: File = { path: "/b.ts", content: `import aTest from "./a"; function test() { return aTest(); }` };
+
+            const session = createSession(createServerHost([aTs, bTs]));
+            openFilesForSession([bTs], session);
+
+            session.getProjectService().setHostConfiguration({ preferences: { providePrefixAndSuffixTextForRename: false } });
+            const response1 = executeSessionRequest<protocol.RenameRequest, protocol.RenameResponse>(session, protocol.CommandTypes.Rename, protocolFileLocationFromSubstring(bTs, "aTest("));
+            assert.deepEqual<protocol.RenameResponseBody | undefined>(response1, {
+                info: {
+                    canRename: true,
+                    fileToRename: undefined,
+                    displayName: "aTest",
+                    fullDisplayName: "aTest",
+                    kind: ScriptElementKind.alias,
+                    kindModifiers: "export",
+                    triggerSpan: protocolTextSpanFromSubstring(bTs.content, "aTest", { index: 1 })
+                },
+                locs: [{
+                    file: bTs.path,
+                    locs: [
+                        protocolRenameSpanFromSubstring({
+                            fileText: bTs.content,
+                            text: "aTest",
+                            contextText: `import aTest from "./a";`
+                        }),
+                        protocolRenameSpanFromSubstring({
+                            fileText: bTs.content,
+                            text: "aTest",
+                            options: { index: 1 },
+                        })
+                    ]
+                }],
+            });
+        });
+
         it("rename behavior is based on file of rename initiation", () => {
             const aTs: File = { path: "/a.ts", content: "const x = 1; export { x };" };
             const bTs: File = { path: "/b.ts", content: `import { x } from "./a"; const y = x + 1;` };

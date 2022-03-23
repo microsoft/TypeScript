@@ -695,3 +695,61 @@ function func<K extends keyof MyObj>(k: K): MyObj[K]['name'] | undefined {
 >undefined : undefined
 }
 
+// Repro from #48157
+
+interface Foo {
+    bar?: string
+>bar : string | undefined
+}
+
+function foo<T extends keyof Foo>(prop: T, f: Required<Foo>) {
+>foo : <T extends "bar">(prop: T, f: Required<Foo>) => void
+>prop : T
+>f : Required<Foo>
+
+    bar(f[prop]);
+>bar(f[prop]) : void
+>bar : (t: string) => void
+>f[prop] : Required<Foo>[T]
+>f : Required<Foo>
+>prop : T
+}
+
+declare function bar(t: string): void;
+>bar : (t: string) => void
+>t : string
+
+// Repro from #48246
+
+declare function makeCompleteLookupMapping<T extends ReadonlyArray<any>, Attr extends keyof T[number]>(
+>makeCompleteLookupMapping : <T extends readonly any[], Attr extends keyof T[number]>(ops: T, attr: Attr) => { [Item in T[number] as Item[Attr]]: Item; }
+
+    ops: T, attr: Attr): { [Item in T[number]as Item[Attr]]: Item };
+>ops : T
+>attr : Attr
+
+const ALL_BARS = [{ name: 'a'}, {name: 'b'}] as const;
+>ALL_BARS : readonly [{ readonly name: "a"; }, { readonly name: "b"; }]
+>[{ name: 'a'}, {name: 'b'}] as const : readonly [{ readonly name: "a"; }, { readonly name: "b"; }]
+>[{ name: 'a'}, {name: 'b'}] : readonly [{ readonly name: "a"; }, { readonly name: "b"; }]
+>{ name: 'a'} : { readonly name: "a"; }
+>name : "a"
+>'a' : "a"
+>{name: 'b'} : { readonly name: "b"; }
+>name : "b"
+>'b' : "b"
+
+const BAR_LOOKUP = makeCompleteLookupMapping(ALL_BARS, 'name');
+>BAR_LOOKUP : { a: { readonly name: "a"; }; b: { readonly name: "b"; }; }
+>makeCompleteLookupMapping(ALL_BARS, 'name') : { a: { readonly name: "a"; }; b: { readonly name: "b"; }; }
+>makeCompleteLookupMapping : <T extends readonly any[], Attr extends keyof T[number]>(ops: T, attr: Attr) => { [Item in T[number] as Item[Attr]]: Item; }
+>ALL_BARS : readonly [{ readonly name: "a"; }, { readonly name: "b"; }]
+>'name' : "name"
+
+type BarLookup = typeof BAR_LOOKUP;
+>BarLookup : { a: { readonly name: "a"; }; b: { readonly name: "b"; }; }
+>BAR_LOOKUP : { a: { readonly name: "a"; }; b: { readonly name: "b"; }; }
+
+type Baz = { [K in keyof BarLookup]: BarLookup[K]['name'] };
+>Baz : Baz
+

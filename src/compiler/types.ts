@@ -176,6 +176,7 @@ namespace ts {
         ModuleKeyword,
         NamespaceKeyword,
         NeverKeyword,
+        OutKeyword,
         ReadonlyKeyword,
         RequireKeyword,
         NumberKeyword,
@@ -378,6 +379,7 @@ namespace ts {
         JSDocFunctionType,
         JSDocVariadicType,
         JSDocNamepathType, // https://jsdoc.app/about-namepaths.html
+        /** @deprecated Use SyntaxKind.JSDoc */
         JSDocComment,
         JSDocText,
         JSDocTypeLiteral,
@@ -455,6 +457,7 @@ namespace ts {
         LastJSDocTagNode = JSDocPropertyTag,
         /* @internal */ FirstContextualKeyword = AbstractKeyword,
         /* @internal */ LastContextualKeyword = OfKeyword,
+        JSDoc = JSDocComment,
     }
 
     export type TriviaSyntaxKind =
@@ -600,6 +603,7 @@ namespace ts {
         | SyntaxKind.ProtectedKeyword
         | SyntaxKind.PublicKeyword
         | SyntaxKind.ReadonlyKeyword
+        | SyntaxKind.OutKeyword
         | SyntaxKind.OverrideKeyword
         | SyntaxKind.RequireKeyword
         | SyntaxKind.ReturnKeyword
@@ -632,10 +636,12 @@ namespace ts {
         | SyntaxKind.DeclareKeyword
         | SyntaxKind.DefaultKeyword
         | SyntaxKind.ExportKeyword
+        | SyntaxKind.InKeyword
         | SyntaxKind.PrivateKeyword
         | SyntaxKind.ProtectedKeyword
         | SyntaxKind.PublicKeyword
         | SyntaxKind.ReadonlyKeyword
+        | SyntaxKind.OutKeyword
         | SyntaxKind.OverrideKeyword
         | SyntaxKind.StaticKeyword
         ;
@@ -815,6 +821,8 @@ namespace ts {
 
         Deprecated =         1 << 13, // Deprecated tag.
         Override =           1 << 14, // Override method.
+        In =                 1 << 15, // Contravariance modifier
+        Out =                1 << 16, // Covariance modifier
         HasComputedFlags =   1 << 29, // Modifier flags have been computed
 
         AccessibilityModifier = Public | Private | Protected,
@@ -822,9 +830,9 @@ namespace ts {
         ParameterPropertyModifier = AccessibilityModifier | Readonly | Override,
         NonPublicAccessibilityModifier = Private | Protected,
 
-        TypeScriptModifier = Ambient | Public | Private | Protected | Readonly | Abstract | Const | Override,
+        TypeScriptModifier = Ambient | Public | Private | Protected | Readonly | Abstract | Const | Override | In | Out,
         ExportDefault = Export | Default,
-        All = Export | Ambient | Public | Private | Protected | Static | Readonly | Abstract | Async | Default | Const | Deprecated | Override
+        All = Export | Ambient | Public | Private | Protected | Static | Readonly | Abstract | Async | Default | Const | Deprecated | Override | In | Out
     }
 
     export const enum JsxFlags {
@@ -1064,10 +1072,12 @@ namespace ts {
     export type DeclareKeyword = ModifierToken<SyntaxKind.DeclareKeyword>;
     export type DefaultKeyword = ModifierToken<SyntaxKind.DefaultKeyword>;
     export type ExportKeyword = ModifierToken<SyntaxKind.ExportKeyword>;
+    export type InKeyword = ModifierToken<SyntaxKind.InKeyword>;
     export type PrivateKeyword = ModifierToken<SyntaxKind.PrivateKeyword>;
     export type ProtectedKeyword = ModifierToken<SyntaxKind.ProtectedKeyword>;
     export type PublicKeyword = ModifierToken<SyntaxKind.PublicKeyword>;
     export type ReadonlyKeyword = ModifierToken<SyntaxKind.ReadonlyKeyword>;
+    export type OutKeyword = ModifierToken<SyntaxKind.OutKeyword>;
     export type OverrideKeyword = ModifierToken<SyntaxKind.OverrideKeyword>;
     export type StaticKeyword = ModifierToken<SyntaxKind.StaticKeyword>;
 
@@ -1081,9 +1091,11 @@ namespace ts {
         | DeclareKeyword
         | DefaultKeyword
         | ExportKeyword
+        | InKeyword
         | PrivateKeyword
         | ProtectedKeyword
         | PublicKeyword
+        | OutKeyword
         | OverrideKeyword
         | ReadonlyKeyword
         | StaticKeyword
@@ -3256,7 +3268,7 @@ namespace ts {
         ;
 
     export interface JSDoc extends Node {
-        readonly kind: SyntaxKind.JSDocComment;
+        readonly kind: SyntaxKind.JSDoc;
         readonly parent: HasJSDoc;
         readonly tags?: NodeArray<JSDocTag>;
         readonly comment?: string | NodeArray<JSDocComment>;
@@ -3620,7 +3632,13 @@ namespace ts {
          * This is intended to be the first top-level import/export,
          * but could be arbitrarily nested (e.g. `import.meta`).
          */
-        /* @internal */ externalModuleIndicator?: Node;
+        /* @internal */ externalModuleIndicator?: Node | true;
+        /**
+         * The callback used to set the external module indicator - this is saved to
+         * be later reused during incremental reparsing, which otherwise lacks the information
+         * to set this field
+         */
+        /* @internal */ setExternalModuleIndicator?: (file: SourceFile) => void;
         // The first node that causes this file to be a CommonJS module
         /* @internal */ commonJsModuleIndicator?: Node;
         // JS identifier-declarations that are intended to merge with globals
@@ -5236,11 +5254,12 @@ namespace ts {
         pattern?: DestructuringPattern;  // Destructuring pattern represented by type (if any)
         aliasSymbol?: Symbol;            // Alias associated with type
         aliasTypeArguments?: readonly Type[]; // Alias type arguments (if any)
-        /* @internal */ aliasTypeArgumentsContainsMarker?: boolean; // Alias type arguments (if any)
         /* @internal */
         permissiveInstantiation?: Type;  // Instantiation with type parameters mapped to wildcard type
         /* @internal */
         restrictiveInstantiation?: Type; // Instantiation with type parameters mapped to unconstrained form
+        /* @internal */
+        uniqueLiteralFilledInstantiation?: Type;  // Instantiation with type parameters mapped to never type
         /* @internal */
         immediateBaseConstraint?: Type;  // Immediate base constraint cache
         /* @internal */
@@ -5315,22 +5334,21 @@ namespace ts {
         ObjectLiteralPatternWithComputedProperties = 1 << 9,  // Object literal pattern with computed properties
         ReverseMapped    = 1 << 10, // Object contains a property from a reverse-mapped type
         JsxAttributes    = 1 << 11, // Jsx attributes type
-        MarkerType       = 1 << 12, // Marker type used for variance probing
-        JSLiteral        = 1 << 13, // Object type declared in JS - disables errors on read/write of nonexisting members
-        FreshLiteral     = 1 << 14, // Fresh object literal
-        ArrayLiteral     = 1 << 15, // Originates in an array literal
+        JSLiteral        = 1 << 12, // Object type declared in JS - disables errors on read/write of nonexisting members
+        FreshLiteral     = 1 << 13, // Fresh object literal
+        ArrayLiteral     = 1 << 14, // Originates in an array literal
         /* @internal */
-        PrimitiveUnion   = 1 << 16, // Union of only primitive types
+        PrimitiveUnion   = 1 << 15, // Union of only primitive types
         /* @internal */
-        ContainsWideningType = 1 << 17, // Type is or contains undefined or null widening type
+        ContainsWideningType = 1 << 16, // Type is or contains undefined or null widening type
         /* @internal */
-        ContainsObjectOrArrayLiteral = 1 << 18, // Type is or contains object literal type
+        ContainsObjectOrArrayLiteral = 1 << 17, // Type is or contains object literal type
         /* @internal */
-        NonInferrableType = 1 << 19, // Type is or contains anyFunctionType or silentNeverType
+        NonInferrableType = 1 << 18, // Type is or contains anyFunctionType or silentNeverType
         /* @internal */
-        CouldContainTypeVariablesComputed = 1 << 20, // CouldContainTypeVariables flag has been computed
+        CouldContainTypeVariablesComputed = 1 << 19, // CouldContainTypeVariables flag has been computed
         /* @internal */
-        CouldContainTypeVariables = 1 << 21, // Type could contain a type variable
+        CouldContainTypeVariables = 1 << 20, // Type could contain a type variable
 
         ClassOrInterface = Class | Interface,
         /* @internal */
@@ -5342,36 +5360,36 @@ namespace ts {
         ObjectTypeKindMask = ClassOrInterface | Reference | Tuple | Anonymous | Mapped | ReverseMapped | EvolvingArray,
 
         // Flags that require TypeFlags.Object
-        ContainsSpread   = 1 << 22,  // Object literal contains spread operation
-        ObjectRestType   = 1 << 23,  // Originates in object rest declaration
-        InstantiationExpressionType = 1 << 24,  // Originates in instantiation expression
+        ContainsSpread   = 1 << 21,  // Object literal contains spread operation
+        ObjectRestType   = 1 << 22,  // Originates in object rest declaration
+        InstantiationExpressionType = 1 << 23,  // Originates in instantiation expression
         /* @internal */
-        IsClassInstanceClone = 1 << 25, // Type is a clone of a class instance type
+        IsClassInstanceClone = 1 << 24, // Type is a clone of a class instance type
         // Flags that require TypeFlags.Object and ObjectFlags.Reference
         /* @internal */
-        IdenticalBaseTypeCalculated = 1 << 26, // has had `getSingleBaseForNonAugmentingSubtype` invoked on it already
+        IdenticalBaseTypeCalculated = 1 << 25, // has had `getSingleBaseForNonAugmentingSubtype` invoked on it already
         /* @internal */
-        IdenticalBaseTypeExists = 1 << 27, // has a defined cachedEquivalentBaseType member
+        IdenticalBaseTypeExists = 1 << 26, // has a defined cachedEquivalentBaseType member
 
         // Flags that require TypeFlags.UnionOrIntersection or TypeFlags.Substitution
         /* @internal */
-        IsGenericTypeComputed = 1 << 22, // IsGenericObjectType flag has been computed
+        IsGenericTypeComputed = 1 << 21, // IsGenericObjectType flag has been computed
         /* @internal */
-        IsGenericObjectType = 1 << 23, // Union or intersection contains generic object type
+        IsGenericObjectType = 1 << 22, // Union or intersection contains generic object type
         /* @internal */
-        IsGenericIndexType = 1 << 24, // Union or intersection contains generic index type
+        IsGenericIndexType = 1 << 23, // Union or intersection contains generic index type
         /* @internal */
         IsGenericType = IsGenericObjectType | IsGenericIndexType,
 
         // Flags that require TypeFlags.Union
         /* @internal */
-        ContainsIntersections = 1 << 25, // Union contains intersections
+        ContainsIntersections = 1 << 24, // Union contains intersections
 
         // Flags that require TypeFlags.Intersection
         /* @internal */
-        IsNeverIntersectionComputed = 1 << 25, // IsNeverLike flag has been computed
+        IsNeverIntersectionComputed = 1 << 24, // IsNeverLike flag has been computed
         /* @internal */
-        IsNeverIntersection = 1 << 26, // Intersection reduces to never
+        IsNeverIntersection = 1 << 25, // Intersection reduces to never
     }
 
     /* @internal */
@@ -6025,6 +6043,21 @@ namespace ts {
         NodeNext = 99, // Not simply `Node12` so that compiled code linked against TS can use the `Next` value reliably (same as with `ModuleKind`)
     }
 
+    export enum ModuleDetectionKind {
+        /**
+         * Files with imports, exports and/or import.meta are considered modules
+         */
+        Legacy = 1,
+        /**
+         * Legacy, but also files with jsx under react-jsx or react-jsxdev and esm mode files under moduleResolution: node12+
+         */
+        Auto = 2,
+        /**
+         * Consider all non-declaration files modules, regardless of present syntax
+         */
+        Force = 3,
+    }
+
     export interface PluginImport {
         name: string;
     }
@@ -6120,6 +6153,7 @@ namespace ts {
         maxNodeModuleJsDepth?: number;
         module?: ModuleKind;
         moduleResolution?: ModuleResolutionKind;
+        moduleDetection?: ModuleDetectionKind;
         newLine?: NewLineKind;
         noEmit?: boolean;
         /*@internal*/noEmitForJsFiles?: boolean;
@@ -6585,6 +6619,14 @@ namespace ts {
     }
 
     /**
+     * Used by services to specify the minimum host area required to set up source files under any compilation settings
+     */
+    export interface MinimalResolutionCacheHost extends ModuleResolutionHost {
+        getCompilationSettings(): CompilerOptions;
+        getCompilerHost?(): CompilerHost | undefined;
+    }
+
+    /**
      * Represents the result of module resolution.
      * Module resolution will pick up tsx/jsx/js files even if '--jsx' and '--allowJs' are turned off.
      * The Program will then filter results based on these flags.
@@ -6686,8 +6728,8 @@ namespace ts {
     export type HasChangedAutomaticTypeDirectiveNames = () => boolean;
 
     export interface CompilerHost extends ModuleResolutionHost {
-        getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined;
-        getSourceFileByPath?(fileName: string, path: Path, languageVersion: ScriptTarget, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined;
+        getSourceFile(fileName: string, languageVersionOrOptions: ScriptTarget | CreateSourceFileOptions, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined;
+        getSourceFileByPath?(fileName: string, path: Path, languageVersionOrOptions: ScriptTarget | CreateSourceFileOptions, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined;
         getCancellationToken?(): CancellationToken;
         getDefaultLibFileName(options: CompilerOptions): string;
         getDefaultLibLocation?(): string;
@@ -7206,7 +7248,11 @@ namespace ts {
         // Signature elements
         //
 
+        createTypeParameterDeclaration(modifiers: readonly Modifier[] | undefined, name: string | Identifier, constraint?: TypeNode, defaultType?: TypeNode): TypeParameterDeclaration;
+        /** @deprecated */
         createTypeParameterDeclaration(name: string | Identifier, constraint?: TypeNode, defaultType?: TypeNode): TypeParameterDeclaration;
+        updateTypeParameterDeclaration(node: TypeParameterDeclaration, modifiers: readonly Modifier[] | undefined, name: Identifier, constraint: TypeNode | undefined, defaultType: TypeNode | undefined): TypeParameterDeclaration;
+        /** @deprecated */
         updateTypeParameterDeclaration(node: TypeParameterDeclaration, name: Identifier, constraint: TypeNode | undefined, defaultType: TypeNode | undefined): TypeParameterDeclaration;
         createParameterDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, dotDotDotToken: DotDotDotToken | undefined, name: string | BindingName, questionToken?: QuestionToken, type?: TypeNode, initializer?: Expression): ParameterDeclaration;
         updateParameterDeclaration(node: ParameterDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, dotDotDotToken: DotDotDotToken | undefined, name: string | BindingName, questionToken: QuestionToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined): ParameterDeclaration;

@@ -203,7 +203,7 @@ namespace ts.refactor {
             /* decorators */ undefined,
             /* modifiers */ undefined,
             name,
-            typeParameters.map(id => factory.updateTypeParameterDeclaration(id, id.name, id.constraint, /* defaultType */ undefined)),
+            typeParameters.map(id => factory.updateTypeParameterDeclaration(id, id.modifiers, id.name, id.constraint, /* defaultType */ undefined)),
             selection
         );
         changes.insertNodeBefore(file, firstStatement, ignoreSourceNewlines(newTypeNode), /* blankLineBetween */ true);
@@ -237,7 +237,7 @@ namespace ts.refactor {
         const templates: JSDocTemplateTag[] = [];
         forEach(typeParameters, typeParameter => {
             const constraint = getEffectiveConstraintOfTypeParameter(typeParameter);
-            const parameter = factory.createTypeParameterDeclaration(typeParameter.name);
+            const parameter = factory.createTypeParameterDeclaration(/*modifiers*/ undefined, typeParameter.name);
             const template = factory.createJSDocTemplateTag(
                 factory.createIdentifier("template"),
                 constraint && cast(constraint, isJSDocTypeExpression),

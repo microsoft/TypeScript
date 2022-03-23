@@ -963,7 +963,8 @@ namespace FourSlashInterface {
             SuggestedClassMembers: "14" as SortText,
             GlobalsOrKeywords: "15" as SortText,
             AutoImportSuggestions: "16" as SortText,
-            JavascriptIdentifiers: "17" as SortText,
+            ClassMemberSnippets: "17" as SortText,
+            JavascriptIdentifiers: "18" as SortText,
 
             // Transformations
             Deprecated(sortText: SortText): SortText {

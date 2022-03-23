@@ -222,6 +222,7 @@ namespace ts.codefix {
                     }
                     return factory.updateTypeParameterDeclaration(
                         typeParameterDecl,
+                        typeParameterDecl.modifiers,
                         typeParameterDecl.name,
                         constraint,
                         defaultType
@@ -306,7 +307,7 @@ namespace ts.codefix {
         const typeParameters = isJs || typeArguments === undefined
             ? undefined
             : map(typeArguments, (_, i) =>
-                factory.createTypeParameterDeclaration(CharacterCodes.T + typeArguments.length - 1 <= CharacterCodes.Z ? String.fromCharCode(CharacterCodes.T + i) : `T${i}`));
+                factory.createTypeParameterDeclaration(/*modifiers*/ undefined, CharacterCodes.T + typeArguments.length - 1 <= CharacterCodes.Z ? String.fromCharCode(CharacterCodes.T + i) : `T${i}`));
         const parameters = createDummyParameters(args.length, names, types, /*minArgumentCount*/ undefined, isJs);
         const type = isJs || contextualType === undefined
             ? undefined

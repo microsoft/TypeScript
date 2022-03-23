@@ -847,6 +847,7 @@ declare namespace completion {
         SuggestedClassMembers: SortText,
         GlobalsOrKeywords: SortText,
         AutoImportSuggestions: SortText,
+        ClassMemberSnippets: SortText,
         JavascriptIdentifiers: SortText,
 
         Deprecated(sortText: SortText): SortText,

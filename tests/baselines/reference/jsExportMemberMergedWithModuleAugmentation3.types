@@ -1,11 +1,11 @@
 === /x.js ===
 module.exports.x = 1;
 >module.exports.x = 1 : 1
->module.exports.x : number
+>module.exports.x : 1
 >module.exports : typeof import("/y")
 >module : { exports: typeof import("/y"); }
 >exports : typeof import("/y")
->x : number
+>x : 1
 >1 : 1
 
 module.exports = require("./y.js");

@@ -2293,8 +2293,18 @@ namespace FourSlash {
             // Check syntactic structure
             const content = this.getFileContent(this.activeFile.fileName);
 
+            const options: ts.CreateSourceFileOptions = {
+                languageVersion: ts.ScriptTarget.Latest,
+                impliedNodeFormat: ts.getImpliedNodeFormatForFile(
+                    ts.toPath(this.activeFile.fileName, this.languageServiceAdapterHost.sys.getCurrentDirectory(), ts.hostGetCanonicalFileName(this.languageServiceAdapterHost)),
+                    /*cache*/ undefined,
+                    this.languageServiceAdapterHost,
+                    this.languageService.getProgram()?.getCompilerOptions() || {}
+                ),
+                setExternalModuleIndicator: ts.getSetExternalModuleIndicator(this.languageService.getProgram()?.getCompilerOptions() || {})
+            };
             const referenceSourceFile = ts.createLanguageServiceSourceFile(
-                this.activeFile.fileName, createScriptSnapShot(content), ts.ScriptTarget.Latest, /*version:*/ "0", /*setNodeParents:*/ false);
+                this.activeFile.fileName, createScriptSnapShot(content), options, /*version:*/ "0", /*setNodeParents:*/ false);
             const referenceSyntaxDiagnostics = referenceSourceFile.parseDiagnostics;
 
             Utils.assertDiagnosticsEquals(incrementalSyntaxDiagnostics, referenceSyntaxDiagnostics);

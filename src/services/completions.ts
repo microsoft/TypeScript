@@ -16,7 +16,8 @@ namespace ts.Completions {
         SuggestedClassMembers: "14" as SortText,
         GlobalsOrKeywords: "15" as SortText,
         AutoImportSuggestions: "16" as SortText,
-        JavascriptIdentifiers: "17" as SortText,
+        ClassMemberSnippets: "17" as SortText,
+        JavascriptIdentifiers: "18" as SortText,
 
         // Transformations
         Deprecated(sortText: SortText): SortText {
@@ -763,6 +764,7 @@ namespace ts.Completions {
             isClassLikeMemberCompletion(symbol, location)) {
             let importAdder;
             ({ insertText, isSnippet, importAdder, replacementSpan } = getEntryForMemberCompletion(host, program, options, preferences, name, symbol, location, contextToken, formatContext));
+            sortText = SortText.ClassMemberSnippets; // sortText has to be lower priority than the sortText for keywords. See #47852.
             if (importAdder?.hasFixes()) {
                 hasAction = true;
                 source = CompletionSource.ClassMemberSnippet;

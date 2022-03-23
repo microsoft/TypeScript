@@ -1,4 +1,5 @@
 {
     "cloneUrl": "https://github.com/npm/cli.git",
+    "branch": "latest",
     "types": ["node"]
 }

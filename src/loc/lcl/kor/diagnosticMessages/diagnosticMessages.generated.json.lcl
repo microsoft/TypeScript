@@ -963,6 +963,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";A_type_referenced_in_a_decorated_signature_must_be_imported_with_import_type_or_a_namespace_import_w_1272" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[A type referenced in a decorated signature must be imported with 'import type' or a namespace import when 'isolatedModules' and 'emitDecoratorMetadata' are enabled.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[데코레이팅된 서명에서 참조하는 유형은 'isolatedModules' 및 'emitDecoratorMetadata'가 활성화된 경우 '가져오기 유형' 또는 네임스페이스 가져오기를 사용하여 가져와야 합니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";A_variable_whose_type_is_a_unique_symbol_type_must_be_const_1332" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[A variable whose type is a 'unique symbol' type must be 'const'.]]></Val>
@@ -1421,10 +1430,13 @@
       </Item>
       <Item ItemId=";Add_undefined_to_a_type_when_accessed_using_an_index_6674" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Add `undefined` to a type when accessed using an index.]]></Val>
+          <Val><![CDATA[Add 'undefined' to a type when accessed using an index.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[인덱스로 액세스할 때 형식에 'undefined'를 추가합니다.]]></Val>
+            <Val><![CDATA[인덱스를 사용하여 액세스할 때 유형에 'undefined'를 추가합니다.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Add `undefined` to a type when accessed using an index.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -1568,10 +1580,13 @@
       </Item>
       <Item ItemId=";Allow_JavaScript_files_to_be_a_part_of_your_program_Use_the_checkJS_option_to_get_errors_from_these__6600" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Allow JavaScript files to be a part of your program. Use the `checkJS` option to get errors from these files.]]></Val>
+          <Val><![CDATA[Allow JavaScript files to be a part of your program. Use the 'checkJS' option to get errors from these files.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[JavaScript 파일이 프로그램의 일부가 되도록 허용합니다. 이러한 파일에서 오류를 가져오려면 'checkJS' 옵션을 사용합니다.]]></Val>
+            <Val><![CDATA[JavaScript 파일이 프로그램의 일부가 되도록 허용합니다. 이러한 파일에서 오류를 가져오려면 'checkJS' 옵션을 사용하세요.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Allow JavaScript files to be a part of your program. Use the `checkJS` option to get errors from these files.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -2462,10 +2477,13 @@
       </Item>
       <Item ItemId=";Build_all_projects_including_those_that_appear_to_be_up_to_date_6636" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Build all projects, including those that appear to be up to date]]></Val>
+          <Val><![CDATA[Build all projects, including those that appear to be up to date.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[최신 상태로 표시될 프로젝트를 포함하여 모든 프로젝트 빌드]]></Val>
+            <Val><![CDATA[최신으로 보이는 프로젝트를 포함하여 모든 프로젝트를 빌드합니다.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Build all projects, including those that appear to be up to date]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -3383,10 +3401,13 @@
       </Item>
       <Item ItemId=";Check_that_the_arguments_for_bind_call_and_apply_methods_match_the_original_function_6697" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Check that the arguments for `bind`, `call`, and `apply` methods match the original function.]]></Val>
+          <Val><![CDATA[Check that the arguments for 'bind', 'call', and 'apply' methods match the original function.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['bind', 'call' 및 'apply' 메서드의 인수가 원래 함수와 일치하는지 확인합니다.]]></Val>
+            <Val><![CDATA['bind', 'call' 및 'apply' 메서드에 대한 인수가 원래 함수와 일치하는지 확인하세요.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Check that the arguments for `bind`, `call`, and `apply` methods match the original function.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -3875,6 +3896,15 @@
           <Val><![CDATA[Containing function is not an arrow function]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[포함 함수가 화살표 함수가 아닙니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Control_what_method_is_used_to_detect_module_format_JS_files_1475" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Control what method is used to detect module-format JS files.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[모듈 형식의 JS 파일을 감지하는 데 사용되는 방법을 제어합니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4605,6 +4635,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Default_catch_clause_variables_as_unknown_instead_of_any_6803" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Default catch clause variables as 'unknown' instead of 'any'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[기본 catch 절 변수는 'any' 대신 'unknown'입니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Default_export_of_the_module_has_or_is_using_private_name_0_4082" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Default export of the module has or is using private name '{0}'.]]></Val>
@@ -4670,10 +4709,13 @@
       </Item>
       <Item ItemId=";Delete_the_outputs_of_all_projects_6365" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Delete the outputs of all projects]]></Val>
+          <Val><![CDATA[Delete the outputs of all projects.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[모든 프로젝트의 출력 삭제]]></Val>
+            <Val><![CDATA[모든 프로젝트의 출력을 삭제합니다.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Delete the outputs of all projects]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -4715,10 +4757,13 @@
       </Item>
       <Item ItemId=";Deprecated_setting_Use_outFile_instead_6677" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Deprecated setting. Use `outFile` instead.]]></Val>
+          <Val><![CDATA[Deprecated setting. Use 'outFile' instead.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[사용되지 않는 설정입니다. 대신 'outFile'을 사용하세요.]]></Val>
+            <Val><![CDATA[더 이상 사용되지 않는 설정입니다. 대신 'outFile'을 사용하세요.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Deprecated setting. Use `outFile` instead.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -4844,10 +4889,13 @@
       </Item>
       <Item ItemId=";Disable_emitting_declarations_that_have_internal_in_their_JSDoc_comments_6701" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Disable emitting declarations that have `@internal` in their JSDoc comments.]]></Val>
+          <Val><![CDATA[Disable emitting declarations that have '@internal' in their JSDoc comments.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[JSDoc 주석에 '@internal'이 있는 선언을 내보내지 않도록 설정합니다.]]></Val>
+            <Val><![CDATA[JSDoc 주석에 '@internal'이 있는 선언을 내보내는 것을 비활성화합니다.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Disable emitting declarations that have `@internal` in their JSDoc comments.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -4871,10 +4919,13 @@
       </Item>
       <Item ItemId=";Disable_erasing_const_enum_declarations_in_generated_code_6682" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Disable erasing `const enum` declarations in generated code.]]></Val>
+          <Val><![CDATA[Disable erasing 'const enum' declarations in generated code.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[생성된 코드에서 'const enum' 선언 지우기 사용 안 함]]></Val>
+            <Val><![CDATA[생성된 코드에서 'const enum' 선언 지우기를 비활성화합니다.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Disable erasing `const enum` declarations in generated code.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -4898,10 +4949,13 @@
       </Item>
       <Item ItemId=";Disable_generating_custom_helper_functions_like_extends_in_compiled_output_6661" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Disable generating custom helper functions like `__extends` in compiled output.]]></Val>
+          <Val><![CDATA[Disable generating custom helper functions like '__extends' in compiled output.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[컴파일된 출력에서 '__extends'와 같은 사용자 지정 도우미 함수 생성을 사용하지 않도록 설정합니다.]]></Val>
+            <Val><![CDATA[컴파일된 출력에서 ​​'__extents'와 같은 사용자 지정 도우미 함수 생성을 비활성화합니다.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Disable generating custom helper functions like `__extends` in compiled output.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -4925,10 +4979,13 @@
       </Item>
       <Item ItemId=";Disable_preferring_source_files_instead_of_declaration_files_when_referencing_composite_projects_6620" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Disable preferring source files instead of declaration files when referencing composite projects]]></Val>
+          <Val><![CDATA[Disable preferring source files instead of declaration files when referencing composite projects.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[복합 프로젝트를 참조할 때 선언 파일 대신 선호하는 소스 파일 비활성화]]></Val>
+            <Val><![CDATA[복합 프로젝트를 참조할 때 선언 파일 대신 선호하는 소스 파일을 비활성화합니다.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Disable preferring source files instead of declaration files when referencing composite projects]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -5006,10 +5063,13 @@
       </Item>
       <Item ItemId=";Disable_wiping_the_console_in_watch_mode_6684" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Disable wiping the console in watch mode]]></Val>
+          <Val><![CDATA[Disable wiping the console in watch mode.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[감시 모드에서 콘솔 초기화를 사용하지 않습니다.]]></Val>
+            <Val><![CDATA[시계 모드에서 콘솔 초기화를 비활성화합니다.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Disable wiping the console in watch mode]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -5024,10 +5084,13 @@
       </Item>
       <Item ItemId=";Disallow_import_s_require_s_or_reference_s_from_expanding_the_number_of_files_TypeScript_should_add__6672" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Disallow `import`s, `require`s or `<reference>`s from expanding the number of files TypeScript should add to a project.]]></Val>
+          <Val><![CDATA[Disallow 'import's, 'require's or '<reference>'s from expanding the number of files TypeScript should add to a project.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[TypeScript가 프로젝트에 추가해야 하는 파일 수를 'import', 'require' 또는 '<reference>'에서 확장하지 못하도록 합니다.]]></Val>
+            <Val><![CDATA[TypeScript가 프로젝트에 추가해야 하는 파일 수를 확장하는 '가져오기', '요구' 또는 '<reference>'를 허용하지 않습니다.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Disallow `import`s, `require`s or `<reference>`s from expanding the number of files TypeScript should add to a project.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -5435,10 +5498,13 @@
       </Item>
       <Item ItemId=";Emit_additional_JavaScript_to_ease_support_for_importing_CommonJS_modules_This_enables_allowSyntheti_6626" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Emit additional JavaScript to ease support for importing CommonJS modules. This enables `allowSyntheticDefaultImports` for type compatibility.]]></Val>
+          <Val><![CDATA[Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[CommonJS 모듈 가져오기를 쉽게 지원하기 위해 추가 JavaScript를 내보냅니다. 이렇게 하면 형식 호환성을 위해 'allowSyntheticDefaultImports'를 사용할 수 있습니다.]]></Val>
+            <Val><![CDATA[CommonJS 모듈 가져오기 지원을 쉽게 하기 위해 추가 JavaScript를 내보냅니다. 이것은 유형 호환성을 위해 'allowSyntheticDefaultImports'를 활성화합니다.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Emit additional JavaScript to ease support for importing CommonJS modules. This enables `allowSyntheticDefaultImports` for type compatibility.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -5489,10 +5555,13 @@
       </Item>
       <Item ItemId=";Enable_color_and_formatting_in_TypeScript_s_output_to_make_compiler_errors_easier_to_read_6685" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Enable color and formatting in TypeScript's output to make compiler errors easier to read]]></Val>
+          <Val><![CDATA[Enable color and formatting in TypeScript's output to make compiler errors easier to read.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[컴파일러 오류를 더 쉽게 읽을 수 있도록 TypeScript 출력에서 색상 및 서식을 사용합니다.]]></Val>
+            <Val><![CDATA[컴파일러 오류를 더 쉽게 읽을 수 있도록 TypeScript의 출력에서 ​​색상 및 서식을 활성화합니다.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Enable color and formatting in TypeScript's output to make compiler errors easier to read]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -5516,10 +5585,13 @@
       </Item>
       <Item ItemId=";Enable_error_reporting_for_expressions_and_declarations_with_an_implied_any_type_6665" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Enable error reporting for expressions and declarations with an implied `any` type..]]></Val>
+          <Val><![CDATA[Enable error reporting for expressions and declarations with an implied 'any' type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[암시된 'any' 형식이 있는 식 및 선언에 대해 보고하는 오류를 사용 설정합니다.]]></Val>
+            <Val><![CDATA[암시적 '모든' 유형의 표현식 및 선언에 대한 오류 보고를 활성화합니다.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Enable error reporting for expressions and declarations with an implied `any` type..]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -5541,21 +5613,24 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Enable_error_reporting_when_a_local_variables_aren_t_read_6675" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Enable_error_reporting_when_local_variables_aren_t_read_6675" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Enable error reporting when a local variables aren't read.]]></Val>
+          <Val><![CDATA[Enable error reporting when local variables aren't read.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[지역 변수를 읽을 수 없을 때 오류 보고를 사용합니다.]]></Val>
+            <Val><![CDATA[지역 변수를 읽지 않을 때 오류 보고를 활성화합니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Enable_error_reporting_when_this_is_given_the_type_any_6668" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Enable error reporting when `this` is given the type `any`.]]></Val>
+          <Val><![CDATA[Enable error reporting when 'this' is given the type 'any'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['this'에 'any' 형식이 지정되면 오류 보고를 사용합니다.]]></Val>
+            <Val><![CDATA['this'에 'any' 유형이 지정되면 오류 보고를 활성화합니다.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Enable error reporting when `this` is given the type `any`.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -5570,19 +5645,13 @@
       </Item>
       <Item ItemId=";Enable_importing_json_files_6689" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Enable importing .json files]]></Val>
+          <Val><![CDATA[Enable importing .json files.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[.json 파일 가져오기를 사용합니다.]]></Val>
+            <Val><![CDATA[.json 파일 가져오기를 활성화합니다.]]></Val>
           </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Enable_incremental_compilation_6378" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Enable incremental compilation]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[증분 컴파일을 사용합니다.]]></Val>
-          </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Enable importing .json files]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -5660,10 +5729,13 @@
       </Item>
       <Item ItemId=";Enable_verbose_logging_6713" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Enable verbose logging]]></Val>
+          <Val><![CDATA[Enable verbose logging.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[자세한 정보 로깅 사용]]></Val>
+            <Val><![CDATA[자세한 로깅을 활성화합니다.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Enable verbose logging]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -5696,10 +5768,13 @@
       </Item>
       <Item ItemId=";Enforces_using_indexed_accessors_for_keys_declared_using_an_indexed_type_6671" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Enforces using indexed accessors for keys declared using an indexed type]]></Val>
+          <Val><![CDATA[Enforces using indexed accessors for keys declared using an indexed type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[인덱싱된 형식을 사용하여 선언된 키에 인덱싱된 접근자를 사용합니다.]]></Val>
+            <Val><![CDATA[인덱싱된 형식을 사용하여 선언된 키에 대해 인덱싱된 접근자를 사용합니다.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Enforces using indexed accessors for keys declared using an indexed type]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -6980,10 +7055,13 @@
       </Item>
       <Item ItemId=";Have_recompiles_in_projects_that_use_incremental_and_watch_mode_assume_that_changes_within_a_file_wi_6606" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Have recompiles in projects that use `incremental` and `watch` mode assume that changes within a file will only affect files directly depending on it.]]></Val>
+          <Val><![CDATA[Have recompiles in projects that use 'incremental' and 'watch' mode assume that changes within a file will only affect files directly depending on it.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['incremental' 및 'watch' 모드를 사용하는 프로젝트의 다시 컴파일에서 파일 내 변경 내용은 파일에 따라 파일에만 직접적인 영향을 준다고 가정하게 합니다.]]></Val>
+            <Val><![CDATA['증분' 및 '감시' 모드를 사용하는 프로젝트에서 재컴파일하면 파일 내의 변경 사항이 해당 파일에 직접적으로 영향을 미치는 파일에만 영향을 미친다고 가정합니다.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Have recompiles in projects that use `incremental` and `watch` mode assume that changes within a file will only affect files directly depending on it.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -7412,15 +7490,6 @@
           <Val><![CDATA[Include sourcemap files inside the emitted JavaScript.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[내보낸 JavaScript 내에 sourcemap 파일을 포함합니다.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Include_undefined_in_index_signature_results_6716" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Include 'undefined' in index signature results]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[인덱스 시그니처 결과에 '정의되지 않음' 포함]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8124,15 +8193,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";List_of_language_service_plugins_6181" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[List of language service plugins.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[언어 서비스 플러그 인의 목록입니다.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";List_of_root_folders_whose_combined_content_represents_the_structure_of_the_project_at_runtime_6168" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[List of root folders whose combined content represents the structure of the project at runtime.]]></Val>
@@ -8183,10 +8243,13 @@
       </Item>
       <Item ItemId=";Log_paths_used_during_the_moduleResolution_process_6706" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Log paths used during the `moduleResolution` process.]]></Val>
+          <Val><![CDATA[Log paths used during the 'moduleResolution' process.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['moduleResolution' 프로세스 중에 사용되는 로그 경로입니다.]]></Val>
+            <Val><![CDATA['moduleResolution' 프로세스 동안 사용된 로그 경로입니다.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Log paths used during the `moduleResolution` process.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -10595,10 +10658,13 @@
       </Item>
       <Item ItemId=";Raise_an_error_when_a_function_parameter_isn_t_read_6676" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Raise an error when a function parameter isn't read]]></Val>
+          <Val><![CDATA[Raise an error when a function parameter isn't read.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[함수 매개 변수를 읽을 수 없을 때 오류를 표시합니다.]]></Val>
+            <Val><![CDATA[함수 매개 변수를 읽지 않으면 오류가 발생합니다.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Raise an error when a function parameter isn't read]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -11813,10 +11879,13 @@
       </Item>
       <Item ItemId=";Specify_a_file_that_bundles_all_outputs_into_one_JavaScript_file_If_declaration_is_true_also_designa_6679" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Specify a file that bundles all outputs into one JavaScript file. If `declaration` is true, also designates a file that bundles all .d.ts output.]]></Val>
+          <Val><![CDATA[Specify a file that bundles all outputs into one JavaScript file. If 'declaration' is true, also designates a file that bundles all .d.ts output.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[모든 출력을 하나의 JavaScript 파일에 번들로 제공하는 파일을 지정합니다. 'declaration'이 true이면 모든 .d.ts 출력을 번들로 제공하는 파일도 지정합니다.]]></Val>
+            <Val><![CDATA[모든 출력을 하나의 JavaScript 파일로 묶는 파일을 지정하세요. 'declaration'이 true이면 모든 .d.ts 출력을 묶는 파일도 지정합니다.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Specify a file that bundles all outputs into one JavaScript file. If `declaration` is true, also designates a file that bundles all .d.ts output.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -11876,10 +11945,13 @@
       </Item>
       <Item ItemId=";Specify_emit_Slashchecking_behavior_for_imports_that_are_only_used_for_types_6718" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Specify emit/checking behavior for imports that are only used for types]]></Val>
+          <Val><![CDATA[Specify emit/checking behavior for imports that are only used for types.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[형식에만 사용되는 가져오기의 내보내기/확인 동작 지정]]></Val>
+            <Val><![CDATA[유형에만 사용되는 가져오기에 대한 방출/확인 동작을 지정합니다.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Specify emit/checking behavior for imports that are only used for types]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -11948,19 +12020,25 @@
       </Item>
       <Item ItemId=";Specify_module_specifier_used_to_import_the_JSX_factory_functions_when_using_jsx_Colon_react_jsx_Ast_6649" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Specify module specifier used to import the JSX factory functions when using `jsx: react-jsx*`.`]]></Val>
+          <Val><![CDATA[Specify module specifier used to import the JSX factory functions when using 'jsx: react-jsx*'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['jsx: react-jsx*'를 사용할 때 JSX 팩터리 함수를 가져오는 데 사용되는 모듈 지정자를 지정합니다.]]></Val>
+            <Val><![CDATA['jsx: react-jsx*'를 사용할 때 JSX 팩토리 함수를 가져오기 위해 사용되는 모듈 지정자를 지정합니다.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Specify module specifier used to import the JSX factory functions when using `jsx: react-jsx*`.`]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Specify_multiple_folders_that_act_like_Slashnode_modules_Slash_types_6710" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Specify multiple folders that act like `./node_modules/@types`.]]></Val>
+          <Val><![CDATA[Specify multiple folders that act like './node_modules/@types'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA['./node_modules/@types'와 같은 역할을 하는 여러 폴더를 지정합니다.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Specify multiple folders that act like `./node_modules/@types`.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -12038,10 +12116,13 @@
       </Item>
       <Item ItemId=";Specify_the_JSX_factory_function_used_when_targeting_React_JSX_emit_e_g_React_createElement_or_h_6647" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Specify the JSX factory function used when targeting React JSX emit, e.g. 'React.createElement' or 'h']]></Val>
+          <Val><![CDATA[Specify the JSX factory function used when targeting React JSX emit, e.g. 'React.createElement' or 'h'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[React JSX 내보내기를 대상으로 할 때 사용되는 JSX 팩터리 함수를 지정합니다(예: 'React.createElement' 또는 'h').]]></Val>
+            <Val><![CDATA[React JSX 방출을 대상으로 할 때 사용되는 JSX 팩토리 함수를 지정하세요. 'React.createElement' 또는 'h'.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Specify the JSX factory function used when targeting React JSX emit, e.g. 'React.createElement' or 'h']]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -12101,10 +12182,13 @@
       </Item>
       <Item ItemId=";Specify_the_maximum_folder_depth_used_for_checking_JavaScript_files_from_node_modules_Only_applicabl_6656" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Specify the maximum folder depth used for checking JavaScript files from `node_modules`. Only applicable with `allowJs`.]]></Val>
+          <Val><![CDATA[Specify the maximum folder depth used for checking JavaScript files from 'node_modules'. Only applicable with 'allowJs'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['node_modules'에서 JavaScript 파일을 확인하는 데 사용되는 최대 폴더 깊이를 지정합니다. 'allowJs'에만 적용됩니다.]]></Val>
+            <Val><![CDATA['node_modules'에서 JavaScript 파일을 확인하는 데 사용되는 최대 폴더 깊이를 지정합니다. 'allowJs'에만 적용 가능합니다.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Specify the maximum folder depth used for checking JavaScript files from `node_modules`. Only applicable with `allowJs`.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -12122,10 +12206,13 @@
       </Item>
       <Item ItemId=";Specify_the_object_invoked_for_createElement_This_only_applies_when_targeting_react_JSX_emit_6686" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Specify the object invoked for `createElement`. This only applies when targeting `react` JSX emit.]]></Val>
+          <Val><![CDATA[Specify the object invoked for 'createElement'. This only applies when targeting 'react' JSX emit.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['createElement'에 대해 호출된 개체를 지정합니다. 이는 'react' JSX 내보내기를 대상으로 할 때만 적용됩니다.]]></Val>
+            <Val><![CDATA['createElement'에 대해 호출된 개체를 지정합니다. '반응' JSX 방출을 대상으로 할 때만 적용됩니다.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Specify the object invoked for `createElement`. This only applies when targeting `react` JSX emit.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -12404,10 +12491,13 @@
       </Item>
       <Item ItemId=";Suppress_noImplicitAny_errors_when_indexing_objects_that_lack_index_signatures_6703" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Suppress `noImplicitAny` errors when indexing objects that lack index signatures.]]></Val>
+          <Val><![CDATA[Suppress 'noImplicitAny' errors when indexing objects that lack index signatures.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[인덱스 시그니처가 없는 개체를 인덱싱할 때 'noImplicitAny' 오류를 표시하지 않습니다.]]></Val>
+            <Val><![CDATA[인덱스 서명이 없는 개체를 인덱싱할 때 'noImplicitAny' 오류를 억제합니다.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Suppress `noImplicitAny` errors when indexing objects that lack index signatures.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -13026,11 +13116,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";The_parser_expected_to_find_a_to_match_the_token_here_1007" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";The_parser_expected_to_find_a_1_to_match_the_0_token_here_1007" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[The parser expected to find a '}' to match the '{' token here.]]></Val>
+          <Val><![CDATA[The parser expected to find a '{1}' to match the '{0}' token here.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[여기서 파서는 '{' 토큰과 일치하는 '}'를 찾아야 합니다.]]></Val>
+            <Val><![CDATA[여기서 파서는 '{0}' 토큰과 일치하는 '{1}'을(를) 찾아야 합니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14127,15 +14217,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Type_catch_clause_variables_as_unknown_instead_of_any_6803" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Type catch clause variables as 'unknown' instead of 'any'.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[catch 절 변수를 'any' 대신 'unknown'으로 입력하세요.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Type_declaration_files_to_be_included_in_compilation_6124" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Type declaration files to be included in compilation.]]></Val>
@@ -15050,10 +15131,13 @@
       </Item>
       <Item ItemId=";When_type_checking_take_into_account_null_and_undefined_6699" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[When type checking, take into account `null` and `undefined`.]]></Val>
+          <Val><![CDATA[When type checking, take into account 'null' and 'undefined'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[형식 검사 시 'null' 및 'undefined'를 고려합니다.]]></Val>
+            <Val><![CDATA[유형 검사 시 'null' 및 'undefined'를 고려하세요.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[When type checking, take into account `null` and `undefined`.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -15800,6 +15884,15 @@
           <Val><![CDATA['arguments' cannot be referenced in property initializers.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA['arguments'는 속성 이니셜라이저에서 참조할 수 없습니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";auto_Colon_Treat_files_with_imports_exports_import_meta_jsx_with_jsx_Colon_react_jsx_or_esm_format_w_1476" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA["auto": Treat files with imports, exports, import.meta, jsx (with jsx: react-jsx), or esm format (with module: node12+) as modules.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA["auto": 가져오기, 내보내기, import.meta, jsx(jsx: react-jsx 포함) 또는 esm 형식(모듈: node12+ 포함)이 있는 파일을 모듈로 처리합니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

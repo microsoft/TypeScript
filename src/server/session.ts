@@ -299,6 +299,10 @@ namespace ts.server {
         navigateToItems: readonly NavigateToItem[];
     };
 
+    function createDocumentSpanSet(): Set<DocumentSpan> {
+        return createSet(({textSpan}) => textSpan.start + 100003 * textSpan.length, documentSpansEqual);
+    }
+
     function combineProjectOutputForRenameLocations(
         projects: Projects,
         defaultProject: Project,
@@ -308,6 +312,7 @@ namespace ts.server {
         { providePrefixAndSuffixTextForRename }: UserPreferences
     ): readonly RenameLocation[] {
         const outputs: RenameLocation[] = [];
+        const seen = createDocumentSpanSet();
         combineProjectOutputWorker(
             projects,
             defaultProject,
@@ -316,7 +321,8 @@ namespace ts.server {
                 const projectOutputs = project.getLanguageService().findRenameLocations(location.fileName, location.pos, findInStrings, findInComments, providePrefixAndSuffixTextForRename);
                 if (projectOutputs) {
                     for (const output of projectOutputs) {
-                        if (!contains(outputs, output, documentSpansEqual) && !tryAddToTodo(project, documentSpanLocation(output))) {
+                        if (!seen.has(output) && !tryAddToTodo(project, documentSpanLocation(output))) {
+                            seen.add(output);
                             outputs.push(output);
                         }
                     }
@@ -897,7 +903,6 @@ namespace ts.server {
         }
 
         public event<T extends object>(body: T, eventName: string): void {
-            tracing?.instant(tracing.Phase.Session, "event", { eventName });
             this.send(toEvent(eventName, body));
         }
 
@@ -949,18 +954,24 @@ namespace ts.server {
         }
 
         private semanticCheck(file: NormalizedPath, project: Project) {
+            tracing?.push(tracing.Phase.Session, "semanticCheck", { file, configFilePath: (project as ConfiguredProject).canonicalConfigFilePath }); // undefined is fine if the cast fails
             const diags = isDeclarationFileInJSOnlyNonConfiguredProject(project, file)
                 ? emptyArray
                 : project.getLanguageService().getSemanticDiagnostics(file).filter(d => !!d.file);
             this.sendDiagnosticsEvent(file, project, diags, "semanticDiag");
+            tracing?.pop();
         }
 
         private syntacticCheck(file: NormalizedPath, project: Project) {
+            tracing?.push(tracing.Phase.Session, "syntacticCheck", { file, configFilePath: (project as ConfiguredProject).canonicalConfigFilePath }); // undefined is fine if the cast fails
             this.sendDiagnosticsEvent(file, project, project.getLanguageService().getSyntacticDiagnostics(file), "syntaxDiag");
+            tracing?.pop();
         }
 
         private suggestionCheck(file: NormalizedPath, project: Project) {
+            tracing?.push(tracing.Phase.Session, "suggestionCheck", { file, configFilePath: (project as ConfiguredProject).canonicalConfigFilePath }); // undefined is fine if the cast fails
             this.sendDiagnosticsEvent(file, project, project.getLanguageService().getSuggestionDiagnostics(file), "suggestionDiag");
+            tracing?.pop();
         }
 
         private sendDiagnosticsEvent(file: NormalizedPath, project: Project, diagnostics: readonly Diagnostic[], kind: protocol.DiagnosticEventKind): void {
@@ -1558,6 +1569,7 @@ namespace ts.server {
             const fileName = args.file;
 
             const references: ReferenceEntry[] = [];
+            const seen = createDocumentSpanSet();
 
             forEachProjectInProjects(projects, /*path*/ undefined, project => {
                 if (project.getCancellationToken().isCancellationRequested()) return;
@@ -1565,8 +1577,9 @@ namespace ts.server {
                 const projectOutputs = project.getLanguageService().getFileReferences(fileName);
                 if (projectOutputs) {
                     for (const referenceEntry of projectOutputs) {
-                        if (!contains(references, referenceEntry, documentSpansEqual)) {
+                        if (!seen.has(referenceEntry)) {
                             references.push(referenceEntry);
+                            seen.add(referenceEntry);
                         }
                     }
                 }
