@@ -3045,12 +3045,16 @@ namespace ts.Completions {
                 // Add filtered items to the completion list
                 const filteredMembers = filterObjectMembersList(typeMembers, Debug.checkDefined(existingMembers));
                 symbols = concatenate(symbols, filteredMembers);
-                if (objectLikeContainer.kind === SyntaxKind.ObjectLiteralExpression && preferences.includeCompletionsWithInsertText) {
+                if (objectLikeContainer.kind === SyntaxKind.ObjectLiteralExpression
+                    && preferences.includeCompletionsWithObjectLiteralMethodSnippets
+                    && preferences.includeCompletionsWithInsertText) {
                     collectObjectLiteralMethodSymbols(filteredMembers);
                 }
             }
             setSortTextToOptionalMember();
-            if (objectLikeContainer.kind === SyntaxKind.ObjectLiteralExpression && preferences.includeCompletionsWithInsertText) {
+            if (objectLikeContainer.kind === SyntaxKind.ObjectLiteralExpression
+                && preferences.includeCompletionsWithObjectLiteralMethodSnippets
+                && preferences.includeCompletionsWithInsertText) {
                 transformObjectLiteralMembersSortText(symbolsStartIndex);
             }
 
