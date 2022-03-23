@@ -168,7 +168,7 @@ namespace FourSlash {
         // The position of the end of the current selection, or -1 if nothing is selected
         public selectionEnd = -1;
 
-        public lastKnownMarker = "";
+        public lastKnownMarker: string | undefined;
 
         // The file that's currently 'opened'
         public activeFile!: FourSlashFile;
@@ -400,7 +400,7 @@ namespace FourSlash {
                         continue;
                     }
                     const memo = Utils.memoize(
-                        (_version: number, _active: string, _caret: number, _selectEnd: number, _marker: string, ...args: any[]) => (ls[key] as Function)(...args),
+                        (_version: number, _active: string, _caret: number, _selectEnd: number, _marker: string | undefined, ...args: any[]) => (ls[key] as Function)(...args),
                         (...args) => args.map(a => a && typeof a === "object" ? JSON.stringify(a) : a).join("|,|")
                     );
                     proxy[key] = (...args: any[]) => memo(
@@ -540,8 +540,8 @@ namespace FourSlash {
         }
 
         private messageAtLastKnownMarker(message: string) {
-            const locationDescription = this.lastKnownMarker ? this.lastKnownMarker : this.getLineColStringAtPosition(this.currentCaretPosition);
-            return `At ${locationDescription}: ${message}`;
+            const locationDescription = this.lastKnownMarker !== undefined ? this.lastKnownMarker : this.getLineColStringAtPosition(this.currentCaretPosition);
+            return `At marker '${locationDescription}': ${message}`;
         }
 
         private assertionMessageAtLastKnownMarker(msg: string) {
@@ -864,7 +864,7 @@ namespace FourSlash {
             else {
                 for (const marker of toArray(options.marker)) {
                     this.goToMarker(marker);
-                    this.verifyCompletionsWorker(options);
+                    this.verifyCompletionsWorker({ ...options, marker });
                 }
             }
         }
