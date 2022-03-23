@@ -141,7 +141,9 @@ namespace Harness {
             "preserveConstEnums",
             "skipLibCheck",
             "exactOptionalPropertyTypes",
-            "useUnknownInCatchVariables"
+            "useUnknownInCatchVariables",
+            "noUncheckedIndexedAccess",
+            "noPropertyAccessFromIndexSignature"
         ];
         private fileName: string;
         private justName: string;
