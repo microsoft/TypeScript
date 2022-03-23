@@ -347,6 +347,7 @@ namespace ts {
         let instantiationDepth = 0;
         let inlineLevel = 0;
         let currentNode: Node | undefined;
+        let varianceTypeParameter: TypeParameter | undefined;
 
         const emptySymbols = createSymbolTable();
         const arrayVariances = [VarianceFlags.Covariant];
@@ -761,6 +762,7 @@ namespace ts {
         const subtypeReductionCache = new Map<string, Type[]>();
         const evolvingArrayTypes: EvolvingArrayType[] = [];
         const undefinedProperties: SymbolTable = new Map();
+        const markerTypes = new Set<number>();
 
         const unknownSymbol = createSymbol(SymbolFlags.Property, "unknown" as __String);
         const resolvingSymbol = createSymbol(0, InternalSymbolName.Resolving);
@@ -4985,9 +4987,12 @@ namespace ts {
                         return factory.createTypeReferenceNode(factory.createIdentifier(idText(name)), /*typeArguments*/ undefined);
                     }
                     // Ignore constraint/default when creating a usage (as opposed to declaration) of a type parameter.
-                    return type.symbol
-                        ? symbolToTypeNode(type.symbol, context, SymbolFlags.Type)
-                        : factory.createTypeReferenceNode(factory.createIdentifier("?"), /*typeArguments*/ undefined);
+                    if (type.symbol) {
+                        return symbolToTypeNode(type.symbol, context, SymbolFlags.Type);
+                    }
+                    const name = (type === markerSuperType || type === markerSubType) && varianceTypeParameter && varianceTypeParameter.symbol ?
+                        (type === markerSubType ? "sub-" : "super-") + symbolName(varianceTypeParameter.symbol) : "?";
+                    return factory.createTypeReferenceNode(factory.createIdentifier(name), /*typeArguments*/ undefined);
                 }
                 if (type.flags & TypeFlags.Union && (type as UnionType).origin) {
                     type = (type as UnionType).origin!;
@@ -5107,7 +5112,7 @@ namespace ts {
                         // type stays homomorphic
                         return factory.createConditionalTypeNode(
                             typeToTypeNodeHelper(getModifiersTypeFromMappedType(type), context),
-                            factory.createInferTypeNode(factory.createTypeParameterDeclaration(factory.cloneNode(newTypeVariable!.typeName) as Identifier)),
+                            factory.createInferTypeNode(factory.createTypeParameterDeclaration(/*modifiers*/ undefined, factory.cloneNode(newTypeVariable!.typeName) as Identifier)),
                             result,
                             factory.createKeywordTypeNode(SyntaxKind.NeverKeyword)
                         );
@@ -5795,11 +5800,12 @@ namespace ts {
             function typeParameterToDeclarationWithConstraint(type: TypeParameter, context: NodeBuilderContext, constraintNode: TypeNode | undefined): TypeParameterDeclaration {
                 const savedContextFlags = context.flags;
                 context.flags &= ~NodeBuilderFlags.WriteTypeParametersInQualifiedName; // Avoids potential infinite loop when building for a claimspace with a generic
+                const modifiers = factory.createModifiersFromModifierFlags(getVarianceModifiers(type));
                 const name = typeParameterToName(type, context);
                 const defaultParameter = getDefaultFromTypeParameter(type);
                 const defaultParameterNode = defaultParameter && typeToTypeNodeHelper(defaultParameter, context);
                 context.flags = savedContextFlags;
-                return factory.createTypeParameterDeclaration(name, constraintNode, defaultParameterNode);
+                return factory.createTypeParameterDeclaration(modifiers, name, constraintNode, defaultParameterNode);
             }
 
             function typeParameterToDeclaration(type: TypeParameter, context: NodeBuilderContext, constraint = getConstraintOfTypeParameter(type)): TypeParameterDeclaration {
@@ -15250,24 +15256,32 @@ namespace ts {
             }
             return type;
 
-            function addSpans(texts: readonly string[], types: readonly Type[]): boolean {
+            function addSpans(texts: readonly string[] | string, types: readonly Type[]): boolean {
+                const isTextsArray = isArray(texts);
                 for (let i = 0; i < types.length; i++) {
                     const t = types[i];
+                    const addText = isTextsArray ? texts[i + 1] : texts;
                     if (t.flags & (TypeFlags.Literal | TypeFlags.Null | TypeFlags.Undefined)) {
                         text += getTemplateStringForType(t) || "";
-                        text += texts[i + 1];
+                        text += addText;
+                        if (!isTextsArray) return true;
                     }
                     else if (t.flags & TypeFlags.TemplateLiteral) {
                         text += (t as TemplateLiteralType).texts[0];
                         if (!addSpans((t as TemplateLiteralType).texts, (t as TemplateLiteralType).types)) return false;
-                        text += texts[i + 1];
+                        text += addText;
+                        if (!isTextsArray) return true;
                     }
                     else if (isGenericIndexType(t) || isPatternLiteralPlaceholderType(t)) {
                         newTypes.push(t);
                         newTexts.push(text);
-                        text = texts[i + 1];
+                        text = addText;
                     }
-                    else {
+                    else if (t.flags & TypeFlags.Intersection) {
+                        const added = addSpans(texts[i + 1], (t as IntersectionType).types);
+                        if (!added) return false;
+                    }
+                    else if (isTextsArray) {
                         return false;
                     }
                 }
@@ -18404,7 +18418,7 @@ namespace ts {
                     generalizedSourceType = getTypeNameForErrorDisplay(generalizedSource);
                 }
 
-                if (target.flags & TypeFlags.TypeParameter) {
+                if (target.flags & TypeFlags.TypeParameter && target !== markerSuperType && target !== markerSubType) {
                     const constraint = getBaseConstraintOfType(target);
                     let needsOriginalSource;
                     if (constraint && (isTypeAssignableTo(generalizedSource, constraint) || (needsOriginalSource = isTypeAssignableTo(source, constraint)))) {
@@ -19227,9 +19241,8 @@ namespace ts {
                 // We limit alias variance probing to only object and conditional types since their alias behavior
                 // is more predictable than other, interned types, which may or may not have an alias depending on
                 // the order in which things were checked.
-                if (sourceFlags & (TypeFlags.Object | TypeFlags.Conditional) && source.aliasSymbol &&
-                    source.aliasTypeArguments && source.aliasSymbol === target.aliasSymbol &&
-                    !(source.aliasTypeArgumentsContainsMarker || target.aliasTypeArgumentsContainsMarker)) {
+                if (sourceFlags & (TypeFlags.Object | TypeFlags.Conditional) && source.aliasSymbol && source.aliasTypeArguments &&
+                    source.aliasSymbol === target.aliasSymbol && !(isMarkerType(source) || isMarkerType(target))) {
                     const variances = getAliasVariances(source.aliasSymbol);
                     if (variances === emptyArray) {
                         return Ternary.Unknown;
@@ -19608,7 +19621,7 @@ namespace ts {
                         return Ternary.False;
                     }
                     if (getObjectFlags(source) & ObjectFlags.Reference && getObjectFlags(target) & ObjectFlags.Reference && (source as TypeReference).target === (target as TypeReference).target &&
-                        !isTupleType(source) && !(getObjectFlags(source) & ObjectFlags.MarkerType || getObjectFlags(target) & ObjectFlags.MarkerType)) {
+                        !isTupleType(source) && !(isMarkerType(source) || isMarkerType(target))) {
                         // When strictNullChecks is disabled, the element type of the empty array literal is undefinedWideningType,
                         // and an empty array literal wouldn't be assignable to a `never[]` without this check.
                         if (isEmptyArrayLiteralType(source)) {
@@ -20559,21 +20572,15 @@ namespace ts {
             return false;
         }
 
-        // Return a type reference where the source type parameter is replaced with the target marker
-        // type, and flag the result as a marker type reference.
-        function getMarkerTypeReference(type: GenericType, source: TypeParameter, target: Type) {
-            const result = createTypeReference(type, map(type.typeParameters, t => t === source ? target : t));
-            result.objectFlags |= ObjectFlags.MarkerType;
-            return result;
+        function getVariances(type: GenericType): VarianceFlags[] {
+            // Arrays and tuples are known to be covariant, no need to spend time computing this.
+            return type === globalArrayType || type === globalReadonlyArrayType || type.objectFlags & ObjectFlags.Tuple ?
+                arrayVariances :
+                getVariancesWorker(type.symbol, type.typeParameters);
         }
 
         function getAliasVariances(symbol: Symbol) {
-            const links = getSymbolLinks(symbol);
-            return getVariancesWorker(links.typeParameters, links, (_links, param, marker) => {
-                const type = getTypeAliasInstantiation(symbol, instantiateTypes(links.typeParameters!, makeUnaryTypeMapper(param, marker)));
-                type.aliasTypeArgumentsContainsMarker = true;
-                return type;
-            });
+            return getVariancesWorker(symbol, getSymbolLinks(symbol).typeParameters);
         }
 
         // Return an array containing the variance of each type parameter. The variance is effectively
@@ -20581,55 +20588,71 @@ namespace ts {
         // generic type are structurally compared. We infer the variance information by comparing
         // instantiations of the generic type for type arguments with known relations. The function
         // returns the emptyArray singleton when invoked recursively for the given generic type.
-        function getVariancesWorker<TCache extends { variances?: VarianceFlags[] }>(typeParameters: readonly TypeParameter[] = emptyArray, cache: TCache, createMarkerType: (input: TCache, param: TypeParameter, marker: Type) => Type): VarianceFlags[] {
-            let variances = cache.variances;
-            if (!variances) {
-                tracing?.push(tracing.Phase.CheckTypes, "getVariancesWorker", { arity: typeParameters.length, id: (cache as any).id ?? (cache as any).declaredType?.id ?? -1 });
-                // The emptyArray singleton is used to signal a recursive invocation.
-                cache.variances = emptyArray;
-                variances = [];
+        function getVariancesWorker(symbol: Symbol, typeParameters: readonly TypeParameter[] = emptyArray): VarianceFlags[] {
+            const links = getSymbolLinks(symbol);
+            if (!links.variances) {
+                tracing?.push(tracing.Phase.CheckTypes, "getVariancesWorker", { arity: typeParameters.length, id: getTypeId(getDeclaredTypeOfSymbol(symbol)) });
+                links.variances = emptyArray;
+                const variances = [];
                 for (const tp of typeParameters) {
-                    let unmeasurable = false;
-                    let unreliable = false;
-                    const oldHandler = outofbandVarianceMarkerHandler;
-                    outofbandVarianceMarkerHandler = (onlyUnreliable) => onlyUnreliable ? unreliable = true : unmeasurable = true;
-                    // We first compare instantiations where the type parameter is replaced with
-                    // marker types that have a known subtype relationship. From this we can infer
-                    // invariance, covariance, contravariance or bivariance.
-                    const typeWithSuper = createMarkerType(cache, tp, markerSuperType);
-                    const typeWithSub = createMarkerType(cache, tp, markerSubType);
-                    let variance = (isTypeAssignableTo(typeWithSub, typeWithSuper) ? VarianceFlags.Covariant : 0) |
-                        (isTypeAssignableTo(typeWithSuper, typeWithSub) ? VarianceFlags.Contravariant : 0);
-                    // If the instantiations appear to be related bivariantly it may be because the
-                    // type parameter is independent (i.e. it isn't witnessed anywhere in the generic
-                    // type). To determine this we compare instantiations where the type parameter is
-                    // replaced with marker types that are known to be unrelated.
-                    if (variance === VarianceFlags.Bivariant && isTypeAssignableTo(createMarkerType(cache, tp, markerOtherType), typeWithSuper)) {
-                        variance = VarianceFlags.Independent;
-                    }
-                    outofbandVarianceMarkerHandler = oldHandler;
-                    if (unmeasurable || unreliable) {
-                        if (unmeasurable) {
-                            variance |= VarianceFlags.Unmeasurable;
+                    const modifiers = getVarianceModifiers(tp);
+                    let variance = modifiers & ModifierFlags.Out ?
+                        modifiers & ModifierFlags.In ? VarianceFlags.Invariant : VarianceFlags.Covariant :
+                        modifiers & ModifierFlags.In ? VarianceFlags.Contravariant : undefined;
+                    if (variance === undefined) {
+                        let unmeasurable = false;
+                        let unreliable = false;
+                        const oldHandler = outofbandVarianceMarkerHandler;
+                        outofbandVarianceMarkerHandler = (onlyUnreliable) => onlyUnreliable ? unreliable = true : unmeasurable = true;
+                        // We first compare instantiations where the type parameter is replaced with
+                        // marker types that have a known subtype relationship. From this we can infer
+                        // invariance, covariance, contravariance or bivariance.
+                        const typeWithSuper = createMarkerType(symbol, tp, markerSuperType);
+                        const typeWithSub = createMarkerType(symbol, tp, markerSubType);
+                        variance = (isTypeAssignableTo(typeWithSub, typeWithSuper) ? VarianceFlags.Covariant : 0) |
+                            (isTypeAssignableTo(typeWithSuper, typeWithSub) ? VarianceFlags.Contravariant : 0);
+                        // If the instantiations appear to be related bivariantly it may be because the
+                        // type parameter is independent (i.e. it isn't witnessed anywhere in the generic
+                        // type). To determine this we compare instantiations where the type parameter is
+                        // replaced with marker types that are known to be unrelated.
+                        if (variance === VarianceFlags.Bivariant && isTypeAssignableTo(createMarkerType(symbol, tp, markerOtherType), typeWithSuper)) {
+                            variance = VarianceFlags.Independent;
                         }
-                        if (unreliable) {
-                            variance |= VarianceFlags.Unreliable;
+                        outofbandVarianceMarkerHandler = oldHandler;
+                        if (unmeasurable || unreliable) {
+                            if (unmeasurable) {
+                                variance |= VarianceFlags.Unmeasurable;
+                            }
+                            if (unreliable) {
+                                variance |= VarianceFlags.Unreliable;
+                            }
                         }
                     }
                     variances.push(variance);
                 }
-                cache.variances = variances;
+                links.variances = variances;
                 tracing?.pop();
             }
-            return variances;
+            return links.variances;
         }
 
-        function getVariances(type: GenericType): VarianceFlags[] {
-            // Arrays and tuples are known to be covariant, no need to spend time computing this.
-            if (type === globalArrayType || type === globalReadonlyArrayType || type.objectFlags & ObjectFlags.Tuple) {
-                return arrayVariances;
-            }
-            return getVariancesWorker(type.typeParameters, type, getMarkerTypeReference);
+        function createMarkerType(symbol: Symbol, source: TypeParameter, target: Type) {
+            const mapper = makeUnaryTypeMapper(source, target);
+            const type = getDeclaredTypeOfSymbol(symbol);
+            const result = symbol.flags & SymbolFlags.TypeAlias ?
+                getTypeAliasInstantiation(symbol, instantiateTypes(getSymbolLinks(symbol).typeParameters!, mapper)) :
+                createTypeReference(type as GenericType, instantiateTypes((type as GenericType).typeParameters, mapper));
+            markerTypes.add(getTypeId(result));
+            return result;
+        }
+
+        function isMarkerType(type: Type) {
+            return markerTypes.has(getTypeId(type));
+        }
+
+        function getVarianceModifiers(tp: TypeParameter): ModifierFlags {
+            return (some(tp.symbol?.declarations, d => hasSyntacticModifier(d, ModifierFlags.In)) ? ModifierFlags.In : 0) |
+                (some(tp.symbol?.declarations, d => hasSyntacticModifier(d, ModifierFlags.Out)) ? ModifierFlags.Out: 0);
         }
 
         // Return true if the given type reference has a 'void' type argument for a covariant type parameter.
@@ -34670,6 +34693,7 @@ namespace ts {
 
         function checkTypeParameter(node: TypeParameterDeclaration) {
             // Grammar Checking
+            checkGrammarModifiers(node);
             if (node.expression) {
                 grammarErrorOnFirstToken(node.expression, Diagnostics.Type_expected);
             }
@@ -34686,6 +34710,18 @@ namespace ts {
             const defaultType = getDefaultFromTypeParameter(typeParameter);
             if (constraintType && defaultType) {
                 checkTypeAssignableTo(defaultType, getTypeWithThisArgument(instantiateType(constraintType, makeUnaryTypeMapper(typeParameter, defaultType)), defaultType), node.default, Diagnostics.Type_0_does_not_satisfy_the_constraint_1);
+            }
+            if (node.parent.kind === SyntaxKind.InterfaceDeclaration || node.parent.kind === SyntaxKind.ClassDeclaration || node.parent.kind === SyntaxKind.TypeAliasDeclaration) {
+                const modifiers = getVarianceModifiers(typeParameter);
+                if (modifiers === ModifierFlags.In || modifiers === ModifierFlags.Out) {
+                    const symbol = getSymbolOfNode(node.parent);
+                    const source = createMarkerType(symbol, typeParameter, modifiers === ModifierFlags.Out ? markerSubType : markerSuperType);
+                    const target = createMarkerType(symbol, typeParameter, modifiers === ModifierFlags.Out ? markerSuperType : markerSubType);
+                    const saveVarianceTypeParameter = typeParameter;
+                    varianceTypeParameter = typeParameter;
+                    checkTypeAssignableTo(source, target, node, Diagnostics.Type_0_is_not_assignable_to_type_1_as_implied_by_variance_annotation);
+                    varianceTypeParameter = saveVarianceTypeParameter;
+                }
             }
             if (produceDiagnostics) {
                 checkTypeNameIsReserved(node.name, Diagnostics.Type_parameter_name_cannot_be_0);
@@ -43098,6 +43134,11 @@ namespace ts {
                         return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_an_index_signature, tokenToString(modifier.kind));
                     }
                 }
+                if (modifier.kind !== SyntaxKind.InKeyword && modifier.kind !== SyntaxKind.OutKeyword) {
+                    if (node.kind === SyntaxKind.TypeParameter) {
+                        return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_type_parameter, tokenToString(modifier.kind));
+                    }
+                }
                 switch (modifier.kind) {
                     case SyntaxKind.ConstKeyword:
                         if (node.kind !== SyntaxKind.EnumDeclaration) {
@@ -43305,6 +43346,23 @@ namespace ts {
                         flags |= ModifierFlags.Async;
                         lastAsync = modifier;
                         break;
+
+                    case SyntaxKind.InKeyword:
+                    case SyntaxKind.OutKeyword:
+                        const inOutFlag = modifier.kind === SyntaxKind.InKeyword ? ModifierFlags.In : ModifierFlags.Out;
+                        const inOutText = modifier.kind === SyntaxKind.InKeyword ? "in" : "out";
+                        if (node.kind !== SyntaxKind.TypeParameter || (node.parent.kind !== SyntaxKind.InterfaceDeclaration &&
+                            node.parent.kind !== SyntaxKind.ClassDeclaration && node.parent.kind !== SyntaxKind.TypeAliasDeclaration)) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_can_only_appear_on_a_type_parameter_of_a_class_interface_or_type_alias, inOutText);
+                        }
+                        if (flags & inOutFlag) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_already_seen, inOutText);
+                        }
+                        if (inOutFlag & ModifierFlags.In && flags & ModifierFlags.Out) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "in", "out");
+                        }
+                        flags |= inOutFlag;
+                        break;
                 }
             }
 
@@ -43364,6 +43422,7 @@ namespace ts {
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
                 case SyntaxKind.Parameter:
+                case SyntaxKind.TypeParameter:
                     return false;
                 default:
                     if (node.parent.kind === SyntaxKind.ModuleBlock || node.parent.kind === SyntaxKind.SourceFile) {

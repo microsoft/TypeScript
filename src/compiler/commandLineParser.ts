@@ -568,7 +568,7 @@ namespace ts {
             category: Diagnostics.Projects,
             transpileOptionValue: undefined,
             defaultValueDescription: ".tsbuildinfo",
-            description: Diagnostics.Specify_the_folder_for_tsbuildinfo_incremental_compilation_files,
+            description: Diagnostics.Specify_the_path_to_tsbuildinfo_incremental_compilation_file,
         },
         {
             name: "removeComments",
@@ -3635,7 +3635,8 @@ namespace ts {
             case "boolean":
                 return true;
             case "string":
-                return option.isFilePath ? "./" : "";
+                const defaultValue = option.defaultValueDescription;
+                return option.isFilePath ? `./${defaultValue && typeof defaultValue === "string" ? defaultValue : ""}` : "";
             case "list":
                 return [];
             case "object":

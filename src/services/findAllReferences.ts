@@ -1673,6 +1673,12 @@ namespace ts.FindAllReferences {
 
         function addReference(referenceLocation: Node, relatedSymbol: Symbol | RelatedSymbol, state: State): void {
             const { kind, symbol } = "kind" in relatedSymbol ? relatedSymbol : { kind: undefined, symbol: relatedSymbol }; // eslint-disable-line no-in-operator
+
+            // if rename symbol from default export anonymous function, for example `export default function() {}`, we do not need to add reference
+            if (state.options.use === FindReferencesUse.Rename && referenceLocation.kind === SyntaxKind.DefaultKeyword) {
+                return;
+            }
+
             const addRef = state.referenceAdder(symbol);
             if (state.options.implementations) {
                 addImplementationReferences(referenceLocation, addRef, state);
