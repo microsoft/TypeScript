@@ -3074,6 +3074,28 @@ namespace ts {
                 return;
             }
 
+            const existingResolutions = file.resolvedTypeReferenceDirectiveNames;
+            if (existingResolutions && structureIsReused !== StructureIsReused.Not) {
+                // sourceFile has cached resolutions and module resolutions are safe to reuse, reuse those
+                let idx = 0;
+                existingResolutions.forEach((elem, key, mode) => {
+                    if (elem && isTraceEnabled(options, host)) {
+                        trace(host,
+                            elem.packageId ?
+                                Diagnostics.Reusing_resolution_of_module_0_from_1_of_old_program_it_was_successfully_resolved_to_2_with_Package_ID_3 :
+                                Diagnostics.Reusing_resolution_of_module_0_from_1_of_old_program_it_was_successfully_resolved_to_2,
+                            typeDirectives[idx]?.fileName || "", // maps are iterated in insertion order, so this is usually right - this is just diagnostic anyway, so there's no real consequence for it being wrong
+                            getNormalizedAbsolutePath(file.originalFileName, currentDirectory),
+                            elem.resolvedFileName,
+                            elem.packageId && packageIdToString(elem.packageId)
+                        );
+                    }
+                    processTypeReferenceDirective(key, mode, elem, { kind: FileIncludeKind.TypeReferenceDirective, file: file.path, index: idx, });
+                    idx++;
+                });
+                return;
+            }
+
             const resolutions = resolveTypeReferenceDirectiveNamesWorker(typeDirectives, file);
             for (let index = 0; index < typeDirectives.length; index++) {
                 const ref = file.typeReferenceDirectives[index];
