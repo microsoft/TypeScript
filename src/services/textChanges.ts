@@ -116,10 +116,6 @@ namespace ts.textChanges {
          * Text of inserted node will be formatted with this delta, otherwise delta will be inferred from the new node kind
          */
         delta?: number;
-        /**
-         * Do not trim leading white spaces in the edit range
-         */
-        preserveLeadingWhitespace?: boolean;
     }
 
     export interface ReplaceWithMultipleNodesOptions extends InsertNodeOptions {
@@ -492,7 +488,7 @@ namespace ts.textChanges {
             }
             const startPosition = getPrecedingNonSpaceCharacterPosition(sourceFile.text, fnStart - 1);
             const indent = sourceFile.text.slice(startPosition, fnStart);
-            this.insertNodeAt(sourceFile, fnStart, tag, { preserveLeadingWhitespace: false, suffix: this.newLineCharacter + indent });
+            this.insertNodeAt(sourceFile, fnStart, tag, { suffix: this.newLineCharacter + indent });
         }
 
         private createJSDocText(sourceFile: SourceFile, node: HasJSDoc) {
@@ -1068,7 +1064,7 @@ namespace ts.textChanges {
                 ? change.nodes.map(n => removeSuffix(format(n), newLineCharacter)).join(change.options?.joiner || newLineCharacter)
                 : format(change.node);
             // strip initial indentation (spaces or tabs) if text will be inserted in the middle of the line
-            const noIndent = (options.preserveLeadingWhitespace || options.indentation !== undefined || getLineStartPositionForPosition(pos, sourceFile) === pos) ? text : text.replace(/^\s+/, "");
+            const noIndent = (options.indentation !== undefined || getLineStartPositionForPosition(pos, sourceFile) === pos) ? text : text.replace(/^\s+/, "");
             return (options.prefix || "") + noIndent
                  + ((!options.suffix || endsWith(noIndent, options.suffix))
                     ? "" : options.suffix);
