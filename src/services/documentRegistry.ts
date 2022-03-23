@@ -357,7 +357,26 @@ namespace ts {
         };
     }
 
+    function compilerOptionValueToString(value: unknown, configPathIfPaths?: string): string {
+        if (value === null || typeof value !== "object") { // eslint-disable-line no-null/no-null
+            return "" + value;
+        }
+        if (isArray(value)) {
+            return `[${map(value, e => compilerOptionValueToString(e))?.join(",")}]`;
+        }
+        let str = "{";
+        if (configPathIfPaths) { // config file path has to be in key for `paths` so `paths` from different configs produce differing keys
+            str += `|config:${configPathIfPaths}|`;
+        }
+        for (const key in value) {
+            if (ts.hasOwnProperty.call(value, key)) { // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
+                str += `${key}: ${compilerOptionValueToString((value as any)[key])}`;
+            }
+        }
+        return str + "}";
+    }
+
     function getKeyForCompilationSettings(settings: CompilerOptions): DocumentRegistryBucketKey {
-        return sourceFileAffectingCompilerOptions.map(option => getCompilerOptionValue(settings, option)).join("|") as DocumentRegistryBucketKey;
+        return sourceFileAffectingCompilerOptions.map(option => compilerOptionValueToString(getCompilerOptionValue(settings, option), option.name === "paths" ? settings.configFilePath || "" : undefined)).join("|") as DocumentRegistryBucketKey;
     }
 }
