@@ -357,7 +357,7 @@ namespace ts {
         };
     }
 
-    function compilerOptionValueToString(value: unknown, configPathIfPaths?: string): string {
+    function compilerOptionValueToString(value: unknown): string {
         if (value === null || typeof value !== "object") { // eslint-disable-line no-null/no-null
             return "" + value;
         }
@@ -365,9 +365,6 @@ namespace ts {
             return `[${map(value, e => compilerOptionValueToString(e))?.join(",")}]`;
         }
         let str = "{";
-        if (configPathIfPaths) { // config file path has to be in key for `paths` so `paths` from different configs produce differing keys
-            str += `|config:${configPathIfPaths}|`;
-        }
         for (const key in value) {
             if (ts.hasOwnProperty.call(value, key)) { // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
                 str += `${key}: ${compilerOptionValueToString((value as any)[key])}`;
@@ -377,6 +374,6 @@ namespace ts {
     }
 
     function getKeyForCompilationSettings(settings: CompilerOptions): DocumentRegistryBucketKey {
-        return sourceFileAffectingCompilerOptions.map(option => compilerOptionValueToString(getCompilerOptionValue(settings, option), option.name === "paths" ? settings.configFilePath || "" : undefined)).join("|") as DocumentRegistryBucketKey;
+        return sourceFileAffectingCompilerOptions.map(option => compilerOptionValueToString(getCompilerOptionValue(settings, option))).join("|") + (settings.pathsBasePath ? `|${settings.pathsBasePath}` : undefined) as DocumentRegistryBucketKey;
     }
 }
