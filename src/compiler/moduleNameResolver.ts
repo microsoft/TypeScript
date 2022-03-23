@@ -354,7 +354,10 @@ namespace ts {
         }
         const conditions = features & NodeResolutionFeatures.Exports ? features & NodeResolutionFeatures.EsmMode ? ["node", "import", "types"] : ["node", "require", "types"] : [];
         const moduleResolutionState: ModuleResolutionState = { compilerOptions: options, host, traceEnabled, failedLookupLocations, packageJsonInfoCache: cache, features, conditions };
-        let resolved = primaryLookup();
+        const loader: ResolutionKindSpecificLoader = (extensions, candidate, onlyRecordFailures, state) => nodeLoadModuleByRelativeName(extensions, candidate, onlyRecordFailures, state, /*considerPackageJson*/ true);
+        const optional = tryLoadModuleUsingOptionalResolutionSettings(Extensions.DtsOnly, typeReferenceDirectiveName, containingDirectory || "", loader, moduleResolutionState);
+        // tryLoadModuleUsingOptionalResolutionSettings will happily return what a user wrote in `paths` varbatim - this means if a user writes `.js`, it'll return a `.js` file, even if we're looking for TS files
+        let resolved = optional && hasTSFileExtension(optional.path) && { fileName: optional.path, packageId: optional.packageId } || primaryLookup();
         let primary = true;
         if (!resolved) {
             resolved = secondaryLookup();
