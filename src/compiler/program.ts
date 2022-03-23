@@ -3095,6 +3095,7 @@ namespace ts {
                         const ref = file.typeReferenceDirectives[idx];
                         programDiagnostics.add(createDiagnosticForRange(file, ref, Diagnostics.Resolution_modes_are_only_supported_when_moduleResolution_is_node12_or_nodenext));
                     }
+
                     processTypeReferenceDirective(key, mode, elem, { kind: FileIncludeKind.TypeReferenceDirective, file: file.path, index: idx, });
                     idx++;
                 });
