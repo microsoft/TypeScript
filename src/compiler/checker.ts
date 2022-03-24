@@ -4977,7 +4977,20 @@ namespace ts {
                 if (type.flags & TypeFlags.TypeParameter || objectFlags & ObjectFlags.ClassOrInterface) {
                     if (type.flags & TypeFlags.TypeParameter && contains(context.inferTypeParameters, type)) {
                         context.approximateLength += (symbolName(type.symbol).length + 6);
-                        return factory.createInferTypeNode(typeParameterToDeclarationWithConstraint(type as TypeParameter, context, /*constraintNode*/ undefined));
+                        let constraintNode: TypeNode | undefined;
+                        const constraint = getConstraintOfTypeParameter(type as TypeParameter);
+                        if (constraint) {
+                            // If the infer type has a constraint that is not the same as the constraint
+                            // we would have normally inferred based on context, we emit the constraint
+                            // using `infer T extends ?`. We omit inferred constraints from type references
+                            // as they may be elided.
+                            const inferredConstraint = getInferredTypeParameterConstraint(type as TypeParameter, /*omitTypeReferences*/ true);
+                            if (!(inferredConstraint && isTypeIdenticalTo(constraint, inferredConstraint))) {
+                                context.approximateLength += 9;
+                                constraintNode = constraint && typeToTypeNodeHelper(constraint, context);
+                            }
+                        }
+                        return factory.createInferTypeNode(typeParameterToDeclarationWithConstraint(type as TypeParameter, context, constraintNode));
                     }
                     if (context.flags & NodeBuilderFlags.GenerateNamesForShadowedTypeParams &&
                         type.flags & TypeFlags.TypeParameter &&
@@ -13259,7 +13272,7 @@ namespace ts {
             return mapDefined(filter(type.symbol && type.symbol.declarations, isTypeParameterDeclaration), getEffectiveConstraintOfTypeParameter)[0];
         }
 
-        function getInferredTypeParameterConstraint(typeParameter: TypeParameter) {
+        function getInferredTypeParameterConstraint(typeParameter: TypeParameter, omitTypeReferences?: boolean) {
             let inferences: Type[] | undefined;
             if (typeParameter.symbol?.declarations) {
                 for (const declaration of typeParameter.symbol.declarations) {
@@ -13269,7 +13282,7 @@ namespace ts {
                         // corresponding type parameter in 'Foo'. When multiple 'infer T' declarations are
                         // present, we form an intersection of the inferred constraint types.
                         const [childTypeParameter = declaration.parent, grandParent] = walkUpParenthesizedTypesAndGetParentAndChild(declaration.parent.parent);
-                        if (grandParent.kind === SyntaxKind.TypeReference) {
+                        if (grandParent.kind === SyntaxKind.TypeReference && !omitTypeReferences) {
                             const typeReference = grandParent as TypeReferenceNode;
                             const typeParameters = getTypeParametersForTypeReference(typeReference);
                             if (typeParameters) {

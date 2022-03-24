@@ -125,3 +125,14 @@ type X21_T5 = X21<1 | 2, 3>; // never
 
 // from mongoose
 type IfEquals<X, Y, A, B> = (<T>() => T extends X ? 1 : 2) extends <T>() => T extends Y ? 1 : 2 ? A : B;
+
+declare const x1: <T>() => (T extends infer U extends number ? 1 : 0);
+function f1() {
+    return x1;
+}
+
+type ExpectNumber<T extends number> = T;
+declare const x2: <T>() => (T extends ExpectNumber<infer U> ? 1 : 0);
+function f2() {
+    return x2;
+}

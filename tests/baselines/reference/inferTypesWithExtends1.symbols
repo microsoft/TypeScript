@@ -498,3 +498,34 @@ type IfEquals<X, Y, A, B> = (<T>() => T extends X ? 1 : 2) extends <T>() => T ex
 >A : Symbol(A, Decl(inferTypesWithExtends1.ts, 123, 19))
 >B : Symbol(B, Decl(inferTypesWithExtends1.ts, 123, 22))
 
+declare const x1: <T>() => (T extends infer U extends number ? 1 : 0);
+>x1 : Symbol(x1, Decl(inferTypesWithExtends1.ts, 125, 13))
+>T : Symbol(T, Decl(inferTypesWithExtends1.ts, 125, 19))
+>T : Symbol(T, Decl(inferTypesWithExtends1.ts, 125, 19))
+>U : Symbol(U, Decl(inferTypesWithExtends1.ts, 125, 43))
+
+function f1() {
+>f1 : Symbol(f1, Decl(inferTypesWithExtends1.ts, 125, 70))
+
+    return x1;
+>x1 : Symbol(x1, Decl(inferTypesWithExtends1.ts, 125, 13))
+}
+
+type ExpectNumber<T extends number> = T;
+>ExpectNumber : Symbol(ExpectNumber, Decl(inferTypesWithExtends1.ts, 128, 1))
+>T : Symbol(T, Decl(inferTypesWithExtends1.ts, 130, 18))
+>T : Symbol(T, Decl(inferTypesWithExtends1.ts, 130, 18))
+
+declare const x2: <T>() => (T extends ExpectNumber<infer U> ? 1 : 0);
+>x2 : Symbol(x2, Decl(inferTypesWithExtends1.ts, 131, 13))
+>T : Symbol(T, Decl(inferTypesWithExtends1.ts, 131, 19))
+>T : Symbol(T, Decl(inferTypesWithExtends1.ts, 131, 19))
+>ExpectNumber : Symbol(ExpectNumber, Decl(inferTypesWithExtends1.ts, 128, 1))
+>U : Symbol(U, Decl(inferTypesWithExtends1.ts, 131, 56))
+
+function f2() {
+>f2 : Symbol(f2, Decl(inferTypesWithExtends1.ts, 131, 69))
+
+    return x2;
+>x2 : Symbol(x2, Decl(inferTypesWithExtends1.ts, 131, 13))
+}
