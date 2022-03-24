@@ -1831,7 +1831,8 @@ namespace ts.server {
             if (this.serverMode !== LanguageServiceMode.Semantic) {
                 return undefined;
             }
-
+            // TODO: My code leaves deleted files as: the scriptinfo doesn't list a containing project, but the contianing ProjectService.openFiles still has the file
+            // OR maybe vice versa
             Debug.assert(!isOpenScriptInfo(info) || this.openFiles.has(info.path));
             const projectRootPath = this.openFiles.get(info.path);
             const scriptInfo = Debug.checkDefined(this.getScriptInfo(info.path));
@@ -3691,11 +3692,6 @@ namespace ts.server {
             // TODO: Maybe it is somehow gauche or verboten to use protocol types but the translation in applyChangesInOpenFiles seems stupid
             // It is also WEIRD that we use iterators here not arrays
             // 1. set some internal tsserver state for mocked FS (if it hasn't already been set, this might not be the first message)
-            //   - change this.host at least
-            this.host // no, it's readonly, we get this from a parent object
-            //   - ScriptInfo instances might need to update their host -- what is textStorage?
-            //     - they deffo have FileWatcher instances
-            //   - TextStorage.host needs to update
             if (!this.fs) {
                 this.fs = new vfs.FileSystem(/*ignoreCase*/ true, {
                     files: {
@@ -3704,9 +3700,13 @@ namespace ts.server {
                     cwd: "/", // maybe not needed
                     meta: { } // probably not needed
                 })
+                // -nervous laugh-
                 ;(this as any).host = new fakes.FakeServerHost(this.fs, { executingFilePath: "TEST" })
                 ;(this.session as any).host = this.host
             }
+            // 2. update vfs
+            // I THINK that only vfs needs to update, because none of these files should be open.
+            // (I guess files could update from the filesystem while they are still open, but that's something to solve at the end of prototyping I think)
             if (createdFiles) {
                 let it
                 while (!(it = createdFiles.next()).done) {
@@ -3728,10 +3728,8 @@ namespace ts.server {
                 this.fs.apply(fileset)
             }
             if (deletedFiles) {
-                //  TODO:  - closeClientFile -> closeOpenFile -> ScriptInfo.close
-                // (maybe -- it may be enough to just delete it from the filesystem)
+                // these files should already be closed, so I THINK deleting it is enough
                 for (const file of deletedFiles) {
-                    this.closeClientFile(file) // maybe copy stuff from applyChanges -- mostly I just want to leave a pointer to more code
                     this.fs.rimrafSync(file)
                 }
             }
