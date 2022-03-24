@@ -22777,8 +22777,7 @@ namespace ts {
                             const inferenceContext = getInferenceInfoForType(target);
                             const constraint = inferenceContext ? getBaseConstraintOfType(inferenceContext.typeParameter) : undefined;
                             if (constraint && !isTypeAny(constraint)) {
-                                let allTypeFlags: TypeFlags = 0;
-                                forEachType(constraint, t => { allTypeFlags |= t.flags; });
+                                let allTypeFlags = reduceType(constraint, (flags, t) => flags | t.flags, 0 as TypeFlags);
 
                                 // If the constraint contains `string`, we don't need to look for a more preferred type
                                 if (!(allTypeFlags & TypeFlags.String)) {
@@ -22788,38 +22787,27 @@ namespace ts {
                                     if (allTypeFlags & TypeFlags.NumberLike && !isValidNumberString(str, /*roundTripOnly*/ true)) {
                                         allTypeFlags &= ~TypeFlags.NumberLike;
                                     }
-    
+
                                     // If the type contains `bigint` or a bigint literal and the string isn't a valid bigint, exclude bigints
                                     if (allTypeFlags & TypeFlags.BigIntLike && !isValidBigIntString(str, /*roundTripOnly*/ true)) {
                                         allTypeFlags &= ~TypeFlags.BigIntLike;
                                     }
-    
+
                                     // for each type in the constraint, find the highest priority matching type
-                                    let matchingType: Type | undefined;
-                                    let matchingTypePriority = TemplateTypePlaceholderPriority.Never;
-                                    forEachType(constraint, t => {
-                                        if (t.flags & allTypeFlags) {
-                                            const typePriority = getTemplateTypePlaceholderPriority(t);
-                                            if (typePriority > matchingTypePriority) {
-                                                const newMatchingType =
-                                                    t.flags & TypeFlags.String ? source :
-                                                    t.flags & TypeFlags.Number ? getNumberLiteralType(+str) : // if `str` was not a valid number, TypeFlags.Number would have been excluded above.
-                                                    t.flags & TypeFlags.BigInt ? parseBigIntLiteralType(str) : // if `str` was not a valid bigint, TypeFlags.BigInt would have been excluded above.
-                                                    t.flags & TypeFlags.Boolean ? str === "true" ? trueType : falseType :
-                                                    t.flags & TypeFlags.StringLiteral && (t as StringLiteralType).value === str ? t :
-                                                    t.flags & TypeFlags.NumberLiteral && (t as NumberLiteralType).value === +str ? t :
-                                                    t.flags & TypeFlags.BigIntLiteral && pseudoBigIntToString((t as BigIntLiteralType).value) === str ? t :
-                                                    t.flags & (TypeFlags.BooleanLiteral | TypeFlags.Nullable) && (t as IntrinsicType).intrinsicName === str ? t :
-                                                    undefined;
-                                                if (newMatchingType) {
-                                                    matchingType = newMatchingType;
-                                                    matchingTypePriority = typePriority;
-                                                }
-                                            }
-                                        }
-                                    });
-    
-                                    if (matchingType) {
+                                    const matchingType = reduceType(constraint, (matchingType, t) =>
+                                        !(t.flags & allTypeFlags) || getTemplateTypePlaceholderPriority(t) <= getTemplateTypePlaceholderPriority(matchingType) ? matchingType :
+                                        t.flags & TypeFlags.String ? source :
+                                        t.flags & TypeFlags.Number ? getNumberLiteralType(+str) : // if `str` was not a valid number, TypeFlags.Number would have been excluded above.
+                                        t.flags & TypeFlags.BigInt ? parseBigIntLiteralType(str) : // if `str` was not a valid bigint, TypeFlags.BigInt would have been excluded above.
+                                        t.flags & TypeFlags.Boolean ? str === "true" ? trueType : falseType :
+                                        t.flags & TypeFlags.StringLiteral && (t as StringLiteralType).value === str ? t :
+                                        t.flags & TypeFlags.NumberLiteral && (t as NumberLiteralType).value === +str ? t :
+                                        t.flags & TypeFlags.BigIntLiteral && pseudoBigIntToString((t as BigIntLiteralType).value) === str ? t :
+                                        t.flags & (TypeFlags.BooleanLiteral | TypeFlags.Nullable) && (t as IntrinsicType).intrinsicName === str ? t :
+                                        matchingType,
+                                        neverType as Type);
+
+                                    if (!(matchingType.flags & TypeFlags.Never)) {
                                         inferFromTypes(matchingType, target);
                                         continue;
                                     }
@@ -23833,6 +23821,12 @@ namespace ts {
 
         function forEachType<T>(type: Type, f: (t: Type) => T | undefined): T | undefined {
             return type.flags & TypeFlags.Union ? forEach((type as UnionType).types, f) : f(type);
+        }
+
+        function reduceType<T>(type: Type, f: (memo: T, t: Type) => T | undefined, initial: T): T;
+        function reduceType<T>(type: Type, f: (memo: T | undefined, t: Type) => T | undefined): T | undefined;
+        function reduceType<T>(type: Type, f: (memo: T | undefined, t: Type) => T | undefined, initial?: T | undefined): T | undefined {
+            return type.flags & TypeFlags.Union ? reduceLeft((type as UnionType).types, f, initial) : f(initial, type);
         }
 
         function someType(type: Type, f: (t: Type) => boolean): boolean {
