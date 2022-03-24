@@ -150,286 +150,423 @@ type T41 = "abcd" extends `${Is<infer T, undefined>}` ? T : never; // never
 >T : Symbol(T, Decl(templateLiteralTypes4.ts, 29, 37))
 >T : Symbol(T, Decl(templateLiteralTypes4.ts, 29, 37))
 
-type T50 = "100" extends `${Is<infer T, string | number | bigint | boolean | null | undefined>}` ? T : never; // "100" | 100 | 100n
->T50 : Symbol(T50, Decl(templateLiteralTypes4.ts, 29, 66))
+type T500 = "100" extends `${Is<infer T, string | number | bigint>}` ? T : never; // "100"
+>T500 : Symbol(T500, Decl(templateLiteralTypes4.ts, 29, 66))
 >Is : Symbol(Is, Decl(templateLiteralTypes4.ts, 0, 0))
->T : Symbol(T, Decl(templateLiteralTypes4.ts, 31, 36))
->T : Symbol(T, Decl(templateLiteralTypes4.ts, 31, 36))
+>T : Symbol(T, Decl(templateLiteralTypes4.ts, 31, 37))
+>T : Symbol(T, Decl(templateLiteralTypes4.ts, 31, 37))
 
-type T51 = "1.1" extends `${Is<infer T, string | number | bigint | boolean | null | undefined>}` ? T : never; // "100" | 1.1
->T51 : Symbol(T51, Decl(templateLiteralTypes4.ts, 31, 109))
+type T501 = "100" extends `${Is<infer T, number | bigint>}` ? T : never; // 100
+>T501 : Symbol(T501, Decl(templateLiteralTypes4.ts, 31, 81))
 >Is : Symbol(Is, Decl(templateLiteralTypes4.ts, 0, 0))
->T : Symbol(T, Decl(templateLiteralTypes4.ts, 32, 36))
->T : Symbol(T, Decl(templateLiteralTypes4.ts, 32, 36))
+>T : Symbol(T, Decl(templateLiteralTypes4.ts, 32, 37))
+>T : Symbol(T, Decl(templateLiteralTypes4.ts, 32, 37))
 
-type T52 = "true" extends `${Is<infer T, string | number | bigint | boolean | null | undefined>}` ? T : never; // "true" | true
->T52 : Symbol(T52, Decl(templateLiteralTypes4.ts, 32, 109))
+type T502 = "100" extends `${Is<infer T, bigint>}` ? T : never; // 100n
+>T502 : Symbol(T502, Decl(templateLiteralTypes4.ts, 32, 72))
 >Is : Symbol(Is, Decl(templateLiteralTypes4.ts, 0, 0))
 >T : Symbol(T, Decl(templateLiteralTypes4.ts, 33, 37))
 >T : Symbol(T, Decl(templateLiteralTypes4.ts, 33, 37))
 
-type T53 = "false" extends `${Is<infer T, string | number | bigint | boolean | null | undefined>}` ? T : never; // "false" | false
->T53 : Symbol(T53, Decl(templateLiteralTypes4.ts, 33, 110))
+type T503 = "100" extends `${Is<infer T, "100" | number>}` ? T : never; // "100"
+>T503 : Symbol(T503, Decl(templateLiteralTypes4.ts, 33, 63))
 >Is : Symbol(Is, Decl(templateLiteralTypes4.ts, 0, 0))
->T : Symbol(T, Decl(templateLiteralTypes4.ts, 34, 38))
->T : Symbol(T, Decl(templateLiteralTypes4.ts, 34, 38))
+>T : Symbol(T, Decl(templateLiteralTypes4.ts, 34, 37))
+>T : Symbol(T, Decl(templateLiteralTypes4.ts, 34, 37))
 
-type T54 = "null" extends `${Is<infer T, string | number | bigint | boolean | null | undefined>}` ? T : never; // "null" | null
->T54 : Symbol(T54, Decl(templateLiteralTypes4.ts, 34, 111))
+type T504 = "100" extends `${Is<infer T, "101" | number>}` ? T : never; // 100
+>T504 : Symbol(T504, Decl(templateLiteralTypes4.ts, 34, 71))
 >Is : Symbol(Is, Decl(templateLiteralTypes4.ts, 0, 0))
 >T : Symbol(T, Decl(templateLiteralTypes4.ts, 35, 37))
 >T : Symbol(T, Decl(templateLiteralTypes4.ts, 35, 37))
 
-type T55 = "undefined" extends `${Is<infer T, string | number | bigint | boolean | null | undefined>}` ? T : never; // "undefined" | undefined
->T55 : Symbol(T55, Decl(templateLiteralTypes4.ts, 35, 110))
+type T510 = "1.1" extends `${Is<infer T, string | number | bigint>}` ? T : never; // "1.1"
+>T510 : Symbol(T510, Decl(templateLiteralTypes4.ts, 35, 71))
 >Is : Symbol(Is, Decl(templateLiteralTypes4.ts, 0, 0))
->T : Symbol(T, Decl(templateLiteralTypes4.ts, 36, 42))
->T : Symbol(T, Decl(templateLiteralTypes4.ts, 36, 42))
+>T : Symbol(T, Decl(templateLiteralTypes4.ts, 37, 37))
+>T : Symbol(T, Decl(templateLiteralTypes4.ts, 37, 37))
+
+type T511 = "1.1" extends `${Is<infer T, number | bigint>}` ? T : never; // 1.1
+>T511 : Symbol(T511, Decl(templateLiteralTypes4.ts, 37, 81))
+>Is : Symbol(Is, Decl(templateLiteralTypes4.ts, 0, 0))
+>T : Symbol(T, Decl(templateLiteralTypes4.ts, 38, 37))
+>T : Symbol(T, Decl(templateLiteralTypes4.ts, 38, 37))
+
+type T512 = "1.1" extends `${Is<infer T, bigint>}` ? T : never; // never
+>T512 : Symbol(T512, Decl(templateLiteralTypes4.ts, 38, 72))
+>Is : Symbol(Is, Decl(templateLiteralTypes4.ts, 0, 0))
+>T : Symbol(T, Decl(templateLiteralTypes4.ts, 39, 37))
+>T : Symbol(T, Decl(templateLiteralTypes4.ts, 39, 37))
+
+type T520 = "true" extends `${Is<infer T, string | boolean>}` ? T : never; // "true"
+>T520 : Symbol(T520, Decl(templateLiteralTypes4.ts, 39, 63))
+>Is : Symbol(Is, Decl(templateLiteralTypes4.ts, 0, 0))
+>T : Symbol(T, Decl(templateLiteralTypes4.ts, 41, 38))
+>T : Symbol(T, Decl(templateLiteralTypes4.ts, 41, 38))
+
+type T521 = "true" extends `${Is<infer T, boolean>}` ? T : never; // true
+>T521 : Symbol(T521, Decl(templateLiteralTypes4.ts, 41, 74))
+>Is : Symbol(Is, Decl(templateLiteralTypes4.ts, 0, 0))
+>T : Symbol(T, Decl(templateLiteralTypes4.ts, 42, 38))
+>T : Symbol(T, Decl(templateLiteralTypes4.ts, 42, 38))
+
+type T530 = "false" extends `${Is<infer T, string | boolean>}` ? T : never; // "false"
+>T530 : Symbol(T530, Decl(templateLiteralTypes4.ts, 42, 65))
+>Is : Symbol(Is, Decl(templateLiteralTypes4.ts, 0, 0))
+>T : Symbol(T, Decl(templateLiteralTypes4.ts, 44, 39))
+>T : Symbol(T, Decl(templateLiteralTypes4.ts, 44, 39))
+
+type T531 = "false" extends `${Is<infer T, boolean>}` ? T : never; // false
+>T531 : Symbol(T531, Decl(templateLiteralTypes4.ts, 44, 75))
+>Is : Symbol(Is, Decl(templateLiteralTypes4.ts, 0, 0))
+>T : Symbol(T, Decl(templateLiteralTypes4.ts, 45, 39))
+>T : Symbol(T, Decl(templateLiteralTypes4.ts, 45, 39))
+
+type T540 = "null" extends `${Is<infer T, string | null>}` ? T : never; // "null"
+>T540 : Symbol(T540, Decl(templateLiteralTypes4.ts, 45, 66))
+>Is : Symbol(Is, Decl(templateLiteralTypes4.ts, 0, 0))
+>T : Symbol(T, Decl(templateLiteralTypes4.ts, 47, 38))
+>T : Symbol(T, Decl(templateLiteralTypes4.ts, 47, 38))
+
+type T541 = "null" extends `${Is<infer T, string | null>}` ? T : never; // null
+>T541 : Symbol(T541, Decl(templateLiteralTypes4.ts, 47, 71))
+>Is : Symbol(Is, Decl(templateLiteralTypes4.ts, 0, 0))
+>T : Symbol(T, Decl(templateLiteralTypes4.ts, 48, 38))
+>T : Symbol(T, Decl(templateLiteralTypes4.ts, 48, 38))
+
+type T550 = "undefined" extends `${Is<infer T, string | undefined>}` ? T : never; // "undefined"
+>T550 : Symbol(T550, Decl(templateLiteralTypes4.ts, 48, 71))
+>Is : Symbol(Is, Decl(templateLiteralTypes4.ts, 0, 0))
+>T : Symbol(T, Decl(templateLiteralTypes4.ts, 50, 43))
+>T : Symbol(T, Decl(templateLiteralTypes4.ts, 50, 43))
+
+type T551 = "undefined" extends `${Is<infer T, undefined>}` ? T : never; // undefined
+>T551 : Symbol(T551, Decl(templateLiteralTypes4.ts, 50, 81))
+>Is : Symbol(Is, Decl(templateLiteralTypes4.ts, 0, 0))
+>T : Symbol(T, Decl(templateLiteralTypes4.ts, 51, 43))
+>T : Symbol(T, Decl(templateLiteralTypes4.ts, 51, 43))
+
+type T560 = "100000000000000000000000" extends `${Is<infer T, number | bigint>}` ? T : never; // 100000000000000000000000n
+>T560 : Symbol(T560, Decl(templateLiteralTypes4.ts, 51, 72))
+>Is : Symbol(Is, Decl(templateLiteralTypes4.ts, 0, 0))
+>T : Symbol(T, Decl(templateLiteralTypes4.ts, 53, 58))
+>T : Symbol(T, Decl(templateLiteralTypes4.ts, 53, 58))
+
+type T561 = "100000000000000000000000" extends `${Is<infer T, number>}` ? T : never; // number
+>T561 : Symbol(T561, Decl(templateLiteralTypes4.ts, 53, 93))
+>Is : Symbol(Is, Decl(templateLiteralTypes4.ts, 0, 0))
+>T : Symbol(T, Decl(templateLiteralTypes4.ts, 54, 58))
+>T : Symbol(T, Decl(templateLiteralTypes4.ts, 54, 58))
+
+type ExtractPrimitives<T extends string> =
+>ExtractPrimitives : Symbol(ExtractPrimitives, Decl(templateLiteralTypes4.ts, 54, 84))
+>T : Symbol(T, Decl(templateLiteralTypes4.ts, 56, 23))
+
+    | T
+>T : Symbol(T, Decl(templateLiteralTypes4.ts, 56, 23))
+
+    | (T extends `${Is<infer U, number>}` ? U : never)
+>T : Symbol(T, Decl(templateLiteralTypes4.ts, 56, 23))
+>Is : Symbol(Is, Decl(templateLiteralTypes4.ts, 0, 0))
+>U : Symbol(U, Decl(templateLiteralTypes4.ts, 58, 28))
+>U : Symbol(U, Decl(templateLiteralTypes4.ts, 58, 28))
+
+    | (T extends `${Is<infer U, bigint>}` ? U : never)
+>T : Symbol(T, Decl(templateLiteralTypes4.ts, 56, 23))
+>Is : Symbol(Is, Decl(templateLiteralTypes4.ts, 0, 0))
+>U : Symbol(U, Decl(templateLiteralTypes4.ts, 59, 28))
+>U : Symbol(U, Decl(templateLiteralTypes4.ts, 59, 28))
+
+    | (T extends `${Is<infer U, boolean | null | undefined>}` ? U : never)
+>T : Symbol(T, Decl(templateLiteralTypes4.ts, 56, 23))
+>Is : Symbol(Is, Decl(templateLiteralTypes4.ts, 0, 0))
+>U : Symbol(U, Decl(templateLiteralTypes4.ts, 60, 28))
+>U : Symbol(U, Decl(templateLiteralTypes4.ts, 60, 28))
+
+    ;
+
+// Type writer doesn't show the union that is produced, so we use a helper type to verify constraints
+type T570 = ExtractPrimitives<"100">;
+>T570 : Symbol(T570, Decl(templateLiteralTypes4.ts, 61, 5))
+>ExtractPrimitives : Symbol(ExtractPrimitives, Decl(templateLiteralTypes4.ts, 54, 84))
+
+type CheckT570 = Is<"100" | 100 | 100n, T570>;
+>CheckT570 : Symbol(CheckT570, Decl(templateLiteralTypes4.ts, 64, 37))
+>Is : Symbol(Is, Decl(templateLiteralTypes4.ts, 0, 0))
+>T570 : Symbol(T570, Decl(templateLiteralTypes4.ts, 61, 5))
+
+type T571 = ExtractPrimitives<"1.1">;
+>T571 : Symbol(T571, Decl(templateLiteralTypes4.ts, 65, 46))
+>ExtractPrimitives : Symbol(ExtractPrimitives, Decl(templateLiteralTypes4.ts, 54, 84))
+
+type CheckT571 = Is<"1.1" | 1.1, T571>;
+>CheckT571 : Symbol(CheckT571, Decl(templateLiteralTypes4.ts, 67, 37))
+>Is : Symbol(Is, Decl(templateLiteralTypes4.ts, 0, 0))
+>T571 : Symbol(T571, Decl(templateLiteralTypes4.ts, 65, 46))
+
+type T572 = ExtractPrimitives<"true">;
+>T572 : Symbol(T572, Decl(templateLiteralTypes4.ts, 68, 39))
+>ExtractPrimitives : Symbol(ExtractPrimitives, Decl(templateLiteralTypes4.ts, 54, 84))
+
+type CheckT572 = Is<"true" | true, T572>;
+>CheckT572 : Symbol(CheckT572, Decl(templateLiteralTypes4.ts, 70, 38))
+>Is : Symbol(Is, Decl(templateLiteralTypes4.ts, 0, 0))
+>T572 : Symbol(T572, Decl(templateLiteralTypes4.ts, 68, 39))
 
 type NumberFor<S extends string> = S extends `${Is<infer N, number>}` ? N : never;
->NumberFor : Symbol(NumberFor, Decl(templateLiteralTypes4.ts, 36, 115))
->S : Symbol(S, Decl(templateLiteralTypes4.ts, 38, 15))
->S : Symbol(S, Decl(templateLiteralTypes4.ts, 38, 15))
+>NumberFor : Symbol(NumberFor, Decl(templateLiteralTypes4.ts, 71, 41))
+>S : Symbol(S, Decl(templateLiteralTypes4.ts, 73, 15))
+>S : Symbol(S, Decl(templateLiteralTypes4.ts, 73, 15))
 >Is : Symbol(Is, Decl(templateLiteralTypes4.ts, 0, 0))
->N : Symbol(N, Decl(templateLiteralTypes4.ts, 38, 56))
->N : Symbol(N, Decl(templateLiteralTypes4.ts, 38, 56))
+>N : Symbol(N, Decl(templateLiteralTypes4.ts, 73, 56))
+>N : Symbol(N, Decl(templateLiteralTypes4.ts, 73, 56))
 
 type T60 = NumberFor<"100">; // 100
->T60 : Symbol(T60, Decl(templateLiteralTypes4.ts, 38, 82))
->NumberFor : Symbol(NumberFor, Decl(templateLiteralTypes4.ts, 36, 115))
+>T60 : Symbol(T60, Decl(templateLiteralTypes4.ts, 73, 82))
+>NumberFor : Symbol(NumberFor, Decl(templateLiteralTypes4.ts, 71, 41))
 
 type T61 = NumberFor<any>; // never
->T61 : Symbol(T61, Decl(templateLiteralTypes4.ts, 39, 28))
->NumberFor : Symbol(NumberFor, Decl(templateLiteralTypes4.ts, 36, 115))
+>T61 : Symbol(T61, Decl(templateLiteralTypes4.ts, 74, 28))
+>NumberFor : Symbol(NumberFor, Decl(templateLiteralTypes4.ts, 71, 41))
 
 type T62 = NumberFor<never>; // never
->T62 : Symbol(T62, Decl(templateLiteralTypes4.ts, 40, 26))
->NumberFor : Symbol(NumberFor, Decl(templateLiteralTypes4.ts, 36, 115))
+>T62 : Symbol(T62, Decl(templateLiteralTypes4.ts, 75, 26))
+>NumberFor : Symbol(NumberFor, Decl(templateLiteralTypes4.ts, 71, 41))
 
 // example use case:
 interface FieldDefinition {
->FieldDefinition : Symbol(FieldDefinition, Decl(templateLiteralTypes4.ts, 41, 28))
+>FieldDefinition : Symbol(FieldDefinition, Decl(templateLiteralTypes4.ts, 76, 28))
 
     readonly name: string;
->name : Symbol(FieldDefinition.name, Decl(templateLiteralTypes4.ts, 44, 27))
+>name : Symbol(FieldDefinition.name, Decl(templateLiteralTypes4.ts, 79, 27))
 
     readonly type: "i8" | "i16" | "i32" | "i64" | "u8" | "u16" | "u32" | "u64" | "f32" | "f64";
->type : Symbol(FieldDefinition.type, Decl(templateLiteralTypes4.ts, 45, 26))
+>type : Symbol(FieldDefinition.type, Decl(templateLiteralTypes4.ts, 80, 26))
 }
 
 type FieldType<T extends FieldDefinition["type"]> =
->FieldType : Symbol(FieldType, Decl(templateLiteralTypes4.ts, 47, 1))
->T : Symbol(T, Decl(templateLiteralTypes4.ts, 49, 15))
->FieldDefinition : Symbol(FieldDefinition, Decl(templateLiteralTypes4.ts, 41, 28))
+>FieldType : Symbol(FieldType, Decl(templateLiteralTypes4.ts, 82, 1))
+>T : Symbol(T, Decl(templateLiteralTypes4.ts, 84, 15))
+>FieldDefinition : Symbol(FieldDefinition, Decl(templateLiteralTypes4.ts, 76, 28))
 
     T extends "i8" | "i16" | "i32" | "u8" | "u16" | "u32" | "f32" | "f64" ? number :
->T : Symbol(T, Decl(templateLiteralTypes4.ts, 49, 15))
+>T : Symbol(T, Decl(templateLiteralTypes4.ts, 84, 15))
 
     T extends "f32" | "f64" ? bigint :
->T : Symbol(T, Decl(templateLiteralTypes4.ts, 49, 15))
+>T : Symbol(T, Decl(templateLiteralTypes4.ts, 84, 15))
 
     never;
 
 // Generates named members like `{ x: number, y: bigint }` from `[{ name: "x", type: "i32" }, { name: "y", type: "i64" }]`
 type TypedObjectNamedMembers<TDef extends readonly FieldDefinition[]> = {
->TypedObjectNamedMembers : Symbol(TypedObjectNamedMembers, Decl(templateLiteralTypes4.ts, 52, 10))
->TDef : Symbol(TDef, Decl(templateLiteralTypes4.ts, 55, 29))
->FieldDefinition : Symbol(FieldDefinition, Decl(templateLiteralTypes4.ts, 41, 28))
+>TypedObjectNamedMembers : Symbol(TypedObjectNamedMembers, Decl(templateLiteralTypes4.ts, 87, 10))
+>TDef : Symbol(TDef, Decl(templateLiteralTypes4.ts, 90, 29))
+>FieldDefinition : Symbol(FieldDefinition, Decl(templateLiteralTypes4.ts, 76, 28))
 
     [P in TDef[number]["name"]]: FieldType<Extract<TDef[number], { readonly name: P }>["type"]>;
->P : Symbol(P, Decl(templateLiteralTypes4.ts, 56, 5))
->TDef : Symbol(TDef, Decl(templateLiteralTypes4.ts, 55, 29))
->FieldType : Symbol(FieldType, Decl(templateLiteralTypes4.ts, 47, 1))
+>P : Symbol(P, Decl(templateLiteralTypes4.ts, 91, 5))
+>TDef : Symbol(TDef, Decl(templateLiteralTypes4.ts, 90, 29))
+>FieldType : Symbol(FieldType, Decl(templateLiteralTypes4.ts, 82, 1))
 >Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
->TDef : Symbol(TDef, Decl(templateLiteralTypes4.ts, 55, 29))
->name : Symbol(name, Decl(templateLiteralTypes4.ts, 56, 66))
->P : Symbol(P, Decl(templateLiteralTypes4.ts, 56, 5))
+>TDef : Symbol(TDef, Decl(templateLiteralTypes4.ts, 90, 29))
+>name : Symbol(name, Decl(templateLiteralTypes4.ts, 91, 66))
+>P : Symbol(P, Decl(templateLiteralTypes4.ts, 91, 5))
 
 };
 
 // Generates ordinal members like `{ 0: number, 1: bigint }` from `[{ name: "x", type: "i32" }, { name: "y", type: "i64" }]`
 type TypedObjectOrdinalMembers<TDef extends readonly FieldDefinition[]> = {
->TypedObjectOrdinalMembers : Symbol(TypedObjectOrdinalMembers, Decl(templateLiteralTypes4.ts, 57, 2))
->TDef : Symbol(TDef, Decl(templateLiteralTypes4.ts, 60, 31))
->FieldDefinition : Symbol(FieldDefinition, Decl(templateLiteralTypes4.ts, 41, 28))
+>TypedObjectOrdinalMembers : Symbol(TypedObjectOrdinalMembers, Decl(templateLiteralTypes4.ts, 92, 2))
+>TDef : Symbol(TDef, Decl(templateLiteralTypes4.ts, 95, 31))
+>FieldDefinition : Symbol(FieldDefinition, Decl(templateLiteralTypes4.ts, 76, 28))
 
     [I in Extract<keyof TDef, `${number}`>]: FieldType<Extract<TDef[I], FieldDefinition>["type"]>;
->I : Symbol(I, Decl(templateLiteralTypes4.ts, 61, 5))
+>I : Symbol(I, Decl(templateLiteralTypes4.ts, 96, 5))
 >Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
->TDef : Symbol(TDef, Decl(templateLiteralTypes4.ts, 60, 31))
->FieldType : Symbol(FieldType, Decl(templateLiteralTypes4.ts, 47, 1))
+>TDef : Symbol(TDef, Decl(templateLiteralTypes4.ts, 95, 31))
+>FieldType : Symbol(FieldType, Decl(templateLiteralTypes4.ts, 82, 1))
 >Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
->TDef : Symbol(TDef, Decl(templateLiteralTypes4.ts, 60, 31))
->I : Symbol(I, Decl(templateLiteralTypes4.ts, 61, 5))
->FieldDefinition : Symbol(FieldDefinition, Decl(templateLiteralTypes4.ts, 41, 28))
+>TDef : Symbol(TDef, Decl(templateLiteralTypes4.ts, 95, 31))
+>I : Symbol(I, Decl(templateLiteralTypes4.ts, 96, 5))
+>FieldDefinition : Symbol(FieldDefinition, Decl(templateLiteralTypes4.ts, 76, 28))
 
 };
 
 // Default members
 interface TypedObjectMembers<TDef extends readonly FieldDefinition[]> {
->TypedObjectMembers : Symbol(TypedObjectMembers, Decl(templateLiteralTypes4.ts, 62, 2))
->TDef : Symbol(TDef, Decl(templateLiteralTypes4.ts, 65, 29))
->FieldDefinition : Symbol(FieldDefinition, Decl(templateLiteralTypes4.ts, 41, 28))
+>TypedObjectMembers : Symbol(TypedObjectMembers, Decl(templateLiteralTypes4.ts, 97, 2))
+>TDef : Symbol(TDef, Decl(templateLiteralTypes4.ts, 100, 29))
+>FieldDefinition : Symbol(FieldDefinition, Decl(templateLiteralTypes4.ts, 76, 28))
 
     // get/set a field by name
     get<K extends TDef[number]["name"]>(key: K): FieldType<Extract<TDef[number], { readonly name: K }>["type"]>;
->get : Symbol(TypedObjectMembers.get, Decl(templateLiteralTypes4.ts, 65, 71))
->K : Symbol(K, Decl(templateLiteralTypes4.ts, 67, 8))
->TDef : Symbol(TDef, Decl(templateLiteralTypes4.ts, 65, 29))
->key : Symbol(key, Decl(templateLiteralTypes4.ts, 67, 40))
->K : Symbol(K, Decl(templateLiteralTypes4.ts, 67, 8))
->FieldType : Symbol(FieldType, Decl(templateLiteralTypes4.ts, 47, 1))
+>get : Symbol(TypedObjectMembers.get, Decl(templateLiteralTypes4.ts, 100, 71))
+>K : Symbol(K, Decl(templateLiteralTypes4.ts, 102, 8))
+>TDef : Symbol(TDef, Decl(templateLiteralTypes4.ts, 100, 29))
+>key : Symbol(key, Decl(templateLiteralTypes4.ts, 102, 40))
+>K : Symbol(K, Decl(templateLiteralTypes4.ts, 102, 8))
+>FieldType : Symbol(FieldType, Decl(templateLiteralTypes4.ts, 82, 1))
 >Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
->TDef : Symbol(TDef, Decl(templateLiteralTypes4.ts, 65, 29))
->name : Symbol(name, Decl(templateLiteralTypes4.ts, 67, 82))
->K : Symbol(K, Decl(templateLiteralTypes4.ts, 67, 8))
+>TDef : Symbol(TDef, Decl(templateLiteralTypes4.ts, 100, 29))
+>name : Symbol(name, Decl(templateLiteralTypes4.ts, 102, 82))
+>K : Symbol(K, Decl(templateLiteralTypes4.ts, 102, 8))
 
     set<K extends TDef[number]["name"]>(key: K, value: FieldType<Extract<TDef[number], { readonly name: K }>["type"]>): void;
->set : Symbol(TypedObjectMembers.set, Decl(templateLiteralTypes4.ts, 67, 112))
->K : Symbol(K, Decl(templateLiteralTypes4.ts, 68, 8))
->TDef : Symbol(TDef, Decl(templateLiteralTypes4.ts, 65, 29))
->key : Symbol(key, Decl(templateLiteralTypes4.ts, 68, 40))
->K : Symbol(K, Decl(templateLiteralTypes4.ts, 68, 8))
->value : Symbol(value, Decl(templateLiteralTypes4.ts, 68, 47))
->FieldType : Symbol(FieldType, Decl(templateLiteralTypes4.ts, 47, 1))
+>set : Symbol(TypedObjectMembers.set, Decl(templateLiteralTypes4.ts, 102, 112))
+>K : Symbol(K, Decl(templateLiteralTypes4.ts, 103, 8))
+>TDef : Symbol(TDef, Decl(templateLiteralTypes4.ts, 100, 29))
+>key : Symbol(key, Decl(templateLiteralTypes4.ts, 103, 40))
+>K : Symbol(K, Decl(templateLiteralTypes4.ts, 103, 8))
+>value : Symbol(value, Decl(templateLiteralTypes4.ts, 103, 47))
+>FieldType : Symbol(FieldType, Decl(templateLiteralTypes4.ts, 82, 1))
 >Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
->TDef : Symbol(TDef, Decl(templateLiteralTypes4.ts, 65, 29))
->name : Symbol(name, Decl(templateLiteralTypes4.ts, 68, 88))
->K : Symbol(K, Decl(templateLiteralTypes4.ts, 68, 8))
+>TDef : Symbol(TDef, Decl(templateLiteralTypes4.ts, 100, 29))
+>name : Symbol(name, Decl(templateLiteralTypes4.ts, 103, 88))
+>K : Symbol(K, Decl(templateLiteralTypes4.ts, 103, 8))
 
     // get/set a field by index
     getIndex<I extends IndicesOf<TDef>>(index: I): FieldType<Extract<TDef[I], FieldDefinition>["type"]>;
->getIndex : Symbol(TypedObjectMembers.getIndex, Decl(templateLiteralTypes4.ts, 68, 125))
->I : Symbol(I, Decl(templateLiteralTypes4.ts, 71, 13))
->IndicesOf : Symbol(IndicesOf, Decl(templateLiteralTypes4.ts, 73, 1))
->TDef : Symbol(TDef, Decl(templateLiteralTypes4.ts, 65, 29))
->index : Symbol(index, Decl(templateLiteralTypes4.ts, 71, 40))
->I : Symbol(I, Decl(templateLiteralTypes4.ts, 71, 13))
->FieldType : Symbol(FieldType, Decl(templateLiteralTypes4.ts, 47, 1))
+>getIndex : Symbol(TypedObjectMembers.getIndex, Decl(templateLiteralTypes4.ts, 103, 125))
+>I : Symbol(I, Decl(templateLiteralTypes4.ts, 106, 13))
+>IndicesOf : Symbol(IndicesOf, Decl(templateLiteralTypes4.ts, 108, 1))
+>TDef : Symbol(TDef, Decl(templateLiteralTypes4.ts, 100, 29))
+>index : Symbol(index, Decl(templateLiteralTypes4.ts, 106, 40))
+>I : Symbol(I, Decl(templateLiteralTypes4.ts, 106, 13))
+>FieldType : Symbol(FieldType, Decl(templateLiteralTypes4.ts, 82, 1))
 >Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
->TDef : Symbol(TDef, Decl(templateLiteralTypes4.ts, 65, 29))
->I : Symbol(I, Decl(templateLiteralTypes4.ts, 71, 13))
->FieldDefinition : Symbol(FieldDefinition, Decl(templateLiteralTypes4.ts, 41, 28))
+>TDef : Symbol(TDef, Decl(templateLiteralTypes4.ts, 100, 29))
+>I : Symbol(I, Decl(templateLiteralTypes4.ts, 106, 13))
+>FieldDefinition : Symbol(FieldDefinition, Decl(templateLiteralTypes4.ts, 76, 28))
 
     setIndex<I extends IndicesOf<TDef>>(index: I, value: FieldType<Extract<TDef[I], FieldDefinition>["type"]>): void;
->setIndex : Symbol(TypedObjectMembers.setIndex, Decl(templateLiteralTypes4.ts, 71, 104))
->I : Symbol(I, Decl(templateLiteralTypes4.ts, 72, 13))
->IndicesOf : Symbol(IndicesOf, Decl(templateLiteralTypes4.ts, 73, 1))
->TDef : Symbol(TDef, Decl(templateLiteralTypes4.ts, 65, 29))
->index : Symbol(index, Decl(templateLiteralTypes4.ts, 72, 40))
->I : Symbol(I, Decl(templateLiteralTypes4.ts, 72, 13))
->value : Symbol(value, Decl(templateLiteralTypes4.ts, 72, 49))
->FieldType : Symbol(FieldType, Decl(templateLiteralTypes4.ts, 47, 1))
+>setIndex : Symbol(TypedObjectMembers.setIndex, Decl(templateLiteralTypes4.ts, 106, 104))
+>I : Symbol(I, Decl(templateLiteralTypes4.ts, 107, 13))
+>IndicesOf : Symbol(IndicesOf, Decl(templateLiteralTypes4.ts, 108, 1))
+>TDef : Symbol(TDef, Decl(templateLiteralTypes4.ts, 100, 29))
+>index : Symbol(index, Decl(templateLiteralTypes4.ts, 107, 40))
+>I : Symbol(I, Decl(templateLiteralTypes4.ts, 107, 13))
+>value : Symbol(value, Decl(templateLiteralTypes4.ts, 107, 49))
+>FieldType : Symbol(FieldType, Decl(templateLiteralTypes4.ts, 82, 1))
 >Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
->TDef : Symbol(TDef, Decl(templateLiteralTypes4.ts, 65, 29))
->I : Symbol(I, Decl(templateLiteralTypes4.ts, 72, 13))
->FieldDefinition : Symbol(FieldDefinition, Decl(templateLiteralTypes4.ts, 41, 28))
+>TDef : Symbol(TDef, Decl(templateLiteralTypes4.ts, 100, 29))
+>I : Symbol(I, Decl(templateLiteralTypes4.ts, 107, 13))
+>FieldDefinition : Symbol(FieldDefinition, Decl(templateLiteralTypes4.ts, 76, 28))
 }
 
 // Use constrained `infer` in template literal to get ordinal indices as numbers:
 type IndicesOf<T> = NumberFor<Extract<keyof T, string>>; // ordinal indices as number literals
->IndicesOf : Symbol(IndicesOf, Decl(templateLiteralTypes4.ts, 73, 1))
->T : Symbol(T, Decl(templateLiteralTypes4.ts, 76, 15))
->NumberFor : Symbol(NumberFor, Decl(templateLiteralTypes4.ts, 36, 115))
+>IndicesOf : Symbol(IndicesOf, Decl(templateLiteralTypes4.ts, 108, 1))
+>T : Symbol(T, Decl(templateLiteralTypes4.ts, 111, 15))
+>NumberFor : Symbol(NumberFor, Decl(templateLiteralTypes4.ts, 71, 41))
 >Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
->T : Symbol(T, Decl(templateLiteralTypes4.ts, 76, 15))
+>T : Symbol(T, Decl(templateLiteralTypes4.ts, 111, 15))
 
 type TypedObject<TDef extends readonly FieldDefinition[]> =
->TypedObject : Symbol(TypedObject, Decl(templateLiteralTypes4.ts, 76, 56))
->TDef : Symbol(TDef, Decl(templateLiteralTypes4.ts, 78, 17))
->FieldDefinition : Symbol(FieldDefinition, Decl(templateLiteralTypes4.ts, 41, 28))
+>TypedObject : Symbol(TypedObject, Decl(templateLiteralTypes4.ts, 111, 56))
+>TDef : Symbol(TDef, Decl(templateLiteralTypes4.ts, 113, 17))
+>FieldDefinition : Symbol(FieldDefinition, Decl(templateLiteralTypes4.ts, 76, 28))
 
     & TypedObjectMembers<TDef>
->TypedObjectMembers : Symbol(TypedObjectMembers, Decl(templateLiteralTypes4.ts, 62, 2))
->TDef : Symbol(TDef, Decl(templateLiteralTypes4.ts, 78, 17))
+>TypedObjectMembers : Symbol(TypedObjectMembers, Decl(templateLiteralTypes4.ts, 97, 2))
+>TDef : Symbol(TDef, Decl(templateLiteralTypes4.ts, 113, 17))
 
     & TypedObjectNamedMembers<TDef>
->TypedObjectNamedMembers : Symbol(TypedObjectNamedMembers, Decl(templateLiteralTypes4.ts, 52, 10))
->TDef : Symbol(TDef, Decl(templateLiteralTypes4.ts, 78, 17))
+>TypedObjectNamedMembers : Symbol(TypedObjectNamedMembers, Decl(templateLiteralTypes4.ts, 87, 10))
+>TDef : Symbol(TDef, Decl(templateLiteralTypes4.ts, 113, 17))
 
     & TypedObjectOrdinalMembers<TDef>;
->TypedObjectOrdinalMembers : Symbol(TypedObjectOrdinalMembers, Decl(templateLiteralTypes4.ts, 57, 2))
->TDef : Symbol(TDef, Decl(templateLiteralTypes4.ts, 78, 17))
+>TypedObjectOrdinalMembers : Symbol(TypedObjectOrdinalMembers, Decl(templateLiteralTypes4.ts, 92, 2))
+>TDef : Symbol(TDef, Decl(templateLiteralTypes4.ts, 113, 17))
 
 // NOTE: type would normally be created from something like `const Point = TypedObject([...])` from which we would infer the type
 type Point = TypedObject<[
->Point : Symbol(Point, Decl(templateLiteralTypes4.ts, 81, 38))
->TypedObject : Symbol(TypedObject, Decl(templateLiteralTypes4.ts, 76, 56))
+>Point : Symbol(Point, Decl(templateLiteralTypes4.ts, 116, 38))
+>TypedObject : Symbol(TypedObject, Decl(templateLiteralTypes4.ts, 111, 56))
 
     { name: "x", type: "f64" },
->name : Symbol(name, Decl(templateLiteralTypes4.ts, 85, 5))
->type : Symbol(type, Decl(templateLiteralTypes4.ts, 85, 16))
+>name : Symbol(name, Decl(templateLiteralTypes4.ts, 120, 5))
+>type : Symbol(type, Decl(templateLiteralTypes4.ts, 120, 16))
 
     { name: "y", type: "f64" },
->name : Symbol(name, Decl(templateLiteralTypes4.ts, 86, 5))
->type : Symbol(type, Decl(templateLiteralTypes4.ts, 86, 16))
+>name : Symbol(name, Decl(templateLiteralTypes4.ts, 121, 5))
+>type : Symbol(type, Decl(templateLiteralTypes4.ts, 121, 16))
 
 ]>;
 
 declare const p: Point;
->p : Symbol(p, Decl(templateLiteralTypes4.ts, 89, 13))
->Point : Symbol(Point, Decl(templateLiteralTypes4.ts, 81, 38))
+>p : Symbol(p, Decl(templateLiteralTypes4.ts, 124, 13))
+>Point : Symbol(Point, Decl(templateLiteralTypes4.ts, 116, 38))
 
 p.getIndex(0); // ok, 0 is a valid index
->p.getIndex : Symbol(TypedObjectMembers.getIndex, Decl(templateLiteralTypes4.ts, 68, 125))
->p : Symbol(p, Decl(templateLiteralTypes4.ts, 89, 13))
->getIndex : Symbol(TypedObjectMembers.getIndex, Decl(templateLiteralTypes4.ts, 68, 125))
+>p.getIndex : Symbol(TypedObjectMembers.getIndex, Decl(templateLiteralTypes4.ts, 103, 125))
+>p : Symbol(p, Decl(templateLiteralTypes4.ts, 124, 13))
+>getIndex : Symbol(TypedObjectMembers.getIndex, Decl(templateLiteralTypes4.ts, 103, 125))
 
 p.getIndex(1); // ok, 1 is a valid index
->p.getIndex : Symbol(TypedObjectMembers.getIndex, Decl(templateLiteralTypes4.ts, 68, 125))
->p : Symbol(p, Decl(templateLiteralTypes4.ts, 89, 13))
->getIndex : Symbol(TypedObjectMembers.getIndex, Decl(templateLiteralTypes4.ts, 68, 125))
+>p.getIndex : Symbol(TypedObjectMembers.getIndex, Decl(templateLiteralTypes4.ts, 103, 125))
+>p : Symbol(p, Decl(templateLiteralTypes4.ts, 124, 13))
+>getIndex : Symbol(TypedObjectMembers.getIndex, Decl(templateLiteralTypes4.ts, 103, 125))
 
 p.getIndex(2); // error, 2 is not a valid index
->p.getIndex : Symbol(TypedObjectMembers.getIndex, Decl(templateLiteralTypes4.ts, 68, 125))
->p : Symbol(p, Decl(templateLiteralTypes4.ts, 89, 13))
->getIndex : Symbol(TypedObjectMembers.getIndex, Decl(templateLiteralTypes4.ts, 68, 125))
+>p.getIndex : Symbol(TypedObjectMembers.getIndex, Decl(templateLiteralTypes4.ts, 103, 125))
+>p : Symbol(p, Decl(templateLiteralTypes4.ts, 124, 13))
+>getIndex : Symbol(TypedObjectMembers.getIndex, Decl(templateLiteralTypes4.ts, 103, 125))
 
 p.setIndex(0, 0); // ok, 0 is a valid index
->p.setIndex : Symbol(TypedObjectMembers.setIndex, Decl(templateLiteralTypes4.ts, 71, 104))
->p : Symbol(p, Decl(templateLiteralTypes4.ts, 89, 13))
->setIndex : Symbol(TypedObjectMembers.setIndex, Decl(templateLiteralTypes4.ts, 71, 104))
+>p.setIndex : Symbol(TypedObjectMembers.setIndex, Decl(templateLiteralTypes4.ts, 106, 104))
+>p : Symbol(p, Decl(templateLiteralTypes4.ts, 124, 13))
+>setIndex : Symbol(TypedObjectMembers.setIndex, Decl(templateLiteralTypes4.ts, 106, 104))
 
 p.setIndex(1, 0); // ok, 1 is a valid index
->p.setIndex : Symbol(TypedObjectMembers.setIndex, Decl(templateLiteralTypes4.ts, 71, 104))
->p : Symbol(p, Decl(templateLiteralTypes4.ts, 89, 13))
->setIndex : Symbol(TypedObjectMembers.setIndex, Decl(templateLiteralTypes4.ts, 71, 104))
+>p.setIndex : Symbol(TypedObjectMembers.setIndex, Decl(templateLiteralTypes4.ts, 106, 104))
+>p : Symbol(p, Decl(templateLiteralTypes4.ts, 124, 13))
+>setIndex : Symbol(TypedObjectMembers.setIndex, Decl(templateLiteralTypes4.ts, 106, 104))
 
 p.setIndex(2, 3); // error, 2 is not a valid index
->p.setIndex : Symbol(TypedObjectMembers.setIndex, Decl(templateLiteralTypes4.ts, 71, 104))
->p : Symbol(p, Decl(templateLiteralTypes4.ts, 89, 13))
->setIndex : Symbol(TypedObjectMembers.setIndex, Decl(templateLiteralTypes4.ts, 71, 104))
+>p.setIndex : Symbol(TypedObjectMembers.setIndex, Decl(templateLiteralTypes4.ts, 106, 104))
+>p : Symbol(p, Decl(templateLiteralTypes4.ts, 124, 13))
+>setIndex : Symbol(TypedObjectMembers.setIndex, Decl(templateLiteralTypes4.ts, 106, 104))
 
 declare function f1<T extends string | number>(s: `**${T}**`): T;
->f1 : Symbol(f1, Decl(templateLiteralTypes4.ts, 96, 17))
->T : Symbol(T, Decl(templateLiteralTypes4.ts, 98, 20))
->s : Symbol(s, Decl(templateLiteralTypes4.ts, 98, 47))
->T : Symbol(T, Decl(templateLiteralTypes4.ts, 98, 20))
->T : Symbol(T, Decl(templateLiteralTypes4.ts, 98, 20))
+>f1 : Symbol(f1, Decl(templateLiteralTypes4.ts, 131, 17))
+>T : Symbol(T, Decl(templateLiteralTypes4.ts, 133, 20))
+>s : Symbol(s, Decl(templateLiteralTypes4.ts, 133, 47))
+>T : Symbol(T, Decl(templateLiteralTypes4.ts, 133, 20))
+>T : Symbol(T, Decl(templateLiteralTypes4.ts, 133, 20))
 
-f1("**123**"); // "123" | 123
->f1 : Symbol(f1, Decl(templateLiteralTypes4.ts, 96, 17))
+f1("**123**"); // "123"
+>f1 : Symbol(f1, Decl(templateLiteralTypes4.ts, 131, 17))
 
-declare function f2<T extends string | bigint>(s: `**${T}**`): T;
->f2 : Symbol(f2, Decl(templateLiteralTypes4.ts, 99, 14))
->T : Symbol(T, Decl(templateLiteralTypes4.ts, 101, 20))
->s : Symbol(s, Decl(templateLiteralTypes4.ts, 101, 47))
->T : Symbol(T, Decl(templateLiteralTypes4.ts, 101, 20))
->T : Symbol(T, Decl(templateLiteralTypes4.ts, 101, 20))
+declare function f2<T extends number>(s: `**${T}**`): T;
+>f2 : Symbol(f2, Decl(templateLiteralTypes4.ts, 134, 14))
+>T : Symbol(T, Decl(templateLiteralTypes4.ts, 136, 20))
+>s : Symbol(s, Decl(templateLiteralTypes4.ts, 136, 38))
+>T : Symbol(T, Decl(templateLiteralTypes4.ts, 136, 20))
+>T : Symbol(T, Decl(templateLiteralTypes4.ts, 136, 20))
 
-f2("**123**"); // "123" | 123n
->f2 : Symbol(f2, Decl(templateLiteralTypes4.ts, 99, 14))
+f2("**123**"); // 123
+>f2 : Symbol(f2, Decl(templateLiteralTypes4.ts, 134, 14))
 
-declare function f3<T extends string | boolean>(s: `**${T}**`): T;
->f3 : Symbol(f3, Decl(templateLiteralTypes4.ts, 102, 14))
->T : Symbol(T, Decl(templateLiteralTypes4.ts, 104, 20))
->s : Symbol(s, Decl(templateLiteralTypes4.ts, 104, 48))
->T : Symbol(T, Decl(templateLiteralTypes4.ts, 104, 20))
->T : Symbol(T, Decl(templateLiteralTypes4.ts, 104, 20))
+declare function f3<T extends bigint>(s: `**${T}**`): T;
+>f3 : Symbol(f3, Decl(templateLiteralTypes4.ts, 137, 14))
+>T : Symbol(T, Decl(templateLiteralTypes4.ts, 139, 20))
+>s : Symbol(s, Decl(templateLiteralTypes4.ts, 139, 38))
+>T : Symbol(T, Decl(templateLiteralTypes4.ts, 139, 20))
+>T : Symbol(T, Decl(templateLiteralTypes4.ts, 139, 20))
 
-f3("**true**"); // true | "true"
->f3 : Symbol(f3, Decl(templateLiteralTypes4.ts, 102, 14))
+f3("**123**"); // 123n
+>f3 : Symbol(f3, Decl(templateLiteralTypes4.ts, 137, 14))
 
-f3("**false**"); // false | "false"
->f3 : Symbol(f3, Decl(templateLiteralTypes4.ts, 102, 14))
+declare function f4<T extends boolean>(s: `**${T}**`): T;
+>f4 : Symbol(f4, Decl(templateLiteralTypes4.ts, 140, 14))
+>T : Symbol(T, Decl(templateLiteralTypes4.ts, 142, 20))
+>s : Symbol(s, Decl(templateLiteralTypes4.ts, 142, 39))
+>T : Symbol(T, Decl(templateLiteralTypes4.ts, 142, 20))
+>T : Symbol(T, Decl(templateLiteralTypes4.ts, 142, 20))
+
+f4("**true**"); // true | "true"
+>f4 : Symbol(f4, Decl(templateLiteralTypes4.ts, 140, 14))
+
+f4("**false**"); // false | "false"
+>f4 : Symbol(f4, Decl(templateLiteralTypes4.ts, 140, 14))
 

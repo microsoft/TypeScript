@@ -263,6 +263,20 @@ namespace ts {
         VoidIsNonOptional = 1 << 1,
     }
 
+    const enum TemplateTypePlaceholderPriority {
+        Never, // lowest
+        Null,
+        Undefined,
+        BooleanLiterals,
+        Boolean,
+        BigIntLiterals,
+        BigInt,
+        NumberLiterals,
+        Number,
+        StringLiterals,
+        String, // highest
+    }
+
     const enum IntrinsicTypeKind {
         Uppercase,
         Lowercase,
@@ -22729,6 +22743,20 @@ namespace ts {
                 }
             }
 
+            function getTemplateTypePlaceholderPriority(type: Type) {
+                return type.flags & TypeFlags.String ? TemplateTypePlaceholderPriority.String :
+                    type.flags & TypeFlags.StringLiteral ? TemplateTypePlaceholderPriority.StringLiterals :
+                    type.flags & TypeFlags.Number ? TemplateTypePlaceholderPriority.Number :
+                    type.flags & TypeFlags.NumberLiteral ? TemplateTypePlaceholderPriority.NumberLiterals :
+                    type.flags & TypeFlags.BigInt ? TemplateTypePlaceholderPriority.BigInt :
+                    type.flags & TypeFlags.BigIntLiteral ? TemplateTypePlaceholderPriority.BigIntLiterals :
+                    type.flags & TypeFlags.Boolean ? TemplateTypePlaceholderPriority.Boolean :
+                    type.flags & TypeFlags.BooleanLiteral ? TemplateTypePlaceholderPriority.BooleanLiterals :
+                    type.flags & TypeFlags.Undefined ? TemplateTypePlaceholderPriority.Undefined :
+                    type.flags & TypeFlags.Null ? TemplateTypePlaceholderPriority.Null :
+                    TemplateTypePlaceholderPriority.Never;
+            }
+
             function inferToTemplateLiteralType(source: Type, target: TemplateLiteralType) {
                 const matches = inferTypesFromTemplateLiteralType(source, target);
                 const types = target.types;
@@ -22745,42 +22773,61 @@ namespace ts {
 
                         // If we are inferring from a string literal type to a type variable whose constraint includes one of the
                         // allowed template literal placeholder types, infer from a literal type corresponding to the constraint.
-                        let sourceTypes: Type[] | undefined;
                         if (source.flags & TypeFlags.StringLiteral && target.flags & TypeFlags.TypeVariable) {
                             const inferenceContext = getInferenceInfoForType(target);
-                            const constraint = inferenceContext ? getConstraintOfTypeParameter(inferenceContext.typeParameter) : undefined;
-                            if (constraint) {
-                                const str = (source as StringLiteralType).value;
-                                const constraintTypes = constraint.flags & TypeFlags.Union ? (constraint as UnionType).types : [constraint];
-                                for (const constraintType of constraintTypes) {
-                                    const sourceType =
-                                        constraintType.flags & TypeFlags.StringLike ? source :
-                                        constraintType.flags & TypeFlags.NumberLike && isValidNumberString(str, /*roundTripOnly*/ true) ? getNumberLiteralType(+str) :
-                                        constraintType.flags & TypeFlags.BigIntLike && isValidBigIntString(str, /*roundTripOnly*/ true) ? parseBigIntLiteralType(str) :
-                                        constraintType.flags & TypeFlags.BooleanLike && str === trueType.intrinsicName ? trueType :
-                                        constraintType.flags & TypeFlags.BooleanLike && str === falseType.intrinsicName ? falseType :
-                                        constraintType.flags & TypeFlags.Null && str === nullType.intrinsicName ? nullType :
-                                        constraintType.flags & TypeFlags.Undefined && str === undefinedType.intrinsicName ? undefinedType :
-                                        undefined;
-                                    if (sourceType) {
-                                        sourceTypes ??= [];
-                                        sourceTypes.push(sourceType);
+                            const constraint = inferenceContext ? getBaseConstraintOfType(inferenceContext.typeParameter) : undefined;
+                            if (constraint && !isTypeAny(constraint)) {
+                                let allTypeFlags: TypeFlags = 0;
+                                forEachType(constraint, t => { allTypeFlags |= t.flags; });
+
+                                // If the constraint contains `string`, we don't need to look for a more preferred type
+                                if (!(allTypeFlags & TypeFlags.String)) {
+                                    const str = (source as StringLiteralType).value;
+
+                                    // If the type contains `number` or a number literal and the string isn't a valid number, exclude numbers
+                                    if (allTypeFlags & TypeFlags.NumberLike && !isValidNumberString(str, /*roundTripOnly*/ true)) {
+                                        allTypeFlags &= ~TypeFlags.NumberLike;
+                                    }
+    
+                                    // If the type contains `bigint` or a bigint literal and the string isn't a valid bigint, exclude bigints
+                                    if (allTypeFlags & TypeFlags.BigIntLike && !isValidBigIntString(str, /*roundTripOnly*/ true)) {
+                                        allTypeFlags &= ~TypeFlags.BigIntLike;
+                                    }
+    
+                                    // for each type in the constraint, find the highest priority matching type
+                                    let matchingType: Type | undefined;
+                                    let matchingTypePriority = TemplateTypePlaceholderPriority.Never;
+                                    forEachType(constraint, t => {
+                                        if (t.flags & allTypeFlags) {
+                                            const typePriority = getTemplateTypePlaceholderPriority(t);
+                                            if (typePriority > matchingTypePriority) {
+                                                const newMatchingType =
+                                                    t.flags & TypeFlags.String ? source :
+                                                    t.flags & TypeFlags.Number ? getNumberLiteralType(+str) : // if `str` was not a valid number, TypeFlags.Number would have been excluded above.
+                                                    t.flags & TypeFlags.BigInt ? parseBigIntLiteralType(str) : // if `str` was not a valid bigint, TypeFlags.BigInt would have been excluded above.
+                                                    t.flags & TypeFlags.Boolean ? str === "true" ? trueType : falseType :
+                                                    t.flags & TypeFlags.StringLiteral && (t as StringLiteralType).value === str ? t :
+                                                    t.flags & TypeFlags.NumberLiteral && (t as NumberLiteralType).value === +str ? t :
+                                                    t.flags & TypeFlags.BigIntLiteral && pseudoBigIntToString((t as BigIntLiteralType).value) === str ? t :
+                                                    t.flags & (TypeFlags.BooleanLiteral | TypeFlags.Nullable) && (t as IntrinsicType).intrinsicName === str ? t :
+                                                    undefined;
+                                                if (newMatchingType) {
+                                                    matchingType = newMatchingType;
+                                                    matchingTypePriority = typePriority;
+                                                }
+                                            }
+                                        }
+                                    });
+    
+                                    if (matchingType) {
+                                        inferFromTypes(matchingType, target);
+                                        continue;
                                     }
                                 }
                             }
                         }
 
-                        if (sourceTypes) {
-                            const savedPriority = priority;
-                            priority |= InferencePriority.TemplateLiteralPlaceholder;
-                            for (const source of sourceTypes) {
-                                inferFromTypes(source, target);
-                            }
-                            priority = savedPriority;
-                        }
-                        else {
-                            inferFromTypes(source, target);
-                        }
+                        inferFromTypes(source, target);
                     }
                 }
             }
