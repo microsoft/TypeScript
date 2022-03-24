@@ -1,6 +1,7 @@
 /// <reference path="fourslash.ts" />
 
 // @newline: LF
+// @strictNullChecks: true
 // @Filename: a.ts
 ////interface I1 {
 ////    M(x: number): void;
@@ -25,7 +26,7 @@
 ////}
 ////interface Op {
 ////    M?(x: number): void;
-////    N: (x: string) => void | null | undefined;
+////    N: ((x: string) => void) | null | undefined;
 ////    O?: () => void;
 ////}
 ////const op: Op = {

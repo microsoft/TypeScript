@@ -1141,11 +1141,6 @@ namespace ts.Completions {
             case SyntaxKind.PropertyDeclaration:
             case SyntaxKind.MethodSignature:
             case SyntaxKind.MethodDeclaration: {
-                const signatures = checker.getSignaturesOfType(type, SignatureKind.Call);
-                if (signatures.length !== 1) {
-                    // We don't support overloads in object literals.
-                    return undefined;
-                }
                 let effectiveType = type.flags & TypeFlags.Union && (type as UnionType).types.length < 10
                     ? checker.getUnionType((type as UnionType).types, UnionReduction.Subtype)
                     : type;
@@ -1158,6 +1153,11 @@ namespace ts.Completions {
                     else {
                         return undefined;
                     }
+                }
+                const signatures = checker.getSignaturesOfType(effectiveType, SignatureKind.Call);
+                if (signatures.length !== 1) {
+                    // We don't support overloads in object literals.
+                    return undefined;
                 }
                 let typeNode = checker.typeToTypeNode(effectiveType, enclosingDeclaration, builderFlags, codefix.getNoopSymbolTrackerWithResolver({ program, host }));
                 if (!typeNode || !isFunctionTypeNode(typeNode)) {
@@ -2801,13 +2801,6 @@ namespace ts.Completions {
             */
             if (!(symbol.flags & (SymbolFlags.Property | SymbolFlags.Method))) {
                 return false;
-            }
-            if (symbol.flags & SymbolFlags.Property) {
-                const type = program.getTypeChecker().getTypeOfSymbol(symbol);
-                // We ignore non-function properties.
-                if (!type.getCallSignatures().length) {
-                    return false;
-                }
             }
             return true;
         }
