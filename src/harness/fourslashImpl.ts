@@ -983,6 +983,8 @@ namespace FourSlash {
                 assert.equal<boolean | undefined>(actual.isPackageJsonImport, expected.isPackageJsonImport, `At entry ${actual.name}: Expected 'isPackageJsonImport' properties to match`);
             }
 
+            assert.equal(actual.labelDetails?.description, expected.labelDetails?.description, `At entry ${actual.name}: Expected 'labelDetails.description' properties to match`);
+            assert.equal(actual.labelDetails?.detail, expected.labelDetails?.detail, `At entry ${actual.name}: Expected 'labelDetails.detail' properties to match`);
             assert.equal(actual.hasAction, expected.hasAction, `At entry ${actual.name}: Expected 'hasAction' properties to match`);
             assert.equal(actual.isRecommended, expected.isRecommended, `At entry ${actual.name}: Expected 'isRecommended' properties to match'`);
             assert.equal(actual.isSnippet, expected.isSnippet, `At entry ${actual.name}: Expected 'isSnippet' properties to match`);

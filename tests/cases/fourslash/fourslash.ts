@@ -700,6 +700,12 @@ declare namespace FourSlashInterface {
         readonly documentation?: string;
         readonly tags?: ReadonlyArray<JSDocTagInfo>;
         readonly sourceDisplay?: string;
+        readonly labelDetails?: ExpectedCompletionEntryLabelDetails;
+    }
+
+    export interface ExpectedCompletionEntryLabelDetails {
+        detail?: string;
+        description?: string;
     }
 
     interface VerifySignatureHelpOptions {
