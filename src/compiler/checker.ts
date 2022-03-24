@@ -25424,7 +25424,7 @@ namespace ts {
                     if (func.parameters.length >= 2 && isContextSensitiveFunctionOrObjectLiteralMethod(func)) {
                         const contextualSignature = getContextualSignature(func);
                         if (contextualSignature && contextualSignature.parameters.length === 1 && signatureHasRestParameter(contextualSignature)) {
-                            const restType = getTypeOfSymbol(contextualSignature.parameters[0]);
+                            const restType = getReducedApparentType(getTypeOfSymbol(contextualSignature.parameters[0]));
                             if (restType.flags & TypeFlags.Union && everyType(restType, isTupleType) && !isSymbolAssigned(symbol)) {
                                 const narrowedType = getFlowTypeOfReference(func, restType, restType, /*flowContainer*/ undefined, location.flowNode);
                                 const index = func.parameters.indexOf(declaration) - (getThisParameter(func) ? 1 : 0);
