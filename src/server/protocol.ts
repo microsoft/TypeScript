@@ -2291,6 +2291,10 @@ namespace ts.server.protocol {
          */
         sourceDisplay?: SymbolDisplayPart[];
         /**
+         * Additional details for the label.
+         */
+        labelDetails?: CompletionEntryLabelDetails;
+        /**
          * If true, this completion should be highlighted as recommended. There will only be one of these.
          * This will be set when we know the user should write an expression with a certain type and that type is an enum or constructable class.
          * Then either that enum/class or a namespace containing it will be the recommended symbol.
@@ -2317,6 +2321,21 @@ namespace ts.server.protocol {
          * items with the same name.
          */
         data?: unknown;
+    }
+
+    export interface CompletionEntryLabelDetails {
+        /**
+         * An optional string which is rendered less prominently directly after
+         * {@link CompletionEntry.name name}, without any spacing. Should be
+         * used for function signatures or type annotations.
+         */
+        detail?: string;
+        /**
+         * An optional string which is rendered less prominently after
+         * {@link CompletionEntryLabelDetails.detail}. Should be used for fully qualified
+         * names or file path.
+         */
+        description?: string;
     }
 
     /**
