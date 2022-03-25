@@ -758,7 +758,7 @@ namespace ts.server {
         readonly toCanonicalFileName: (f: string) => string;
 
         public host: ServerHost;
-        public fs: vfs.FileSystem | undefined;
+        public fs: vfs.VirtualServerHost | undefined;
         public readonly logger: Logger;
         public readonly cancellationToken: HostCancellationToken;
         public readonly useSingleInferredProject: boolean;
@@ -3690,19 +3690,12 @@ namespace ts.server {
         /* @internal */
         updateFileSystem(createdFiles: Iterator<protocol.FileSystemRequestArgs> | undefined, updatedFiles?: Iterator<protocol.FileSystemRequestArgs>, deletedFiles?: string[]) {
             // TODO: Maybe it is somehow gauche or verboten to use protocol types but the translation in applyChangesInOpenFiles seems stupid
-            // It is also WEIRD that we use iterators here not arrays
             // 1. set some internal tsserver state for mocked FS (if it hasn't already been set, this might not be the first message)
             if (!this.fs) {
-                this.fs = new vfs.FileSystem(/*ignoreCase*/ true, {
-                    files: {
-                        "/": {}
-                    },
-                    cwd: "/", // maybe not needed
-                    meta: { } // probably not needed
-                })
                 // -nervous laugh-
-                ;(this as any).host = new fakes.FakeServerHost(this.fs, { executingFilePath: "TEST" })
-                ;(this.session as any).host = this.host
+                this.fs = vfs.createVirtualServerHost([])
+                ;(this as any).host = this.fs
+                ;(this.session as any).host = this.fs
             }
             // 2. update vfs
             // I THINK that only vfs needs to update, because none of these files should be open.
@@ -3712,25 +3705,24 @@ namespace ts.server {
                 while (!(it = createdFiles.next()).done) {
                     const document = it.value
                     if (document.fileContent) {
-                        this.fs.mkdirpSync(vpath.dirname(document.file));
-                        this.fs.writeFileSync(document.file, document.fileContent, "utf8");
-                        this.fs.filemeta(document.file).set("document", document);
+                        // TODO: This isn't recursive, have to create parents AND walk past ones that already exist.
+                        this.fs.createDirectory(ts.getDirectoryPath(document.file));
+                        this.fs.writeFile(document.file, document.fileContent);
                     }
                 }
             }
 
             if (updatedFiles) {
-                const fileset: vfs.FileSet = {}
                 let it
-                while (!(it = updatedFiles.next()).done) {
-                    fileset[it.value.file] = it.value.fileContent
-                }
-                this.fs.apply(fileset)
+                while (!(it = updatedFiles.next()).done)
+                    if (it.value.fileContent)
+                        // TODO: Also should check that file exists, probably creating if it doesn't
+                        this.fs.modifyFile(it.value.file, it.value.fileContent)
             }
             if (deletedFiles) {
-                // these files should already be closed, so I THINK deleting it is enough
+                // TODO: Probably want to delete empty parent folders while they are empty too
                 for (const file of deletedFiles) {
-                    this.fs.rimrafSync(file)
+                    this.fs.deleteFile(file)
                 }
             }
         }

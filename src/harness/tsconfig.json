@@ -20,7 +20,11 @@
     ],
 
     "files": [
+        "collectionsImpl.ts",
         "util.ts",
+        "documentsUtil.ts",
+        "vpathUtil.ts",
+        "vfsUtil.ts",
         "compilerImpl.ts",
         "evaluatorImpl.ts",
         "fakesHosts.ts",

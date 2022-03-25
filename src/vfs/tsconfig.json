@@ -17,11 +17,6 @@
     ],
 
     "files": [
-        "collectionsImpl.ts",
-        "documentsUtil.ts",
-        "vpathUtil.ts",
-        "vfsUtil.ts",
-        "util.ts",
-        "fakesHosts.ts"
+        "virtualFileSystemWithWatch.ts"
     ]
 }
