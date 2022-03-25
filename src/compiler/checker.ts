@@ -26849,13 +26849,6 @@ namespace ts {
             return false;
         }
 
-        function uniqueStrings(strings: readonly __String[]): __String[] {
-            const unique = new Set(strings);
-            const result: __String[] = [];
-            unique.forEach(str => result.push(str));
-            return result;
-        }
-
         function discriminateContextualTypeByObjectMembers(node: ObjectLiteralExpression, contextualType: UnionType) {
             return getMatchingUnionConstituentForObjectLiteral(contextualType, node) || discriminateTypeByDiscriminableItems(contextualType,
                 concatenate(
@@ -26864,13 +26857,8 @@ namespace ts {
                         prop => ([() => getContextFreeTypeOfExpression((prop as PropertyAssignment).initializer), prop.symbol.escapedName] as [() => Type, __String])
                     ),
                     map(
-                        uniqueStrings(flatMap(contextualType.types, memberType =>
-                            map(
-                                filter(getPropertiesOfType(memberType), s => !!(s.flags & SymbolFlags.Optional) && !!node?.symbol?.members && !node.symbol.members.has(s.escapedName) && isDiscriminantProperty(contextualType, s.escapedName)),
-                                s => s.escapedName
-                            )
-                        )),
-                        name => [() => undefinedType, name] as [() => Type, __String]
+                        filter(getPropertiesOfType(contextualType), s => !!(s.flags & SymbolFlags.Optional) && !!node?.symbol?.members && !node.symbol.members.has(s.escapedName) && isDiscriminantProperty(contextualType, s.escapedName)),
+                        s => [() => undefinedType, s.escapedName] as [() => Type, __String]
                     )
                 ),
                 isTypeAssignableTo,
@@ -26886,13 +26874,8 @@ namespace ts {
                         prop => ([!(prop as JsxAttribute).initializer ? (() => trueType) : (() => getContextFreeTypeOfExpression((prop as JsxAttribute).initializer!)), prop.symbol.escapedName] as [() => Type, __String])
                     ),
                     map(
-                        uniqueStrings(flatMap(contextualType.types, memberType =>
-                            map(
-                                filter(getPropertiesOfType(memberType), s => !!(s.flags & SymbolFlags.Optional) && !!node?.symbol?.members && !node.symbol.members.has(s.escapedName) && isDiscriminantProperty(contextualType, s.escapedName)),
-                                s => s.escapedName
-                            )
-                        )),
-                        name => [() => undefinedType, name] as [() => Type, __String]
+                        filter(getPropertiesOfType(contextualType), s => !!(s.flags & SymbolFlags.Optional) && !!node?.symbol?.members && !node.symbol.members.has(s.escapedName) && isDiscriminantProperty(contextualType, s.escapedName)),
+                        s => [() => undefinedType, s.escapedName] as [() => Type, __String]
                     )
                 ),
                 isTypeAssignableTo,
