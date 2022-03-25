@@ -1,0 +1,76 @@
+=== tests/cases/compiler/controlFlowForIndexSignatures.ts ===
+type Foo = { bar: string };
+>Foo : Symbol(Foo, Decl(controlFlowForIndexSignatures.ts, 0, 0))
+>bar : Symbol(bar, Decl(controlFlowForIndexSignatures.ts, 0, 12))
+
+const boo: Foo = { bar: 'bar' };
+>boo : Symbol(boo, Decl(controlFlowForIndexSignatures.ts, 1, 5))
+>Foo : Symbol(Foo, Decl(controlFlowForIndexSignatures.ts, 0, 0))
+>bar : Symbol(bar, Decl(controlFlowForIndexSignatures.ts, 1, 18))
+
+function a(aboo1?: Foo) {
+>a : Symbol(a, Decl(controlFlowForIndexSignatures.ts, 1, 32))
+>aboo1 : Symbol(aboo1, Decl(controlFlowForIndexSignatures.ts, 3, 11))
+>Foo : Symbol(Foo, Decl(controlFlowForIndexSignatures.ts, 0, 0))
+
+    if (!aboo1) return;
+>aboo1 : Symbol(aboo1, Decl(controlFlowForIndexSignatures.ts, 3, 11))
+
+    const aboo2: { [key: string]: typeof aboo1.bar } = boo;
+>aboo2 : Symbol(aboo2, Decl(controlFlowForIndexSignatures.ts, 5, 9))
+>key : Symbol(key, Decl(controlFlowForIndexSignatures.ts, 5, 20))
+>aboo1.bar : Symbol(bar, Decl(controlFlowForIndexSignatures.ts, 0, 12))
+>aboo1 : Symbol(aboo1, Decl(controlFlowForIndexSignatures.ts, 3, 11))
+>bar : Symbol(bar, Decl(controlFlowForIndexSignatures.ts, 0, 12))
+>boo : Symbol(boo, Decl(controlFlowForIndexSignatures.ts, 1, 5))
+}
+
+declare let b: Foo | undefined;
+>b : Symbol(b, Decl(controlFlowForIndexSignatures.ts, 8, 11))
+>Foo : Symbol(Foo, Decl(controlFlowForIndexSignatures.ts, 0, 0))
+
+if (b) {
+>b : Symbol(b, Decl(controlFlowForIndexSignatures.ts, 8, 11))
+
+    const bboo: { [key: string]: typeof b.bar } = boo;
+>bboo : Symbol(bboo, Decl(controlFlowForIndexSignatures.ts, 10, 9))
+>key : Symbol(key, Decl(controlFlowForIndexSignatures.ts, 10, 19))
+>b.bar : Symbol(bar, Decl(controlFlowForIndexSignatures.ts, 0, 12))
+>b : Symbol(b, Decl(controlFlowForIndexSignatures.ts, 8, 11))
+>bar : Symbol(bar, Decl(controlFlowForIndexSignatures.ts, 0, 12))
+>boo : Symbol(boo, Decl(controlFlowForIndexSignatures.ts, 1, 5))
+}
+b = boo;
+>b : Symbol(b, Decl(controlFlowForIndexSignatures.ts, 8, 11))
+>boo : Symbol(boo, Decl(controlFlowForIndexSignatures.ts, 1, 5))
+
+const bboo: { [key: string]: typeof b.bar } = boo;
+>bboo : Symbol(bboo, Decl(controlFlowForIndexSignatures.ts, 13, 5))
+>key : Symbol(key, Decl(controlFlowForIndexSignatures.ts, 13, 15))
+>b.bar : Symbol(bar, Decl(controlFlowForIndexSignatures.ts, 0, 12))
+>b : Symbol(b, Decl(controlFlowForIndexSignatures.ts, 8, 11))
+>bar : Symbol(bar, Decl(controlFlowForIndexSignatures.ts, 0, 12))
+>boo : Symbol(boo, Decl(controlFlowForIndexSignatures.ts, 1, 5))
+
+declare let c: string | number;
+>c : Symbol(c, Decl(controlFlowForIndexSignatures.ts, 15, 11))
+
+if (typeof c === 'string') {
+>c : Symbol(c, Decl(controlFlowForIndexSignatures.ts, 15, 11))
+
+    type C = { [key: string]: typeof c };
+>C : Symbol(C, Decl(controlFlowForIndexSignatures.ts, 16, 28))
+>key : Symbol(key, Decl(controlFlowForIndexSignatures.ts, 17, 16))
+>c : Symbol(c, Decl(controlFlowForIndexSignatures.ts, 15, 11))
+
+    const boo1: C = { bar: 'works' };
+>boo1 : Symbol(boo1, Decl(controlFlowForIndexSignatures.ts, 18, 9))
+>C : Symbol(C, Decl(controlFlowForIndexSignatures.ts, 16, 28))
+>bar : Symbol(bar, Decl(controlFlowForIndexSignatures.ts, 18, 21))
+
+    const boo2: C = { bar: 1 }; // should error
+>boo2 : Symbol(boo2, Decl(controlFlowForIndexSignatures.ts, 19, 9))
+>C : Symbol(C, Decl(controlFlowForIndexSignatures.ts, 16, 28))
+>bar : Symbol(bar, Decl(controlFlowForIndexSignatures.ts, 19, 21))
+}
+
