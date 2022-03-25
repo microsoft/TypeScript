@@ -301,7 +301,7 @@ namespace ts {
         array.length = outIndex;
     }
 
-    export function clear(array: {}[]): void {
+    export function clear(array: unknown[]): void {
         array.length = 0;
     }
 
@@ -1644,7 +1644,7 @@ namespace ts {
     /**
      * Tests whether a value is an array.
      */
-    export function isArray(value: any): value is readonly {}[] {
+    export function isArray(value: any): value is readonly unknown[] {
         return Array.isArray ? Array.isArray(value) : value instanceof Array;
     }
 
@@ -1677,7 +1677,7 @@ namespace ts {
     }
 
     /** Does nothing. */
-    export function noop(_?: {} | null | undefined): void { }
+    export function noop(_?: unknown): void { }
 
     /** Do nothing and return false */
     export function returnFalse(): false {

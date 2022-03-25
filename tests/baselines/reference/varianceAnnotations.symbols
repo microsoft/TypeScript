@@ -1,0 +1,450 @@
+=== tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts ===
+type Covariant<out T> = {
+>Covariant : Symbol(Covariant, Decl(varianceAnnotations.ts, 0, 0))
+>T : Symbol(T, Decl(varianceAnnotations.ts, 0, 15))
+
+    x: T;
+>x : Symbol(x, Decl(varianceAnnotations.ts, 0, 25))
+>T : Symbol(T, Decl(varianceAnnotations.ts, 0, 15))
+}
+
+declare let super_covariant: Covariant<unknown>;
+>super_covariant : Symbol(super_covariant, Decl(varianceAnnotations.ts, 4, 11))
+>Covariant : Symbol(Covariant, Decl(varianceAnnotations.ts, 0, 0))
+
+declare let sub_covariant: Covariant<string>;
+>sub_covariant : Symbol(sub_covariant, Decl(varianceAnnotations.ts, 5, 11))
+>Covariant : Symbol(Covariant, Decl(varianceAnnotations.ts, 0, 0))
+
+super_covariant = sub_covariant;
+>super_covariant : Symbol(super_covariant, Decl(varianceAnnotations.ts, 4, 11))
+>sub_covariant : Symbol(sub_covariant, Decl(varianceAnnotations.ts, 5, 11))
+
+sub_covariant = super_covariant;  // Error
+>sub_covariant : Symbol(sub_covariant, Decl(varianceAnnotations.ts, 5, 11))
+>super_covariant : Symbol(super_covariant, Decl(varianceAnnotations.ts, 4, 11))
+
+type Contravariant<in T> = {
+>Contravariant : Symbol(Contravariant, Decl(varianceAnnotations.ts, 8, 32))
+>T : Symbol(T, Decl(varianceAnnotations.ts, 10, 19))
+
+    f: (x: T) => void;
+>f : Symbol(f, Decl(varianceAnnotations.ts, 10, 28))
+>x : Symbol(x, Decl(varianceAnnotations.ts, 11, 8))
+>T : Symbol(T, Decl(varianceAnnotations.ts, 10, 19))
+}
+
+declare let super_contravariant: Contravariant<unknown>;
+>super_contravariant : Symbol(super_contravariant, Decl(varianceAnnotations.ts, 14, 11))
+>Contravariant : Symbol(Contravariant, Decl(varianceAnnotations.ts, 8, 32))
+
+declare let sub_contravariant: Contravariant<string>;
+>sub_contravariant : Symbol(sub_contravariant, Decl(varianceAnnotations.ts, 15, 11))
+>Contravariant : Symbol(Contravariant, Decl(varianceAnnotations.ts, 8, 32))
+
+super_contravariant = sub_contravariant;  // Error
+>super_contravariant : Symbol(super_contravariant, Decl(varianceAnnotations.ts, 14, 11))
+>sub_contravariant : Symbol(sub_contravariant, Decl(varianceAnnotations.ts, 15, 11))
+
+sub_contravariant = super_contravariant;
+>sub_contravariant : Symbol(sub_contravariant, Decl(varianceAnnotations.ts, 15, 11))
+>super_contravariant : Symbol(super_contravariant, Decl(varianceAnnotations.ts, 14, 11))
+
+type Invariant<in out T> = {
+>Invariant : Symbol(Invariant, Decl(varianceAnnotations.ts, 18, 40))
+>T : Symbol(T, Decl(varianceAnnotations.ts, 20, 15))
+
+    f: (x: T) => T;
+>f : Symbol(f, Decl(varianceAnnotations.ts, 20, 28))
+>x : Symbol(x, Decl(varianceAnnotations.ts, 21, 8))
+>T : Symbol(T, Decl(varianceAnnotations.ts, 20, 15))
+>T : Symbol(T, Decl(varianceAnnotations.ts, 20, 15))
+}
+
+declare let super_invariant: Invariant<unknown>;
+>super_invariant : Symbol(super_invariant, Decl(varianceAnnotations.ts, 24, 11))
+>Invariant : Symbol(Invariant, Decl(varianceAnnotations.ts, 18, 40))
+
+declare let sub_invariant: Invariant<string>;
+>sub_invariant : Symbol(sub_invariant, Decl(varianceAnnotations.ts, 25, 11))
+>Invariant : Symbol(Invariant, Decl(varianceAnnotations.ts, 18, 40))
+
+super_invariant = sub_invariant;  // Error
+>super_invariant : Symbol(super_invariant, Decl(varianceAnnotations.ts, 24, 11))
+>sub_invariant : Symbol(sub_invariant, Decl(varianceAnnotations.ts, 25, 11))
+
+sub_invariant = super_invariant;  // Error
+>sub_invariant : Symbol(sub_invariant, Decl(varianceAnnotations.ts, 25, 11))
+>super_invariant : Symbol(super_invariant, Decl(varianceAnnotations.ts, 24, 11))
+
+// Variance of various type constructors
+
+type T10<out T> = T;
+>T10 : Symbol(T10, Decl(varianceAnnotations.ts, 28, 32))
+>T : Symbol(T, Decl(varianceAnnotations.ts, 32, 9))
+>T : Symbol(T, Decl(varianceAnnotations.ts, 32, 9))
+
+type T11<in T> = keyof T;
+>T11 : Symbol(T11, Decl(varianceAnnotations.ts, 32, 20))
+>T : Symbol(T, Decl(varianceAnnotations.ts, 33, 9))
+>T : Symbol(T, Decl(varianceAnnotations.ts, 33, 9))
+
+type T12<out T, out K extends keyof T> = T[K];
+>T12 : Symbol(T12, Decl(varianceAnnotations.ts, 33, 25))
+>T : Symbol(T, Decl(varianceAnnotations.ts, 34, 9))
+>K : Symbol(K, Decl(varianceAnnotations.ts, 34, 15))
+>T : Symbol(T, Decl(varianceAnnotations.ts, 34, 9))
+>T : Symbol(T, Decl(varianceAnnotations.ts, 34, 9))
+>K : Symbol(K, Decl(varianceAnnotations.ts, 34, 15))
+
+type T13<in out T> = T[keyof T];
+>T13 : Symbol(T13, Decl(varianceAnnotations.ts, 34, 46))
+>T : Symbol(T, Decl(varianceAnnotations.ts, 35, 9))
+>T : Symbol(T, Decl(varianceAnnotations.ts, 35, 9))
+>T : Symbol(T, Decl(varianceAnnotations.ts, 35, 9))
+
+// Variance annotation errors
+
+type Covariant1<in T> = {  // Error
+>Covariant1 : Symbol(Covariant1, Decl(varianceAnnotations.ts, 35, 32))
+>T : Symbol(T, Decl(varianceAnnotations.ts, 39, 16))
+
+    x: T;
+>x : Symbol(x, Decl(varianceAnnotations.ts, 39, 25))
+>T : Symbol(T, Decl(varianceAnnotations.ts, 39, 16))
+}
+
+type Contravariant1<out T> = keyof T;  // Error
+>Contravariant1 : Symbol(Contravariant1, Decl(varianceAnnotations.ts, 41, 1))
+>T : Symbol(T, Decl(varianceAnnotations.ts, 43, 20))
+>T : Symbol(T, Decl(varianceAnnotations.ts, 43, 20))
+
+type Contravariant2<out T> = {  // Error
+>Contravariant2 : Symbol(Contravariant2, Decl(varianceAnnotations.ts, 43, 37))
+>T : Symbol(T, Decl(varianceAnnotations.ts, 45, 20))
+
+    f: (x: T) => void;
+>f : Symbol(f, Decl(varianceAnnotations.ts, 45, 30))
+>x : Symbol(x, Decl(varianceAnnotations.ts, 46, 8))
+>T : Symbol(T, Decl(varianceAnnotations.ts, 45, 20))
+}
+
+type Invariant1<in T> = {  // Error
+>Invariant1 : Symbol(Invariant1, Decl(varianceAnnotations.ts, 47, 1))
+>T : Symbol(T, Decl(varianceAnnotations.ts, 49, 16))
+
+    f: (x: T) => T;
+>f : Symbol(f, Decl(varianceAnnotations.ts, 49, 25))
+>x : Symbol(x, Decl(varianceAnnotations.ts, 50, 8))
+>T : Symbol(T, Decl(varianceAnnotations.ts, 49, 16))
+>T : Symbol(T, Decl(varianceAnnotations.ts, 49, 16))
+}
+
+type Invariant2<out T> = {  // Error
+>Invariant2 : Symbol(Invariant2, Decl(varianceAnnotations.ts, 51, 1))
+>T : Symbol(T, Decl(varianceAnnotations.ts, 53, 16))
+
+    f: (x: T) => T;
+>f : Symbol(f, Decl(varianceAnnotations.ts, 53, 26))
+>x : Symbol(x, Decl(varianceAnnotations.ts, 54, 8))
+>T : Symbol(T, Decl(varianceAnnotations.ts, 53, 16))
+>T : Symbol(T, Decl(varianceAnnotations.ts, 53, 16))
+}
+
+// Variance in circular types
+
+type Foo1<in T> = {  // Error
+>Foo1 : Symbol(Foo1, Decl(varianceAnnotations.ts, 55, 1))
+>T : Symbol(T, Decl(varianceAnnotations.ts, 59, 10))
+
+    x: T;
+>x : Symbol(x, Decl(varianceAnnotations.ts, 59, 19))
+>T : Symbol(T, Decl(varianceAnnotations.ts, 59, 10))
+
+    f: FooFn1<T>;
+>f : Symbol(f, Decl(varianceAnnotations.ts, 60, 9))
+>FooFn1 : Symbol(FooFn1, Decl(varianceAnnotations.ts, 62, 1))
+>T : Symbol(T, Decl(varianceAnnotations.ts, 59, 10))
+}
+
+type FooFn1<T> = (foo: Bar1<T[]>) => void;
+>FooFn1 : Symbol(FooFn1, Decl(varianceAnnotations.ts, 62, 1))
+>T : Symbol(T, Decl(varianceAnnotations.ts, 64, 12))
+>foo : Symbol(foo, Decl(varianceAnnotations.ts, 64, 18))
+>Bar1 : Symbol(Bar1, Decl(varianceAnnotations.ts, 64, 42))
+>T : Symbol(T, Decl(varianceAnnotations.ts, 64, 12))
+
+type Bar1<T> = {
+>Bar1 : Symbol(Bar1, Decl(varianceAnnotations.ts, 64, 42))
+>T : Symbol(T, Decl(varianceAnnotations.ts, 66, 10))
+
+    value: Foo1<T[]>;
+>value : Symbol(value, Decl(varianceAnnotations.ts, 66, 16))
+>Foo1 : Symbol(Foo1, Decl(varianceAnnotations.ts, 55, 1))
+>T : Symbol(T, Decl(varianceAnnotations.ts, 66, 10))
+}
+
+type Foo2<out T> = {  // Error
+>Foo2 : Symbol(Foo2, Decl(varianceAnnotations.ts, 68, 1))
+>T : Symbol(T, Decl(varianceAnnotations.ts, 70, 10))
+
+    x: T;
+>x : Symbol(x, Decl(varianceAnnotations.ts, 70, 20))
+>T : Symbol(T, Decl(varianceAnnotations.ts, 70, 10))
+
+    f: FooFn2<T>;
+>f : Symbol(f, Decl(varianceAnnotations.ts, 71, 9))
+>FooFn2 : Symbol(FooFn2, Decl(varianceAnnotations.ts, 73, 1))
+>T : Symbol(T, Decl(varianceAnnotations.ts, 70, 10))
+}
+
+type FooFn2<T> = (foo: Bar2<T[]>) => void;
+>FooFn2 : Symbol(FooFn2, Decl(varianceAnnotations.ts, 73, 1))
+>T : Symbol(T, Decl(varianceAnnotations.ts, 75, 12))
+>foo : Symbol(foo, Decl(varianceAnnotations.ts, 75, 18))
+>Bar2 : Symbol(Bar2, Decl(varianceAnnotations.ts, 75, 42))
+>T : Symbol(T, Decl(varianceAnnotations.ts, 75, 12))
+
+type Bar2<T> = {
+>Bar2 : Symbol(Bar2, Decl(varianceAnnotations.ts, 75, 42))
+>T : Symbol(T, Decl(varianceAnnotations.ts, 77, 10))
+
+    value: Foo2<T[]>;
+>value : Symbol(value, Decl(varianceAnnotations.ts, 77, 16))
+>Foo2 : Symbol(Foo2, Decl(varianceAnnotations.ts, 68, 1))
+>T : Symbol(T, Decl(varianceAnnotations.ts, 77, 10))
+}
+
+type Foo3<in out T> = {
+>Foo3 : Symbol(Foo3, Decl(varianceAnnotations.ts, 79, 1))
+>T : Symbol(T, Decl(varianceAnnotations.ts, 81, 10))
+
+    x: T;
+>x : Symbol(x, Decl(varianceAnnotations.ts, 81, 23))
+>T : Symbol(T, Decl(varianceAnnotations.ts, 81, 10))
+
+    f: FooFn3<T>;
+>f : Symbol(f, Decl(varianceAnnotations.ts, 82, 9))
+>FooFn3 : Symbol(FooFn3, Decl(varianceAnnotations.ts, 84, 1))
+>T : Symbol(T, Decl(varianceAnnotations.ts, 81, 10))
+}
+
+type FooFn3<T> = (foo: Bar3<T[]>) => void;
+>FooFn3 : Symbol(FooFn3, Decl(varianceAnnotations.ts, 84, 1))
+>T : Symbol(T, Decl(varianceAnnotations.ts, 86, 12))
+>foo : Symbol(foo, Decl(varianceAnnotations.ts, 86, 18))
+>Bar3 : Symbol(Bar3, Decl(varianceAnnotations.ts, 86, 42))
+>T : Symbol(T, Decl(varianceAnnotations.ts, 86, 12))
+
+type Bar3<T> = {
+>Bar3 : Symbol(Bar3, Decl(varianceAnnotations.ts, 86, 42))
+>T : Symbol(T, Decl(varianceAnnotations.ts, 88, 10))
+
+    value: Foo3<T[]>;
+>value : Symbol(value, Decl(varianceAnnotations.ts, 88, 16))
+>Foo3 : Symbol(Foo3, Decl(varianceAnnotations.ts, 79, 1))
+>T : Symbol(T, Decl(varianceAnnotations.ts, 88, 10))
+}
+
+// Wrong modifier usage
+
+type T20<public T> = T;  // Error
+>T20 : Symbol(T20, Decl(varianceAnnotations.ts, 90, 1))
+>T : Symbol(T, Decl(varianceAnnotations.ts, 94, 9))
+>T : Symbol(T, Decl(varianceAnnotations.ts, 94, 9))
+
+type T21<in out in T> = T;  // Error
+>T21 : Symbol(T21, Decl(varianceAnnotations.ts, 94, 23))
+>T : Symbol(T, Decl(varianceAnnotations.ts, 95, 9))
+>T : Symbol(T, Decl(varianceAnnotations.ts, 95, 9))
+
+type T22<in out out T> = T;  // Error
+>T22 : Symbol(T22, Decl(varianceAnnotations.ts, 95, 26))
+>T : Symbol(T, Decl(varianceAnnotations.ts, 96, 9))
+>T : Symbol(T, Decl(varianceAnnotations.ts, 96, 9))
+
+type T23<out in T> = T;  // Error
+>T23 : Symbol(T23, Decl(varianceAnnotations.ts, 96, 27))
+>T : Symbol(T, Decl(varianceAnnotations.ts, 97, 9))
+>T : Symbol(T, Decl(varianceAnnotations.ts, 97, 9))
+
+declare function f1<in T>(x: T): void;  // Error
+>f1 : Symbol(f1, Decl(varianceAnnotations.ts, 97, 23))
+>T : Symbol(T, Decl(varianceAnnotations.ts, 99, 20))
+>x : Symbol(x, Decl(varianceAnnotations.ts, 99, 26))
+>T : Symbol(T, Decl(varianceAnnotations.ts, 99, 20))
+
+declare function f2<out T>(): T;  // Error
+>f2 : Symbol(f2, Decl(varianceAnnotations.ts, 99, 38))
+>T : Symbol(T, Decl(varianceAnnotations.ts, 100, 20))
+>T : Symbol(T, Decl(varianceAnnotations.ts, 100, 20))
+
+class C {
+>C : Symbol(C, Decl(varianceAnnotations.ts, 100, 32))
+
+    in a = 0;  // Error
+>a : Symbol(C.a, Decl(varianceAnnotations.ts, 102, 9))
+
+    out b = 0;  // Error
+>b : Symbol(C.b, Decl(varianceAnnotations.ts, 103, 13))
+}
+
+// Interface merging
+
+interface Baz<out T> {}
+>Baz : Symbol(Baz, Decl(varianceAnnotations.ts, 105, 1), Decl(varianceAnnotations.ts, 109, 23))
+>T : Symbol(T, Decl(varianceAnnotations.ts, 109, 14), Decl(varianceAnnotations.ts, 110, 14))
+
+interface Baz<in T> {}
+>Baz : Symbol(Baz, Decl(varianceAnnotations.ts, 105, 1), Decl(varianceAnnotations.ts, 109, 23))
+>T : Symbol(T, Decl(varianceAnnotations.ts, 109, 14), Decl(varianceAnnotations.ts, 110, 14))
+
+declare let baz1: Baz<unknown>;
+>baz1 : Symbol(baz1, Decl(varianceAnnotations.ts, 112, 11))
+>Baz : Symbol(Baz, Decl(varianceAnnotations.ts, 105, 1), Decl(varianceAnnotations.ts, 109, 23))
+
+declare let baz2: Baz<string>;
+>baz2 : Symbol(baz2, Decl(varianceAnnotations.ts, 113, 11))
+>Baz : Symbol(Baz, Decl(varianceAnnotations.ts, 105, 1), Decl(varianceAnnotations.ts, 109, 23))
+
+baz1 = baz2;  // Error
+>baz1 : Symbol(baz1, Decl(varianceAnnotations.ts, 112, 11))
+>baz2 : Symbol(baz2, Decl(varianceAnnotations.ts, 113, 11))
+
+baz2 = baz1;  // Error
+>baz2 : Symbol(baz2, Decl(varianceAnnotations.ts, 113, 11))
+>baz1 : Symbol(baz1, Decl(varianceAnnotations.ts, 112, 11))
+
+// Repro from #44572
+
+interface Parent<out A> {
+>Parent : Symbol(Parent, Decl(varianceAnnotations.ts, 116, 12))
+>A : Symbol(A, Decl(varianceAnnotations.ts, 120, 17))
+
+    child: Child<A> | null;
+>child : Symbol(Parent.child, Decl(varianceAnnotations.ts, 120, 25))
+>Child : Symbol(Child, Decl(varianceAnnotations.ts, 123, 1))
+>A : Symbol(A, Decl(varianceAnnotations.ts, 120, 17))
+
+    parent: Parent<A> | null;
+>parent : Symbol(Parent.parent, Decl(varianceAnnotations.ts, 121, 27))
+>Parent : Symbol(Parent, Decl(varianceAnnotations.ts, 116, 12))
+>A : Symbol(A, Decl(varianceAnnotations.ts, 120, 17))
+}
+
+interface Child<A, B = unknown> extends Parent<A> {
+>Child : Symbol(Child, Decl(varianceAnnotations.ts, 123, 1))
+>A : Symbol(A, Decl(varianceAnnotations.ts, 125, 16))
+>B : Symbol(B, Decl(varianceAnnotations.ts, 125, 18))
+>Parent : Symbol(Parent, Decl(varianceAnnotations.ts, 116, 12))
+>A : Symbol(A, Decl(varianceAnnotations.ts, 125, 16))
+
+    readonly a: A;
+>a : Symbol(Child.a, Decl(varianceAnnotations.ts, 125, 51))
+>A : Symbol(A, Decl(varianceAnnotations.ts, 125, 16))
+
+    readonly b: B;
+>b : Symbol(Child.b, Decl(varianceAnnotations.ts, 126, 18))
+>B : Symbol(B, Decl(varianceAnnotations.ts, 125, 18))
+}
+
+function fn<A>(inp: Child<A>) {
+>fn : Symbol(fn, Decl(varianceAnnotations.ts, 128, 1))
+>A : Symbol(A, Decl(varianceAnnotations.ts, 130, 12))
+>inp : Symbol(inp, Decl(varianceAnnotations.ts, 130, 15))
+>Child : Symbol(Child, Decl(varianceAnnotations.ts, 123, 1))
+>A : Symbol(A, Decl(varianceAnnotations.ts, 130, 12))
+
+    const a: Child<unknown> = inp;
+>a : Symbol(a, Decl(varianceAnnotations.ts, 131, 9))
+>Child : Symbol(Child, Decl(varianceAnnotations.ts, 123, 1))
+>inp : Symbol(inp, Decl(varianceAnnotations.ts, 130, 15))
+}
+
+const pu: Parent<unknown> = { child: { a: 0, b: 0, child: null, parent: null }, parent: null };
+>pu : Symbol(pu, Decl(varianceAnnotations.ts, 134, 5))
+>Parent : Symbol(Parent, Decl(varianceAnnotations.ts, 116, 12))
+>child : Symbol(child, Decl(varianceAnnotations.ts, 134, 29))
+>a : Symbol(a, Decl(varianceAnnotations.ts, 134, 38))
+>b : Symbol(b, Decl(varianceAnnotations.ts, 134, 44))
+>child : Symbol(child, Decl(varianceAnnotations.ts, 134, 50))
+>parent : Symbol(parent, Decl(varianceAnnotations.ts, 134, 63))
+>parent : Symbol(parent, Decl(varianceAnnotations.ts, 134, 79))
+
+const notString: Parent<string> = pu;  // Error
+>notString : Symbol(notString, Decl(varianceAnnotations.ts, 135, 5))
+>Parent : Symbol(Parent, Decl(varianceAnnotations.ts, 116, 12))
+>pu : Symbol(pu, Decl(varianceAnnotations.ts, 134, 5))
+
+// Repro from comment in #44572
+
+declare class StateNode<TContext, in out TEvent extends { type: string }> {
+>StateNode : Symbol(StateNode, Decl(varianceAnnotations.ts, 135, 37))
+>TContext : Symbol(TContext, Decl(varianceAnnotations.ts, 139, 24))
+>TEvent : Symbol(TEvent, Decl(varianceAnnotations.ts, 139, 33))
+>type : Symbol(type, Decl(varianceAnnotations.ts, 139, 57))
+
+    _storedEvent: TEvent;
+>_storedEvent : Symbol(StateNode._storedEvent, Decl(varianceAnnotations.ts, 139, 75))
+>TEvent : Symbol(TEvent, Decl(varianceAnnotations.ts, 139, 33))
+
+    _action: ActionObject<TEvent>;
+>_action : Symbol(StateNode._action, Decl(varianceAnnotations.ts, 140, 25))
+>ActionObject : Symbol(ActionObject, Decl(varianceAnnotations.ts, 143, 1))
+>TEvent : Symbol(TEvent, Decl(varianceAnnotations.ts, 139, 33))
+
+    _state: StateNode<TContext, any>;
+>_state : Symbol(StateNode._state, Decl(varianceAnnotations.ts, 141, 34))
+>StateNode : Symbol(StateNode, Decl(varianceAnnotations.ts, 135, 37))
+>TContext : Symbol(TContext, Decl(varianceAnnotations.ts, 139, 24))
+}
+
+interface ActionObject<TEvent extends { type: string }> {
+>ActionObject : Symbol(ActionObject, Decl(varianceAnnotations.ts, 143, 1))
+>TEvent : Symbol(TEvent, Decl(varianceAnnotations.ts, 145, 23))
+>type : Symbol(type, Decl(varianceAnnotations.ts, 145, 39))
+
+    exec: (meta: StateNode<any, TEvent>) => void;
+>exec : Symbol(ActionObject.exec, Decl(varianceAnnotations.ts, 145, 57))
+>meta : Symbol(meta, Decl(varianceAnnotations.ts, 146, 11))
+>StateNode : Symbol(StateNode, Decl(varianceAnnotations.ts, 135, 37))
+>TEvent : Symbol(TEvent, Decl(varianceAnnotations.ts, 145, 23))
+}
+
+declare function createMachine<TEvent extends { type: string }>(action: ActionObject<TEvent>): StateNode<any, any>;
+>createMachine : Symbol(createMachine, Decl(varianceAnnotations.ts, 147, 1))
+>TEvent : Symbol(TEvent, Decl(varianceAnnotations.ts, 149, 31))
+>type : Symbol(type, Decl(varianceAnnotations.ts, 149, 47))
+>action : Symbol(action, Decl(varianceAnnotations.ts, 149, 64))
+>ActionObject : Symbol(ActionObject, Decl(varianceAnnotations.ts, 143, 1))
+>TEvent : Symbol(TEvent, Decl(varianceAnnotations.ts, 149, 31))
+>StateNode : Symbol(StateNode, Decl(varianceAnnotations.ts, 135, 37))
+
+declare function interpret<TContext>(machine: StateNode<TContext, any>): void;
+>interpret : Symbol(interpret, Decl(varianceAnnotations.ts, 149, 115))
+>TContext : Symbol(TContext, Decl(varianceAnnotations.ts, 151, 27))
+>machine : Symbol(machine, Decl(varianceAnnotations.ts, 151, 37))
+>StateNode : Symbol(StateNode, Decl(varianceAnnotations.ts, 135, 37))
+>TContext : Symbol(TContext, Decl(varianceAnnotations.ts, 151, 27))
+
+const machine = createMachine({} as any);
+>machine : Symbol(machine, Decl(varianceAnnotations.ts, 153, 5))
+>createMachine : Symbol(createMachine, Decl(varianceAnnotations.ts, 147, 1))
+
+interpret(machine);
+>interpret : Symbol(interpret, Decl(varianceAnnotations.ts, 149, 115))
+>machine : Symbol(machine, Decl(varianceAnnotations.ts, 153, 5))
+
+declare const qq: ActionObject<{ type: "PLAY"; value: number }>;
+>qq : Symbol(qq, Decl(varianceAnnotations.ts, 157, 13))
+>ActionObject : Symbol(ActionObject, Decl(varianceAnnotations.ts, 143, 1))
+>type : Symbol(type, Decl(varianceAnnotations.ts, 157, 32))
+>value : Symbol(value, Decl(varianceAnnotations.ts, 157, 46))
+
+createMachine<{ type: "PLAY"; value: number } | { type: "RESET" }>(qq);  // Error
+>createMachine : Symbol(createMachine, Decl(varianceAnnotations.ts, 147, 1))
+>type : Symbol(type, Decl(varianceAnnotations.ts, 159, 15))
+>value : Symbol(value, Decl(varianceAnnotations.ts, 159, 29))
+>type : Symbol(type, Decl(varianceAnnotations.ts, 159, 49))
+>qq : Symbol(qq, Decl(varianceAnnotations.ts, 157, 13))
+

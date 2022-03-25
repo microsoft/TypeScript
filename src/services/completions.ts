@@ -3913,9 +3913,14 @@ namespace ts.Completions {
         if (type) {
             return type;
         }
-        if (isBinaryExpression(node.parent) && node.parent.operatorToken.kind === SyntaxKind.EqualsToken && node === node.parent.left) {
+        const parent = walkUpParenthesizedExpressions(node.parent);
+        if (isBinaryExpression(parent) && parent.operatorToken.kind === SyntaxKind.EqualsToken && node === parent.left) {
             // Object literal is assignment pattern: ({ | } = x)
-            return typeChecker.getTypeAtLocation(node.parent);
+            return typeChecker.getTypeAtLocation(parent);
+        }
+        if (isExpression(parent)) {
+            // f(() => (({ | })));
+            return typeChecker.getContextualType(parent);
         }
         return undefined;
     }

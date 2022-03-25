@@ -117,7 +117,8 @@ namespace ts {
                 return visitNode(cbNode, (node as QualifiedName).left) ||
                     visitNode(cbNode, (node as QualifiedName).right);
             case SyntaxKind.TypeParameter:
-                return visitNode(cbNode, (node as TypeParameterDeclaration).name) ||
+                return visitNodes(cbNode, cbNodes, node.modifiers) ||
+                    visitNode(cbNode, (node as TypeParameterDeclaration).name) ||
                     visitNode(cbNode, (node as TypeParameterDeclaration).constraint) ||
                     visitNode(cbNode, (node as TypeParameterDeclaration).default) ||
                     visitNode(cbNode, (node as TypeParameterDeclaration).expression);
@@ -2176,7 +2177,7 @@ namespace ts {
                 case ParsingContext.ArrayBindingElements:
                     return token() === SyntaxKind.CommaToken || token() === SyntaxKind.DotDotDotToken || isBindingIdentifierOrPrivateIdentifierOrPattern();
                 case ParsingContext.TypeParameters:
-                    return isIdentifier();
+                    return token() === SyntaxKind.InKeyword || isIdentifier();
                 case ParsingContext.ArrayLiteralMembers:
                     switch (token()) {
                         case SyntaxKind.CommaToken:
@@ -3176,6 +3177,7 @@ namespace ts {
 
         function parseTypeParameter(): TypeParameterDeclaration {
             const pos = getNodePos();
+            const modifiers = parseModifiers();
             const name = parseIdentifier();
             let constraint: TypeNode | undefined;
             let expression: Expression | undefined;
@@ -3200,7 +3202,7 @@ namespace ts {
             }
 
             const defaultType = parseOptional(SyntaxKind.EqualsToken) ? parseType() : undefined;
-            const node = factory.createTypeParameterDeclaration(name, constraint, defaultType);
+            const node = factory.createTypeParameterDeclaration(modifiers, name, constraint, defaultType);
             node.expression = expression;
             return finishNode(node, pos);
         }
@@ -3605,7 +3607,7 @@ namespace ts {
             const name = parseIdentifierName();
             parseExpected(SyntaxKind.InKeyword);
             const type = parseType();
-            return finishNode(factory.createTypeParameterDeclaration(name, type, /*defaultType*/ undefined), pos);
+            return finishNode(factory.createTypeParameterDeclaration(/*modifiers*/ undefined, name, type, /*defaultType*/ undefined), pos);
         }
 
         function parseMappedType() {
@@ -3961,6 +3963,7 @@ namespace ts {
             const pos = getNodePos();
             return finishNode(
                 factory.createTypeParameterDeclaration(
+                    /*modifiers*/ undefined,
                     parseIdentifier(),
                     /*constraint*/ undefined,
                     /*defaultType*/ undefined
@@ -8656,7 +8659,7 @@ namespace ts {
                     if (nodeIsMissing(name)) {
                         return undefined;
                     }
-                    return finishNode(factory.createTypeParameterDeclaration(name, /*constraint*/ undefined, defaultType), typeParameterPos);
+                    return finishNode(factory.createTypeParameterDeclaration(/*modifiers*/ undefined, name, /*constraint*/ undefined, defaultType), typeParameterPos);
                 }
 
                 function parseTemplateTagTypeParameters() {
