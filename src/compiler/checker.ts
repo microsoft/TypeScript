@@ -9628,13 +9628,17 @@ namespace ts {
             }
 
             let type = resolveTypeOfAccessors(symbol, writing);
-
             if (!popTypeResolution()) {
-                type = anyType;
-                if (noImplicitAny) {
-                    const getter = getDeclarationOfKind<AccessorDeclaration>(symbol, SyntaxKind.GetAccessor);
-                    error(getter, Diagnostics._0_implicitly_has_return_type_any_because_it_does_not_have_a_return_type_annotation_and_is_referenced_directly_or_indirectly_in_one_of_its_return_expressions, symbolToString(symbol));
+                const getter = getDeclarationOfKind<AccessorDeclaration>(symbol, SyntaxKind.GetAccessor);
+                if (getter) {
+                    if (getEffectiveTypeAnnotationNode(getter)) {
+                        error(getter.name, Diagnostics._0_is_referenced_directly_or_indirectly_in_its_own_type_annotation, symbolToString(symbol));
+                    }
+                    else if (noImplicitAny) {
+                        error(getter, Diagnostics._0_implicitly_has_return_type_any_because_it_does_not_have_a_return_type_annotation_and_is_referenced_directly_or_indirectly_in_one_of_its_return_expressions, symbolToString(symbol));
+                    }
                 }
+                type = anyType;
             }
             return type;
         }
