@@ -3458,7 +3458,6 @@ namespace ts {
         | FlowStart
         | FlowLabel
         | FlowAssignment
-        | FlowCall
         | FlowCondition
         | FlowSwitchClause
         | FlowArrayMutation
