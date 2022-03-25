@@ -782,6 +782,10 @@ namespace ts.Completions {
         if (origin && originIsObjectLiteralMethod(origin)) {
             let importAdder;
             ({ insertText, isSnippet, importAdder, labelDetails } = origin);
+            if (!preferences.includeCompletionsWithLabelDetails) {
+                name = name + labelDetails.detail;
+                labelDetails = undefined;
+            }
             source = CompletionSource.ObjectLiteralMethodSnippet;
             sortText = SortText.SortBelow(sortText);
             if (importAdder.hasFixes()) {
