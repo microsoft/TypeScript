@@ -40,18 +40,15 @@ interface Array<T> { length: number; [n: number]: T; }`
             return `// some copy right notice
 ${'content' in file ? file.content :  file.fileContent}`;
         }
-        function verifyFileSystem(fs: vfs.FileSystem | undefined, files: protocol.FileSystemRequestArgs[]) {
+        // TODO: This is almost certainly in harness/virtualFileSystemHost.ts, or should be.
+        function verifyFileSystem(host: ts.TestFSWithWatch.VirtualServerHost | undefined, files: protocol.FileSystemRequestArgs[]) {
             // 1. make sure that everything in files is there
-            assert.isDefined(fs)
-            const result = fs!.scanSync('.', "descendants-or-self", {
-                accept: (_, stats) => stats.isFile()
-            })
-            assert.equal(result.length, files.length)
-            let i = 0
+            assert.isDefined(host)
+            const fs = (host as any).fs as ESMap<string, ts.TestFSWithWatch.FSEntry>
+            assert.equal(fs.size, files.length)
             for (const { file, fileContent } of files) {
-                assert.equal(result[i], file)
-                assert.equal(fs!.readFileSync(file, 'utf8'), fileContent)
-                i++
+                assert(host?.fileExists(file))
+                assert.equal(host!.readFile(file), fileContent)
             }
             // 2. make sure nothing else is
         }
@@ -79,9 +76,9 @@ ${'content' in file ? file.content :  file.fileContent}`;
             });
             const service = session.getProjectService(); // session -> service -> project
             const project = service.configuredProjects.get(config.file)!;
-            const vfs = (session as any).host.vfs
-            const fakehost = (session as any).host as fakes.FakeServerHost
-            assert.isDefined(vfs);
+            const v = (session as any).host.vfs
+            const fakehost = (session as any).host as ts.TestFSWithWatch.VirtualServerHost
+            assert.isDefined(v);
             assert.isDefined(project);
             assert.equal(fakehost.fsWatches.size, 0)
             assert.equal(fakehost.fsWatchesRecursive.size, 0)

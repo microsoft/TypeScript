@@ -1,3 +1,6 @@
+/**
+ * Fake implementations of various compiler dependencies.
+ */
 namespace fakes {
     const processExitSentinel = new Error("System exit");
 
@@ -211,172 +214,7 @@ namespace fakes {
         }
     }
 
-    /**
-     * @implements {server.ServerHost} but that would create a circular dependency
-     */
-    export class FakeServerHost extends System {
-        timeoutCallbacks = new Callbacks()
-        immediateCallbacks = new Callbacks()
-        readonly watchedFiles = ts.createMultiMap<ts.Path, TestFileWatcher>();
-        readonly fsWatches = ts.createMultiMap<ts.Path, TestFsWatcher>();
-        readonly fsWatchesRecursive = ts.createMultiMap<ts.Path, TestFsWatcher>();
-        readonly currentDirectory: string // TODO: Needed? Probably not
-        readonly toPath: (f: string) => ts.Path;
-        watchFile: ts.HostWatchFile
-        watchDirectory: ts.HostWatchDirectory
-        constructor(vfs: vfs.FileSystem, options: SystemOptions = {}) {
-            super(vfs, options)
-
-            this.currentDirectory = '/'; // THIS IS FINE
-            this.toPath = s => ts.toPath(s, this.currentDirectory, s => s);
-
-            const { watchFile, watchDirectory } = ts.createSystemWatchFunctions({
-                // We dont have polling watch file
-                // it is essentially fsWatch but lets get that separate from fsWatch and
-                // into watchedFiles for easier testing
-                pollingWatchFile: /*tscWatchFile === Tsc_WatchFile.SingleFileWatcherPerName ?
-                    createSingleFileWatcherPerName(
-                        this.watchFileWorker.bind(this),
-                        this.useCaseSensitiveFileNames
-                    ) :*/
-                    this.watchFileWorker.bind(this),
-                getModifiedTime: this.getModifiedTime.bind(this),
-                setTimeout: this.setTimeout.bind(this),
-                clearTimeout: this.clearTimeout.bind(this),
-                fsWatch: this.fsWatch.bind(this),
-                fileExists: this.fileExists.bind(this),
-                useCaseSensitiveFileNames: this.useCaseSensitiveFileNames,
-                getCurrentDirectory: this.getCurrentDirectory.bind(this),
-                // TODO: Tests usually set "run without recursive watches" to true, except for two tests
-                // watchOptions/with excludeFiles option${...}
-                // and the same, but excludeDirectories
-                // .............guessing that it's true on a real FS
-                fsSupportsRecursiveFsWatch: true, /*tscWatchDirectory ? false : !runWithoutRecursiveWatches */
-                directoryExists: this.directoryExists.bind(this),
-                getAccessibleSortedChildDirectories: path => this.getDirectories(path),
-                realpath: this.realpath.bind(this),
-                tscWatchFile: undefined,
-                tscWatchDirectory: undefined,
-                defaultWatchFileKind: () => undefined, // () => this.defaultWatchFileKind?.(),
-            })
-            this.watchFile = watchFile
-            this.watchDirectory = watchDirectory
-        }
-        setTimeout(callback: (...args: any[]) => void, _ms: number, ...args: any[]): any {
-            return this.timeoutCallbacks.register(callback, args)
-        }
-        clearTimeout(timeoutId: any): void {
-            this.timeoutCallbacks.unregister(timeoutId)
-        }
-        setImmediate(callback: (...args: any[]) => void, ...args: any[]): any {
-            return this.immediateCallbacks.register(callback, args)
-        }
-        clearImmediate(timeoutId: any): void {
-            this.immediateCallbacks.unregister(timeoutId)
-        }
-        watchFileWorker(fileName: string, cb: ts.FileWatcherCallback, pollingInterval: ts.PollingInterval) {
-            console.log('watchfileworker')
-            return createWatcher(
-                this.watchedFiles,
-                this.toFullPath(fileName),
-                { fileName, cb, pollingInterval }
-            );
-        }
-
-        fsWatch(
-            fileOrDirectory: string,
-            _entryKind: ts.FileSystemEntryKind,
-            cb: ts.FsWatchCallback,
-            recursive: boolean,
-            fallbackPollingInterval: ts.PollingInterval,
-            fallbackOptions: ts.WatchOptions | undefined): ts.FileWatcher {
-            console.log('fswatch')
-            /*return this.runWithFallbackPolling ?
-                this.watchFile(
-                    fileOrDirectory,
-                    createFileWatcherCallback(cb),
-                    fallbackPollingInterval,
-                    fallbackOptions
-                ) :*/
-                return createWatcher(
-                    recursive ? this.fsWatchesRecursive : this.fsWatches,
-                    this.toFullPath(fileOrDirectory),
-                    {
-                        directoryName: fileOrDirectory,
-                        cb,
-                        fallbackPollingInterval,
-                        fallbackOptions
-                    }
-                );
-        }
-        toFullPath(s: string) {
-            return this.toPath(this.toNormalizedAbsolutePath(s));
-        }
-        toNormalizedAbsolutePath(s: string) {
-            return ts.getNormalizedAbsolutePath(s, this.currentDirectory);
-        }
-    }
-    function createWatcher<T>(map: ts.MultiMap<ts.Path, T>, path: ts.Path, callback: T): ts.FileWatcher {
-        map.add(path, callback);
-        return { close: () => map.remove(path, callback) };
-    }
-    /** Copied from virtualFileSystemWithWatch */
-    type TimeOutCallback = () => any;
-    /** Copied from virtualFileSystemWithWatch */
-    interface TestFileWatcher {
-        cb: ts.FileWatcherCallback;
-        fileName: string;
-        pollingInterval: ts.PollingInterval;
-    }
-    /** Copied from virtualFileSystemWithWatch */
-    interface TestFsWatcher {
-        cb: ts.FsWatchCallback;
-        directoryName: string;
-        fallbackPollingInterval: ts.PollingInterval;
-        fallbackOptions: ts.WatchOptions | undefined;
-    }
-    /** Copied from virtualFileSystemWithWatch */
-    class Callbacks {
-        private map: TimeOutCallback[] = [];
-        private nextId = 1;
-        getNextId() {
-            return this.nextId;
-        }
-        register(cb: (...args: any[]) => void, args: any[]) {
-            const timeoutId = this.nextId;
-            this.nextId++;
-            this.map[timeoutId] = cb.bind(/*this*/ undefined, ...args);
-            return timeoutId;
-        }
-        unregister(id: any) {
-            if (typeof id === "number") {
-                delete this.map[id];
-            }
-        }
-        count() {
-            // ??????????????????????????????????????????????????????????????????
-            let n = 0;
-            for (const _ in this.map) {
-                n++;
-            }
-            return n;
-        }
-        invoke(invokeKey?: number) {
-            if (invokeKey) {
-                this.map[invokeKey]();
-                delete this.map[invokeKey];
-                return;
-            }
-            // Note: invoking a callback may result in new callbacks been queued,
-            // so do not clear the entire callback list regardless. Only remove the
-            // ones we have invoked.
-            for (const key in this.map) {
-                this.map[key]();
-                delete this.map[key];
-            }
-        }
-    }
-    /**
+   /**
      * A fake `ts.CompilerHost` that leverages a virtual file system.
      */
     export class CompilerHost implements ts.CompilerHost {
@@ -386,8 +224,8 @@ namespace fakes {
         private readonly _outputsMap: collections.SortedMap<string, number>;
         public readonly traces: string[] = [];
         public readonly shouldAssertInvariants = !Harness.lightMode;
-                protected _setParentNodes: boolean;
-        protected _sourceFiles: collections.SortedMap<string, ts.SourceFile>;
+        private _setParentNodes: boolean;
+        private _sourceFiles: collections.SortedMap<string, ts.SourceFile>;
         private _parseConfigHost: ParseConfigHost | undefined;
         private _newLine: string;
 
@@ -546,7 +384,6 @@ namespace fakes {
 
             return parsed;
         }
-
     }
 
     export type ExpectedDiagnosticMessage = [ts.DiagnosticMessage, ...(string | number)[]];
@@ -574,7 +411,7 @@ namespace fakes {
 
     export type ExpectedDiagnostic = ExpectedDiagnosticMessage | ExpectedErrorDiagnostic;
 
-    export interface SolutionBuilderDiagnostic {
+    interface SolutionBuilderDiagnostic {
         kind: DiagnosticKind;
         diagnostic: ts.Diagnostic;
     }
@@ -604,6 +441,32 @@ ${indentText}${text}`;
             next.forEach(kid => text += expectedDiagnosticMessageChainToText(kid, indent));
         }
         return text;
+    }
+
+    function expectedDiagnosticRelatedInformationToText({ location, ...diagnosticMessage }: ExpectedDiagnosticRelatedInformation) {
+        const text = expectedDiagnosticMessageChainToText(diagnosticMessage);
+        if (location) {
+            const { file, start, length } = location;
+            return `${file}(${start}:${length}):: ${text}`;
+        }
+        return text;
+    }
+
+    function expectedErrorDiagnosticToText({ relatedInformation, ...diagnosticRelatedInformation }: ExpectedErrorDiagnostic) {
+        let text = `${DiagnosticKind.Error}!: ${expectedDiagnosticRelatedInformationToText(diagnosticRelatedInformation)}`;
+        if (relatedInformation) {
+            for (const kid of relatedInformation) {
+                text += `
+  related:: ${expectedDiagnosticRelatedInformationToText(kid)}`;
+            }
+        }
+        return text;
+    }
+
+    function expectedDiagnosticToText(errorOrStatus: ExpectedDiagnostic) {
+        return ts.isArray(errorOrStatus) ?
+            `${DiagnosticKind.Status}!: ${expectedDiagnosticMessageToText(errorOrStatus)}` :
+            expectedErrorDiagnosticToText(errorOrStatus);
     }
 
     function diagnosticMessageChainToText({ messageText, next}: ts.DiagnosticMessageChain, indent = 0) {
@@ -662,39 +525,14 @@ ${indentText}${text}`;
         return sys;
     }
 
-
-    function expectedDiagnosticRelatedInformationToText({ location, ...diagnosticMessage }: ExpectedDiagnosticRelatedInformation) {
-        const text = expectedDiagnosticMessageChainToText(diagnosticMessage);
-        if (location) {
-            const { file, start, length } = location;
-            return `${file}(${start}:${length}):: ${text}`;
-        }
-        return text;
-    }
-
-    function expectedErrorDiagnosticToText({ relatedInformation, ...diagnosticRelatedInformation }: ExpectedErrorDiagnostic) {
-        let text = `${DiagnosticKind.Error}!: ${expectedDiagnosticRelatedInformationToText(diagnosticRelatedInformation)}`;
-        if (relatedInformation) {
-            for (const kid of relatedInformation) {
-                text += `
-  related:: ${expectedDiagnosticRelatedInformationToText(kid)}`;
-            }
-        }
-        return text;
-    }
-
-    function expectedDiagnosticToText(errorOrStatus: ExpectedDiagnostic) {
-        return ts.isArray(errorOrStatus) ?
-            `${DiagnosticKind.Status}!: ${expectedDiagnosticMessageToText(errorOrStatus)}` :
-            expectedErrorDiagnosticToText(errorOrStatus);
-    }
-
     export class SolutionBuilderHost extends CompilerHost implements ts.SolutionBuilderHost<ts.BuilderProgram> {
         createProgram: ts.CreateProgram<ts.BuilderProgram>;
+
         private constructor(sys: System | vfs.FileSystem, options?: ts.CompilerOptions, setParentNodes?: boolean, createProgram?: ts.CreateProgram<ts.BuilderProgram>) {
             super(sys, options, setParentNodes);
             this.createProgram = createProgram || ts.createEmitAndSemanticDiagnosticsBuilderProgram;
         }
+
         static create(sys: System | vfs.FileSystem, options?: ts.CompilerOptions, setParentNodes?: boolean, createProgram?: ts.CreateProgram<ts.BuilderProgram>) {
             const host = new SolutionBuilderHost(sys, options, setParentNodes, createProgram);
             patchHostForBuildInfoReadWrite(host.sys);

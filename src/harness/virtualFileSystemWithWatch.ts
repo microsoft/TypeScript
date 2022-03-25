@@ -1,16 +1,16 @@
 namespace ts.TestFSWithWatch {
-    export function createWatchedSystem(fileOrFolderList: readonly vfs.FileOrFolderOrSymLink[], params?: vfs.TestServerHostCreationParameters): TestServerHost {
+    export function createWatchedSystem(fileOrFolderList: readonly FileOrFolderOrSymLink[], params?: TestServerHostCreationParameters): TestServerHost {
         return new TestServerHost(/*withSafelist*/ false, fileOrFolderList, params);
     }
 
-    export function createServerHost(fileOrFolderList: readonly vfs.FileOrFolderOrSymLink[], params?: vfs.TestServerHostCreationParameters): TestServerHost {
+    export function createServerHost(fileOrFolderList: readonly FileOrFolderOrSymLink[], params?: TestServerHostCreationParameters): TestServerHost {
         const host = new TestServerHost(/*withSafelist*/ true, fileOrFolderList, params);
         // Just like sys, patch the host to use writeFile
         patchWriteFileEnsuringDirectory(host);
         return host;
     }
     export function verifyMapSize(caption: string, map: ESMap<string, any>, expectedKeys: readonly string[]) {
-        assert.equal(map.size, expectedKeys.length, `${caption}: incorrect size of map: Actual keys: ${arrayFrom(map.keys())} Expected: ${expectedKeys}${vfs.getDiffInKeys(map, expectedKeys)}`);
+        assert.equal(map.size, expectedKeys.length, `${caption}: incorrect size of map: Actual keys: ${arrayFrom(map.keys())} Expected: ${expectedKeys}${getDiffInKeys(map, expectedKeys)}`);
     }
 
     export type MapValueTester<T, U> = [ESMap<string, U[]> | undefined, (value: T) => U];
@@ -147,18 +147,18 @@ namespace ts.TestFSWithWatch {
         return host;
     }
 
-    export function getTsBuildProjectFile(project: string, file: string): vfs.File {
+    export function getTsBuildProjectFile(project: string, file: string): File {
         return {
-            path: vfs.getTsBuildProjectFilePath(project, file),
+            path: getTsBuildProjectFilePath(project, file),
             content: Harness.IO.readFile(`${Harness.IO.getWorkspaceRoot()}/tests/projects/${project}/${file}`)!
         };
     }
 
-    export class TestServerHost extends vfs.VirtualServerHost implements server.ServerHost {
+    export class TestServerHost extends VirtualServerHost implements server.ServerHost {
         constructor(
             public withSafeList: boolean,
-            fileOrFolderorSymLinkList: readonly vfs.FileOrFolderOrSymLink[],
-            options: vfs.TestServerHostCreationParameters = {}) {
+            fileOrFolderorSymLinkList: readonly FileOrFolderOrSymLink[],
+            options: TestServerHostCreationParameters = {}) {
             super(withSafeList, fileOrFolderorSymLinkList, options);
         }
         runQueuedImmediateCallbacks(checkCount?: number) {

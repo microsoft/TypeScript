@@ -1,5 +1,5 @@
 /* @internal */
-namespace ts.vfs {
+namespace  ts.TestFSWithWatch {
     export const libFile: File = {
         path: "/a/lib/lib.d.ts",
         content: `/// <reference no-default-lib="true"/>
@@ -85,20 +85,20 @@ interface Array<T> { length: number; [n: number]: T; }`
         modifiedTime: Date;
     }
 
-    interface FsFile extends FSEntryBase {
+    export interface FsFile extends FSEntryBase {
         content: string;
         fileSize?: number;
     }
 
-    interface FsFolder extends FSEntryBase {
+    export interface FsFolder extends FSEntryBase {
         entries: SortedArray<FSEntry>;
     }
 
-    interface FsSymLink extends FSEntryBase {
+    export interface FsSymLink extends FSEntryBase {
         symLink: string;
     }
 
-    type FSEntry = FsFile | FsFolder | FsSymLink;
+    export type FSEntry = FsFile | FsFolder | FsSymLink;
 
     function isFsFolder(s: FSEntry | undefined): s is FsFolder {
         return !!s && isArray((s as FsFolder).entries);

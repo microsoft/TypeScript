@@ -758,7 +758,7 @@ namespace ts.server {
         readonly toCanonicalFileName: (f: string) => string;
 
         public host: ServerHost;
-        public fs: vfs.VirtualServerHost | undefined;
+        public fs: ts.TestFSWithWatch.VirtualServerHost | undefined;
         public readonly logger: Logger;
         public readonly cancellationToken: HostCancellationToken;
         public readonly useSingleInferredProject: boolean;
@@ -3693,7 +3693,7 @@ namespace ts.server {
             // 1. set some internal tsserver state for mocked FS (if it hasn't already been set, this might not be the first message)
             if (!this.fs) {
                 // -nervous laugh-
-                this.fs = vfs.createVirtualServerHost([])
+                this.fs = ts.TestFSWithWatch.createVirtualServerHost([])
                 ;(this as any).host = this.fs
                 ;(this.session as any).host = this.fs
             }
