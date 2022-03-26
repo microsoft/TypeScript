@@ -24715,7 +24715,8 @@ namespace ts {
             function narrowOrWidenTypeByInKeyword(type: Type, name: __String, assumeTrue: boolean) {
                 // If type contains global this, don't touch it
                 if (type.symbol === globalThisSymbol
-                    || isUnionOrIntersectionType(type) && filterUnionOrIntersectionType(type, t => t.symbol === globalThisSymbol) !== neverType
+                    || (type.flags & TypeFlags.UnionOrIntersection
+                        && filterUnionOrIntersectionType(type as UnionOrIntersectionType, t => t.symbol === globalThisSymbol) !== neverType)
                    ) {
                     return type;
                 }
