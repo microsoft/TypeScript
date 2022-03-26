@@ -46,3 +46,13 @@ console.log(Intl.DisplayNames.supportedLocalesOf(locales1, options1).join(', '))
 
 new Intl.Locale(); // should error
 new Intl.Locale(new Intl.Locale('en-US'));
+
+new Intl.DisplayNames(); // TypeError: invalid_argument
+new Intl.DisplayNames('en'); // TypeError: invalid_argument
+new Intl.DisplayNames('en', {}); // TypeError: invalid_argument
+
+const localesArg = ["es-ES", new Intl.Locale("en-US")];
+console.log((new Intl.DisplayNames(localesArg, {type: 'language'})).resolvedOptions().locale); // "es-ES"
+console.log(Intl.DisplayNames.supportedLocalesOf(localesArg)); // ["es-ES", "en-US"]
+console.log(Intl.DisplayNames.supportedLocalesOf()); // []
+console.log(Intl.DisplayNames.supportedLocalesOf(localesArg, {})); // ["es-ES", "en-US"]
