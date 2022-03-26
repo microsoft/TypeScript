@@ -1,0 +1,50 @@
+=== tests/cases/compiler/mappedTypeConcreteTupleHomomorphism.ts ===
+type A = [1, 2]
+>A : A
+
+type B = {
+>B : ["1", "2"]
+
+    [K in keyof A]: `${A[K]}`
+}
+
+const b: B = ['1', '2']
+>b : ["1", "2"]
+>['1', '2'] : ["1", "2"]
+>'1' : "1"
+>'2' : "2"
+
+type C<T> = {
+>C : C<T>
+
+    [K in keyof T]: [K, T[K]]
+}
+
+type D = {
+>D : [1, 1, 1]
+
+    [K in keyof C<['c', 'd', 'e']>]: 1
+}
+
+const d: D = [1, 1, 1]
+>d : [1, 1, 1]
+>[1, 1, 1] : [1, 1, 1]
+>1 : 1
+>1 : 1
+>1 : 1
+
+// repro from #27995
+type Foo = ['a', 'b'];
+>Foo : Foo
+
+interface Bar {
+    a: string;
+>a : string
+
+    b: number;
+>b : number
+}
+
+type Baz = { [K in keyof Foo]: Bar[Foo[K]]; };
+>Baz : [string, number]
+

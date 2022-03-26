@@ -1,0 +1,41 @@
+tests/cases/compiler/mappedTypeConcreteTupleHomomorphism.ts(4,24): error TS2322: Type 'A[K]' is not assignable to type 'string | number | bigint | boolean'.
+  Type '2 | 1 | (() => string) | (() => string) | (() => 2 | 1) | ((...items: (2 | 1)[]) => number) | { (...items: ConcatArray<2 | 1>[]): (2 | 1)[]; (...items: (2 | 1 | ConcatArray<2 | 1>)[]): (2 | 1)[]; } | ((separator?: string) => string) | (() => (2 | 1)[]) | (() => 2 | 1) | ((start?: number, end?: number) => (2 | 1)[]) | ((compareFn?: (a: 2 | 1, b: 2 | 1) => number) => A) | { (start: number, deleteCount?: number): (2 | 1)[]; (start: number, deleteCount: number, ...items: (2 | 1)[]): (2 | 1)[]; } | ((...items: (2 | 1)[]) => number) | ((searchElement: 2 | 1, fromIndex?: number) => number) | ((searchElement: 2 | 1, fromIndex?: number) => number) | { <S extends 2 | 1>(predicate: (value: 2 | 1, index: number, array: (2 | 1)[]) => value is S, thisArg?: any): this is S[]; (predicate: (value: 2 | 1, index: number, array: (2 | 1)[]) => unknown, thisArg?: any): boolean; } | ((predicate: (value: 2 | 1, index: number, array: (2 | 1)[]) => unknown, thisArg?: any) => boolean) | ((callbackfn: (value: 2 | 1, index: number, array: (2 | 1)[]) => void, thisArg?: any) => void) | (<U>(callbackfn: (value: 2 | 1, index: number, array: (2 | 1)[]) => U, thisArg?: any) => U[]) | { <S extends 2 | 1>(predicate: (value: 2 | 1, index: number, array: (2 | 1)[]) => value is S, thisArg?: any): S[]; (predicate: (value: 2 | 1, index: number, array: (2 | 1)[]) => unknown, thisArg?: any): (2 | 1)[]; } | { (callbackfn: (previousValue: 2 | 1, currentValue: 2 | 1, currentIndex: number, array: (2 | 1)[]) => 2 | 1): 2 | 1; (callbackfn: (previousValue: 2 | 1, currentValue: 2 | 1, currentIndex: number, array: (2 | 1)[]) => 2 | 1, initialValue: 2 | 1): 2 | 1; <U>(callbackfn: (previousValue: U, currentValue: 2 | 1, currentIndex: number, array: (2 | 1)[]) => U, initialValue: U): U; } | { (callbackfn: (previousValue: 2 | 1, currentValue: 2 | 1, currentIndex: number, array: (2 | 1)[]) => 2 | 1): 2 | 1; (callbackfn: (previousValue: 2 | 1, currentValue: 2 | 1, currentIndex: number, array: (2 | 1)[]) => 2 | 1, initialValue: 2 | 1): 2 | 1; <U>(callbackfn: (previousValue: U, currentValue: 2 | 1, currentIndex: number, array: (2 | 1)[]) => U, initialValue: U): U; }' is not assignable to type 'string | number | bigint | boolean'.
+    Type '() => string' is not assignable to type 'string | number | bigint | boolean'.
+tests/cases/compiler/mappedTypeConcreteTupleHomomorphism.ts(27,32): error TS2536: Type 'Foo[K]' cannot be used to index type 'Bar'.
+
+
+==== tests/cases/compiler/mappedTypeConcreteTupleHomomorphism.ts (2 errors) ====
+    type A = [1, 2]
+    
+    type B = {
+        [K in keyof A]: `${A[K]}`
+                           ~~~~
+!!! error TS2322: Type 'A[K]' is not assignable to type 'string | number | bigint | boolean'.
+!!! error TS2322:   Type '2 | 1 | (() => string) | (() => string) | (() => 2 | 1) | ((...items: (2 | 1)[]) => number) | { (...items: ConcatArray<2 | 1>[]): (2 | 1)[]; (...items: (2 | 1 | ConcatArray<2 | 1>)[]): (2 | 1)[]; } | ((separator?: string) => string) | (() => (2 | 1)[]) | (() => 2 | 1) | ((start?: number, end?: number) => (2 | 1)[]) | ((compareFn?: (a: 2 | 1, b: 2 | 1) => number) => A) | { (start: number, deleteCount?: number): (2 | 1)[]; (start: number, deleteCount: number, ...items: (2 | 1)[]): (2 | 1)[]; } | ((...items: (2 | 1)[]) => number) | ((searchElement: 2 | 1, fromIndex?: number) => number) | ((searchElement: 2 | 1, fromIndex?: number) => number) | { <S extends 2 | 1>(predicate: (value: 2 | 1, index: number, array: (2 | 1)[]) => value is S, thisArg?: any): this is S[]; (predicate: (value: 2 | 1, index: number, array: (2 | 1)[]) => unknown, thisArg?: any): boolean; } | ((predicate: (value: 2 | 1, index: number, array: (2 | 1)[]) => unknown, thisArg?: any) => boolean) | ((callbackfn: (value: 2 | 1, index: number, array: (2 | 1)[]) => void, thisArg?: any) => void) | (<U>(callbackfn: (value: 2 | 1, index: number, array: (2 | 1)[]) => U, thisArg?: any) => U[]) | { <S extends 2 | 1>(predicate: (value: 2 | 1, index: number, array: (2 | 1)[]) => value is S, thisArg?: any): S[]; (predicate: (value: 2 | 1, index: number, array: (2 | 1)[]) => unknown, thisArg?: any): (2 | 1)[]; } | { (callbackfn: (previousValue: 2 | 1, currentValue: 2 | 1, currentIndex: number, array: (2 | 1)[]) => 2 | 1): 2 | 1; (callbackfn: (previousValue: 2 | 1, currentValue: 2 | 1, currentIndex: number, array: (2 | 1)[]) => 2 | 1, initialValue: 2 | 1): 2 | 1; <U>(callbackfn: (previousValue: U, currentValue: 2 | 1, currentIndex: number, array: (2 | 1)[]) => U, initialValue: U): U; } | { (callbackfn: (previousValue: 2 | 1, currentValue: 2 | 1, currentIndex: number, array: (2 | 1)[]) => 2 | 1): 2 | 1; (callbackfn: (previousValue: 2 | 1, currentValue: 2 | 1, currentIndex: number, array: (2 | 1)[]) => 2 | 1, initialValue: 2 | 1): 2 | 1; <U>(callbackfn: (previousValue: U, currentValue: 2 | 1, currentIndex: number, array: (2 | 1)[]) => U, initialValue: U): U; }' is not assignable to type 'string | number | bigint | boolean'.
+!!! error TS2322:     Type '() => string' is not assignable to type 'string | number | bigint | boolean'.
+    }
+    
+    const b: B = ['1', '2']
+    
+    type C<T> = {
+        [K in keyof T]: [K, T[K]]
+    }
+    
+    type D = {
+        [K in keyof C<['c', 'd', 'e']>]: 1
+    }
+    
+    const d: D = [1, 1, 1]
+    
+    // repro from #27995
+    type Foo = ['a', 'b'];
+    
+    interface Bar {
+        a: string;
+        b: number;
+    }
+    
+    type Baz = { [K in keyof Foo]: Bar[Foo[K]]; };
+                                   ~~~~~~~~~~~
+!!! error TS2536: Type 'Foo[K]' cannot be used to index type 'Bar'.
+    
