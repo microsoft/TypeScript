@@ -1,9 +1,5 @@
 /* @internal */
 namespace ts {
-    export function isUnionType(type: Type): type is UnionType {
-        return !!(type.flags & TypeFlags.Union);
-    }
-
     export function isIntersectionType(type: Type): type is IntersectionType {
         return !!(type.flags & TypeFlags.Intersection);
     }

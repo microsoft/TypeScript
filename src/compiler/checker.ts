@@ -23649,8 +23649,8 @@ namespace ts {
             if (filtered === types) {
                 return type;
             }
-            if (isUnionType(type)) {
-                const origin = type.origin;
+            if (type.flags & TypeFlags.Union) {
+                const origin = (type as UnionType).origin;
                 let newOrigin: Type | undefined;
                 if (origin && origin.flags & TypeFlags.Union) {
                     // If the origin type is a (denormalized) union type, filter its non-union constituents. If that ends
@@ -23673,8 +23673,8 @@ namespace ts {
         }
 
         function filterType(type: Type, f: (t: Type) => boolean): Type {
-            if (isUnionType(type)) {
-                return filterUnionOrIntersectionType(type, f);
+            if (type.flags & TypeFlags.Union) {
+                return filterUnionOrIntersectionType(type as UnionType, f);
             }
             return type.flags & TypeFlags.Never || f(type) ? type : neverType;
         }
