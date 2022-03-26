@@ -24730,7 +24730,6 @@ namespace ts {
                         || isThisTypeParameter(type)
                     ) {
                         return filterType(type, t => isTypePresencePossible(t, name, assumeTrue));
-                        return isTypePresencePossible(type, name, assumeTrue) ? type : neverType;
                     }
                 }
                 // only widen property when the type does not contain string-index/name in any of the constituents.
