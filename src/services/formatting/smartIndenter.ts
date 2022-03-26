@@ -56,7 +56,7 @@ namespace ts.formatting {
             // for block indentation, we should look for a line which contains something that's not
             // whitespace.
             const currentToken = getTokenAtPosition(sourceFile, position);
-            // for object literal, we want to the indentation work like block
+            // for object literal, we want the indentation work like block indentation
             // if { starts in any position (can be in the middle of line)
             // the following indentation should treat { as starting of that line (including leading whitespace)
             // ```
@@ -91,7 +91,9 @@ namespace ts.formatting {
             const containerList = getListByPosition(position, precedingToken.parent, sourceFile);
             // use list position if the preceding token is before any list items
             if (containerList && !rangeContainsRange(containerList, precedingToken)) {
-                return getActualIndentationForListStartLine(containerList, sourceFile, options) + options.indentSize!; // TODO: GH#18217
+                const useTheSameBaseIndentation = [SyntaxKind.FunctionExpression, SyntaxKind.ArrowFunction].indexOf(currentToken.parent.kind) !== -1;
+                const indentSize = useTheSameBaseIndentation ? 0 : options.indentSize!;
+                return getActualIndentationForListStartLine(containerList, sourceFile, options) + indentSize; // TODO: GH#18217
             }
 
             return getSmartIndent(sourceFile, position, precedingToken, lineAtPosition, assumeNewLineBeforeCloseBrace, options);
