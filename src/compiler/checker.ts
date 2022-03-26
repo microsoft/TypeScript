@@ -12454,11 +12454,8 @@ namespace ts {
             return property;
         }
 
-        function getPropertyOfUnionOrIntersectionType(type: UnionOrIntersectionType, name: __String, skipObjectFunctionPropertyAugment?: boolean, includePartialProperties?: boolean): Symbol | undefined {
+        function getPropertyOfUnionOrIntersectionType(type: UnionOrIntersectionType, name: __String, skipObjectFunctionPropertyAugment?: boolean): Symbol | undefined {
             const property = getUnionOrIntersectionProperty(type, name, skipObjectFunctionPropertyAugment);
-            if (includePartialProperties) {
-                return property;
-            }
             // We need to filter out partial properties in union types
             return property && !(getCheckFlags(property) & CheckFlags.ReadPartial) ? property : undefined;
         }
@@ -12536,7 +12533,7 @@ namespace ts {
          * @param type a type to look up property from
          * @param name a name of property to look up in a given type
          */
-        function getPropertyOfType(type: Type, name: __String, skipObjectFunctionPropertyAugment?: boolean, includePartialProperties?: boolean): Symbol | undefined {
+        function getPropertyOfType(type: Type, name: __String, skipObjectFunctionPropertyAugment?: boolean): Symbol | undefined {
             type = getReducedApparentType(type);
             if (type.flags & TypeFlags.Object) {
                 const resolved = resolveStructuredTypeMembers(type as ObjectType);
@@ -12558,7 +12555,7 @@ namespace ts {
                 return getPropertyOfObjectType(globalObjectType, name);
             }
             if (type.flags & TypeFlags.UnionOrIntersection) {
-                return getPropertyOfUnionOrIntersectionType(type as UnionOrIntersectionType, name, skipObjectFunctionPropertyAugment, includePartialProperties);
+                return getPropertyOfUnionOrIntersectionType(type as UnionOrIntersectionType, name, skipObjectFunctionPropertyAugment);
             }
             return undefined;
         }
@@ -24722,18 +24719,15 @@ namespace ts {
                    ) {
                     return type;
                 }
-                const someDirectSubtypeContainsProp = getPropertyOfType(type, name, /* skipObjectFunctionPropertyAugment */ false, /* includePartialProperties */ true);
-                if (someDirectSubtypeContainsProp) {
-                    // If union, filter out all components not containing the property
-                    // Otherwise, either return the type or never
-                    if (type.flags & (TypeFlags.Object | TypeFlags.UnionOrIntersection)
-                        || isThisTypeParameter(type)
-                    ) {
-                        return filterType(type, t => isTypePresencePossible(t, name, assumeTrue));
-                    }
+
+                // If union, filter out all components not containing the property
+                const subtypeWithProp = filterType(type, t => isTypePresencePossible(t, name, assumeTrue));
+                if (subtypeWithProp !== neverType || getPropertyOfType(type, name, /* skipObjectFunctionPropertyAugment */ false)) {
+                    return subtypeWithProp;
                 }
+
                 // only widen property when the type does not contain string-index/name in any of the constituents.
-                if (assumeTrue && !someDirectSubtypeContainsProp && !getIndexInfoOfType(type, stringType)) {
+                if (assumeTrue && !getIndexInfoOfType(type, stringType)) {
                     const addSymbol = createSymbol(SymbolFlags.Property, name);
                     addSymbol.type = unknownType;
                     return widenTypeWithSymbol(type, addSymbol);
