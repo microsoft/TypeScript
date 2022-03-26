@@ -245,6 +245,25 @@ new Intl.DisplayNames('en', {}); // TypeError: invalid_argument
 >'en' : "en"
 >{} : {}
 
+console.log((new Intl.DisplayNames(undefined, {type: 'language'})).of('en-GB')); // "British English"
+>console.log((new Intl.DisplayNames(undefined, {type: 'language'})).of('en-GB')) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>(new Intl.DisplayNames(undefined, {type: 'language'})).of('en-GB') : string
+>(new Intl.DisplayNames(undefined, {type: 'language'})).of : (code: string) => string
+>(new Intl.DisplayNames(undefined, {type: 'language'})) : Intl.DisplayNames
+>new Intl.DisplayNames(undefined, {type: 'language'}) : Intl.DisplayNames
+>Intl.DisplayNames : { new (locales: Intl.LocalesArgument, options: Intl.DisplayNamesOptions): Intl.DisplayNames; prototype: Intl.DisplayNames; supportedLocalesOf(locales?: Intl.LocalesArgument, options?: { localeMatcher?: Intl.RelativeTimeFormatLocaleMatcher; }): string[]; }
+>Intl : typeof Intl
+>DisplayNames : { new (locales: Intl.LocalesArgument, options: Intl.DisplayNamesOptions): Intl.DisplayNames; prototype: Intl.DisplayNames; supportedLocalesOf(locales?: Intl.LocalesArgument, options?: { localeMatcher?: Intl.RelativeTimeFormatLocaleMatcher; }): string[]; }
+>undefined : undefined
+>{type: 'language'} : { type: "language"; }
+>type : "language"
+>'language' : "language"
+>of : (code: string) => string
+>'en-GB' : "en-GB"
+
 const localesArg = ["es-ES", new Intl.Locale("en-US")];
 >localesArg : (string | Intl.Locale)[]
 >["es-ES", new Intl.Locale("en-US")] : (string | Intl.Locale)[]
