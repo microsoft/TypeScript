@@ -24690,10 +24690,10 @@ namespace ts {
                     return widenObjectType(type, newSymbol);
                 }
                 // If type is intersection, add the symbol to the first anonymous object component of the intersection
-                if (isIntersectionType(type)) {
-                    const objectSubtype = type.types.find(t => getObjectFlags(t) & ObjectFlags.Anonymous) as ObjectType | undefined;
+                if (type.flags & TypeFlags.Intersection) {
+                    const objectSubtype = (type as IntersectionType).types.find(t => getObjectFlags(t) & ObjectFlags.Anonymous) as ObjectType | undefined;
                     if (objectSubtype) {
-                        const restOfIntersection = filterUnionOrIntersectionType(type, t => t !== objectSubtype);
+                        const restOfIntersection = filterUnionOrIntersectionType(type as IntersectionType, t => t !== objectSubtype);
                         return createIntersectionType([restOfIntersection, widenObjectType(objectSubtype, newSymbol)]);
                     }
                 }
