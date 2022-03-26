@@ -1,21 +1,27 @@
 //// [mappedTypeConcreteTupleHomomorphism.ts]
-type A = [1, 2]
+type TupleOfNumbers = [1, 2]
 
-type B = {
-    [K in keyof A]: `${A[K]}`
+type HomomorphicType = {
+    [K in keyof TupleOfNumbers]: `${TupleOfNumbers[K]}`
 }
 
-const b: B = ['1', '2']
+const homomorphic: HomomorphicType = ['1', '2']
 
-type C<T> = {
+type GenericType<T> = {
     [K in keyof T]: [K, T[K]]
 }
 
-type D = {
-    [K in keyof C<['c', 'd', 'e']>]: 1
+type HomomorphicInstantiation = {
+    [K in keyof GenericType<['c', 'd', 'e']>]: 1
 }
 
-const d: D = [1, 1, 1]
+const d: HomomorphicInstantiation = [1, 1, 1]
+
+type TupleOfNumbersAndObjects = [1, 2, {}]
+
+type ShoulsErrorInAssignement = {
+    [K in keyof TupleOfNumbersAndObjects]: `${TupleOfNumbersAndObjects[K]}`
+}
 
 // repro from #27995
 type Foo = ['a', 'b'];
@@ -29,5 +35,5 @@ type Baz = { [K in keyof Foo]: Bar[Foo[K]]; };
 
 
 //// [mappedTypeConcreteTupleHomomorphism.js]
-var b = ['1', '2'];
+var homomorphic = ['1', '2'];
 var d = [1, 1, 1];

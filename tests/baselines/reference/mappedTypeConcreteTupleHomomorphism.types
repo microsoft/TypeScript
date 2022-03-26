@@ -1,37 +1,46 @@
 === tests/cases/compiler/mappedTypeConcreteTupleHomomorphism.ts ===
-type A = [1, 2]
->A : A
+type TupleOfNumbers = [1, 2]
+>TupleOfNumbers : TupleOfNumbers
 
-type B = {
->B : ["1", "2"]
+type HomomorphicType = {
+>HomomorphicType : ["1", "2"]
 
-    [K in keyof A]: `${A[K]}`
+    [K in keyof TupleOfNumbers]: `${TupleOfNumbers[K]}`
 }
 
-const b: B = ['1', '2']
->b : ["1", "2"]
+const homomorphic: HomomorphicType = ['1', '2']
+>homomorphic : ["1", "2"]
 >['1', '2'] : ["1", "2"]
 >'1' : "1"
 >'2' : "2"
 
-type C<T> = {
->C : C<T>
+type GenericType<T> = {
+>GenericType : GenericType<T>
 
     [K in keyof T]: [K, T[K]]
 }
 
-type D = {
->D : [1, 1, 1]
+type HomomorphicInstantiation = {
+>HomomorphicInstantiation : [1, 1, 1]
 
-    [K in keyof C<['c', 'd', 'e']>]: 1
+    [K in keyof GenericType<['c', 'd', 'e']>]: 1
 }
 
-const d: D = [1, 1, 1]
+const d: HomomorphicInstantiation = [1, 1, 1]
 >d : [1, 1, 1]
 >[1, 1, 1] : [1, 1, 1]
 >1 : 1
 >1 : 1
 >1 : 1
+
+type TupleOfNumbersAndObjects = [1, 2, {}]
+>TupleOfNumbersAndObjects : TupleOfNumbersAndObjects
+
+type ShoulsErrorInAssignement = {
+>ShoulsErrorInAssignement : ["1", "2", string]
+
+    [K in keyof TupleOfNumbersAndObjects]: `${TupleOfNumbersAndObjects[K]}`
+}
 
 // repro from #27995
 type Foo = ['a', 'b'];

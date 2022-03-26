@@ -13353,6 +13353,17 @@ namespace ts {
                         typeParameter.constraint = getInferredTypeParameterConstraint(typeParameter) || noConstraintType;
                     }
                     else {
+                        // Detect is the constraint is for a homomorphic mapped type to a tuple and in case return a literal union of the used tuple keys 
+                        if (constraintDeclaration.parent && constraintDeclaration.parent.parent && constraintDeclaration.parent.parent.kind === SyntaxKind.MappedType) {
+                            const mappedTypeNode = constraintDeclaration.parent.parent as MappedTypeNode;
+                            if (!mappedTypeNode.nameType && mappedTypeNode.typeParameter.constraint && isTypeOperatorNode(mappedTypeNode.typeParameter.constraint) && mappedTypeNode.typeParameter.constraint.operator === SyntaxKind.KeyOfKeyword) {
+                                const keyOfTarget = getTypeFromTypeNode(mappedTypeNode.typeParameter.constraint.type);
+                                if (isTupleType(keyOfTarget)) {                                    
+                                    typeParameter.constraint = getUnionType(map(getTypeArguments(keyOfTarget), (_, i) => getStringLiteralType("" + i)));
+                                    return typeParameter.constraint;
+                                }
+                            }
+                        }
                         let type = getTypeFromTypeNode(constraintDeclaration);
                         if (type.flags & TypeFlags.Any && !isErrorType(type)) { // Allow errorType to propegate to keep downstream errors suppressed
                             // use keyofConstraintType as the base constraint for mapped type key constraints (unknown isn;t assignable to that, but `any` was),
