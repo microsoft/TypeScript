@@ -131,6 +131,7 @@ namespace ts {
         protected: SyntaxKind.ProtectedKeyword,
         public: SyntaxKind.PublicKeyword,
         override: SyntaxKind.OverrideKeyword,
+        out: SyntaxKind.OutKeyword,
         readonly: SyntaxKind.ReadonlyKeyword,
         require: SyntaxKind.RequireKeyword,
         global: SyntaxKind.GlobalKeyword,
@@ -2374,6 +2375,7 @@ namespace ts {
                     tokenValue = tokenValue.slice(0, -1);
                     pos--;
                 }
+                return getIdentifierToken();
             }
             return token;
         }

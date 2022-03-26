@@ -41,7 +41,7 @@ namespace ts.SymbolDisplay {
         if (typeChecker.isArgumentsSymbol(symbol)) {
             return ScriptElementKind.localVariableElement;
         }
-        if (location.kind === SyntaxKind.ThisKeyword && isExpression(location)) {
+        if (location.kind === SyntaxKind.ThisKeyword && isExpression(location) || isThisInTypeQuery(location)) {
             return ScriptElementKind.parameterElement;
         }
         const flags = getCombinedLocalAndExportSymbolFlags(symbol);
@@ -58,6 +58,8 @@ namespace ts.SymbolDisplay {
             return isLocalVariableOrFunction(symbol) ? ScriptElementKind.localVariableElement : ScriptElementKind.variableElement;
         }
         if (flags & SymbolFlags.Function) return isLocalVariableOrFunction(symbol) ? ScriptElementKind.localFunctionElement : ScriptElementKind.functionElement;
+        // FIXME: getter and setter use the same symbol. And it is rare to use only setter without getter, so in most cases the symbol always has getter flag.
+        // So, even when the location is just on the declaration of setter, this function returns getter.
         if (flags & SymbolFlags.GetAccessor) return ScriptElementKind.memberGetAccessorElement;
         if (flags & SymbolFlags.SetAccessor) return ScriptElementKind.memberSetAccessorElement;
         if (flags & SymbolFlags.Method) return ScriptElementKind.memberFunctionElement;
@@ -83,18 +85,8 @@ namespace ts.SymbolDisplay {
                 }
                 return unionPropertyKind;
             }
-            // If we requested completions after `x.` at the top-level, we may be at a source file location.
-            switch (location.parent && location.parent.kind) {
-                // If we've typed a character of the attribute name, will be 'JsxAttribute', else will be 'JsxOpeningElement'.
-                case SyntaxKind.JsxOpeningElement:
-                case SyntaxKind.JsxElement:
-                case SyntaxKind.JsxSelfClosingElement:
-                    return location.kind === SyntaxKind.Identifier ? ScriptElementKind.memberVariableElement : ScriptElementKind.jsxAttribute;
-                case SyntaxKind.JsxAttribute:
-                    return ScriptElementKind.jsxAttribute;
-                default:
-                    return ScriptElementKind.memberVariableElement;
-            }
+
+            return ScriptElementKind.memberVariableElement;
         }
 
         return ScriptElementKind.unknown;
@@ -151,7 +143,7 @@ namespace ts.SymbolDisplay {
         const symbolFlags = getCombinedLocalAndExportSymbolFlags(symbol);
         let symbolKind = semanticMeaning & SemanticMeaning.Value ? getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(typeChecker, symbol, location) : ScriptElementKind.unknown;
         let hasAddedSymbolInfo = false;
-        const isThisExpression = location.kind === SyntaxKind.ThisKeyword && isInExpressionContext(location);
+        const isThisExpression = location.kind === SyntaxKind.ThisKeyword && isInExpressionContext(location) || isThisInTypeQuery(location);
         let type: Type | undefined;
         let printer: Printer;
         let documentationFromAlias: SymbolDisplayPart[] | undefined;
@@ -164,9 +156,24 @@ namespace ts.SymbolDisplay {
 
         // Class at constructor site need to be shown as constructor apart from property,method, vars
         if (symbolKind !== ScriptElementKind.unknown || symbolFlags & SymbolFlags.Class || symbolFlags & SymbolFlags.Alias) {
-            // If it is accessor they are allowed only if location is at name of the accessor
+            // If symbol is accessor, they are allowed only if location is at declaration identifier of the accessor
             if (symbolKind === ScriptElementKind.memberGetAccessorElement || symbolKind === ScriptElementKind.memberSetAccessorElement) {
-                symbolKind = ScriptElementKind.memberVariableElement;
+                const declaration = find(symbol.declarations as ((GetAccessorDeclaration | SetAccessorDeclaration)[]), declaration => declaration.name === location);
+                if (declaration) {
+                    switch(declaration.kind){
+                        case SyntaxKind.GetAccessor:
+                            symbolKind = ScriptElementKind.memberGetAccessorElement;
+                            break;
+                        case SyntaxKind.SetAccessor:
+                            symbolKind = ScriptElementKind.memberSetAccessorElement;
+                            break;
+                        default:
+                            Debug.assertNever(declaration);
+                        }
+                }
+                else {
+                    symbolKind = ScriptElementKind.memberVariableElement;
+                }
             }
 
             let signature: Signature | undefined;
@@ -330,7 +337,7 @@ namespace ts.SymbolDisplay {
             displayParts.push(spacePart());
             displayParts.push(operatorPart(SyntaxKind.EqualsToken));
             displayParts.push(spacePart());
-            addRange(displayParts, typeToDisplayParts(typeChecker, typeChecker.getDeclaredTypeOfSymbol(symbol), enclosingDeclaration, TypeFormatFlags.InTypeAlias));
+            addRange(displayParts, typeToDisplayParts(typeChecker, isConstTypeReference(location.parent) ? typeChecker.getTypeAtLocation(location.parent) : typeChecker.getDeclaredTypeOfSymbol(symbol), enclosingDeclaration, TypeFormatFlags.InTypeAlias));
         }
         if (symbolFlags & SymbolFlags.Enum) {
             prefixNextMeaning();
@@ -502,6 +509,8 @@ namespace ts.SymbolDisplay {
 
                     // For properties, variables and local vars: show the type
                     if (symbolKind === ScriptElementKind.memberVariableElement ||
+                        symbolKind === ScriptElementKind.memberGetAccessorElement ||
+                        symbolKind === ScriptElementKind.memberSetAccessorElement ||
                         symbolKind === ScriptElementKind.jsxAttribute ||
                         symbolFlags & SymbolFlags.Variable ||
                         symbolKind === ScriptElementKind.localVariableElement ||
@@ -575,8 +584,21 @@ namespace ts.SymbolDisplay {
             }
         }
 
+        if (documentation.length === 0 && isIdentifier(location) && symbol.valueDeclaration && isBindingElement(symbol.valueDeclaration)) {
+            const declaration = symbol.valueDeclaration;
+            const parent = declaration.parent;
+            if (isIdentifier(declaration.name) && isObjectBindingPattern(parent)) {
+                const name = getTextOfIdentifierOrLiteral(declaration.name);
+                const objectType = typeChecker.getTypeAtLocation(parent);
+                documentation = firstDefined(objectType.isUnion() ? objectType.types : [objectType], t => {
+                    const prop = t.getProperty(name);
+                    return prop ? prop.getDocumentationComment(typeChecker) : undefined;
+                }) || emptyArray;
+            }
+        }
+
         if (tags.length === 0 && !hasMultipleSignatures) {
-            tags = symbol.getJsDocTags(typeChecker);
+            tags = symbol.getContextualJsDocTags(enclosingDeclaration, typeChecker);
         }
 
         if (documentation.length === 0 && documentationFromAlias) {

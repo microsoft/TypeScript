@@ -2,39 +2,21 @@ tests/cases/compiler/potentiallyUncalledDecorators.ts(4,5): error TS1329: 'Input
 tests/cases/compiler/potentiallyUncalledDecorators.ts(35,1): error TS1329: 'noArgs' accepts too few arguments to be used as a decorator here. Did you mean to call it first and write '@noArgs()'?
 tests/cases/compiler/potentiallyUncalledDecorators.ts(37,5): error TS1329: 'noArgs' accepts too few arguments to be used as a decorator here. Did you mean to call it first and write '@noArgs()'?
 tests/cases/compiler/potentiallyUncalledDecorators.ts(38,5): error TS1329: 'noArgs' accepts too few arguments to be used as a decorator here. Did you mean to call it first and write '@noArgs()'?
-tests/cases/compiler/potentiallyUncalledDecorators.ts(41,1): error TS1238: Unable to resolve signature of class decorator when called as an expression.
-  Type 'OmniDecorator' is not assignable to type 'typeof B'.
-    Type 'OmniDecorator' provides no match for the signature 'new (): B'.
-tests/cases/compiler/potentiallyUncalledDecorators.ts(43,5): error TS1236: The return type of a property decorator function must be either 'void' or 'any'.
-  Unable to resolve signature of property decorator when called as an expression.
-tests/cases/compiler/potentiallyUncalledDecorators.ts(44,5): error TS1241: Unable to resolve signature of method decorator when called as an expression.
-  Type 'OmniDecorator' has no properties in common with type 'TypedPropertyDescriptor<() => void>'.
-tests/cases/compiler/potentiallyUncalledDecorators.ts(47,1): error TS1238: Unable to resolve signature of class decorator when called as an expression.
-  Type 'OmniDecorator' is not assignable to type 'typeof C'.
-    Type 'OmniDecorator' provides no match for the signature 'new (): C'.
+tests/cases/compiler/potentiallyUncalledDecorators.ts(41,1): error TS1270: Decorator function return type 'OmniDecorator' is not assignable to type 'void | typeof B'.
+tests/cases/compiler/potentiallyUncalledDecorators.ts(43,5): error TS1271: Decorator function return type is 'OmniDecorator' but is expected to be 'void' or 'any'.
+tests/cases/compiler/potentiallyUncalledDecorators.ts(44,5): error TS1270: Decorator function return type 'OmniDecorator' is not assignable to type 'void | TypedPropertyDescriptor<() => void>'.
+tests/cases/compiler/potentiallyUncalledDecorators.ts(47,1): error TS1270: Decorator function return type 'OmniDecorator' is not assignable to type 'void | typeof C'.
 tests/cases/compiler/potentiallyUncalledDecorators.ts(49,5): error TS1329: 'oneOptional' accepts too few arguments to be used as a decorator here. Did you mean to call it first and write '@oneOptional()'?
 tests/cases/compiler/potentiallyUncalledDecorators.ts(50,5): error TS1329: 'oneOptional' accepts too few arguments to be used as a decorator here. Did you mean to call it first and write '@oneOptional()'?
-tests/cases/compiler/potentiallyUncalledDecorators.ts(53,1): error TS1238: Unable to resolve signature of class decorator when called as an expression.
-  Type 'OmniDecorator' is not assignable to type 'typeof D'.
-    Type 'OmniDecorator' provides no match for the signature 'new (): D'.
-tests/cases/compiler/potentiallyUncalledDecorators.ts(55,5): error TS1236: The return type of a property decorator function must be either 'void' or 'any'.
-  Unable to resolve signature of property decorator when called as an expression.
-tests/cases/compiler/potentiallyUncalledDecorators.ts(56,5): error TS1241: Unable to resolve signature of method decorator when called as an expression.
-  Type 'OmniDecorator' has no properties in common with type 'TypedPropertyDescriptor<() => void>'.
-tests/cases/compiler/potentiallyUncalledDecorators.ts(59,1): error TS1238: Unable to resolve signature of class decorator when called as an expression.
-  Type 'OmniDecorator' is not assignable to type 'typeof E'.
-    Type 'OmniDecorator' provides no match for the signature 'new (): E'.
-tests/cases/compiler/potentiallyUncalledDecorators.ts(61,5): error TS1236: The return type of a property decorator function must be either 'void' or 'any'.
-  Unable to resolve signature of property decorator when called as an expression.
-tests/cases/compiler/potentiallyUncalledDecorators.ts(62,5): error TS1241: Unable to resolve signature of method decorator when called as an expression.
-  Type 'OmniDecorator' has no properties in common with type 'TypedPropertyDescriptor<() => void>'.
-tests/cases/compiler/potentiallyUncalledDecorators.ts(65,1): error TS1238: Unable to resolve signature of class decorator when called as an expression.
-  Type 'OmniDecorator' is not assignable to type 'typeof F'.
-    Type 'OmniDecorator' provides no match for the signature 'new (): F'.
-tests/cases/compiler/potentiallyUncalledDecorators.ts(67,5): error TS1236: The return type of a property decorator function must be either 'void' or 'any'.
-  Unable to resolve signature of property decorator when called as an expression.
-tests/cases/compiler/potentiallyUncalledDecorators.ts(68,5): error TS1241: Unable to resolve signature of method decorator when called as an expression.
-  Type 'OmniDecorator' has no properties in common with type 'TypedPropertyDescriptor<() => void>'.
+tests/cases/compiler/potentiallyUncalledDecorators.ts(53,1): error TS1270: Decorator function return type 'OmniDecorator' is not assignable to type 'void | typeof D'.
+tests/cases/compiler/potentiallyUncalledDecorators.ts(55,5): error TS1271: Decorator function return type is 'OmniDecorator' but is expected to be 'void' or 'any'.
+tests/cases/compiler/potentiallyUncalledDecorators.ts(56,5): error TS1270: Decorator function return type 'OmniDecorator' is not assignable to type 'void | TypedPropertyDescriptor<() => void>'.
+tests/cases/compiler/potentiallyUncalledDecorators.ts(59,1): error TS1270: Decorator function return type 'OmniDecorator' is not assignable to type 'void | typeof E'.
+tests/cases/compiler/potentiallyUncalledDecorators.ts(61,5): error TS1271: Decorator function return type is 'OmniDecorator' but is expected to be 'void' or 'any'.
+tests/cases/compiler/potentiallyUncalledDecorators.ts(62,5): error TS1270: Decorator function return type 'OmniDecorator' is not assignable to type 'void | TypedPropertyDescriptor<() => void>'.
+tests/cases/compiler/potentiallyUncalledDecorators.ts(65,1): error TS1270: Decorator function return type 'OmniDecorator' is not assignable to type 'void | typeof F'.
+tests/cases/compiler/potentiallyUncalledDecorators.ts(67,5): error TS1271: Decorator function return type is 'OmniDecorator' but is expected to be 'void' or 'any'.
+tests/cases/compiler/potentiallyUncalledDecorators.ts(68,5): error TS1270: Decorator function return type 'OmniDecorator' is not assignable to type 'void | TypedPropertyDescriptor<() => void>'.
 
 
 ==== tests/cases/compiler/potentiallyUncalledDecorators.ts (19 errors) ====
@@ -88,25 +70,19 @@ tests/cases/compiler/potentiallyUncalledDecorators.ts(68,5): error TS1241: Unabl
     
     @allRest
     ~~~~~~~~
-!!! error TS1238: Unable to resolve signature of class decorator when called as an expression.
-!!! error TS1238:   Type 'OmniDecorator' is not assignable to type 'typeof B'.
-!!! error TS1238:     Type 'OmniDecorator' provides no match for the signature 'new (): B'.
+!!! error TS1270: Decorator function return type 'OmniDecorator' is not assignable to type 'void | typeof B'.
     class B {
         @allRest foo: any;
         ~~~~~~~~
-!!! error TS1236: The return type of a property decorator function must be either 'void' or 'any'.
-!!! error TS1236:   Unable to resolve signature of property decorator when called as an expression.
+!!! error TS1271: Decorator function return type is 'OmniDecorator' but is expected to be 'void' or 'any'.
         @allRest bar() { }
         ~~~~~~~~
-!!! error TS1241: Unable to resolve signature of method decorator when called as an expression.
-!!! error TS1241:   Type 'OmniDecorator' has no properties in common with type 'TypedPropertyDescriptor<() => void>'.
+!!! error TS1270: Decorator function return type 'OmniDecorator' is not assignable to type 'void | TypedPropertyDescriptor<() => void>'.
     }
     
     @oneOptional
     ~~~~~~~~~~~~
-!!! error TS1238: Unable to resolve signature of class decorator when called as an expression.
-!!! error TS1238:   Type 'OmniDecorator' is not assignable to type 'typeof C'.
-!!! error TS1238:     Type 'OmniDecorator' provides no match for the signature 'new (): C'.
+!!! error TS1270: Decorator function return type 'OmniDecorator' is not assignable to type 'void | typeof C'.
     class C {
         @oneOptional foo: any;
         ~~~~~~~~~~~~
@@ -118,50 +94,38 @@ tests/cases/compiler/potentiallyUncalledDecorators.ts(68,5): error TS1241: Unabl
     
     @twoOptional
     ~~~~~~~~~~~~
-!!! error TS1238: Unable to resolve signature of class decorator when called as an expression.
-!!! error TS1238:   Type 'OmniDecorator' is not assignable to type 'typeof D'.
-!!! error TS1238:     Type 'OmniDecorator' provides no match for the signature 'new (): D'.
+!!! error TS1270: Decorator function return type 'OmniDecorator' is not assignable to type 'void | typeof D'.
     class D {
         @twoOptional foo: any;
         ~~~~~~~~~~~~
-!!! error TS1236: The return type of a property decorator function must be either 'void' or 'any'.
-!!! error TS1236:   Unable to resolve signature of property decorator when called as an expression.
+!!! error TS1271: Decorator function return type is 'OmniDecorator' but is expected to be 'void' or 'any'.
         @twoOptional bar() { }
         ~~~~~~~~~~~~
-!!! error TS1241: Unable to resolve signature of method decorator when called as an expression.
-!!! error TS1241:   Type 'OmniDecorator' has no properties in common with type 'TypedPropertyDescriptor<() => void>'.
+!!! error TS1270: Decorator function return type 'OmniDecorator' is not assignable to type 'void | TypedPropertyDescriptor<() => void>'.
     }
     
     @threeOptional
     ~~~~~~~~~~~~~~
-!!! error TS1238: Unable to resolve signature of class decorator when called as an expression.
-!!! error TS1238:   Type 'OmniDecorator' is not assignable to type 'typeof E'.
-!!! error TS1238:     Type 'OmniDecorator' provides no match for the signature 'new (): E'.
+!!! error TS1270: Decorator function return type 'OmniDecorator' is not assignable to type 'void | typeof E'.
     class E {
         @threeOptional foo: any;
         ~~~~~~~~~~~~~~
-!!! error TS1236: The return type of a property decorator function must be either 'void' or 'any'.
-!!! error TS1236:   Unable to resolve signature of property decorator when called as an expression.
+!!! error TS1271: Decorator function return type is 'OmniDecorator' but is expected to be 'void' or 'any'.
         @threeOptional bar() { }
         ~~~~~~~~~~~~~~
-!!! error TS1241: Unable to resolve signature of method decorator when called as an expression.
-!!! error TS1241:   Type 'OmniDecorator' has no properties in common with type 'TypedPropertyDescriptor<() => void>'.
+!!! error TS1270: Decorator function return type 'OmniDecorator' is not assignable to type 'void | TypedPropertyDescriptor<() => void>'.
     }
     
     @oneOptionalWithRest
     ~~~~~~~~~~~~~~~~~~~~
-!!! error TS1238: Unable to resolve signature of class decorator when called as an expression.
-!!! error TS1238:   Type 'OmniDecorator' is not assignable to type 'typeof F'.
-!!! error TS1238:     Type 'OmniDecorator' provides no match for the signature 'new (): F'.
+!!! error TS1270: Decorator function return type 'OmniDecorator' is not assignable to type 'void | typeof F'.
     class F {
         @oneOptionalWithRest foo: any;
         ~~~~~~~~~~~~~~~~~~~~
-!!! error TS1236: The return type of a property decorator function must be either 'void' or 'any'.
-!!! error TS1236:   Unable to resolve signature of property decorator when called as an expression.
+!!! error TS1271: Decorator function return type is 'OmniDecorator' but is expected to be 'void' or 'any'.
         @oneOptionalWithRest bar() { }
         ~~~~~~~~~~~~~~~~~~~~
-!!! error TS1241: Unable to resolve signature of method decorator when called as an expression.
-!!! error TS1241:   Type 'OmniDecorator' has no properties in common with type 'TypedPropertyDescriptor<() => void>'.
+!!! error TS1270: Decorator function return type 'OmniDecorator' is not assignable to type 'void | TypedPropertyDescriptor<() => void>'.
     }
     
     @anyDec

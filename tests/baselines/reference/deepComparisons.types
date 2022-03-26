@@ -56,3 +56,34 @@ function f3<U>() {
 >0 as any : any
 >0 : 0
 }
+
+// Repro from #46500
+
+type F<T> = {} & (
+>F : F<T>
+
+    T extends [any, ...any[]]
+        ? { [K in keyof T]?: F<T[K]> }
+        : T extends any[]
+            ? F<T[number]>[]
+            : T extends { [K: string]: any }
+>K : string
+
+                ? { [K in keyof T]?: F<T[K]> }
+                : { x: string }
+>x : string
+
+);
+
+declare function f<T = any>(): F<T>;
+>f : <T = any>() => F<T>
+
+function g() {
+>g : () => F<any>
+
+    return f() as F<any>;
+>f() as F<any> : F<any>
+>f() : F<any>
+>f : <T = any>() => F<T>
+}
+

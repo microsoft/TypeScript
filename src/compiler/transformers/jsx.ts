@@ -26,12 +26,12 @@ namespace ts {
             return currentFileState.filenameDeclaration.name;
         }
 
-        function getJsxFactoryCalleePrimitive(childrenLength: number): "jsx" | "jsxs" | "jsxDEV" {
-            return compilerOptions.jsx === JsxEmit.ReactJSXDev ? "jsxDEV" : childrenLength > 1 ? "jsxs" : "jsx";
+        function getJsxFactoryCalleePrimitive(isStaticChildren: boolean): "jsx" | "jsxs" | "jsxDEV" {
+            return compilerOptions.jsx === JsxEmit.ReactJSXDev ? "jsxDEV" : isStaticChildren ? "jsxs" : "jsx";
         }
 
-        function getJsxFactoryCallee(childrenLength: number) {
-            const type = getJsxFactoryCalleePrimitive(childrenLength);
+        function getJsxFactoryCallee(isStaticChildren: boolean) {
+            const type = getJsxFactoryCalleePrimitive(isStaticChildren);
             return getImplicitImportForName(type);
         }
 
@@ -48,11 +48,11 @@ namespace ts {
                 return existing.name;
             }
             if (!currentFileState.utilizedImplicitRuntimeImports) {
-                currentFileState.utilizedImplicitRuntimeImports = createMap();
+                currentFileState.utilizedImplicitRuntimeImports = new Map();
             }
             let specifierSourceImports = currentFileState.utilizedImplicitRuntimeImports.get(importSource);
             if (!specifierSourceImports) {
-                specifierSourceImports = createMap();
+                specifierSourceImports = new Map();
                 currentFileState.utilizedImplicitRuntimeImports.set(importSource, specifierSourceImports);
             }
             const generatedName = factory.createUniqueName(`_${name}`, GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel | GeneratedIdentifierFlags.AllowNameSubstitution);
@@ -206,7 +206,7 @@ namespace ts {
 
         function convertJsxChildrenToChildrenPropAssignment(children: readonly JsxChild[]) {
             const nonWhitespaceChildren = getSemanticJsxChildren(children);
-            if (length(nonWhitespaceChildren) === 1) {
+            if (length(nonWhitespaceChildren) === 1 && !(nonWhitespaceChildren[0] as JsxExpression).dotDotDotToken) {
                 const result = transformJsxChildToExpression(nonWhitespaceChildren[0]);
                 return result && factory.createPropertyAssignment("children", result);
             }
@@ -221,16 +221,42 @@ namespace ts {
             const attrs = keyAttr ? filter(node.attributes.properties, p => p !== keyAttr) : node.attributes.properties;
             const objectProperties = length(attrs) ? transformJsxAttributesToObjectProps(attrs, childrenProp) :
                 factory.createObjectLiteralExpression(childrenProp ? [childrenProp] : emptyArray); // When there are no attributes, React wants {}
-            return visitJsxOpeningLikeElementOrFragmentJSX(tagName, objectProperties, keyAttr, length(getSemanticJsxChildren(children || emptyArray)), isChild, location);
+            return visitJsxOpeningLikeElementOrFragmentJSX(
+                tagName,
+                objectProperties,
+                keyAttr,
+                children || emptyArray,
+                isChild,
+                location
+            );
         }
 
-        function visitJsxOpeningLikeElementOrFragmentJSX(tagName: Expression, objectProperties: Expression, keyAttr: JsxAttribute | undefined, childrenLength: number, isChild: boolean, location: TextRange) {
-            const args: Expression[] = [tagName, objectProperties, !keyAttr ? factory.createVoidZero() : transformJsxAttributeInitializer(keyAttr.initializer)];
+        function visitJsxOpeningLikeElementOrFragmentJSX(
+            tagName: Expression,
+            objectProperties: Expression,
+            keyAttr: JsxAttribute | undefined,
+            children: readonly JsxChild[],
+            isChild: boolean,
+            location: TextRange
+        ) {
+            const nonWhitespaceChildren = getSemanticJsxChildren(children);
+            const isStaticChildren =
+                length(nonWhitespaceChildren) > 1 || !!(nonWhitespaceChildren[0] as JsxExpression)?.dotDotDotToken;
+            const args: Expression[] = [tagName, objectProperties];
+            // function jsx(type, config, maybeKey) {}
+            // "maybeKey" is optional. It is acceptable to use "_jsx" without a third argument
+            if (keyAttr) {
+                args.push(transformJsxAttributeInitializer(keyAttr.initializer));
+            }
             if (compilerOptions.jsx === JsxEmit.ReactJSXDev) {
                 const originalFile = getOriginalNode(currentSourceFile);
                 if (originalFile && isSourceFile(originalFile)) {
+                    // "maybeKey" has to be replaced with "void 0" to not break the jsxDEV signature
+                    if (keyAttr === undefined) {
+                        args.push(factory.createVoidZero());
+                    }
                     // isStaticChildren development flag
-                    args.push(childrenLength > 1 ? factory.createTrue() : factory.createFalse());
+                    args.push(isStaticChildren ? factory.createTrue() : factory.createFalse());
                     // __source development flag
                     const lineCol = getLineAndCharacterOfPosition(originalFile, location.pos);
                     args.push(factory.createObjectLiteralExpression([
@@ -242,7 +268,11 @@ namespace ts {
                     args.push(factory.createThis());
                 }
             }
-            const element = setTextRange(factory.createCallExpression(getJsxFactoryCallee(childrenLength), /*typeArguments*/ undefined, args), location);
+
+            const element = setTextRange(
+                factory.createCallExpression(getJsxFactoryCallee(isStaticChildren), /*typeArguments*/ undefined, args),
+                location
+            );
 
             if (isChild) {
                 startOnNewLine(element);
@@ -294,7 +324,7 @@ namespace ts {
                 getImplicitJsxFragmentReference(),
                 childrenProps || factory.createObjectLiteralExpression([]),
                 /*keyAttr*/ undefined,
-                length(getSemanticJsxChildren(children)),
+                children,
                 isChild,
                 location
             );

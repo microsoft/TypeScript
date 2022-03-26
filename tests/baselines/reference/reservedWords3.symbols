@@ -1,0 +1,18 @@
+=== tests/cases/compiler/reservedWords3.ts ===
+function f1(enum) {}
+>f1 : Symbol(f1, Decl(reservedWords3.ts, 0, 0))
+> : Symbol((Missing), Decl(reservedWords3.ts, 0, 12))
+
+function f2(class) {}
+>f2 : Symbol(f2, Decl(reservedWords3.ts, 0, 20))
+
+function f3(function) {}
+>f3 : Symbol(f3, Decl(reservedWords3.ts, 1, 21))
+> : Symbol((Missing), Decl(reservedWords3.ts, 2, 12))
+
+function f4(while) {}
+>f4 : Symbol(f4, Decl(reservedWords3.ts, 2, 24))
+
+function f5(for) {}
+>f5 : Symbol(f5, Decl(reservedWords3.ts, 3, 21))
+

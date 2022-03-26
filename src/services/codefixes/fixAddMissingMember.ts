@@ -171,7 +171,7 @@ namespace ts.codefix {
 
             const properties = arrayFrom(checker.getUnmatchedProperties(checker.getTypeAtLocation(parent), checker.getTypeAtLocation(param), /* requireOptionalProperties */ false, /* matchDiscriminantProperties */ false));
             if (!length(properties)) return undefined;
-            return { kind: InfoKind.ObjectLiteral, token: param.name, properties, indentation: 0, parentDeclaration: parent };
+            return { kind: InfoKind.ObjectLiteral, token: param.name, properties, parentDeclaration: parent };
         }
 
         if (!isMemberName(token)) return undefined;
@@ -179,11 +179,13 @@ namespace ts.codefix {
         if (isIdentifier(token) && hasInitializer(parent) && parent.initializer && isObjectLiteralExpression(parent.initializer)) {
             const properties = arrayFrom(checker.getUnmatchedProperties(checker.getTypeAtLocation(parent.initializer), checker.getTypeAtLocation(token), /* requireOptionalProperties */ false, /* matchDiscriminantProperties */ false));
             if (!length(properties)) return undefined;
-            return { kind: InfoKind.ObjectLiteral, token, properties, indentation: undefined, parentDeclaration: parent.initializer };
+
+            return { kind: InfoKind.ObjectLiteral, token, properties, parentDeclaration: parent.initializer };
         }
 
         if (isIdentifier(token) && isJsxOpeningLikeElement(token.parent)) {
-            const attributes = getUnmatchedAttributes(checker, token.parent);
+            const target = getEmitScriptTarget(program.getCompilerOptions());
+            const attributes = getUnmatchedAttributes(checker, target, token.parent);
             if (!length(attributes)) return undefined;
             return { kind: InfoKind.JsxAttributes, token, attributes, parentDeclaration: token.parent };
         }
@@ -234,6 +236,7 @@ namespace ts.codefix {
         if (enumDeclaration && !isPrivateIdentifier(token) && !isSourceFileFromLibrary(program, enumDeclaration.getSourceFile())) {
             return { kind: InfoKind.Enum, token, parentDeclaration: enumDeclaration };
         }
+
         return undefined;
     }
 
@@ -465,8 +468,12 @@ namespace ts.codefix {
         const jsxAttributesNode = info.parentDeclaration.attributes;
         const hasSpreadAttribute = some(jsxAttributesNode.properties, isJsxSpreadAttribute);
         const attrs = map(info.attributes, attr => {
-            const value = attr.valueDeclaration ? tryGetValueFromType(context, checker, importAdder, quotePreference, checker.getTypeAtLocation(attr.valueDeclaration)) : createUndefined();
-            return factory.createJsxAttribute(factory.createIdentifier(attr.name), factory.createJsxExpression(/*dotDotDotToken*/ undefined, value));
+            const value = tryGetValueFromType(context, checker, importAdder, quotePreference, checker.getTypeOfSymbol(attr));
+            const name = factory.createIdentifier(attr.name);
+            const jsxAttribute = factory.createJsxAttribute(name, factory.createJsxExpression(/*dotDotDotToken*/ undefined, value));
+            // formattingScanner requires the Identifier to have a context for scanning attributes with "-" (data-foo).
+            setParent(name, jsxAttribute);
+            return jsxAttribute;
         });
         const jsxAttributes = factory.createJsxAttributes(hasSpreadAttribute ? [...attrs, ...jsxAttributesNode.properties] : [...jsxAttributesNode.properties, ...attrs]);
         const options = { prefix: jsxAttributesNode.pos === jsxAttributesNode.end ? " " : undefined };
@@ -476,10 +483,11 @@ namespace ts.codefix {
     function addObjectLiteralProperties(changes: textChanges.ChangeTracker, context: CodeFixContextBase, info: ObjectLiteralInfo) {
         const importAdder = createImportAdder(context.sourceFile, context.program, context.preferences, context.host);
         const quotePreference = getQuotePreference(context.sourceFile, context.preferences);
+        const target = getEmitScriptTarget(context.program.getCompilerOptions());
         const checker = context.program.getTypeChecker();
         const props = map(info.properties, prop => {
-            const initializer = prop.valueDeclaration ? tryGetValueFromType(context, checker, importAdder, quotePreference, checker.getTypeAtLocation(prop.valueDeclaration)) : createUndefined();
-            return factory.createPropertyAssignment(prop.name, initializer);
+            const initializer = tryGetValueFromType(context, checker, importAdder, quotePreference, checker.getTypeOfSymbol(prop));
+            return factory.createPropertyAssignment(createPropertyNameNodeForIdentifierOrLiteral(prop.name, target, quotePreference === QuotePreference.Single), initializer);
         });
         const options = {
             leadingTriviaOption: textChanges.LeadingTriviaOption.Exclude,
@@ -571,7 +579,7 @@ namespace ts.codefix {
             ((getObjectFlags(type) & ObjectFlags.ObjectLiteral) || (type.symbol && tryCast(singleOrUndefined(type.symbol.declarations), isTypeLiteralNode)));
     }
 
-    function getUnmatchedAttributes(checker: TypeChecker, source: JsxOpeningLikeElement) {
+    function getUnmatchedAttributes(checker: TypeChecker, target: ScriptTarget, source: JsxOpeningLikeElement) {
         const attrsType = checker.getContextualType(source.attributes);
         if (attrsType === undefined) return emptyArray;
 
@@ -591,6 +599,6 @@ namespace ts.codefix {
             }
         }
         return filter(targetProps, targetProp =>
-            !((targetProp.flags & SymbolFlags.Optional || getCheckFlags(targetProp) & CheckFlags.Partial) || seenNames.has(targetProp.escapedName)));
+            isIdentifierText(targetProp.name, target, LanguageVariant.JSX) && !((targetProp.flags & SymbolFlags.Optional || getCheckFlags(targetProp) & CheckFlags.Partial) || seenNames.has(targetProp.escapedName)));
     }
 }

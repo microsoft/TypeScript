@@ -1,0 +1,65 @@
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoLink7.ts",
+      "position": 46,
+      "name": ""
+    },
+    "quickInfo": {
+      "kind": "const",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 46,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "const",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "B",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "456",
+          "kind": "stringLiteral"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "See ",
+          "kind": "text"
+        },
+        {
+          "text": "{@link ",
+          "kind": "link"
+        },
+        {
+          "text": "|       ",
+          "kind": "linkText"
+        },
+        {
+          "text": "}",
+          "kind": "link"
+        },
+        {
+          "text": " instead",
+          "kind": "text"
+        }
+      ]
+    }
+  }
+]

@@ -21,10 +21,10 @@ verify.codeFix({
     newFileContent:
 `class foo {
     constructor() { }
-    instanceMethod1() { return "this is name"; }
-    instanceMethod2() { return "this is name"; }
     static staticMethod1() { return "this is static name"; }
     static staticMethod2() { return "this is static name"; }
+    instanceMethod1() { return "this is name"; }
+    instanceMethod2() { return "this is name"; }
 }
 foo.prototype.instanceProp1 = "hello";
 foo.prototype.instanceProp2 = undefined;

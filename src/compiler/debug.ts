@@ -171,12 +171,6 @@ namespace ts {
             return value;
         }
 
-        /**
-         * @deprecated Use `checkDefined` to check whether a value is defined inline. Use `assertIsDefined` to check whether
-         * a value is defined at the statement level.
-         */
-        export const assertDefined = checkDefined;
-
         export function assertEachIsDefined<T extends Node>(value: NodeArray<T>, message?: string, stackCrawlMark?: AnyFunction): asserts value is NodeArray<T>;
         export function assertEachIsDefined<T>(value: readonly T[], message?: string, stackCrawlMark?: AnyFunction): asserts value is readonly NonNullable<T>[];
         export function assertEachIsDefined<T>(value: readonly T[], message?: string, stackCrawlMark?: AnyFunction) {
@@ -190,14 +184,8 @@ namespace ts {
             return value;
         }
 
-        /**
-         * @deprecated Use `checkEachDefined` to check whether the elements of an array are defined inline. Use `assertEachIsDefined` to check whether
-         * the elements of an array are defined at the statement level.
-         */
-        export const assertEachDefined = checkEachDefined;
-
         export function assertNever(member: never, message = "Illegal value:", stackCrawlMark?: AnyFunction): never {
-            const detail = typeof member === "object" && hasProperty(member, "kind") && hasProperty(member, "pos") && formatSyntaxKind ? "SyntaxKind: " + formatSyntaxKind((member as Node).kind) : JSON.stringify(member);
+            const detail = typeof member === "object" && hasProperty(member, "kind") && hasProperty(member, "pos") ? "SyntaxKind: " + formatSyntaxKind((member as Node).kind) : JSON.stringify(member);
             return fail(`${message} ${detail}`, stackCrawlMark || assertNever);
         }
 
@@ -349,6 +337,10 @@ namespace ts {
 
         export function formatSyntaxKind(kind: SyntaxKind | undefined): string {
             return formatEnum(kind, (ts as any).SyntaxKind, /*isFlags*/ false);
+        }
+
+        export function formatSnippetKind(kind: SnippetKind | undefined): string {
+            return formatEnum(kind, (ts as any).SnippetKind, /*isFlags*/ false);
         }
 
         export function formatNodeFlags(flags: NodeFlags | undefined): string {
@@ -662,7 +654,7 @@ namespace ts {
                                 if (text === undefined) {
                                     const parseNode = getParseTreeNode(this);
                                     const sourceFile = parseNode && getSourceFileOfNode(parseNode);
-                                    text = sourceFile ? getSourceTextOfNodeFromSourceFile(sourceFile, parseNode!, includeTrivia) : "";
+                                    text = sourceFile ? getSourceTextOfNodeFromSourceFile(sourceFile, parseNode, includeTrivia) : "";
                                     map?.set(this, text);
                                 }
                                 return text;

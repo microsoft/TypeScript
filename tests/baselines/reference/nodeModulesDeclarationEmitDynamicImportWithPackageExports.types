@@ -95,13 +95,13 @@ export const a = import("package/cjs");
 >"package/cjs" : "package/cjs"
 
 export const b = import("package/mjs");
->b : Promise<typeof import("tests/cases/conformance/node/index")>
->import("package/mjs") : Promise<typeof import("tests/cases/conformance/node/index")>
+>b : Promise<typeof import("tests/cases/conformance/node/index", { assert: { "resolution-mode": "import" } })>
+>import("package/mjs") : Promise<typeof import("tests/cases/conformance/node/index", { assert: { "resolution-mode": "import" } })>
 >"package/mjs" : "package/mjs"
 
 export const c = import("package");
->c : Promise<typeof import("tests/cases/conformance/node/index")>
->import("package") : Promise<typeof import("tests/cases/conformance/node/index")>
+>c : Promise<typeof import("tests/cases/conformance/node/index", { assert: { "resolution-mode": "import" } })>
+>import("package") : Promise<typeof import("tests/cases/conformance/node/index", { assert: { "resolution-mode": "import" } })>
 >"package" : "package"
 
 export const f = import("inner");
@@ -117,8 +117,8 @@ export const d = import("inner/cjs");
 >"inner/cjs" : "inner/cjs"
 
 export const e = import("inner/mjs");
->e : Promise<typeof import("tests/cases/conformance/node/node_modules/inner/index")>
->import("inner/mjs") : Promise<typeof import("tests/cases/conformance/node/node_modules/inner/index")>
+>e : Promise<typeof import("tests/cases/conformance/node/node_modules/inner/index", { assert: { "resolution-mode": "import" } })>
+>import("inner/mjs") : Promise<typeof import("tests/cases/conformance/node/node_modules/inner/index", { assert: { "resolution-mode": "import" } })>
 >"inner/mjs" : "inner/mjs"
 
 === tests/cases/conformance/node/node_modules/inner/index.d.ts ===

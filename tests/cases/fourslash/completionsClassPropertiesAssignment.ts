@@ -19,7 +19,7 @@
 ////   [prop] = /*6*/
 ////}
 
-const exact = completion.globalsPlus(["Class1", "Class2", "Class3", "prop", "Class4"]);
+const exact = completion.globalsPlus(["Class1", "Class2", "Class3", "Class4", "prop"]);
 const markers = ["1", "2", "3", "4", "5", "6"];
 
 verify.completions({ marker: "0", exact: ['a', 'b', 'c', 'd'], isGlobalCompletion: false });

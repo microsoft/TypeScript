@@ -43,21 +43,6 @@ namespace ts.codefix {
 
         function createClassElementsFromSymbol(symbol: Symbol) {
             const memberElements: ClassElement[] = [];
-            // all instance members are stored in the "member" array of symbol
-            if (symbol.members) {
-                symbol.members.forEach((member, key) => {
-                    if (key === "constructor" && member.valueDeclaration) {
-                        // fn.prototype.constructor = fn
-                        changes.delete(sourceFile, member.valueDeclaration.parent);
-                        return;
-                    }
-                    const memberElement = createClassElement(member, /*modifiers*/ undefined);
-                    if (memberElement) {
-                        memberElements.push(...memberElement);
-                    }
-                });
-            }
-
             // all static members are stored in the "exports" array of symbol
             if (symbol.exports) {
                 symbol.exports.forEach(member => {
@@ -71,18 +56,31 @@ namespace ts.codefix {
                             isObjectLiteralExpression(firstDeclaration.parent.right)
                         ) {
                             const prototypes = firstDeclaration.parent.right;
-                            const memberElement = createClassElement(prototypes.symbol, /** modifiers */ undefined);
-                            if (memberElement) {
-                                memberElements.push(...memberElement);
-                            }
+                            createClassElement(prototypes.symbol, /** modifiers */ undefined, memberElements);
                         }
                     }
                     else {
-                        const memberElement = createClassElement(member, [factory.createToken(SyntaxKind.StaticKeyword)]);
-                        if (memberElement) {
-                            memberElements.push(...memberElement);
-                        }
+                        createClassElement(member, [factory.createToken(SyntaxKind.StaticKeyword)], memberElements);
                     }
+                });
+            }
+
+            // all instance members are stored in the "member" array of symbol (done last so instance members pulled from prototype assignments have priority)
+            if (symbol.members) {
+                symbol.members.forEach((member, key) => {
+                    if (key === "constructor" && member.valueDeclaration) {
+                        const prototypeAssignment = symbol.exports?.get("prototype" as __String)?.declarations?.[0]?.parent;
+                        if (prototypeAssignment && isBinaryExpression(prototypeAssignment) && isObjectLiteralExpression(prototypeAssignment.right) && some(prototypeAssignment.right.properties, isConstructorAssignment)) {
+                            // fn.prototype = { constructor: fn }
+                            // Already deleted in `createClassElement` in first pass
+                        }
+                        else {
+                            // fn.prototype.constructor = fn
+                            changes.delete(sourceFile, member.valueDeclaration.parent);
+                        }
+                        return;
+                    }
+                    createClassElement(member, /*modifiers*/ undefined, memberElements);
                 });
             }
 
@@ -109,19 +107,28 @@ namespace ts.codefix {
                 }
             }
 
-            function createClassElement(symbol: Symbol, modifiers: Modifier[] | undefined): readonly ClassElement[] {
+            function createClassElement(symbol: Symbol, modifiers: Modifier[] | undefined, members: ClassElement[]): void {
                 // Right now the only thing we can convert are function expressions, which are marked as methods
                 // or { x: y } type prototype assignments, which are marked as ObjectLiteral
-                const members: ClassElement[] = [];
                 if (!(symbol.flags & SymbolFlags.Method) && !(symbol.flags & SymbolFlags.ObjectLiteral)) {
-                    return members;
+                    return;
                 }
 
                 const memberDeclaration = symbol.valueDeclaration as AccessExpression | ObjectLiteralExpression;
                 const assignmentBinaryExpression = memberDeclaration.parent as BinaryExpression;
                 const assignmentExpr = assignmentBinaryExpression.right;
                 if (!shouldConvertDeclaration(memberDeclaration, assignmentExpr)) {
-                    return members;
+                    return;
+                }
+
+                if (some(members, m => {
+                    const name = getNameOfDeclaration(m);
+                    if (name && isIdentifier(name) && idText(name) === symbolName(symbol)) {
+                        return true; // class member already made for this name
+                    }
+                    return false;
+                })) {
+                    return;
                 }
 
                 // delete the entire statement if this expression is the sole expression to take care of the semicolon at the end
@@ -132,7 +139,7 @@ namespace ts.codefix {
                 if (!assignmentExpr) {
                     members.push(factory.createPropertyDeclaration([], modifiers, symbol.name, /*questionToken*/ undefined,
                         /*type*/ undefined, /*initializer*/ undefined));
-                    return members;
+                    return;
                 }
 
                 // f.x = expr
@@ -140,52 +147,54 @@ namespace ts.codefix {
                     const quotePreference = getQuotePreference(sourceFile, preferences);
                     const name = tryGetPropertyName(memberDeclaration, compilerOptions, quotePreference);
                     if (name) {
-                        return createFunctionLikeExpressionMember(members, assignmentExpr, name);
+                        createFunctionLikeExpressionMember(members, assignmentExpr, name);
                     }
-                    return members;
+                    return;
                 }
                 // f.prototype = { ... }
                 else if (isObjectLiteralExpression(assignmentExpr)) {
-                    return flatMap(
+                    forEach(
                         assignmentExpr.properties,
                         property => {
                             if (isMethodDeclaration(property) || isGetOrSetAccessorDeclaration(property)) {
                                 // MethodDeclaration and AccessorDeclaration can appear in a class directly
-                                return members.concat(property);
+                                members.push(property);
                             }
                             if (isPropertyAssignment(property) && isFunctionExpression(property.initializer)) {
-                                return createFunctionLikeExpressionMember(members, property.initializer, property.name);
+                                createFunctionLikeExpressionMember(members, property.initializer, property.name);
                             }
                             // Drop constructor assignments
-                            if (isConstructorAssignment(property)) return members;
-                            return [];
+                            if (isConstructorAssignment(property)) return;
+                            return;
                         }
                     );
+                    return;
                 }
                 else {
                     // Don't try to declare members in JavaScript files
-                    if (isSourceFileJS(sourceFile)) return members;
-                    if (!isPropertyAccessExpression(memberDeclaration)) return members;
+                    if (isSourceFileJS(sourceFile)) return;
+                    if (!isPropertyAccessExpression(memberDeclaration)) return;
                     const prop = factory.createPropertyDeclaration(/*decorators*/ undefined, modifiers, memberDeclaration.name, /*questionToken*/ undefined, /*type*/ undefined, assignmentExpr);
                     copyLeadingComments(assignmentBinaryExpression.parent, prop, sourceFile);
                     members.push(prop);
-                    return members;
+                    return;
                 }
 
-                function createFunctionLikeExpressionMember(members: readonly ClassElement[], expression: FunctionExpression | ArrowFunction, name: PropertyName) {
+                function createFunctionLikeExpressionMember(members: ClassElement[], expression: FunctionExpression | ArrowFunction, name: PropertyName) {
                     if (isFunctionExpression(expression)) return createFunctionExpressionMember(members, expression, name);
                     else return createArrowFunctionExpressionMember(members, expression, name);
                 }
 
-                function createFunctionExpressionMember(members: readonly ClassElement[], functionExpression: FunctionExpression, name: PropertyName) {
+                function createFunctionExpressionMember(members: ClassElement[], functionExpression: FunctionExpression, name: PropertyName) {
                     const fullModifiers = concatenate(modifiers, getModifierKindFromSource(functionExpression, SyntaxKind.AsyncKeyword));
                     const method = factory.createMethodDeclaration(/*decorators*/ undefined, fullModifiers, /*asteriskToken*/ undefined, name, /*questionToken*/ undefined,
                         /*typeParameters*/ undefined, functionExpression.parameters, /*type*/ undefined, functionExpression.body);
                     copyLeadingComments(assignmentBinaryExpression, method, sourceFile);
-                    return members.concat(method);
+                    members.push(method);
+                    return;
                 }
 
-                function createArrowFunctionExpressionMember(members: readonly ClassElement[], arrowFunction: ArrowFunction, name: PropertyName) {
+                function createArrowFunctionExpressionMember(members: ClassElement[], arrowFunction: ArrowFunction, name: PropertyName) {
                     const arrowFunctionBody = arrowFunction.body;
                     let bodyBlock: Block;
 
@@ -201,7 +210,7 @@ namespace ts.codefix {
                     const method = factory.createMethodDeclaration(/*decorators*/ undefined, fullModifiers, /*asteriskToken*/ undefined, name, /*questionToken*/ undefined,
                         /*typeParameters*/ undefined, arrowFunction.parameters, /*type*/ undefined, bodyBlock);
                     copyLeadingComments(assignmentBinaryExpression, method, sourceFile);
-                    return members.concat(method);
+                    members.push(method);
                 }
             }
         }

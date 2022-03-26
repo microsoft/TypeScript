@@ -191,3 +191,23 @@ class SqlTable<T> {
         this.validateRow(row);
     }
 }
+
+// Repro from #46495
+
+interface Button {
+    type: "button";
+    text: string;
+}
+
+interface Checkbox {
+    type: "checkbox";
+    isChecked: boolean;
+}
+
+type Control = Button | Checkbox;
+
+function update<T extends Control, K extends keyof T>(control : T | undefined, key: K, value: T[K]): void {
+    if (control !== undefined) {
+        control[key] = value;
+    }
+}

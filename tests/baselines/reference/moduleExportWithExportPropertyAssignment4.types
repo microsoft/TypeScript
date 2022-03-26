@@ -17,24 +17,24 @@ mod1.justExport.toFixed()
 mod1.bothBefore.toFixed() // error
 >mod1.bothBefore.toFixed() : any
 >mod1.bothBefore.toFixed : any
->mod1.bothBefore : string | number
+>mod1.bothBefore : number | "string"
 >mod1 : typeof mod1
->bothBefore : string | number
+>bothBefore : number | "string"
 >toFixed : any
 
 mod1.bothAfter.toFixed()
 >mod1.bothAfter.toFixed() : any
 >mod1.bothAfter.toFixed : any
->mod1.bothAfter : string | number
+>mod1.bothAfter : number | "string"
 >mod1 : typeof mod1
->bothAfter : string | number
+>bothAfter : number | "string"
 >toFixed : any
 
 mod1.justProperty.length
 >mod1.justProperty.length : number
->mod1.justProperty : string
+>mod1.justProperty : "string"
 >mod1 : typeof mod1
->justProperty : string
+>justProperty : "string"
 >length : number
 
 === tests/cases/conformance/salsa/requires.d.ts ===
@@ -50,11 +50,11 @@ declare function require(name: string): any;
 /// <reference path='./requires.d.ts' />
 module.exports.bothBefore = 'string'
 >module.exports.bothBefore = 'string' : "string"
->module.exports.bothBefore : string | number
+>module.exports.bothBefore : number | "string"
 >module.exports : typeof A
 >module : { exports: typeof A; }
 >exports : typeof A
->bothBefore : string | number
+>bothBefore : number | "string"
 >'string' : "string"
 
 A.justExport = 4
@@ -66,16 +66,16 @@ A.justExport = 4
 
 A.bothBefore = 2
 >A.bothBefore = 2 : 2
->A.bothBefore : string | number
+>A.bothBefore : number | "string"
 >A : typeof A
->bothBefore : string | number
+>bothBefore : number | "string"
 >2 : 2
 
 A.bothAfter = 3
 >A.bothAfter = 3 : 3
->A.bothAfter : string | number
+>A.bothAfter : number | "string"
 >A : typeof A
->bothAfter : string | number
+>bothAfter : number | "string"
 >3 : 3
 
 module.exports = A
@@ -97,19 +97,19 @@ function A() {
 }
 module.exports.bothAfter = 'string'
 >module.exports.bothAfter = 'string' : "string"
->module.exports.bothAfter : string | number
+>module.exports.bothAfter : number | "string"
 >module.exports : typeof A
 >module : { exports: typeof A; }
 >exports : typeof A
->bothAfter : string | number
+>bothAfter : number | "string"
 >'string' : "string"
 
 module.exports.justProperty = 'string'
 >module.exports.justProperty = 'string' : "string"
->module.exports.justProperty : string
+>module.exports.justProperty : "string"
 >module.exports : typeof A
 >module : { exports: typeof A; }
 >exports : typeof A
->justProperty : string
+>justProperty : "string"
 >'string' : "string"
 
