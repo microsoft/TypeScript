@@ -13353,12 +13353,12 @@ namespace ts {
                         typeParameter.constraint = getInferredTypeParameterConstraint(typeParameter) || noConstraintType;
                     }
                     else {
-                        // Detect is the constraint is for a homomorphic mapped type to a tuple and in case return a literal union of the used tuple keys 
+                        // Detect is the constraint is for a homomorphic mapped type to a tuple and in case return a literal union of the used tuple keys
                         if (constraintDeclaration.parent && constraintDeclaration.parent.parent && constraintDeclaration.parent.parent.kind === SyntaxKind.MappedType) {
                             const mappedTypeNode = constraintDeclaration.parent.parent as MappedTypeNode;
                             if (!mappedTypeNode.nameType && mappedTypeNode.typeParameter.constraint && isTypeOperatorNode(mappedTypeNode.typeParameter.constraint) && mappedTypeNode.typeParameter.constraint.operator === SyntaxKind.KeyOfKeyword) {
                                 const keyOfTarget = getTypeFromTypeNode(mappedTypeNode.typeParameter.constraint.type);
-                                if (isTupleType(keyOfTarget)) {                                    
+                                if (isTupleType(keyOfTarget)) {
                                     typeParameter.constraint = getUnionType(map(getTypeArguments(keyOfTarget), (_, i) => getStringLiteralType("" + i)));
                                     return typeParameter.constraint;
                                 }
