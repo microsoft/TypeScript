@@ -24686,8 +24686,8 @@ namespace ts {
                     return type;
                 }
                 // If type is anonymous object, add the symbol directly
-                if (isObjectType(type) && type.objectFlags & ObjectFlags.Anonymous) {
-                    return widenObjectType(type, newSymbol);
+                if (getObjectFlags(type) & ObjectFlags.Anonymous) {
+                    return widenObjectType(type as ObjectType, newSymbol);
                 }
                 // If type is intersection, add the symbol to the first anonymous object component of the intersection
                 if (type.flags & TypeFlags.Intersection) {
