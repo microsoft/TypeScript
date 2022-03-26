@@ -15848,6 +15848,19 @@ namespace ts {
                 // Eagerly resolve the constraint type which forces an error if the constraint type circularly
                 // references itself through one or more type aliases.
                 getConstraintTypeFromMappedType(type);
+                // Detect if the mapped type should be homomorphic to a tuple by checking the declaration of the constraint if it contains a keyof over a tuple
+                if (!node.nameType && node.typeParameter.constraint && isTypeOperatorNode(node.typeParameter.constraint) && node.typeParameter.constraint.operator === SyntaxKind.KeyOfKeyword) {
+                    const keyOfTarget = getTypeFromTypeNode(node.typeParameter.constraint.type);
+                    if (isTupleType(keyOfTarget)) {
+                        // Instantiate the mapped type over a tuple with an identity mapper
+                        const instantiatedTupleMappedType = instantiateMappedTupleType(
+                            keyOfTarget,
+                            type,
+                            makeFunctionTypeMapper(identity)
+                        );
+                        links.resolvedType = instantiatedTupleMappedType;
+                    }
+                }
             }
             return links.resolvedType;
         }
@@ -35579,14 +35592,17 @@ namespace ts {
                 reportImplicitAny(node, anyType);
             }
 
-            const type = getTypeFromMappedTypeNode(node) as MappedType;
-            const nameType = getNameTypeFromMappedType(type);
-            if (nameType) {
-                checkTypeAssignableTo(nameType, keyofConstraintType, node.nameType);
-            }
-            else {
-                const constraintType = getConstraintTypeFromMappedType(type);
-                checkTypeAssignableTo(constraintType, keyofConstraintType, getEffectiveConstraintOfTypeParameter(node.typeParameter));
+            const type = getTypeFromMappedTypeNode(node);
+            // Continue to check if the type returned is a mapped type, that means it wasn't resolved to a homomorphic tuple type
+            if (type.flags & TypeFlags.Object && (type as ObjectType).objectFlags & ObjectFlags.Mapped) {
+                const nameType = getNameTypeFromMappedType(type as MappedType);
+                if (nameType) {
+                    checkTypeAssignableTo(nameType, keyofConstraintType, node.nameType);
+                }
+                else {
+                    const constraintType = getConstraintTypeFromMappedType(type as MappedType);
+                    checkTypeAssignableTo(constraintType, keyofConstraintType, getEffectiveConstraintOfTypeParameter(node.typeParameter));
+                }
             }
         }
 
