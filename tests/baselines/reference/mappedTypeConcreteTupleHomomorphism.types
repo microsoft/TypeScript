@@ -36,8 +36,8 @@ const d: HomomorphicInstantiation = [1, 1, 1]
 type TupleOfNumbersAndObjects = [1, 2, {}]
 >TupleOfNumbersAndObjects : TupleOfNumbersAndObjects
 
-type ShoulsErrorInAssignement = {
->ShoulsErrorInAssignement : ["1", "2", string]
+type ShouldErrorOnInterpolation = {
+>ShouldErrorOnInterpolation : ["1", "2", string]
 
     [K in keyof TupleOfNumbersAndObjects]: `${TupleOfNumbersAndObjects[K]}`
 }

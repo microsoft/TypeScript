@@ -24,7 +24,7 @@ tests/cases/compiler/mappedTypeConcreteTupleHomomorphism.ts(22,47): error TS2322
     
     type TupleOfNumbersAndObjects = [1, 2, {}]
     
-    type ShoulsErrorInAssignement = {
+    type ShouldErrorOnInterpolation = {
         [K in keyof TupleOfNumbersAndObjects]: `${TupleOfNumbersAndObjects[K]}`
                                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2322: Type 'TupleOfNumbersAndObjects[K]' is not assignable to type 'string | number | bigint | boolean'.

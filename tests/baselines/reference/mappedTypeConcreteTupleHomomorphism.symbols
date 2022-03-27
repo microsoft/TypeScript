@@ -43,8 +43,8 @@ const d: HomomorphicInstantiation = [1, 1, 1]
 type TupleOfNumbersAndObjects = [1, 2, {}]
 >TupleOfNumbersAndObjects : Symbol(TupleOfNumbersAndObjects, Decl(mappedTypeConcreteTupleHomomorphism.ts, 16, 45))
 
-type ShoulsErrorInAssignement = {
->ShoulsErrorInAssignement : Symbol(ShoulsErrorInAssignement, Decl(mappedTypeConcreteTupleHomomorphism.ts, 18, 42))
+type ShouldErrorOnInterpolation = {
+>ShouldErrorOnInterpolation : Symbol(ShouldErrorOnInterpolation, Decl(mappedTypeConcreteTupleHomomorphism.ts, 18, 42))
 
     [K in keyof TupleOfNumbersAndObjects]: `${TupleOfNumbersAndObjects[K]}`
 >K : Symbol(K, Decl(mappedTypeConcreteTupleHomomorphism.ts, 21, 5))

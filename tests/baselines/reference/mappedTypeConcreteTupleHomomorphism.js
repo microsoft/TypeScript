@@ -19,7 +19,7 @@ const d: HomomorphicInstantiation = [1, 1, 1]
 
 type TupleOfNumbersAndObjects = [1, 2, {}]
 
-type ShoulsErrorInAssignement = {
+type ShouldErrorOnInterpolation = {
     [K in keyof TupleOfNumbersAndObjects]: `${TupleOfNumbersAndObjects[K]}`
 }
 
