@@ -1,0 +1,108 @@
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoJsDocTags8.js",
+      "position": 122,
+      "name": ""
+    },
+    "quickInfo": {
+      "kind": "const",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 122,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "const",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "foo",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "t",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=>",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [],
+      "tags": [
+        {
+          "name": "type",
+          "text": [
+            {
+              "text": "{(t: T) => number}",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "template",
+          "text": [
+            {
+              "text": "{Foo}",
+              "kind": "text"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "T",
+              "kind": "typeParameterName"
+            }
+          ]
+        }
+      ]
+    }
+  }
+]

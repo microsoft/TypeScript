@@ -23,14 +23,8 @@ verify.completions({
     includes: [
         {
             name: "boo",
-            sortText: completion.SortText.LocationPriority,
-            replacementSpan: {
-                fileName: "",
-                pos: 0,
-                end: 0,
-            },
-            insertText:
-"boo(): string;\n",
+            sortText: completion.SortText.ClassMemberSnippets,
+            insertText: "boo(): string;",
         }
     ],
 });

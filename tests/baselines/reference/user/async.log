@@ -3,21 +3,17 @@ Standard output:
 node_modules/async/all.js(32,12): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/all.js(49,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/all.js(49,46): error TS2695: Left side of comma operator is unused and has no side effects.
-node_modules/async/allLimit.js(28,9): error TS1003: Identifier expected.
 node_modules/async/allLimit.js(33,12): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/allLimit.js(41,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/allLimit.js(41,51): error TS2695: Left side of comma operator is unused and has no side effects.
-node_modules/async/allSeries.js(24,9): error TS1003: Identifier expected.
 node_modules/async/allSeries.js(28,12): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/allSeries.js(36,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/any.js(33,12): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/any.js(51,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/any.js(51,46): error TS2695: Left side of comma operator is unused and has no side effects.
-node_modules/async/anyLimit.js(28,9): error TS1003: Identifier expected.
 node_modules/async/anyLimit.js(33,12): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/anyLimit.js(42,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/anyLimit.js(42,51): error TS2695: Left side of comma operator is unused and has no side effects.
-node_modules/async/anySeries.js(24,9): error TS1003: Identifier expected.
 node_modules/async/anySeries.js(28,12): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/anySeries.js(37,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/apply.js(8,17): error TS2695: Left side of comma operator is unused and has no side effects.
@@ -26,7 +22,6 @@ node_modules/async/apply.js(37,28): error TS1003: Identifier expected.
 node_modules/async/apply.js(37,29): error TS1003: Identifier expected.
 node_modules/async/apply.js(37,30): error TS1003: Identifier expected.
 node_modules/async/applyEach.js(50,20): error TS2695: Left side of comma operator is unused and has no side effects.
-node_modules/async/applyEachSeries.js(24,9): error TS1003: Identifier expected.
 node_modules/async/applyEachSeries.js(36,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/asyncify.js(43,14): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/asyncify.js(79,13): error TS2695: Left side of comma operator is unused and has no side effects.
@@ -47,7 +42,6 @@ node_modules/async/auto.js(158,10): error TS2695: Left side of comma operator is
 node_modules/async/auto.js(159,18): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/auto.js(159,50): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/autoInject.js(44,17): error TS2695: Left side of comma operator is unused and has no side effects.
-node_modules/async/autoInject.js(66,9): error TS1003: Identifier expected.
 node_modules/async/autoInject.js(134,6): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/autoInject.js(136,25): error TS2532: Object is possibly 'undefined'.
 node_modules/async/autoInject.js(136,25): error TS2722: Cannot invoke an object which is possibly 'undefined'.
@@ -56,7 +50,6 @@ node_modules/async/autoInject.js(139,14): error TS2695: Left side of comma opera
 node_modules/async/autoInject.js(160,28): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/autoInject.js(164,14): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/autoInject.js(168,6): error TS2695: Left side of comma operator is unused and has no side effects.
-node_modules/async/cargo.js(60,9): error TS1003: Identifier expected.
 node_modules/async/cargo.js(62,12): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/cargo.js(92,11): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/compose.js(8,37): error TS2695: Left side of comma operator is unused and has no side effects.
@@ -67,9 +60,7 @@ node_modules/async/concat.js(42,20): error TS2695: Left side of comma operator i
 node_modules/async/concatLimit.js(9,22): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/concatLimit.js(10,6): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/concatLimit.js(13,36): error TS2695: Left side of comma operator is unused and has no side effects.
-node_modules/async/concatLimit.js(54,9): error TS1003: Identifier expected.
 node_modules/async/concatLimit.js(58,12): error TS2304: Cannot find name 'AsyncFunction'.
-node_modules/async/concatSeries.js(24,9): error TS1003: Identifier expected.
 node_modules/async/concatSeries.js(27,12): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/concatSeries.js(30,31): error TS1005: ']' expected.
 node_modules/async/concatSeries.js(35,20): error TS2695: Left side of comma operator is unused and has no side effects.
@@ -80,11 +71,9 @@ node_modules/async/constant.js(34,30): error TS1003: Identifier expected.
 node_modules/async/detect.js(42,12): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/detect.js(60,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/detect.js(60,46): error TS2695: Left side of comma operator is unused and has no side effects.
-node_modules/async/detectLimit.js(33,9): error TS1003: Identifier expected.
 node_modules/async/detectLimit.js(38,12): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/detectLimit.js(47,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/detectLimit.js(47,51): error TS2695: Left side of comma operator is unused and has no side effects.
-node_modules/async/detectSeries.js(24,9): error TS1003: Identifier expected.
 node_modules/async/detectSeries.js(28,12): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/detectSeries.js(37,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/dir.js(26,12): error TS2304: Cannot find name 'AsyncFunction'.
@@ -96,21 +85,15 @@ node_modules/async/dist/async.js(3,10): error TS2304: Cannot find name 'define'.
 node_modules/async/dist/async.js(3,35): error TS2304: Cannot find name 'define'.
 node_modules/async/dist/async.js(3,48): error TS2304: Cannot find name 'define'.
 node_modules/async/dist/async.js(4,20): error TS2339: Property 'async' does not exist on type 'typeof import("/async/node_modules/async/dist/async")'.
-node_modules/async/dist/async.js(31,18): error TS8029: JSDoc '@param' tag has name '', but there is no parameter with that name. It would match 'arguments' if it had an array type.
 node_modules/async/dist/async.js(31,28): error TS1003: Identifier expected.
 node_modules/async/dist/async.js(31,29): error TS1003: Identifier expected.
 node_modules/async/dist/async.js(31,30): error TS1003: Identifier expected.
 node_modules/async/dist/async.js(298,7): error TS2454: Variable 'unmasked' is used before being assigned.
 node_modules/async/dist/async.js(622,80): error TS2339: Property 'nodeType' does not exist on type 'NodeModule'.
 node_modules/async/dist/async.js(748,84): error TS2339: Property 'nodeType' does not exist on type 'NodeModule'.
-node_modules/async/dist/async.js(754,49): error TS2339: Property 'process' does not exist on type 'false | (Global & typeof globalThis)'.
+node_modules/async/dist/async.js(754,49): error TS2339: Property 'process' does not exist on type 'false | typeof globalThis'.
   Property 'process' does not exist on type 'false'.
 node_modules/async/dist/async.js(923,32): error TS2554: Expected 2 arguments, but got 1.
-node_modules/async/dist/async.js(1028,9): error TS1003: Identifier expected.
-node_modules/async/dist/async.js(1086,9): error TS1003: Identifier expected.
-node_modules/async/dist/async.js(1230,9): error TS1003: Identifier expected.
-node_modules/async/dist/async.js(1251,9): error TS1003: Identifier expected.
-node_modules/async/dist/async.js(1271,9): error TS1003: Identifier expected.
 node_modules/async/dist/async.js(1294,27): error TS1016: A required parameter cannot follow an optional parameter.
 node_modules/async/dist/async.js(1299,18): error TS2532: Object is possibly 'undefined'.
 node_modules/async/dist/async.js(1303,3): error TS2322: Type 'any[] | undefined' is not assignable to type 'any[]'.
@@ -135,101 +118,61 @@ node_modules/async/dist/async.js(1769,3): error TS2532: Object is possibly 'unde
 node_modules/async/dist/async.js(1773,35): error TS2532: Object is possibly 'undefined'.
 node_modules/async/dist/async.js(1964,30): error TS1016: A required parameter cannot follow an optional parameter.
 node_modules/async/dist/async.js(1990,16): error TS2554: Expected 3 arguments, but got 1.
-node_modules/async/dist/async.js(2012,9): error TS1003: Identifier expected.
 node_modules/async/dist/async.js(2116,20): error TS2345: Argument of type 'Function | undefined' is not assignable to parameter of type 'number | undefined'.
   Type 'Function' is not assignable to type 'number'.
 node_modules/async/dist/async.js(2274,29): error TS2554: Expected 0 arguments, but got 2.
-node_modules/async/dist/async.js(2418,9): error TS1003: Identifier expected.
-node_modules/async/dist/async.js(2460,9): error TS1003: Identifier expected.
 node_modules/async/dist/async.js(2521,9): error TS2722: Cannot invoke an object which is possibly 'undefined'.
-node_modules/async/dist/async.js(2536,9): error TS1003: Identifier expected.
 node_modules/async/dist/async.js(2564,31): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'any[]'.
-  Type 'IArguments' is missing the following properties from type 'any[]': pop, push, concat, join, and 26 more.
-node_modules/async/dist/async.js(2636,9): error TS1003: Identifier expected.
+  Type 'IArguments' is missing the following properties from type 'any[]': pop, push, concat, join, and 27 more.
 node_modules/async/dist/async.js(2663,16): error TS2722: Cannot invoke an object which is possibly 'undefined'.
 node_modules/async/dist/async.js(2682,31): error TS1005: ']' expected.
-node_modules/async/dist/async.js(2701,9): error TS1003: Identifier expected.
 node_modules/async/dist/async.js(2707,31): error TS1005: ']' expected.
 node_modules/async/dist/async.js(2724,28): error TS1003: Identifier expected.
 node_modules/async/dist/async.js(2724,29): error TS1003: Identifier expected.
 node_modules/async/dist/async.js(2724,30): error TS1003: Identifier expected.
-node_modules/async/dist/async.js(2861,9): error TS1003: Identifier expected.
-node_modules/async/dist/async.js(2884,9): error TS1003: Identifier expected.
 node_modules/async/dist/async.js(2935,28): error TS1003: Identifier expected.
 node_modules/async/dist/async.js(2935,29): error TS1003: Identifier expected.
 node_modules/async/dist/async.js(2935,30): error TS1003: Identifier expected.
-node_modules/async/dist/async.js(2960,9): error TS1003: Identifier expected.
 node_modules/async/dist/async.js(2977,25): error TS2722: Cannot invoke an object which is possibly 'undefined'.
 node_modules/async/dist/async.js(2984,25): error TS2722: Cannot invoke an object which is possibly 'undefined'.
 node_modules/async/dist/async.js(2985,28): error TS2722: Cannot invoke an object which is possibly 'undefined'.
-node_modules/async/dist/async.js(3003,9): error TS1003: Identifier expected.
 node_modules/async/dist/async.js(3019,25): error TS2722: Cannot invoke an object which is possibly 'undefined'.
 node_modules/async/dist/async.js(3022,9): error TS2532: Object is possibly 'undefined'.
 node_modules/async/dist/async.js(3022,9): error TS2684: The 'this' context of type 'Function | undefined' is not assignable to method's 'this' of type 'Function'.
   Type 'undefined' is not assignable to type 'Function'.
-node_modules/async/dist/async.js(3035,9): error TS1003: Identifier expected.
-node_modules/async/dist/async.js(3063,9): error TS1003: Identifier expected.
 node_modules/async/dist/async.js(3095,25): error TS2722: Cannot invoke an object which is possibly 'undefined'.
 node_modules/async/dist/async.js(3100,25): error TS2722: Cannot invoke an object which is possibly 'undefined'.
 node_modules/async/dist/async.js(3101,28): error TS2722: Cannot invoke an object which is possibly 'undefined'.
-node_modules/async/dist/async.js(3182,9): error TS1003: Identifier expected.
-node_modules/async/dist/async.js(3206,9): error TS1003: Identifier expected.
-node_modules/async/dist/async.js(3315,9): error TS1003: Identifier expected.
-node_modules/async/dist/async.js(3337,9): error TS1003: Identifier expected.
-node_modules/async/dist/async.js(3447,9): error TS1003: Identifier expected.
-node_modules/async/dist/async.js(3467,9): error TS1003: Identifier expected.
-node_modules/async/dist/async.js(3526,9): error TS1003: Identifier expected.
 node_modules/async/dist/async.js(3564,16): error TS2722: Cannot invoke an object which is possibly 'undefined'.
-node_modules/async/dist/async.js(3613,9): error TS1003: Identifier expected.
 node_modules/async/dist/async.js(3640,28): error TS1003: Identifier expected.
 node_modules/async/dist/async.js(3640,29): error TS1003: Identifier expected.
 node_modules/async/dist/async.js(3640,30): error TS1003: Identifier expected.
-node_modules/async/dist/async.js(3664,9): error TS1003: Identifier expected.
 node_modules/async/dist/async.js(3688,9): error TS2722: Cannot invoke an object which is possibly 'undefined'.
-node_modules/async/dist/async.js(3746,9): error TS1003: Identifier expected.
 node_modules/async/dist/async.js(3827,14): error TS2339: Property 'memo' does not exist on type '(...args: any[]) => void'.
 node_modules/async/dist/async.js(3828,14): error TS2339: Property 'unmemoized' does not exist on type '(...args: any[]) => void'.
-node_modules/async/dist/async.js(3844,9): error TS1003: Identifier expected.
 node_modules/async/dist/async.js(3848,23): error TS1003: Identifier expected.
 node_modules/async/dist/async.js(3848,24): error TS1003: Identifier expected.
 node_modules/async/dist/async.js(3848,25): error TS1003: Identifier expected.
-node_modules/async/dist/async.js(3973,9): error TS1003: Identifier expected.
-node_modules/async/dist/async.js(4108,9): error TS1003: Identifier expected.
-node_modules/async/dist/async.js(4224,9): error TS1003: Identifier expected.
-node_modules/async/dist/async.js(4311,9): error TS1003: Identifier expected.
 node_modules/async/dist/async.js(4381,5): error TS2322: Type 'any[] | {}' is not assignable to type 'any[]'.
-  Type '{}' is missing the following properties from type 'any[]': length, pop, push, concat, and 28 more.
-node_modules/async/dist/async.js(4399,9): error TS1003: Identifier expected.
-node_modules/async/dist/async.js(4429,9): error TS1003: Identifier expected.
-node_modules/async/dist/async.js(4449,9): error TS1003: Identifier expected.
-node_modules/async/dist/async.js(4497,9): error TS1003: Identifier expected.
+  Type '{}' is missing the following properties from type 'any[]': length, pop, push, concat, and 29 more.
 node_modules/async/dist/async.js(4570,22): error TS1016: A required parameter cannot follow an optional parameter.
 node_modules/async/dist/async.js(4617,17): error TS2532: Object is possibly 'undefined'.
 node_modules/async/dist/async.js(4617,17): error TS2684: The 'this' context of type 'Function | undefined' is not assignable to method's 'this' of type 'Function'.
   Type 'undefined' is not assignable to type 'Function'.
-node_modules/async/dist/async.js(4634,9): error TS1003: Identifier expected.
 node_modules/async/dist/async.js(4653,33): error TS1016: A required parameter cannot follow an optional parameter.
-node_modules/async/dist/async.js(4777,9): error TS1003: Identifier expected.
-node_modules/async/dist/async.js(4800,9): error TS1003: Identifier expected.
 node_modules/async/dist/async.js(4931,19): error TS2339: Property 'code' does not exist on type 'Error'.
 node_modules/async/dist/async.js(4933,23): error TS2339: Property 'info' does not exist on type 'Error'.
-node_modules/async/dist/async.js(4987,9): error TS1003: Identifier expected.
-node_modules/async/dist/async.js(5008,9): error TS1003: Identifier expected.
-node_modules/async/dist/async.js(5041,9): error TS1003: Identifier expected.
 node_modules/async/dist/async.js(5092,40): error TS1016: A required parameter cannot follow an optional parameter.
 node_modules/async/dist/async.js(5104,9): error TS2722: Cannot invoke an object which is possibly 'undefined'.
 node_modules/async/dist/async.js(5160,9): error TS2722: Cannot invoke an object which is possibly 'undefined'.
-node_modules/async/dist/async.js(5172,9): error TS1003: Identifier expected.
 node_modules/async/dist/async.js(5179,20): error TS2339: Property 'unmemoized' does not exist on type 'Function'.
 node_modules/async/dist/async.js(5222,25): error TS2722: Cannot invoke an object which is possibly 'undefined'.
 node_modules/async/dist/async.js(5225,9): error TS2532: Object is possibly 'undefined'.
 node_modules/async/dist/async.js(5225,9): error TS2684: The 'this' context of type 'Function | undefined' is not assignable to method's 'this' of type 'Function'.
   Type 'undefined' is not assignable to type 'Function'.
-node_modules/async/dist/async.js(5241,9): error TS1003: Identifier expected.
 node_modules/async/dist/async.js(5329,20): error TS2532: Object is possibly 'undefined'.
 node_modules/async/dist/async.js(5329,20): error TS2684: The 'this' context of type 'Function | undefined' is not assignable to method's 'this' of type 'Function'.
   Type 'undefined' is not assignable to type 'Function'.
-node_modules/async/doDuring.js(35,9): error TS1003: Identifier expected.
 node_modules/async/doDuring.js(37,12): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/doDuring.js(39,12): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/doDuring.js(47,17): error TS2695: Left side of comma operator is unused and has no side effects.
@@ -239,10 +182,8 @@ node_modules/async/doDuring.js(52,25): error TS2722: Cannot invoke an object whi
 node_modules/async/doDuring.js(53,21): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/doDuring.js(59,25): error TS2722: Cannot invoke an object which is possibly 'undefined'.
 node_modules/async/doDuring.js(60,28): error TS2722: Cannot invoke an object which is possibly 'undefined'.
-node_modules/async/doUntil.js(22,9): error TS1003: Identifier expected.
 node_modules/async/doUntil.js(24,12): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/doUntil.js(35,6): error TS2695: Left side of comma operator is unused and has no side effects.
-node_modules/async/doWhilst.js(36,9): error TS1003: Identifier expected.
 node_modules/async/doWhilst.js(38,12): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/doWhilst.js(49,17): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/doWhilst.js(50,22): error TS2695: Left side of comma operator is unused and has no side effects.
@@ -251,7 +192,6 @@ node_modules/async/doWhilst.js(53,21): error TS2695: Left side of comma operator
 node_modules/async/doWhilst.js(55,9): error TS2532: Object is possibly 'undefined'.
 node_modules/async/doWhilst.js(55,9): error TS2684: The 'this' context of type 'Function | undefined' is not assignable to method's 'this' of type 'Function'.
   Type 'undefined' is not assignable to type 'Function'.
-node_modules/async/during.js(32,9): error TS1003: Identifier expected.
 node_modules/async/during.js(34,12): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/during.js(36,12): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/during.js(59,17): error TS2695: Left side of comma operator is unused and has no side effects.
@@ -264,7 +204,6 @@ node_modules/async/each.js(39,12): error TS2304: Cannot find name 'AsyncFunction
 node_modules/async/each.js(80,4): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/each.js(80,32): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/each.js(80,60): error TS2695: Left side of comma operator is unused and has no side effects.
-node_modules/async/eachLimit.js(29,9): error TS1003: Identifier expected.
 node_modules/async/eachLimit.js(34,12): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/eachLimit.js(43,4): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/eachLimit.js(43,44): error TS2695: Left side of comma operator is unused and has no side effects.
@@ -274,16 +213,12 @@ node_modules/async/eachOf.js(9,33): error TS2695: Left side of comma operator is
 node_modules/async/eachOf.js(48,17): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/eachOf.js(65,39): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/eachOf.js(70,22): error TS2695: Left side of comma operator is unused and has no side effects.
-node_modules/async/eachOf.js(82,9): error TS1003: Identifier expected.
 node_modules/async/eachOf.js(84,12): error TS2304: Cannot find name 'AsyncFunction'.
-node_modules/async/eachOfLimit.js(26,9): error TS1003: Identifier expected.
 node_modules/async/eachOfLimit.js(31,12): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/eachOfLimit.js(39,4): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/eachOfLimit.js(39,44): error TS2695: Left side of comma operator is unused and has no side effects.
-node_modules/async/eachOfSeries.js(24,9): error TS1003: Identifier expected.
 node_modules/async/eachOfSeries.js(28,12): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/eachOfSeries.js(34,20): error TS2695: Left side of comma operator is unused and has no side effects.
-node_modules/async/eachSeries.js(24,9): error TS1003: Identifier expected.
 node_modules/async/eachSeries.js(28,12): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/eachSeries.js(36,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/ensureAsync.js(34,12): error TS2304: Cannot find name 'AsyncFunction'.
@@ -296,26 +231,20 @@ node_modules/async/ensureAsync.js(62,18): error TS2695: Left side of comma opera
 node_modules/async/every.js(32,12): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/every.js(49,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/every.js(49,46): error TS2695: Left side of comma operator is unused and has no side effects.
-node_modules/async/everyLimit.js(28,9): error TS1003: Identifier expected.
 node_modules/async/everyLimit.js(33,12): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/everyLimit.js(41,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/everyLimit.js(41,51): error TS2695: Left side of comma operator is unused and has no side effects.
-node_modules/async/everySeries.js(24,9): error TS1003: Identifier expected.
 node_modules/async/everySeries.js(28,12): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/everySeries.js(36,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/filter.js(44,20): error TS2695: Left side of comma operator is unused and has no side effects.
-node_modules/async/filterLimit.js(25,9): error TS1003: Identifier expected.
 node_modules/async/filterLimit.js(36,20): error TS2695: Left side of comma operator is unused and has no side effects.
-node_modules/async/filterSeries.js(24,9): error TS1003: Identifier expected.
 node_modules/async/filterSeries.js(34,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/find.js(42,12): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/find.js(60,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/find.js(60,46): error TS2695: Left side of comma operator is unused and has no side effects.
-node_modules/async/findLimit.js(33,9): error TS1003: Identifier expected.
 node_modules/async/findLimit.js(38,12): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/findLimit.js(47,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/findLimit.js(47,51): error TS2695: Left side of comma operator is unused and has no side effects.
-node_modules/async/findSeries.js(24,9): error TS1003: Identifier expected.
 node_modules/async/findSeries.js(28,12): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/findSeries.js(37,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/foldl.js(46,12): error TS2304: Cannot find name 'AsyncFunction'.
@@ -323,7 +252,6 @@ node_modules/async/foldl.js(67,17): error TS2695: Left side of comma operator is
 node_modules/async/foldl.js(68,22): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/foldl.js(69,6): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/foldl.js(75,9): error TS2722: Cannot invoke an object which is possibly 'undefined'.
-node_modules/async/foldr.js(25,9): error TS1003: Identifier expected.
 node_modules/async/foldr.js(30,12): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/foldr.js(41,19): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/foldr.js(42,4): error TS2695: Left side of comma operator is unused and has no side effects.
@@ -331,7 +259,6 @@ node_modules/async/forEach.js(39,12): error TS2304: Cannot find name 'AsyncFunct
 node_modules/async/forEach.js(80,4): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/forEach.js(80,32): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/forEach.js(80,60): error TS2695: Left side of comma operator is unused and has no side effects.
-node_modules/async/forEachLimit.js(29,9): error TS1003: Identifier expected.
 node_modules/async/forEachLimit.js(34,12): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/forEachLimit.js(43,4): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/forEachLimit.js(43,44): error TS2695: Left side of comma operator is unused and has no side effects.
@@ -341,16 +268,12 @@ node_modules/async/forEachOf.js(9,33): error TS2695: Left side of comma operator
 node_modules/async/forEachOf.js(48,17): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/forEachOf.js(65,39): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/forEachOf.js(70,22): error TS2695: Left side of comma operator is unused and has no side effects.
-node_modules/async/forEachOf.js(82,9): error TS1003: Identifier expected.
 node_modules/async/forEachOf.js(84,12): error TS2304: Cannot find name 'AsyncFunction'.
-node_modules/async/forEachOfLimit.js(26,9): error TS1003: Identifier expected.
 node_modules/async/forEachOfLimit.js(31,12): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/forEachOfLimit.js(39,4): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/forEachOfLimit.js(39,44): error TS2695: Left side of comma operator is unused and has no side effects.
-node_modules/async/forEachOfSeries.js(24,9): error TS1003: Identifier expected.
 node_modules/async/forEachOfSeries.js(28,12): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/forEachOfSeries.js(34,20): error TS2695: Left side of comma operator is unused and has no side effects.
-node_modules/async/forEachSeries.js(24,9): error TS1003: Identifier expected.
 node_modules/async/forEachSeries.js(28,12): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/forEachSeries.js(36,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/forever.js(38,12): error TS2304: Cannot find name 'AsyncFunction'.
@@ -361,209 +284,9 @@ node_modules/async/groupBy.js(34,12): error TS2304: Cannot find name 'AsyncFunct
 node_modules/async/groupBy.js(53,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/groupByLimit.js(9,22): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/groupByLimit.js(10,6): error TS2695: Left side of comma operator is unused and has no side effects.
-node_modules/async/groupByLimit.js(59,9): error TS1003: Identifier expected.
 node_modules/async/groupByLimit.js(63,12): error TS2304: Cannot find name 'AsyncFunction'.
-node_modules/async/groupBySeries.js(24,9): error TS1003: Identifier expected.
 node_modules/async/groupBySeries.js(28,12): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/groupBySeries.js(36,20): error TS2695: Left side of comma operator is unused and has no side effects.
-node_modules/async/index.js(6,1): error TS2323: Cannot redeclare exported variable 'wrapSync'.
-node_modules/async/index.js(6,20): error TS2323: Cannot redeclare exported variable 'selectSeries'.
-node_modules/async/index.js(6,43): error TS2323: Cannot redeclare exported variable 'selectLimit'.
-node_modules/async/index.js(6,65): error TS2323: Cannot redeclare exported variable 'select'.
-node_modules/async/index.js(6,82): error TS2323: Cannot redeclare exported variable 'foldr'.
-node_modules/async/index.js(6,98): error TS2323: Cannot redeclare exported variable 'foldl'.
-node_modules/async/index.js(6,114): error TS2323: Cannot redeclare exported variable 'inject'.
-node_modules/async/index.js(6,131): error TS2323: Cannot redeclare exported variable 'forEachOfLimit'.
-node_modules/async/index.js(6,156): error TS2323: Cannot redeclare exported variable 'forEachOfSeries'.
-node_modules/async/index.js(6,182): error TS2323: Cannot redeclare exported variable 'forEachOf'.
-node_modules/async/index.js(6,202): error TS2323: Cannot redeclare exported variable 'forEachLimit'.
-node_modules/async/index.js(6,225): error TS2323: Cannot redeclare exported variable 'forEachSeries'.
-node_modules/async/index.js(6,249): error TS2323: Cannot redeclare exported variable 'forEach'.
-node_modules/async/index.js(6,267): error TS2323: Cannot redeclare exported variable 'findSeries'.
-node_modules/async/index.js(6,288): error TS2323: Cannot redeclare exported variable 'findLimit'.
-node_modules/async/index.js(6,308): error TS2323: Cannot redeclare exported variable 'find'.
-node_modules/async/index.js(6,323): error TS2323: Cannot redeclare exported variable 'anySeries'.
-node_modules/async/index.js(6,343): error TS2323: Cannot redeclare exported variable 'anyLimit'.
-node_modules/async/index.js(6,362): error TS2323: Cannot redeclare exported variable 'any'.
-node_modules/async/index.js(6,376): error TS2323: Cannot redeclare exported variable 'allSeries'.
-node_modules/async/index.js(6,396): error TS2323: Cannot redeclare exported variable 'allLimit'.
-node_modules/async/index.js(6,415): error TS2323: Cannot redeclare exported variable 'all'.
-node_modules/async/index.js(6,429): error TS2323: Cannot redeclare exported variable 'whilst'.
-node_modules/async/index.js(6,446): error TS2323: Cannot redeclare exported variable 'waterfall'.
-node_modules/async/index.js(6,466): error TS2323: Cannot redeclare exported variable 'until'.
-node_modules/async/index.js(6,482): error TS2323: Cannot redeclare exported variable 'unmemoize'.
-node_modules/async/index.js(6,502): error TS2323: Cannot redeclare exported variable 'tryEach'.
-node_modules/async/index.js(6,520): error TS2323: Cannot redeclare exported variable 'transform'.
-node_modules/async/index.js(6,540): error TS2323: Cannot redeclare exported variable 'timesSeries'.
-node_modules/async/index.js(6,562): error TS2323: Cannot redeclare exported variable 'timesLimit'.
-node_modules/async/index.js(6,583): error TS2323: Cannot redeclare exported variable 'times'.
-node_modules/async/index.js(6,599): error TS2323: Cannot redeclare exported variable 'timeout'.
-node_modules/async/index.js(6,617): error TS2323: Cannot redeclare exported variable 'sortBy'.
-node_modules/async/index.js(6,634): error TS2323: Cannot redeclare exported variable 'someSeries'.
-node_modules/async/index.js(6,655): error TS2323: Cannot redeclare exported variable 'someLimit'.
-node_modules/async/index.js(6,675): error TS2323: Cannot redeclare exported variable 'some'.
-node_modules/async/index.js(6,690): error TS2323: Cannot redeclare exported variable 'setImmediate'.
-node_modules/async/index.js(6,713): error TS2323: Cannot redeclare exported variable 'series'.
-node_modules/async/index.js(6,730): error TS2323: Cannot redeclare exported variable 'seq'.
-node_modules/async/index.js(6,744): error TS2323: Cannot redeclare exported variable 'retryable'.
-node_modules/async/index.js(6,764): error TS2323: Cannot redeclare exported variable 'retry'.
-node_modules/async/index.js(6,780): error TS2323: Cannot redeclare exported variable 'rejectSeries'.
-node_modules/async/index.js(6,803): error TS2323: Cannot redeclare exported variable 'rejectLimit'.
-node_modules/async/index.js(6,825): error TS2323: Cannot redeclare exported variable 'reject'.
-node_modules/async/index.js(6,842): error TS2323: Cannot redeclare exported variable 'reflectAll'.
-node_modules/async/index.js(6,863): error TS2323: Cannot redeclare exported variable 'reflect'.
-node_modules/async/index.js(6,881): error TS2323: Cannot redeclare exported variable 'reduceRight'.
-node_modules/async/index.js(6,903): error TS2323: Cannot redeclare exported variable 'reduce'.
-node_modules/async/index.js(6,920): error TS2323: Cannot redeclare exported variable 'race'.
-node_modules/async/index.js(6,935): error TS2323: Cannot redeclare exported variable 'queue'.
-node_modules/async/index.js(6,951): error TS2323: Cannot redeclare exported variable 'priorityQueue'.
-node_modules/async/index.js(6,975): error TS2323: Cannot redeclare exported variable 'parallelLimit'.
-node_modules/async/index.js(6,999): error TS2323: Cannot redeclare exported variable 'parallel'.
-node_modules/async/index.js(6,1018): error TS2323: Cannot redeclare exported variable 'nextTick'.
-node_modules/async/index.js(6,1037): error TS2323: Cannot redeclare exported variable 'memoize'.
-node_modules/async/index.js(6,1055): error TS2323: Cannot redeclare exported variable 'mapValuesSeries'.
-node_modules/async/index.js(6,1081): error TS2323: Cannot redeclare exported variable 'mapValuesLimit'.
-node_modules/async/index.js(6,1106): error TS2323: Cannot redeclare exported variable 'mapValues'.
-node_modules/async/index.js(6,1126): error TS2323: Cannot redeclare exported variable 'mapSeries'.
-node_modules/async/index.js(6,1146): error TS2323: Cannot redeclare exported variable 'mapLimit'.
-node_modules/async/index.js(6,1165): error TS2323: Cannot redeclare exported variable 'map'.
-node_modules/async/index.js(6,1179): error TS2323: Cannot redeclare exported variable 'log'.
-node_modules/async/index.js(6,1193): error TS2323: Cannot redeclare exported variable 'groupBySeries'.
-node_modules/async/index.js(6,1217): error TS2323: Cannot redeclare exported variable 'groupByLimit'.
-node_modules/async/index.js(6,1240): error TS2323: Cannot redeclare exported variable 'groupBy'.
-node_modules/async/index.js(6,1258): error TS2323: Cannot redeclare exported variable 'forever'.
-node_modules/async/index.js(6,1276): error TS2323: Cannot redeclare exported variable 'filterSeries'.
-node_modules/async/index.js(6,1299): error TS2323: Cannot redeclare exported variable 'filterLimit'.
-node_modules/async/index.js(6,1321): error TS2323: Cannot redeclare exported variable 'filter'.
-node_modules/async/index.js(6,1338): error TS2323: Cannot redeclare exported variable 'everySeries'.
-node_modules/async/index.js(6,1360): error TS2323: Cannot redeclare exported variable 'everyLimit'.
-node_modules/async/index.js(6,1381): error TS2323: Cannot redeclare exported variable 'every'.
-node_modules/async/index.js(6,1397): error TS2323: Cannot redeclare exported variable 'ensureAsync'.
-node_modules/async/index.js(6,1419): error TS2323: Cannot redeclare exported variable 'eachSeries'.
-node_modules/async/index.js(6,1440): error TS2323: Cannot redeclare exported variable 'eachOfSeries'.
-node_modules/async/index.js(6,1463): error TS2323: Cannot redeclare exported variable 'eachOfLimit'.
-node_modules/async/index.js(6,1485): error TS2323: Cannot redeclare exported variable 'eachOf'.
-node_modules/async/index.js(6,1502): error TS2323: Cannot redeclare exported variable 'eachLimit'.
-node_modules/async/index.js(6,1522): error TS2323: Cannot redeclare exported variable 'each'.
-node_modules/async/index.js(6,1537): error TS2323: Cannot redeclare exported variable 'during'.
-node_modules/async/index.js(6,1554): error TS2323: Cannot redeclare exported variable 'doWhilst'.
-node_modules/async/index.js(6,1573): error TS2323: Cannot redeclare exported variable 'doUntil'.
-node_modules/async/index.js(6,1591): error TS2323: Cannot redeclare exported variable 'doDuring'.
-node_modules/async/index.js(6,1610): error TS2323: Cannot redeclare exported variable 'dir'.
-node_modules/async/index.js(6,1624): error TS2323: Cannot redeclare exported variable 'detectSeries'.
-node_modules/async/index.js(6,1647): error TS2323: Cannot redeclare exported variable 'detectLimit'.
-node_modules/async/index.js(6,1669): error TS2323: Cannot redeclare exported variable 'detect'.
-node_modules/async/index.js(6,1686): error TS2323: Cannot redeclare exported variable 'constant'.
-node_modules/async/index.js(6,1705): error TS2323: Cannot redeclare exported variable 'concatSeries'.
-node_modules/async/index.js(6,1728): error TS2323: Cannot redeclare exported variable 'concatLimit'.
-node_modules/async/index.js(6,1750): error TS2323: Cannot redeclare exported variable 'concat'.
-node_modules/async/index.js(6,1767): error TS2323: Cannot redeclare exported variable 'compose'.
-node_modules/async/index.js(6,1785): error TS2323: Cannot redeclare exported variable 'cargo'.
-node_modules/async/index.js(6,1801): error TS2323: Cannot redeclare exported variable 'autoInject'.
-node_modules/async/index.js(6,1822): error TS2323: Cannot redeclare exported variable 'auto'.
-node_modules/async/index.js(6,1837): error TS2323: Cannot redeclare exported variable 'asyncify'.
-node_modules/async/index.js(6,1856): error TS2323: Cannot redeclare exported variable 'applyEachSeries'.
-node_modules/async/index.js(6,1882): error TS2323: Cannot redeclare exported variable 'applyEach'.
-node_modules/async/index.js(6,1902): error TS2323: Cannot redeclare exported variable 'apply'.
-node_modules/async/index.js(484,1): error TS2323: Cannot redeclare exported variable 'apply'.
-node_modules/async/index.js(485,1): error TS2323: Cannot redeclare exported variable 'applyEach'.
-node_modules/async/index.js(486,1): error TS2323: Cannot redeclare exported variable 'applyEachSeries'.
-node_modules/async/index.js(487,1): error TS2323: Cannot redeclare exported variable 'asyncify'.
-node_modules/async/index.js(488,1): error TS2323: Cannot redeclare exported variable 'auto'.
-node_modules/async/index.js(489,1): error TS2323: Cannot redeclare exported variable 'autoInject'.
-node_modules/async/index.js(490,1): error TS2323: Cannot redeclare exported variable 'cargo'.
-node_modules/async/index.js(491,1): error TS2323: Cannot redeclare exported variable 'compose'.
-node_modules/async/index.js(492,1): error TS2323: Cannot redeclare exported variable 'concat'.
-node_modules/async/index.js(493,1): error TS2323: Cannot redeclare exported variable 'concatLimit'.
-node_modules/async/index.js(494,1): error TS2323: Cannot redeclare exported variable 'concatSeries'.
-node_modules/async/index.js(495,1): error TS2323: Cannot redeclare exported variable 'constant'.
-node_modules/async/index.js(496,1): error TS2323: Cannot redeclare exported variable 'detect'.
-node_modules/async/index.js(497,1): error TS2323: Cannot redeclare exported variable 'detectLimit'.
-node_modules/async/index.js(498,1): error TS2323: Cannot redeclare exported variable 'detectSeries'.
-node_modules/async/index.js(499,1): error TS2323: Cannot redeclare exported variable 'dir'.
-node_modules/async/index.js(500,1): error TS2323: Cannot redeclare exported variable 'doDuring'.
-node_modules/async/index.js(501,1): error TS2323: Cannot redeclare exported variable 'doUntil'.
-node_modules/async/index.js(502,1): error TS2323: Cannot redeclare exported variable 'doWhilst'.
-node_modules/async/index.js(503,1): error TS2323: Cannot redeclare exported variable 'during'.
-node_modules/async/index.js(504,1): error TS2323: Cannot redeclare exported variable 'each'.
-node_modules/async/index.js(505,1): error TS2323: Cannot redeclare exported variable 'eachLimit'.
-node_modules/async/index.js(506,1): error TS2323: Cannot redeclare exported variable 'eachOf'.
-node_modules/async/index.js(507,1): error TS2323: Cannot redeclare exported variable 'eachOfLimit'.
-node_modules/async/index.js(508,1): error TS2323: Cannot redeclare exported variable 'eachOfSeries'.
-node_modules/async/index.js(509,1): error TS2323: Cannot redeclare exported variable 'eachSeries'.
-node_modules/async/index.js(510,1): error TS2323: Cannot redeclare exported variable 'ensureAsync'.
-node_modules/async/index.js(511,1): error TS2323: Cannot redeclare exported variable 'every'.
-node_modules/async/index.js(512,1): error TS2323: Cannot redeclare exported variable 'everyLimit'.
-node_modules/async/index.js(513,1): error TS2323: Cannot redeclare exported variable 'everySeries'.
-node_modules/async/index.js(514,1): error TS2323: Cannot redeclare exported variable 'filter'.
-node_modules/async/index.js(515,1): error TS2323: Cannot redeclare exported variable 'filterLimit'.
-node_modules/async/index.js(516,1): error TS2323: Cannot redeclare exported variable 'filterSeries'.
-node_modules/async/index.js(517,1): error TS2323: Cannot redeclare exported variable 'forever'.
-node_modules/async/index.js(518,1): error TS2323: Cannot redeclare exported variable 'groupBy'.
-node_modules/async/index.js(519,1): error TS2323: Cannot redeclare exported variable 'groupByLimit'.
-node_modules/async/index.js(520,1): error TS2323: Cannot redeclare exported variable 'groupBySeries'.
-node_modules/async/index.js(521,1): error TS2323: Cannot redeclare exported variable 'log'.
-node_modules/async/index.js(522,1): error TS2323: Cannot redeclare exported variable 'map'.
-node_modules/async/index.js(523,1): error TS2323: Cannot redeclare exported variable 'mapLimit'.
-node_modules/async/index.js(524,1): error TS2323: Cannot redeclare exported variable 'mapSeries'.
-node_modules/async/index.js(525,1): error TS2323: Cannot redeclare exported variable 'mapValues'.
-node_modules/async/index.js(526,1): error TS2323: Cannot redeclare exported variable 'mapValuesLimit'.
-node_modules/async/index.js(527,1): error TS2323: Cannot redeclare exported variable 'mapValuesSeries'.
-node_modules/async/index.js(528,1): error TS2323: Cannot redeclare exported variable 'memoize'.
-node_modules/async/index.js(529,1): error TS2323: Cannot redeclare exported variable 'nextTick'.
-node_modules/async/index.js(530,1): error TS2323: Cannot redeclare exported variable 'parallel'.
-node_modules/async/index.js(531,1): error TS2323: Cannot redeclare exported variable 'parallelLimit'.
-node_modules/async/index.js(532,1): error TS2323: Cannot redeclare exported variable 'priorityQueue'.
-node_modules/async/index.js(533,1): error TS2323: Cannot redeclare exported variable 'queue'.
-node_modules/async/index.js(534,1): error TS2323: Cannot redeclare exported variable 'race'.
-node_modules/async/index.js(535,1): error TS2323: Cannot redeclare exported variable 'reduce'.
-node_modules/async/index.js(536,1): error TS2323: Cannot redeclare exported variable 'reduceRight'.
-node_modules/async/index.js(537,1): error TS2323: Cannot redeclare exported variable 'reflect'.
-node_modules/async/index.js(538,1): error TS2323: Cannot redeclare exported variable 'reflectAll'.
-node_modules/async/index.js(539,1): error TS2323: Cannot redeclare exported variable 'reject'.
-node_modules/async/index.js(540,1): error TS2323: Cannot redeclare exported variable 'rejectLimit'.
-node_modules/async/index.js(541,1): error TS2323: Cannot redeclare exported variable 'rejectSeries'.
-node_modules/async/index.js(542,1): error TS2323: Cannot redeclare exported variable 'retry'.
-node_modules/async/index.js(543,1): error TS2323: Cannot redeclare exported variable 'retryable'.
-node_modules/async/index.js(544,1): error TS2323: Cannot redeclare exported variable 'seq'.
-node_modules/async/index.js(545,1): error TS2323: Cannot redeclare exported variable 'series'.
-node_modules/async/index.js(546,1): error TS2323: Cannot redeclare exported variable 'setImmediate'.
-node_modules/async/index.js(547,1): error TS2323: Cannot redeclare exported variable 'some'.
-node_modules/async/index.js(548,1): error TS2323: Cannot redeclare exported variable 'someLimit'.
-node_modules/async/index.js(549,1): error TS2323: Cannot redeclare exported variable 'someSeries'.
-node_modules/async/index.js(550,1): error TS2323: Cannot redeclare exported variable 'sortBy'.
-node_modules/async/index.js(551,1): error TS2323: Cannot redeclare exported variable 'timeout'.
-node_modules/async/index.js(552,1): error TS2323: Cannot redeclare exported variable 'times'.
-node_modules/async/index.js(553,1): error TS2323: Cannot redeclare exported variable 'timesLimit'.
-node_modules/async/index.js(554,1): error TS2323: Cannot redeclare exported variable 'timesSeries'.
-node_modules/async/index.js(555,1): error TS2323: Cannot redeclare exported variable 'transform'.
-node_modules/async/index.js(556,1): error TS2323: Cannot redeclare exported variable 'tryEach'.
-node_modules/async/index.js(557,1): error TS2323: Cannot redeclare exported variable 'unmemoize'.
-node_modules/async/index.js(558,1): error TS2323: Cannot redeclare exported variable 'until'.
-node_modules/async/index.js(559,1): error TS2323: Cannot redeclare exported variable 'waterfall'.
-node_modules/async/index.js(560,1): error TS2323: Cannot redeclare exported variable 'whilst'.
-node_modules/async/index.js(561,1): error TS2323: Cannot redeclare exported variable 'all'.
-node_modules/async/index.js(562,1): error TS2323: Cannot redeclare exported variable 'allLimit'.
-node_modules/async/index.js(563,1): error TS2323: Cannot redeclare exported variable 'allSeries'.
-node_modules/async/index.js(564,1): error TS2323: Cannot redeclare exported variable 'any'.
-node_modules/async/index.js(565,1): error TS2323: Cannot redeclare exported variable 'anyLimit'.
-node_modules/async/index.js(566,1): error TS2323: Cannot redeclare exported variable 'anySeries'.
-node_modules/async/index.js(567,1): error TS2323: Cannot redeclare exported variable 'find'.
-node_modules/async/index.js(568,1): error TS2323: Cannot redeclare exported variable 'findLimit'.
-node_modules/async/index.js(569,1): error TS2323: Cannot redeclare exported variable 'findSeries'.
-node_modules/async/index.js(570,1): error TS2323: Cannot redeclare exported variable 'forEach'.
-node_modules/async/index.js(571,1): error TS2323: Cannot redeclare exported variable 'forEachSeries'.
-node_modules/async/index.js(572,1): error TS2323: Cannot redeclare exported variable 'forEachLimit'.
-node_modules/async/index.js(573,1): error TS2323: Cannot redeclare exported variable 'forEachOf'.
-node_modules/async/index.js(574,1): error TS2323: Cannot redeclare exported variable 'forEachOfSeries'.
-node_modules/async/index.js(575,1): error TS2323: Cannot redeclare exported variable 'forEachOfLimit'.
-node_modules/async/index.js(576,1): error TS2323: Cannot redeclare exported variable 'inject'.
-node_modules/async/index.js(577,1): error TS2323: Cannot redeclare exported variable 'foldl'.
-node_modules/async/index.js(578,1): error TS2323: Cannot redeclare exported variable 'foldr'.
-node_modules/async/index.js(579,1): error TS2323: Cannot redeclare exported variable 'select'.
-node_modules/async/index.js(580,1): error TS2323: Cannot redeclare exported variable 'selectLimit'.
-node_modules/async/index.js(581,1): error TS2323: Cannot redeclare exported variable 'selectSeries'.
-node_modules/async/index.js(582,1): error TS2323: Cannot redeclare exported variable 'wrapSync'.
 node_modules/async/inject.js(46,12): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/inject.js(67,17): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/inject.js(68,22): error TS2695: Left side of comma operator is unused and has no side effects.
@@ -602,15 +325,8 @@ node_modules/async/internal/queue.js(94,30): error TS2695: Left side of comma op
 node_modules/async/internal/queue.js(174,27): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/internal/queue.js(199,14): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/internal/reject.js(15,6): error TS2695: Left side of comma operator is unused and has no side effects.
-node_modules/async/internal/setImmediate.js(6,1): error TS2323: Cannot redeclare exported variable 'hasNextTick'.
-node_modules/async/internal/setImmediate.js(6,23): error TS2323: Cannot redeclare exported variable 'hasSetImmediate'.
-node_modules/async/internal/setImmediate.js(16,23): error TS2323: Cannot redeclare exported variable 'hasSetImmediate'.
-node_modules/async/internal/setImmediate.js(17,19): error TS2323: Cannot redeclare exported variable 'hasNextTick'.
 node_modules/async/internal/setImmediate.js(25,21): error TS2695: Left side of comma operator is unused and has no side effects.
-node_modules/async/internal/wrapAsync.js(6,1): error TS2323: Cannot redeclare exported variable 'isAsync'.
 node_modules/async/internal/wrapAsync.js(21,32): error TS2695: Left side of comma operator is unused and has no side effects.
-node_modules/async/internal/wrapAsync.js(25,1): error TS2322: Type '(fn: any) => boolean' is not assignable to type 'undefined'.
-node_modules/async/internal/wrapAsync.js(25,1): error TS2323: Cannot redeclare exported variable 'isAsync'.
 node_modules/async/log.js(24,12): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/log.js(26,28): error TS1003: Identifier expected.
 node_modules/async/log.js(26,29): error TS1003: Identifier expected.
@@ -618,21 +334,17 @@ node_modules/async/log.js(26,30): error TS1003: Identifier expected.
 node_modules/async/log.js(40,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/map.js(40,12): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/map.js(53,20): error TS2695: Left side of comma operator is unused and has no side effects.
-node_modules/async/mapLimit.js(24,9): error TS1003: Identifier expected.
 node_modules/async/mapLimit.js(28,12): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/mapLimit.js(36,20): error TS2695: Left side of comma operator is unused and has no side effects.
-node_modules/async/mapSeries.js(24,9): error TS1003: Identifier expected.
 node_modules/async/mapSeries.js(27,12): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/mapSeries.js(35,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/mapValues.js(36,12): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/mapValues.js(62,20): error TS2695: Left side of comma operator is unused and has no side effects.
-node_modules/async/mapValuesLimit.js(34,9): error TS1003: Identifier expected.
 node_modules/async/mapValuesLimit.js(38,12): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/mapValuesLimit.js(48,17): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/mapValuesLimit.js(50,22): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/mapValuesLimit.js(51,6): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/mapValuesLimit.js(58,9): error TS2722: Cannot invoke an object which is possibly 'undefined'.
-node_modules/async/mapValuesSeries.js(24,9): error TS1003: Identifier expected.
 node_modules/async/mapValuesSeries.js(27,12): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/mapValuesSeries.js(36,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/memoize.js(53,12): error TS2304: Cannot find name 'AsyncFunction'.
@@ -641,20 +353,17 @@ node_modules/async/memoize.js(75,16): error TS2695: Left side of comma operator 
 node_modules/async/memoize.js(76,21): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/memoize.js(79,14): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/memoize.js(87,29): error TS2695: Left side of comma operator is unused and has no side effects.
-node_modules/async/nextTick.js(21,9): error TS1003: Identifier expected.
 node_modules/async/nextTick.js(25,23): error TS1003: Identifier expected.
 node_modules/async/nextTick.js(25,24): error TS1003: Identifier expected.
 node_modules/async/nextTick.js(25,25): error TS1003: Identifier expected.
 node_modules/async/nextTick.js(50,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/parallel.js(88,4): error TS2695: Left side of comma operator is unused and has no side effects.
-node_modules/async/parallelLimit.js(26,9): error TS1003: Identifier expected.
 node_modules/async/parallelLimit.js(38,4): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/parallelLimit.js(38,28): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/priorityQueue.js(9,14): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/priorityQueue.js(18,15): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/priorityQueue.js(23,21): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/priorityQueue.js(47,10): error TS2695: Left side of comma operator is unused and has no side effects.
-node_modules/async/priorityQueue.js(84,9): error TS1003: Identifier expected.
 node_modules/async/priorityQueue.js(86,12): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/queue.js(8,18): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/queue.js(9,11): error TS2695: Left side of comma operator is unused and has no side effects.
@@ -667,7 +376,6 @@ node_modules/async/reduce.js(67,17): error TS2695: Left side of comma operator i
 node_modules/async/reduce.js(68,22): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/reduce.js(69,6): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/reduce.js(75,9): error TS2722: Cannot invoke an object which is possibly 'undefined'.
-node_modules/async/reduceRight.js(25,9): error TS1003: Identifier expected.
 node_modules/async/reduceRight.js(30,12): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/reduceRight.js(41,19): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/reduceRight.js(42,4): error TS2695: Left side of comma operator is unused and has no side effects.
@@ -675,17 +383,12 @@ node_modules/async/reflect.js(33,12): error TS2304: Cannot find name 'AsyncFunct
 node_modules/async/reflect.js(62,16): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/reflect.js(63,13): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/reflect.js(72,30): error TS2695: Left side of comma operator is unused and has no side effects.
-node_modules/async/reflectAll.js(33,9): error TS1003: Identifier expected.
 node_modules/async/reflectAll.js(95,10): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/reflectAll.js(96,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/reflectAll.js(99,10): error TS2695: Left side of comma operator is unused and has no side effects.
-node_modules/async/reject.js(24,9): error TS1003: Identifier expected.
 node_modules/async/reject.js(44,20): error TS2695: Left side of comma operator is unused and has no side effects.
-node_modules/async/rejectLimit.js(25,9): error TS1003: Identifier expected.
 node_modules/async/rejectLimit.js(36,20): error TS2695: Left side of comma operator is unused and has no side effects.
-node_modules/async/rejectSeries.js(24,9): error TS1003: Identifier expected.
 node_modules/async/rejectSeries.js(34,20): error TS2695: Left side of comma operator is unused and has no side effects.
-node_modules/async/retry.js(33,9): error TS1003: Identifier expected.
 node_modules/async/retry.js(48,12): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/retry.js(106,22): error TS1016: A required parameter cannot follow an optional parameter.
 node_modules/async/retry.js(112,24): error TS2695: Left side of comma operator is unused and has no side effects.
@@ -698,32 +401,25 @@ node_modules/async/retryable.js(12,18): error TS2695: Left side of comma operato
 node_modules/async/retryable.js(13,13): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/retryable.js(18,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/retryable.js(18,70): error TS2695: Left side of comma operator is unused and has no side effects.
-node_modules/async/retryable.js(47,9): error TS1003: Identifier expected.
 node_modules/async/retryable.js(51,12): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/select.js(44,20): error TS2695: Left side of comma operator is unused and has no side effects.
-node_modules/async/selectLimit.js(25,9): error TS1003: Identifier expected.
 node_modules/async/selectLimit.js(36,20): error TS2695: Left side of comma operator is unused and has no side effects.
-node_modules/async/selectSeries.js(24,9): error TS1003: Identifier expected.
 node_modules/async/selectSeries.js(34,20): error TS2695: Left side of comma operator is unused and has no side effects.
-node_modules/async/seq.js(41,9): error TS1003: Identifier expected.
 node_modules/async/seq.js(43,15): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/seq.js(69,23): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/seq.js(71,21): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/seq.js(81,10): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/seq.js(83,33): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/series.js(83,4): error TS2695: Left side of comma operator is unused and has no side effects.
-node_modules/async/setImmediate.js(25,9): error TS1003: Identifier expected.
 node_modules/async/setImmediate.js(29,23): error TS1003: Identifier expected.
 node_modules/async/setImmediate.js(29,24): error TS1003: Identifier expected.
 node_modules/async/setImmediate.js(29,25): error TS1003: Identifier expected.
 node_modules/async/some.js(33,12): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/some.js(51,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/some.js(51,46): error TS2695: Left side of comma operator is unused and has no side effects.
-node_modules/async/someLimit.js(28,9): error TS1003: Identifier expected.
 node_modules/async/someLimit.js(33,12): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/someLimit.js(42,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/someLimit.js(42,51): error TS2695: Left side of comma operator is unused and has no side effects.
-node_modules/async/someSeries.js(24,9): error TS1003: Identifier expected.
 node_modules/async/someSeries.js(28,12): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/someSeries.js(37,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/sortBy.js(36,12): error TS2304: Cannot find name 'AsyncFunction'.
@@ -737,15 +433,12 @@ node_modules/async/timeout.js(60,15): error TS2695: Left side of comma operator 
 node_modules/async/timeout.js(62,13): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/timeout.js(69,19): error TS2339: Property 'code' does not exist on type 'Error'.
 node_modules/async/timeout.js(71,23): error TS2339: Property 'info' does not exist on type 'Error'.
-node_modules/async/times.js(25,9): error TS1003: Identifier expected.
 node_modules/async/times.js(28,12): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/times.js(49,20): error TS2695: Left side of comma operator is unused and has no side effects.
-node_modules/async/timesLimit.js(30,9): error TS1003: Identifier expected.
 node_modules/async/timesLimit.js(34,12): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/timesLimit.js(39,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/timesLimit.js(40,4): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/timesLimit.js(40,28): error TS2695: Left side of comma operator is unused and has no side effects.
-node_modules/async/timesSeries.js(24,9): error TS1003: Identifier expected.
 node_modules/async/timesSeries.js(27,12): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/timesSeries.js(31,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/transform.js(43,12): error TS2304: Cannot find name 'AsyncFunction'.
@@ -759,10 +452,8 @@ node_modules/async/tryEach.js(67,6): error TS2695: Left side of comma operator i
 node_modules/async/tryEach.js(68,10): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/tryEach.js(70,27): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/tryEach.js(78,9): error TS2722: Cannot invoke an object which is possibly 'undefined'.
-node_modules/async/unmemoize.js(15,9): error TS1003: Identifier expected.
 node_modules/async/unmemoize.js(17,12): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/unmemoize.js(18,14): error TS2304: Cannot find name 'AsyncFunction'.
-node_modules/async/until.js(25,9): error TS1003: Identifier expected.
 node_modules/async/until.js(29,12): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/until.js(37,6): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/waterfall.js(8,17): error TS2695: Left side of comma operator is unused and has no side effects.

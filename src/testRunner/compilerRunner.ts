@@ -118,6 +118,7 @@ namespace Harness {
         private static varyBy: readonly string[] = [
             "module",
             "moduleResolution",
+            "moduleDetection",
             "target",
             "jsx",
             "removeComments",

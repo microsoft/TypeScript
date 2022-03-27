@@ -33,7 +33,7 @@ namespace ts.projectSystem {
                 });
                 assert.deepEqual<readonly protocol.CodeFixAction[] | undefined>(response, [
                     {
-                        description: `Import 'foo' from module "foo"`,
+                        description: `Add import from "foo"`,
                         fixName: "import",
                         changes: [{
                             fileName: user.path,

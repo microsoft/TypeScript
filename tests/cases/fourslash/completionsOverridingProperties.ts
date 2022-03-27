@@ -5,7 +5,6 @@
 // Case: Properties
 ////class Base {
 ////    protected foo: string = "bar";
-////
 ////}
 ////
 ////class Sub extends Base {
@@ -26,14 +25,8 @@ verify.completions({
     includes: [
         {
             name: "foo",
-            sortText: completion.SortText.LocationPriority,
-            replacementSpan: {
-                fileName: "",
-                pos: 0,
-                end: 0,
-            },
-            insertText:
-"protected foo: string;\n",
+            sortText: completion.SortText.ClassMemberSnippets,
+            insertText: "protected foo: string;",
         }
     ],
 });

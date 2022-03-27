@@ -271,7 +271,7 @@ fn5();
             });
         }
 
-        interface Action<Req = protocol.Request, Response = {}> {
+        interface Action<Req = protocol.Request, Response = unknown> {
             reqName: string;
             request: Partial<Req>;
             expectedResponse: Response;

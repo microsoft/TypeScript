@@ -4,9 +4,9 @@ import * as mod from "inner";
 >mod : Symbol(mod, Decl(index.ts, 1, 6))
 
 mod.correctVersionApplied;
->mod.correctVersionApplied : Symbol(mod.correctVersionApplied, Decl(new-types.d.ts, 0, 12))
+>mod.correctVersionApplied : Symbol(correctVersionApplied, Decl(new-types.d.ts, 0, 12))
 >mod : Symbol(mod, Decl(index.ts, 1, 6))
->correctVersionApplied : Symbol(mod.correctVersionApplied, Decl(new-types.d.ts, 0, 12))
+>correctVersionApplied : Symbol(correctVersionApplied, Decl(new-types.d.ts, 0, 12))
 
 === tests/cases/conformance/node/index.mts ===
 // esm format file
@@ -14,9 +14,9 @@ import * as mod from "inner";
 >mod : Symbol(mod, Decl(index.mts, 1, 6))
 
 mod.correctVersionApplied;
->mod.correctVersionApplied : Symbol(mod.correctVersionApplied, Decl(new-types.d.ts, 0, 12))
+>mod.correctVersionApplied : Symbol(correctVersionApplied, Decl(new-types.d.ts, 0, 12))
 >mod : Symbol(mod, Decl(index.mts, 1, 6))
->correctVersionApplied : Symbol(mod.correctVersionApplied, Decl(new-types.d.ts, 0, 12))
+>correctVersionApplied : Symbol(correctVersionApplied, Decl(new-types.d.ts, 0, 12))
 
 === tests/cases/conformance/node/index.cts ===
 // cjs format file

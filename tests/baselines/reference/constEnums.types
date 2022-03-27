@@ -180,6 +180,30 @@ const enum Enum1 {
 >`V` : "V"
 }
 
+const enum Comments {
+>Comments : Comments
+
+    "//",
+>"//" : typeof Comments["//"]
+
+    "/*",
+>"/*" : typeof Comments["/*"]
+
+    "*/",
+>"*/" : typeof Comments["*/"]
+
+    "///",
+>"///" : typeof Comments["///"]
+
+    "#",
+>"#" : typeof Comments["#"]
+
+    "<!--",
+>"<!--" : typeof Comments["<!--"]
+
+    "-->",
+>"-->" : typeof Comments["-->"]
+}
 
 module A {
     export module B {
@@ -591,3 +615,50 @@ function bar(e: A.B.C.E): number {
 >1 : 1
     }
 }
+
+function baz(c: Comments) {
+>baz : (c: Comments) => void
+>c : Comments
+
+    switch (c) {
+>c : Comments
+
+        case Comments["//"]:
+>Comments["//"] : typeof Comments["//"]
+>Comments : typeof Comments
+>"//" : "//"
+
+        case Comments["/*"]:
+>Comments["/*"] : typeof Comments["/*"]
+>Comments : typeof Comments
+>"/*" : "/*"
+
+        case Comments["*/"]:
+>Comments["*/"] : typeof Comments["*/"]
+>Comments : typeof Comments
+>"*/" : "*/"
+
+        case Comments["///"]:
+>Comments["///"] : typeof Comments["///"]
+>Comments : typeof Comments
+>"///" : "///"
+
+        case Comments["#"]:
+>Comments["#"] : typeof Comments["#"]
+>Comments : typeof Comments
+>"#" : "#"
+
+        case Comments["<!--"]:
+>Comments["<!--"] : typeof Comments["<!--"]
+>Comments : typeof Comments
+>"<!--" : "<!--"
+
+        case Comments["-->"]:
+>Comments["-->"] : typeof Comments["-->"]
+>Comments : typeof Comments
+>"-->" : "-->"
+
+        break;
+    }
+}
+

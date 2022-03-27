@@ -1,4 +1,4 @@
-tests/cases/compiler/baseCheck.ts(9,18): error TS2552: Cannot find name 'loc'. Did you mean 'ELoc'?
+tests/cases/compiler/baseCheck.ts(9,18): error TS2552: Cannot find name 'loc'. Did you mean 'Lock'?
 tests/cases/compiler/baseCheck.ts(17,53): error TS2554: Expected 2 arguments, but got 1.
 tests/cases/compiler/baseCheck.ts(17,59): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
 tests/cases/compiler/baseCheck.ts(18,62): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
@@ -20,8 +20,8 @@ tests/cases/compiler/baseCheck.ts(26,9): error TS2304: Cannot find name 'x'.
         constructor(x: number) {
             super(0, loc);
                      ~~~
-!!! error TS2552: Cannot find name 'loc'. Did you mean 'ELoc'?
-!!! related TS2728 tests/cases/compiler/baseCheck.ts:2:7: 'ELoc' is declared here.
+!!! error TS2552: Cannot find name 'loc'. Did you mean 'Lock'?
+!!! related TS2728 /.ts/lib.dom.d.ts:8963:13: 'Lock' is declared here.
         }
     
         m() {

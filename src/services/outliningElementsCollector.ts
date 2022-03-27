@@ -240,6 +240,8 @@ namespace ts.OutliningElementsCollector {
                 return spanForArrowFunction(n as ArrowFunction);
             case SyntaxKind.CallExpression:
                 return spanForCallExpression(n as CallExpression);
+            case SyntaxKind.ParenthesizedExpression:
+                return spanForParenthesizedExpression(n as ParenthesizedExpression);
         }
 
         function spanForCallExpression(node: CallExpression): OutliningSpan | undefined {
@@ -256,7 +258,7 @@ namespace ts.OutliningElementsCollector {
         }
 
         function spanForArrowFunction(node: ArrowFunction): OutliningSpan | undefined {
-            if (isBlock(node.body) || positionsAreOnSameLine(node.body.getFullStart(), node.body.getEnd(), sourceFile)) {
+            if (isBlock(node.body) || isParenthesizedExpression(node.body) || positionsAreOnSameLine(node.body.getFullStart(), node.body.getEnd(), sourceFile)) {
                 return undefined;
             }
             const textSpan = createTextSpanFromBounds(node.body.getFullStart(), node.body.getEnd());
@@ -306,6 +308,12 @@ namespace ts.OutliningElementsCollector {
 
         function spanForNodeArray(nodeArray: NodeArray<Node>): OutliningSpan | undefined {
             return nodeArray.length ? createOutliningSpan(createTextSpanFromRange(nodeArray), OutliningSpanKind.Code) : undefined;
+        }
+
+        function spanForParenthesizedExpression(node: ParenthesizedExpression): OutliningSpan | undefined {
+            if (positionsAreOnSameLine(node.getStart(), node.getEnd(), sourceFile)) return undefined;
+            const textSpan = createTextSpanFromBounds(node.getStart(), node.getEnd());
+            return createOutliningSpan(textSpan, OutliningSpanKind.Code, createTextSpanFromNode(node));
         }
     }
 

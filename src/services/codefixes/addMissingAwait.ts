@@ -30,7 +30,7 @@ namespace ts.codefix {
     registerCodeFix({
         fixIds: [fixId],
         errorCodes,
-        getCodeActions: context => {
+        getCodeActions: function getCodeActionsToAddMissingAwait(context) {
             const { sourceFile, errorCode, span, cancellationToken, program } = context;
             const expression = getAwaitErrorSpanExpression(sourceFile, errorCode, span, cancellationToken, program);
             if (!expression) {
@@ -93,7 +93,7 @@ namespace ts.codefix {
     }
 
     function isMissingAwaitError(sourceFile: SourceFile, errorCode: number, span: TextSpan, cancellationToken: CancellationToken, program: Program) {
-        const checker = program.getDiagnosticsProducingTypeChecker();
+        const checker = program.getTypeChecker();
         const diagnostics = checker.getDiagnostics(sourceFile, cancellationToken);
         return some(diagnostics, ({ start, length, relatedInformation, code }) =>
             isNumber(start) && isNumber(length) && textSpansEqual({ start, length }, span) &&

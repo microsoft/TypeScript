@@ -1,6 +1,7 @@
 // @strict: true
 // @declaration: true
 // @target: es2015
+// @lib: esnext, dom
 
 type Action =
     | { kind: 'A', payload: number }
@@ -115,6 +116,17 @@ function f30({ kind, isA }: Foo) {
     }
 }
 
+type Args = ['A', number] | ['B', string]
+
+function f40(...[kind, data]: Args) {
+    if (kind === 'A') {
+        data.toFixed();
+    }
+    if (kind === 'B') {
+        data.toUpperCase();
+    }
+}
+
 // Repro from #35283
 
 interface A<T> { variant: 'a', value: T }
@@ -159,3 +171,131 @@ const { value, done } = it.next();
 if (!done) {
     value;  // number
 }
+
+// Repro from #46658
+
+declare function f50(cb: (...args: Args) => void): void
+
+f50((kind, data) => {
+    if (kind === 'A') {
+        data.toFixed();
+    }
+    if (kind === 'B') {
+        data.toUpperCase();
+    }
+});
+
+const f51: (...args: ['A', number] | ['B', string]) => void = (kind, payload) => {
+    if (kind === 'A') {
+        payload.toFixed();
+    }
+    if (kind === 'B') {
+        payload.toUpperCase();
+    }
+};
+
+const f52: (...args: ['A', number] | ['B']) => void = (kind, payload?) => {
+    if (kind === 'A') {
+        payload.toFixed();
+    }
+    else {
+        payload;  // undefined
+    }
+};
+
+declare function readFile(path: string, callback: (...args: [err: null, data: unknown[]] | [err: Error, data: undefined]) => void): void;
+
+readFile('hello', (err, data) => {
+    if (err === null) {
+        data.length;
+    }
+    else {
+        err.message;
+    }
+});
+
+type ReducerArgs = ["add", { a: number, b: number }] | ["concat", { firstArr: any[], secondArr: any[] }];
+
+const reducer: (...args: ReducerArgs) => void = (op, args) => {
+    switch (op) {
+        case "add":
+            console.log(args.a + args.b);
+            break;
+        case "concat":
+            console.log(args.firstArr.concat(args.secondArr));
+            break;
+    }
+}
+
+reducer("add", { a: 1, b: 3 });
+reducer("concat", { firstArr: [1, 2], secondArr: [3, 4] });
+
+// repro from https://github.com/microsoft/TypeScript/pull/47190#issuecomment-1057603588
+
+type FooMethod = {
+  method(...args:
+    [type: "str", cb: (e: string) => void] |
+    [type: "num", cb: (e: number) => void]
+  ): void;
+}
+
+let fooM: FooMethod = {
+  method(type, cb) {
+    if (type == 'num') {
+      cb(123)
+    } else {
+      cb("abc")
+    }
+  }
+};
+
+type FooAsyncMethod = {
+  method(...args:
+    [type: "str", cb: (e: string) => void] |
+    [type: "num", cb: (e: number) => void]
+  ): Promise<any>;
+}
+
+let fooAsyncM: FooAsyncMethod = {
+  async method(type, cb) {
+    if (type == 'num') {
+      cb(123)
+    } else {
+      cb("abc")
+    }
+  }
+};
+
+type FooGenMethod = {
+  method(...args:
+    [type: "str", cb: (e: string) => void] |
+    [type: "num", cb: (e: number) => void]
+  ): Generator<any, any, any>;
+}
+
+let fooGenM: FooGenMethod = {
+  *method(type, cb) {
+    if (type == 'num') {
+      cb(123)
+    } else {
+      cb("abc")
+    }
+  }
+};
+
+type FooAsyncGenMethod = {
+  method(...args:
+    [type: "str", cb: (e: string) => void] |
+    [type: "num", cb: (e: number) => void]
+  ): AsyncGenerator<any, any, any>;
+}
+
+let fooAsyncGenM: FooAsyncGenMethod = {
+  async *method(type, cb) {
+    if (type == 'num') {
+      cb(123)
+    } else {
+      cb("abc")
+    }
+  }
+};

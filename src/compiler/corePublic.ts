@@ -1,7 +1,7 @@
 namespace ts {
     // WARNING: The script `configurePrerelease.ts` uses a regexp to parse out these values.
     // If changing the text in this section, be sure to test `configurePrerelease` too.
-    export const versionMajorMinor = "4.6";
+    export const versionMajorMinor = "4.7";
     // The following is baselined as a literal template type without intervention
     /** The version of the TypeScript compiler release */
     // eslint-disable-next-line @typescript-eslint/no-inferrable-types
@@ -114,16 +114,21 @@ namespace ts {
 
     /* @internal */
     namespace NativeCollections {
-        declare const Map: MapConstructor | undefined;
-        declare const Set: SetConstructor | undefined;
+        declare const self: any;
+
+        const globals = typeof globalThis !== "undefined" ? globalThis :
+                  typeof global !== "undefined" ? global :
+                  typeof self !== "undefined" ? self :
+                  undefined;
 
         /**
          * Returns the native Map implementation if it is available and compatible (i.e. supports iteration).
          */
         export function tryGetNativeMap(): MapConstructor | undefined {
             // Internet Explorer's Map doesn't support iteration, so don't use it.
+            const gMap = globals?.Map;
             // eslint-disable-next-line no-in-operator
-            return typeof Map !== "undefined" && "entries" in Map.prototype && new Map([[0, 0]]).size === 1 ? Map : undefined;
+            return typeof gMap !== "undefined" && "entries" in gMap.prototype && new gMap([[0, 0]]).size === 1 ? gMap : undefined;
         }
 
         /**
@@ -131,8 +136,9 @@ namespace ts {
          */
         export function tryGetNativeSet(): SetConstructor | undefined {
             // Internet Explorer's Set doesn't support iteration, so don't use it.
+            const gSet = globals?.Set;
             // eslint-disable-next-line no-in-operator
-            return typeof Set !== "undefined" && "entries" in Set.prototype && new Set([0]).size === 1 ? Set : undefined;
+            return typeof gSet !== "undefined" && "entries" in gSet.prototype && new gSet([0]).size === 1 ? gSet : undefined;
         }
     }
 

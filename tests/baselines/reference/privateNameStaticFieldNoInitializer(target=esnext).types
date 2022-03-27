@@ -13,3 +13,4 @@ class C2 {
     static #x;
 >#x : any
 }
+

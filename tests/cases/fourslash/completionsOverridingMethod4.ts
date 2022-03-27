@@ -42,23 +42,13 @@ verify.completions({
     includes: [
         {
             name: "hint",
-            sortText: completion.SortText.LocationPriority,
-            replacementSpan: {
-                fileName: "",
-                pos: 0,
-                end: 0,
-            },
-            insertText: "protected hint(): string {\n}\n",
+            sortText: completion.SortText.ClassMemberSnippets,
+            insertText: "protected hint(): string {\n}",
         },
         {
             name: "refuse",
-            sortText: completion.SortText.LocationPriority,
-            replacementSpan: {
-                fileName: "",
-                pos: 0,
-                end: 0,
-            },
-            insertText: "public refuse(): string {\n}\n",
+            sortText: completion.SortText.ClassMemberSnippets,
+            insertText: "public refuse(): string {\n}",
         }
     ],
 });

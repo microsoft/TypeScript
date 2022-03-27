@@ -233,7 +233,7 @@ namespace ts.server {
 
         // Override sys.write because fs.writeSync is not reliable on Node 4
         sys.write = (s: string) => writeMessage(sys.bufferFrom!(s, "utf8") as globalThis.Buffer);
-         // REVIEW: for now this implementation uses polling.
+        // REVIEW: for now this implementation uses polling.
         // The advantage of polling is that it works reliably
         // on all os and with network mounted files.
         // For 90 referenced files, the average time to detect
@@ -759,12 +759,40 @@ namespace ts.server {
             }
         }
 
+        class IpcIOSession extends IOSession {
+
+            protected writeMessage(msg: protocol.Message): void {
+                const verboseLogging = logger.hasLevel(LogLevel.verbose);
+                if (verboseLogging) {
+                    const json = JSON.stringify(msg);
+                    logger.info(`${msg.type}:${indent(json)}`);
+                }
+
+                process.send!(msg);
+            }
+
+            protected parseMessage(message: any): protocol.Request {
+                return message as protocol.Request;
+            }
+
+            protected toStringMessage(message: any) {
+                return JSON.stringify(message, undefined, 2);
+            }
+
+            public listen() {
+                process.on("message", (e: any) => {
+                    this.onMessage(e);
+                });
+            }
+        }
+
         const eventPort: number | undefined = parseEventPort(findArgument("--eventPort"));
         const typingSafeListLocation = findArgument(Arguments.TypingSafeListLocation)!; // TODO: GH#18217
         const typesMapLocation = findArgument(Arguments.TypesMapLocation) || combinePaths(getDirectoryPath(sys.getExecutingFilePath()), "typesMap.json");
         const npmLocation = findArgument(Arguments.NpmLocation);
         const validateDefaultNpmLocation = hasArgument(Arguments.ValidateDefaultNpmLocation);
         const disableAutomaticTypingAcquisition = hasArgument("--disableAutomaticTypingAcquisition");
+        const useNodeIpc = hasArgument("--useNodeIpc");
         const telemetryEnabled = hasArgument(Arguments.EnableTelemetry);
         const commandLineTraceDir = findArgument("--traceDirectory");
         const traceDir = commandLineTraceDir
@@ -774,7 +802,7 @@ namespace ts.server {
             startTracing("server", traceDir);
         }
 
-        const ioSession = new IOSession();
+        const ioSession = useNodeIpc ? new IpcIOSession() : new IOSession();
         process.on("uncaughtException", err => {
             ioSession.logError(err, "unknown");
         });

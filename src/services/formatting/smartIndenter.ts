@@ -55,7 +55,28 @@ namespace ts.formatting {
             // indentation is first non-whitespace character in a previous line
             // for block indentation, we should look for a line which contains something that's not
             // whitespace.
-            if (options.indentStyle === IndentStyle.Block) {
+            const currentToken = getTokenAtPosition(sourceFile, position);
+            // for object literal, we want to the indentation work like block
+            // if { starts in any position (can be in the middle of line)
+            // the following indentation should treat { as starting of that line (including leading whitespace)
+            // ```
+            //     const a: { x: undefined, y: undefined } = {}       // leading 4 whitespaces and { starts in the middle of line
+            // ->
+            //     const a: { x: undefined, y: undefined } = {
+            //         x: undefined,
+            //         y: undefined,
+            //     }
+            // ---------------------
+            //     const a: {x : undefined, y: undefined } =
+            //      {}
+            // ->
+            //     const a: { x: undefined, y: undefined } =
+            //      {                                                  // leading 5 whitespaces and { starts at 6 column
+            //          x: undefined,
+            //          y: undefined,
+            //      }
+            // ```
+            if (options.indentStyle === IndentStyle.Block || currentToken.kind === SyntaxKind.OpenBraceToken) {
                 return getBlockIndent(sourceFile, position, options);
             }
 
@@ -432,6 +453,8 @@ namespace ts.formatting {
                 case SyntaxKind.ConstructorType:
                 case SyntaxKind.ConstructSignature:
                     return getList((node as SignatureDeclaration).typeParameters) || getList((node as SignatureDeclaration).parameters);
+                case SyntaxKind.GetAccessor:
+                    return getList((node as GetAccessorDeclaration).parameters);
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.ClassExpression:
                 case SyntaxKind.InterfaceDeclaration:

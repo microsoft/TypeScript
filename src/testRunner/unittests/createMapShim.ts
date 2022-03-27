@@ -130,9 +130,9 @@ namespace ts {
             }
 
             MapShim = ShimCollections.createMapShim(getIterator);
-            afterEach(() => {
-                MapShim = undefined!;
-            });
+        });
+        afterEach(() => {
+            MapShim = undefined!;
         });
 
         it("iterates values in insertion order and handles changes with string keys", () => {
