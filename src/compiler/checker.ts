@@ -13340,6 +13340,18 @@ namespace ts {
             return inferences && getIntersectionType(inferences);
         }
 
+        function getTupleConstraintFromMappedTypeNode(node: MappedTypeNode) {
+            if (!node.nameType && node.typeParameter.constraint &&
+                isTypeOperatorNode(node.typeParameter.constraint) &&
+                node.typeParameter.constraint.operator === SyntaxKind.KeyOfKeyword
+            ) {
+                const keyOfTarget = getTypeFromTypeNode(node.typeParameter.constraint.type);
+                if (isTupleType(keyOfTarget)) {
+                    return keyOfTarget
+                }
+            }
+        }
+
         /** This is a worker function. Use getConstraintOfTypeParameter which guards against circular constraints. */
         function getConstraintFromTypeParameter(typeParameter: TypeParameter): Type | undefined {
             if (!typeParameter.constraint) {
@@ -13355,13 +13367,10 @@ namespace ts {
                     else {
                         // Detect is the constraint is for a homomorphic mapped type to a tuple and in case return a literal union of the used tuple keys
                         if (constraintDeclaration.parent && constraintDeclaration.parent.parent && constraintDeclaration.parent.parent.kind === SyntaxKind.MappedType) {
-                            const mappedTypeNode = constraintDeclaration.parent.parent as MappedTypeNode;
-                            if (!mappedTypeNode.nameType && mappedTypeNode.typeParameter.constraint && isTypeOperatorNode(mappedTypeNode.typeParameter.constraint) && mappedTypeNode.typeParameter.constraint.operator === SyntaxKind.KeyOfKeyword) {
-                                const keyOfTarget = getTypeFromTypeNode(mappedTypeNode.typeParameter.constraint.type);
-                                if (isTupleType(keyOfTarget)) {
-                                    typeParameter.constraint = getUnionType(map(getTypeArguments(keyOfTarget), (_, i) => getStringLiteralType("" + i)));
-                                    return typeParameter.constraint;
-                                }
+                            const keyOfTarget = getTupleConstraintFromMappedTypeNode(constraintDeclaration.parent.parent as MappedTypeNode);
+                            if (keyOfTarget) {
+                                typeParameter.constraint = getUnionType(map(getTypeArguments(keyOfTarget), (_, i) => getStringLiteralType("" + i)));
+                                return typeParameter.constraint;
                             }
                         }
                         let type = getTypeFromTypeNode(constraintDeclaration);
@@ -15860,17 +15869,14 @@ namespace ts {
                 // references itself through one or more type aliases.
                 getConstraintTypeFromMappedType(type);
                 // Detect if the mapped type should be homomorphic to a tuple by checking the declaration of the constraint if it contains a keyof over a tuple
-                if (!node.nameType && node.typeParameter.constraint && isTypeOperatorNode(node.typeParameter.constraint) && node.typeParameter.constraint.operator === SyntaxKind.KeyOfKeyword) {
-                    const keyOfTarget = getTypeFromTypeNode(node.typeParameter.constraint.type);
-                    if (isTupleType(keyOfTarget)) {
-                        // Instantiate the mapped type over a tuple with an identity mapper
-                        const instantiatedTupleMappedType = instantiateMappedTupleType(
-                            keyOfTarget,
-                            type,
-                            makeFunctionTypeMapper(identity)
-                        );
-                        links.resolvedType = instantiatedTupleMappedType;
-                    }
+                const keyOfTarget = getTupleConstraintFromMappedTypeNode(node);
+                if (keyOfTarget) {
+                    // Instantiate the mapped type over a tuple with an identity mapper
+                    links.resolvedType = instantiateMappedTupleType(
+                        keyOfTarget,
+                        type,
+                        makeFunctionTypeMapper(identity)
+                    );
                 }
             }
             return links.resolvedType;
