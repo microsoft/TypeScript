@@ -13347,7 +13347,7 @@ namespace ts {
             ) {
                 const keyOfTarget = getTypeFromTypeNode(node.typeParameter.constraint.type);
                 if (isTupleType(keyOfTarget)) {
-                    return keyOfTarget
+                    return keyOfTarget;
                 }
             }
         }
