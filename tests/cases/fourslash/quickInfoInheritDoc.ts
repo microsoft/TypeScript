@@ -3,7 +3,7 @@
 // @noEmit: true
 // @allowJs: true
 
-// @Filename: quickInfoJsDocTags7.ts
+// @Filename: quickInfoInheritDoc.ts
 ////abstract class BaseClass {
 ////    /**
 ////     * Useful description always applicable
@@ -12,6 +12,14 @@
 ////     */
 ////    public static doSomethingUseful(stuff?: any): string {
 ////        throw new Error('Must be implemented by subclass');
+////    }
+////
+////    /**
+////     * BaseClass.func1
+////     * @param {any} stuff1 BaseClass.func1.stuff1
+////     * @returns {void} BaseClass.func1.returns
+////     */
+////    public static func1(stuff1: any): void {
 ////    }
 ////
 ////    /**
@@ -40,8 +48,18 @@
 ////
 ////    /**
 ////     * @inheritDoc
+////     * @param {any} stuff1 SubClass.func1.stuff1
+////     * @returns {void} SubClass.func1.returns
 ////     */
-////    public static readonly /*2*/someProperty: string = 'specific to this class value'
+////    public static /*2*/func1(stuff1: any): void {
+////    }
+////
+////    /**
+////     * text over tag
+////     * @inheritDoc
+////     * text after tag
+////     */
+////    public static readonly /*3*/someProperty: string = 'specific to this class value'
 ////}
 
 verify.baselineQuickInfo();

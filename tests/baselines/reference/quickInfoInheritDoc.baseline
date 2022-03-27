@@ -1,15 +1,15 @@
 [
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/quickInfoJsDocTags7.ts",
-      "position": 629,
+      "fileName": "/tests/cases/fourslash/quickInfoInheritDoc.ts",
+      "position": 817,
       "name": "1"
     },
     "quickInfo": {
       "kind": "method",
       "kindModifiers": "public,static",
       "textSpan": {
-        "start": 629,
+        "start": 817,
         "length": 17
       },
       "displayParts": [
@@ -187,15 +187,159 @@
   },
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/quickInfoJsDocTags7.ts",
-      "position": 869,
+      "fileName": "/tests/cases/fourslash/quickInfoInheritDoc.ts",
+      "position": 1143,
       "name": "2"
+    },
+    "quickInfo": {
+      "kind": "method",
+      "kindModifiers": "public,static",
+      "textSpan": {
+        "start": 1143,
+        "length": 5
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "SubClass",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "func1",
+          "kind": "methodName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "stuff1",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "BaseClass.func1",
+          "kind": "text"
+        }
+      ],
+      "tags": [
+        {
+          "name": "param",
+          "text": [
+            {
+              "text": "stuff1",
+              "kind": "parameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "BaseClass.func1.stuff1",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "returns",
+          "text": [
+            {
+              "text": "BaseClass.func1.returns",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "inheritDoc"
+        },
+        {
+          "name": "param",
+          "text": [
+            {
+              "text": "stuff1",
+              "kind": "parameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "SubClass.func1.stuff1",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "returns",
+          "text": [
+            {
+              "text": "SubClass.func1.returns",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoInheritDoc.ts",
+      "position": 1282,
+      "name": "3"
     },
     "quickInfo": {
       "kind": "property",
       "kindModifiers": "public,static",
       "textSpan": {
-        "start": 869,
+        "start": 1282,
         "length": 12
       },
       "displayParts": [
@@ -244,11 +388,25 @@
         {
           "text": "Applicable description always.",
           "kind": "text"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "text over tag",
+          "kind": "text"
         }
       ],
       "tags": [
         {
-          "name": "inheritDoc"
+          "name": "inheritDoc",
+          "text": [
+            {
+              "text": "text after tag",
+              "kind": "text"
+            }
+          ]
         }
       ]
     }
