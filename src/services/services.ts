@@ -643,13 +643,12 @@ namespace ts {
     }
 
     function findBaseOfDeclaration<T>(checker: TypeChecker, declaration: Declaration, cb: (symbol: Symbol) => T[] | undefined): T[] | undefined {
-        if (hasStaticModifier(declaration)) return;
-
         const classOrInterfaceDeclaration = declaration.parent?.kind === SyntaxKind.Constructor ? declaration.parent.parent : declaration.parent;
         if (!classOrInterfaceDeclaration) return;
 
+        const isStaticMember = hasStaticModifier(declaration);
         return firstDefined(getAllSuperTypeNodes(classOrInterfaceDeclaration), superTypeNode => {
-            if (declaration.modifiers?.some(modifier => modifier.kind === SyntaxKind.StaticKeyword)) {
+            if (isStaticMember) {
                 // For nodes like `class Foo extends Bar {}`, superTypeNode refers to an ExpressionWithTypeArguments with its expression being `Bar`.
                 const baseClassSymbol = checker.getSymbolAtLocation(isExpressionWithTypeArguments(superTypeNode) && !superTypeNode.typeArguments?.length ? superTypeNode.expression : superTypeNode);
                 const symbol = baseClassSymbol?.declarations?.[0] && checker.getPropertyOfType(checker.getTypeOfSymbolAtLocation(baseClassSymbol, baseClassSymbol.declarations[0]), declaration.symbol.name);
