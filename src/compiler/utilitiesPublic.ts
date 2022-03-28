@@ -1335,7 +1335,9 @@ namespace ts {
             || kind === SyntaxKind.CallSignature
             || kind === SyntaxKind.PropertySignature
             || kind === SyntaxKind.MethodSignature
-            || kind === SyntaxKind.IndexSignature;
+            || kind === SyntaxKind.IndexSignature
+            || kind === SyntaxKind.GetAccessor
+            || kind === SyntaxKind.SetAccessor;
     }
 
     export function isClassOrTypeElement(node: Node): node is ClassElement | TypeElement {
