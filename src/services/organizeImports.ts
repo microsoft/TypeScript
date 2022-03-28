@@ -23,7 +23,7 @@ namespace ts.OrganizeImports {
 
         // All of the old ImportDeclarations in the file, in syntactic order.
         const topLevelImportGroupDecls = groupImportsByNewlineContiguous(sourceFile.statements.filter(isImportDeclaration), host, formatContext);
-        topLevelImportGroupDecls.forEach(topLevelImportGroupDecl => organizeImportsWorker(topLevelImportGroupDecl, coalesceAndOrganizeImports));
+        topLevelImportGroupDecls.forEach(importGroupDecl => organizeImportsWorker(importGroupDecl, coalesceAndOrganizeImports));
 
         // All of the old ExportDeclarations in the file, in syntactic order.
         const topLevelExportDecls = sourceFile.statements.filter(isExportDeclaration);
@@ -33,7 +33,7 @@ namespace ts.OrganizeImports {
             if (!ambientModule.body) continue;
 
             const ambientModuleImportGroupDecls = groupImportsByNewlineContiguous(ambientModule.body.statements.filter(isImportDeclaration), host, formatContext);
-            ambientModuleImportGroupDecls.forEach(ambientModuleImportGroupDecl => organizeImportsWorker(ambientModuleImportGroupDecl, coalesceAndOrganizeImports));
+            ambientModuleImportGroupDecls.forEach(importGroupDecl => organizeImportsWorker(importGroupDecl, coalesceAndOrganizeImports));
 
             const ambientModuleExportDecls = ambientModule.body.statements.filter(isExportDeclaration);
             organizeImportsWorker(ambientModuleExportDecls, coalesceExports);
@@ -92,11 +92,9 @@ namespace ts.OrganizeImports {
         const newLine = getNewLineOrDefaultFromHost(host, formatContext.options);
         const prefixCond = `${newLine}${newLine}`;
 
-        for(let importIndex = 0, groupIndex = 0, length = importDecls.length; importIndex < length ; ++importIndex) {
-            const topLevelImportDecl = importDecls[importIndex];
-            const leadingText = topLevelImportDecl.getFullText().substring(
-                0,
-                topLevelImportDecl.getStart() - topLevelImportDecl.getFullStart());
+        let groupIndex = 0;
+        for(const topLevelImportDecl of importDecls) {
+            const leadingText = topLevelImportDecl.getFullText().substring(0, topLevelImportDecl.getStart() - topLevelImportDecl.getFullStart());
 
             if (startsWith(leadingText, prefixCond)) {
                 groupIndex++;
