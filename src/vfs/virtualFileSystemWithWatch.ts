@@ -40,14 +40,16 @@ interface Array<T> { length: number; [n: number]: T; }`
         environmentVariables?: ESMap<string, string>;
         runWithoutRecursiveWatches?: boolean;
         runWithFallbackPolling?: boolean;
+        withSafeList?: boolean;
     }
 
     export function createVirtualWatchedSystem(fileOrFolderList: readonly FileOrFolderOrSymLink[], params?: TestServerHostCreationParameters): VirtualServerHost {
-        return new VirtualServerHost(/*withSafelist*/ false, fileOrFolderList, params);
+        return new VirtualServerHost(!!params?.withSafeList, fileOrFolderList, params);
     }
 
     export function createVirtualServerHost(fileOrFolderList: readonly FileOrFolderOrSymLink[], params?: TestServerHostCreationParameters): VirtualServerHost {
-        const host = new VirtualServerHost(/*withSafelist*/ true, fileOrFolderList, params);
+        const withSafeList = params?.withSafeList !== undefined ? params.withSafeList : true;
+        const host = new VirtualServerHost(withSafeList, fileOrFolderList, params);
         // Just like sys, patch the host to use writeFile
         patchWriteFileEnsuringDirectory(host);
         return host;
@@ -100,15 +102,15 @@ interface Array<T> { length: number; [n: number]: T; }`
 
     export type FSEntry = FsFile | FsFolder | FsSymLink;
 
-    function isFsFolder(s: FSEntry | undefined): s is FsFolder {
+    export function isFsFolder(s: FSEntry | undefined): s is FsFolder {
         return !!s && isArray((s as FsFolder).entries);
     }
 
-    function isFsFile(s: FSEntry | undefined): s is FsFile {
+    export function isFsFile(s: FSEntry | undefined): s is FsFile {
         return !!s && isString((s as FsFile).content);
     }
 
-    function isFsSymLink(s: FSEntry | undefined): s is FsSymLink {
+    export function isFsSymLink(s: FSEntry | undefined): s is FsSymLink {
         return !!s && isString((s as FsSymLink).symLink);
     }
 
@@ -853,11 +855,21 @@ interface Array<T> { length: number; [n: number]: T; }`
             this.immediateCallbacks.unregister(timeoutId);
         }
 
-        createDirectory(directoryName: string): void {
+        createDirectory(directoryName: string, recursive?: boolean): void {
             const folder = this.toFsFolder(directoryName);
 
-            // base folder has to be present
             const base = getDirectoryPath(folder.path);
+            if (recursive && base !== directoryName && !this.getRealFolder(base)) {
+                if (base === '/') {
+                    // create / if not present, then continue
+                    this.ensureFolder('/', false);
+                }
+                else {
+                    this.createDirectory(base, recursive)
+                }
+            }
+
+            // base folder has to be present
             const baseFolder = this.fs.get(base) as FsFolder;
             Debug.assert(isFsFolder(baseFolder));
 

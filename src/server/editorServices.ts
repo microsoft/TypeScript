@@ -3693,7 +3693,7 @@ namespace ts.server {
             // 1. set some internal tsserver state for mocked FS (if it hasn't already been set, this might not be the first message)
             if (!this.fs) {
                 // -nervous laugh-
-                this.fs = ts.TestFSWithWatch.createVirtualServerHost([])
+                this.fs = ts.TestFSWithWatch.createVirtualServerHost([], { withSafeList: false })
                 ;(this as any).host = this.fs
                 ;(this.session as any).host = this.fs
             }
@@ -3705,8 +3705,8 @@ namespace ts.server {
                 while (!(it = createdFiles.next()).done) {
                     const document = it.value
                     if (document.fileContent) {
-                        // TODO: This isn't recursive, have to create parents AND walk past ones that already exist.
-                        this.fs.createDirectory(ts.getDirectoryPath(document.file));
+                        if (!this.fs.directoryExists(ts.getDirectoryPath(document.file)))
+                            this.fs.createDirectory(ts.getDirectoryPath(document.file), /*recursive*/ true);
                         this.fs.writeFile(document.file, document.fileContent);
                     }
                 }
@@ -3714,10 +3714,17 @@ namespace ts.server {
 
             if (updatedFiles) {
                 let it
-                while (!(it = updatedFiles.next()).done)
-                    if (it.value.fileContent)
-                        // TODO: Also should check that file exists, probably creating if it doesn't
-                        this.fs.modifyFile(it.value.file, it.value.fileContent)
+                while (!(it = updatedFiles.next()).done) {
+                    if (it.value.fileContent) {
+                        if (this.fs.fileExists(it.value.file)) {
+                            this.fs.modifyFile(it.value.file, it.value.fileContent)
+                        }
+                        else {
+                            this.fs.createDirectory(ts.getDirectoryPath(it.value.file), /*recursive*/ true);
+                            this.fs.writeFile(it.value.file, it.value.fileContent);
+                        }
+                    }
+                }
             }
             if (deletedFiles) {
                 // TODO: Probably want to delete empty parent folders while they are empty too
