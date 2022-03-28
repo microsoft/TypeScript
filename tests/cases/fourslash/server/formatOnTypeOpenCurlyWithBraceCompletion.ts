@@ -6,7 +6,6 @@
 
 goTo.marker("");
 format.onType("", "{");
-// format.document();
 verify.currentFileContentIs(
 `if (foo) {
     if (bar) { }

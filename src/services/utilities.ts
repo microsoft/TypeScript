@@ -1259,7 +1259,7 @@ namespace ts {
     export function findPrecedingToken(position: number, sourceFile: SourceFileLike, startNode: Node, excludeJsdoc?: boolean): Node | undefined;
     export function findPrecedingToken(position: number, sourceFile: SourceFile, startNode?: Node, excludeJsdoc?: boolean): Node | undefined;
     export function findPrecedingToken(position: number, sourceFile: SourceFileLike, startNode?: Node, excludeJsdoc?: boolean): Node | undefined {
-        const result = find(startNode! || sourceFile);
+        const result = find((startNode || sourceFile) as Node);
         Debug.assert(!(result && isWhiteSpaceOnlyJsxText(result)));
         return result;
 
