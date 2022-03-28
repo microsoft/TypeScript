@@ -37679,6 +37679,7 @@ namespace ts {
                     (condExpr.operatorToken.kind === SyntaxKind.BarBarToken || condExpr.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken)
                     ? condExpr.right
                     : condExpr;
+                if (isModuleExportsAccessExpression(location)) return;
                 const type = checkTruthinessExpression(location);
                 const isPropertyExpressionCast = isPropertyAccessExpression(location) && isTypeAssertion(location.expression);
                 if (getFalsyFlags(type) || isPropertyExpressionCast) return;
