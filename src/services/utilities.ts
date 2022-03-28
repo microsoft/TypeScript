@@ -1256,8 +1256,10 @@ namespace ts {
      * Finds the rightmost token satisfying `token.end <= position`,
      * excluding `JsxText` tokens containing only whitespace.
      */
-    export function findPrecedingToken(position: number, sourceFile: SourceFile, startNode?: Node, excludeJsdoc?: boolean): Node | undefined {
-        const result = find(startNode || sourceFile);
+    export function findPrecedingToken(position: number, sourceFile: SourceFileLike, startNode: Node, excludeJsdoc?: boolean): Node | undefined;
+    export function findPrecedingToken(position: number, sourceFile: SourceFile, startNode?: Node, excludeJsdoc?: boolean): Node | undefined;
+    export function findPrecedingToken(position: number, sourceFile: SourceFileLike, startNode?: Node, excludeJsdoc?: boolean): Node | undefined {
+        const result = find((startNode || sourceFile) as Node);
         Debug.assert(!(result && isWhiteSpaceOnlyJsxText(result)));
         return result;
 
@@ -1322,7 +1324,7 @@ namespace ts {
         return isToken(n) && !isWhiteSpaceOnlyJsxText(n);
     }
 
-    function findRightmostToken(n: Node, sourceFile: SourceFile): Node | undefined {
+    function findRightmostToken(n: Node, sourceFile: SourceFileLike): Node | undefined {
         if (isNonWhitespaceToken(n)) {
             return n;
         }
@@ -1339,7 +1341,7 @@ namespace ts {
     /**
      * Finds the rightmost child to the left of `children[exclusiveStartPosition]` which is a non-all-whitespace token or has constituent tokens.
      */
-    function findRightmostChildNodeWithTokens(children: Node[], exclusiveStartPosition: number, sourceFile: SourceFile, parentKind: SyntaxKind): Node | undefined {
+    function findRightmostChildNodeWithTokens(children: Node[], exclusiveStartPosition: number, sourceFile: SourceFileLike, parentKind: SyntaxKind): Node | undefined {
         for (let i = exclusiveStartPosition - 1; i >= 0; i--) {
             const child = children[i];
 
