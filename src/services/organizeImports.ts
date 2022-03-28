@@ -22,7 +22,7 @@ namespace ts.OrganizeImports {
             (s1, s2) => compareImportsOrRequireStatements(s1, s2));
 
         // All of the old ImportDeclarations in the file, in syntactic order.
-        const topLevelImportGroupDecls = groupImportsByNewlineContiguous(sourceFile.statements.filter(isImportDeclaration), host, formatContext);
+        const topLevelImportGroupDecls = groupImportsByNewlineContiguous(sourceFile, sourceFile.statements.filter(isImportDeclaration));
         topLevelImportGroupDecls.forEach(importGroupDecl => organizeImportsWorker(importGroupDecl, coalesceAndOrganizeImports));
 
         // All of the old ExportDeclarations in the file, in syntactic order.
@@ -32,7 +32,7 @@ namespace ts.OrganizeImports {
         for (const ambientModule of sourceFile.statements.filter(isAmbientModule)) {
             if (!ambientModule.body) continue;
 
-            const ambientModuleImportGroupDecls = groupImportsByNewlineContiguous(ambientModule.body.statements.filter(isImportDeclaration), host, formatContext);
+            const ambientModuleImportGroupDecls = groupImportsByNewlineContiguous(sourceFile, ambientModule.body.statements.filter(isImportDeclaration));
             ambientModuleImportGroupDecls.forEach(importGroupDecl => organizeImportsWorker(importGroupDecl, coalesceAndOrganizeImports));
 
             const ambientModuleExportDecls = ambientModule.body.statements.filter(isExportDeclaration);
@@ -87,16 +87,11 @@ namespace ts.OrganizeImports {
         }
     }
 
-    function groupImportsByNewlineContiguous(importDecls: ImportDeclaration[], host: LanguageServiceHost, formatContext: formatting.FormatContext): ImportDeclaration[][] {
+    function groupImportsByNewlineContiguous(sourceFile: SourceFile,importDecls: ImportDeclaration[]): ImportDeclaration[][] {
         const groupImports: ImportDeclaration[][] = [];
-        const newLine = getNewLineOrDefaultFromHost(host, formatContext.options);
-        const prefixCond = `${newLine}${newLine}`;
-
         let groupIndex = 0;
-        for(const topLevelImportDecl of importDecls) {
-            const leadingText = topLevelImportDecl.getFullText().substring(0, topLevelImportDecl.getStart() - topLevelImportDecl.getFullStart());
-
-            if (startsWith(leadingText, prefixCond)) {
+        for (const topLevelImportDecl of importDecls) {
+            if (isStartedNewGroup(sourceFile, topLevelImportDecl)) {
                 groupIndex++;
             }
 
@@ -108,6 +103,26 @@ namespace ts.OrganizeImports {
         }
 
         return groupImports;
+    }
+
+    // a new group is created if an import includes at least two new line
+    // new line from multi-line comment doesn't count
+    function isStartedNewGroup(sourceFile: SourceFile, topLevelImportDecl: ImportDeclaration) {
+        const startPos = topLevelImportDecl.getFullStart();
+        const endPos = topLevelImportDecl.getStart();
+
+        const scanner = createScanner(sourceFile.languageVersion, /*skipTrivia*/ false, sourceFile.languageVariant, sourceFile.text, /*onError:*/ undefined, startPos);
+
+        let numberOfNewLines = 0;
+        while (scanner.getTokenPos() < endPos) {
+            const tokenKind = scanner.scan();
+
+            if (tokenKind === SyntaxKind.NewLineTrivia) {
+                numberOfNewLines++;
+            }
+        }
+
+        return numberOfNewLines >= 2;
     }
 
     function removeUnusedImports(oldImports: readonly ImportDeclaration[], sourceFile: SourceFile, program: Program, skipDestructiveCodeActions: boolean | undefined) {
