@@ -796,8 +796,7 @@ getModifiedTime:: {
  "/src/global.d.ts": 1,
  "/src/index.ts": 1,
  "/src/lazyIndex.ts": 1,
- "/src/obj/bar.js": 1,
- "/src/obj/bundling.d.ts": 1
+ "/src/obj/bar.js": 1
 }
 
 setModifiedTime:: {

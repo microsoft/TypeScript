@@ -67,7 +67,7 @@ namespace ts {
             type: UpToDateStatusType.UpToDate | UpToDateStatusType.UpToDateWithUpstreamTypes;
             newestInputFileTime?: Date;
             newestInputFileName?: string;
-            newestDeclarationFileContentChangedTime?: Date;
+            newestDeclarationFileContentChangedTime: Date | undefined;
             oldestOutputFileName: string;
         }
 

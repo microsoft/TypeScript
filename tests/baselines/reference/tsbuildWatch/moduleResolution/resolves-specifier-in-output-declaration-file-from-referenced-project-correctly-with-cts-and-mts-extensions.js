@@ -1034,8 +1034,7 @@ directoryExists:: {
 getModifiedTimes:: {
  "/user/username/projects/myproject/packages/pkg2/const.cts": 1,
  "/user/username/projects/myproject/packages/pkg2/index.cts": 1,
- "/user/username/projects/myproject/packages/pkg2/build/const.cjs": 1,
- "/user/username/projects/myproject/packages/pkg2/build/const.d.cts": 1
+ "/user/username/projects/myproject/packages/pkg2/build/const.cjs": 1
 } 
 
 setModifiedTimes:: {
