@@ -1,0 +1,62 @@
+=== tests/cases/compiler/circularAccessorAnnotations.ts ===
+declare const c1: {
+>c1 : { readonly foo: any; }
+
+    get foo(): typeof c1.foo;
+>foo : any
+>c1.foo : any
+>c1 : { readonly foo: any; }
+>foo : any
+}
+
+declare const c2: {
+>c2 : { foo: any; }
+
+    set foo(value: typeof c2.foo);
+>foo : any
+>value : any
+>c2.foo : any
+>c2 : { foo: any; }
+>foo : any
+}
+
+declare const c3: {
+>c3 : { foo: string; }
+
+    get foo(): string;
+>foo : string
+
+    set foo(value: typeof c3.foo);
+>foo : string
+>value : string
+>c3.foo : string
+>c3 : { foo: string; }
+>foo : string
+}
+
+type T1 = {
+>T1 : T1
+
+    get foo(): T1["foo"];
+>foo : any
+}
+
+type T2 = {
+>T2 : T2
+
+    set foo(value: T2["foo"]);
+>foo : any
+>value : any
+}
+
+type T3 = {
+>T3 : T3
+
+    get foo(): string;
+>foo : string
+
+    set foo(value: T3["foo"]);
+>foo : string
+>value : string
+}
+

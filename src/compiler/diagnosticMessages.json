@@ -879,6 +879,18 @@
         "category": "Error",
         "code": 1271
     },
+    "A type referenced in a decorated signature must be imported with 'import type' or a namespace import when 'isolatedModules' and 'emitDecoratorMetadata' are enabled.": {
+        "category": "Error",
+        "code": 1272
+    },
+    "'{0}' modifier cannot appear on a type parameter": {
+        "category": "Error",
+        "code": 1273
+    },
+    "'{0}' modifier can only appear on a type parameter of a class, interface or type alias": {
+        "category": "Error",
+        "code": 1274
+    },
 
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
@@ -1493,6 +1505,10 @@
     "The 'type' modifier cannot be used on a named export when 'export type' is used on its export statement.": {
         "category": "Error",
         "code": 2207
+    },
+    "This type parameter probably needs an `extends object` constraint.": {
+        "category": "Error",
+        "code": 2208
     },
 
     "Duplicate identifier '{0}'.": {
@@ -2722,6 +2738,10 @@
     "Type '{0}' has no signatures for which the type argument list is applicable.": {
         "category": "Error",
         "code": 2635
+    },
+    "Type '{0}' is not assignable to type '{1}' as implied by variance annotation.": {
+        "category": "Error",
+        "code": 2636
     },
 
     "Cannot augment module '{0}' with value exports because it resolves to a non-module entity.": {
@@ -5689,7 +5709,7 @@
         "category": "Message",
         "code": 6706
     },
-    "Specify the folder for .tsbuildinfo incremental compilation files.": {
+    "Specify the path to .tsbuildinfo incremental compilation file.": {
         "category": "Message",
         "code": 6707
     },
@@ -7173,6 +7193,7 @@
         "category": "Message",
         "code": 95173
     },
+
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",

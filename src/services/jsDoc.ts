@@ -152,21 +152,12 @@ namespace ts.JsDoc {
 
     function getDisplayPartsFromComment(comment: string | readonly JSDocComment[], checker: TypeChecker | undefined): SymbolDisplayPart[] {
         if (typeof comment === "string") {
-            return [textPart(skipSeparatorFromComment(comment))];
+            return [textPart(comment)];
         }
         return flatMap(
             comment,
-            node => node.kind === SyntaxKind.JSDocText ? [textPart(skipSeparatorFromComment(node.text))] : buildLinkParts(node, checker)
+            node => node.kind === SyntaxKind.JSDocText ? [textPart(node.text)] : buildLinkParts(node, checker)
         ) as SymbolDisplayPart[];
-    }
-
-    function skipSeparatorFromComment(text: string) {
-        let pos = 0;
-        if (text.charCodeAt(pos++) === CharacterCodes.minus) {
-            while (pos < text.length && text.charCodeAt(pos) === CharacterCodes.space) pos++;
-            return text.slice(pos);
-        }
-        return text;
     }
 
     function getCommentDisplayParts(tag: JSDocTag, checker?: TypeChecker): SymbolDisplayPart[] | undefined {

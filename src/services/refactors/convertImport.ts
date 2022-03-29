@@ -79,13 +79,16 @@ namespace ts.refactor {
         if (importClause.namedBindings.kind === SyntaxKind.NamespaceImport) {
             return { convertTo: ImportKind.Named, import: importClause.namedBindings };
         }
-        const compilerOptions = context.program.getCompilerOptions();
-        const shouldUseDefault = getAllowSyntheticDefaultImports(compilerOptions)
-            && isExportEqualsModule(importClause.parent.moduleSpecifier, context.program.getTypeChecker());
+        const shouldUseDefault = getShouldUseDefault(context.program, importClause);
 
         return shouldUseDefault
             ? { convertTo: ImportKind.Default, import: importClause.namedBindings }
             : { convertTo: ImportKind.Namespace, import: importClause.namedBindings };
+    }
+
+    function getShouldUseDefault(program: Program, importClause: ImportClause) {
+        return getAllowSyntheticDefaultImports(program.getCompilerOptions())
+            && isExportEqualsModule(importClause.parent.moduleSpecifier, program.getTypeChecker());
     }
 
     function doChange(sourceFile: SourceFile, program: Program, changes: textChanges.ChangeTracker, info: ImportConversionInfo): void {
@@ -94,7 +97,7 @@ namespace ts.refactor {
             doChangeNamespaceToNamed(sourceFile, checker, changes, info.import, getAllowSyntheticDefaultImports(program.getCompilerOptions()));
         }
         else {
-            doChangeNamedToNamespaceOrDefault(sourceFile, checker, changes, info.import, info.convertTo === ImportKind.Default);
+            doChangeNamedToNamespaceOrDefault(sourceFile, program, changes, info.import, info.convertTo === ImportKind.Default);
         }
     }
 
@@ -153,7 +156,8 @@ namespace ts.refactor {
         return isPropertyAccessExpression(propertyAccessOrQualifiedName) ? propertyAccessOrQualifiedName.expression : propertyAccessOrQualifiedName.left;
     }
 
-    function doChangeNamedToNamespaceOrDefault(sourceFile: SourceFile, checker: TypeChecker, changes: textChanges.ChangeTracker, toConvert: NamedImports, shouldUseDefault: boolean) {
+    export function doChangeNamedToNamespaceOrDefault(sourceFile: SourceFile, program: Program, changes: textChanges.ChangeTracker, toConvert: NamedImports, shouldUseDefault = getShouldUseDefault(program, toConvert.parent)): void {
+        const checker = program.getTypeChecker();
         const importDecl = toConvert.parent.parent;
         const { moduleSpecifier } = importDecl;
 
