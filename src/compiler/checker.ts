@@ -41694,8 +41694,10 @@ namespace ts {
                         const symbol = getIntrinsicTagSymbol(name.parent as JsxOpeningLikeElement);
                         return symbol === unknownSymbol ? undefined : symbol;
                     }
-                    //const result = resolveEntityName(name, meaning, /*ignoreErrors*/ false, /*dontResolveAlias*/ !isJSDoc, getHostSignatureFromJSDoc(name));
-                    const result = resolveEntityName(name, meaning, /*ignoreErrors*/ false, /*dontResolveAlias*/ true, getHostSignatureFromJSDoc(name));
+
+                    const isJSDocLink = !!isJSDoc && (isJSDoc.kind === SyntaxKind.JSDocLink || isJSDoc.kind === SyntaxKind.JSDocLinkCode || isJSDoc.kind === SyntaxKind.JSDocLinkPlain);
+                    const dontResolveAlias = !isJSDoc || isJSDocLink;
+                    const result = resolveEntityName(name, meaning, /*ignoreErrors*/ false, dontResolveAlias, getHostSignatureFromJSDoc(name));
                     if (!result && isJSDoc) {
                         const container = findAncestor(name, or(isClassLike, isInterfaceDeclaration));
                         if (container) {
