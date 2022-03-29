@@ -370,7 +370,7 @@ namespace ts.codefix {
     export function createMethodImplementingSignatures(
         checker: TypeChecker,
         context: TypeConstructionContext,
-        enclosingDeclaration: Node,
+        enclosingDeclaration: ClassLikeDeclaration,
         signatures: readonly Signature[],
         name: PropertyName,
         optional: boolean,
@@ -421,7 +421,7 @@ namespace ts.codefix {
             body);
     }
 
-    function getReturnTypeFromSignatures(signatures: readonly Signature[], checker: TypeChecker, context: TypeConstructionContext, enclosingDeclaration: Node): TypeNode | undefined {
+    function getReturnTypeFromSignatures(signatures: readonly Signature[], checker: TypeChecker, context: TypeConstructionContext, enclosingDeclaration: ClassLikeDeclaration): TypeNode | undefined {
         if (length(signatures)) {
             const type = checker.getUnionType(map(signatures, checker.getReturnTypeOfSignature));
             return checker.typeToTypeNode(type, enclosingDeclaration, /*flags*/ undefined, getNoopSymbolTrackerWithResolver(context));
