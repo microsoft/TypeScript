@@ -367,7 +367,7 @@ namespace ts.codefix {
         return parameters;
     }
 
-    export function createMethodImplementingSignatures(
+    function createMethodImplementingSignatures(
         checker: TypeChecker,
         context: TypeConstructionContext,
         enclosingDeclaration: ClassLikeDeclaration,
