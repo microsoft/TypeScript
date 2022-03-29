@@ -95,6 +95,13 @@ namespace ts.Completions {
         declaration: TypeOnlyAliasDeclaration;
     }
 
+    interface SymbolOriginInfoObjectLiteralMethod extends SymbolOriginInfo {
+        importAdder: codefix.ImportAdder,
+        insertText: string,
+        sourceDisplay: SymbolDisplayPart[],
+        isSnippet?: true,
+    }
+
     function originIsThisType(origin: SymbolOriginInfo): boolean {
         return !!(origin.kind & SymbolOriginInfoKind.ThisType);
     }
@@ -131,7 +138,7 @@ namespace ts.Completions {
         return !!(origin && origin.kind & SymbolOriginInfoKind.TypeOnlyAlias);
     }
 
-    function originIsObjectLiteralMethod(origin: SymbolOriginInfo | undefined): boolean {
+    function originIsObjectLiteralMethod(origin: SymbolOriginInfo | undefined): origin is SymbolOriginInfoObjectLiteralMethod {
         return !!(origin && origin.kind & SymbolOriginInfoKind.ObjectLiteralMethod);
     }
 
@@ -276,7 +283,7 @@ namespace ts.Completions {
             return getLabelCompletionAtPosition(previousToken.parent);
         }
 
-        const completionData = getCompletionData(program, log, sourceFile, compilerOptions, position, preferences, /*detailsEntryId*/ undefined, host, cancellationToken);
+        const completionData = getCompletionData(program, log, sourceFile, compilerOptions, position, preferences, /*detailsEntryId*/ undefined, host, formatContext, cancellationToken);
         if (!completionData) {
             return undefined;
         }
@@ -772,13 +779,8 @@ namespace ts.Completions {
         }
 
         if (origin && originIsObjectLiteralMethod(origin)) {
-            const objectLiteral = cast(tryGetObjectLikeCompletionContainer(contextToken), isObjectLiteralExpression);
             let importAdder;
-            const entry = getEntryForObjectLiteralMethodCompletion(symbol, name, objectLiteral, program, host, options, preferences, formatContext);
-            if (!entry) {
-                return undefined;
-            }
-            ({ insertText, isSnippet, importAdder, sourceDisplay } = entry);
+            ({ insertText, isSnippet, importAdder, sourceDisplay } = origin);
             source = CompletionSource.ObjectLiteralMethodSnippet;
             sortText = SortText.SortBelow(sortText);
             if (importAdder.hasFixes()) {
@@ -1557,7 +1559,7 @@ namespace ts.Completions {
         }
 
         const compilerOptions = program.getCompilerOptions();
-        const completionData = getCompletionData(program, log, sourceFile, compilerOptions, position, { includeCompletionsForModuleExports: true, includeCompletionsWithInsertText: true }, entryId, host);
+        const completionData = getCompletionData(program, log, sourceFile, compilerOptions, position, { includeCompletionsForModuleExports: true, includeCompletionsWithInsertText: true }, entryId, host, /*formatContext*/ undefined);
         if (!completionData) {
             return { type: "none" };
         }
@@ -1895,6 +1897,7 @@ namespace ts.Completions {
         preferences: UserPreferences,
         detailsEntryId: CompletionEntryIdentifier | undefined,
         host: LanguageServiceHost,
+        formatContext: formatting.FormatContext | undefined,
         cancellationToken?: CancellationToken,
     ): CompletionData | Request | undefined {
         const typeChecker = program.getTypeChecker();
@@ -2770,7 +2773,7 @@ namespace ts.Completions {
         }
 
         /* Mutates `symbols` and `symbolToOriginInfoMap`. */
-        function collectObjectLiteralMethodSymbols(members: Symbol[]): void {
+        function collectObjectLiteralMethodSymbols(members: Symbol[], enclosingDeclaration: ObjectLiteralExpression): void {
             // TODO: support JS files.
             if (isInJSFile(location)) {
                 return;
@@ -2779,7 +2782,29 @@ namespace ts.Completions {
                 if (!isObjectLiteralMethodSymbol(member)) {
                     return;
                 }
-                const origin = { kind: SymbolOriginInfoKind.ObjectLiteralMethod };
+                const displayName = getCompletionEntryDisplayNameForSymbol(
+                    member,
+                    getEmitScriptTarget(compilerOptions),
+                    /*origin*/ undefined,
+                    CompletionKind.ObjectPropertyDeclaration,
+                    /*jsxIdentifierExpected*/ false);
+                if (!displayName) {
+                    return;
+                }
+                const { name } = displayName;
+                const entryProps = getEntryForObjectLiteralMethodCompletion(
+                    member,
+                    name,
+                    enclosingDeclaration,
+                    program,
+                    host,
+                    compilerOptions,
+                    preferences,
+                    formatContext);
+                if (!entryProps) {
+                    return;
+                }
+                const origin: SymbolOriginInfoObjectLiteralMethod = { kind: SymbolOriginInfoKind.ObjectLiteralMethod, ...entryProps };
                 symbolToOriginInfoMap[symbols.length] = origin;
                 symbols.push(member);
             });
@@ -3034,17 +3059,13 @@ namespace ts.Completions {
                 // Add filtered items to the completion list
                 const filteredMembers = filterObjectMembersList(typeMembers, Debug.checkDefined(existingMembers));
                 symbols = concatenate(symbols, filteredMembers);
+                setSortTextToOptionalMember();
                 if (objectLikeContainer.kind === SyntaxKind.ObjectLiteralExpression
                     && preferences.includeCompletionsWithObjectLiteralMethodSnippets
                     && preferences.includeCompletionsWithInsertText) {
-                    collectObjectLiteralMethodSymbols(filteredMembers);
+                    transformObjectLiteralMembersSortText(symbolsStartIndex);
+                    collectObjectLiteralMethodSymbols(filteredMembers, objectLikeContainer);
                 }
-            }
-            setSortTextToOptionalMember();
-            if (objectLikeContainer.kind === SyntaxKind.ObjectLiteralExpression
-                && preferences.includeCompletionsWithObjectLiteralMethodSnippets
-                && preferences.includeCompletionsWithInsertText) {
-                transformObjectLiteralMembersSortText(symbolsStartIndex);
             }
 
             return GlobalsSearch.Success;
@@ -3585,14 +3606,9 @@ namespace ts.Completions {
         }
 
         function transformObjectLiteralMembersSortText(start: number): void {
-            const pastSymbolIds: Set<number> = new Set();
             for (let i = start; i < symbols.length; i++) {
                 const symbol = symbols[i];
                 const symbolId = getSymbolId(symbol);
-                if (pastSymbolIds.has(symbolId)) {
-                    continue;
-                }
-                pastSymbolIds.add(symbolId);
                 const origin = symbolToOriginInfoMap?.[i];
                 const target = getEmitScriptTarget(compilerOptions);
                 const displayName = getCompletionEntryDisplayNameForSymbol(
