@@ -1065,24 +1065,13 @@ namespace ts.Completions {
         preferences: UserPreferences,
         formatContext: formatting.FormatContext | undefined,
     ): { insertText: string, isSnippet?: true, importAdder: codefix.ImportAdder, sourceDisplay: SymbolDisplayPart[] } | undefined {
-        let isSnippet: true | undefined;
+        const isSnippet = preferences.includeCompletionsWithSnippetText || undefined;
         let insertText: string = name;
 
         const sourceFile = enclosingDeclaration.getSourceFile();
         const importAdder = codefix.createImportAdder(sourceFile, program, preferences, host);
 
-        let body;
-        if (preferences.includeCompletionsWithSnippetText) {
-            isSnippet = true;
-            const emptyStmt = factory.createEmptyStatement();
-            body = factory.createBlock([emptyStmt], /* multiline */ true);
-            setSnippetElement(emptyStmt, { kind: SnippetKind.TabStop, order: 0 });
-        }
-        else {
-            body = factory.createBlock([], /* multiline */ true);
-        }
-
-        const method = createObjectLiteralMethod(symbol, enclosingDeclaration, sourceFile, program, host, preferences, importAdder, /*body*/ body);
+        const method = createObjectLiteralMethod(symbol, enclosingDeclaration, sourceFile, program, host, preferences, importAdder);
         if (!method) {
             return undefined;
         }
@@ -1122,7 +1111,6 @@ namespace ts.Completions {
         host: LanguageServiceHost,
         preferences: UserPreferences,
         importAdder: codefix.ImportAdder,
-        body: Block,
     ): MethodDeclaration | undefined {
         const declarations = symbol.getDeclarations();
         if (!(declarations && declarations.length)) {
@@ -1168,6 +1156,17 @@ namespace ts.Completions {
                     typeNode = importableReference.typeNode;
                     codefix.importSymbols(importAdder, importableReference.symbols);
                 }
+
+                let body;
+                if (preferences.includeCompletionsWithSnippetText) {
+                    const emptyStmt = factory.createEmptyStatement();
+                    body = factory.createBlock([emptyStmt], /* multiline */ true);
+                    setSnippetElement(emptyStmt, { kind: SnippetKind.TabStop, order: 0 });
+                }
+                else {
+                    body = factory.createBlock([], /* multiline */ true);
+                }
+
                 return factory.createMethodDeclaration(
                     /*decorators*/ undefined,
                     /*modifiers*/ undefined,
@@ -2776,17 +2775,14 @@ namespace ts.Completions {
             if (isInJSFile(location)) {
                 return;
             }
-            if (members === symbols) {
-                members = members.slice();
-            }
-            for (const member of members) {
+            members.forEach(member => {
                 if (!isObjectLiteralMethodSymbol(member)) {
-                    continue;
+                    return;
                 }
                 const origin = { kind: SymbolOriginInfoKind.ObjectLiteralMethod };
                 symbolToOriginInfoMap[symbols.length] = origin;
                 symbols.push(member);
-            }
+            });
         }
 
         function isObjectLiteralMethodSymbol(symbol: Symbol): boolean {
