@@ -703,6 +703,8 @@ sourceFile:../../third_part1.ts
 ---
 >>>//# sourceMappingURL=third-output.d.ts.map
 
+//// [/src/third/thirdjs/output/third-output.js] file changed its modified time
+//// [/src/third/thirdjs/output/third-output.js.map] file changed its modified time
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo]
 {"bundle":{"commonSourceDirectory":"../..","sourceFiles":["../../third_part1.ts"],"js":{"sections":[{"pos":0,"end":110,"kind":"prepend","data":"../../../first/bin/first-output.js","texts":[{"pos":0,"end":110,"kind":"text"}]},{"pos":110,"end":3527,"kind":"prepend","data":"../../../2/second-output.js","texts":[{"pos":110,"end":3527,"kind":"text"}]},{"pos":3527,"end":3563,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":157,"kind":"prepend","data":"../../../first/bin/first-output.d.ts","texts":[{"pos":0,"end":157,"kind":"text"}]},{"pos":157,"end":317,"kind":"prepend","data":"../../../2/second-output.d.ts","texts":[{"pos":157,"end":317,"kind":"text"}]},{"pos":317,"end":336,"kind":"text"}]}},"version":"FakeTSVersion"}
 

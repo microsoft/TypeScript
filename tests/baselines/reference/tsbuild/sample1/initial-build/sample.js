@@ -734,6 +734,7 @@ readFiles:: {
  "/src/tests/index.d.ts": 1
 } 
 
+//// [/src/core/anotherModule.d.ts] file changed its modified time
 //// [/src/core/index.d.ts]
 export declare const someString: string;
 export declare function leftPad(s: string, n: number): string;
@@ -1152,6 +1153,7 @@ readFiles:: {
  "/src/tests/tsconfig.tsbuildinfo": 1
 } 
 
+//// [/src/core/anotherModule.d.ts] file changed its modified time
 //// [/src/core/index.d.ts] file written with same contents
 //// [/src/core/index.d.ts.map] file written with same contents
 //// [/src/core/index.d.ts.map.baseline.txt] file written with same contents
@@ -1228,6 +1230,9 @@ var someClass2 = /** @class */ (function () {
   "size": 1442
 }
 
+//// [/src/logic/tsconfig.tsbuildinfo] file changed its modified time
+//// [/src/tests/index.d.ts] file changed its modified time
+//// [/src/tests/tsconfig.tsbuildinfo] file changed its modified time
 
 
 Change:: when logic config changes declaration dir

@@ -24,6 +24,8 @@ Output::
 exitCode:: ExitStatus.Success
 
 
+//// [/src/app/module.d.ts] file changed its modified time
+//// [/src/app/module.d.ts.map] file changed its modified time
 //// [/src/app/module.js]
 #!someshebang lib file0
 var myGlob = 20;

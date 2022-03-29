@@ -418,6 +418,7 @@ Output::
 exitCode:: ExitStatus.Success
 
 
+//// [/src/core/anotherModule.d.ts] file changed its modified time
 //// [/src/core/index.d.ts]
 export declare const someString: string;
 export declare function leftPad(s: string, n: number): string;
@@ -749,3 +750,5 @@ var someClass2 = /** @class */ (function () {
   "size": 1442
 }
 
+//// [/src/logic/tsconfig.tsbuildinfo] file changed its modified time
+//// [/src/tests/tsconfig.tsbuildinfo] file changed its modified time

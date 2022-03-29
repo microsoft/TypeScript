@@ -289,6 +289,8 @@ declare function f(): string;
   "size": 252
 }
 
+//// [/src/third/thirdjs/output/third-output.d.ts] file changed its modified time
+//// [/src/third/thirdjs/output/third-output.d.ts.map] file changed its modified time
 //// [/src/third/thirdjs/output/third-output.js]
 "use strict";
 var s = "Hello, world";
