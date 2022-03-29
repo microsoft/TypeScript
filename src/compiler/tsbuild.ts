@@ -26,7 +26,8 @@ namespace ts {
         /**
          * Projects with no outputs (i.e. "solution" files)
          */
-        ContainerOnly
+        ContainerOnly,
+        ForceBuild,
     }
 
     export type UpToDateStatus =
@@ -40,7 +41,8 @@ namespace ts {
         | Status.UpstreamBlocked
         | Status.ComputingUpstream
         | Status.TsVersionOutOfDate
-        | Status.ContainerOnly;
+        | Status.ContainerOnly
+        | Status.ForceBuild;
 
     export namespace Status {
         /**
@@ -137,6 +139,10 @@ namespace ts {
             type: UpToDateStatusType.OutOfDateWithUpstream;
             outOfDateOutputFileName: string;
             newerProjectName: string;
+        }
+
+        export interface ForceBuild {
+            type: UpToDateStatusType.ForceBuild;
         }
     }
 
