@@ -2703,29 +2703,6 @@ namespace ts {
             : undefined;
     }
 
-    /**
-     * Retrieves all nodes belonging to the same root node that contain JSDocs.
-     */
-    export function getAllNodesWithJSDocs(rootNode: Node) {
-        const traverseNodes = (node: Node) => {
-            let nodesWithJSDocs: Node[] = [];
-
-            forEachChild(node,
-                (childNode) => {
-                    nodesWithJSDocs = nodesWithJSDocs.concat(traverseNodes(childNode));
-                },
-            );
-
-            if (hasJSDocNodes(node)) {
-                nodesWithJSDocs.push(node);
-            }
-
-            return nodesWithJSDocs;
-        };
-
-        return traverseNodes(rootNode);
-    }
-
     export function getJSDocCommentsAndTags(hostNode: Node, noCache?: boolean): readonly (JSDoc | JSDocTag)[] {
         let result: (JSDoc | JSDocTag)[] | undefined;
         // Pull parameter comments from declaring function as well

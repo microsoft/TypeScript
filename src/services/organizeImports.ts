@@ -99,7 +99,6 @@ namespace ts.OrganizeImports {
         const jsxNamespace = typeChecker.getJsxNamespace(sourceFile);
         const jsxFragmentFactory = typeChecker.getJsxFragmentFactory(sourceFile);
         const jsxElementsPresent = !!(sourceFile.transformFlags & TransformFlags.ContainsJsx);
-        const jsDocReferencesSet = getJSDocReferencedTypesFromSourceFile(sourceFile);
 
         const usedImports: ImportDeclaration[] = [];
 
@@ -165,29 +164,7 @@ namespace ts.OrganizeImports {
         function isDeclarationUsed(identifier: Identifier) {
             // The JSX factory symbol is always used if JSX elements are present - even if they are not allowed.
             return jsxElementsPresent && (identifier.text === jsxNamespace || jsxFragmentFactory && identifier.text === jsxFragmentFactory) && jsxModeNeedsExplicitImport(compilerOptions.jsx) ||
-                FindAllReferences.Core.isSymbolReferencedInFile(identifier, typeChecker, sourceFile) ||
-                jsDocReferencesSet.has(identifier.getText());
-        }
-
-        /**
-         * Retrieve all the type names from the JSDoc "@link" tags in the source file as a Set.
-         * @returns a Set with the types referenced inside the JSDoc tags.
-         */
-        function getJSDocReferencedTypesFromSourceFile(sourceFile: SourceFile) {
-            const nodesWithJSDocs = flatMap(sourceFile.statements, (statement) => getAllNodesWithJSDocs(statement));
-            const jsDocs = flatMap(nodesWithJSDocs, statement => getJSDocCommentsAndTags(statement));
-            const jdDocsLinks = flatMap(jsDocs, (doc) => getJSDocLinksFromJSDocComments(doc.comment));
-            const jsDocLinkNames = getNamesFromJSDocLinks(jdDocsLinks);
-
-            return new Set<string>(jsDocLinkNames);
-        }
-
-        function getJSDocLinksFromJSDocComments(comment?: string | NodeArray<JSDocComment>): JSDocLink[] {
-            return isArray(comment) ? comment.filter((commentNode) => commentNode.kind === SyntaxKind.JSDocLink) as JSDocLink[] : [];
-        }
-
-        function getNamesFromJSDocLinks(jsDocLinks: readonly JSDocLink[]): string[] {
-            return jsDocLinks.filter((link) => link.name?.getText()).map((link) => link.name!.getText());
+                FindAllReferences.Core.isSymbolReferencedInFile(identifier, typeChecker, sourceFile);
         }
     }
 
