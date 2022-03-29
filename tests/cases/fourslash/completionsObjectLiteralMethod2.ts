@@ -24,7 +24,7 @@ verify.completions({
         includeCompletionsWithInsertText: true,
         includeCompletionsWithSnippetText: false,
         includeCompletionsWithObjectLiteralMethodSnippets: true,
-        includeCompletionsWithLabelDetails: true,
+        useLabelDetailsInCompletionEntries: true,
     },
     includes: [
         {
@@ -51,7 +51,7 @@ verify.applyCodeActionFromCompletion("a", {
         includeCompletionsWithInsertText: true,
         includeCompletionsWithSnippetText: false,
         includeCompletionsWithObjectLiteralMethodSnippets: true,
-        includeCompletionsWithLabelDetails: true,
+        useLabelDetailsInCompletionEntries: true,
     },
     name: "foo",
     source: completion.CompletionSource.ObjectLiteralMethodSnippet,

@@ -38,7 +38,7 @@ verify.completions({
         includeCompletionsWithInsertText: true,
         includeCompletionsWithSnippetText: false,
         includeCompletionsWithObjectLiteralMethodSnippets: true,
-        includeCompletionsWithLabelDetails: true,
+        useLabelDetailsInCompletionEntries: true,
     },
     includes: [
         {
@@ -64,7 +64,7 @@ verify.completions({
         includeCompletionsWithInsertText: true,
         includeCompletionsWithSnippetText: false,
         includeCompletionsWithObjectLiteralMethodSnippets: true,
-        includeCompletionsWithLabelDetails: true,
+        useLabelDetailsInCompletionEntries: true,
     },
     includes: [
         {
@@ -121,7 +121,7 @@ verify.completions({
         includeCompletionsWithInsertText: true,
         includeCompletionsWithSnippetText: false,
         includeCompletionsWithObjectLiteralMethodSnippets: true,
-        includeCompletionsWithLabelDetails: true,
+        useLabelDetailsInCompletionEntries: true,
     },
     includes: [
         {
@@ -147,7 +147,7 @@ verify.completions({
         includeCompletionsWithInsertText: true,
         includeCompletionsWithSnippetText: true,
         includeCompletionsWithObjectLiteralMethodSnippets: true,
-        includeCompletionsWithLabelDetails: true,
+        useLabelDetailsInCompletionEntries: true,
     },
     includes: [
         {
@@ -174,7 +174,7 @@ verify.completions({
         includeCompletionsWithInsertText: true,
         includeCompletionsWithSnippetText: true,
         includeCompletionsWithObjectLiteralMethodSnippets: true,
-        includeCompletionsWithLabelDetails: false,
+        useLabelDetailsInCompletionEntries: false,
     },
     includes: [
         {

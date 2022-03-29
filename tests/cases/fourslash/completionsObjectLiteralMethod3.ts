@@ -39,7 +39,7 @@ verify.completions({
         includeCompletionsWithInsertText: true,
         includeCompletionsWithSnippetText: false,
         includeCompletionsWithObjectLiteralMethodSnippets: true,
-        includeCompletionsWithLabelDetails: true,
+        useLabelDetailsInCompletionEntries: true,
     },
     includes: [
         {
@@ -97,7 +97,7 @@ verify.completions({
         includeCompletionsWithInsertText: true,
         includeCompletionsWithSnippetText: false,
         includeCompletionsWithObjectLiteralMethodSnippets: true,
-        includeCompletionsWithLabelDetails: true,
+        useLabelDetailsInCompletionEntries: true,
     },
     includes: [
         {
