@@ -163,6 +163,24 @@ namespace Harness.LanguageService {
             }
         }
 
+        public fileExists(path: string): boolean {
+            try {
+                return this.vfs.existsSync(path);
+            }
+            catch {
+                return false;
+            }
+        }
+
+        public readFile(path: string): string | undefined {
+            try {
+                return this.vfs.readFileSync(path).toString();
+            }
+            catch {
+                return undefined;
+            }
+        }
+
         public directoryExists(path: string) {
             return this.vfs.statSync(path).isDirectory();
         }
@@ -976,7 +994,7 @@ namespace Harness.LanguageService {
                 cancellationToken: ts.server.nullCancellationToken,
                 useSingleInferredProject: false,
                 useInferredProjectPerProjectRoot: false,
-                typingsInstaller: undefined!, // TODO: GH#18217
+                typingsInstaller: { ...ts.server.nullTypingsInstaller, globalTypingsCacheLocation: "/Library/Caches/typescript" },
                 byteLength: Utils.byteLength,
                 hrtime: process.hrtime,
                 logger: serverHost,

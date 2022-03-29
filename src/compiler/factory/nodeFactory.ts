@@ -293,6 +293,8 @@ namespace ts {
             updateAssertClause,
             createAssertEntry,
             updateAssertEntry,
+            createImportTypeAssertionContainer,
+            updateImportTypeAssertionContainer,
             createNamespaceImport,
             updateNamespaceImport,
             createNamespaceExport,
@@ -996,6 +998,8 @@ namespace ts {
                 case SyntaxKind.BigIntKeyword:
                 case SyntaxKind.NeverKeyword:
                 case SyntaxKind.ObjectKeyword:
+                case SyntaxKind.InKeyword:
+                case SyntaxKind.OutKeyword:
                 case SyntaxKind.OverrideKeyword:
                 case SyntaxKind.StringKeyword:
                 case SyntaxKind.BooleanKeyword:
@@ -1075,6 +1079,8 @@ namespace ts {
             if (flags & ModifierFlags.Override) result.push(createModifier(SyntaxKind.OverrideKeyword));
             if (flags & ModifierFlags.Readonly) result.push(createModifier(SyntaxKind.ReadonlyKeyword));
             if (flags & ModifierFlags.Async) result.push(createModifier(SyntaxKind.AsyncKeyword));
+            if (flags & ModifierFlags.In) result.push(createModifier(SyntaxKind.InKeyword));
+            if (flags & ModifierFlags.Out) result.push(createModifier(SyntaxKind.OutKeyword));
             return result.length ? result : undefined;
         }
 
@@ -1124,11 +1130,27 @@ namespace ts {
         //
 
         // @api
-        function createTypeParameterDeclaration(name: string | Identifier, constraint?: TypeNode, defaultType?: TypeNode) {
+        function createTypeParameterDeclaration(modifiers: readonly Modifier[] | undefined, name: string | Identifier, constraint?: TypeNode, defaultType?: TypeNode): TypeParameterDeclaration;
+        /** @deprecated */
+        function createTypeParameterDeclaration(name: string | Identifier, constraint?: TypeNode, defaultType?: TypeNode): TypeParameterDeclaration;
+        function createTypeParameterDeclaration(modifiersOrName: readonly Modifier[] | string | Identifier | undefined , nameOrConstraint?: string | Identifier | TypeNode, constraintOrDefault?: TypeNode, defaultType?: TypeNode) {
+            let name;
+            let modifiers;
+            let constraint;
+            if (modifiersOrName === undefined || isArray(modifiersOrName)) {
+                modifiers = modifiersOrName;
+                name = nameOrConstraint as string | Identifier;
+                constraint = constraintOrDefault;
+            }
+            else {
+                modifiers = undefined;
+                name = modifiersOrName;
+                constraint = nameOrConstraint as TypeNode | undefined;
+            }
             const node = createBaseNamedDeclaration<TypeParameterDeclaration>(
                 SyntaxKind.TypeParameter,
                 /*decorators*/ undefined,
-                /*modifiers*/ undefined,
+                modifiers,
                 name
             );
             node.constraint = constraint;
@@ -1138,11 +1160,28 @@ namespace ts {
         }
 
         // @api
-        function updateTypeParameterDeclaration(node: TypeParameterDeclaration, name: Identifier, constraint: TypeNode | undefined, defaultType: TypeNode | undefined) {
-            return node.name !== name
+        function updateTypeParameterDeclaration(node: TypeParameterDeclaration, modifiers: readonly Modifier[] | undefined, name: Identifier, constraint: TypeNode | undefined, defaultType: TypeNode | undefined): TypeParameterDeclaration;
+        /** @deprecated */
+        function updateTypeParameterDeclaration(node: TypeParameterDeclaration, name: Identifier, constraint: TypeNode | undefined, defaultType: TypeNode | undefined): TypeParameterDeclaration;
+        function updateTypeParameterDeclaration(node: TypeParameterDeclaration, modifiersOrName: readonly Modifier[] | Identifier | undefined, nameOrConstraint: Identifier | TypeNode | undefined, constraintOrDefault: TypeNode | undefined, defaultType?: TypeNode | undefined) {
+            let name;
+            let modifiers;
+            let constraint;
+            if (modifiersOrName === undefined || isArray(modifiersOrName)) {
+                modifiers = modifiersOrName;
+                name = nameOrConstraint as Identifier;
+                constraint = constraintOrDefault;
+            }
+            else {
+                modifiers = undefined;
+                name = modifiersOrName;
+                constraint = nameOrConstraint as TypeNode | undefined;
+            }
+            return node.modifiers !== modifiers
+                || node.name !== name
                 || node.constraint !== constraint
                 || node.default !== defaultType
-                ? update(createTypeParameterDeclaration(name, constraint, defaultType), node)
+                ? update(createTypeParameterDeclaration(modifiers, name, constraint, defaultType), node)
                 : node;
         }
 
@@ -2038,9 +2077,24 @@ namespace ts {
         }
 
         // @api
-        function createImportTypeNode(argument: TypeNode, qualifier?: EntityName, typeArguments?: readonly TypeNode[], isTypeOf = false) {
+        function createImportTypeNode(argument: TypeNode, qualifier?: EntityName, typeArguments?: readonly TypeNode[], isTypeOf?: boolean): ImportTypeNode;
+        function createImportTypeNode(argument: TypeNode, assertions?: ImportTypeAssertionContainer, qualifier?: EntityName, typeArguments?: readonly TypeNode[], isTypeOf?: boolean): ImportTypeNode;
+        function createImportTypeNode(
+            argument: TypeNode,
+            qualifierOrAssertions?: EntityName | ImportTypeAssertionContainer,
+            typeArgumentsOrQualifier?: readonly TypeNode[] | EntityName,
+            isTypeOfOrTypeArguments?: boolean | readonly TypeNode[],
+            isTypeOf?: boolean
+        ) {
+            const assertion = qualifierOrAssertions && qualifierOrAssertions.kind === SyntaxKind.ImportTypeAssertionContainer ? qualifierOrAssertions : undefined;
+            const qualifier = qualifierOrAssertions && isEntityName(qualifierOrAssertions) ? qualifierOrAssertions
+                : typeArgumentsOrQualifier && !isArray(typeArgumentsOrQualifier) ? typeArgumentsOrQualifier : undefined;
+            const typeArguments = isArray(typeArgumentsOrQualifier) ? typeArgumentsOrQualifier : isArray(isTypeOfOrTypeArguments) ? isTypeOfOrTypeArguments : undefined;
+            isTypeOf = typeof isTypeOfOrTypeArguments === "boolean" ? isTypeOfOrTypeArguments : typeof isTypeOf === "boolean" ? isTypeOf : false;
+
             const node = createBaseNode<ImportTypeNode>(SyntaxKind.ImportType);
             node.argument = argument;
+            node.assertions = assertion;
             node.qualifier = qualifier;
             node.typeArguments = typeArguments && parenthesizerRules().parenthesizeTypeArguments(typeArguments);
             node.isTypeOf = isTypeOf;
@@ -2049,12 +2103,28 @@ namespace ts {
         }
 
         // @api
-        function updateImportTypeNode(node: ImportTypeNode, argument: TypeNode, qualifier: EntityName | undefined, typeArguments: readonly TypeNode[] | undefined, isTypeOf = node.isTypeOf) {
+        function updateImportTypeNode(node: ImportTypeNode, argument: TypeNode, qualifier: EntityName | undefined, typeArguments: readonly TypeNode[] | undefined, isTypeOf?: boolean | undefined): ImportTypeNode;
+        function updateImportTypeNode(node: ImportTypeNode, argument: TypeNode, assertions: ImportTypeAssertionContainer | undefined, qualifier: EntityName | undefined, typeArguments: readonly TypeNode[] | undefined, isTypeOf?: boolean | undefined): ImportTypeNode;
+        function updateImportTypeNode(
+            node: ImportTypeNode,
+            argument: TypeNode,
+            qualifierOrAssertions: EntityName | ImportTypeAssertionContainer | undefined,
+            typeArgumentsOrQualifier: readonly TypeNode[] | EntityName | undefined,
+            isTypeOfOrTypeArguments: boolean | readonly TypeNode[] | undefined,
+            isTypeOf?: boolean | undefined
+        ) {
+            const assertion = qualifierOrAssertions && qualifierOrAssertions.kind === SyntaxKind.ImportTypeAssertionContainer ? qualifierOrAssertions : undefined;
+            const qualifier = qualifierOrAssertions && isEntityName(qualifierOrAssertions) ? qualifierOrAssertions
+                : typeArgumentsOrQualifier && !isArray(typeArgumentsOrQualifier) ? typeArgumentsOrQualifier : undefined;
+            const typeArguments = isArray(typeArgumentsOrQualifier) ? typeArgumentsOrQualifier : isArray(isTypeOfOrTypeArguments) ? isTypeOfOrTypeArguments : undefined;
+            isTypeOf = typeof isTypeOfOrTypeArguments === "boolean" ? isTypeOfOrTypeArguments : typeof isTypeOf === "boolean" ? isTypeOf : node.isTypeOf;
+
             return node.argument !== argument
+                || node.assertions !== assertion
                 || node.qualifier !== qualifier
                 || node.typeArguments !== typeArguments
                 || node.isTypeOf !== isTypeOf
-                ? update(createImportTypeNode(argument, qualifier, typeArguments, isTypeOf), node)
+                ? update(createImportTypeNode(argument, assertion, qualifier, typeArguments, isTypeOf), node)
                 : node;
         }
 
@@ -4043,6 +4113,22 @@ namespace ts {
         }
 
         // @api
+        function createImportTypeAssertionContainer(clause: AssertClause, multiLine?: boolean): ImportTypeAssertionContainer {
+            const node = createBaseNode<ImportTypeAssertionContainer>(SyntaxKind.ImportTypeAssertionContainer);
+            node.assertClause = clause;
+            node.multiLine = multiLine;
+            return node;
+        }
+
+        // @api
+        function updateImportTypeAssertionContainer(node: ImportTypeAssertionContainer, clause: AssertClause, multiLine?: boolean): ImportTypeAssertionContainer {
+            return node.assertClause !== clause
+                || node.multiLine !== multiLine
+                ? update(createImportTypeAssertionContainer(clause, multiLine), node)
+                : node;
+        }
+
+        // @api
         function createNamespaceImport(name: Identifier): NamespaceImport {
             const node = createBaseNode<NamespaceImport>(SyntaxKind.NamespaceImport);
             node.name = name;
@@ -4691,7 +4777,7 @@ namespace ts {
 
         // @api
         function createJSDocComment(comment?: string | NodeArray<JSDocComment> | undefined, tags?: readonly JSDocTag[] | undefined) {
-            const node = createBaseNode<JSDoc>(SyntaxKind.JSDocComment);
+            const node = createBaseNode<JSDoc>(SyntaxKind.JSDoc);
             node.comment = comment;
             node.tags = asNodeArray(tags);
             return node;

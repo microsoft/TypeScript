@@ -59,6 +59,13 @@ declare namespace Intl {
     type BCP47LanguageTag = string;
 
     /**
+     * The locale(s) to use
+     *
+     * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl#locales_argument).
+     */
+    type LocalesArgument = UnicodeBCP47LocaleIdentifier | UnicodeBCP47LocaleIdentifier[] | Locale | Locale[] | undefined;
+
+    /**
      * An object with some or all of properties of `options` parameter
      * of `Intl.RelativeTimeFormat` constructor.
      *
@@ -281,15 +288,37 @@ declare namespace Intl {
      * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Locale).
      */
     const Locale: {
-        new (tag?: BCP47LanguageTag, options?: LocaleOptions): Locale;
+        new (tag: BCP47LanguageTag | Locale, options?: LocaleOptions): Locale;
     };
 
-     interface DisplayNamesOptions {
-        locale: UnicodeBCP47LocaleIdentifier;
+    type DisplayNamesFallback =
+        | "code"
+        | "none";
+
+    type ResolvedDisplayNamesType =
+        | "language"
+        | "region"
+        | "script"
+        | "currency";
+
+    type DisplayNamesType =
+        | ResolvedDisplayNamesType
+        | "calendar"
+        | "datetimeField";
+
+    interface DisplayNamesOptions {
         localeMatcher: RelativeTimeFormatLocaleMatcher;
         style: RelativeTimeFormatStyle;
-        type: "language" | "region" | "script" | "currency";
-        fallback: "code" | "none";
+        type: DisplayNamesType;
+        languageDisplay: "dialect" | "standard";
+        fallback: DisplayNamesFallback;
+    }
+
+    interface ResolvedDisplayNamesOptions {
+        locale: UnicodeBCP47LocaleIdentifier;
+        style: RelativeTimeFormatStyle;
+        type: ResolvedDisplayNamesType;
+        fallback: DisplayNamesFallback;
     }
 
     interface DisplayNames {
@@ -315,7 +344,7 @@ declare namespace Intl {
          *
          * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DisplayNames/resolvedOptions).
          */
-        resolvedOptions(): DisplayNamesOptions;
+        resolvedOptions(): ResolvedDisplayNamesOptions;
     }
 
     /**

@@ -168,7 +168,7 @@ namespace FourSlash {
         // The position of the end of the current selection, or -1 if nothing is selected
         public selectionEnd = -1;
 
-        public lastKnownMarker = "";
+        public lastKnownMarker: string | undefined;
 
         // The file that's currently 'opened'
         public activeFile!: FourSlashFile;
@@ -400,7 +400,7 @@ namespace FourSlash {
                         continue;
                     }
                     const memo = Utils.memoize(
-                        (_version: number, _active: string, _caret: number, _selectEnd: number, _marker: string, ...args: any[]) => (ls[key] as Function)(...args),
+                        (_version: number, _active: string, _caret: number, _selectEnd: number, _marker: string | undefined, ...args: any[]) => (ls[key] as Function)(...args),
                         (...args) => args.map(a => a && typeof a === "object" ? JSON.stringify(a) : a).join("|,|")
                     );
                     proxy[key] = (...args: any[]) => memo(
@@ -540,8 +540,8 @@ namespace FourSlash {
         }
 
         private messageAtLastKnownMarker(message: string) {
-            const locationDescription = this.lastKnownMarker ? this.lastKnownMarker : this.getLineColStringAtPosition(this.currentCaretPosition);
-            return `At ${locationDescription}: ${message}`;
+            const locationDescription = this.lastKnownMarker !== undefined ? this.lastKnownMarker : this.getLineColStringAtPosition(this.currentCaretPosition);
+            return `At marker '${locationDescription}': ${message}`;
         }
 
         private assertionMessageAtLastKnownMarker(msg: string) {
@@ -864,7 +864,7 @@ namespace FourSlash {
             else {
                 for (const marker of toArray(options.marker)) {
                     this.goToMarker(marker);
-                    this.verifyCompletionsWorker(options);
+                    this.verifyCompletionsWorker({ ...options, marker });
                 }
             }
         }
@@ -2293,8 +2293,18 @@ namespace FourSlash {
             // Check syntactic structure
             const content = this.getFileContent(this.activeFile.fileName);
 
+            const options: ts.CreateSourceFileOptions = {
+                languageVersion: ts.ScriptTarget.Latest,
+                impliedNodeFormat: ts.getImpliedNodeFormatForFile(
+                    ts.toPath(this.activeFile.fileName, this.languageServiceAdapterHost.sys.getCurrentDirectory(), ts.hostGetCanonicalFileName(this.languageServiceAdapterHost)),
+                    /*cache*/ undefined,
+                    this.languageServiceAdapterHost,
+                    this.languageService.getProgram()?.getCompilerOptions() || {}
+                ),
+                setExternalModuleIndicator: ts.getSetExternalModuleIndicator(this.languageService.getProgram()?.getCompilerOptions() || {})
+            };
             const referenceSourceFile = ts.createLanguageServiceSourceFile(
-                this.activeFile.fileName, createScriptSnapShot(content), ts.ScriptTarget.Latest, /*version:*/ "0", /*setNodeParents:*/ false);
+                this.activeFile.fileName, createScriptSnapShot(content), options, /*version:*/ "0", /*setNodeParents:*/ false);
             const referenceSyntaxDiagnostics = referenceSourceFile.parseDiagnostics;
 
             Utils.assertDiagnosticsEquals(incrementalSyntaxDiagnostics, referenceSyntaxDiagnostics);

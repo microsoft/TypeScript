@@ -222,6 +222,7 @@ namespace ts.codefix {
                     }
                     return factory.updateTypeParameterDeclaration(
                         typeParameterDecl,
+                        typeParameterDecl.modifiers,
                         typeParameterDecl.name,
                         constraint,
                         defaultType
@@ -306,7 +307,7 @@ namespace ts.codefix {
         const typeParameters = isJs || typeArguments === undefined
             ? undefined
             : map(typeArguments, (_, i) =>
-                factory.createTypeParameterDeclaration(CharacterCodes.T + typeArguments.length - 1 <= CharacterCodes.Z ? String.fromCharCode(CharacterCodes.T + i) : `T${i}`));
+                factory.createTypeParameterDeclaration(/*modifiers*/ undefined, CharacterCodes.T + typeArguments.length - 1 <= CharacterCodes.Z ? String.fromCharCode(CharacterCodes.T + i) : `T${i}`));
         const parameters = createDummyParameters(args.length, names, types, /*minArgumentCount*/ undefined, isJs);
         const type = isJs || contextualType === undefined
             ? undefined
@@ -359,7 +360,7 @@ namespace ts.codefix {
                 /*dotDotDotToken*/ undefined,
                 /*name*/ names && names[i] || `arg${i}`,
                 /*questionToken*/ minArgumentCount !== undefined && i >= minArgumentCount ? factory.createToken(SyntaxKind.QuestionToken) : undefined,
-                /*type*/ inJs ? undefined : types && types[i] || factory.createKeywordTypeNode(SyntaxKind.AnyKeyword),
+                /*type*/ inJs ? undefined : types && types[i] || factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword),
                 /*initializer*/ undefined);
             parameters.push(newParameter);
         }
@@ -398,14 +399,13 @@ namespace ts.codefix {
         const parameters = createDummyParameters(maxNonRestArgs, maxArgsParameterSymbolNames, /* types */ undefined, minArgumentCount, /*inJs*/ false);
 
         if (someSigHasRestParameter) {
-            const anyArrayType = factory.createArrayTypeNode(factory.createKeywordTypeNode(SyntaxKind.AnyKeyword));
             const restParameter = factory.createParameterDeclaration(
                 /*decorators*/ undefined,
                 /*modifiers*/ undefined,
                 factory.createToken(SyntaxKind.DotDotDotToken),
                 maxArgsParameterSymbolNames[maxNonRestArgs] || "rest",
                 /*questionToken*/ maxNonRestArgs >= minArgumentCount ? factory.createToken(SyntaxKind.QuestionToken) : undefined,
-                anyArrayType,
+                factory.createArrayTypeNode(factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword)),
                 /*initializer*/ undefined);
             parameters.push(restParameter);
         }

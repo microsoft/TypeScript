@@ -171,7 +171,7 @@ namespace ts.codefix {
 
             const properties = arrayFrom(checker.getUnmatchedProperties(checker.getTypeAtLocation(parent), checker.getTypeAtLocation(param), /* requireOptionalProperties */ false, /* matchDiscriminantProperties */ false));
             if (!length(properties)) return undefined;
-            return { kind: InfoKind.ObjectLiteral, token: param.name, properties, indentation: 0, parentDeclaration: parent };
+            return { kind: InfoKind.ObjectLiteral, token: param.name, properties, parentDeclaration: parent };
         }
 
         if (!isMemberName(token)) return undefined;
@@ -179,7 +179,8 @@ namespace ts.codefix {
         if (isIdentifier(token) && hasInitializer(parent) && parent.initializer && isObjectLiteralExpression(parent.initializer)) {
             const properties = arrayFrom(checker.getUnmatchedProperties(checker.getTypeAtLocation(parent.initializer), checker.getTypeAtLocation(token), /* requireOptionalProperties */ false, /* matchDiscriminantProperties */ false));
             if (!length(properties)) return undefined;
-            return { kind: InfoKind.ObjectLiteral, token, properties, indentation: undefined, parentDeclaration: parent.initializer };
+
+            return { kind: InfoKind.ObjectLiteral, token, properties, parentDeclaration: parent.initializer };
         }
 
         if (isIdentifier(token) && isJsxOpeningLikeElement(token.parent)) {
@@ -235,6 +236,7 @@ namespace ts.codefix {
         if (enumDeclaration && !isPrivateIdentifier(token) && !isSourceFileFromLibrary(program, enumDeclaration.getSourceFile())) {
             return { kind: InfoKind.Enum, token, parentDeclaration: enumDeclaration };
         }
+
         return undefined;
     }
 

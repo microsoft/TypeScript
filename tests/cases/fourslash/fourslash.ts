@@ -846,14 +846,15 @@ declare namespace completion {
         SuggestedClassMembers = "14",
         GlobalsOrKeywords = "15",
         AutoImportSuggestions = "16",
-        JavascriptIdentifiers = "17",
-        DeprecatedLocalDeclarationPriority = "18",
-        DeprecatedLocationPriority = "19",
-        DeprecatedOptionalMember = "20",
-        DeprecatedMemberDeclaredBySpreadAssignment = "21",
-        DeprecatedSuggestedClassMembers = "22",
-        DeprecatedGlobalsOrKeywords = "23",
-        DeprecatedAutoImportSuggestions = "24"
+        ClassMemberSnippets = "17",
+        JavascriptIdentifiers = "18",
+        DeprecatedLocalDeclarationPriority = "19",
+        DeprecatedLocationPriority = "20",
+        DeprecatedOptionalMember = "21",
+        DeprecatedMemberDeclaredBySpreadAssignment = "22",
+        DeprecatedSuggestedClassMembers = "23",
+        DeprecatedGlobalsOrKeywords = "24",
+        DeprecatedAutoImportSuggestions = "25"
     }
     export const enum CompletionSource {
         ThisProperty = "ThisProperty/",
