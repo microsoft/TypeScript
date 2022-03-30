@@ -88,10 +88,11 @@ namespace ts.OrganizeImports {
     }
 
     function groupImportsByNewlineContiguous(sourceFile: SourceFile,importDecls: ImportDeclaration[]): ImportDeclaration[][] {
+        const scanner = createScanner(sourceFile.languageVersion, /*skipTrivia*/ false, sourceFile.languageVariant);
         const groupImports: ImportDeclaration[][] = [];
         let groupIndex = 0;
         for (const topLevelImportDecl of importDecls) {
-            if (isStartedNewGroup(sourceFile, topLevelImportDecl)) {
+            if (isNewGroup(sourceFile, topLevelImportDecl, scanner)) {
                 groupIndex++;
             }
 
@@ -107,11 +108,10 @@ namespace ts.OrganizeImports {
 
     // a new group is created if an import includes at least two new line
     // new line from multi-line comment doesn't count
-    function isStartedNewGroup(sourceFile: SourceFile, topLevelImportDecl: ImportDeclaration) {
+    function isNewGroup(sourceFile: SourceFile, topLevelImportDecl: ImportDeclaration, scanner: Scanner) {
         const startPos = topLevelImportDecl.getFullStart();
         const endPos = topLevelImportDecl.getStart();
-
-        const scanner = createScanner(sourceFile.languageVersion, /*skipTrivia*/ false, sourceFile.languageVariant, sourceFile.text, /*onError:*/ undefined, startPos);
+        scanner.setText(sourceFile.text, startPos, endPos - startPos);
 
         let numberOfNewLines = 0;
         while (scanner.getTokenPos() < endPos) {
