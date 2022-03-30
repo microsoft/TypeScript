@@ -5,19 +5,19 @@ type Correct = {
 >Correct : Symbol(Correct, Decl(discriminatedUnionTypes3.ts, 0, 0))
 
 	code: string
->code : Symbol(code, Decl(discriminatedUnionTypes3.ts, 2, 16))
+>code : Symbol(Correct.code, Decl(discriminatedUnionTypes3.ts, 2, 16))
 
 	property: true
->property : Symbol(property, Decl(discriminatedUnionTypes3.ts, 3, 13))
+>property : Symbol(Correct.property, Decl(discriminatedUnionTypes3.ts, 3, 13))
 
 	err: undefined
->err : Symbol(err, Decl(discriminatedUnionTypes3.ts, 4, 15))
+>err : Symbol(Correct.err, Decl(discriminatedUnionTypes3.ts, 4, 15))
 }
 type Err = {
 >Err : Symbol(Err, Decl(discriminatedUnionTypes3.ts, 6, 1))
 
 	err: `${string} is wrong!`
->err : Symbol(err, Decl(discriminatedUnionTypes3.ts, 7, 12))
+>err : Symbol(Err.err, Decl(discriminatedUnionTypes3.ts, 7, 12))
 }
 type SomeReturnType = Correct | Err;
 >SomeReturnType : Symbol(SomeReturnType, Decl(discriminatedUnionTypes3.ts, 9, 1))
@@ -36,7 +36,7 @@ if (example.err === undefined) {
 >undefined : Symbol(undefined)
 
 	example.property;  // true
->example.property : Symbol(property, Decl(discriminatedUnionTypes3.ts, 3, 13))
+>example.property : Symbol(Correct.property, Decl(discriminatedUnionTypes3.ts, 3, 13))
 >example : Symbol(example, Decl(discriminatedUnionTypes3.ts, 12, 5))
->property : Symbol(property, Decl(discriminatedUnionTypes3.ts, 3, 13))
+>property : Symbol(Correct.property, Decl(discriminatedUnionTypes3.ts, 3, 13))
 }

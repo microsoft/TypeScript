@@ -17,7 +17,7 @@ getResults2({data: []});
 
 type Result = { value: string };
 >Result : Symbol(Result, Decl(typePredicateStructuralMatch.ts, 6, 24))
->value : Symbol(value, Decl(typePredicateStructuralMatch.ts, 8, 15))
+>value : Symbol(Result.value, Decl(typePredicateStructuralMatch.ts, 8, 15))
 
 type Results = Result[];
 >Results : Symbol(Results, Decl(typePredicateStructuralMatch.ts, 8, 32))

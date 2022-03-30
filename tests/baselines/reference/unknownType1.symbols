@@ -93,7 +93,7 @@ type T35<T> = T extends unknown ? { x: T } : false;
 >T35 : Symbol(T35, Decl(unknownType1.ts, 32, 45))
 >T : Symbol(T, Decl(unknownType1.ts, 34, 9))
 >T : Symbol(T, Decl(unknownType1.ts, 34, 9))
->x : Symbol(x, Decl(unknownType1.ts, 34, 35))
+>x : Symbol(T37.x, Decl(unknownType1.ts, 34, 35))
 >T : Symbol(T, Decl(unknownType1.ts, 34, 9))
 
 type T36 = T35<string | number>;  // { x: string } | { x: number }

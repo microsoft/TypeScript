@@ -3,16 +3,16 @@ type A = {
 >A : Symbol(A, Decl(omitTypeHelperModifiers01.ts, 0, 0))
 
     a: number;
->a : Symbol(a, Decl(omitTypeHelperModifiers01.ts, 0, 10))
+>a : Symbol(A.a, Decl(omitTypeHelperModifiers01.ts, 0, 10))
 
     b?: string;
->b : Symbol(b, Decl(omitTypeHelperModifiers01.ts, 1, 14))
+>b : Symbol(A.b, Decl(omitTypeHelperModifiers01.ts, 1, 14))
 
     readonly c: boolean;
->c : Symbol(c, Decl(omitTypeHelperModifiers01.ts, 2, 15))
+>c : Symbol(A.c, Decl(omitTypeHelperModifiers01.ts, 2, 15))
 
     d: unknown;
->d : Symbol(d, Decl(omitTypeHelperModifiers01.ts, 3, 24))
+>d : Symbol(A.d, Decl(omitTypeHelperModifiers01.ts, 3, 24))
 
 };
 

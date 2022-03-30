@@ -36,7 +36,7 @@ interface I { x: I };
 
 type T = { x: T };
 >T : Symbol(T, Decl(noUnusedLocals_selfReference.ts, 12, 21))
->x : Symbol(x, Decl(noUnusedLocals_selfReference.ts, 13, 10))
+>x : Symbol(T.x, Decl(noUnusedLocals_selfReference.ts, 13, 10))
 >T : Symbol(T, Decl(noUnusedLocals_selfReference.ts, 12, 21))
 
 namespace N { N; }

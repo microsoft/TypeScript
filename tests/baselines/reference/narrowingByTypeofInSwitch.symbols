@@ -362,8 +362,8 @@ type L = (x: number) => string;
 
 type R = { x: string, y: number }
 >R : Symbol(R, Decl(narrowingByTypeofInSwitch.ts, 134, 31))
->x : Symbol(x, Decl(narrowingByTypeofInSwitch.ts, 135, 10))
->y : Symbol(y, Decl(narrowingByTypeofInSwitch.ts, 135, 21))
+>x : Symbol(R.x, Decl(narrowingByTypeofInSwitch.ts, 135, 10))
+>y : Symbol(R.y, Decl(narrowingByTypeofInSwitch.ts, 135, 21))
 
 function exhaustiveChecks(x: number | string | L | R): string {
 >exhaustiveChecks : Symbol(exhaustiveChecks, Decl(narrowingByTypeofInSwitch.ts, 135, 33))
@@ -386,9 +386,9 @@ function exhaustiveChecks(x: number | string | L | R): string {
 >x : Symbol(x, Decl(narrowingByTypeofInSwitch.ts, 137, 26))
 
         case 'object': return x.x;
->x.x : Symbol(x, Decl(narrowingByTypeofInSwitch.ts, 135, 10))
+>x.x : Symbol(R.x, Decl(narrowingByTypeofInSwitch.ts, 135, 10))
 >x : Symbol(x, Decl(narrowingByTypeofInSwitch.ts, 137, 26))
->x : Symbol(x, Decl(narrowingByTypeofInSwitch.ts, 135, 10))
+>x : Symbol(R.x, Decl(narrowingByTypeofInSwitch.ts, 135, 10))
     }
 }
 
@@ -416,10 +416,10 @@ function exhaustiveChecksGenerics<T extends L | R | number | string>(x: T): stri
 >L : Symbol(L, Decl(narrowingByTypeofInSwitch.ts, 132, 1))
 
         case 'object': return (x as R).x;            // Can't narrow generic
->(x as R).x : Symbol(x, Decl(narrowingByTypeofInSwitch.ts, 135, 10))
+>(x as R).x : Symbol(R.x, Decl(narrowingByTypeofInSwitch.ts, 135, 10))
 >x : Symbol(x, Decl(narrowingByTypeofInSwitch.ts, 146, 69))
 >R : Symbol(R, Decl(narrowingByTypeofInSwitch.ts, 134, 31))
->x : Symbol(x, Decl(narrowingByTypeofInSwitch.ts, 135, 10))
+>x : Symbol(R.x, Decl(narrowingByTypeofInSwitch.ts, 135, 10))
     }
 }
 
@@ -444,9 +444,9 @@ function multipleGeneric<X extends L, Y extends R>(xy: X | Y): [X, string] | [Y,
 
         case 'object': return [xy, xy.y];
 >xy : Symbol(xy, Decl(narrowingByTypeofInSwitch.ts, 155, 51))
->xy.y : Symbol(y, Decl(narrowingByTypeofInSwitch.ts, 135, 21))
+>xy.y : Symbol(R.y, Decl(narrowingByTypeofInSwitch.ts, 135, 21))
 >xy : Symbol(xy, Decl(narrowingByTypeofInSwitch.ts, 155, 51))
->y : Symbol(y, Decl(narrowingByTypeofInSwitch.ts, 135, 21))
+>y : Symbol(R.y, Decl(narrowingByTypeofInSwitch.ts, 135, 21))
 
         default: return assertNever(xy);
 >assertNever : Symbol(assertNever, Decl(narrowingByTypeofInSwitch.ts, 0, 0))
@@ -499,9 +499,9 @@ function multipleGenericExhaustive<X extends L, Y extends R>(xy: X | Y): [X, str
 
         case 'object': return [xy, xy.y];
 >xy : Symbol(xy, Decl(narrowingByTypeofInSwitch.ts, 171, 61))
->xy.y : Symbol(y, Decl(narrowingByTypeofInSwitch.ts, 135, 21))
+>xy.y : Symbol(R.y, Decl(narrowingByTypeofInSwitch.ts, 135, 21))
 >xy : Symbol(xy, Decl(narrowingByTypeofInSwitch.ts, 171, 61))
->y : Symbol(y, Decl(narrowingByTypeofInSwitch.ts, 135, 21))
+>y : Symbol(R.y, Decl(narrowingByTypeofInSwitch.ts, 135, 21))
 
         case 'function': return [xy, xy(42)];
 >xy : Symbol(xy, Decl(narrowingByTypeofInSwitch.ts, 171, 61))

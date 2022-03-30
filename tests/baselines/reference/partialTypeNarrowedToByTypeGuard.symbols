@@ -6,10 +6,10 @@ type User = {
 >User : Symbol(User, Decl(partialTypeNarrowedToByTypeGuard.ts, 0, 26))
 
     email: string;
->email : Symbol(email, Decl(partialTypeNarrowedToByTypeGuard.ts, 2, 13))
+>email : Symbol(User.email, Decl(partialTypeNarrowedToByTypeGuard.ts, 2, 13))
 
     name: string;
->name : Symbol(name, Decl(partialTypeNarrowedToByTypeGuard.ts, 3, 18))
+>name : Symbol(User.name, Decl(partialTypeNarrowedToByTypeGuard.ts, 3, 18))
 
 };
 

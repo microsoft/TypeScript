@@ -5,7 +5,7 @@ type UserArgs = {
 >UserArgs : Symbol(UserArgs, Decl(substitutionTypesInIndexedAccessTypes.ts, 0, 0))
 
   select?: boolean
->select : Symbol(select, Decl(substitutionTypesInIndexedAccessTypes.ts, 2, 17))
+>select : Symbol(UserArgs.select, Decl(substitutionTypesInIndexedAccessTypes.ts, 2, 17))
 
 };
 

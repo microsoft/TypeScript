@@ -24,7 +24,7 @@ type MyPromise<T> = {
 >T : Symbol(T, Decl(recursiveConditionalTypes.ts, 7, 15))
 
     then<U>(f: ((value: T) => U | PromiseLike<U>) | null | undefined): MyPromise<U>;
->then : Symbol(then, Decl(recursiveConditionalTypes.ts, 7, 21))
+>then : Symbol(MyPromise.then, Decl(recursiveConditionalTypes.ts, 7, 21))
 >U : Symbol(U, Decl(recursiveConditionalTypes.ts, 8, 9))
 >f : Symbol(f, Decl(recursiveConditionalTypes.ts, 8, 12))
 >value : Symbol(value, Decl(recursiveConditionalTypes.ts, 8, 17))
@@ -339,13 +339,13 @@ unbox({ value: { value: { get value() { return this; } }}});  // { readonly valu
 type Box1<T> = { value: T };
 >Box1 : Symbol(Box1, Decl(recursiveConditionalTypes.ts, 82, 60))
 >T : Symbol(T, Decl(recursiveConditionalTypes.ts, 86, 10))
->value : Symbol(value, Decl(recursiveConditionalTypes.ts, 86, 16))
+>value : Symbol(Box1.value, Decl(recursiveConditionalTypes.ts, 86, 16))
 >T : Symbol(T, Decl(recursiveConditionalTypes.ts, 86, 10))
 
 type Box2<T> = { value: T };
 >Box2 : Symbol(Box2, Decl(recursiveConditionalTypes.ts, 86, 28))
 >T : Symbol(T, Decl(recursiveConditionalTypes.ts, 87, 10))
->value : Symbol(value, Decl(recursiveConditionalTypes.ts, 87, 16))
+>value : Symbol(Box2.value, Decl(recursiveConditionalTypes.ts, 87, 16))
 >T : Symbol(T, Decl(recursiveConditionalTypes.ts, 87, 10))
 
 declare function foo<T>(x: Box1<Box1<T>>): T;
@@ -474,7 +474,7 @@ function f21<T extends number>(x: Grow1<[], T>, y: Grow2<[], T>) {
 type ParseSuccess<R extends string> = { rest: R };
 >ParseSuccess : Symbol(ParseSuccess, Decl(recursiveConditionalTypes.ts, 117, 1))
 >R : Symbol(R, Decl(recursiveConditionalTypes.ts, 121, 18))
->rest : Symbol(rest, Decl(recursiveConditionalTypes.ts, 121, 39))
+>rest : Symbol(ParseSuccess.rest, Decl(recursiveConditionalTypes.ts, 121, 39))
 >R : Symbol(R, Decl(recursiveConditionalTypes.ts, 121, 18))
 
 type ParseManyWhitespace<S extends string> =

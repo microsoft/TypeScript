@@ -19,7 +19,7 @@ type InstanceInterface<I> = {
 >I : Symbol(I, Decl(mixinOverMappedTypeNoCrash.ts, 4, 23))
 
     prototype: I
->prototype : Symbol(prototype, Decl(mixinOverMappedTypeNoCrash.ts, 5, 26))
+>prototype : Symbol(InstanceInterface.prototype, Decl(mixinOverMappedTypeNoCrash.ts, 5, 26))
 >I : Symbol(I, Decl(mixinOverMappedTypeNoCrash.ts, 4, 23))
 }
 

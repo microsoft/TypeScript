@@ -22,7 +22,7 @@ declare function combineReducers<S>(reducers: { [K in keyof S]: Reducer<S[K]> })
 
 type MyState = { combined: { foo: number } };
 >MyState : Symbol(MyState, Decl(genericFunctionInference2.ts, 3, 93))
->combined : Symbol(combined, Decl(genericFunctionInference2.ts, 5, 16))
+>combined : Symbol(MyState.combined, Decl(genericFunctionInference2.ts, 5, 16))
 >foo : Symbol(foo, Decl(genericFunctionInference2.ts, 5, 28))
 
 declare const foo: Reducer<MyState['combined']['foo']>;
@@ -68,7 +68,7 @@ declare function withH<T, U>(handlerCreators: HandleCreatorsFactory<T, U>): U;
 
 type Props = { out: number }
 >Props : Symbol(Props, Decl(genericFunctionInference2.ts, 18, 78))
->out : Symbol(out, Decl(genericFunctionInference2.ts, 20, 14))
+>out : Symbol(Props.out, Decl(genericFunctionInference2.ts, 20, 14))
 
 type HandleCreatorsFactory<T, U> = (initialProps: T) => { [P in keyof U]: (props: T) => U[P] };
 >HandleCreatorsFactory : Symbol(HandleCreatorsFactory, Decl(genericFunctionInference2.ts, 20, 28))

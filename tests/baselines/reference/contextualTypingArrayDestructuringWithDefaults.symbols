@@ -1,7 +1,7 @@
 === tests/cases/compiler/contextualTypingArrayDestructuringWithDefaults.ts ===
 type I = { a: "a" };
 >I : Symbol(I, Decl(contextualTypingArrayDestructuringWithDefaults.ts, 0, 0))
->a : Symbol(a, Decl(contextualTypingArrayDestructuringWithDefaults.ts, 0, 10))
+>a : Symbol(I.a, Decl(contextualTypingArrayDestructuringWithDefaults.ts, 0, 10))
 
 let [ c0 = {a: "a"} ]: [I?] = [];
 >c0 : Symbol(c0, Decl(contextualTypingArrayDestructuringWithDefaults.ts, 1, 5))

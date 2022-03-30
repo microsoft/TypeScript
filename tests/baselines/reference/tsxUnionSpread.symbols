@@ -8,12 +8,12 @@ namespace JSX {
 
 export type CatInfo = { type: 'Cat'; subType: string; };
 >CatInfo : Symbol(CatInfo, Decl(index.tsx, 2, 1))
->type : Symbol(type, Decl(index.tsx, 4, 23))
->subType : Symbol(subType, Decl(index.tsx, 4, 36))
+>type : Symbol(CatInfo.type, Decl(index.tsx, 4, 23))
+>subType : Symbol(CatInfo.subType, Decl(index.tsx, 4, 36))
 
 export type DogInfo = { type: 'Dog'; };
 >DogInfo : Symbol(DogInfo, Decl(index.tsx, 4, 56))
->type : Symbol(type, Decl(index.tsx, 5, 23))
+>type : Symbol(DogInfo.type, Decl(index.tsx, 5, 23))
 
 export type AnimalInfo = CatInfo | DogInfo;
 >AnimalInfo : Symbol(AnimalInfo, Decl(index.tsx, 5, 39))

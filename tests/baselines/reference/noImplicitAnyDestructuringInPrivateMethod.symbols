@@ -3,7 +3,7 @@ type Arg = {
 >Arg : Symbol(Arg, Decl(noImplicitAnyDestructuringInPrivateMethod.ts, 0, 0))
 
     a: number;
->a : Symbol(a, Decl(noImplicitAnyDestructuringInPrivateMethod.ts, 0, 12))
+>a : Symbol(Arg.a, Decl(noImplicitAnyDestructuringInPrivateMethod.ts, 0, 12))
 
 };
 export class Bar {

@@ -138,13 +138,13 @@ type Args1<T extends State> = {
 >State : Symbol(State, Decl(mappedTypes5.ts, 17, 1))
 
     readonly previous: Readonly<Partial<T>>;
->previous : Symbol(previous, Decl(mappedTypes5.ts, 25, 31))
+>previous : Symbol(Args1.previous, Decl(mappedTypes5.ts, 25, 31))
 >Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
 >Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(mappedTypes5.ts, 25, 11))
 
     readonly current: Readonly<Partial<T>>;
->current : Symbol(current, Decl(mappedTypes5.ts, 26, 44))
+>current : Symbol(Args1.current, Decl(mappedTypes5.ts, 26, 44))
 >Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
 >Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(mappedTypes5.ts, 25, 11))
@@ -157,13 +157,13 @@ type Args2<T extends State> = {
 >State : Symbol(State, Decl(mappedTypes5.ts, 17, 1))
 
     readonly previous: Partial<Readonly<T>>;
->previous : Symbol(previous, Decl(mappedTypes5.ts, 30, 31))
+>previous : Symbol(Args2.previous, Decl(mappedTypes5.ts, 30, 31))
 >Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
 >Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(mappedTypes5.ts, 30, 11))
 
     readonly current: Partial<Readonly<T>>;
->current : Symbol(current, Decl(mappedTypes5.ts, 31, 44))
+>current : Symbol(Args2.current, Decl(mappedTypes5.ts, 31, 44))
 >Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
 >Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(mappedTypes5.ts, 30, 11))
@@ -208,20 +208,20 @@ function doit<T extends State>() {
 
 type State2 = { foo: number, bar: string };
 >State2 : Symbol(State2, Decl(mappedTypes5.ts, 40, 1))
->foo : Symbol(foo, Decl(mappedTypes5.ts, 42, 15))
->bar : Symbol(bar, Decl(mappedTypes5.ts, 42, 28))
+>foo : Symbol(State2.foo, Decl(mappedTypes5.ts, 42, 15))
+>bar : Symbol(State2.bar, Decl(mappedTypes5.ts, 42, 28))
 
 type Args3 = {
 >Args3 : Symbol(Args3, Decl(mappedTypes5.ts, 42, 43))
 
     readonly previous: Readonly<Partial<State2>>;
->previous : Symbol(previous, Decl(mappedTypes5.ts, 44, 14))
+>previous : Symbol(Args3.previous, Decl(mappedTypes5.ts, 44, 14))
 >Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
 >Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
 >State2 : Symbol(State2, Decl(mappedTypes5.ts, 40, 1))
 
     readonly current: Readonly<Partial<State2>>;
->current : Symbol(current, Decl(mappedTypes5.ts, 45, 49))
+>current : Symbol(Args3.current, Decl(mappedTypes5.ts, 45, 49))
 >Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
 >Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
 >State2 : Symbol(State2, Decl(mappedTypes5.ts, 40, 1))
@@ -232,13 +232,13 @@ type Args4 = {
 >Args4 : Symbol(Args4, Decl(mappedTypes5.ts, 47, 2))
 
     readonly previous: Partial<Readonly<State2>>;
->previous : Symbol(previous, Decl(mappedTypes5.ts, 49, 14))
+>previous : Symbol(Args4.previous, Decl(mappedTypes5.ts, 49, 14))
 >Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
 >Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
 >State2 : Symbol(State2, Decl(mappedTypes5.ts, 40, 1))
 
     readonly current: Partial<Readonly<State2>>;
->current : Symbol(current, Decl(mappedTypes5.ts, 50, 49))
+>current : Symbol(Args4.current, Decl(mappedTypes5.ts, 50, 49))
 >Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
 >Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
 >State2 : Symbol(State2, Decl(mappedTypes5.ts, 40, 1))

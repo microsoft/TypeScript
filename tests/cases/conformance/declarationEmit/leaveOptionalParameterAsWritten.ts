@@ -19,4 +19,7 @@ declare global {
 
 // @Filename: c.ts
 type Foo = teams.calling.Foo;
-export const bar = (p?: Foo) => {}
+export const f = (p?: Foo) => {}
+export const o = {
+  p: undefined! as Foo
+};

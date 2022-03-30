@@ -7,6 +7,6 @@ export interface Bar {
 === tests/cases/compiler/usage.js ===
 /** @type {Bar} */
 export let bar;
->bar : import("tests/cases/compiler/interfaces").Bar
+>bar : Bar
 
 /** @typedef {import('./interfaces').Bar} Bar */

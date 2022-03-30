@@ -363,7 +363,7 @@ anyish = `aok`
 type AGen<T extends string | number> = {field: `a${T}`};
 >AGen : Symbol(AGen, Decl(templateLiteralTypesPatterns.ts, 148, 14))
 >T : Symbol(T, Decl(templateLiteralTypesPatterns.ts, 152, 10))
->field : Symbol(field, Decl(templateLiteralTypesPatterns.ts, 152, 40))
+>field : Symbol(AGen.field, Decl(templateLiteralTypesPatterns.ts, 152, 40))
 >T : Symbol(T, Decl(templateLiteralTypesPatterns.ts, 152, 10))
 
 const shouldWork1: AGen<string> = null as any as AGen<"yes">;

@@ -82,10 +82,10 @@ type Movie = {
 >Movie : Symbol(Movie, Decl(objectSpreadStrictNull.ts, 18, 1))
 
     title: string;
->title : Symbol(title, Decl(objectSpreadStrictNull.ts, 20, 14))
+>title : Symbol(Movie.title, Decl(objectSpreadStrictNull.ts, 20, 14))
 
     yearReleased: number;
->yearReleased : Symbol(yearReleased, Decl(objectSpreadStrictNull.ts, 21, 18))
+>yearReleased : Symbol(Movie.yearReleased, Decl(objectSpreadStrictNull.ts, 21, 18))
 }
 
 const m = { title: "The Matrix", yearReleased: 1999 };

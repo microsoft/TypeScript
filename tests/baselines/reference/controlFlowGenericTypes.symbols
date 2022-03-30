@@ -215,18 +215,18 @@ export function bounceAndTakeIfA<AB extends 'A' | 'B'>(value: AB): AB {
 
 type Common = { id: number };
 >Common : Symbol(Common, Decl(controlFlowGenericTypes.ts, 69, 1))
->id : Symbol(id, Decl(controlFlowGenericTypes.ts, 73, 15))
+>id : Symbol(Common.id, Decl(controlFlowGenericTypes.ts, 73, 15))
 
 type AA = { tag: 'A', id: number };
 >AA : Symbol(AA, Decl(controlFlowGenericTypes.ts, 73, 29))
->tag : Symbol(tag, Decl(controlFlowGenericTypes.ts, 74, 11))
->id : Symbol(id, Decl(controlFlowGenericTypes.ts, 74, 21))
+>tag : Symbol(AA.tag, Decl(controlFlowGenericTypes.ts, 74, 11))
+>id : Symbol(AA.id, Decl(controlFlowGenericTypes.ts, 74, 21))
 
 type BB = { tag: 'B', id: number, foo: number };
 >BB : Symbol(BB, Decl(controlFlowGenericTypes.ts, 74, 35))
->tag : Symbol(tag, Decl(controlFlowGenericTypes.ts, 75, 11))
->id : Symbol(id, Decl(controlFlowGenericTypes.ts, 75, 21))
->foo : Symbol(foo, Decl(controlFlowGenericTypes.ts, 75, 33))
+>tag : Symbol(BB.tag, Decl(controlFlowGenericTypes.ts, 75, 11))
+>id : Symbol(BB.id, Decl(controlFlowGenericTypes.ts, 75, 21))
+>foo : Symbol(BB.foo, Decl(controlFlowGenericTypes.ts, 75, 33))
 
 type MyUnion = AA | BB;
 >MyUnion : Symbol(MyUnion, Decl(controlFlowGenericTypes.ts, 75, 48))
@@ -245,9 +245,9 @@ const fn = (value: MyUnion) => {
 >value : Symbol(value, Decl(controlFlowGenericTypes.ts, 79, 12))
 
         value.foo;
->value.foo : Symbol(foo, Decl(controlFlowGenericTypes.ts, 75, 33))
+>value.foo : Symbol(BB.foo, Decl(controlFlowGenericTypes.ts, 75, 33))
 >value : Symbol(value, Decl(controlFlowGenericTypes.ts, 79, 12))
->foo : Symbol(foo, Decl(controlFlowGenericTypes.ts, 75, 33))
+>foo : Symbol(BB.foo, Decl(controlFlowGenericTypes.ts, 75, 33))
     }
     if (value.tag === 'B') {
 >value.tag : Symbol(tag, Decl(controlFlowGenericTypes.ts, 74, 11), Decl(controlFlowGenericTypes.ts, 75, 11))
@@ -255,9 +255,9 @@ const fn = (value: MyUnion) => {
 >tag : Symbol(tag, Decl(controlFlowGenericTypes.ts, 74, 11), Decl(controlFlowGenericTypes.ts, 75, 11))
 
         value.foo;
->value.foo : Symbol(foo, Decl(controlFlowGenericTypes.ts, 75, 33))
+>value.foo : Symbol(BB.foo, Decl(controlFlowGenericTypes.ts, 75, 33))
 >value : Symbol(value, Decl(controlFlowGenericTypes.ts, 79, 12))
->foo : Symbol(foo, Decl(controlFlowGenericTypes.ts, 75, 33))
+>foo : Symbol(BB.foo, Decl(controlFlowGenericTypes.ts, 75, 33))
     }
 };
 
@@ -276,9 +276,9 @@ const fn2 = <T extends MyUnion>(value: T): MyUnion => {
 >value : Symbol(value, Decl(controlFlowGenericTypes.ts, 89, 32))
 
         value.foo;
->value.foo : Symbol(foo, Decl(controlFlowGenericTypes.ts, 75, 33))
+>value.foo : Symbol(BB.foo, Decl(controlFlowGenericTypes.ts, 75, 33))
 >value : Symbol(value, Decl(controlFlowGenericTypes.ts, 89, 32))
->foo : Symbol(foo, Decl(controlFlowGenericTypes.ts, 75, 33))
+>foo : Symbol(BB.foo, Decl(controlFlowGenericTypes.ts, 75, 33))
     }
     if (value.tag === 'B') {
 >value.tag : Symbol(tag, Decl(controlFlowGenericTypes.ts, 74, 11), Decl(controlFlowGenericTypes.ts, 75, 11))
@@ -286,9 +286,9 @@ const fn2 = <T extends MyUnion>(value: T): MyUnion => {
 >tag : Symbol(tag, Decl(controlFlowGenericTypes.ts, 74, 11), Decl(controlFlowGenericTypes.ts, 75, 11))
 
         value.foo;
->value.foo : Symbol(foo, Decl(controlFlowGenericTypes.ts, 75, 33))
+>value.foo : Symbol(BB.foo, Decl(controlFlowGenericTypes.ts, 75, 33))
 >value : Symbol(value, Decl(controlFlowGenericTypes.ts, 89, 32))
->foo : Symbol(foo, Decl(controlFlowGenericTypes.ts, 75, 33))
+>foo : Symbol(BB.foo, Decl(controlFlowGenericTypes.ts, 75, 33))
     }
 };
 
@@ -298,16 +298,16 @@ type A1 = {
 >A1 : Symbol(A1, Decl(controlFlowGenericTypes.ts, 97, 2))
 
     testable: true
->testable : Symbol(testable, Decl(controlFlowGenericTypes.ts, 101, 11))
+>testable : Symbol(A1.testable, Decl(controlFlowGenericTypes.ts, 101, 11))
 
     doTest: () => void
->doTest : Symbol(doTest, Decl(controlFlowGenericTypes.ts, 102, 18))
+>doTest : Symbol(A1.doTest, Decl(controlFlowGenericTypes.ts, 102, 18))
 }
 type B1 = {
 >B1 : Symbol(B1, Decl(controlFlowGenericTypes.ts, 104, 1))
 
     testable: false
->testable : Symbol(testable, Decl(controlFlowGenericTypes.ts, 105, 11))
+>testable : Symbol(B1.testable, Decl(controlFlowGenericTypes.ts, 105, 11))
 
 };
 
@@ -329,9 +329,9 @@ function notWorking<T extends Union>(object: T) {
 >testable : Symbol(testable, Decl(controlFlowGenericTypes.ts, 101, 11), Decl(controlFlowGenericTypes.ts, 105, 11))
 
     object.doTest();
->object.doTest : Symbol(doTest, Decl(controlFlowGenericTypes.ts, 102, 18))
+>object.doTest : Symbol(A1.doTest, Decl(controlFlowGenericTypes.ts, 102, 18))
 >object : Symbol(object, Decl(controlFlowGenericTypes.ts, 111, 37))
->doTest : Symbol(doTest, Decl(controlFlowGenericTypes.ts, 102, 18))
+>doTest : Symbol(A1.doTest, Decl(controlFlowGenericTypes.ts, 102, 18))
 }
 
 // Repro from #42939

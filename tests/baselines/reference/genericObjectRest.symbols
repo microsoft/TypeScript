@@ -98,9 +98,9 @@ function f3<T, K1 extends keyof T, K2 extends keyof T>(obj: T, k1: K1, k2: K2) {
 
 type Item = { a: string, b: number, c: boolean };
 >Item : Symbol(Item, Decl(genericObjectRest.ts, 20, 1))
->a : Symbol(a, Decl(genericObjectRest.ts, 22, 13))
->b : Symbol(b, Decl(genericObjectRest.ts, 22, 24))
->c : Symbol(c, Decl(genericObjectRest.ts, 22, 35))
+>a : Symbol(Item.a, Decl(genericObjectRest.ts, 22, 13))
+>b : Symbol(Item.b, Decl(genericObjectRest.ts, 22, 24))
+>c : Symbol(Item.c, Decl(genericObjectRest.ts, 22, 35))
 
 function f4<K1 extends keyof Item, K2 extends keyof Item>(obj: Item, k1: K1, k2: K2) {
 >f4 : Symbol(f4, Decl(genericObjectRest.ts, 22, 49))

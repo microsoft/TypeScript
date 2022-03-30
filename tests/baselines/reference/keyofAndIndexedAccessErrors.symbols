@@ -447,8 +447,8 @@ type UndefinedKeys<T extends Record<string, any>> = {
 
 type MyType = {a: string, b: string | undefined}
 >MyType : Symbol(MyType, Decl(keyofAndIndexedAccessErrors.ts, 129, 2))
->a : Symbol(a, Decl(keyofAndIndexedAccessErrors.ts, 131, 15))
->b : Symbol(b, Decl(keyofAndIndexedAccessErrors.ts, 131, 25))
+>a : Symbol(MyType.a, Decl(keyofAndIndexedAccessErrors.ts, 131, 15))
+>b : Symbol(MyType.b, Decl(keyofAndIndexedAccessErrors.ts, 131, 25))
 
 type Result1 = UndefinedKeys<MyType>;
 >Result1 : Symbol(Result1, Decl(keyofAndIndexedAccessErrors.ts, 131, 48))

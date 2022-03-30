@@ -127,18 +127,18 @@ type A = {
 >A : Symbol(A, Decl(unionTypeReduction2.ts, 34, 1))
 
     f(): void;
->f : Symbol(f, Decl(unionTypeReduction2.ts, 36, 10))
+>f : Symbol(A.f, Decl(unionTypeReduction2.ts, 36, 10))
 }
 
 type B = {
 >B : Symbol(B, Decl(unionTypeReduction2.ts, 38, 1))
 
     f(x?: string): void;
->f : Symbol(f, Decl(unionTypeReduction2.ts, 40, 10))
+>f : Symbol(B.f, Decl(unionTypeReduction2.ts, 40, 10))
 >x : Symbol(x, Decl(unionTypeReduction2.ts, 41, 6))
 
     g(): void;
->g : Symbol(g, Decl(unionTypeReduction2.ts, 41, 24))
+>g : Symbol(B.g, Decl(unionTypeReduction2.ts, 41, 24))
 }
 
 function f11(a: A, b: B) {

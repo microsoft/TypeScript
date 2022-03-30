@@ -3,10 +3,10 @@ type A = {
 >A : Symbol(A, Decl(privateNameAndPropertySignature.ts, 0, 0))
 
     #foo: string;
->#foo : Symbol(#foo, Decl(privateNameAndPropertySignature.ts, 0, 10))
+>#foo : Symbol(A.#foo, Decl(privateNameAndPropertySignature.ts, 0, 10))
 
     #bar(): string;
->#bar : Symbol(#bar, Decl(privateNameAndPropertySignature.ts, 1, 17))
+>#bar : Symbol(A.#bar, Decl(privateNameAndPropertySignature.ts, 1, 17))
 }
 
 interface B {

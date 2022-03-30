@@ -3,7 +3,7 @@ export type Locale = {
 >Locale : Symbol(Locale, Decl(locale.d.ts, 0, 0))
 
     weekdays: {
->weekdays : Symbol(weekdays, Decl(locale.d.ts, 0, 22))
+>weekdays : Symbol(Locale.weekdays, Decl(locale.d.ts, 0, 22))
 
         shorthand: [string, string, string, string, string, string, string];
 >shorthand : Symbol(shorthand, Decl(locale.d.ts, 1, 15))
@@ -17,7 +17,7 @@ export type CustomLocale = {
 >CustomLocale : Symbol(CustomLocale, Decl(locale.d.ts, 5, 2))
 
     weekdays: {
->weekdays : Symbol(weekdays, Decl(locale.d.ts, 6, 28))
+>weekdays : Symbol(CustomLocale.weekdays, Decl(locale.d.ts, 6, 28))
 
         shorthand: [string, string, string, string, string, string, string];
 >shorthand : Symbol(shorthand, Decl(locale.d.ts, 7, 15))

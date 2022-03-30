@@ -48,15 +48,15 @@ export declare type T3 = {
 >T3 : Symbol(T3, Decl(module.ts, 14, 1))
 
     [c0]: number;
->[c0] : Symbol([c0], Decl(module.ts, 15, 26))
+>[c0] : Symbol(T3[c0], Decl(module.ts, 15, 26))
 >c0 : Symbol(c0, Decl(module.ts, 0, 12))
 
     [c1]: string;
->[c1] : Symbol([c1], Decl(module.ts, 16, 17))
+>[c1] : Symbol(T3[c1], Decl(module.ts, 16, 17))
 >c1 : Symbol(c1, Decl(module.ts, 1, 12))
 
     [s0]: boolean;
->[s0] : Symbol([s0], Decl(module.ts, 17, 17))
+>[s0] : Symbol(T3[s0], Decl(module.ts, 17, 17))
 >s0 : Symbol(s0, Decl(module.ts, 2, 12))
 
 };
@@ -139,19 +139,19 @@ namespace N {
 >T7 : Symbol(T7, Decl(main.ts, 19, 5))
 
         [N.c2]: number;
->[N.c2] : Symbol([N.c2], Decl(main.ts, 20, 30))
+>[N.c2] : Symbol(T7[N.c2], Decl(main.ts, 20, 30))
 >N.c2 : Symbol(c2, Decl(main.ts, 4, 16))
 >N : Symbol(N, Decl(main.ts, 1, 30))
 >c2 : Symbol(c2, Decl(main.ts, 4, 16))
 
         [N.c3]: string;
->[N.c3] : Symbol([N.c3], Decl(main.ts, 21, 23))
+>[N.c3] : Symbol(T7[N.c3], Decl(main.ts, 21, 23))
 >N.c3 : Symbol(c3, Decl(main.ts, 5, 16))
 >N : Symbol(N, Decl(main.ts, 1, 30))
 >c3 : Symbol(c3, Decl(main.ts, 5, 16))
 
         [N.s1]: boolean;
->[N.s1] : Symbol([N.s1], Decl(main.ts, 22, 23))
+>[N.s1] : Symbol(T7[N.s1], Decl(main.ts, 22, 23))
 >N.s1 : Symbol(s1, Decl(main.ts, 6, 16))
 >N : Symbol(N, Decl(main.ts, 1, 30))
 >s1 : Symbol(s1, Decl(main.ts, 6, 16))
@@ -209,15 +209,15 @@ declare type T11 = {
 >T11 : Symbol(T11, Decl(main.ts, 42, 1))
 
     [c4]: number;
->[c4] : Symbol([c4], Decl(main.ts, 43, 20))
+>[c4] : Symbol(T11[c4], Decl(main.ts, 43, 20))
 >c4 : Symbol(c4, Decl(main.ts, 27, 12))
 
     [c5]: string;
->[c5] : Symbol([c5], Decl(main.ts, 44, 17))
+>[c5] : Symbol(T11[c5], Decl(main.ts, 44, 17))
 >c5 : Symbol(c5, Decl(main.ts, 28, 12))
 
     [s2]: boolean;
->[s2] : Symbol([s2], Decl(main.ts, 45, 17))
+>[s2] : Symbol(T11[s2], Decl(main.ts, 45, 17))
 >s2 : Symbol(s2, Decl(main.ts, 29, 12))
 
 };
@@ -257,13 +257,13 @@ declare type T15 = {
 >T15 : Symbol(T15, Decl(main.ts, 60, 1))
 
     a: number;
->a : Symbol(a, Decl(main.ts, 61, 20))
+>a : Symbol(T15.a, Decl(main.ts, 61, 20))
 
     1: string;
->1 : Symbol(1, Decl(main.ts, 62, 14))
+>1 : Symbol(T15[1], Decl(main.ts, 62, 14))
 
     [s2]: boolean;
->[s2] : Symbol([s2], Decl(main.ts, 63, 14))
+>[s2] : Symbol(T15[s2], Decl(main.ts, 63, 14))
 >s2 : Symbol(s2, Decl(main.ts, 29, 12))
 
 };

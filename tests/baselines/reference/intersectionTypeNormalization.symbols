@@ -192,7 +192,7 @@ type ToString = {
 >ToString : Symbol(ToString, Decl(intersectionTypeNormalization.ts, 38, 10))
 
     toString(): string;
->toString : Symbol(toString, Decl(intersectionTypeNormalization.ts, 42, 17))
+>toString : Symbol(ToString.toString, Decl(intersectionTypeNormalization.ts, 42, 17))
 }
 
 type BoxedValue = { kind: 'int',    num: number }
@@ -311,7 +311,7 @@ type Foo = {
 >Foo : Symbol(Foo, Decl(intersectionTypeNormalization.ts, 88, 1))
 
     genreId: enums.Genre;
->genreId : Symbol(genreId, Decl(intersectionTypeNormalization.ts, 90, 12))
+>genreId : Symbol(Foo.genreId, Decl(intersectionTypeNormalization.ts, 90, 12))
 >enums : Symbol(enums, Decl(intersectionTypeNormalization.ts, 59, 1))
 >Genre : Symbol(enums.Genre, Decl(intersectionTypeNormalization.ts, 86, 5))
 
@@ -321,7 +321,7 @@ type Bar = {
 >Bar : Symbol(Bar, Decl(intersectionTypeNormalization.ts, 92, 2))
 
     genreId: enums.Genre;
->genreId : Symbol(genreId, Decl(intersectionTypeNormalization.ts, 94, 12))
+>genreId : Symbol(Bar.genreId, Decl(intersectionTypeNormalization.ts, 94, 12))
 >enums : Symbol(enums, Decl(intersectionTypeNormalization.ts, 59, 1))
 >Genre : Symbol(enums.Genre, Decl(intersectionTypeNormalization.ts, 86, 5))
 

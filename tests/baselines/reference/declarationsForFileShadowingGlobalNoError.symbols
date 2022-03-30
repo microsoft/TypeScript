@@ -1,7 +1,7 @@
 === tests/cases/compiler/dom.ts ===
 export type DOMNode = Node;
 >DOMNode : Symbol(DOMNode, Decl(dom.ts, 0, 0))
->Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>Node : Symbol(DOMNode, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
 
 === tests/cases/compiler/custom.ts ===
 export type Node = {};

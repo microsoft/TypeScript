@@ -571,10 +571,10 @@ type O = {
 >O : Symbol(O, Decl(exhaustiveSwitchStatements1.ts, 220, 1))
 
     a: number,
->a : Symbol(a, Decl(exhaustiveSwitchStatements1.ts, 224, 10))
+>a : Symbol(O.a, Decl(exhaustiveSwitchStatements1.ts, 224, 10))
 
     b: number
->b : Symbol(b, Decl(exhaustiveSwitchStatements1.ts, 225, 14))
+>b : Symbol(O.b, Decl(exhaustiveSwitchStatements1.ts, 225, 14))
 
 };
 type K = keyof O | 'c';

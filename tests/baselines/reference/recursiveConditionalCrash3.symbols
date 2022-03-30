@@ -14,11 +14,11 @@ export type CanBeExpanded<T extends object = object, D = string> = {
 >D : Symbol(D, Decl(recursiveConditionalCrash3.ts, 9, 52))
 
     value: T
->value : Symbol(value, Decl(recursiveConditionalCrash3.ts, 9, 68))
+>value : Symbol(CanBeExpanded.value, Decl(recursiveConditionalCrash3.ts, 9, 68))
 >T : Symbol(T, Decl(recursiveConditionalCrash3.ts, 9, 26))
 
     default: D
->default : Symbol(default, Decl(recursiveConditionalCrash3.ts, 10, 12))
+>default : Symbol(CanBeExpanded.default, Decl(recursiveConditionalCrash3.ts, 10, 12))
 >D : Symbol(D, Decl(recursiveConditionalCrash3.ts, 9, 52))
 }
 

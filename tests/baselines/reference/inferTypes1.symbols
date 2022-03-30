@@ -59,8 +59,8 @@ function f1(s: string) {
 >s : Symbol(s, Decl(inferTypes1.ts, 14, 12))
 
     return { a: 1, b: s };
->a : Symbol(a, Decl(inferTypes1.ts, 15, 12))
->b : Symbol(b, Decl(inferTypes1.ts, 15, 18))
+>a : Symbol(T14.a, Decl(inferTypes1.ts, 15, 12))
+>b : Symbol(T14.b, Decl(inferTypes1.ts, 15, 18))
 >s : Symbol(s, Decl(inferTypes1.ts, 14, 12))
 }
 
@@ -377,7 +377,7 @@ type T63<T> = T extends (infer A extends infer B ? infer C : infer D) ? string :
 type T70<T extends string> = { x: T };
 >T70 : Symbol(T70, Decl(inferTypes1.ts, 84, 88))
 >T : Symbol(T, Decl(inferTypes1.ts, 86, 9))
->x : Symbol(x, Decl(inferTypes1.ts, 86, 30))
+>x : Symbol(T70.x, Decl(inferTypes1.ts, 86, 30))
 >T : Symbol(T, Decl(inferTypes1.ts, 86, 9))
 
 type T71<T> = T extends T70<infer U> ? T70<U> : never;
@@ -392,7 +392,7 @@ type T71<T> = T extends T70<infer U> ? T70<U> : never;
 type T72<T extends number> = { y: T };
 >T72 : Symbol(T72, Decl(inferTypes1.ts, 87, 54))
 >T : Symbol(T, Decl(inferTypes1.ts, 89, 9))
->y : Symbol(y, Decl(inferTypes1.ts, 89, 30))
+>y : Symbol(T72.y, Decl(inferTypes1.ts, 89, 30))
 >T : Symbol(T, Decl(inferTypes1.ts, 89, 9))
 
 type T73<T> = T extends T72<infer U> ? T70<U> : never;  // Error
@@ -408,9 +408,9 @@ type T74<T extends number, U extends string> = { x: T, y: U };
 >T74 : Symbol(T74, Decl(inferTypes1.ts, 90, 54))
 >T : Symbol(T, Decl(inferTypes1.ts, 92, 9))
 >U : Symbol(U, Decl(inferTypes1.ts, 92, 26))
->x : Symbol(x, Decl(inferTypes1.ts, 92, 48))
+>x : Symbol(T74.x, Decl(inferTypes1.ts, 92, 48))
 >T : Symbol(T, Decl(inferTypes1.ts, 92, 9))
->y : Symbol(y, Decl(inferTypes1.ts, 92, 54))
+>y : Symbol(T74.y, Decl(inferTypes1.ts, 92, 54))
 >U : Symbol(U, Decl(inferTypes1.ts, 92, 26))
 
 type T75<T> = T extends T74<infer U, infer U> ? T70<U> | T72<U> | T74<U, U> : never;
@@ -434,7 +434,7 @@ type T76<T extends T[], U extends T> = { x: T };
 >T : Symbol(T, Decl(inferTypes1.ts, 95, 9))
 >U : Symbol(U, Decl(inferTypes1.ts, 95, 23))
 >T : Symbol(T, Decl(inferTypes1.ts, 95, 9))
->x : Symbol(x, Decl(inferTypes1.ts, 95, 40))
+>x : Symbol(T76.x, Decl(inferTypes1.ts, 95, 40))
 >T : Symbol(T, Decl(inferTypes1.ts, 95, 9))
 
 type T77<T> = T extends T76<infer X, infer Y> ? T76<X, Y> : never;
@@ -539,21 +539,21 @@ type Example = {
 >Example : Symbol(Example, Decl(inferTypes1.ts, 117, 21))
 
     str: "literalstring",
->str : Symbol(str, Decl(inferTypes1.ts, 119, 16))
+>str : Symbol(Example.str, Decl(inferTypes1.ts, 119, 16))
 
     fn: () => void,
->fn : Symbol(fn, Decl(inferTypes1.ts, 120, 25))
+>fn : Symbol(Example.fn, Decl(inferTypes1.ts, 120, 25))
 
     date: Date,
->date : Symbol(date, Decl(inferTypes1.ts, 121, 19))
+>date : Symbol(Example.date, Decl(inferTypes1.ts, 121, 19))
 >Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
 
     customClass: MyClass,
->customClass : Symbol(customClass, Decl(inferTypes1.ts, 122, 15))
+>customClass : Symbol(Example.customClass, Decl(inferTypes1.ts, 122, 15))
 >MyClass : Symbol(MyClass, Decl(inferTypes1.ts, 129, 1))
 
     obj: {
->obj : Symbol(obj, Decl(inferTypes1.ts, 123, 25))
+>obj : Symbol(Example.obj, Decl(inferTypes1.ts, 123, 25))
 
         prop: "property",
 >prop : Symbol(prop, Decl(inferTypes1.ts, 124, 10))

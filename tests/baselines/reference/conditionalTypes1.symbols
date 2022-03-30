@@ -124,8 +124,8 @@ type Options = { k: "a", a: number } | { k: "b", b: string } | { k: "c", c: bool
 >a : Symbol(a, Decl(conditionalTypes1.ts, 33, 24))
 >k : Symbol(k, Decl(conditionalTypes1.ts, 33, 40))
 >b : Symbol(b, Decl(conditionalTypes1.ts, 33, 48))
->k : Symbol(k, Decl(conditionalTypes1.ts, 33, 64))
->c : Symbol(c, Decl(conditionalTypes1.ts, 33, 72))
+>k : Symbol(T10.k, Decl(conditionalTypes1.ts, 33, 64))
+>c : Symbol(T10.c, Decl(conditionalTypes1.ts, 33, 72))
 
 type T10 = Exclude<Options, { k: "a" | "b" }>;  // { k: "c", c: boolean }
 >T10 : Symbol(T10, Decl(conditionalTypes1.ts, 33, 86))
@@ -254,13 +254,13 @@ type T23 = TypeName<{}>;  // "object"
 type KnockoutObservable<T> = { object: T };
 >KnockoutObservable : Symbol(KnockoutObservable, Decl(conditionalTypes1.ts, 66, 24))
 >T : Symbol(T, Decl(conditionalTypes1.ts, 68, 24))
->object : Symbol(object, Decl(conditionalTypes1.ts, 68, 30))
+>object : Symbol(KnockoutObservable.object, Decl(conditionalTypes1.ts, 68, 30))
 >T : Symbol(T, Decl(conditionalTypes1.ts, 68, 24))
 
 type KnockoutObservableArray<T> = { array: T };
 >KnockoutObservableArray : Symbol(KnockoutObservableArray, Decl(conditionalTypes1.ts, 68, 43))
 >T : Symbol(T, Decl(conditionalTypes1.ts, 69, 29))
->array : Symbol(array, Decl(conditionalTypes1.ts, 69, 35))
+>array : Symbol(KnockoutObservableArray.array, Decl(conditionalTypes1.ts, 69, 35))
 >T : Symbol(T, Decl(conditionalTypes1.ts, 69, 29))
 
 type KnockedOut<T> = T extends any[] ? KnockoutObservableArray<T[number]> : KnockoutObservable<T>;

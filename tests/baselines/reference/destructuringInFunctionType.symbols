@@ -25,7 +25,7 @@ type F1 = ([a, b, c]) => void;
 
 type T2 = ({ a });
 >T2 : Symbol(T2, Decl(destructuringInFunctionType.ts, 5, 30))
->a : Symbol(a, Decl(destructuringInFunctionType.ts, 7, 12))
+>a : Symbol(T2.a, Decl(destructuringInFunctionType.ts, 7, 12))
 
 type F2 = ({ a }) => void;
 >F2 : Symbol(F2, Decl(destructuringInFunctionType.ts, 7, 18))

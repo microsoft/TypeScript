@@ -324,10 +324,10 @@ type L = {
 >L : Symbol(L, Decl(uniqueSymbols.ts, 96, 84))
 
     readonly readonlyType: unique symbol;
->readonlyType : Symbol(readonlyType, Decl(uniqueSymbols.ts, 99, 10))
+>readonlyType : Symbol(L.readonlyType, Decl(uniqueSymbols.ts, 99, 10))
 
     nested: {
->nested : Symbol(nested, Decl(uniqueSymbols.ts, 100, 41))
+>nested : Symbol(L.nested, Decl(uniqueSymbols.ts, 100, 41))
 
         readonly readonlyNestedType: unique symbol;
 >readonlyNestedType : Symbol(readonlyNestedType, Decl(uniqueSymbols.ts, 101, 13))
@@ -339,54 +339,54 @@ declare const l: L;
 
 const constInitToLReadonlyType = l.readonlyType;
 >constInitToLReadonlyType : Symbol(constInitToLReadonlyType, Decl(uniqueSymbols.ts, 107, 5))
->l.readonlyType : Symbol(readonlyType, Decl(uniqueSymbols.ts, 99, 10))
+>l.readonlyType : Symbol(L.readonlyType, Decl(uniqueSymbols.ts, 99, 10))
 >l : Symbol(l, Decl(uniqueSymbols.ts, 105, 13))
->readonlyType : Symbol(readonlyType, Decl(uniqueSymbols.ts, 99, 10))
+>readonlyType : Symbol(L.readonlyType, Decl(uniqueSymbols.ts, 99, 10))
 
 const constInitToLReadonlyNestedType = l.nested.readonlyNestedType;
 >constInitToLReadonlyNestedType : Symbol(constInitToLReadonlyNestedType, Decl(uniqueSymbols.ts, 108, 5))
 >l.nested.readonlyNestedType : Symbol(readonlyNestedType, Decl(uniqueSymbols.ts, 101, 13))
->l.nested : Symbol(nested, Decl(uniqueSymbols.ts, 100, 41))
+>l.nested : Symbol(L.nested, Decl(uniqueSymbols.ts, 100, 41))
 >l : Symbol(l, Decl(uniqueSymbols.ts, 105, 13))
->nested : Symbol(nested, Decl(uniqueSymbols.ts, 100, 41))
+>nested : Symbol(L.nested, Decl(uniqueSymbols.ts, 100, 41))
 >readonlyNestedType : Symbol(readonlyNestedType, Decl(uniqueSymbols.ts, 101, 13))
 
 const constInitToLReadonlyTypeWithTypeQuery: typeof l.readonlyType = l.readonlyType;
 >constInitToLReadonlyTypeWithTypeQuery : Symbol(constInitToLReadonlyTypeWithTypeQuery, Decl(uniqueSymbols.ts, 109, 5))
->l.readonlyType : Symbol(readonlyType, Decl(uniqueSymbols.ts, 99, 10))
+>l.readonlyType : Symbol(L.readonlyType, Decl(uniqueSymbols.ts, 99, 10))
 >l : Symbol(l, Decl(uniqueSymbols.ts, 105, 13))
->readonlyType : Symbol(readonlyType, Decl(uniqueSymbols.ts, 99, 10))
->l.readonlyType : Symbol(readonlyType, Decl(uniqueSymbols.ts, 99, 10))
+>readonlyType : Symbol(L.readonlyType, Decl(uniqueSymbols.ts, 99, 10))
+>l.readonlyType : Symbol(L.readonlyType, Decl(uniqueSymbols.ts, 99, 10))
 >l : Symbol(l, Decl(uniqueSymbols.ts, 105, 13))
->readonlyType : Symbol(readonlyType, Decl(uniqueSymbols.ts, 99, 10))
+>readonlyType : Symbol(L.readonlyType, Decl(uniqueSymbols.ts, 99, 10))
 
 const constInitToLReadonlyNestedTypeWithTypeQuery: typeof l.nested.readonlyNestedType = l.nested.readonlyNestedType;
 >constInitToLReadonlyNestedTypeWithTypeQuery : Symbol(constInitToLReadonlyNestedTypeWithTypeQuery, Decl(uniqueSymbols.ts, 110, 5))
 >l.nested.readonlyNestedType : Symbol(readonlyNestedType, Decl(uniqueSymbols.ts, 101, 13))
->l.nested : Symbol(nested, Decl(uniqueSymbols.ts, 100, 41))
+>l.nested : Symbol(L.nested, Decl(uniqueSymbols.ts, 100, 41))
 >l : Symbol(l, Decl(uniqueSymbols.ts, 105, 13))
->nested : Symbol(nested, Decl(uniqueSymbols.ts, 100, 41))
+>nested : Symbol(L.nested, Decl(uniqueSymbols.ts, 100, 41))
 >readonlyNestedType : Symbol(readonlyNestedType, Decl(uniqueSymbols.ts, 101, 13))
 >l.nested.readonlyNestedType : Symbol(readonlyNestedType, Decl(uniqueSymbols.ts, 101, 13))
->l.nested : Symbol(nested, Decl(uniqueSymbols.ts, 100, 41))
+>l.nested : Symbol(L.nested, Decl(uniqueSymbols.ts, 100, 41))
 >l : Symbol(l, Decl(uniqueSymbols.ts, 105, 13))
->nested : Symbol(nested, Decl(uniqueSymbols.ts, 100, 41))
+>nested : Symbol(L.nested, Decl(uniqueSymbols.ts, 100, 41))
 >readonlyNestedType : Symbol(readonlyNestedType, Decl(uniqueSymbols.ts, 101, 13))
 
 const constInitToLReadonlyTypeWithIndexedAccess: L["readonlyType"] = l.readonlyType;
 >constInitToLReadonlyTypeWithIndexedAccess : Symbol(constInitToLReadonlyTypeWithIndexedAccess, Decl(uniqueSymbols.ts, 111, 5))
 >L : Symbol(L, Decl(uniqueSymbols.ts, 96, 84))
->l.readonlyType : Symbol(readonlyType, Decl(uniqueSymbols.ts, 99, 10))
+>l.readonlyType : Symbol(L.readonlyType, Decl(uniqueSymbols.ts, 99, 10))
 >l : Symbol(l, Decl(uniqueSymbols.ts, 105, 13))
->readonlyType : Symbol(readonlyType, Decl(uniqueSymbols.ts, 99, 10))
+>readonlyType : Symbol(L.readonlyType, Decl(uniqueSymbols.ts, 99, 10))
 
 const constInitToLReadonlyNestedTypeWithIndexedAccess: L["nested"]["readonlyNestedType"] = l.nested.readonlyNestedType;
 >constInitToLReadonlyNestedTypeWithIndexedAccess : Symbol(constInitToLReadonlyNestedTypeWithIndexedAccess, Decl(uniqueSymbols.ts, 112, 5))
 >L : Symbol(L, Decl(uniqueSymbols.ts, 96, 84))
 >l.nested.readonlyNestedType : Symbol(readonlyNestedType, Decl(uniqueSymbols.ts, 101, 13))
->l.nested : Symbol(nested, Decl(uniqueSymbols.ts, 100, 41))
+>l.nested : Symbol(L.nested, Decl(uniqueSymbols.ts, 100, 41))
 >l : Symbol(l, Decl(uniqueSymbols.ts, 105, 13))
->nested : Symbol(nested, Decl(uniqueSymbols.ts, 100, 41))
+>nested : Symbol(L.nested, Decl(uniqueSymbols.ts, 100, 41))
 >readonlyNestedType : Symbol(readonlyNestedType, Decl(uniqueSymbols.ts, 101, 13))
 
 // type argument inference

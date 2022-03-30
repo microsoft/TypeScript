@@ -601,7 +601,7 @@ type FooMethod = {
 >FooMethod : Symbol(FooMethod, Decl(dependentDestructuredVariables.ts, 225, 59))
 
   method(...args:
->method : Symbol(method, Decl(dependentDestructuredVariables.ts, 229, 18))
+>method : Symbol(FooMethod.method, Decl(dependentDestructuredVariables.ts, 229, 18))
 >args : Symbol(args, Decl(dependentDestructuredVariables.ts, 230, 9))
 
     [type: "str", cb: (e: string) => void] |
@@ -639,7 +639,7 @@ type FooAsyncMethod = {
 >FooAsyncMethod : Symbol(FooAsyncMethod, Decl(dependentDestructuredVariables.ts, 244, 2))
 
   method(...args:
->method : Symbol(method, Decl(dependentDestructuredVariables.ts, 246, 23))
+>method : Symbol(FooAsyncMethod.method, Decl(dependentDestructuredVariables.ts, 246, 23))
 >args : Symbol(args, Decl(dependentDestructuredVariables.ts, 247, 9))
 
     [type: "str", cb: (e: string) => void] |
@@ -678,7 +678,7 @@ type FooGenMethod = {
 >FooGenMethod : Symbol(FooGenMethod, Decl(dependentDestructuredVariables.ts, 261, 2))
 
   method(...args:
->method : Symbol(method, Decl(dependentDestructuredVariables.ts, 263, 21))
+>method : Symbol(FooGenMethod.method, Decl(dependentDestructuredVariables.ts, 263, 21))
 >args : Symbol(args, Decl(dependentDestructuredVariables.ts, 264, 9))
 
     [type: "str", cb: (e: string) => void] |
@@ -717,7 +717,7 @@ type FooAsyncGenMethod = {
 >FooAsyncGenMethod : Symbol(FooAsyncGenMethod, Decl(dependentDestructuredVariables.ts, 278, 2))
 
   method(...args:
->method : Symbol(method, Decl(dependentDestructuredVariables.ts, 280, 26))
+>method : Symbol(FooAsyncGenMethod.method, Decl(dependentDestructuredVariables.ts, 280, 26))
 >args : Symbol(args, Decl(dependentDestructuredVariables.ts, 281, 9))
 
     [type: "str", cb: (e: string) => void] |

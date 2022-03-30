@@ -124,9 +124,9 @@ let spreadFunc = { ...(function () { }) };
 
 type Header = { head: string, body: string, authToken: string }
 >Header : Symbol(Header, Decl(objectSpread.ts, 28, 42))
->head : Symbol(head, Decl(objectSpread.ts, 30, 15))
->body : Symbol(body, Decl(objectSpread.ts, 30, 29))
->authToken : Symbol(authToken, Decl(objectSpread.ts, 30, 43))
+>head : Symbol(Header.head, Decl(objectSpread.ts, 30, 15))
+>body : Symbol(Header.body, Decl(objectSpread.ts, 30, 29))
+>authToken : Symbol(Header.authToken, Decl(objectSpread.ts, 30, 43))
 
 function from16326(this: { header: Header }, header: Header, authToken: string): Header {
 >from16326 : Symbol(from16326, Decl(objectSpread.ts, 30, 63))

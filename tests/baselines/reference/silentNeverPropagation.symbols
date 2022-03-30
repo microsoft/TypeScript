@@ -6,7 +6,7 @@ type ModuleWithState<TState> = {
 >TState : Symbol(TState, Decl(silentNeverPropagation.ts, 2, 21))
 
     state: TState;
->state : Symbol(state, Decl(silentNeverPropagation.ts, 2, 32))
+>state : Symbol(ModuleWithState.state, Decl(silentNeverPropagation.ts, 2, 32))
 >TState : Symbol(TState, Decl(silentNeverPropagation.ts, 2, 21))
 
 };
@@ -15,7 +15,7 @@ type State = {
 >State : Symbol(State, Decl(silentNeverPropagation.ts, 4, 2))
 
     a: number;
->a : Symbol(a, Decl(silentNeverPropagation.ts, 6, 14))
+>a : Symbol(State.a, Decl(silentNeverPropagation.ts, 6, 14))
 
 };
 
@@ -23,7 +23,7 @@ type MoreState = {
 >MoreState : Symbol(MoreState, Decl(silentNeverPropagation.ts, 8, 2))
 
     z: string;
->z : Symbol(z, Decl(silentNeverPropagation.ts, 10, 18))
+>z : Symbol(MoreState.z, Decl(silentNeverPropagation.ts, 10, 18))
 
 };
 
@@ -65,17 +65,17 @@ const breaks = convert(
 
 breaks.state.a
 >breaks.state.a : Symbol(a, Decl(silentNeverPropagation.ts, 19, 18))
->breaks.state : Symbol(state, Decl(silentNeverPropagation.ts, 2, 32), Decl(silentNeverPropagation.ts, 2, 32))
+>breaks.state : Symbol(ModuleWithState.state, Decl(silentNeverPropagation.ts, 2, 32), Decl(silentNeverPropagation.ts, 2, 32))
 >breaks : Symbol(breaks, Decl(silentNeverPropagation.ts, 18, 5))
->state : Symbol(state, Decl(silentNeverPropagation.ts, 2, 32), Decl(silentNeverPropagation.ts, 2, 32))
+>state : Symbol(ModuleWithState.state, Decl(silentNeverPropagation.ts, 2, 32), Decl(silentNeverPropagation.ts, 2, 32))
 >a : Symbol(a, Decl(silentNeverPropagation.ts, 19, 18))
 
 breaks.state.z
->breaks.state.z : Symbol(z, Decl(silentNeverPropagation.ts, 10, 18))
->breaks.state : Symbol(state, Decl(silentNeverPropagation.ts, 2, 32), Decl(silentNeverPropagation.ts, 2, 32))
+>breaks.state.z : Symbol(MoreState.z, Decl(silentNeverPropagation.ts, 10, 18))
+>breaks.state : Symbol(ModuleWithState.state, Decl(silentNeverPropagation.ts, 2, 32), Decl(silentNeverPropagation.ts, 2, 32))
 >breaks : Symbol(breaks, Decl(silentNeverPropagation.ts, 18, 5))
->state : Symbol(state, Decl(silentNeverPropagation.ts, 2, 32), Decl(silentNeverPropagation.ts, 2, 32))
->z : Symbol(z, Decl(silentNeverPropagation.ts, 10, 18))
+>state : Symbol(ModuleWithState.state, Decl(silentNeverPropagation.ts, 2, 32), Decl(silentNeverPropagation.ts, 2, 32))
+>z : Symbol(MoreState.z, Decl(silentNeverPropagation.ts, 10, 18))
 
 breaks.foo()
 >breaks.foo : Symbol(foo, Decl(silentNeverPropagation.ts, 19, 29))

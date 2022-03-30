@@ -74,11 +74,11 @@ type Foo3<T> = {
 >T : Symbol(T, Decl(varianceMeasurement.ts, 26, 10))
 
   x: T;
->x : Symbol(x, Decl(varianceMeasurement.ts, 26, 16))
+>x : Symbol(Foo3.x, Decl(varianceMeasurement.ts, 26, 16))
 >T : Symbol(T, Decl(varianceMeasurement.ts, 26, 10))
 
   y: Foo3<(arg: T) => void>;
->y : Symbol(y, Decl(varianceMeasurement.ts, 27, 7))
+>y : Symbol(Foo3.y, Decl(varianceMeasurement.ts, 27, 7))
 >Foo3 : Symbol(Foo3, Decl(varianceMeasurement.ts, 21, 31))
 >arg : Symbol(arg, Decl(varianceMeasurement.ts, 28, 11))
 >T : Symbol(T, Decl(varianceMeasurement.ts, 26, 10))
@@ -105,11 +105,11 @@ type Foo4<T> = {
 >T : Symbol(T, Decl(varianceMeasurement.ts, 37, 10))
 
   x: T;
->x : Symbol(x, Decl(varianceMeasurement.ts, 37, 16))
+>x : Symbol(Foo4.x, Decl(varianceMeasurement.ts, 37, 16))
 >T : Symbol(T, Decl(varianceMeasurement.ts, 37, 10))
 
   y: { x: (arg: T) => void, y: Foo4<(arg: T) => void>; }
->y : Symbol(y, Decl(varianceMeasurement.ts, 38, 7))
+>y : Symbol(Foo4.y, Decl(varianceMeasurement.ts, 38, 7))
 >x : Symbol(x, Decl(varianceMeasurement.ts, 39, 6))
 >arg : Symbol(arg, Decl(varianceMeasurement.ts, 39, 11))
 >T : Symbol(T, Decl(varianceMeasurement.ts, 37, 10))

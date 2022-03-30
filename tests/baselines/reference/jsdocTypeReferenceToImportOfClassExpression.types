@@ -8,12 +8,12 @@ const MW = require("./MW");
 /** @typedef {number} Cictema */
 
 module.exports = class MC {
->module.exports = class MC {  watch() {    return new MW(this);  }} : typeof import("tests/cases/conformance/jsdoc/MC")
->module.exports : typeof import("tests/cases/conformance/jsdoc/MC")
->module : { exports: typeof import("tests/cases/conformance/jsdoc/MC"); }
->exports : typeof import("tests/cases/conformance/jsdoc/MC")
->class MC {  watch() {    return new MW(this);  }} : typeof import("tests/cases/conformance/jsdoc/MC")
->MC : typeof import("tests/cases/conformance/jsdoc/MC")
+>module.exports = class MC {  watch() {    return new MW(this);  }} : typeof MW.MC
+>module.exports : typeof MW.MC
+>module : { exports: typeof MW.MC; }
+>exports : typeof MW.MC
+>class MC {  watch() {    return new MW(this);  }} : typeof MW.MC
+>MC : typeof MW.MC
 
   watch() {
 >watch : () => MW
@@ -35,14 +35,14 @@ class MW {
    * @param {MC} compiler the compiler
    */
   constructor(compiler) {
->compiler : import("tests/cases/conformance/jsdoc/MC")
+>compiler : MC
 
     this.compiler = compiler;
->this.compiler = compiler : import("tests/cases/conformance/jsdoc/MC")
+>this.compiler = compiler : MC
 >this.compiler : any
 >this : this
 >compiler : any
->compiler : import("tests/cases/conformance/jsdoc/MC")
+>compiler : MC
   }
 }
 

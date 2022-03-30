@@ -54,7 +54,7 @@ type InteropObservable<T> = {
 >T : Symbol(T, Decl(symbolProperty61.ts, 20, 23))
 
     [Symbol.obs]: () => { subscribe(next: (val: T) => void): void }
->[Symbol.obs] : Symbol([Symbol.obs], Decl(symbolProperty61.ts, 20, 29))
+>[Symbol.obs] : Symbol(InteropObservable[Symbol.obs], Decl(symbolProperty61.ts, 20, 29))
 >Symbol.obs : Symbol(SymbolConstructor.obs, Decl(symbolProperty61.ts, 1, 31))
 >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >obs : Symbol(SymbolConstructor.obs, Decl(symbolProperty61.ts, 1, 31))

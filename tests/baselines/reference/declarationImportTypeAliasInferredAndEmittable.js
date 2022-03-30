@@ -52,7 +52,9 @@ declare class Conn {
 }
 export = Conn;
 //// [usage.d.ts]
+declare type Conn = import("./foo");
 export declare class Wrap {
     connItem: number;
-    constructor(c?: import("./foo"));
+    constructor(c?: Conn);
 }
+export {};

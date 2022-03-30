@@ -4,7 +4,7 @@ type Experiment<Name> = {
 >Name : Symbol(Name, Decl(other.ts, 0, 16))
 
     name: Name;
->name : Symbol(name, Decl(other.ts, 0, 25))
+>name : Symbol(Experiment.name, Decl(other.ts, 0, 25))
 >Name : Symbol(Name, Decl(other.ts, 0, 16))
 
 };

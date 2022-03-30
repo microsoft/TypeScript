@@ -34,10 +34,10 @@
 >T_HasGetSet : Symbol(T_HasGetSet, Decl(divergentAccessors1.ts, 13, 1))
 
         get foo(): number;
->foo : Symbol(foo, Decl(divergentAccessors1.ts, 14, 24), Decl(divergentAccessors1.ts, 15, 26))
+>foo : Symbol(T_HasGetSet.foo, Decl(divergentAccessors1.ts, 14, 24), Decl(divergentAccessors1.ts, 15, 26))
 
         set foo(v: number | string);
->foo : Symbol(foo, Decl(divergentAccessors1.ts, 14, 24), Decl(divergentAccessors1.ts, 15, 26))
+>foo : Symbol(T_HasGetSet.foo, Decl(divergentAccessors1.ts, 14, 24), Decl(divergentAccessors1.ts, 15, 26))
 >v : Symbol(v, Decl(divergentAccessors1.ts, 16, 16))
     }
     
@@ -46,14 +46,14 @@
 >T_HasGetSet : Symbol(T_HasGetSet, Decl(divergentAccessors1.ts, 13, 1))
 
     t_hgs.foo = "32";
->t_hgs.foo : Symbol(foo, Decl(divergentAccessors1.ts, 14, 24), Decl(divergentAccessors1.ts, 15, 26))
+>t_hgs.foo : Symbol(T_HasGetSet.foo, Decl(divergentAccessors1.ts, 14, 24), Decl(divergentAccessors1.ts, 15, 26))
 >t_hgs : Symbol(t_hgs, Decl(divergentAccessors1.ts, 19, 9))
->foo : Symbol(foo, Decl(divergentAccessors1.ts, 14, 24), Decl(divergentAccessors1.ts, 15, 26))
+>foo : Symbol(T_HasGetSet.foo, Decl(divergentAccessors1.ts, 14, 24), Decl(divergentAccessors1.ts, 15, 26))
 
     let r_t_hgs_foo: number = t_hgs.foo;
 >r_t_hgs_foo : Symbol(r_t_hgs_foo, Decl(divergentAccessors1.ts, 21, 7))
->t_hgs.foo : Symbol(foo, Decl(divergentAccessors1.ts, 14, 24), Decl(divergentAccessors1.ts, 15, 26))
+>t_hgs.foo : Symbol(T_HasGetSet.foo, Decl(divergentAccessors1.ts, 14, 24), Decl(divergentAccessors1.ts, 15, 26))
 >t_hgs : Symbol(t_hgs, Decl(divergentAccessors1.ts, 19, 9))
->foo : Symbol(foo, Decl(divergentAccessors1.ts, 14, 24), Decl(divergentAccessors1.ts, 15, 26))
+>foo : Symbol(T_HasGetSet.foo, Decl(divergentAccessors1.ts, 14, 24), Decl(divergentAccessors1.ts, 15, 26))
 }
 

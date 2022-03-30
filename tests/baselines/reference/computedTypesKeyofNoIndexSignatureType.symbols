@@ -55,8 +55,8 @@ type IndexObject = { [key: string]: unknown; };
 
 type FooBar = { foo: "hello"; bar: "world"; };
 >FooBar : Symbol(FooBar, Decl(computedTypesKeyofNoIndexSignatureType.ts, 11, 47))
->foo : Symbol(foo, Decl(computedTypesKeyofNoIndexSignatureType.ts, 12, 15))
->bar : Symbol(bar, Decl(computedTypesKeyofNoIndexSignatureType.ts, 12, 29))
+>foo : Symbol(FooBar.foo, Decl(computedTypesKeyofNoIndexSignatureType.ts, 12, 15))
+>bar : Symbol(FooBar.bar, Decl(computedTypesKeyofNoIndexSignatureType.ts, 12, 29))
 
 type WithIndex = Compute<FooBar & IndexObject>;   // { [x: string]: {}; foo: "hello"; bar: "world"; } <-- OK
 >WithIndex : Symbol(WithIndex, Decl(computedTypesKeyofNoIndexSignatureType.ts, 12, 46))

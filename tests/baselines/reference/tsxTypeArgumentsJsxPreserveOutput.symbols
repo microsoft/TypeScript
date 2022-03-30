@@ -4,7 +4,7 @@ import React = require('react');
 
 type TypeProps = { foo?: boolean; };
 >TypeProps : Symbol(TypeProps, Decl(foo.tsx, 0, 32))
->foo : Symbol(foo, Decl(foo.tsx, 2, 18))
+>foo : Symbol(TypeProps.foo, Decl(foo.tsx, 2, 18))
 
 interface InterfaceProps { foo?: boolean; }
 >InterfaceProps : Symbol(InterfaceProps, Decl(foo.tsx, 2, 36))

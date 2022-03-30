@@ -23,20 +23,20 @@ type LiteralType = {
 >LiteralType : Symbol(LiteralType, Decl(reverseMappedTypeAssignableToIndex.ts, 2, 64))
 
 	first: "first";
->first : Symbol(first, Decl(reverseMappedTypeAssignableToIndex.ts, 6, 20))
+>first : Symbol(LiteralType.first, Decl(reverseMappedTypeAssignableToIndex.ts, 6, 20))
 
 	second: "second";
->second : Symbol(second, Decl(reverseMappedTypeAssignableToIndex.ts, 7, 16))
+>second : Symbol(LiteralType.second, Decl(reverseMappedTypeAssignableToIndex.ts, 7, 16))
 }
 type MappedLiteralType = {
 >MappedLiteralType : Symbol(MappedLiteralType, Decl(reverseMappedTypeAssignableToIndex.ts, 9, 1))
 
 	first: { name: "first" },
->first : Symbol(first, Decl(reverseMappedTypeAssignableToIndex.ts, 10, 26))
+>first : Symbol(MappedLiteralType.first, Decl(reverseMappedTypeAssignableToIndex.ts, 10, 26))
 >name : Symbol(name, Decl(reverseMappedTypeAssignableToIndex.ts, 11, 9))
 
 	second: { name: "second" },
->second : Symbol(second, Decl(reverseMappedTypeAssignableToIndex.ts, 11, 26))
+>second : Symbol(MappedLiteralType.second, Decl(reverseMappedTypeAssignableToIndex.ts, 11, 26))
 >name : Symbol(name, Decl(reverseMappedTypeAssignableToIndex.ts, 12, 10))
 
 };

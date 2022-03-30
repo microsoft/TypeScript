@@ -4,13 +4,13 @@
 type Foo<A> = { type: "foo", (): A[] };
 >Foo : Symbol(Foo, Decl(discriminatedUnionInference.ts, 0, 0))
 >A : Symbol(A, Decl(discriminatedUnionInference.ts, 2, 9))
->type : Symbol(type, Decl(discriminatedUnionInference.ts, 2, 15))
+>type : Symbol(Foo.type, Decl(discriminatedUnionInference.ts, 2, 15))
 >A : Symbol(A, Decl(discriminatedUnionInference.ts, 2, 9))
 
 type Bar<A> = { type: "bar", (): A };
 >Bar : Symbol(Bar, Decl(discriminatedUnionInference.ts, 2, 39))
 >A : Symbol(A, Decl(discriminatedUnionInference.ts, 3, 9))
->type : Symbol(type, Decl(discriminatedUnionInference.ts, 3, 15))
+>type : Symbol(Bar.type, Decl(discriminatedUnionInference.ts, 3, 15))
 >A : Symbol(A, Decl(discriminatedUnionInference.ts, 3, 9))
 
 type FooBar<A> = Foo<A> | Bar<A>;

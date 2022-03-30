@@ -5,7 +5,7 @@ type A = {
 >A : Symbol(A, Decl(functionCallOnConstrainedTypeVariable.ts, 0, 0))
 
   a: (x: number) => string
->a : Symbol(a, Decl(functionCallOnConstrainedTypeVariable.ts, 2, 10))
+>a : Symbol(A.a, Decl(functionCallOnConstrainedTypeVariable.ts, 2, 10))
 >x : Symbol(x, Decl(functionCallOnConstrainedTypeVariable.ts, 3, 6))
 
 };
@@ -13,7 +13,7 @@ type B = {
 >B : Symbol(B, Decl(functionCallOnConstrainedTypeVariable.ts, 4, 2))
 
   a: (x: boolean) => string
->a : Symbol(a, Decl(functionCallOnConstrainedTypeVariable.ts, 5, 10))
+>a : Symbol(B.a, Decl(functionCallOnConstrainedTypeVariable.ts, 5, 10))
 >x : Symbol(x, Decl(functionCallOnConstrainedTypeVariable.ts, 6, 6))
 
 };

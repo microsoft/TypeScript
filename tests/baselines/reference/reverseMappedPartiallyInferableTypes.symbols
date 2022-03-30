@@ -36,20 +36,20 @@ export type PropOptions<T> = {
 >T : Symbol(T, Decl(reverseMappedPartiallyInferableTypes.ts, 11, 24))
 
     type: PropType<T>;
->type : Symbol(type, Decl(reverseMappedPartiallyInferableTypes.ts, 11, 30))
+>type : Symbol(PropValidator.type, Decl(reverseMappedPartiallyInferableTypes.ts, 11, 30))
 >PropType : Symbol(PropType, Decl(reverseMappedPartiallyInferableTypes.ts, 2, 31))
 >T : Symbol(T, Decl(reverseMappedPartiallyInferableTypes.ts, 11, 24))
 
     value?: PropDefaultValue<T>,
->value : Symbol(value, Decl(reverseMappedPartiallyInferableTypes.ts, 12, 22))
+>value : Symbol(PropValidator.value, Decl(reverseMappedPartiallyInferableTypes.ts, 12, 22))
 >PropDefaultValue : Symbol(PropDefaultValue, Decl(reverseMappedPartiallyInferableTypes.ts, 3, 34))
 >T : Symbol(T, Decl(reverseMappedPartiallyInferableTypes.ts, 11, 24))
 
     required?: boolean;
->required : Symbol(required, Decl(reverseMappedPartiallyInferableTypes.ts, 14, 32))
+>required : Symbol(PropValidator.required, Decl(reverseMappedPartiallyInferableTypes.ts, 14, 32))
 
     validator?: PropValidatorFunction<T>;
->validator : Symbol(validator, Decl(reverseMappedPartiallyInferableTypes.ts, 15, 23))
+>validator : Symbol(PropValidator.validator, Decl(reverseMappedPartiallyInferableTypes.ts, 15, 23))
 >PropValidatorFunction : Symbol(PropValidatorFunction, Decl(reverseMappedPartiallyInferableTypes.ts, 4, 36))
 >T : Symbol(T, Decl(reverseMappedPartiallyInferableTypes.ts, 11, 24))
 }
@@ -149,18 +149,18 @@ r.notResolved
 >notResolved : Symbol(notResolved, Decl(reverseMappedPartiallyInferableTypes.ts, 32, 12))
 
 r.explicit.required
->r.explicit.required : Symbol(required, Decl(reverseMappedPartiallyInferableTypes.ts, 14, 32))
+>r.explicit.required : Symbol(PropValidator.required, Decl(reverseMappedPartiallyInferableTypes.ts, 14, 32))
 >r.explicit : Symbol(explicit, Decl(reverseMappedPartiallyInferableTypes.ts, 38, 10))
 >r : Symbol(r, Decl(reverseMappedPartiallyInferableTypes.ts, 31, 5))
 >explicit : Symbol(explicit, Decl(reverseMappedPartiallyInferableTypes.ts, 38, 10))
->required : Symbol(required, Decl(reverseMappedPartiallyInferableTypes.ts, 14, 32))
+>required : Symbol(PropValidator.required, Decl(reverseMappedPartiallyInferableTypes.ts, 14, 32))
 
 r.notResolved.required
->r.notResolved.required : Symbol(required, Decl(reverseMappedPartiallyInferableTypes.ts, 14, 32))
+>r.notResolved.required : Symbol(PropValidator.required, Decl(reverseMappedPartiallyInferableTypes.ts, 14, 32))
 >r.notResolved : Symbol(notResolved, Decl(reverseMappedPartiallyInferableTypes.ts, 32, 12))
 >r : Symbol(r, Decl(reverseMappedPartiallyInferableTypes.ts, 31, 5))
 >notResolved : Symbol(notResolved, Decl(reverseMappedPartiallyInferableTypes.ts, 32, 12))
->required : Symbol(required, Decl(reverseMappedPartiallyInferableTypes.ts, 14, 32))
+>required : Symbol(PropValidator.required, Decl(reverseMappedPartiallyInferableTypes.ts, 14, 32))
 
 // Modified repro from #30505
 
@@ -169,11 +169,11 @@ type Box<T> = {
 >T : Symbol(T, Decl(reverseMappedPartiallyInferableTypes.ts, 55, 9))
 
     contents?: T;
->contents : Symbol(contents, Decl(reverseMappedPartiallyInferableTypes.ts, 55, 15))
+>contents : Symbol(Box.contents, Decl(reverseMappedPartiallyInferableTypes.ts, 55, 15))
 >T : Symbol(T, Decl(reverseMappedPartiallyInferableTypes.ts, 55, 9))
 
     contains?(content: T): boolean;
->contains : Symbol(contains, Decl(reverseMappedPartiallyInferableTypes.ts, 56, 17))
+>contains : Symbol(Box.contains, Decl(reverseMappedPartiallyInferableTypes.ts, 56, 17))
 >content : Symbol(content, Decl(reverseMappedPartiallyInferableTypes.ts, 57, 14))
 >T : Symbol(T, Decl(reverseMappedPartiallyInferableTypes.ts, 55, 9))
 

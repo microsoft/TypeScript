@@ -6,7 +6,7 @@ declare module "@ts-bug/a" {
 >AText : Symbol(AText, Decl(index.d.ts, 0, 28))
 
       value: string;
->value : Symbol(value, Decl(index.d.ts, 1, 25))
+>value : Symbol(AText.value, Decl(index.d.ts, 1, 25))
 
     };
     export function a(text: string): AText;

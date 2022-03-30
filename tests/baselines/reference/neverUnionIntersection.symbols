@@ -31,7 +31,7 @@ type T10 = null & never;
 
 type T11 = { a: string } | never;
 >T11 : Symbol(T11, Decl(neverUnionIntersection.ts, 9, 24))
->a : Symbol(a, Decl(neverUnionIntersection.ts, 10, 12))
+>a : Symbol(T11.a, Decl(neverUnionIntersection.ts, 10, 12))
 
 type T12 = { a: string } & never;
 >T12 : Symbol(T12, Decl(neverUnionIntersection.ts, 10, 33))

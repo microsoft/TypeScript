@@ -98,8 +98,8 @@ enum Nums {
 }
 type TestNums = { 0: number, 1: number }
 >TestNums : Symbol(TestNums, Decl(objectLiteralEnumPropertyNames.ts, 32, 1))
->0 : Symbol(0, Decl(objectLiteralEnumPropertyNames.ts, 33, 17))
->1 : Symbol(1, Decl(objectLiteralEnumPropertyNames.ts, 33, 28))
+>0 : Symbol(TestNums[0], Decl(objectLiteralEnumPropertyNames.ts, 33, 17))
+>1 : Symbol(TestNums[1], Decl(objectLiteralEnumPropertyNames.ts, 33, 28))
 
 const n: TestNums = {
 >n : Symbol(n, Decl(objectLiteralEnumPropertyNames.ts, 34, 5))

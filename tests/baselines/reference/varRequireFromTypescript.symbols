@@ -28,9 +28,9 @@ function f(greatest, wrap) {
 >wrap : Symbol(wrap, Decl(use.js, 12, 20))
 
     greatest.day
->greatest.day : Symbol(day, Decl(ex.d.ts, 0, 24))
+>greatest.day : Symbol(ex.Greatest.day, Decl(ex.d.ts, 0, 24))
 >greatest : Symbol(greatest, Decl(use.js, 12, 11))
->day : Symbol(day, Decl(ex.d.ts, 0, 24))
+>day : Symbol(ex.Greatest.day, Decl(ex.d.ts, 0, 24))
 
     wrap.n
 >wrap.n : Symbol(ex.Crunch.n, Decl(ex.d.ts, 1, 21))
@@ -41,7 +41,7 @@ function f(greatest, wrap) {
 === tests/cases/conformance/salsa/ex.d.ts ===
 export type Greatest = { day: 1 }
 >Greatest : Symbol(Greatest, Decl(ex.d.ts, 0, 0))
->day : Symbol(day, Decl(ex.d.ts, 0, 24))
+>day : Symbol(Greatest.day, Decl(ex.d.ts, 0, 24))
 
 export class Crunch {
 >Crunch : Symbol(Crunch, Decl(ex.d.ts, 0, 33))

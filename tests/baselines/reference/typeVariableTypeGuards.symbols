@@ -107,7 +107,7 @@ type Item = {
 
     (): string;
     x: string;
->x : Symbol(x, Decl(typeVariableTypeGuards.ts, 42, 15))
+>x : Symbol(Item.x, Decl(typeVariableTypeGuards.ts, 42, 15))
 }
 
 function f1<T extends Item | undefined>(obj: T) {
@@ -121,13 +121,13 @@ function f1<T extends Item | undefined>(obj: T) {
 >obj : Symbol(obj, Decl(typeVariableTypeGuards.ts, 46, 40))
 
         obj.x;
->obj.x : Symbol(x, Decl(typeVariableTypeGuards.ts, 42, 15))
+>obj.x : Symbol(Item.x, Decl(typeVariableTypeGuards.ts, 42, 15))
 >obj : Symbol(obj, Decl(typeVariableTypeGuards.ts, 46, 40))
->x : Symbol(x, Decl(typeVariableTypeGuards.ts, 42, 15))
+>x : Symbol(Item.x, Decl(typeVariableTypeGuards.ts, 42, 15))
 
         obj["x"];
 >obj : Symbol(obj, Decl(typeVariableTypeGuards.ts, 46, 40))
->"x" : Symbol(x, Decl(typeVariableTypeGuards.ts, 42, 15))
+>"x" : Symbol(Item.x, Decl(typeVariableTypeGuards.ts, 42, 15))
 
         obj();
 >obj : Symbol(obj, Decl(typeVariableTypeGuards.ts, 46, 40))
@@ -145,13 +145,13 @@ function f2<T extends Item | undefined>(obj: T | undefined) {
 >obj : Symbol(obj, Decl(typeVariableTypeGuards.ts, 54, 40))
 
         obj.x;
->obj.x : Symbol(x, Decl(typeVariableTypeGuards.ts, 42, 15))
+>obj.x : Symbol(Item.x, Decl(typeVariableTypeGuards.ts, 42, 15))
 >obj : Symbol(obj, Decl(typeVariableTypeGuards.ts, 54, 40))
->x : Symbol(x, Decl(typeVariableTypeGuards.ts, 42, 15))
+>x : Symbol(Item.x, Decl(typeVariableTypeGuards.ts, 42, 15))
 
         obj["x"];
 >obj : Symbol(obj, Decl(typeVariableTypeGuards.ts, 54, 40))
->"x" : Symbol(x, Decl(typeVariableTypeGuards.ts, 42, 15))
+>"x" : Symbol(Item.x, Decl(typeVariableTypeGuards.ts, 42, 15))
 
         obj();
 >obj : Symbol(obj, Decl(typeVariableTypeGuards.ts, 54, 40))
@@ -169,13 +169,13 @@ function f3<T extends Item | undefined>(obj: T | null) {
 >obj : Symbol(obj, Decl(typeVariableTypeGuards.ts, 62, 40))
 
         obj.x;
->obj.x : Symbol(x, Decl(typeVariableTypeGuards.ts, 42, 15))
+>obj.x : Symbol(Item.x, Decl(typeVariableTypeGuards.ts, 42, 15))
 >obj : Symbol(obj, Decl(typeVariableTypeGuards.ts, 62, 40))
->x : Symbol(x, Decl(typeVariableTypeGuards.ts, 42, 15))
+>x : Symbol(Item.x, Decl(typeVariableTypeGuards.ts, 42, 15))
 
         obj["x"];
 >obj : Symbol(obj, Decl(typeVariableTypeGuards.ts, 62, 40))
->"x" : Symbol(x, Decl(typeVariableTypeGuards.ts, 42, 15))
+>"x" : Symbol(Item.x, Decl(typeVariableTypeGuards.ts, 42, 15))
 
         obj();
 >obj : Symbol(obj, Decl(typeVariableTypeGuards.ts, 62, 40))

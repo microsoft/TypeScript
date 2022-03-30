@@ -130,11 +130,11 @@ export type ObjectTypeVisibility = {
 >ObjectTypeVisibility : Symbol(ObjectTypeVisibility, Decl(dynamicNamesErrors.ts, 46, 1))
 
     [x]: number;
->[x] : Symbol([x], Decl(dynamicNamesErrors.ts, 48, 36))
+>[x] : Symbol(ObjectTypeVisibility[x], Decl(dynamicNamesErrors.ts, 48, 36))
 >x : Symbol(x, Decl(dynamicNamesErrors.ts, 26, 5))
 
     [y](): number;
->[y] : Symbol([y], Decl(dynamicNamesErrors.ts, 49, 16))
+>[y] : Symbol(ObjectTypeVisibility[y], Decl(dynamicNamesErrors.ts, 49, 16))
 >y : Symbol(y, Decl(dynamicNamesErrors.ts, 27, 5))
 
 };

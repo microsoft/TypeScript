@@ -8,7 +8,7 @@ type CounterProps = {
 >CounterProps : Symbol(CounterProps, Decl(jsxFragmentFactoryNoUnusedLocals.tsx, 1, 47))
 
     count?: number
->count : Symbol(count, Decl(jsxFragmentFactoryNoUnusedLocals.tsx, 3, 21))
+>count : Symbol(CounterProps.count, Decl(jsxFragmentFactoryNoUnusedLocals.tsx, 3, 21))
 }
 
 export function Counter({ count = 0 }: CounterProps) {

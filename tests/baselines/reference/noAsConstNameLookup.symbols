@@ -3,7 +3,7 @@
 
 type Store = { a: 123 }
 >Store : Symbol(Store, Decl(noAsConstNameLookup.ts, 0, 0))
->a : Symbol(a, Decl(noAsConstNameLookup.ts, 2, 14))
+>a : Symbol(Store.a, Decl(noAsConstNameLookup.ts, 2, 14))
 
 export type Cleaner = <W extends Store>(runner: FeatureRunner<W>) => Promise<any>
 >Cleaner : Symbol(Cleaner, Decl(noAsConstNameLookup.ts, 2, 23))

@@ -175,11 +175,11 @@ function f12(x: string | (() => string) | undefined) {
 
 type Foo = { foo: string };
 >Foo : Symbol(Foo, Decl(conditionalTypes2.ts, 55, 1))
->foo : Symbol(foo, Decl(conditionalTypes2.ts, 57, 12))
+>foo : Symbol(Foo.foo, Decl(conditionalTypes2.ts, 57, 12))
 
 type Bar = { bar: string };
 >Bar : Symbol(Bar, Decl(conditionalTypes2.ts, 57, 27))
->bar : Symbol(bar, Decl(conditionalTypes2.ts, 58, 12))
+>bar : Symbol(Bar.bar, Decl(conditionalTypes2.ts, 58, 12))
 
 declare function fooBar(x: { foo: string, bar: string }): void;
 >fooBar : Symbol(fooBar, Decl(conditionalTypes2.ts, 58, 27))
@@ -589,9 +589,9 @@ type Product<A extends Union, B> = { f1: A, f2: B};
 >A : Symbol(A, Decl(conditionalTypes2.ts, 159, 13))
 >Union : Symbol(Union, Decl(conditionalTypes2.ts, 154, 36))
 >B : Symbol(B, Decl(conditionalTypes2.ts, 159, 29))
->f1 : Symbol(f1, Decl(conditionalTypes2.ts, 159, 36))
+>f1 : Symbol(Product.f1, Decl(conditionalTypes2.ts, 159, 36))
 >A : Symbol(A, Decl(conditionalTypes2.ts, 159, 13))
->f2 : Symbol(f2, Decl(conditionalTypes2.ts, 159, 43))
+>f2 : Symbol(Product.f2, Decl(conditionalTypes2.ts, 159, 43))
 >B : Symbol(B, Decl(conditionalTypes2.ts, 159, 29))
 
 type ProductUnion = Product<'a', 0> | Product<'b', 1>;
@@ -771,7 +771,7 @@ declare type IResponse<T> = {
 >T : Symbol(T, Decl(conditionalTypes2.ts, 219, 23))
 
 	sendValue(name: keyof GetAllPropertiesOfType<T, string>): void;
->sendValue : Symbol(sendValue, Decl(conditionalTypes2.ts, 219, 29))
+>sendValue : Symbol(IResponse.sendValue, Decl(conditionalTypes2.ts, 219, 29))
 >name : Symbol(name, Decl(conditionalTypes2.ts, 220, 11))
 >GetAllPropertiesOfType : Symbol(GetAllPropertiesOfType, Decl(conditionalTypes2.ts, 225, 28))
 >T : Symbol(T, Decl(conditionalTypes2.ts, 219, 23))

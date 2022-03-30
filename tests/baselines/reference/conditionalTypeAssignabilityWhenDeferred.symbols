@@ -270,7 +270,7 @@ function testAssignabilityToConditionalType<T>() {
 type Wrapped<T> = { ___secret: T };
 >Wrapped : Symbol(Wrapped, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 79, 1))
 >T : Symbol(T, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 81, 13))
->___secret : Symbol(___secret, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 81, 19))
+>___secret : Symbol(Wrapped.___secret, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 81, 19))
 >T : Symbol(T, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 81, 13))
 
 type Unwrap<T> = T extends Wrapped<infer U> ? U : T;

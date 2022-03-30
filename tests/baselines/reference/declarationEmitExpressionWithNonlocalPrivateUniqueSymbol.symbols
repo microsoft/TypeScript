@@ -1,7 +1,7 @@
 === tests/cases/compiler/a.ts ===
 type AX = { readonly A: unique symbol };
 >AX : Symbol(AX, Decl(a.ts, 0, 0))
->A : Symbol(A, Decl(a.ts, 0, 11))
+>A : Symbol(AX.A, Decl(a.ts, 0, 11))
 
 export const A: AX = 0 as any;
 >A : Symbol(A, Decl(a.ts, 1, 12))

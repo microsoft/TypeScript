@@ -475,7 +475,7 @@ namespace n2 {
 >BivariantHack : Symbol(BivariantHack, Decl(strictFunctionTypesErrors.ts, 149, 14))
 >Input : Symbol(Input, Decl(strictFunctionTypesErrors.ts, 150, 23))
 >Output : Symbol(Output, Decl(strictFunctionTypesErrors.ts, 150, 29))
->foo : Symbol(foo, Decl(strictFunctionTypesErrors.ts, 150, 41))
+>foo : Symbol(BivariantHack, Decl(strictFunctionTypesErrors.ts, 150, 41))
 >x : Symbol(x, Decl(strictFunctionTypesErrors.ts, 150, 46))
 >Input : Symbol(Input, Decl(strictFunctionTypesErrors.ts, 150, 23))
 >Output : Symbol(Output, Decl(strictFunctionTypesErrors.ts, 150, 29))

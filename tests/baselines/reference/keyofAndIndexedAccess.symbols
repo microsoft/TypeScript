@@ -1142,10 +1142,10 @@ type S2 = {
 >S2 : Symbol(S2, Decl(keyofAndIndexedAccess.ts, 294, 1))
 
     a: string;
->a : Symbol(a, Decl(keyofAndIndexedAccess.ts, 296, 11))
+>a : Symbol(S2.a, Decl(keyofAndIndexedAccess.ts, 296, 11))
 
     b: string;
->b : Symbol(b, Decl(keyofAndIndexedAccess.ts, 297, 14))
+>b : Symbol(S2.b, Decl(keyofAndIndexedAccess.ts, 297, 14))
 
 };
 
@@ -1435,12 +1435,12 @@ type Thing = {
 >Thing : Symbol(Thing, Decl(keyofAndIndexedAccess.ts, 371, 1))
 
     a: { x: number, y: string },
->a : Symbol(a, Decl(keyofAndIndexedAccess.ts, 373, 14))
+>a : Symbol(Thing.a, Decl(keyofAndIndexedAccess.ts, 373, 14))
 >x : Symbol(x, Decl(keyofAndIndexedAccess.ts, 374, 8))
 >y : Symbol(y, Decl(keyofAndIndexedAccess.ts, 374, 19))
 
     b: boolean
->b : Symbol(b, Decl(keyofAndIndexedAccess.ts, 374, 32))
+>b : Symbol(Thing.b, Decl(keyofAndIndexedAccess.ts, 374, 32))
 
 };
 
@@ -1665,13 +1665,13 @@ type MethodDescriptor = {
 >MethodDescriptor : Symbol(MethodDescriptor, Decl(keyofAndIndexedAccess.ts, 442, 1))
 
 	name: string;
->name : Symbol(name, Decl(keyofAndIndexedAccess.ts, 446, 25))
+>name : Symbol(MethodDescriptor.name, Decl(keyofAndIndexedAccess.ts, 446, 25))
 
 	args: any[];
->args : Symbol(args, Decl(keyofAndIndexedAccess.ts, 447, 14))
+>args : Symbol(MethodDescriptor.args, Decl(keyofAndIndexedAccess.ts, 447, 14))
 
 	returnValue: any;
->returnValue : Symbol(returnValue, Decl(keyofAndIndexedAccess.ts, 448, 13))
+>returnValue : Symbol(MethodDescriptor.returnValue, Decl(keyofAndIndexedAccess.ts, 448, 13))
 }
 
 declare function dispatchMethod<M extends MethodDescriptor>(name: M['name'], args: M['args']): M['returnValue'];
@@ -1688,13 +1688,13 @@ type SomeMethodDescriptor = {
 >SomeMethodDescriptor : Symbol(SomeMethodDescriptor, Decl(keyofAndIndexedAccess.ts, 452, 112))
 
 	name: "someMethod";
->name : Symbol(name, Decl(keyofAndIndexedAccess.ts, 454, 29))
+>name : Symbol(SomeMethodDescriptor.name, Decl(keyofAndIndexedAccess.ts, 454, 29))
 
 	args: [string, number];
->args : Symbol(args, Decl(keyofAndIndexedAccess.ts, 455, 20))
+>args : Symbol(SomeMethodDescriptor.args, Decl(keyofAndIndexedAccess.ts, 455, 20))
 
 	returnValue: string[];
->returnValue : Symbol(returnValue, Decl(keyofAndIndexedAccess.ts, 456, 24))
+>returnValue : Symbol(SomeMethodDescriptor.returnValue, Decl(keyofAndIndexedAccess.ts, 456, 24))
 }
 
 let result = dispatchMethod<SomeMethodDescriptor>("someMethod", ["hello", 35]);
@@ -1733,7 +1733,7 @@ type Handler<T> = {
 >T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 473, 13))
 
     onChange: (name: keyof T) => void;
->onChange : Symbol(onChange, Decl(keyofAndIndexedAccess.ts, 473, 19))
+>onChange : Symbol(Handler.onChange, Decl(keyofAndIndexedAccess.ts, 473, 19))
 >name : Symbol(name, Decl(keyofAndIndexedAccess.ts, 474, 15))
 >T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 473, 13))
 
@@ -1748,9 +1748,9 @@ function onChangeGenericFunction<T>(handler: Handler<T & {preset: number}>) {
 >preset : Symbol(preset, Decl(keyofAndIndexedAccess.ts, 477, 58))
 
     handler.onChange('preset')
->handler.onChange : Symbol(onChange, Decl(keyofAndIndexedAccess.ts, 473, 19))
+>handler.onChange : Symbol(Handler.onChange, Decl(keyofAndIndexedAccess.ts, 473, 19))
 >handler : Symbol(handler, Decl(keyofAndIndexedAccess.ts, 477, 36))
->onChange : Symbol(onChange, Decl(keyofAndIndexedAccess.ts, 473, 19))
+>onChange : Symbol(Handler.onChange, Decl(keyofAndIndexedAccess.ts, 473, 19))
 }
 
 // Repro from #13285

@@ -175,7 +175,7 @@ type AN = { a: string } | { c: string }
 
 type BN = { b: string }
 >BN : Symbol(BN, Decl(excessPropertyCheckWithUnions.ts, 58, 39))
->b : Symbol(b, Decl(excessPropertyCheckWithUnions.ts, 59, 11))
+>b : Symbol(BN.b, Decl(excessPropertyCheckWithUnions.ts, 59, 11))
 
 type AB = { kind: "A", n: AN } | { kind: "B", n: BN }
 >AB : Symbol(AB, Decl(excessPropertyCheckWithUnions.ts, 59, 23))
@@ -224,14 +224,14 @@ const abac: AB = {
 // Excess property checks must match all discriminable properties
 type Button = { tag: 'button'; type?: 'submit'; };
 >Button : Symbol(Button, Decl(excessPropertyCheckWithUnions.ts, 74, 1))
->tag : Symbol(tag, Decl(excessPropertyCheckWithUnions.ts, 77, 15))
->type : Symbol(type, Decl(excessPropertyCheckWithUnions.ts, 77, 30))
+>tag : Symbol(Button.tag, Decl(excessPropertyCheckWithUnions.ts, 77, 15))
+>type : Symbol(Button.type, Decl(excessPropertyCheckWithUnions.ts, 77, 30))
 
 type Anchor = { tag: 'a'; type?: string; href: string };
 >Anchor : Symbol(Anchor, Decl(excessPropertyCheckWithUnions.ts, 77, 50))
->tag : Symbol(tag, Decl(excessPropertyCheckWithUnions.ts, 78, 15))
->type : Symbol(type, Decl(excessPropertyCheckWithUnions.ts, 78, 25))
->href : Symbol(href, Decl(excessPropertyCheckWithUnions.ts, 78, 40))
+>tag : Symbol(Anchor.tag, Decl(excessPropertyCheckWithUnions.ts, 78, 15))
+>type : Symbol(Anchor.type, Decl(excessPropertyCheckWithUnions.ts, 78, 25))
+>href : Symbol(Anchor.href, Decl(excessPropertyCheckWithUnions.ts, 78, 40))
 
 type Union = Button | Anchor;
 >Union : Symbol(Union, Decl(excessPropertyCheckWithUnions.ts, 78, 56))

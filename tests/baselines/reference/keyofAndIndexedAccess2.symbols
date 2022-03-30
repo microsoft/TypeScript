@@ -182,8 +182,8 @@ function f4<K extends string>(a: { [key: string]: number }[K], b: number) {
 
 type Item = { a: string, b: number };
 >Item : Symbol(Item, Decl(keyofAndIndexedAccess2.ts, 44, 1))
->a : Symbol(a, Decl(keyofAndIndexedAccess2.ts, 46, 13))
->b : Symbol(b, Decl(keyofAndIndexedAccess2.ts, 46, 24))
+>a : Symbol(Item.a, Decl(keyofAndIndexedAccess2.ts, 46, 13))
+>b : Symbol(Item.b, Decl(keyofAndIndexedAccess2.ts, 46, 24))
 
 function f10<T extends Item, K extends keyof T>(obj: T, k1: string, k2: keyof Item, k3: keyof T, k4: K) {
 >f10 : Symbol(f10, Decl(keyofAndIndexedAccess2.ts, 46, 37))

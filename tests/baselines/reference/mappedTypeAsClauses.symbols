@@ -25,9 +25,9 @@ type PropDef<K extends keyof any, T> = { name: K, type: T };
 >PropDef : Symbol(PropDef, Decl(mappedTypeAsClauses.ts, 3, 70))
 >K : Symbol(K, Decl(mappedTypeAsClauses.ts, 7, 13))
 >T : Symbol(T, Decl(mappedTypeAsClauses.ts, 7, 33))
->name : Symbol(name, Decl(mappedTypeAsClauses.ts, 7, 40))
+>name : Symbol(PropDef.name, Decl(mappedTypeAsClauses.ts, 7, 40))
 >K : Symbol(K, Decl(mappedTypeAsClauses.ts, 7, 13))
->type : Symbol(type, Decl(mappedTypeAsClauses.ts, 7, 49))
+>type : Symbol(PropDef.type, Decl(mappedTypeAsClauses.ts, 7, 49))
 >T : Symbol(T, Decl(mappedTypeAsClauses.ts, 7, 33))
 
 type TypeFromDefs<T extends PropDef<keyof any, any>> = { [P in T as P['name']]: P['type'] };
@@ -147,8 +147,8 @@ type LazyPerson = Lazyify<Person>;
 
 type Example = {foo: string, bar: number};
 >Example : Symbol(Example, Decl(mappedTypeAsClauses.ts, 42, 34))
->foo : Symbol(foo, Decl(mappedTypeAsClauses.ts, 46, 16))
->bar : Symbol(bar, Decl(mappedTypeAsClauses.ts, 46, 28))
+>foo : Symbol(Example.foo, Decl(mappedTypeAsClauses.ts, 46, 16))
+>bar : Symbol(Example.bar, Decl(mappedTypeAsClauses.ts, 46, 28))
 
 type PickByValueType<T, U> = {
 >PickByValueType : Symbol(PickByValueType, Decl(mappedTypeAsClauses.ts, 46, 42))
@@ -328,7 +328,7 @@ type Task = {
 >Task : Symbol(Task, Decl(mappedTypeAsClauses.ts, 98, 85))
 
   isDone: boolean;
->isDone : Symbol(isDone, Decl(mappedTypeAsClauses.ts, 100, 13))
+>isDone : Symbol(Task.isDone, Decl(mappedTypeAsClauses.ts, 100, 13))
 
 };
 
@@ -336,7 +336,7 @@ type Schema = {
 >Schema : Symbol(Schema, Decl(mappedTypeAsClauses.ts, 102, 2))
 
   root: {
->root : Symbol(root, Decl(mappedTypeAsClauses.ts, 104, 15))
+>root : Symbol(Schema.root, Decl(mappedTypeAsClauses.ts, 104, 15))
 
     title: string;
 >title : Symbol(title, Decl(mappedTypeAsClauses.ts, 105, 9))
@@ -346,7 +346,7 @@ type Schema = {
 >Task : Symbol(Task, Decl(mappedTypeAsClauses.ts, 98, 85))
   }
   Task: Task;
->Task : Symbol(Task, Decl(mappedTypeAsClauses.ts, 108, 3))
+>Task : Symbol(Schema.Task, Decl(mappedTypeAsClauses.ts, 108, 3))
 >Task : Symbol(Task, Decl(mappedTypeAsClauses.ts, 98, 85))
 
 };
@@ -409,9 +409,9 @@ f("a");  // Error, should allow only "b"
 
 type NameMap = { 'a': 'x', 'b': 'y', 'c': 'z' };
 >NameMap : Symbol(NameMap, Decl(mappedTypeAsClauses.ts, 129, 7))
->'a' : Symbol('a', Decl(mappedTypeAsClauses.ts, 131, 16))
->'b' : Symbol('b', Decl(mappedTypeAsClauses.ts, 131, 26))
->'c' : Symbol('c', Decl(mappedTypeAsClauses.ts, 131, 36))
+>'a' : Symbol(NameMap['a'], Decl(mappedTypeAsClauses.ts, 131, 16))
+>'b' : Symbol(NameMap['b'], Decl(mappedTypeAsClauses.ts, 131, 26))
+>'c' : Symbol(NameMap['c'], Decl(mappedTypeAsClauses.ts, 131, 36))
 
 // Distributive, will be simplified
 

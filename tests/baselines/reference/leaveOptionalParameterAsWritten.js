@@ -15,7 +15,11 @@ declare global {
 
 //// [c.ts]
 type Foo = teams.calling.Foo;
-export const bar = (p?: Foo) => {}
+export const f = (p?: Foo) => {}
+export const o = {
+  p: undefined! as Foo
+};
+
 
 
 
@@ -33,5 +37,8 @@ declare global {
 }
 //// [c.d.ts]
 declare type Foo = teams.calling.Foo;
-export declare const bar: (p?: Foo) => void;
+export declare const f: (p?: Foo) => void;
+export declare const o: {
+    p: Foo;
+};
 export {};

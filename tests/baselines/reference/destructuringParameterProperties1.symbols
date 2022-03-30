@@ -25,9 +25,9 @@ class C2 {
 
 type ObjType1 = { x: number; y: string; z: boolean }
 >ObjType1 : Symbol(ObjType1, Decl(destructuringParameterProperties1.ts, 10, 1))
->x : Symbol(x, Decl(destructuringParameterProperties1.ts, 12, 17))
->y : Symbol(y, Decl(destructuringParameterProperties1.ts, 12, 28))
->z : Symbol(z, Decl(destructuringParameterProperties1.ts, 12, 39))
+>x : Symbol(ObjType1.x, Decl(destructuringParameterProperties1.ts, 12, 17))
+>y : Symbol(ObjType1.y, Decl(destructuringParameterProperties1.ts, 12, 28))
+>z : Symbol(ObjType1.z, Decl(destructuringParameterProperties1.ts, 12, 39))
 
 class C3 {
 >C3 : Symbol(C3, Decl(destructuringParameterProperties1.ts, 12, 52))

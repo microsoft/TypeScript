@@ -54,15 +54,15 @@ function boxify<T>(obj: T): Boxified<T> {
 
 type A = { a: string };
 >A : Symbol(A, Decl(mappedTypes4.ts, 16, 1))
->a : Symbol(a, Decl(mappedTypes4.ts, 18, 10))
+>a : Symbol(A.a, Decl(mappedTypes4.ts, 18, 10))
 
 type B = { b: string };
 >B : Symbol(B, Decl(mappedTypes4.ts, 18, 23))
->b : Symbol(b, Decl(mappedTypes4.ts, 19, 10))
+>b : Symbol(B.b, Decl(mappedTypes4.ts, 19, 10))
 
 type C = { c: string };
 >C : Symbol(C, Decl(mappedTypes4.ts, 19, 23))
->c : Symbol(c, Decl(mappedTypes4.ts, 20, 10))
+>c : Symbol(C.c, Decl(mappedTypes4.ts, 20, 10))
 
 function f1(x: A | B | C | undefined) {
 >f1 : Symbol(f1, Decl(mappedTypes4.ts, 20, 23))
@@ -158,15 +158,15 @@ type Foo = {
 >Foo : Symbol(Foo, Decl(mappedTypes4.ts, 43, 2))
 
     x: number;
->x : Symbol(x, Decl(mappedTypes4.ts, 45, 12))
+>x : Symbol(Foo.x, Decl(mappedTypes4.ts, 45, 12))
 
     y: { a: string, b: number };
->y : Symbol(y, Decl(mappedTypes4.ts, 46, 14))
+>y : Symbol(Foo.y, Decl(mappedTypes4.ts, 46, 14))
 >a : Symbol(a, Decl(mappedTypes4.ts, 47, 8))
 >b : Symbol(b, Decl(mappedTypes4.ts, 47, 19))
 
     z: boolean;
->z : Symbol(z, Decl(mappedTypes4.ts, 47, 32))
+>z : Symbol(Foo.z, Decl(mappedTypes4.ts, 47, 32))
 
 };
 
@@ -174,15 +174,15 @@ type DeepReadonlyFoo = {
 >DeepReadonlyFoo : Symbol(DeepReadonlyFoo, Decl(mappedTypes4.ts, 49, 2))
 
     readonly x: number;
->x : Symbol(x, Decl(mappedTypes4.ts, 51, 24))
+>x : Symbol(DeepReadonlyFoo.x, Decl(mappedTypes4.ts, 51, 24))
 
     readonly y: { readonly a: string, readonly b: number };
->y : Symbol(y, Decl(mappedTypes4.ts, 52, 23))
+>y : Symbol(DeepReadonlyFoo.y, Decl(mappedTypes4.ts, 52, 23))
 >a : Symbol(a, Decl(mappedTypes4.ts, 53, 17))
 >b : Symbol(b, Decl(mappedTypes4.ts, 53, 37))
 
     readonly z: boolean;
->z : Symbol(z, Decl(mappedTypes4.ts, 53, 59))
+>z : Symbol(DeepReadonlyFoo.z, Decl(mappedTypes4.ts, 53, 59))
 
 };
 
@@ -199,7 +199,7 @@ var x1: DeepReadonlyFoo;
 
 type Z = { a: number };
 >Z : Symbol(Z, Decl(mappedTypes4.ts, 58, 24))
->a : Symbol(a, Decl(mappedTypes4.ts, 62, 10))
+>a : Symbol(Z.a, Decl(mappedTypes4.ts, 62, 10))
 
 type Clone<T> = {
 >Clone : Symbol(Clone, Decl(mappedTypes4.ts, 62, 23))

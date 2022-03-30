@@ -16,10 +16,10 @@ export = Conn;
 
 === tests/cases/compiler/usage.ts ===
 type Conn = import("./foo");
->Conn : import("tests/cases/compiler/foo")
+>Conn : Conn
 
 declare var x: Conn;
->x : import("tests/cases/compiler/foo")
+>x : Conn
 
 export class Wrap {
 >Wrap : Wrap
@@ -28,8 +28,8 @@ export class Wrap {
 >connItem : number
 
     constructor(c = x) {
->c : import("tests/cases/compiler/foo")
->x : import("tests/cases/compiler/foo")
+>c : Conn
+>x : Conn
 
         this.connItem = c.item;
 >this.connItem = c.item : number
@@ -37,7 +37,7 @@ export class Wrap {
 >this : this
 >connItem : number
 >c.item : number
->c : import("tests/cases/compiler/foo")
+>c : Conn
 >item : number
     }
 }

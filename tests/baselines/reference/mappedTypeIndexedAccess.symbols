@@ -32,10 +32,10 @@ type FooBar = {
 >FooBar : Symbol(FooBar, Decl(mappedTypeIndexedAccess.ts, 9, 33))
 
     foo: string;
->foo : Symbol(foo, Decl(mappedTypeIndexedAccess.ts, 11, 15))
+>foo : Symbol(FooBar.foo, Decl(mappedTypeIndexedAccess.ts, 11, 15))
 
     bar: number;
->bar : Symbol(bar, Decl(mappedTypeIndexedAccess.ts, 12, 16))
+>bar : Symbol(FooBar.bar, Decl(mappedTypeIndexedAccess.ts, 12, 16))
 
 };
 

@@ -112,10 +112,10 @@ type TargetProps = {
 >TargetProps : Symbol(TargetProps, Decl(mappedTypeConstraints.ts, 21, 1))
 
     foo: string,
->foo : Symbol(foo, Decl(mappedTypeConstraints.ts, 25, 20))
+>foo : Symbol(TargetProps.foo, Decl(mappedTypeConstraints.ts, 25, 20))
 
     bar: string
->bar : Symbol(bar, Decl(mappedTypeConstraints.ts, 26, 16))
+>bar : Symbol(TargetProps.bar, Decl(mappedTypeConstraints.ts, 26, 16))
 
 };
 

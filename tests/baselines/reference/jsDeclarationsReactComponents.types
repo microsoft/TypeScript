@@ -7,8 +7,8 @@ import PropTypes from "prop-types"
 >PropTypes : typeof PropTypes
 
 const TabbedShowLayout = ({
->TabbedShowLayout : { ({}: {}): JSX.Element; propTypes: { version: PropTypes.Requireable<number>; }; defaultProps: { tabs: undefined; }; }
->({}) => {    return (        <div />    );} : { ({}: {}): JSX.Element; propTypes: { version: PropTypes.Requireable<number>; }; defaultProps: { tabs: undefined; }; }
+>TabbedShowLayout : { ({}: {}): JSX.Element; propTypes: { version: React.Requireable<number>; }; defaultProps: { tabs: undefined; }; }
+>({}) => {    return (        <div />    );} : { ({}: {}): JSX.Element; propTypes: { version: React.Requireable<number>; }; defaultProps: { tabs: undefined; }; }
 
 }) => {
     return (
@@ -22,24 +22,24 @@ const TabbedShowLayout = ({
 };
 
 TabbedShowLayout.propTypes = {
->TabbedShowLayout.propTypes = {    version: PropTypes.number,} : { version: PropTypes.Requireable<number>; }
->TabbedShowLayout.propTypes : { version: PropTypes.Requireable<number>; }
->TabbedShowLayout : { ({}: {}): JSX.Element; propTypes: { version: PropTypes.Requireable<number>; }; defaultProps: { tabs: undefined; }; }
->propTypes : { version: PropTypes.Requireable<number>; }
->{    version: PropTypes.number,} : { version: PropTypes.Requireable<number>; }
+>TabbedShowLayout.propTypes = {    version: PropTypes.number,} : { version: React.Requireable<number>; }
+>TabbedShowLayout.propTypes : { version: React.Requireable<number>; }
+>TabbedShowLayout : { ({}: {}): JSX.Element; propTypes: { version: React.Requireable<number>; }; defaultProps: { tabs: undefined; }; }
+>propTypes : { version: React.Requireable<number>; }
+>{    version: PropTypes.number,} : { version: React.Requireable<number>; }
 
     version: PropTypes.number,
->version : PropTypes.Requireable<number>
->PropTypes.number : PropTypes.Requireable<number>
+>version : React.Requireable<number>
+>PropTypes.number : React.Requireable<number>
 >PropTypes : typeof PropTypes
->number : PropTypes.Requireable<number>
+>number : React.Requireable<number>
 
 };
 
 TabbedShowLayout.defaultProps = {
 >TabbedShowLayout.defaultProps = {    tabs: undefined} : { tabs: undefined; }
 >TabbedShowLayout.defaultProps : { tabs: undefined; }
->TabbedShowLayout : { ({}: {}): JSX.Element; propTypes: { version: PropTypes.Requireable<number>; }; defaultProps: { tabs: undefined; }; }
+>TabbedShowLayout : { ({}: {}): JSX.Element; propTypes: { version: React.Requireable<number>; }; defaultProps: { tabs: undefined; }; }
 >defaultProps : { tabs: undefined; }
 >{    tabs: undefined} : { tabs: undefined; }
 
@@ -50,7 +50,7 @@ TabbedShowLayout.defaultProps = {
 };
 
 export default TabbedShowLayout;
->TabbedShowLayout : { ({}: {}): JSX.Element; propTypes: { version: PropTypes.Requireable<number>; }; defaultProps: { tabs: undefined; }; }
+>TabbedShowLayout : { ({}: {}): JSX.Element; propTypes: { version: React.Requireable<number>; }; defaultProps: { tabs: undefined; }; }
 
 === tests/cases/conformance/jsdoc/declarations/jsDeclarationsReactComponents2.jsx ===
 import React from "react";
@@ -199,17 +199,17 @@ function Tree({ allowDropOnRoot }) {
 }
 
 Tree.propTypes = {
->Tree.propTypes = {    classes: PropTypes.object,} : { classes: PropTypes.Requireable<object>; }
->Tree.propTypes : { classes: PropTypes.Requireable<object>; }
+>Tree.propTypes = {    classes: PropTypes.object,} : { classes: React.Requireable<object>; }
+>Tree.propTypes : { classes: React.Requireable<object>; }
 >Tree : typeof Tree
->propTypes : { classes: PropTypes.Requireable<object>; }
->{    classes: PropTypes.object,} : { classes: PropTypes.Requireable<object>; }
+>propTypes : { classes: React.Requireable<object>; }
+>{    classes: PropTypes.object,} : { classes: React.Requireable<object>; }
 
     classes: PropTypes.object,
->classes : PropTypes.Requireable<object>
->PropTypes.object : PropTypes.Requireable<object>
+>classes : React.Requireable<object>
+>PropTypes.object : React.Requireable<object>
 >PropTypes : typeof PropTypes
->object : PropTypes.Requireable<object>
+>object : React.Requireable<object>
 
 };
 

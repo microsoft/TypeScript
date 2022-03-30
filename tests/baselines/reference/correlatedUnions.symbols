@@ -3,9 +3,9 @@
 
 type RecordMap = { n: number, s: string, b: boolean };
 >RecordMap : Symbol(RecordMap, Decl(correlatedUnions.ts, 0, 0))
->n : Symbol(n, Decl(correlatedUnions.ts, 2, 18))
->s : Symbol(s, Decl(correlatedUnions.ts, 2, 29))
->b : Symbol(b, Decl(correlatedUnions.ts, 2, 40))
+>n : Symbol(RecordMap.n, Decl(correlatedUnions.ts, 2, 18))
+>s : Symbol(RecordMap.s, Decl(correlatedUnions.ts, 2, 29))
+>b : Symbol(RecordMap.b, Decl(correlatedUnions.ts, 2, 40))
 
 type UnionRecord<K extends keyof RecordMap = keyof RecordMap> = { [P in K]: {
 >UnionRecord : Symbol(UnionRecord, Decl(correlatedUnions.ts, 2, 54))
@@ -80,22 +80,22 @@ processRecord({ kind: 'n', v: 42, f: v => v.toExponential() });
 
 type TextFieldData = { value: string }
 >TextFieldData : Symbol(TextFieldData, Decl(correlatedUnions.ts, 18, 63))
->value : Symbol(value, Decl(correlatedUnions.ts, 22, 22))
+>value : Symbol(TextFieldData.value, Decl(correlatedUnions.ts, 22, 22))
 
 type SelectFieldData = { options: string[], selectedValue: string }
 >SelectFieldData : Symbol(SelectFieldData, Decl(correlatedUnions.ts, 22, 38))
->options : Symbol(options, Decl(correlatedUnions.ts, 23, 24))
->selectedValue : Symbol(selectedValue, Decl(correlatedUnions.ts, 23, 43))
+>options : Symbol(SelectFieldData.options, Decl(correlatedUnions.ts, 23, 24))
+>selectedValue : Symbol(SelectFieldData.selectedValue, Decl(correlatedUnions.ts, 23, 43))
 
 type FieldMap = {
 >FieldMap : Symbol(FieldMap, Decl(correlatedUnions.ts, 23, 67))
 
     text: TextFieldData;
->text : Symbol(text, Decl(correlatedUnions.ts, 25, 17))
+>text : Symbol(FieldMap.text, Decl(correlatedUnions.ts, 25, 17))
 >TextFieldData : Symbol(TextFieldData, Decl(correlatedUnions.ts, 18, 63))
 
     select: SelectFieldData;
->select : Symbol(select, Decl(correlatedUnions.ts, 26, 24))
+>select : Symbol(FieldMap.select, Decl(correlatedUnions.ts, 26, 24))
 >SelectFieldData : Symbol(SelectFieldData, Decl(correlatedUnions.ts, 22, 38))
 }
 
@@ -103,9 +103,9 @@ type FormField<K extends keyof FieldMap> = { type: K, data: FieldMap[K] };
 >FormField : Symbol(FormField, Decl(correlatedUnions.ts, 28, 1))
 >K : Symbol(K, Decl(correlatedUnions.ts, 30, 15))
 >FieldMap : Symbol(FieldMap, Decl(correlatedUnions.ts, 23, 67))
->type : Symbol(type, Decl(correlatedUnions.ts, 30, 44))
+>type : Symbol(FormField.type, Decl(correlatedUnions.ts, 30, 44))
 >K : Symbol(K, Decl(correlatedUnions.ts, 30, 15))
->data : Symbol(data, Decl(correlatedUnions.ts, 30, 53))
+>data : Symbol(FormField.data, Decl(correlatedUnions.ts, 30, 53))
 >FieldMap : Symbol(FieldMap, Decl(correlatedUnions.ts, 23, 67))
 >K : Symbol(K, Decl(correlatedUnions.ts, 30, 15))
 
@@ -159,15 +159,15 @@ function renderField<K extends keyof FieldMap>(field: FormField<K>) {
     const renderFn = renderFuncs[field.type];
 >renderFn : Symbol(renderFn, Decl(correlatedUnions.ts, 44, 9))
 >renderFuncs : Symbol(renderFuncs, Decl(correlatedUnions.ts, 38, 5))
->field.type : Symbol(type, Decl(correlatedUnions.ts, 30, 44))
+>field.type : Symbol(FormField.type, Decl(correlatedUnions.ts, 30, 44))
 >field : Symbol(field, Decl(correlatedUnions.ts, 43, 47))
->type : Symbol(type, Decl(correlatedUnions.ts, 30, 44))
+>type : Symbol(FormField.type, Decl(correlatedUnions.ts, 30, 44))
 
     renderFn(field.data);
 >renderFn : Symbol(renderFn, Decl(correlatedUnions.ts, 44, 9))
->field.data : Symbol(data, Decl(correlatedUnions.ts, 30, 53))
+>field.data : Symbol(FormField.data, Decl(correlatedUnions.ts, 30, 53))
 >field : Symbol(field, Decl(correlatedUnions.ts, 43, 47))
->data : Symbol(data, Decl(correlatedUnions.ts, 30, 53))
+>data : Symbol(FormField.data, Decl(correlatedUnions.ts, 30, 53))
 }
 
 // --------
@@ -176,10 +176,10 @@ type TypeMap = {
 >TypeMap : Symbol(TypeMap, Decl(correlatedUnions.ts, 46, 1))
 
     foo: string,
->foo : Symbol(foo, Decl(correlatedUnions.ts, 50, 16))
+>foo : Symbol(TypeMap.foo, Decl(correlatedUnions.ts, 50, 16))
 
     bar: number
->bar : Symbol(bar, Decl(correlatedUnions.ts, 51, 16))
+>bar : Symbol(TypeMap.bar, Decl(correlatedUnions.ts, 51, 16))
 
 };
 
@@ -298,8 +298,8 @@ process([{ type: 'foo', data: 'abc' }]);
 
 type LetterMap = { A: string, B: number }
 >LetterMap : Symbol(LetterMap, Decl(correlatedUnions.ts, 84, 40))
->A : Symbol(A, Decl(correlatedUnions.ts, 88, 18))
->B : Symbol(B, Decl(correlatedUnions.ts, 88, 29))
+>A : Symbol(LetterMap.A, Decl(correlatedUnions.ts, 88, 18))
+>B : Symbol(LetterMap.B, Decl(correlatedUnions.ts, 88, 29))
 
 type LetterCaller<K extends keyof LetterMap> = { [P in K]: { letter: Record<P, LetterMap[P]>, caller: (x: Record<P, LetterMap[P]>) => void } }[K];
 >LetterCaller : Symbol(LetterCaller, Decl(correlatedUnions.ts, 88, 41))
@@ -336,11 +336,11 @@ function call<K extends keyof LetterMap>({ letter, caller }: LetterCaller<K>): v
 
 type A = { A: string };
 >A : Symbol(A, Decl(correlatedUnions.ts, 93, 1))
->A : Symbol(A, Decl(correlatedUnions.ts, 95, 10))
+>A : Symbol(A.A, Decl(correlatedUnions.ts, 95, 10))
 
 type B = { B: number };
 >B : Symbol(B, Decl(correlatedUnions.ts, 95, 23))
->B : Symbol(B, Decl(correlatedUnions.ts, 96, 10))
+>B : Symbol(B.B, Decl(correlatedUnions.ts, 96, 10))
 
 type ACaller = (a: A) => void;
 >ACaller : Symbol(ACaller, Decl(correlatedUnions.ts, 96, 23))
@@ -512,10 +512,10 @@ function ff1() {
 >ArgMap : Symbol(ArgMap, Decl(correlatedUnions.ts, 141, 16))
 
         sum: [a: number, b: number],
->sum : Symbol(sum, Decl(correlatedUnions.ts, 142, 19))
+>sum : Symbol(ArgMap.sum, Decl(correlatedUnions.ts, 142, 19))
 
         concat: [a: string, b: string, c: string]
->concat : Symbol(concat, Decl(correlatedUnions.ts, 143, 36))
+>concat : Symbol(ArgMap.concat, Decl(correlatedUnions.ts, 143, 36))
     }
     type Keys = keyof ArgMap;
 >Keys : Symbol(Keys, Decl(correlatedUnions.ts, 145, 5))
@@ -577,8 +577,8 @@ function ff1() {
 
 type ArgMap = { a: number, b: string };
 >ArgMap : Symbol(ArgMap, Decl(correlatedUnions.ts, 157, 1))
->a : Symbol(a, Decl(correlatedUnions.ts, 161, 15))
->b : Symbol(b, Decl(correlatedUnions.ts, 161, 26))
+>a : Symbol(ArgMap.a, Decl(correlatedUnions.ts, 161, 15))
+>b : Symbol(ArgMap.b, Decl(correlatedUnions.ts, 161, 26))
 
 type Func<K extends keyof ArgMap> = (x: ArgMap[K]) => void;
 >Func : Symbol(Func, Decl(correlatedUnions.ts, 161, 39))

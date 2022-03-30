@@ -24,7 +24,7 @@ export function bar<T>(obj: T) {
 export type BadNested<T> = { x: T extends number ? T : string };
 >BadNested : Symbol(BadNested, Decl(inferTypes2.ts, 5, 1))
 >T : Symbol(T, Decl(inferTypes2.ts, 7, 22))
->x : Symbol(x, Decl(inferTypes2.ts, 7, 28))
+>x : Symbol(BadNested.x, Decl(inferTypes2.ts, 7, 28))
 >T : Symbol(T, Decl(inferTypes2.ts, 7, 22))
 >T : Symbol(T, Decl(inferTypes2.ts, 7, 22))
 

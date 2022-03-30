@@ -54,11 +54,11 @@ doSomething(false);
 // this example is from services/textChanges.ts
 type ConfigurableStart = { useStart?: boolean }
 >ConfigurableStart : Symbol(ConfigurableStart, Decl(weakType.ts, 19, 19))
->useStart : Symbol(useStart, Decl(weakType.ts, 23, 26))
+>useStart : Symbol(ConfigurableStart.useStart, Decl(weakType.ts, 23, 26))
 
 type ConfigurableEnd = { useEnd?: boolean }
 >ConfigurableEnd : Symbol(ConfigurableEnd, Decl(weakType.ts, 23, 47))
->useEnd : Symbol(useEnd, Decl(weakType.ts, 24, 24))
+>useEnd : Symbol(ConfigurableEnd.useEnd, Decl(weakType.ts, 24, 24))
 
 type ConfigurableStartEnd = ConfigurableStart & ConfigurableEnd
 >ConfigurableStartEnd : Symbol(ConfigurableStartEnd, Decl(weakType.ts, 24, 43))
@@ -129,16 +129,16 @@ let ctor: Ctor = K
 
 type Spoiler = { nope?: string }
 >Spoiler : Symbol(Spoiler, Decl(weakType.ts, 47, 18))
->nope : Symbol(nope, Decl(weakType.ts, 49, 16))
+>nope : Symbol(Spoiler.nope, Decl(weakType.ts, 49, 16))
 
 type Weak = {
 >Weak : Symbol(Weak, Decl(weakType.ts, 49, 32))
 
     a?: number
->a : Symbol(a, Decl(weakType.ts, 50, 13))
+>a : Symbol(Weak.a, Decl(weakType.ts, 50, 13))
 
     properties?: {
->properties : Symbol(properties, Decl(weakType.ts, 51, 14))
+>properties : Symbol(Weak.properties, Decl(weakType.ts, 51, 14))
 
         b?: number
 >b : Symbol(b, Decl(weakType.ts, 52, 18))

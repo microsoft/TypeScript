@@ -3,10 +3,10 @@ type A = {
 >A : Symbol(A, Decl(unionErrorMessageOnMatchingDiscriminant.ts, 0, 0))
 
     type: 'a',
->type : Symbol(type, Decl(unionErrorMessageOnMatchingDiscriminant.ts, 0, 10))
+>type : Symbol(A.type, Decl(unionErrorMessageOnMatchingDiscriminant.ts, 0, 10))
 
     data: { a: string }
->data : Symbol(data, Decl(unionErrorMessageOnMatchingDiscriminant.ts, 1, 14))
+>data : Symbol(A.data, Decl(unionErrorMessageOnMatchingDiscriminant.ts, 1, 14))
 >a : Symbol(a, Decl(unionErrorMessageOnMatchingDiscriminant.ts, 2, 11))
 
 };
@@ -15,10 +15,10 @@ type B = {
 >B : Symbol(B, Decl(unionErrorMessageOnMatchingDiscriminant.ts, 3, 2))
 
     type: 'b',
->type : Symbol(type, Decl(unionErrorMessageOnMatchingDiscriminant.ts, 5, 10))
+>type : Symbol(B.type, Decl(unionErrorMessageOnMatchingDiscriminant.ts, 5, 10))
 
     data: null
->data : Symbol(data, Decl(unionErrorMessageOnMatchingDiscriminant.ts, 6, 14))
+>data : Symbol(B.data, Decl(unionErrorMessageOnMatchingDiscriminant.ts, 6, 14))
 
 };
 
@@ -26,10 +26,10 @@ type C = {
 >C : Symbol(C, Decl(unionErrorMessageOnMatchingDiscriminant.ts, 8, 2))
 
     type: 'c',
->type : Symbol(type, Decl(unionErrorMessageOnMatchingDiscriminant.ts, 10, 10))
+>type : Symbol(C.type, Decl(unionErrorMessageOnMatchingDiscriminant.ts, 10, 10))
 
     payload: string
->payload : Symbol(payload, Decl(unionErrorMessageOnMatchingDiscriminant.ts, 11, 14))
+>payload : Symbol(C.payload, Decl(unionErrorMessageOnMatchingDiscriminant.ts, 11, 14))
 
 };
 

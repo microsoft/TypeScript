@@ -468,7 +468,7 @@ c.setState({ c: true });  // Error
 
 type T2 = { a?: number, [key: string]: any };
 >T2 : Symbol(T2, Decl(mappedTypeErrors.ts, 123, 24))
->a : Symbol(a, Decl(mappedTypeErrors.ts, 125, 11))
+>a : Symbol(T2.a, Decl(mappedTypeErrors.ts, 125, 11))
 >key : Symbol(key, Decl(mappedTypeErrors.ts, 125, 25))
 
 let x1: T2 = { a: 'no' };  // Error
@@ -499,14 +499,14 @@ type Foo2<T, F extends keyof T> = {
 >T : Symbol(T, Decl(mappedTypeErrors.ts, 133, 10))
 
     pf: {[P in F]?: T[P]},
->pf : Symbol(pf, Decl(mappedTypeErrors.ts, 133, 35))
+>pf : Symbol(Foo2.pf, Decl(mappedTypeErrors.ts, 133, 35))
 >P : Symbol(P, Decl(mappedTypeErrors.ts, 134, 10))
 >F : Symbol(F, Decl(mappedTypeErrors.ts, 133, 12))
 >T : Symbol(T, Decl(mappedTypeErrors.ts, 133, 10))
 >P : Symbol(P, Decl(mappedTypeErrors.ts, 134, 10))
 
     pt: {[P in T]?: T[P]}, // note: should be in keyof T
->pt : Symbol(pt, Decl(mappedTypeErrors.ts, 134, 26))
+>pt : Symbol(Foo2.pt, Decl(mappedTypeErrors.ts, 134, 26))
 >P : Symbol(P, Decl(mappedTypeErrors.ts, 135, 10))
 >T : Symbol(T, Decl(mappedTypeErrors.ts, 133, 10))
 >T : Symbol(T, Decl(mappedTypeErrors.ts, 133, 10))
@@ -515,8 +515,8 @@ type Foo2<T, F extends keyof T> = {
 };
 type O = {x: number, y: boolean};
 >O : Symbol(O, Decl(mappedTypeErrors.ts, 136, 2))
->x : Symbol(x, Decl(mappedTypeErrors.ts, 137, 10))
->y : Symbol(y, Decl(mappedTypeErrors.ts, 137, 20))
+>x : Symbol(O.x, Decl(mappedTypeErrors.ts, 137, 10))
+>y : Symbol(O.y, Decl(mappedTypeErrors.ts, 137, 20))
 
 let o: O = {x: 5, y: false};
 >o : Symbol(o, Decl(mappedTypeErrors.ts, 138, 3))

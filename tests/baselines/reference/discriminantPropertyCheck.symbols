@@ -459,13 +459,13 @@ type UnionOfBar = TypeBar1 | TypeBar2;
 
 type TypeBar1 = { type: BarEnum.bar1 };
 >TypeBar1 : Symbol(TypeBar1, Decl(discriminantPropertyCheck.ts, 159, 38))
->type : Symbol(type, Decl(discriminantPropertyCheck.ts, 160, 17))
+>type : Symbol(TypeBar1.type, Decl(discriminantPropertyCheck.ts, 160, 17))
 >BarEnum : Symbol(BarEnum, Decl(discriminantPropertyCheck.ts, 152, 44))
 >bar1 : Symbol(BarEnum.bar1, Decl(discriminantPropertyCheck.ts, 154, 20))
 
 type TypeBar2 = { type: BarEnum.bar2 };
 >TypeBar2 : Symbol(TypeBar2, Decl(discriminantPropertyCheck.ts, 160, 39))
->type : Symbol(type, Decl(discriminantPropertyCheck.ts, 161, 17))
+>type : Symbol(TypeBar2.type, Decl(discriminantPropertyCheck.ts, 161, 17))
 >BarEnum : Symbol(BarEnum, Decl(discriminantPropertyCheck.ts, 152, 44))
 >bar2 : Symbol(BarEnum.bar2, Decl(discriminantPropertyCheck.ts, 155, 13))
 
@@ -587,20 +587,20 @@ type TestA = {
 >TestA : Symbol(TestA, Decl(discriminantPropertyCheck.ts, 204, 1))
 
     type: 'testA';
->type : Symbol(type, Decl(discriminantPropertyCheck.ts, 208, 14))
+>type : Symbol(TestA.type, Decl(discriminantPropertyCheck.ts, 208, 14))
 
     bananas: 3;
->bananas : Symbol(bananas, Decl(discriminantPropertyCheck.ts, 209, 18))
+>bananas : Symbol(TestA.bananas, Decl(discriminantPropertyCheck.ts, 209, 18))
 }
   
 type TestB = {
 >TestB : Symbol(TestB, Decl(discriminantPropertyCheck.ts, 211, 1))
 
     type: 'testB';
->type : Symbol(type, Decl(discriminantPropertyCheck.ts, 213, 14))
+>type : Symbol(TestB.type, Decl(discriminantPropertyCheck.ts, 213, 14))
 
     apples: 5;
->apples : Symbol(apples, Decl(discriminantPropertyCheck.ts, 214, 18))
+>apples : Symbol(TestB.apples, Decl(discriminantPropertyCheck.ts, 214, 18))
 }
   
 type AllTests = TestA | TestB;
@@ -642,9 +642,9 @@ const doTestingStuff = (mapOfTests: MapOfAllTests, ids: string[]) => {
 >console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
 >log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
->test.bananas : Symbol(bananas, Decl(discriminantPropertyCheck.ts, 209, 18))
+>test.bananas : Symbol(TestA.bananas, Decl(discriminantPropertyCheck.ts, 209, 18))
 >test : Symbol(test, Decl(discriminantPropertyCheck.ts, 224, 11))
->bananas : Symbol(bananas, Decl(discriminantPropertyCheck.ts, 209, 18))
+>bananas : Symbol(TestA.bananas, Decl(discriminantPropertyCheck.ts, 209, 18))
         }
         switch (test.type) {
 >test.type : Symbol(type, Decl(discriminantPropertyCheck.ts, 208, 14), Decl(discriminantPropertyCheck.ts, 213, 14))
@@ -656,9 +656,9 @@ const doTestingStuff = (mapOfTests: MapOfAllTests, ids: string[]) => {
 >console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
 >log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
->test.bananas : Symbol(bananas, Decl(discriminantPropertyCheck.ts, 209, 18))
+>test.bananas : Symbol(TestA.bananas, Decl(discriminantPropertyCheck.ts, 209, 18))
 >test : Symbol(test, Decl(discriminantPropertyCheck.ts, 224, 11))
->bananas : Symbol(bananas, Decl(discriminantPropertyCheck.ts, 209, 18))
+>bananas : Symbol(TestA.bananas, Decl(discriminantPropertyCheck.ts, 209, 18))
             }
         }
     });

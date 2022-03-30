@@ -4,13 +4,13 @@ type ObjType = {
 >ObjType : Symbol(ObjType, Decl(objectRestReadonly.ts, 0, 0))
 
   foo: string
->foo : Symbol(foo, Decl(objectRestReadonly.ts, 1, 16))
+>foo : Symbol(ObjType.foo, Decl(objectRestReadonly.ts, 1, 16))
 
   baz: string
->baz : Symbol(baz, Decl(objectRestReadonly.ts, 2, 13))
+>baz : Symbol(ObjType.baz, Decl(objectRestReadonly.ts, 2, 13))
 
   quux: string
->quux : Symbol(quux, Decl(objectRestReadonly.ts, 3, 13))
+>quux : Symbol(ObjType.quux, Decl(objectRestReadonly.ts, 3, 13))
 }
 
 const obj: Readonly<ObjType> = {

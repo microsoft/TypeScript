@@ -15,7 +15,7 @@ type Data<T> = {
 >T : Symbol(T, Decl(indexedAccessTypeConstraints.ts, 6, 10))
 
     get: <K extends keyof T>(prop: K) => T[K];
->get : Symbol(get, Decl(indexedAccessTypeConstraints.ts, 6, 16))
+>get : Symbol(Data.get, Decl(indexedAccessTypeConstraints.ts, 6, 16))
 >K : Symbol(K, Decl(indexedAccessTypeConstraints.ts, 7, 10))
 >T : Symbol(T, Decl(indexedAccessTypeConstraints.ts, 6, 10))
 >prop : Symbol(prop, Decl(indexedAccessTypeConstraints.ts, 7, 29))
@@ -58,11 +58,11 @@ export class Foo<C> extends Parent<IData<C>> {
 >C : Symbol(C, Decl(indexedAccessTypeConstraints.ts, 17, 17))
 
         return this.getData().get('content');
->this.getData().get : Symbol(get, Decl(indexedAccessTypeConstraints.ts, 6, 16))
+>this.getData().get : Symbol(Data.get, Decl(indexedAccessTypeConstraints.ts, 6, 16))
 >this.getData : Symbol(Parent.getData, Decl(indexedAccessTypeConstraints.ts, 11, 41))
 >this : Symbol(Foo, Decl(indexedAccessTypeConstraints.ts, 15, 1))
 >getData : Symbol(Parent.getData, Decl(indexedAccessTypeConstraints.ts, 11, 41))
->get : Symbol(get, Decl(indexedAccessTypeConstraints.ts, 6, 16))
+>get : Symbol(Data.get, Decl(indexedAccessTypeConstraints.ts, 6, 16))
     }
 }
 
@@ -80,11 +80,11 @@ export class Bar<C, T extends IData<C>> extends Parent<T> {
 >C : Symbol(C, Decl(indexedAccessTypeConstraints.ts, 23, 17))
 
         return this.getData().get('content');
->this.getData().get : Symbol(get, Decl(indexedAccessTypeConstraints.ts, 6, 16))
+>this.getData().get : Symbol(Data.get, Decl(indexedAccessTypeConstraints.ts, 6, 16))
 >this.getData : Symbol(Parent.getData, Decl(indexedAccessTypeConstraints.ts, 11, 41))
 >this : Symbol(Bar, Decl(indexedAccessTypeConstraints.ts, 21, 1))
 >getData : Symbol(Parent.getData, Decl(indexedAccessTypeConstraints.ts, 11, 41))
->get : Symbol(get, Decl(indexedAccessTypeConstraints.ts, 6, 16))
+>get : Symbol(Data.get, Decl(indexedAccessTypeConstraints.ts, 6, 16))
     }
 }
 

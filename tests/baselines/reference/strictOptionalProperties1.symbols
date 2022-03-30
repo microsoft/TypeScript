@@ -323,20 +323,20 @@ type Props = {
 >Props : Symbol(Props, Decl(strictOptionalProperties1.ts, 83, 1))
 
     foo: string;
->foo : Symbol(foo, Decl(strictOptionalProperties1.ts, 87, 14))
+>foo : Symbol(Props.foo, Decl(strictOptionalProperties1.ts, 87, 14))
 
     bar: string
->bar : Symbol(bar, Decl(strictOptionalProperties1.ts, 88, 16))
+>bar : Symbol(Props.bar, Decl(strictOptionalProperties1.ts, 88, 16))
 }
 
 type InputProps = {
 >InputProps : Symbol(InputProps, Decl(strictOptionalProperties1.ts, 90, 1))
 
     foo?: string;
->foo : Symbol(foo, Decl(strictOptionalProperties1.ts, 92, 19))
+>foo : Symbol(InputProps.foo, Decl(strictOptionalProperties1.ts, 92, 19))
 
     bar: string;
->bar : Symbol(bar, Decl(strictOptionalProperties1.ts, 93, 17))
+>bar : Symbol(InputProps.bar, Decl(strictOptionalProperties1.ts, 93, 17))
 }
 
 const defaultProps: Pick<Props, 'foo'> = { foo: 'foo' };

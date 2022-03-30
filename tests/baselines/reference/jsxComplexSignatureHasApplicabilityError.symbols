@@ -446,7 +446,7 @@ export type Options<TValue = OptionValues> = Array<Option<TValue>>;
 >Options : Symbol(Options, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 100, 1))
 >TValue : Symbol(TValue, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 102, 20))
 >OptionValues : Symbol(OptionValues, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 124, 1))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Options, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Option : Symbol(Option, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 102, 67))
 >TValue : Symbol(TValue, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 102, 20))
 
@@ -711,7 +711,7 @@ export interface ValueComponentProps<TValue = OptionValues> {
 
     values?: Array<Option<TValue>>;
 >values : Symbol(ValueComponentProps.values, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 251, 26))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Options, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Option : Symbol(Option, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 102, 67))
 >TValue : Symbol(TValue, Decl(jsxComplexSignatureHasApplicabilityError.tsx, 244, 37))
 }

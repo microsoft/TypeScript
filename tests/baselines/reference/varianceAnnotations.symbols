@@ -4,7 +4,7 @@ type Covariant<out T> = {
 >T : Symbol(T, Decl(varianceAnnotations.ts, 0, 15))
 
     x: T;
->x : Symbol(x, Decl(varianceAnnotations.ts, 0, 25))
+>x : Symbol(Covariant.x, Decl(varianceAnnotations.ts, 0, 25))
 >T : Symbol(T, Decl(varianceAnnotations.ts, 0, 15))
 }
 
@@ -29,7 +29,7 @@ type Contravariant<in T> = {
 >T : Symbol(T, Decl(varianceAnnotations.ts, 10, 19))
 
     f: (x: T) => void;
->f : Symbol(f, Decl(varianceAnnotations.ts, 10, 28))
+>f : Symbol(Contravariant.f, Decl(varianceAnnotations.ts, 10, 28))
 >x : Symbol(x, Decl(varianceAnnotations.ts, 11, 8))
 >T : Symbol(T, Decl(varianceAnnotations.ts, 10, 19))
 }
@@ -55,7 +55,7 @@ type Invariant<in out T> = {
 >T : Symbol(T, Decl(varianceAnnotations.ts, 20, 15))
 
     f: (x: T) => T;
->f : Symbol(f, Decl(varianceAnnotations.ts, 20, 28))
+>f : Symbol(Invariant.f, Decl(varianceAnnotations.ts, 20, 28))
 >x : Symbol(x, Decl(varianceAnnotations.ts, 21, 8))
 >T : Symbol(T, Decl(varianceAnnotations.ts, 20, 15))
 >T : Symbol(T, Decl(varianceAnnotations.ts, 20, 15))
@@ -110,7 +110,7 @@ type Covariant1<in T> = {  // Error
 >T : Symbol(T, Decl(varianceAnnotations.ts, 39, 16))
 
     x: T;
->x : Symbol(x, Decl(varianceAnnotations.ts, 39, 25))
+>x : Symbol(Covariant1.x, Decl(varianceAnnotations.ts, 39, 25))
 >T : Symbol(T, Decl(varianceAnnotations.ts, 39, 16))
 }
 
@@ -124,7 +124,7 @@ type Contravariant2<out T> = {  // Error
 >T : Symbol(T, Decl(varianceAnnotations.ts, 45, 20))
 
     f: (x: T) => void;
->f : Symbol(f, Decl(varianceAnnotations.ts, 45, 30))
+>f : Symbol(Contravariant2.f, Decl(varianceAnnotations.ts, 45, 30))
 >x : Symbol(x, Decl(varianceAnnotations.ts, 46, 8))
 >T : Symbol(T, Decl(varianceAnnotations.ts, 45, 20))
 }
@@ -134,7 +134,7 @@ type Invariant1<in T> = {  // Error
 >T : Symbol(T, Decl(varianceAnnotations.ts, 49, 16))
 
     f: (x: T) => T;
->f : Symbol(f, Decl(varianceAnnotations.ts, 49, 25))
+>f : Symbol(Invariant1.f, Decl(varianceAnnotations.ts, 49, 25))
 >x : Symbol(x, Decl(varianceAnnotations.ts, 50, 8))
 >T : Symbol(T, Decl(varianceAnnotations.ts, 49, 16))
 >T : Symbol(T, Decl(varianceAnnotations.ts, 49, 16))
@@ -145,7 +145,7 @@ type Invariant2<out T> = {  // Error
 >T : Symbol(T, Decl(varianceAnnotations.ts, 53, 16))
 
     f: (x: T) => T;
->f : Symbol(f, Decl(varianceAnnotations.ts, 53, 26))
+>f : Symbol(Invariant2.f, Decl(varianceAnnotations.ts, 53, 26))
 >x : Symbol(x, Decl(varianceAnnotations.ts, 54, 8))
 >T : Symbol(T, Decl(varianceAnnotations.ts, 53, 16))
 >T : Symbol(T, Decl(varianceAnnotations.ts, 53, 16))
@@ -158,11 +158,11 @@ type Foo1<in T> = {  // Error
 >T : Symbol(T, Decl(varianceAnnotations.ts, 59, 10))
 
     x: T;
->x : Symbol(x, Decl(varianceAnnotations.ts, 59, 19))
+>x : Symbol(Foo1.x, Decl(varianceAnnotations.ts, 59, 19))
 >T : Symbol(T, Decl(varianceAnnotations.ts, 59, 10))
 
     f: FooFn1<T>;
->f : Symbol(f, Decl(varianceAnnotations.ts, 60, 9))
+>f : Symbol(Foo1.f, Decl(varianceAnnotations.ts, 60, 9))
 >FooFn1 : Symbol(FooFn1, Decl(varianceAnnotations.ts, 62, 1))
 >T : Symbol(T, Decl(varianceAnnotations.ts, 59, 10))
 }
@@ -179,7 +179,7 @@ type Bar1<T> = {
 >T : Symbol(T, Decl(varianceAnnotations.ts, 66, 10))
 
     value: Foo1<T[]>;
->value : Symbol(value, Decl(varianceAnnotations.ts, 66, 16))
+>value : Symbol(Bar1.value, Decl(varianceAnnotations.ts, 66, 16))
 >Foo1 : Symbol(Foo1, Decl(varianceAnnotations.ts, 55, 1))
 >T : Symbol(T, Decl(varianceAnnotations.ts, 66, 10))
 }
@@ -189,11 +189,11 @@ type Foo2<out T> = {  // Error
 >T : Symbol(T, Decl(varianceAnnotations.ts, 70, 10))
 
     x: T;
->x : Symbol(x, Decl(varianceAnnotations.ts, 70, 20))
+>x : Symbol(Foo2.x, Decl(varianceAnnotations.ts, 70, 20))
 >T : Symbol(T, Decl(varianceAnnotations.ts, 70, 10))
 
     f: FooFn2<T>;
->f : Symbol(f, Decl(varianceAnnotations.ts, 71, 9))
+>f : Symbol(Foo2.f, Decl(varianceAnnotations.ts, 71, 9))
 >FooFn2 : Symbol(FooFn2, Decl(varianceAnnotations.ts, 73, 1))
 >T : Symbol(T, Decl(varianceAnnotations.ts, 70, 10))
 }
@@ -210,7 +210,7 @@ type Bar2<T> = {
 >T : Symbol(T, Decl(varianceAnnotations.ts, 77, 10))
 
     value: Foo2<T[]>;
->value : Symbol(value, Decl(varianceAnnotations.ts, 77, 16))
+>value : Symbol(Bar2.value, Decl(varianceAnnotations.ts, 77, 16))
 >Foo2 : Symbol(Foo2, Decl(varianceAnnotations.ts, 68, 1))
 >T : Symbol(T, Decl(varianceAnnotations.ts, 77, 10))
 }
@@ -220,11 +220,11 @@ type Foo3<in out T> = {
 >T : Symbol(T, Decl(varianceAnnotations.ts, 81, 10))
 
     x: T;
->x : Symbol(x, Decl(varianceAnnotations.ts, 81, 23))
+>x : Symbol(Foo3.x, Decl(varianceAnnotations.ts, 81, 23))
 >T : Symbol(T, Decl(varianceAnnotations.ts, 81, 10))
 
     f: FooFn3<T>;
->f : Symbol(f, Decl(varianceAnnotations.ts, 82, 9))
+>f : Symbol(Foo3.f, Decl(varianceAnnotations.ts, 82, 9))
 >FooFn3 : Symbol(FooFn3, Decl(varianceAnnotations.ts, 84, 1))
 >T : Symbol(T, Decl(varianceAnnotations.ts, 81, 10))
 }
@@ -241,7 +241,7 @@ type Bar3<T> = {
 >T : Symbol(T, Decl(varianceAnnotations.ts, 88, 10))
 
     value: Foo3<T[]>;
->value : Symbol(value, Decl(varianceAnnotations.ts, 88, 16))
+>value : Symbol(Bar3.value, Decl(varianceAnnotations.ts, 88, 16))
 >Foo3 : Symbol(Foo3, Decl(varianceAnnotations.ts, 79, 1))
 >T : Symbol(T, Decl(varianceAnnotations.ts, 88, 10))
 }

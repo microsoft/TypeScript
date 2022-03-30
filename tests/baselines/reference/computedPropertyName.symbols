@@ -19,7 +19,7 @@ type T = {
 >T : Symbol(T, Decl(component.ts, 4, 1))
 
   [onInit]: any;
->[onInit] : Symbol([onInit], Decl(component.ts, 6, 10))
+>[onInit] : Symbol(T[onInit], Decl(component.ts, 6, 10))
 >onInit : Symbol(onInit, Decl(component.ts, 0, 13))
 }
 

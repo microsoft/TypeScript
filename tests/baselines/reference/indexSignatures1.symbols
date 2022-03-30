@@ -235,11 +235,11 @@ type Invalid<T extends string> = {
 
 type Tag1 = { __tag1__: void };
 >Tag1 : Symbol(Tag1, Decl(indexSignatures1.ts, 90, 1))
->__tag1__ : Symbol(__tag1__, Decl(indexSignatures1.ts, 94, 13))
+>__tag1__ : Symbol(Tag1.__tag1__, Decl(indexSignatures1.ts, 94, 13))
 
 type Tag2 = { __tag2__: void };
 >Tag2 : Symbol(Tag2, Decl(indexSignatures1.ts, 94, 31))
->__tag2__ : Symbol(__tag2__, Decl(indexSignatures1.ts, 95, 13))
+>__tag2__ : Symbol(Tag2.__tag2__, Decl(indexSignatures1.ts, 95, 13))
 
 type TaggedString1 = string & Tag1;
 >TaggedString1 : Symbol(TaggedString1, Decl(indexSignatures1.ts, 95, 31))

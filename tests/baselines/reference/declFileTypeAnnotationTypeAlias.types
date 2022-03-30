@@ -24,7 +24,7 @@ module M {
     }
 
     export type MC = m.c;
->MC : m.c
+>MC : MC
 >m : any
 
     export type fc = () => c;

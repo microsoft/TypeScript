@@ -252,7 +252,7 @@ function createPerson(): Person {
 type Box<T> = { value: T };
 >Box : Symbol(Box, Decl(inferFromGenericFunctionReturnTypes3.ts, 101, 1))
 >T : Symbol(T, Decl(inferFromGenericFunctionReturnTypes3.ts, 105, 9))
->value : Symbol(value, Decl(inferFromGenericFunctionReturnTypes3.ts, 105, 15))
+>value : Symbol(Box.value, Decl(inferFromGenericFunctionReturnTypes3.ts, 105, 15))
 >T : Symbol(T, Decl(inferFromGenericFunctionReturnTypes3.ts, 105, 9))
 
 declare function box<T>(value: T): Box<T>;
@@ -360,13 +360,13 @@ type Player = {
 >Player : Symbol(Player, Decl(inferFromGenericFunctionReturnTypes3.ts, 145, 3))
 
     name: string;
->name : Symbol(name, Decl(inferFromGenericFunctionReturnTypes3.ts, 149, 15))
+>name : Symbol(Player.name, Decl(inferFromGenericFunctionReturnTypes3.ts, 149, 15))
 
     age: number;
->age : Symbol(age, Decl(inferFromGenericFunctionReturnTypes3.ts, 150, 17))
+>age : Symbol(Player.age, Decl(inferFromGenericFunctionReturnTypes3.ts, 150, 17))
 
     position: "STRIKER" | "GOALKEEPER",
->position : Symbol(position, Decl(inferFromGenericFunctionReturnTypes3.ts, 151, 16))
+>position : Symbol(Player.position, Decl(inferFromGenericFunctionReturnTypes3.ts, 151, 16))
 
 };
  
@@ -436,7 +436,7 @@ enum State { A, B }
 
 type Foo = { state: State }
 >Foo : Symbol(Foo, Decl(inferFromGenericFunctionReturnTypes3.ts, 176, 19))
->state : Symbol(state, Decl(inferFromGenericFunctionReturnTypes3.ts, 177, 12))
+>state : Symbol(Foo.state, Decl(inferFromGenericFunctionReturnTypes3.ts, 177, 12))
 >State : Symbol(State, Decl(inferFromGenericFunctionReturnTypes3.ts, 174, 56))
 
 declare function bar<T>(f: () => T[]): T[];

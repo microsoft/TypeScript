@@ -61,7 +61,7 @@ type N7 = void & string;
 
 type X = { x: string };
 >X : Symbol(X, Decl(intersectionReduction.ts, 20, 24))
->x : Symbol(x, Decl(intersectionReduction.ts, 22, 10))
+>x : Symbol(X.x, Decl(intersectionReduction.ts, 22, 10))
 
 type X1 = X | 'a' & 'b';
 >X1 : Symbol(X1, Decl(intersectionReduction.ts, 22, 23))
@@ -95,18 +95,18 @@ type X7 = X | void & string;
 
 type A = { kind: 'a', foo: string };
 >A : Symbol(A, Decl(intersectionReduction.ts, 30, 28))
->kind : Symbol(kind, Decl(intersectionReduction.ts, 32, 10))
->foo : Symbol(foo, Decl(intersectionReduction.ts, 32, 21))
+>kind : Symbol(A.kind, Decl(intersectionReduction.ts, 32, 10))
+>foo : Symbol(A.foo, Decl(intersectionReduction.ts, 32, 21))
 
 type B = { kind: 'b', foo: number };
 >B : Symbol(B, Decl(intersectionReduction.ts, 32, 36))
->kind : Symbol(kind, Decl(intersectionReduction.ts, 33, 10))
->foo : Symbol(foo, Decl(intersectionReduction.ts, 33, 21))
+>kind : Symbol(B.kind, Decl(intersectionReduction.ts, 33, 10))
+>foo : Symbol(B.foo, Decl(intersectionReduction.ts, 33, 21))
 
 type C = { kind: 'c', foo: number };
 >C : Symbol(C, Decl(intersectionReduction.ts, 33, 36))
->kind : Symbol(kind, Decl(intersectionReduction.ts, 34, 10))
->foo : Symbol(foo, Decl(intersectionReduction.ts, 34, 21))
+>kind : Symbol(C.kind, Decl(intersectionReduction.ts, 34, 10))
+>foo : Symbol(C.foo, Decl(intersectionReduction.ts, 34, 21))
 
 declare let ab: A & B;
 >ab : Symbol(ab, Decl(intersectionReduction.ts, 36, 11))
@@ -232,13 +232,13 @@ type M3 = Merge2<{ a: 1, b: 2 }, { a: 2, c: 3 }>;  // { a: 1, b: 2, c: 3 }
 
 type D = { kind: 'd', foo: unknown };
 >D : Symbol(D, Decl(intersectionReduction.ts, 59, 49))
->kind : Symbol(kind, Decl(intersectionReduction.ts, 61, 10))
->foo : Symbol(foo, Decl(intersectionReduction.ts, 61, 21))
+>kind : Symbol(D.kind, Decl(intersectionReduction.ts, 61, 10))
+>foo : Symbol(D.foo, Decl(intersectionReduction.ts, 61, 21))
 
 type E = { kind: 'e', foo: unknown };
 >E : Symbol(E, Decl(intersectionReduction.ts, 61, 37))
->kind : Symbol(kind, Decl(intersectionReduction.ts, 62, 10))
->foo : Symbol(foo, Decl(intersectionReduction.ts, 62, 21))
+>kind : Symbol(E.kind, Decl(intersectionReduction.ts, 62, 10))
+>foo : Symbol(E.foo, Decl(intersectionReduction.ts, 62, 21))
 
 declare function f10<T>(x: { foo: T }): T;
 >f10 : Symbol(f10, Decl(intersectionReduction.ts, 62, 37))
@@ -342,7 +342,7 @@ type Container<Type extends string> = {
 >Type : Symbol(Type, Decl(intersectionReduction.ts, 101, 15))
 
     type: Type;
->type : Symbol(type, Decl(intersectionReduction.ts, 101, 39))
+>type : Symbol(Container.type, Decl(intersectionReduction.ts, 101, 39))
 >Type : Symbol(Type, Decl(intersectionReduction.ts, 101, 15))
 }
 

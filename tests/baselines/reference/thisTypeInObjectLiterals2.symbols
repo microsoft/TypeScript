@@ -69,16 +69,16 @@ type Point = {
 >Point : Symbol(Point, Decl(thisTypeInObjectLiterals2.ts, 23, 2))
 
     x: number;
->x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 28, 14))
+>x : Symbol(Point.x, Decl(thisTypeInObjectLiterals2.ts, 28, 14))
 
     y: number;
->y : Symbol(y, Decl(thisTypeInObjectLiterals2.ts, 29, 14))
+>y : Symbol(Point.y, Decl(thisTypeInObjectLiterals2.ts, 29, 14))
 
     z?: number;
->z : Symbol(z, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
+>z : Symbol(Point.z, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
 
     moveBy(dx: number, dy: number, dz?: number): void;
->moveBy : Symbol(moveBy, Decl(thisTypeInObjectLiterals2.ts, 31, 15))
+>moveBy : Symbol(Point.moveBy, Decl(thisTypeInObjectLiterals2.ts, 31, 15))
 >dx : Symbol(dx, Decl(thisTypeInObjectLiterals2.ts, 32, 11))
 >dy : Symbol(dy, Decl(thisTypeInObjectLiterals2.ts, 32, 22))
 >dz : Symbol(dz, Decl(thisTypeInObjectLiterals2.ts, 32, 34))
@@ -101,27 +101,27 @@ let p1: Point = {
 >dz : Symbol(dz, Decl(thisTypeInObjectLiterals2.ts, 38, 18))
 
         this.x += dx;
->this.x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 28, 14))
->this : Symbol(__type, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
->x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 28, 14))
+>this.x : Symbol(Point.x, Decl(thisTypeInObjectLiterals2.ts, 28, 14))
+>this : Symbol(Point, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
+>x : Symbol(Point.x, Decl(thisTypeInObjectLiterals2.ts, 28, 14))
 >dx : Symbol(dx, Decl(thisTypeInObjectLiterals2.ts, 38, 11))
 
         this.y += dy;
->this.y : Symbol(y, Decl(thisTypeInObjectLiterals2.ts, 29, 14))
->this : Symbol(__type, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
->y : Symbol(y, Decl(thisTypeInObjectLiterals2.ts, 29, 14))
+>this.y : Symbol(Point.y, Decl(thisTypeInObjectLiterals2.ts, 29, 14))
+>this : Symbol(Point, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
+>y : Symbol(Point.y, Decl(thisTypeInObjectLiterals2.ts, 29, 14))
 >dy : Symbol(dy, Decl(thisTypeInObjectLiterals2.ts, 38, 14))
 
         if (this.z && dz) {
->this.z : Symbol(z, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
->this : Symbol(__type, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
->z : Symbol(z, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
+>this.z : Symbol(Point.z, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
+>this : Symbol(Point, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
+>z : Symbol(Point.z, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
 >dz : Symbol(dz, Decl(thisTypeInObjectLiterals2.ts, 38, 18))
 
             this.z += dz;
->this.z : Symbol(z, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
->this : Symbol(__type, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
->z : Symbol(z, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
+>this.z : Symbol(Point.z, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
+>this : Symbol(Point, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
+>z : Symbol(Point.z, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
 >dz : Symbol(dz, Decl(thisTypeInObjectLiterals2.ts, 38, 18))
         }
     }
@@ -144,27 +144,27 @@ let p2: Point | null = {
 >dz : Symbol(dz, Decl(thisTypeInObjectLiterals2.ts, 50, 18))
 
         this.x += dx;
->this.x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 28, 14))
->this : Symbol(__type, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
->x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 28, 14))
+>this.x : Symbol(Point.x, Decl(thisTypeInObjectLiterals2.ts, 28, 14))
+>this : Symbol(Point, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
+>x : Symbol(Point.x, Decl(thisTypeInObjectLiterals2.ts, 28, 14))
 >dx : Symbol(dx, Decl(thisTypeInObjectLiterals2.ts, 50, 11))
 
         this.y += dy;
->this.y : Symbol(y, Decl(thisTypeInObjectLiterals2.ts, 29, 14))
->this : Symbol(__type, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
->y : Symbol(y, Decl(thisTypeInObjectLiterals2.ts, 29, 14))
+>this.y : Symbol(Point.y, Decl(thisTypeInObjectLiterals2.ts, 29, 14))
+>this : Symbol(Point, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
+>y : Symbol(Point.y, Decl(thisTypeInObjectLiterals2.ts, 29, 14))
 >dy : Symbol(dy, Decl(thisTypeInObjectLiterals2.ts, 50, 14))
 
         if (this.z && dz) {
->this.z : Symbol(z, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
->this : Symbol(__type, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
->z : Symbol(z, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
+>this.z : Symbol(Point.z, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
+>this : Symbol(Point, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
+>z : Symbol(Point.z, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
 >dz : Symbol(dz, Decl(thisTypeInObjectLiterals2.ts, 50, 18))
 
             this.z += dz;
->this.z : Symbol(z, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
->this : Symbol(__type, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
->z : Symbol(z, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
+>this.z : Symbol(Point.z, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
+>this : Symbol(Point, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
+>z : Symbol(Point.z, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
 >dz : Symbol(dz, Decl(thisTypeInObjectLiterals2.ts, 50, 18))
         }
     }
@@ -187,27 +187,27 @@ let p3: Point | undefined = {
 >dz : Symbol(dz, Decl(thisTypeInObjectLiterals2.ts, 62, 18))
 
         this.x += dx;
->this.x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 28, 14))
->this : Symbol(__type, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
->x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 28, 14))
+>this.x : Symbol(Point.x, Decl(thisTypeInObjectLiterals2.ts, 28, 14))
+>this : Symbol(Point, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
+>x : Symbol(Point.x, Decl(thisTypeInObjectLiterals2.ts, 28, 14))
 >dx : Symbol(dx, Decl(thisTypeInObjectLiterals2.ts, 62, 11))
 
         this.y += dy;
->this.y : Symbol(y, Decl(thisTypeInObjectLiterals2.ts, 29, 14))
->this : Symbol(__type, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
->y : Symbol(y, Decl(thisTypeInObjectLiterals2.ts, 29, 14))
+>this.y : Symbol(Point.y, Decl(thisTypeInObjectLiterals2.ts, 29, 14))
+>this : Symbol(Point, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
+>y : Symbol(Point.y, Decl(thisTypeInObjectLiterals2.ts, 29, 14))
 >dy : Symbol(dy, Decl(thisTypeInObjectLiterals2.ts, 62, 14))
 
         if (this.z && dz) {
->this.z : Symbol(z, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
->this : Symbol(__type, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
->z : Symbol(z, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
+>this.z : Symbol(Point.z, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
+>this : Symbol(Point, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
+>z : Symbol(Point.z, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
 >dz : Symbol(dz, Decl(thisTypeInObjectLiterals2.ts, 62, 18))
 
             this.z += dz;
->this.z : Symbol(z, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
->this : Symbol(__type, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
->z : Symbol(z, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
+>this.z : Symbol(Point.z, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
+>this : Symbol(Point, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
+>z : Symbol(Point.z, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
 >dz : Symbol(dz, Decl(thisTypeInObjectLiterals2.ts, 62, 18))
         }
     }
@@ -230,27 +230,27 @@ let p4: Point | null | undefined = {
 >dz : Symbol(dz, Decl(thisTypeInObjectLiterals2.ts, 74, 18))
 
         this.x += dx;
->this.x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 28, 14))
->this : Symbol(__type, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
->x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 28, 14))
+>this.x : Symbol(Point.x, Decl(thisTypeInObjectLiterals2.ts, 28, 14))
+>this : Symbol(Point, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
+>x : Symbol(Point.x, Decl(thisTypeInObjectLiterals2.ts, 28, 14))
 >dx : Symbol(dx, Decl(thisTypeInObjectLiterals2.ts, 74, 11))
 
         this.y += dy;
->this.y : Symbol(y, Decl(thisTypeInObjectLiterals2.ts, 29, 14))
->this : Symbol(__type, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
->y : Symbol(y, Decl(thisTypeInObjectLiterals2.ts, 29, 14))
+>this.y : Symbol(Point.y, Decl(thisTypeInObjectLiterals2.ts, 29, 14))
+>this : Symbol(Point, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
+>y : Symbol(Point.y, Decl(thisTypeInObjectLiterals2.ts, 29, 14))
 >dy : Symbol(dy, Decl(thisTypeInObjectLiterals2.ts, 74, 14))
 
         if (this.z && dz) {
->this.z : Symbol(z, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
->this : Symbol(__type, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
->z : Symbol(z, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
+>this.z : Symbol(Point.z, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
+>this : Symbol(Point, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
+>z : Symbol(Point.z, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
 >dz : Symbol(dz, Decl(thisTypeInObjectLiterals2.ts, 74, 18))
 
             this.z += dz;
->this.z : Symbol(z, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
->this : Symbol(__type, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
->z : Symbol(z, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
+>this.z : Symbol(Point.z, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
+>this : Symbol(Point, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
+>z : Symbol(Point.z, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
 >dz : Symbol(dz, Decl(thisTypeInObjectLiterals2.ts, 74, 18))
         }
     }
@@ -277,27 +277,27 @@ f1({
 >dz : Symbol(dz, Decl(thisTypeInObjectLiterals2.ts, 88, 18))
 
         this.x += dx;
->this.x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 28, 14))
->this : Symbol(__type, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
->x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 28, 14))
+>this.x : Symbol(Point.x, Decl(thisTypeInObjectLiterals2.ts, 28, 14))
+>this : Symbol(Point, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
+>x : Symbol(Point.x, Decl(thisTypeInObjectLiterals2.ts, 28, 14))
 >dx : Symbol(dx, Decl(thisTypeInObjectLiterals2.ts, 88, 11))
 
         this.y += dy;
->this.y : Symbol(y, Decl(thisTypeInObjectLiterals2.ts, 29, 14))
->this : Symbol(__type, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
->y : Symbol(y, Decl(thisTypeInObjectLiterals2.ts, 29, 14))
+>this.y : Symbol(Point.y, Decl(thisTypeInObjectLiterals2.ts, 29, 14))
+>this : Symbol(Point, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
+>y : Symbol(Point.y, Decl(thisTypeInObjectLiterals2.ts, 29, 14))
 >dy : Symbol(dy, Decl(thisTypeInObjectLiterals2.ts, 88, 14))
 
         if (this.z && dz) {
->this.z : Symbol(z, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
->this : Symbol(__type, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
->z : Symbol(z, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
+>this.z : Symbol(Point.z, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
+>this : Symbol(Point, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
+>z : Symbol(Point.z, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
 >dz : Symbol(dz, Decl(thisTypeInObjectLiterals2.ts, 88, 18))
 
             this.z += dz;
->this.z : Symbol(z, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
->this : Symbol(__type, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
->z : Symbol(z, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
+>this.z : Symbol(Point.z, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
+>this : Symbol(Point, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
+>z : Symbol(Point.z, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
 >dz : Symbol(dz, Decl(thisTypeInObjectLiterals2.ts, 88, 18))
         }
     }
@@ -324,27 +324,27 @@ f2({
 >dz : Symbol(dz, Decl(thisTypeInObjectLiterals2.ts, 102, 18))
 
         this.x += dx;
->this.x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 28, 14))
->this : Symbol(__type, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
->x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 28, 14))
+>this.x : Symbol(Point.x, Decl(thisTypeInObjectLiterals2.ts, 28, 14))
+>this : Symbol(Point, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
+>x : Symbol(Point.x, Decl(thisTypeInObjectLiterals2.ts, 28, 14))
 >dx : Symbol(dx, Decl(thisTypeInObjectLiterals2.ts, 102, 11))
 
         this.y += dy;
->this.y : Symbol(y, Decl(thisTypeInObjectLiterals2.ts, 29, 14))
->this : Symbol(__type, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
->y : Symbol(y, Decl(thisTypeInObjectLiterals2.ts, 29, 14))
+>this.y : Symbol(Point.y, Decl(thisTypeInObjectLiterals2.ts, 29, 14))
+>this : Symbol(Point, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
+>y : Symbol(Point.y, Decl(thisTypeInObjectLiterals2.ts, 29, 14))
 >dy : Symbol(dy, Decl(thisTypeInObjectLiterals2.ts, 102, 14))
 
         if (this.z && dz) {
->this.z : Symbol(z, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
->this : Symbol(__type, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
->z : Symbol(z, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
+>this.z : Symbol(Point.z, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
+>this : Symbol(Point, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
+>z : Symbol(Point.z, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
 >dz : Symbol(dz, Decl(thisTypeInObjectLiterals2.ts, 102, 18))
 
             this.z += dz;
->this.z : Symbol(z, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
->this : Symbol(__type, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
->z : Symbol(z, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
+>this.z : Symbol(Point.z, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
+>this : Symbol(Point, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
+>z : Symbol(Point.z, Decl(thisTypeInObjectLiterals2.ts, 30, 14))
 >dz : Symbol(dz, Decl(thisTypeInObjectLiterals2.ts, 102, 18))
         }
     }
@@ -359,11 +359,11 @@ type ObjectDescriptor<D, M> = {
 >M : Symbol(M, Decl(thisTypeInObjectLiterals2.ts, 114, 24))
 
     data?: D;
->data : Symbol(data, Decl(thisTypeInObjectLiterals2.ts, 114, 31))
+>data : Symbol(ObjectDescriptor.data, Decl(thisTypeInObjectLiterals2.ts, 114, 31))
 >D : Symbol(D, Decl(thisTypeInObjectLiterals2.ts, 114, 22))
 
     methods?: M & ThisType<D & M>;  // Type of 'this' in methods is D & M
->methods : Symbol(methods, Decl(thisTypeInObjectLiterals2.ts, 115, 13))
+>methods : Symbol(ObjectDescriptor.methods, Decl(thisTypeInObjectLiterals2.ts, 115, 13))
 >M : Symbol(M, Decl(thisTypeInObjectLiterals2.ts, 114, 24))
 >ThisType : Symbol(ThisType, Decl(lib.es5.d.ts, --, --))
 >D : Symbol(D, Decl(thisTypeInObjectLiterals2.ts, 114, 22))
@@ -479,15 +479,15 @@ type PropDesc<T> = {
 >T : Symbol(T, Decl(thisTypeInObjectLiterals2.ts, 153, 14))
 
     value?: T;
->value : Symbol(value, Decl(thisTypeInObjectLiterals2.ts, 153, 20))
+>value : Symbol(PropDesc.value, Decl(thisTypeInObjectLiterals2.ts, 153, 20))
 >T : Symbol(T, Decl(thisTypeInObjectLiterals2.ts, 153, 14))
 
     get?(): T;
->get : Symbol(get, Decl(thisTypeInObjectLiterals2.ts, 154, 14))
+>get : Symbol(PropDesc.get, Decl(thisTypeInObjectLiterals2.ts, 154, 14))
 >T : Symbol(T, Decl(thisTypeInObjectLiterals2.ts, 153, 14))
 
     set?(value: T): void;
->set : Symbol(set, Decl(thisTypeInObjectLiterals2.ts, 155, 14))
+>set : Symbol(PropDesc.set, Decl(thisTypeInObjectLiterals2.ts, 155, 14))
 >value : Symbol(value, Decl(thisTypeInObjectLiterals2.ts, 156, 9))
 >T : Symbol(T, Decl(thisTypeInObjectLiterals2.ts, 153, 14))
 }
@@ -560,9 +560,9 @@ let p11 = defineProp(p1, "bar", {
 >get : Symbol(get, Decl(thisTypeInObjectLiterals2.ts, 170, 33))
 
         return this.x;
->this.x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 28, 14))
->this : Symbol(__type, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
->x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 28, 14))
+>this.x : Symbol(Point.x, Decl(thisTypeInObjectLiterals2.ts, 28, 14))
+>this : Symbol(Point, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
+>x : Symbol(Point.x, Decl(thisTypeInObjectLiterals2.ts, 28, 14))
 
     },
     set(value: number) {
@@ -570,9 +570,9 @@ let p11 = defineProp(p1, "bar", {
 >value : Symbol(value, Decl(thisTypeInObjectLiterals2.ts, 174, 8))
 
         this.x = value;
->this.x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 28, 14))
->this : Symbol(__type, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
->x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 28, 14))
+>this.x : Symbol(Point.x, Decl(thisTypeInObjectLiterals2.ts, 28, 14))
+>this : Symbol(Point, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
+>x : Symbol(Point.x, Decl(thisTypeInObjectLiterals2.ts, 28, 14))
 >value : Symbol(value, Decl(thisTypeInObjectLiterals2.ts, 174, 8))
     }
 });
@@ -603,9 +603,9 @@ let p12 = defineProps(p1, {
 >get : Symbol(get, Decl(thisTypeInObjectLiterals2.ts, 184, 10))
 
             return this.x;
->this.x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 28, 14))
->this : Symbol(__type, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
->x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 28, 14))
+>this.x : Symbol(Point.x, Decl(thisTypeInObjectLiterals2.ts, 28, 14))
+>this : Symbol(Point, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
+>x : Symbol(Point.x, Decl(thisTypeInObjectLiterals2.ts, 28, 14))
 
         },
         set(value: number) {
@@ -613,9 +613,9 @@ let p12 = defineProps(p1, {
 >value : Symbol(value, Decl(thisTypeInObjectLiterals2.ts, 188, 12))
 
             this.x = value;
->this.x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 28, 14))
->this : Symbol(__type, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
->x : Symbol(x, Decl(thisTypeInObjectLiterals2.ts, 28, 14))
+>this.x : Symbol(Point.x, Decl(thisTypeInObjectLiterals2.ts, 28, 14))
+>this : Symbol(Point, Decl(thisTypeInObjectLiterals2.ts, 28, 12))
+>x : Symbol(Point.x, Decl(thisTypeInObjectLiterals2.ts, 28, 14))
 >value : Symbol(value, Decl(thisTypeInObjectLiterals2.ts, 188, 12))
         }
     }
@@ -660,11 +660,11 @@ type Computed<T> = {
 >T : Symbol(T, Decl(thisTypeInObjectLiterals2.ts, 202, 14))
 
     get?(): T;
->get : Symbol(get, Decl(thisTypeInObjectLiterals2.ts, 202, 20))
+>get : Symbol(Computed.get, Decl(thisTypeInObjectLiterals2.ts, 202, 20))
 >T : Symbol(T, Decl(thisTypeInObjectLiterals2.ts, 202, 14))
 
     set?(value: T): void;
->set : Symbol(set, Decl(thisTypeInObjectLiterals2.ts, 203, 14))
+>set : Symbol(Computed.set, Decl(thisTypeInObjectLiterals2.ts, 203, 14))
 >value : Symbol(value, Decl(thisTypeInObjectLiterals2.ts, 204, 9))
 >T : Symbol(T, Decl(thisTypeInObjectLiterals2.ts, 202, 14))
 }

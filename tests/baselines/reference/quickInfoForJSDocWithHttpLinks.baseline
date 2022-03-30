@@ -81,6 +81,14 @@
           "kind": "space"
         },
         {
+          "text": "Oops",
+          "kind": "aliasName"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
           "text": "https",
           "kind": "propertyName"
         },

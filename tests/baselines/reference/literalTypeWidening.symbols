@@ -375,7 +375,7 @@ export function keys<K extends string, V>(obj: Record<K, V>): K[] {
 
 type Obj = { code: LangCode }
 >Obj : Symbol(Obj, Decl(literalTypeWidening.ts, 120, 1))
->code : Symbol(code, Decl(literalTypeWidening.ts, 122, 12))
+>code : Symbol(Obj.code, Decl(literalTypeWidening.ts, 122, 12))
 >LangCode : Symbol(LangCode, Decl(literalTypeWidening.ts, 124, 53))
 
 const langCodeSet = Set('fr', 'en', 'es', 'it', 'nl')

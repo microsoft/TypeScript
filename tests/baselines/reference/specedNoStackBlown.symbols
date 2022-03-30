@@ -56,7 +56,7 @@ export type SpecArray<INPUT, ROOTINPUT = any> = Array<Spec<INPUT, ROOTINPUT>>;
 >SpecArray : Symbol(SpecArray, Decl(specedNoStackBlown.ts, 14, 90))
 >INPUT : Symbol(INPUT, Decl(specedNoStackBlown.ts, 16, 22))
 >ROOTINPUT : Symbol(ROOTINPUT, Decl(specedNoStackBlown.ts, 16, 28))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(SpecArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Spec : Symbol(Spec, Decl(specedNoStackBlown.ts, 12, 45))
 >INPUT : Symbol(INPUT, Decl(specedNoStackBlown.ts, 16, 22))
 >ROOTINPUT : Symbol(ROOTINPUT, Decl(specedNoStackBlown.ts, 16, 28))

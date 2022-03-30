@@ -86,7 +86,7 @@ export type TypeLiteralWithPrivateNamedProperties = {
 >TypeLiteralWithPrivateNamedProperties : Symbol(TypeLiteralWithPrivateNamedProperties, Decl(uniqueSymbolsDeclarationsErrors.ts, 33, 1))
 
     [s]: any;
->[s] : Symbol([s], Decl(uniqueSymbolsDeclarationsErrors.ts, 35, 53))
+>[s] : Symbol(TypeLiteralWithPrivateNamedProperties[s], Decl(uniqueSymbolsDeclarationsErrors.ts, 35, 53))
 >s : Symbol(s, Decl(uniqueSymbolsDeclarationsErrors.ts, 0, 13))
 }
 
@@ -94,7 +94,7 @@ export type TypeLiteralWithPrivateNamedMethods = {
 >TypeLiteralWithPrivateNamedMethods : Symbol(TypeLiteralWithPrivateNamedMethods, Decl(uniqueSymbolsDeclarationsErrors.ts, 37, 1))
 
     [s](): any;
->[s] : Symbol([s], Decl(uniqueSymbolsDeclarationsErrors.ts, 39, 50))
+>[s] : Symbol(TypeLiteralWithPrivateNamedMethods[s], Decl(uniqueSymbolsDeclarationsErrors.ts, 39, 50))
 >s : Symbol(s, Decl(uniqueSymbolsDeclarationsErrors.ts, 0, 13))
 }
 

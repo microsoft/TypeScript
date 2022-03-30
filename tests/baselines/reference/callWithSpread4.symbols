@@ -1,16 +1,16 @@
 === tests/cases/conformance/expressions/functionCalls/callWithSpread4.ts ===
 type R = { a: number }
 >R : Symbol(R, Decl(callWithSpread4.ts, 0, 0))
->a : Symbol(a, Decl(callWithSpread4.ts, 0, 10))
+>a : Symbol(R.a, Decl(callWithSpread4.ts, 0, 10))
 
 type W = { b: number }
 >W : Symbol(W, Decl(callWithSpread4.ts, 0, 22))
->b : Symbol(b, Decl(callWithSpread4.ts, 1, 10))
+>b : Symbol(W.b, Decl(callWithSpread4.ts, 1, 10))
 
 type RW = { a: number, b: number }
 >RW : Symbol(RW, Decl(callWithSpread4.ts, 1, 22))
->a : Symbol(a, Decl(callWithSpread4.ts, 2, 11))
->b : Symbol(b, Decl(callWithSpread4.ts, 2, 22))
+>a : Symbol(RW.a, Decl(callWithSpread4.ts, 2, 11))
+>b : Symbol(RW.b, Decl(callWithSpread4.ts, 2, 22))
 
 declare const pli: {
 >pli : Symbol(pli, Decl(callWithSpread4.ts, 3, 13))

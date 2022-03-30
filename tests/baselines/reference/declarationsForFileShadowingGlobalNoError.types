@@ -1,6 +1,6 @@
 === tests/cases/compiler/dom.ts ===
 export type DOMNode = Node;
->DOMNode : Node
+>DOMNode : DOMNode
 
 === tests/cases/compiler/custom.ts ===
 export type Node = {};

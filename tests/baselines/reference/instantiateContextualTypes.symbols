@@ -217,11 +217,11 @@ type R = {
 >R : Symbol(R, Decl(instantiateContextualTypes.ts, 66, 1))
 
   a: (x: number) => void;
->a : Symbol(a, Decl(instantiateContextualTypes.ts, 70, 10))
+>a : Symbol(R.a, Decl(instantiateContextualTypes.ts, 70, 10))
 >x : Symbol(x, Decl(instantiateContextualTypes.ts, 71, 6))
 
   b: (x: string) => void;
->b : Symbol(b, Decl(instantiateContextualTypes.ts, 71, 25))
+>b : Symbol(R.b, Decl(instantiateContextualTypes.ts, 71, 25))
 >x : Symbol(x, Decl(instantiateContextualTypes.ts, 72, 6))
 
 };
@@ -230,7 +230,7 @@ type O = {
 >O : Symbol(O, Decl(instantiateContextualTypes.ts, 73, 2))
 
   on<P extends keyof R>(x: P, callback: R[P]): void;
->on : Symbol(on, Decl(instantiateContextualTypes.ts, 75, 10))
+>on : Symbol(O.on, Decl(instantiateContextualTypes.ts, 75, 10))
 >P : Symbol(P, Decl(instantiateContextualTypes.ts, 76, 5))
 >R : Symbol(R, Decl(instantiateContextualTypes.ts, 66, 1))
 >x : Symbol(x, Decl(instantiateContextualTypes.ts, 76, 24))
@@ -246,9 +246,9 @@ declare var x: O;
 >O : Symbol(O, Decl(instantiateContextualTypes.ts, 73, 2))
 
 x.on('a', a => {});
->x.on : Symbol(on, Decl(instantiateContextualTypes.ts, 75, 10))
+>x.on : Symbol(O.on, Decl(instantiateContextualTypes.ts, 75, 10))
 >x : Symbol(x, Decl(instantiateContextualTypes.ts, 79, 11))
->on : Symbol(on, Decl(instantiateContextualTypes.ts, 75, 10))
+>on : Symbol(O.on, Decl(instantiateContextualTypes.ts, 75, 10))
 >a : Symbol(a, Decl(instantiateContextualTypes.ts, 80, 9))
 
 // #29775
@@ -355,7 +355,7 @@ type InnerBox<T> = {
 >T : Symbol(T, Decl(instantiateContextualTypes.ts, 121, 14))
 
   value: T;
->value : Symbol(value, Decl(instantiateContextualTypes.ts, 121, 20))
+>value : Symbol(InnerBox.value, Decl(instantiateContextualTypes.ts, 121, 20))
 >T : Symbol(T, Decl(instantiateContextualTypes.ts, 121, 14))
 }
 
@@ -364,7 +364,7 @@ type OuterBox<T> = {
 >T : Symbol(T, Decl(instantiateContextualTypes.ts, 125, 14))
 
   inner: InnerBox<T>
->inner : Symbol(inner, Decl(instantiateContextualTypes.ts, 125, 20))
+>inner : Symbol(OuterBox.inner, Decl(instantiateContextualTypes.ts, 125, 20))
 >InnerBox : Symbol(InnerBox, Decl(instantiateContextualTypes.ts, 117, 1))
 >T : Symbol(T, Decl(instantiateContextualTypes.ts, 125, 14))
 
@@ -403,9 +403,9 @@ passContentsToFunc(outerBoxOfString, box => box.value);
 >passContentsToFunc : Symbol(passContentsToFunc, Decl(instantiateContextualTypes.ts, 132, 12))
 >outerBoxOfString : Symbol(outerBoxOfString, Decl(instantiateContextualTypes.ts, 136, 13))
 >box : Symbol(box, Decl(instantiateContextualTypes.ts, 138, 36))
->box.value : Symbol(value, Decl(instantiateContextualTypes.ts, 121, 20))
+>box.value : Symbol(InnerBox.value, Decl(instantiateContextualTypes.ts, 121, 20))
 >box : Symbol(box, Decl(instantiateContextualTypes.ts, 138, 36))
->value : Symbol(value, Decl(instantiateContextualTypes.ts, 121, 20))
+>value : Symbol(InnerBox.value, Decl(instantiateContextualTypes.ts, 121, 20))
 
 // Repro from #32349
 

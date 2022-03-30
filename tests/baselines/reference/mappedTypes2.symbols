@@ -61,11 +61,11 @@ type Proxy<T> = {
 >T : Symbol(T, Decl(mappedTypes2.ts, 11, 11))
 
     get(): T;
->get : Symbol(get, Decl(mappedTypes2.ts, 11, 17))
+>get : Symbol(Proxy.get, Decl(mappedTypes2.ts, 11, 17))
 >T : Symbol(T, Decl(mappedTypes2.ts, 11, 11))
 
     set(value: T): void;
->set : Symbol(set, Decl(mappedTypes2.ts, 12, 13))
+>set : Symbol(Proxy.set, Decl(mappedTypes2.ts, 12, 13))
 >value : Symbol(value, Decl(mappedTypes2.ts, 13, 8))
 >T : Symbol(T, Decl(mappedTypes2.ts, 11, 11))
 }
@@ -312,18 +312,18 @@ function f5(shape: Shape) {
 
     let name = p.name.get();
 >name : Symbol(name, Decl(mappedTypes2.ts, 84, 7))
->p.name.get : Symbol(get, Decl(mappedTypes2.ts, 11, 17))
+>p.name.get : Symbol(Proxy.get, Decl(mappedTypes2.ts, 11, 17))
 >p.name : Symbol(name, Decl(mappedTypes2.ts, 35, 17))
 >p : Symbol(p, Decl(mappedTypes2.ts, 83, 9))
 >name : Symbol(name, Decl(mappedTypes2.ts, 35, 17))
->get : Symbol(get, Decl(mappedTypes2.ts, 11, 17))
+>get : Symbol(Proxy.get, Decl(mappedTypes2.ts, 11, 17))
 
     p.width.set(42);
->p.width.set : Symbol(set, Decl(mappedTypes2.ts, 12, 13))
+>p.width.set : Symbol(Proxy.set, Decl(mappedTypes2.ts, 12, 13))
 >p.width : Symbol(width, Decl(mappedTypes2.ts, 36, 17))
 >p : Symbol(p, Decl(mappedTypes2.ts, 83, 9))
 >width : Symbol(width, Decl(mappedTypes2.ts, 36, 17))
->set : Symbol(set, Decl(mappedTypes2.ts, 12, 13))
+>set : Symbol(Proxy.set, Decl(mappedTypes2.ts, 12, 13))
 }
 
 function f6(shape: DeepReadonly<Shape>) {

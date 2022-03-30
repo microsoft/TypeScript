@@ -3,7 +3,7 @@ type T1 = {
 >T1 : Symbol(T1, Decl(circularIndexedAccessErrors.ts, 0, 0))
 
     x: T1["x"];  // Error
->x : Symbol(x, Decl(circularIndexedAccessErrors.ts, 0, 11))
+>x : Symbol(T1.x, Decl(circularIndexedAccessErrors.ts, 0, 11))
 >T1 : Symbol(T1, Decl(circularIndexedAccessErrors.ts, 0, 0))
 
 };
@@ -13,13 +13,13 @@ type T2<K extends "x" | "y"> = {
 >K : Symbol(K, Decl(circularIndexedAccessErrors.ts, 4, 8))
 
     x: T2<K>[K];  // Error
->x : Symbol(x, Decl(circularIndexedAccessErrors.ts, 4, 32))
+>x : Symbol(T2.x, Decl(circularIndexedAccessErrors.ts, 4, 32))
 >T2 : Symbol(T2, Decl(circularIndexedAccessErrors.ts, 2, 2))
 >K : Symbol(K, Decl(circularIndexedAccessErrors.ts, 4, 8))
 >K : Symbol(K, Decl(circularIndexedAccessErrors.ts, 4, 8))
 
     y: number;
->y : Symbol(y, Decl(circularIndexedAccessErrors.ts, 5, 16))
+>y : Symbol(T2.y, Decl(circularIndexedAccessErrors.ts, 5, 16))
 }
 
 declare let x2: T2<"x">;
@@ -28,9 +28,9 @@ declare let x2: T2<"x">;
 
 let x2x = x2.x;
 >x2x : Symbol(x2x, Decl(circularIndexedAccessErrors.ts, 10, 3))
->x2.x : Symbol(x, Decl(circularIndexedAccessErrors.ts, 4, 32))
+>x2.x : Symbol(T2.x, Decl(circularIndexedAccessErrors.ts, 4, 32))
 >x2 : Symbol(x2, Decl(circularIndexedAccessErrors.ts, 9, 11))
->x : Symbol(x, Decl(circularIndexedAccessErrors.ts, 4, 32))
+>x : Symbol(T2.x, Decl(circularIndexedAccessErrors.ts, 4, 32))
 
 interface T3<T extends T3<T>> {
 >T3 : Symbol(T3, Decl(circularIndexedAccessErrors.ts, 10, 15))

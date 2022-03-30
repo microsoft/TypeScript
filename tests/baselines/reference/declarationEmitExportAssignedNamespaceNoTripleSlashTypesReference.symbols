@@ -10,11 +10,11 @@ declare namespace React {
 >T : Symbol(T, Decl(index.d.ts, 3, 26))
 >U : Symbol(U, Decl(index.d.ts, 3, 34))
 >V : Symbol(V, Decl(index.d.ts, 3, 42))
->x : Symbol(x, Decl(index.d.ts, 3, 54))
+>x : Symbol(Component.x, Decl(index.d.ts, 3, 54))
 >T : Symbol(T, Decl(index.d.ts, 3, 26))
->y : Symbol(y, Decl(index.d.ts, 3, 60))
+>y : Symbol(Component.y, Decl(index.d.ts, 3, 60))
 >U : Symbol(U, Decl(index.d.ts, 3, 34))
->z : Symbol(z, Decl(index.d.ts, 3, 66))
+>z : Symbol(Component.z, Decl(index.d.ts, 3, 66))
 >V : Symbol(V, Decl(index.d.ts, 3, 42))
 
     export interface DOMAttributes<T> { }

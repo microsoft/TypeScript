@@ -7,8 +7,8 @@ namespace Example1 {
 
     type S = { done: boolean, value: number };
 >S : Symbol(S, Decl(assignmentCompatWithDiscriminatedUnion.ts, 3, 20))
->done : Symbol(done, Decl(assignmentCompatWithDiscriminatedUnion.ts, 4, 14))
->value : Symbol(value, Decl(assignmentCompatWithDiscriminatedUnion.ts, 4, 29))
+>done : Symbol(S.done, Decl(assignmentCompatWithDiscriminatedUnion.ts, 4, 14))
+>value : Symbol(S.value, Decl(assignmentCompatWithDiscriminatedUnion.ts, 4, 29))
 
     type T =
 >T : Symbol(T, Decl(assignmentCompatWithDiscriminatedUnion.ts, 4, 46))
@@ -42,8 +42,8 @@ namespace Example2 {
 
     type S = { a: 0 | 2, b: 4 };
 >S : Symbol(S, Decl(assignmentCompatWithDiscriminatedUnion.ts, 18, 20))
->a : Symbol(a, Decl(assignmentCompatWithDiscriminatedUnion.ts, 19, 14))
->b : Symbol(b, Decl(assignmentCompatWithDiscriminatedUnion.ts, 19, 24))
+>a : Symbol(S.a, Decl(assignmentCompatWithDiscriminatedUnion.ts, 19, 14))
+>b : Symbol(S.b, Decl(assignmentCompatWithDiscriminatedUnion.ts, 19, 24))
 
     type T = { a: 0,     b: 1 | 4 }     // T0
 >T : Symbol(T, Decl(assignmentCompatWithDiscriminatedUnion.ts, 19, 32))
@@ -79,8 +79,8 @@ namespace Example3 {
 
     type S = { a: 0 | 2, b: 4 };
 >S : Symbol(S, Decl(assignmentCompatWithDiscriminatedUnion.ts, 32, 20))
->a : Symbol(a, Decl(assignmentCompatWithDiscriminatedUnion.ts, 33, 14))
->b : Symbol(b, Decl(assignmentCompatWithDiscriminatedUnion.ts, 33, 24))
+>a : Symbol(S.a, Decl(assignmentCompatWithDiscriminatedUnion.ts, 33, 14))
+>b : Symbol(S.b, Decl(assignmentCompatWithDiscriminatedUnion.ts, 33, 24))
 
     type T = { a: 0,     b: 1 | 4 }     // T0
 >T : Symbol(T, Decl(assignmentCompatWithDiscriminatedUnion.ts, 33, 32))
@@ -117,8 +117,8 @@ namespace Example4 {
 
     type S = { a: 0 | 2, b: 4 };
 >S : Symbol(S, Decl(assignmentCompatWithDiscriminatedUnion.ts, 47, 20))
->a : Symbol(a, Decl(assignmentCompatWithDiscriminatedUnion.ts, 48, 14))
->b : Symbol(b, Decl(assignmentCompatWithDiscriminatedUnion.ts, 48, 24))
+>a : Symbol(S.a, Decl(assignmentCompatWithDiscriminatedUnion.ts, 48, 14))
+>b : Symbol(S.b, Decl(assignmentCompatWithDiscriminatedUnion.ts, 48, 24))
 
     type T = { a: 0,     b: 1 | 4 }             // T0
 >T : Symbol(T, Decl(assignmentCompatWithDiscriminatedUnion.ts, 48, 32))
@@ -161,11 +161,11 @@ namespace Example5 {
 
     type S = { a: N, b: N, c: N };
 >S : Symbol(S, Decl(assignmentCompatWithDiscriminatedUnion.ts, 65, 23))
->a : Symbol(a, Decl(assignmentCompatWithDiscriminatedUnion.ts, 66, 14))
+>a : Symbol(S.a, Decl(assignmentCompatWithDiscriminatedUnion.ts, 66, 14))
 >N : Symbol(N, Decl(assignmentCompatWithDiscriminatedUnion.ts, 61, 20))
->b : Symbol(b, Decl(assignmentCompatWithDiscriminatedUnion.ts, 66, 20))
+>b : Symbol(S.b, Decl(assignmentCompatWithDiscriminatedUnion.ts, 66, 20))
 >N : Symbol(N, Decl(assignmentCompatWithDiscriminatedUnion.ts, 61, 20))
->c : Symbol(c, Decl(assignmentCompatWithDiscriminatedUnion.ts, 66, 26))
+>c : Symbol(S.c, Decl(assignmentCompatWithDiscriminatedUnion.ts, 66, 26))
 >N : Symbol(N, Decl(assignmentCompatWithDiscriminatedUnion.ts, 61, 20))
 
     type T = { a: 0, b: N, c: N }
@@ -273,10 +273,10 @@ namespace GH14865 {
 >Style2 : Symbol(Style2, Decl(assignmentCompatWithDiscriminatedUnion.ts, 92, 6))
 
         type: "A" | "B";
->type : Symbol(type, Decl(assignmentCompatWithDiscriminatedUnion.ts, 94, 19))
+>type : Symbol(Style2.type, Decl(assignmentCompatWithDiscriminatedUnion.ts, 94, 19))
 
         data: string;
->data : Symbol(data, Decl(assignmentCompatWithDiscriminatedUnion.ts, 95, 24))
+>data : Symbol(Style2.data, Decl(assignmentCompatWithDiscriminatedUnion.ts, 95, 24))
     }
 
     const a: Style2 = { type: "A", data: "whatevs" };
@@ -290,9 +290,9 @@ namespace GH14865 {
 >Style1 : Symbol(Style1, Decl(assignmentCompatWithDiscriminatedUnion.ts, 85, 19))
 
     a.type; // "A" | "B"
->a.type : Symbol(type, Decl(assignmentCompatWithDiscriminatedUnion.ts, 94, 19))
+>a.type : Symbol(Style2.type, Decl(assignmentCompatWithDiscriminatedUnion.ts, 94, 19))
 >a : Symbol(a, Decl(assignmentCompatWithDiscriminatedUnion.ts, 99, 9))
->type : Symbol(type, Decl(assignmentCompatWithDiscriminatedUnion.ts, 94, 19))
+>type : Symbol(Style2.type, Decl(assignmentCompatWithDiscriminatedUnion.ts, 94, 19))
 
     b.type; // "A" | "B"
 >b.type : Symbol(type, Decl(assignmentCompatWithDiscriminatedUnion.ts, 86, 19), Decl(assignmentCompatWithDiscriminatedUnion.ts, 89, 9))

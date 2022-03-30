@@ -332,41 +332,41 @@ class Tests12 {
 >Tests12 : Symbol(Tests12, Decl(typeofThis.ts, 121, 1))
 
     test1() { // OK
->test1 : Symbol(Tests12.test1, Decl(typeofThis.ts, 123, 15))
+>test1 : Symbol(Test.test1, Decl(typeofThis.ts, 123, 15))
 
         type Test = typeof this;
 >Test : Symbol(Test, Decl(typeofThis.ts, 124, 13))
->this : Symbol(Tests12, Decl(typeofThis.ts, 121, 1))
+>this : Symbol(Test, Decl(typeofThis.ts, 121, 1))
     }
 
     test2() { // OK
->test2 : Symbol(Tests12.test2, Decl(typeofThis.ts, 126, 5))
+>test2 : Symbol(Test.test2, Decl(typeofThis.ts, 126, 5))
 
         for (;;) {}
         type Test = typeof this;
 >Test : Symbol(Test, Decl(typeofThis.ts, 129, 19))
->this : Symbol(Tests12, Decl(typeofThis.ts, 121, 1))
+>this : Symbol(Test, Decl(typeofThis.ts, 121, 1))
     }
 
     test3() { // expected no compile errors
->test3 : Symbol(Tests12.test3, Decl(typeofThis.ts, 131, 5))
+>test3 : Symbol(Test.test3, Decl(typeofThis.ts, 131, 5))
 
         for (const dummy in []) {}
 >dummy : Symbol(dummy, Decl(typeofThis.ts, 134, 18))
 
         type Test = typeof this;
 >Test : Symbol(Test, Decl(typeofThis.ts, 134, 34))
->this : Symbol(Tests12, Decl(typeofThis.ts, 121, 1))
+>this : Symbol(Test, Decl(typeofThis.ts, 121, 1))
     }
 
     test4() { // expected no compile errors
->test4 : Symbol(Tests12.test4, Decl(typeofThis.ts, 136, 5))
+>test4 : Symbol(Test.test4, Decl(typeofThis.ts, 136, 5))
 
         for (const dummy of []) {}
 >dummy : Symbol(dummy, Decl(typeofThis.ts, 139, 18))
 
         type Test = typeof this;
 >Test : Symbol(Test, Decl(typeofThis.ts, 139, 34))
->this : Symbol(Tests12, Decl(typeofThis.ts, 121, 1))
+>this : Symbol(Test, Decl(typeofThis.ts, 121, 1))
     }
 }

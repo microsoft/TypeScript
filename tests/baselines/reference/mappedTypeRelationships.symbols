@@ -341,8 +341,8 @@ function f23<T, U extends T, K extends keyof T>(x: T, y: Readonly<U>, k: K) {
 
 type Thing = { a: string, b: string };
 >Thing : Symbol(Thing, Decl(mappedTypeRelationships.ts, 66, 1))
->a : Symbol(a, Decl(mappedTypeRelationships.ts, 68, 14))
->b : Symbol(b, Decl(mappedTypeRelationships.ts, 68, 25))
+>a : Symbol(Thing.a, Decl(mappedTypeRelationships.ts, 68, 14))
+>b : Symbol(Thing.b, Decl(mappedTypeRelationships.ts, 68, 25))
 
 function f30<T>(x: T, y: Partial<T>) {
 >f30 : Symbol(f30, Decl(mappedTypeRelationships.ts, 68, 38))
@@ -424,7 +424,7 @@ type Item = {
 >Item : Symbol(Item, Decl(mappedTypeRelationships.ts, 88, 1))
 
     name: string;
->name : Symbol(name, Decl(mappedTypeRelationships.ts, 90, 13))
+>name : Symbol(Item.name, Decl(mappedTypeRelationships.ts, 90, 13))
 }
 
 type ItemMap = {
@@ -451,10 +451,10 @@ function f50<T extends ItemMap>(obj: T, key: keyof T) {
 >key : Symbol(key, Decl(mappedTypeRelationships.ts, 98, 39))
 
     return obj[key].name;
->obj[key].name : Symbol(name, Decl(mappedTypeRelationships.ts, 90, 13))
+>obj[key].name : Symbol(Item.name, Decl(mappedTypeRelationships.ts, 90, 13))
 >obj : Symbol(obj, Decl(mappedTypeRelationships.ts, 98, 32))
 >key : Symbol(key, Decl(mappedTypeRelationships.ts, 98, 39))
->name : Symbol(name, Decl(mappedTypeRelationships.ts, 90, 13))
+>name : Symbol(Item.name, Decl(mappedTypeRelationships.ts, 90, 13))
 }
 
 function f51<T extends ItemMap, K extends keyof T>(obj: T, key: K) {
@@ -475,10 +475,10 @@ function f51<T extends ItemMap, K extends keyof T>(obj: T, key: K) {
 >key : Symbol(key, Decl(mappedTypeRelationships.ts, 103, 58))
 
     return obj[key].name;
->obj[key].name : Symbol(name, Decl(mappedTypeRelationships.ts, 90, 13))
+>obj[key].name : Symbol(Item.name, Decl(mappedTypeRelationships.ts, 90, 13))
 >obj : Symbol(obj, Decl(mappedTypeRelationships.ts, 103, 51))
 >key : Symbol(key, Decl(mappedTypeRelationships.ts, 103, 58))
->name : Symbol(name, Decl(mappedTypeRelationships.ts, 90, 13))
+>name : Symbol(Item.name, Decl(mappedTypeRelationships.ts, 90, 13))
 }
 
 type T1<T> = {

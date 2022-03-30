@@ -279,28 +279,28 @@ type a = {
 >a : Symbol(a, Decl(discriminatedUnionTypes2.ts, 93, 1))
 
     type: 'a',
->type : Symbol(type, Decl(discriminatedUnionTypes2.ts, 97, 10))
+>type : Symbol(a.type, Decl(discriminatedUnionTypes2.ts, 97, 10))
 
     data: string
->data : Symbol(data, Decl(discriminatedUnionTypes2.ts, 98, 14))
+>data : Symbol(a.data, Decl(discriminatedUnionTypes2.ts, 98, 14))
 }
 type b = {
 >b : Symbol(b, Decl(discriminatedUnionTypes2.ts, 100, 1))
 
     type: 'b',
->type : Symbol(type, Decl(discriminatedUnionTypes2.ts, 101, 10))
+>type : Symbol(b.type, Decl(discriminatedUnionTypes2.ts, 101, 10))
 
     name: string
->name : Symbol(name, Decl(discriminatedUnionTypes2.ts, 102, 14))
+>name : Symbol(b.name, Decl(discriminatedUnionTypes2.ts, 102, 14))
 }
 type c = {
 >c : Symbol(c, Decl(discriminatedUnionTypes2.ts, 104, 1))
 
     type: 'c',
->type : Symbol(type, Decl(discriminatedUnionTypes2.ts, 105, 10))
+>type : Symbol(c.type, Decl(discriminatedUnionTypes2.ts, 105, 10))
 
     other: string
->other : Symbol(other, Decl(discriminatedUnionTypes2.ts, 106, 14))
+>other : Symbol(c.other, Decl(discriminatedUnionTypes2.ts, 106, 14))
 }
 
 type abc = a | b | c;
@@ -322,15 +322,15 @@ function f(problem: abc & (b | c)) {
 >type : Symbol(type, Decl(discriminatedUnionTypes2.ts, 101, 10), Decl(discriminatedUnionTypes2.ts, 105, 10))
 
         problem.name;
->problem.name : Symbol(name, Decl(discriminatedUnionTypes2.ts, 102, 14))
+>problem.name : Symbol(b.name, Decl(discriminatedUnionTypes2.ts, 102, 14))
 >problem : Symbol(problem, Decl(discriminatedUnionTypes2.ts, 112, 11))
->name : Symbol(name, Decl(discriminatedUnionTypes2.ts, 102, 14))
+>name : Symbol(b.name, Decl(discriminatedUnionTypes2.ts, 102, 14))
     }
     else {
         problem.other;
->problem.other : Symbol(other, Decl(discriminatedUnionTypes2.ts, 106, 14))
+>problem.other : Symbol(c.other, Decl(discriminatedUnionTypes2.ts, 106, 14))
 >problem : Symbol(problem, Decl(discriminatedUnionTypes2.ts, 112, 11))
->other : Symbol(other, Decl(discriminatedUnionTypes2.ts, 106, 14))
+>other : Symbol(c.other, Decl(discriminatedUnionTypes2.ts, 106, 14))
     }
 }
 

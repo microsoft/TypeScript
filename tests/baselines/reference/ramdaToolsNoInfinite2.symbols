@@ -719,7 +719,7 @@ declare module "Number/_Internal" {
 >Numbers : Symbol(Numbers, Decl(ramdaToolsNoInfinite2.ts, 205, 342))
 
         'string': {
->'string' : Symbol('string', Decl(ramdaToolsNoInfinite2.ts, 207, 27))
+>'string' : Symbol(Numbers['string'], Decl(ramdaToolsNoInfinite2.ts, 207, 27))
 
             'all': Format<IterationMap[KnownIterationMapKeys], 's'>;
 >'all' : Symbol('all', Decl(ramdaToolsNoInfinite2.ts, 208, 19))
@@ -746,7 +746,7 @@ declare module "Number/_Internal" {
 
         };
         'number': {
->'number' : Symbol('number', Decl(ramdaToolsNoInfinite2.ts, 213, 10))
+>'number' : Symbol(Numbers['number'], Decl(ramdaToolsNoInfinite2.ts, 213, 10))
 
             'all': Format<IterationMap[KnownIterationMapKeys], 'n'>;
 >'all' : Symbol('all', Decl(ramdaToolsNoInfinite2.ts, 214, 19))
@@ -1373,250 +1373,250 @@ declare module "Iteration/IterationOf" {
 >IterationMap : Symbol(IterationMap, Decl(ramdaToolsNoInfinite2.ts, 387, 43))
 
         '-40': ['__', '-39', '-40', -40, '-'];
->'-40' : Symbol('-40', Decl(ramdaToolsNoInfinite2.ts, 389, 32))
+>'-40' : Symbol(IterationMap['-40'], Decl(ramdaToolsNoInfinite2.ts, 389, 32))
 
         '-39': ['-40', '-38', '-39', -39, '-'];
->'-39' : Symbol('-39', Decl(ramdaToolsNoInfinite2.ts, 390, 46))
+>'-39' : Symbol(IterationMap['-39'], Decl(ramdaToolsNoInfinite2.ts, 390, 46))
 
         '-38': ['-39', '-37', '-38', -38, '-'];
->'-38' : Symbol('-38', Decl(ramdaToolsNoInfinite2.ts, 391, 47))
+>'-38' : Symbol(IterationMap['-38'], Decl(ramdaToolsNoInfinite2.ts, 391, 47))
 
         '-37': ['-38', '-36', '-37', -37, '-'];
->'-37' : Symbol('-37', Decl(ramdaToolsNoInfinite2.ts, 392, 47))
+>'-37' : Symbol(IterationMap['-37'], Decl(ramdaToolsNoInfinite2.ts, 392, 47))
 
         '-36': ['-37', '-35', '-36', -36, '-'];
->'-36' : Symbol('-36', Decl(ramdaToolsNoInfinite2.ts, 393, 47))
+>'-36' : Symbol(IterationMap['-36'], Decl(ramdaToolsNoInfinite2.ts, 393, 47))
 
         '-35': ['-36', '-34', '-35', -35, '-'];
->'-35' : Symbol('-35', Decl(ramdaToolsNoInfinite2.ts, 394, 47))
+>'-35' : Symbol(IterationMap['-35'], Decl(ramdaToolsNoInfinite2.ts, 394, 47))
 
         '-34': ['-35', '-33', '-34', -34, '-'];
->'-34' : Symbol('-34', Decl(ramdaToolsNoInfinite2.ts, 395, 47))
+>'-34' : Symbol(IterationMap['-34'], Decl(ramdaToolsNoInfinite2.ts, 395, 47))
 
         '-33': ['-34', '-32', '-33', -33, '-'];
->'-33' : Symbol('-33', Decl(ramdaToolsNoInfinite2.ts, 396, 47))
+>'-33' : Symbol(IterationMap['-33'], Decl(ramdaToolsNoInfinite2.ts, 396, 47))
 
         '-32': ['-33', '-31', '-32', -32, '-'];
->'-32' : Symbol('-32', Decl(ramdaToolsNoInfinite2.ts, 397, 47))
+>'-32' : Symbol(IterationMap['-32'], Decl(ramdaToolsNoInfinite2.ts, 397, 47))
 
         '-31': ['-32', '-30', '-31', -31, '-'];
->'-31' : Symbol('-31', Decl(ramdaToolsNoInfinite2.ts, 398, 47))
+>'-31' : Symbol(IterationMap['-31'], Decl(ramdaToolsNoInfinite2.ts, 398, 47))
 
         '-30': ['-31', '-29', '-30', -30, '-'];
->'-30' : Symbol('-30', Decl(ramdaToolsNoInfinite2.ts, 399, 47))
+>'-30' : Symbol(IterationMap['-30'], Decl(ramdaToolsNoInfinite2.ts, 399, 47))
 
         '-29': ['-30', '-28', '-29', -29, '-'];
->'-29' : Symbol('-29', Decl(ramdaToolsNoInfinite2.ts, 400, 47))
+>'-29' : Symbol(IterationMap['-29'], Decl(ramdaToolsNoInfinite2.ts, 400, 47))
 
         '-28': ['-29', '-27', '-28', -28, '-'];
->'-28' : Symbol('-28', Decl(ramdaToolsNoInfinite2.ts, 401, 47))
+>'-28' : Symbol(IterationMap['-28'], Decl(ramdaToolsNoInfinite2.ts, 401, 47))
 
         '-27': ['-28', '-26', '-27', -27, '-'];
->'-27' : Symbol('-27', Decl(ramdaToolsNoInfinite2.ts, 402, 47))
+>'-27' : Symbol(IterationMap['-27'], Decl(ramdaToolsNoInfinite2.ts, 402, 47))
 
         '-26': ['-27', '-25', '-26', -26, '-'];
->'-26' : Symbol('-26', Decl(ramdaToolsNoInfinite2.ts, 403, 47))
+>'-26' : Symbol(IterationMap['-26'], Decl(ramdaToolsNoInfinite2.ts, 403, 47))
 
         '-25': ['-26', '-24', '-25', -25, '-'];
->'-25' : Symbol('-25', Decl(ramdaToolsNoInfinite2.ts, 404, 47))
+>'-25' : Symbol(IterationMap['-25'], Decl(ramdaToolsNoInfinite2.ts, 404, 47))
 
         '-24': ['-25', '-23', '-24', -24, '-'];
->'-24' : Symbol('-24', Decl(ramdaToolsNoInfinite2.ts, 405, 47))
+>'-24' : Symbol(IterationMap['-24'], Decl(ramdaToolsNoInfinite2.ts, 405, 47))
 
         '-23': ['-24', '-22', '-23', -23, '-'];
->'-23' : Symbol('-23', Decl(ramdaToolsNoInfinite2.ts, 406, 47))
+>'-23' : Symbol(IterationMap['-23'], Decl(ramdaToolsNoInfinite2.ts, 406, 47))
 
         '-22': ['-23', '-21', '-22', -22, '-'];
->'-22' : Symbol('-22', Decl(ramdaToolsNoInfinite2.ts, 407, 47))
+>'-22' : Symbol(IterationMap['-22'], Decl(ramdaToolsNoInfinite2.ts, 407, 47))
 
         '-21': ['-22', '-20', '-21', -21, '-'];
->'-21' : Symbol('-21', Decl(ramdaToolsNoInfinite2.ts, 408, 47))
+>'-21' : Symbol(IterationMap['-21'], Decl(ramdaToolsNoInfinite2.ts, 408, 47))
 
         '-20': ['-21', '-19', '-20', -20, '-'];
->'-20' : Symbol('-20', Decl(ramdaToolsNoInfinite2.ts, 409, 47))
+>'-20' : Symbol(IterationMap['-20'], Decl(ramdaToolsNoInfinite2.ts, 409, 47))
 
         '-19': ['-20', '-18', '-19', -19, '-'];
->'-19' : Symbol('-19', Decl(ramdaToolsNoInfinite2.ts, 410, 47))
+>'-19' : Symbol(IterationMap['-19'], Decl(ramdaToolsNoInfinite2.ts, 410, 47))
 
         '-18': ['-19', '-17', '-18', -18, '-'];
->'-18' : Symbol('-18', Decl(ramdaToolsNoInfinite2.ts, 411, 47))
+>'-18' : Symbol(IterationMap['-18'], Decl(ramdaToolsNoInfinite2.ts, 411, 47))
 
         '-17': ['-18', '-16', '-17', -17, '-'];
->'-17' : Symbol('-17', Decl(ramdaToolsNoInfinite2.ts, 412, 47))
+>'-17' : Symbol(IterationMap['-17'], Decl(ramdaToolsNoInfinite2.ts, 412, 47))
 
         '-16': ['-17', '-15', '-16', -16, '-'];
->'-16' : Symbol('-16', Decl(ramdaToolsNoInfinite2.ts, 413, 47))
+>'-16' : Symbol(IterationMap['-16'], Decl(ramdaToolsNoInfinite2.ts, 413, 47))
 
         '-15': ['-16', '-14', '-15', -15, '-'];
->'-15' : Symbol('-15', Decl(ramdaToolsNoInfinite2.ts, 414, 47))
+>'-15' : Symbol(IterationMap['-15'], Decl(ramdaToolsNoInfinite2.ts, 414, 47))
 
         '-14': ['-15', '-13', '-14', -14, '-'];
->'-14' : Symbol('-14', Decl(ramdaToolsNoInfinite2.ts, 415, 47))
+>'-14' : Symbol(IterationMap['-14'], Decl(ramdaToolsNoInfinite2.ts, 415, 47))
 
         '-13': ['-14', '-12', '-13', -13, '-'];
->'-13' : Symbol('-13', Decl(ramdaToolsNoInfinite2.ts, 416, 47))
+>'-13' : Symbol(IterationMap['-13'], Decl(ramdaToolsNoInfinite2.ts, 416, 47))
 
         '-12': ['-13', '-11', '-12', -12, '-'];
->'-12' : Symbol('-12', Decl(ramdaToolsNoInfinite2.ts, 417, 47))
+>'-12' : Symbol(IterationMap['-12'], Decl(ramdaToolsNoInfinite2.ts, 417, 47))
 
         '-11': ['-12', '-10', '-11', -11, '-'];
->'-11' : Symbol('-11', Decl(ramdaToolsNoInfinite2.ts, 418, 47))
+>'-11' : Symbol(IterationMap['-11'], Decl(ramdaToolsNoInfinite2.ts, 418, 47))
 
         '-10': ['-11', '-9', '-10', -10, '-'];
->'-10' : Symbol('-10', Decl(ramdaToolsNoInfinite2.ts, 419, 47))
+>'-10' : Symbol(IterationMap['-10'], Decl(ramdaToolsNoInfinite2.ts, 419, 47))
 
         '-9': ['-10', '-8', '-9', -9, '-'];
->'-9' : Symbol('-9', Decl(ramdaToolsNoInfinite2.ts, 420, 46))
+>'-9' : Symbol(IterationMap['-9'], Decl(ramdaToolsNoInfinite2.ts, 420, 46))
 
         '-8': ['-9', '-7', '-8', -8, '-'];
->'-8' : Symbol('-8', Decl(ramdaToolsNoInfinite2.ts, 421, 43))
+>'-8' : Symbol(IterationMap['-8'], Decl(ramdaToolsNoInfinite2.ts, 421, 43))
 
         '-7': ['-8', '-6', '-7', -7, '-'];
->'-7' : Symbol('-7', Decl(ramdaToolsNoInfinite2.ts, 422, 42))
+>'-7' : Symbol(IterationMap['-7'], Decl(ramdaToolsNoInfinite2.ts, 422, 42))
 
         '-6': ['-7', '-5', '-6', -6, '-'];
->'-6' : Symbol('-6', Decl(ramdaToolsNoInfinite2.ts, 423, 42))
+>'-6' : Symbol(IterationMap['-6'], Decl(ramdaToolsNoInfinite2.ts, 423, 42))
 
         '-5': ['-6', '-4', '-5', -5, '-'];
->'-5' : Symbol('-5', Decl(ramdaToolsNoInfinite2.ts, 424, 42))
+>'-5' : Symbol(IterationMap['-5'], Decl(ramdaToolsNoInfinite2.ts, 424, 42))
 
         '-4': ['-5', '-3', '-4', -4, '-'];
->'-4' : Symbol('-4', Decl(ramdaToolsNoInfinite2.ts, 425, 42))
+>'-4' : Symbol(IterationMap['-4'], Decl(ramdaToolsNoInfinite2.ts, 425, 42))
 
         '-3': ['-4', '-2', '-3', -3, '-'];
->'-3' : Symbol('-3', Decl(ramdaToolsNoInfinite2.ts, 426, 42))
+>'-3' : Symbol(IterationMap['-3'], Decl(ramdaToolsNoInfinite2.ts, 426, 42))
 
         '-2': ['-3', '-1', '-2', -2, '-'];
->'-2' : Symbol('-2', Decl(ramdaToolsNoInfinite2.ts, 427, 42))
+>'-2' : Symbol(IterationMap['-2'], Decl(ramdaToolsNoInfinite2.ts, 427, 42))
 
         '-1': ['-2', '0', '-1', -1, '-'];
->'-1' : Symbol('-1', Decl(ramdaToolsNoInfinite2.ts, 428, 42))
+>'-1' : Symbol(IterationMap['-1'], Decl(ramdaToolsNoInfinite2.ts, 428, 42))
 
         '0': ['-1', '1', '0', 0, '0'];
->'0' : Symbol('0', Decl(ramdaToolsNoInfinite2.ts, 429, 41))
+>'0' : Symbol(IterationMap['0'], Decl(ramdaToolsNoInfinite2.ts, 429, 41))
 
         '1': ['0', '2', '1', 1, '+'];
->'1' : Symbol('1', Decl(ramdaToolsNoInfinite2.ts, 430, 38))
+>'1' : Symbol(IterationMap['1'], Decl(ramdaToolsNoInfinite2.ts, 430, 38))
 
         '2': ['1', '3', '2', 2, '+'];
->'2' : Symbol('2', Decl(ramdaToolsNoInfinite2.ts, 431, 37))
+>'2' : Symbol(IterationMap['2'], Decl(ramdaToolsNoInfinite2.ts, 431, 37))
 
         '3': ['2', '4', '3', 3, '+'];
->'3' : Symbol('3', Decl(ramdaToolsNoInfinite2.ts, 432, 37))
+>'3' : Symbol(IterationMap['3'], Decl(ramdaToolsNoInfinite2.ts, 432, 37))
 
         '4': ['3', '5', '4', 4, '+'];
->'4' : Symbol('4', Decl(ramdaToolsNoInfinite2.ts, 433, 37))
+>'4' : Symbol(IterationMap['4'], Decl(ramdaToolsNoInfinite2.ts, 433, 37))
 
         '5': ['4', '6', '5', 5, '+'];
->'5' : Symbol('5', Decl(ramdaToolsNoInfinite2.ts, 434, 37))
+>'5' : Symbol(IterationMap['5'], Decl(ramdaToolsNoInfinite2.ts, 434, 37))
 
         '6': ['5', '7', '6', 6, '+'];
->'6' : Symbol('6', Decl(ramdaToolsNoInfinite2.ts, 435, 37))
+>'6' : Symbol(IterationMap['6'], Decl(ramdaToolsNoInfinite2.ts, 435, 37))
 
         '7': ['6', '8', '7', 7, '+'];
->'7' : Symbol('7', Decl(ramdaToolsNoInfinite2.ts, 436, 37))
+>'7' : Symbol(IterationMap['7'], Decl(ramdaToolsNoInfinite2.ts, 436, 37))
 
         '8': ['7', '9', '8', 8, '+'];
->'8' : Symbol('8', Decl(ramdaToolsNoInfinite2.ts, 437, 37))
+>'8' : Symbol(IterationMap['8'], Decl(ramdaToolsNoInfinite2.ts, 437, 37))
 
         '9': ['8', '10', '9', 9, '+'];
->'9' : Symbol('9', Decl(ramdaToolsNoInfinite2.ts, 438, 37))
+>'9' : Symbol(IterationMap['9'], Decl(ramdaToolsNoInfinite2.ts, 438, 37))
 
         '10': ['9', '11', '10', 10, '+'];
->'10' : Symbol('10', Decl(ramdaToolsNoInfinite2.ts, 439, 38))
+>'10' : Symbol(IterationMap['10'], Decl(ramdaToolsNoInfinite2.ts, 439, 38))
 
         '11': ['10', '12', '11', 11, '+'];
->'11' : Symbol('11', Decl(ramdaToolsNoInfinite2.ts, 440, 41))
+>'11' : Symbol(IterationMap['11'], Decl(ramdaToolsNoInfinite2.ts, 440, 41))
 
         '12': ['11', '13', '12', 12, '+'];
->'12' : Symbol('12', Decl(ramdaToolsNoInfinite2.ts, 441, 42))
+>'12' : Symbol(IterationMap['12'], Decl(ramdaToolsNoInfinite2.ts, 441, 42))
 
         '13': ['12', '14', '13', 13, '+'];
->'13' : Symbol('13', Decl(ramdaToolsNoInfinite2.ts, 442, 42))
+>'13' : Symbol(IterationMap['13'], Decl(ramdaToolsNoInfinite2.ts, 442, 42))
 
         '14': ['13', '15', '14', 14, '+'];
->'14' : Symbol('14', Decl(ramdaToolsNoInfinite2.ts, 443, 42))
+>'14' : Symbol(IterationMap['14'], Decl(ramdaToolsNoInfinite2.ts, 443, 42))
 
         '15': ['14', '16', '15', 15, '+'];
->'15' : Symbol('15', Decl(ramdaToolsNoInfinite2.ts, 444, 42))
+>'15' : Symbol(IterationMap['15'], Decl(ramdaToolsNoInfinite2.ts, 444, 42))
 
         '16': ['15', '17', '16', 16, '+'];
->'16' : Symbol('16', Decl(ramdaToolsNoInfinite2.ts, 445, 42))
+>'16' : Symbol(IterationMap['16'], Decl(ramdaToolsNoInfinite2.ts, 445, 42))
 
         '17': ['16', '18', '17', 17, '+'];
->'17' : Symbol('17', Decl(ramdaToolsNoInfinite2.ts, 446, 42))
+>'17' : Symbol(IterationMap['17'], Decl(ramdaToolsNoInfinite2.ts, 446, 42))
 
         '18': ['17', '19', '18', 18, '+'];
->'18' : Symbol('18', Decl(ramdaToolsNoInfinite2.ts, 447, 42))
+>'18' : Symbol(IterationMap['18'], Decl(ramdaToolsNoInfinite2.ts, 447, 42))
 
         '19': ['18', '20', '19', 19, '+'];
->'19' : Symbol('19', Decl(ramdaToolsNoInfinite2.ts, 448, 42))
+>'19' : Symbol(IterationMap['19'], Decl(ramdaToolsNoInfinite2.ts, 448, 42))
 
         '20': ['19', '21', '20', 20, '+'];
->'20' : Symbol('20', Decl(ramdaToolsNoInfinite2.ts, 449, 42))
+>'20' : Symbol(IterationMap['20'], Decl(ramdaToolsNoInfinite2.ts, 449, 42))
 
         '21': ['20', '22', '21', 21, '+'];
->'21' : Symbol('21', Decl(ramdaToolsNoInfinite2.ts, 450, 42))
+>'21' : Symbol(IterationMap['21'], Decl(ramdaToolsNoInfinite2.ts, 450, 42))
 
         '22': ['21', '23', '22', 22, '+'];
->'22' : Symbol('22', Decl(ramdaToolsNoInfinite2.ts, 451, 42))
+>'22' : Symbol(IterationMap['22'], Decl(ramdaToolsNoInfinite2.ts, 451, 42))
 
         '23': ['22', '24', '23', 23, '+'];
->'23' : Symbol('23', Decl(ramdaToolsNoInfinite2.ts, 452, 42))
+>'23' : Symbol(IterationMap['23'], Decl(ramdaToolsNoInfinite2.ts, 452, 42))
 
         '24': ['23', '25', '24', 24, '+'];
->'24' : Symbol('24', Decl(ramdaToolsNoInfinite2.ts, 453, 42))
+>'24' : Symbol(IterationMap['24'], Decl(ramdaToolsNoInfinite2.ts, 453, 42))
 
         '25': ['24', '26', '25', 25, '+'];
->'25' : Symbol('25', Decl(ramdaToolsNoInfinite2.ts, 454, 42))
+>'25' : Symbol(IterationMap['25'], Decl(ramdaToolsNoInfinite2.ts, 454, 42))
 
         '26': ['25', '27', '26', 26, '+'];
->'26' : Symbol('26', Decl(ramdaToolsNoInfinite2.ts, 455, 42))
+>'26' : Symbol(IterationMap['26'], Decl(ramdaToolsNoInfinite2.ts, 455, 42))
 
         '27': ['26', '28', '27', 27, '+'];
->'27' : Symbol('27', Decl(ramdaToolsNoInfinite2.ts, 456, 42))
+>'27' : Symbol(IterationMap['27'], Decl(ramdaToolsNoInfinite2.ts, 456, 42))
 
         '28': ['27', '29', '28', 28, '+'];
->'28' : Symbol('28', Decl(ramdaToolsNoInfinite2.ts, 457, 42))
+>'28' : Symbol(IterationMap['28'], Decl(ramdaToolsNoInfinite2.ts, 457, 42))
 
         '29': ['28', '30', '29', 29, '+'];
->'29' : Symbol('29', Decl(ramdaToolsNoInfinite2.ts, 458, 42))
+>'29' : Symbol(IterationMap['29'], Decl(ramdaToolsNoInfinite2.ts, 458, 42))
 
         '30': ['29', '31', '30', 30, '+'];
->'30' : Symbol('30', Decl(ramdaToolsNoInfinite2.ts, 459, 42))
+>'30' : Symbol(IterationMap['30'], Decl(ramdaToolsNoInfinite2.ts, 459, 42))
 
         '31': ['30', '32', '31', 31, '+'];
->'31' : Symbol('31', Decl(ramdaToolsNoInfinite2.ts, 460, 42))
+>'31' : Symbol(IterationMap['31'], Decl(ramdaToolsNoInfinite2.ts, 460, 42))
 
         '32': ['31', '33', '32', 32, '+'];
->'32' : Symbol('32', Decl(ramdaToolsNoInfinite2.ts, 461, 42))
+>'32' : Symbol(IterationMap['32'], Decl(ramdaToolsNoInfinite2.ts, 461, 42))
 
         '33': ['32', '34', '33', 33, '+'];
->'33' : Symbol('33', Decl(ramdaToolsNoInfinite2.ts, 462, 42))
+>'33' : Symbol(IterationMap['33'], Decl(ramdaToolsNoInfinite2.ts, 462, 42))
 
         '34': ['33', '35', '34', 34, '+'];
->'34' : Symbol('34', Decl(ramdaToolsNoInfinite2.ts, 463, 42))
+>'34' : Symbol(IterationMap['34'], Decl(ramdaToolsNoInfinite2.ts, 463, 42))
 
         '35': ['34', '36', '35', 35, '+'];
->'35' : Symbol('35', Decl(ramdaToolsNoInfinite2.ts, 464, 42))
+>'35' : Symbol(IterationMap['35'], Decl(ramdaToolsNoInfinite2.ts, 464, 42))
 
         '36': ['35', '37', '36', 36, '+'];
->'36' : Symbol('36', Decl(ramdaToolsNoInfinite2.ts, 465, 42))
+>'36' : Symbol(IterationMap['36'], Decl(ramdaToolsNoInfinite2.ts, 465, 42))
 
         '37': ['36', '38', '37', 37, '+'];
->'37' : Symbol('37', Decl(ramdaToolsNoInfinite2.ts, 466, 42))
+>'37' : Symbol(IterationMap['37'], Decl(ramdaToolsNoInfinite2.ts, 466, 42))
 
         '38': ['37', '39', '38', 38, '+'];
->'38' : Symbol('38', Decl(ramdaToolsNoInfinite2.ts, 467, 42))
+>'38' : Symbol(IterationMap['38'], Decl(ramdaToolsNoInfinite2.ts, 467, 42))
 
         '39': ['38', '40', '39', 39, '+'];
->'39' : Symbol('39', Decl(ramdaToolsNoInfinite2.ts, 468, 42))
+>'39' : Symbol(IterationMap['39'], Decl(ramdaToolsNoInfinite2.ts, 468, 42))
 
         '40': ['39', '__', '40', 40, '+'];
->'40' : Symbol('40', Decl(ramdaToolsNoInfinite2.ts, 469, 42))
+>'40' : Symbol(IterationMap['40'], Decl(ramdaToolsNoInfinite2.ts, 469, 42))
 
         '__': ['__', '__', string, number, '-' | '0' | '+'];
->'__' : Symbol('__', Decl(ramdaToolsNoInfinite2.ts, 470, 42))
+>'__' : Symbol(IterationMap['__'], Decl(ramdaToolsNoInfinite2.ts, 470, 42))
 
     };
 
@@ -1761,7 +1761,7 @@ declare module "List/List" {
     export type List<A = any> = ReadonlyArray<A>;
 >List : Symbol(List, Decl(ramdaToolsNoInfinite2.ts, 516, 28))
 >A : Symbol(A, Decl(ramdaToolsNoInfinite2.ts, 518, 21))
->ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+>ReadonlyArray : Symbol(List, Decl(lib.es5.d.ts, --, --))
 >A : Symbol(A, Decl(ramdaToolsNoInfinite2.ts, 518, 21))
 }
 declare module "Function/Function" {

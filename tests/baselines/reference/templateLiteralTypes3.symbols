@@ -389,7 +389,7 @@ interface ITest<P extends Prefixes, E extends AllPrefixData = PrefixData<P>> {
 
 type Schema = { a: { b: { c: number } } };
 >Schema : Symbol(Schema, Decl(templateLiteralTypes3.ts, 116, 1))
->a : Symbol(a, Decl(templateLiteralTypes3.ts, 120, 15))
+>a : Symbol(Schema.a, Decl(templateLiteralTypes3.ts, 120, 15))
 >b : Symbol(b, Decl(templateLiteralTypes3.ts, 120, 20))
 >c : Symbol(c, Decl(templateLiteralTypes3.ts, 120, 25))
 

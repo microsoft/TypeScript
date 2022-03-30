@@ -255,7 +255,7 @@ declare namespace R {
 
     export type Placeholder = { __placeholder: void };
 >Placeholder : Symbol(Placeholder, Decl(ramdaToolsNoInfinite.ts, 83, 21))
->__placeholder : Symbol(__placeholder, Decl(ramdaToolsNoInfinite.ts, 84, 31))
+>__placeholder : Symbol(Placeholder.__placeholder, Decl(ramdaToolsNoInfinite.ts, 84, 31))
 }
 
 declare namespace Curry {

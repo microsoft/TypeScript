@@ -2,7 +2,7 @@
 type Box<T> = { value: T };
 >Box : Symbol(Box, Decl(mappedTypesArraysTuples.ts, 0, 0))
 >T : Symbol(T, Decl(mappedTypesArraysTuples.ts, 0, 9))
->value : Symbol(value, Decl(mappedTypesArraysTuples.ts, 0, 15))
+>value : Symbol(Box.value, Decl(mappedTypesArraysTuples.ts, 0, 15))
 >T : Symbol(T, Decl(mappedTypesArraysTuples.ts, 0, 9))
 
 type Boxified<T> = { [P in keyof T]: Box<T[P]> };
@@ -92,11 +92,11 @@ type T31 = Partial<Boxified<string[]>>;
 
 type A = { a: string };
 >A : Symbol(A, Decl(mappedTypesArraysTuples.ts, 22, 39))
->a : Symbol(a, Decl(mappedTypesArraysTuples.ts, 24, 10))
+>a : Symbol(A.a, Decl(mappedTypesArraysTuples.ts, 24, 10))
 
 type B = { b: string };
 >B : Symbol(B, Decl(mappedTypesArraysTuples.ts, 24, 23))
->b : Symbol(b, Decl(mappedTypesArraysTuples.ts, 25, 10))
+>b : Symbol(B.b, Decl(mappedTypesArraysTuples.ts, 25, 10))
 
 type T40 = Boxified<A | A[] | ReadonlyArray<A> | [A, B] | string | string[]>;
 >T40 : Symbol(T40, Decl(mappedTypesArraysTuples.ts, 25, 23))

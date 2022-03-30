@@ -3,7 +3,7 @@
 
 type B = {b: string}
 >B : Symbol(B, Decl(indirectTypeParameterReferences.ts, 0, 0))
->b : Symbol(b, Decl(indirectTypeParameterReferences.ts, 2, 10))
+>b : Symbol(B.b, Decl(indirectTypeParameterReferences.ts, 2, 10))
 
 const flowtypes = <A>(b: B) => {
 >flowtypes : Symbol(flowtypes, Decl(indirectTypeParameterReferences.ts, 4, 5))
@@ -46,9 +46,9 @@ literal(aPlusB => {
 >aPlusB : Symbol(aPlusB, Decl(indirectTypeParameterReferences.ts, 15, 8))
 
   aPlusB.b
->aPlusB.b : Symbol(b, Decl(indirectTypeParameterReferences.ts, 2, 10))
+>aPlusB.b : Symbol(B.b, Decl(indirectTypeParameterReferences.ts, 2, 10))
 >aPlusB : Symbol(aPlusB, Decl(indirectTypeParameterReferences.ts, 15, 8))
->b : Symbol(b, Decl(indirectTypeParameterReferences.ts, 2, 10))
+>b : Symbol(B.b, Decl(indirectTypeParameterReferences.ts, 2, 10))
 
   aPlusB.a
 >aPlusB.a : Symbol(a, Decl(indirectTypeParameterReferences.ts, 13, 39))
@@ -62,9 +62,9 @@ combined(comb => {
 >comb : Symbol(comb, Decl(indirectTypeParameterReferences.ts, 20, 9))
 
   comb.b
->comb.b : Symbol(b, Decl(indirectTypeParameterReferences.ts, 2, 10))
+>comb.b : Symbol(B.b, Decl(indirectTypeParameterReferences.ts, 2, 10))
 >comb : Symbol(comb, Decl(indirectTypeParameterReferences.ts, 20, 9))
->b : Symbol(b, Decl(indirectTypeParameterReferences.ts, 2, 10))
+>b : Symbol(B.b, Decl(indirectTypeParameterReferences.ts, 2, 10))
 
   comb.a
 >comb.a : Symbol(a, Decl(indirectTypeParameterReferences.ts, 13, 39))

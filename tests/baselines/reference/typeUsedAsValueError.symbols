@@ -15,7 +15,7 @@ type TypeAliasForSomeClass = SomeClass;
 
 type someType = { x: number };
 >someType : Symbol(someType, Decl(typeUsedAsValueError.ts, 8, 39))
->x : Symbol(x, Decl(typeUsedAsValueError.ts, 9, 17))
+>x : Symbol(someType.x, Decl(typeUsedAsValueError.ts, 9, 17))
 
 function acceptsSomeType(a: someType) {
 >acceptsSomeType : Symbol(acceptsSomeType, Decl(typeUsedAsValueError.ts, 9, 30))

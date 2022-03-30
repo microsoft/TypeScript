@@ -1,9 +1,9 @@
 === tests/cases/conformance/types/mapped/mappedTypes1.ts ===
 type Item = { a: string, b: number, c: boolean };
 >Item : Symbol(Item, Decl(mappedTypes1.ts, 0, 0))
->a : Symbol(a, Decl(mappedTypes1.ts, 0, 13))
->b : Symbol(b, Decl(mappedTypes1.ts, 0, 24))
->c : Symbol(c, Decl(mappedTypes1.ts, 0, 35))
+>a : Symbol(Item.a, Decl(mappedTypes1.ts, 0, 13))
+>b : Symbol(Item.b, Decl(mappedTypes1.ts, 0, 24))
+>c : Symbol(Item.c, Decl(mappedTypes1.ts, 0, 35))
 
 type T00 = { [P in "x" | "y"]: number };
 >T00 : Symbol(T00, Decl(mappedTypes1.ts, 0, 49))

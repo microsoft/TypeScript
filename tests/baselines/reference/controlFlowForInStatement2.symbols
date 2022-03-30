@@ -7,12 +7,12 @@ const keywordB = 'b';
 
 type A = { [keywordA]: number };
 >A : Symbol(A, Decl(controlFlowForInStatement2.ts, 1, 21))
->[keywordA] : Symbol([keywordA], Decl(controlFlowForInStatement2.ts, 3, 10))
+>[keywordA] : Symbol(A[keywordA], Decl(controlFlowForInStatement2.ts, 3, 10))
 >keywordA : Symbol(keywordA, Decl(controlFlowForInStatement2.ts, 0, 5))
 
 type B = { [keywordB]: string };
 >B : Symbol(B, Decl(controlFlowForInStatement2.ts, 3, 32))
->[keywordB] : Symbol([keywordB], Decl(controlFlowForInStatement2.ts, 4, 10))
+>[keywordB] : Symbol(B[keywordB], Decl(controlFlowForInStatement2.ts, 4, 10))
 >keywordB : Symbol(keywordB, Decl(controlFlowForInStatement2.ts, 1, 5))
 
 declare const c: A | B;

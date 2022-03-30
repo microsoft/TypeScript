@@ -1,23 +1,23 @@
 === tests/cases/conformance/types/mapped/mappedTypeModifiers.ts ===
 type T = { a: number, b: string };
 >T : Symbol(T, Decl(mappedTypeModifiers.ts, 0, 0))
->a : Symbol(a, Decl(mappedTypeModifiers.ts, 0, 10))
->b : Symbol(b, Decl(mappedTypeModifiers.ts, 0, 21))
+>a : Symbol(T.a, Decl(mappedTypeModifiers.ts, 0, 10))
+>b : Symbol(T.b, Decl(mappedTypeModifiers.ts, 0, 21))
 
 type TP = { a?: number, b?: string };
 >TP : Symbol(TP, Decl(mappedTypeModifiers.ts, 0, 34))
->a : Symbol(a, Decl(mappedTypeModifiers.ts, 1, 11))
->b : Symbol(b, Decl(mappedTypeModifiers.ts, 1, 23))
+>a : Symbol(TP.a, Decl(mappedTypeModifiers.ts, 1, 11))
+>b : Symbol(TP.b, Decl(mappedTypeModifiers.ts, 1, 23))
 
 type TR = { readonly a: number, readonly b: string };
 >TR : Symbol(TR, Decl(mappedTypeModifiers.ts, 1, 37))
->a : Symbol(a, Decl(mappedTypeModifiers.ts, 2, 11))
->b : Symbol(b, Decl(mappedTypeModifiers.ts, 2, 31))
+>a : Symbol(TR.a, Decl(mappedTypeModifiers.ts, 2, 11))
+>b : Symbol(TR.b, Decl(mappedTypeModifiers.ts, 2, 31))
 
 type TPR = { readonly a?: number, readonly b?: string };
 >TPR : Symbol(TPR, Decl(mappedTypeModifiers.ts, 2, 53))
->a : Symbol(a, Decl(mappedTypeModifiers.ts, 3, 12))
->b : Symbol(b, Decl(mappedTypeModifiers.ts, 3, 33))
+>a : Symbol(TPR.a, Decl(mappedTypeModifiers.ts, 3, 12))
+>b : Symbol(TPR.b, Decl(mappedTypeModifiers.ts, 3, 33))
 
 var v00: "a" | "b";
 >v00 : Symbol(v00, Decl(mappedTypeModifiers.ts, 5, 3), Decl(mappedTypeModifiers.ts, 6, 3), Decl(mappedTypeModifiers.ts, 7, 3), Decl(mappedTypeModifiers.ts, 8, 3), Decl(mappedTypeModifiers.ts, 9, 3))
@@ -178,30 +178,30 @@ type Boxified<T> = { [P in keyof T]: { x: T[P] } };
 
 type B = { a: { x: number }, b: { x: string } };
 >B : Symbol(B, Decl(mappedTypeModifiers.ts, 37, 51))
->a : Symbol(a, Decl(mappedTypeModifiers.ts, 39, 10))
+>a : Symbol(B.a, Decl(mappedTypeModifiers.ts, 39, 10))
 >x : Symbol(x, Decl(mappedTypeModifiers.ts, 39, 15))
->b : Symbol(b, Decl(mappedTypeModifiers.ts, 39, 28))
+>b : Symbol(B.b, Decl(mappedTypeModifiers.ts, 39, 28))
 >x : Symbol(x, Decl(mappedTypeModifiers.ts, 39, 33))
 
 type BP = { a?: { x: number }, b?: { x: string } };
 >BP : Symbol(BP, Decl(mappedTypeModifiers.ts, 39, 48))
->a : Symbol(a, Decl(mappedTypeModifiers.ts, 40, 11))
+>a : Symbol(BP.a, Decl(mappedTypeModifiers.ts, 40, 11))
 >x : Symbol(x, Decl(mappedTypeModifiers.ts, 40, 17))
->b : Symbol(b, Decl(mappedTypeModifiers.ts, 40, 30))
+>b : Symbol(BP.b, Decl(mappedTypeModifiers.ts, 40, 30))
 >x : Symbol(x, Decl(mappedTypeModifiers.ts, 40, 36))
 
 type BR = { readonly a: { x: number }, readonly b: { x: string } };
 >BR : Symbol(BR, Decl(mappedTypeModifiers.ts, 40, 51))
->a : Symbol(a, Decl(mappedTypeModifiers.ts, 41, 11))
+>a : Symbol(BR.a, Decl(mappedTypeModifiers.ts, 41, 11))
 >x : Symbol(x, Decl(mappedTypeModifiers.ts, 41, 25))
->b : Symbol(b, Decl(mappedTypeModifiers.ts, 41, 38))
+>b : Symbol(BR.b, Decl(mappedTypeModifiers.ts, 41, 38))
 >x : Symbol(x, Decl(mappedTypeModifiers.ts, 41, 52))
 
 type BPR = { readonly a?: { x: number }, readonly b?: { x: string } };
 >BPR : Symbol(BPR, Decl(mappedTypeModifiers.ts, 41, 67))
->a : Symbol(a, Decl(mappedTypeModifiers.ts, 42, 12))
+>a : Symbol(BPR.a, Decl(mappedTypeModifiers.ts, 42, 12))
 >x : Symbol(x, Decl(mappedTypeModifiers.ts, 42, 27))
->b : Symbol(b, Decl(mappedTypeModifiers.ts, 42, 40))
+>b : Symbol(BPR.b, Decl(mappedTypeModifiers.ts, 42, 40))
 >x : Symbol(x, Decl(mappedTypeModifiers.ts, 42, 55))
 
 var b00: "a" | "b";
@@ -354,7 +354,7 @@ var b04: Pick<BPR, keyof BPR>;
 
 type Foo = { prop: number, [x: string]: number };
 >Foo : Symbol(Foo, Decl(mappedTypeModifiers.ts, 74, 30))
->prop : Symbol(prop, Decl(mappedTypeModifiers.ts, 76, 12))
+>prop : Symbol(Foo.prop, Decl(mappedTypeModifiers.ts, 76, 12))
 >x : Symbol(x, Decl(mappedTypeModifiers.ts, 76, 28))
 
 function f1(x: Partial<Foo>) {

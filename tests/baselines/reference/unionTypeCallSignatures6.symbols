@@ -1,19 +1,19 @@
 === tests/cases/conformance/types/union/unionTypeCallSignatures6.ts ===
 type A = { a: string };
 >A : Symbol(A, Decl(unionTypeCallSignatures6.ts, 0, 0))
->a : Symbol(a, Decl(unionTypeCallSignatures6.ts, 0, 10))
+>a : Symbol(A.a, Decl(unionTypeCallSignatures6.ts, 0, 10))
 
 type B = { b: number };
 >B : Symbol(B, Decl(unionTypeCallSignatures6.ts, 0, 23))
->b : Symbol(b, Decl(unionTypeCallSignatures6.ts, 1, 10))
+>b : Symbol(B.b, Decl(unionTypeCallSignatures6.ts, 1, 10))
 
 type C = { c: string };
 >C : Symbol(C, Decl(unionTypeCallSignatures6.ts, 1, 23))
->c : Symbol(c, Decl(unionTypeCallSignatures6.ts, 2, 10))
+>c : Symbol(C.c, Decl(unionTypeCallSignatures6.ts, 2, 10))
 
 type D = { d: number };
 >D : Symbol(D, Decl(unionTypeCallSignatures6.ts, 2, 23))
->d : Symbol(d, Decl(unionTypeCallSignatures6.ts, 3, 10))
+>d : Symbol(D.d, Decl(unionTypeCallSignatures6.ts, 3, 10))
 
 type F0 = () => void;
 >F0 : Symbol(F0, Decl(unionTypeCallSignatures6.ts, 3, 23))

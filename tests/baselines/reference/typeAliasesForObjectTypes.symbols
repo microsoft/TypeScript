@@ -1,7 +1,7 @@
 === tests/cases/conformance/types/typeAliases/typeAliasesForObjectTypes.ts ===
 type T1 = { x: string }
 >T1 : Symbol(T1, Decl(typeAliasesForObjectTypes.ts, 0, 0))
->x : Symbol(x, Decl(typeAliasesForObjectTypes.ts, 0, 11))
+>x : Symbol(T1.x, Decl(typeAliasesForObjectTypes.ts, 0, 11))
 
 // An interface can be named in an extends or implements clause, but a type alias for an object type literal cannot.
 interface I1 extends T1 { y: string }
@@ -20,7 +20,7 @@ class C1 implements T1 {
 // An interface can have multiple merged declarations, but a type alias for an object type literal cannot.
 type T2 = { x: string }
 >T2 : Symbol(T2, Decl(typeAliasesForObjectTypes.ts, 6, 1))
->x : Symbol(x, Decl(typeAliasesForObjectTypes.ts, 9, 11))
+>x : Symbol(T2.x, Decl(typeAliasesForObjectTypes.ts, 9, 11))
 
 type T2 = { y: number }
 >T2 : Symbol(T2, Decl(typeAliasesForObjectTypes.ts, 9, 23))
@@ -30,6 +30,6 @@ type T2 = { y: number }
 type T3<T> = { x: T }
 >T3 : Symbol(T3, Decl(typeAliasesForObjectTypes.ts, 10, 23))
 >T : Symbol(T, Decl(typeAliasesForObjectTypes.ts, 13, 8))
->x : Symbol(x, Decl(typeAliasesForObjectTypes.ts, 13, 14))
+>x : Symbol(T3.x, Decl(typeAliasesForObjectTypes.ts, 13, 14))
 >T : Symbol(T, Decl(typeAliasesForObjectTypes.ts, 13, 8))
 

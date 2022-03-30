@@ -554,16 +554,16 @@ type Record1 = {
 >Record1 : Symbol(Record1, Decl(genericRestParameters1.ts, 134, 32))
 
   move: [number, 'left' | 'right'];
->move : Symbol(move, Decl(genericRestParameters1.ts, 136, 16))
+>move : Symbol(Record1.move, Decl(genericRestParameters1.ts, 136, 16))
 
   jump: [number, 'up' | 'down'];
->jump : Symbol(jump, Decl(genericRestParameters1.ts, 137, 35))
+>jump : Symbol(Record1.jump, Decl(genericRestParameters1.ts, 137, 35))
 
   stop: string;
->stop : Symbol(stop, Decl(genericRestParameters1.ts, 138, 32))
+>stop : Symbol(Record1.stop, Decl(genericRestParameters1.ts, 138, 32))
 
   done: [];
->done : Symbol(done, Decl(genericRestParameters1.ts, 139, 15))
+>done : Symbol(Record1.done, Decl(genericRestParameters1.ts, 139, 15))
 }
 
 type EventType<T> = {
@@ -571,7 +571,7 @@ type EventType<T> = {
 >T : Symbol(T, Decl(genericRestParameters1.ts, 143, 15))
 
   emit<K extends keyof T = keyof T>(e: K, ...payload: T[K] extends any[] ? T[K] : [T[K]]): void; 
->emit : Symbol(emit, Decl(genericRestParameters1.ts, 143, 21))
+>emit : Symbol(EventType.emit, Decl(genericRestParameters1.ts, 143, 21))
 >K : Symbol(K, Decl(genericRestParameters1.ts, 144, 7))
 >T : Symbol(T, Decl(genericRestParameters1.ts, 143, 15))
 >T : Symbol(T, Decl(genericRestParameters1.ts, 143, 15))
@@ -592,24 +592,24 @@ declare var events: EventType<Record1>;
 >Record1 : Symbol(Record1, Decl(genericRestParameters1.ts, 134, 32))
 
 events.emit('move', 10, 'left');
->events.emit : Symbol(emit, Decl(genericRestParameters1.ts, 143, 21))
+>events.emit : Symbol(EventType.emit, Decl(genericRestParameters1.ts, 143, 21))
 >events : Symbol(events, Decl(genericRestParameters1.ts, 147, 11))
->emit : Symbol(emit, Decl(genericRestParameters1.ts, 143, 21))
+>emit : Symbol(EventType.emit, Decl(genericRestParameters1.ts, 143, 21))
 
 events.emit('jump', 20, 'up');
->events.emit : Symbol(emit, Decl(genericRestParameters1.ts, 143, 21))
+>events.emit : Symbol(EventType.emit, Decl(genericRestParameters1.ts, 143, 21))
 >events : Symbol(events, Decl(genericRestParameters1.ts, 147, 11))
->emit : Symbol(emit, Decl(genericRestParameters1.ts, 143, 21))
+>emit : Symbol(EventType.emit, Decl(genericRestParameters1.ts, 143, 21))
 
 events.emit('stop', 'Bye!');
->events.emit : Symbol(emit, Decl(genericRestParameters1.ts, 143, 21))
+>events.emit : Symbol(EventType.emit, Decl(genericRestParameters1.ts, 143, 21))
 >events : Symbol(events, Decl(genericRestParameters1.ts, 147, 11))
->emit : Symbol(emit, Decl(genericRestParameters1.ts, 143, 21))
+>emit : Symbol(EventType.emit, Decl(genericRestParameters1.ts, 143, 21))
 
 events.emit('done');
->events.emit : Symbol(emit, Decl(genericRestParameters1.ts, 143, 21))
+>events.emit : Symbol(EventType.emit, Decl(genericRestParameters1.ts, 143, 21))
 >events : Symbol(events, Decl(genericRestParameters1.ts, 147, 11))
->emit : Symbol(emit, Decl(genericRestParameters1.ts, 143, 21))
+>emit : Symbol(EventType.emit, Decl(genericRestParameters1.ts, 143, 21))
 
 // Repro from #25871
 

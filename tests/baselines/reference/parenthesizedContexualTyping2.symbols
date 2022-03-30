@@ -203,9 +203,9 @@ var lambda2: FuncType = (x => { x<number>(undefined); return x; });
 
 type ObjType = { x: (p: number) => string; y: (p: string) => number };
 >ObjType : Symbol(ObjType, Decl(parenthesizedContexualTyping2.ts, 31, 67))
->x : Symbol(x, Decl(parenthesizedContexualTyping2.ts, 33, 16))
+>x : Symbol(ObjType.x, Decl(parenthesizedContexualTyping2.ts, 33, 16))
 >p : Symbol(p, Decl(parenthesizedContexualTyping2.ts, 33, 21))
->y : Symbol(y, Decl(parenthesizedContexualTyping2.ts, 33, 42))
+>y : Symbol(ObjType.y, Decl(parenthesizedContexualTyping2.ts, 33, 42))
 >p : Symbol(p, Decl(parenthesizedContexualTyping2.ts, 33, 47))
 
 var obj1: ObjType = { x: x => (x, undefined), y: y => (y, undefined) };

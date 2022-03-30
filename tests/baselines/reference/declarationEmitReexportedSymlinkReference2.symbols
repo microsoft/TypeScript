@@ -5,14 +5,14 @@ export declare type A = {
 >A : Symbol(A, Decl(types.d.ts, 0, 0))
 
     id: string;
->id : Symbol(id, Decl(types.d.ts, 0, 25))
+>id : Symbol(A.id, Decl(types.d.ts, 0, 25))
 
 };
 export declare type B = {
 >B : Symbol(B, Decl(types.d.ts, 2, 2))
 
     id: number;
->id : Symbol(id, Decl(types.d.ts, 3, 25))
+>id : Symbol(B.id, Decl(types.d.ts, 3, 25))
 
 };
 export declare type IdType = A | B;

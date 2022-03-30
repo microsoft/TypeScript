@@ -631,8 +631,8 @@ declare function myHoc<P>(C: CompClass<P>): CompClass<P>;
 type GenericProps<T> = { foo: number, stuff: T };
 >GenericProps : Symbol(GenericProps, Decl(genericFunctionInference1.ts, 103, 57))
 >T : Symbol(T, Decl(genericFunctionInference1.ts, 105, 18))
->foo : Symbol(foo, Decl(genericFunctionInference1.ts, 105, 24))
->stuff : Symbol(stuff, Decl(genericFunctionInference1.ts, 105, 37))
+>foo : Symbol(GenericProps.foo, Decl(genericFunctionInference1.ts, 105, 24))
+>stuff : Symbol(GenericProps.stuff, Decl(genericFunctionInference1.ts, 105, 37))
 >T : Symbol(T, Decl(genericFunctionInference1.ts, 105, 18))
 
 declare class GenericComp<T> extends Comp<GenericProps<T>> {}

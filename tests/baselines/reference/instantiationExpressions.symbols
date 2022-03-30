@@ -522,7 +522,7 @@ function makeBox<T>(value: T) {
 >T : Symbol(T, Decl(instantiationExpressions.ts, 136, 17))
 
     return { value };
->value : Symbol(value, Decl(instantiationExpressions.ts, 137, 12))
+>value : Symbol(Box.value, Decl(instantiationExpressions.ts, 137, 12))
 }
 
 type BoxFunc<T> = typeof makeBox<T>;  // (value: T) => { value: T }
@@ -560,14 +560,14 @@ declare const g1: {
 >T : Symbol(T, Decl(instantiationExpressions.ts, 149, 5))
 >a : Symbol(a, Decl(instantiationExpressions.ts, 149, 8))
 >T : Symbol(T, Decl(instantiationExpressions.ts, 149, 5))
->a : Symbol(a, Decl(instantiationExpressions.ts, 149, 16))
+>a : Symbol(T31.a, Decl(instantiationExpressions.ts, 149, 16))
 >T : Symbol(T, Decl(instantiationExpressions.ts, 149, 5))
 
     new <U>(b: U): { b: U };
 >U : Symbol(U, Decl(instantiationExpressions.ts, 150, 9))
 >b : Symbol(b, Decl(instantiationExpressions.ts, 150, 12))
 >U : Symbol(U, Decl(instantiationExpressions.ts, 150, 9))
->b : Symbol(b, Decl(instantiationExpressions.ts, 150, 20))
+>b : Symbol(T32.b, Decl(instantiationExpressions.ts, 150, 20))
 >U : Symbol(U, Decl(instantiationExpressions.ts, 150, 9))
 }
 

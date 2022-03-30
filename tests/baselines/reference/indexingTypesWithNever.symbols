@@ -3,10 +3,10 @@ type TestObj = {
 >TestObj : Symbol(TestObj, Decl(indexingTypesWithNever.ts, 0, 0))
 
   a: string;
->a : Symbol(a, Decl(indexingTypesWithNever.ts, 0, 16))
+>a : Symbol(TestObj.a, Decl(indexingTypesWithNever.ts, 0, 16))
 
   b: number;
->b : Symbol(b, Decl(indexingTypesWithNever.ts, 1, 12))
+>b : Symbol(TestObj.b, Decl(indexingTypesWithNever.ts, 1, 12))
 
 };
 
@@ -187,18 +187,18 @@ type ExpectType<Exp, Act> = Match<Exp, Act> extends "Match"
 
 type P3 = { a: string; b: number; c?: boolean };
 >P3 : Symbol(P3, Decl(indexingTypesWithNever.ts, 58, 20))
->a : Symbol(a, Decl(indexingTypesWithNever.ts, 60, 11))
->b : Symbol(b, Decl(indexingTypesWithNever.ts, 60, 22))
->c : Symbol(c, Decl(indexingTypesWithNever.ts, 60, 33))
+>a : Symbol(P3.a, Decl(indexingTypesWithNever.ts, 60, 11))
+>b : Symbol(P3.b, Decl(indexingTypesWithNever.ts, 60, 22))
+>c : Symbol(P3.c, Decl(indexingTypesWithNever.ts, 60, 33))
 
 type P2 = { a: string; c?: boolean };
 >P2 : Symbol(P2, Decl(indexingTypesWithNever.ts, 60, 48))
->a : Symbol(a, Decl(indexingTypesWithNever.ts, 61, 11))
->c : Symbol(c, Decl(indexingTypesWithNever.ts, 61, 22))
+>a : Symbol(P2.a, Decl(indexingTypesWithNever.ts, 61, 11))
+>c : Symbol(P2.c, Decl(indexingTypesWithNever.ts, 61, 22))
 
 type P1 = { c?: boolean };
 >P1 : Symbol(P1, Decl(indexingTypesWithNever.ts, 61, 37))
->c : Symbol(c, Decl(indexingTypesWithNever.ts, 62, 11))
+>c : Symbol(P1.c, Decl(indexingTypesWithNever.ts, 62, 11))
 
 type P0 = {};
 >P0 : Symbol(P0, Decl(indexingTypesWithNever.ts, 62, 26))
@@ -288,18 +288,18 @@ declare const p0Test: ExpectType<{}, P0Props>;
 
 type O3 = { a?: string; b?: number; c: boolean };
 >O3 : Symbol(O3, Decl(indexingTypesWithNever.ts, 83, 46))
->a : Symbol(a, Decl(indexingTypesWithNever.ts, 85, 11))
->b : Symbol(b, Decl(indexingTypesWithNever.ts, 85, 23))
->c : Symbol(c, Decl(indexingTypesWithNever.ts, 85, 35))
+>a : Symbol(O3.a, Decl(indexingTypesWithNever.ts, 85, 11))
+>b : Symbol(O3.b, Decl(indexingTypesWithNever.ts, 85, 23))
+>c : Symbol(O3.c, Decl(indexingTypesWithNever.ts, 85, 35))
 
 type O2 = { a?: string; c: boolean };
 >O2 : Symbol(O2, Decl(indexingTypesWithNever.ts, 85, 49))
->a : Symbol(a, Decl(indexingTypesWithNever.ts, 86, 11))
->c : Symbol(c, Decl(indexingTypesWithNever.ts, 86, 23))
+>a : Symbol(O2.a, Decl(indexingTypesWithNever.ts, 86, 11))
+>c : Symbol(O2.c, Decl(indexingTypesWithNever.ts, 86, 23))
 
 type O1 = { c: boolean };
 >O1 : Symbol(O1, Decl(indexingTypesWithNever.ts, 86, 37))
->c : Symbol(c, Decl(indexingTypesWithNever.ts, 87, 11))
+>c : Symbol(O1.c, Decl(indexingTypesWithNever.ts, 87, 11))
 
 type O0 = {};
 >O0 : Symbol(O0, Decl(indexingTypesWithNever.ts, 87, 25))

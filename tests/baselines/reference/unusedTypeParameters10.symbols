@@ -6,6 +6,6 @@ type Alias<T> = { };
 type Alias2<T> = { x: T };
 >Alias2 : Symbol(Alias2, Decl(unusedTypeParameters10.ts, 0, 20))
 >T : Symbol(T, Decl(unusedTypeParameters10.ts, 1, 12))
->x : Symbol(x, Decl(unusedTypeParameters10.ts, 1, 18))
+>x : Symbol(Alias2.x, Decl(unusedTypeParameters10.ts, 1, 18))
 >T : Symbol(T, Decl(unusedTypeParameters10.ts, 1, 12))
 

@@ -107,7 +107,7 @@ type T13 = typeof zz
 
 var zz: { x: T11 }
 >zz : Symbol(zz, Decl(directDependenceBetweenTypeAliases.ts, 39, 3))
->x : Symbol(x, Decl(directDependenceBetweenTypeAliases.ts, 39, 9))
+>x : Symbol(T13.x, Decl(directDependenceBetweenTypeAliases.ts, 39, 9))
 >T11 : Symbol(T11, Decl(directDependenceBetweenTypeAliases.ts, 35, 47))
 
 

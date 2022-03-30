@@ -1,11 +1,11 @@
 === tests/cases/compiler/varianceRepeatedlyPropegatesWithUnreliableFlag.ts ===
 type A = { a: number };
 >A : Symbol(A, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 0, 0))
->a : Symbol(a, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 0, 10))
+>a : Symbol(A.a, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 0, 10))
 
 type B = { b: number };
 >B : Symbol(B, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 0, 23))
->b : Symbol(b, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 1, 10))
+>b : Symbol(B.b, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 1, 10))
 
 type X<T> = ({ [K in keyof T]: T[K] } & Record<string, void>)[keyof T];
 >X : Symbol(X, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 1, 23))
@@ -20,14 +20,14 @@ type X<T> = ({ [K in keyof T]: T[K] } & Record<string, void>)[keyof T];
 type P1<T> = { data: X<T> };
 >P1 : Symbol(P1, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 2, 71))
 >T : Symbol(T, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 3, 8))
->data : Symbol(data, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 3, 14))
+>data : Symbol(P1.data, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 3, 14))
 >X : Symbol(X, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 1, 23))
 >T : Symbol(T, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 3, 8))
 
 type P2<T> = { data: X<T> };
 >P2 : Symbol(P2, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 3, 28))
 >T : Symbol(T, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 4, 8))
->data : Symbol(data, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 4, 14))
+>data : Symbol(P2.data, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 4, 14))
 >X : Symbol(X, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 1, 23))
 >T : Symbol(T, Decl(varianceRepeatedlyPropegatesWithUnreliableFlag.ts, 4, 8))
 

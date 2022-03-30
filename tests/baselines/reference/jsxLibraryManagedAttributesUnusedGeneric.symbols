@@ -36,7 +36,7 @@ namespace jsx {
 >IntrinsicElements : Symbol(IntrinsicElements, Decl(jsxLibraryManagedAttributesUnusedGeneric.tsx, 11, 55))
 
             div: { className: string }
->div : Symbol(div, Decl(jsxLibraryManagedAttributesUnusedGeneric.tsx, 12, 41))
+>div : Symbol(IntrinsicElements.div, Decl(jsxLibraryManagedAttributesUnusedGeneric.tsx, 12, 41))
 >className : Symbol(className, Decl(jsxLibraryManagedAttributesUnusedGeneric.tsx, 13, 18))
         }
         // Works

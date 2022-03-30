@@ -87,7 +87,7 @@ type X<T> = {
 >T : Symbol(T, Decl(unionTypeErrorMessageTypeRefs01.ts, 30, 7))
 
     xProp: T;
->xProp : Symbol(xProp, Decl(unionTypeErrorMessageTypeRefs01.ts, 30, 13))
+>xProp : Symbol(X.xProp, Decl(unionTypeErrorMessageTypeRefs01.ts, 30, 13))
 >T : Symbol(T, Decl(unionTypeErrorMessageTypeRefs01.ts, 30, 7))
 }
 
@@ -96,7 +96,7 @@ type Y<T> = {
 >T : Symbol(T, Decl(unionTypeErrorMessageTypeRefs01.ts, 34, 7))
 
     yProp: T;
->yProp : Symbol(yProp, Decl(unionTypeErrorMessageTypeRefs01.ts, 34, 13))
+>yProp : Symbol(Y.yProp, Decl(unionTypeErrorMessageTypeRefs01.ts, 34, 13))
 >T : Symbol(T, Decl(unionTypeErrorMessageTypeRefs01.ts, 34, 7))
 }
 
@@ -105,7 +105,7 @@ type Z<T> = {
 >T : Symbol(T, Decl(unionTypeErrorMessageTypeRefs01.ts, 38, 7))
 
     zProp: T;
->zProp : Symbol(zProp, Decl(unionTypeErrorMessageTypeRefs01.ts, 38, 13))
+>zProp : Symbol(Z.zProp, Decl(unionTypeErrorMessageTypeRefs01.ts, 38, 13))
 >T : Symbol(T, Decl(unionTypeErrorMessageTypeRefs01.ts, 38, 7))
 }
 

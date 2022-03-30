@@ -114,7 +114,7 @@ type Foo2<T> = {
 >T : Symbol(T, Decl(unionAndIntersectionInference3.ts, 26, 10))
 
     test(value: T): void;
->test : Symbol(test, Decl(unionAndIntersectionInference3.ts, 26, 16))
+>test : Symbol(Foo2.test, Decl(unionAndIntersectionInference3.ts, 26, 16))
 >value : Symbol(value, Decl(unionAndIntersectionInference3.ts, 27, 9))
 >T : Symbol(T, Decl(unionAndIntersectionInference3.ts, 26, 10))
 }
@@ -124,7 +124,7 @@ type Bar2<T> = {
 >T : Symbol(T, Decl(unionAndIntersectionInference3.ts, 30, 10))
 
     test(value: T | PromiseLike<T>): void;
->test : Symbol(test, Decl(unionAndIntersectionInference3.ts, 30, 16))
+>test : Symbol(Bar2.test, Decl(unionAndIntersectionInference3.ts, 30, 16))
 >value : Symbol(value, Decl(unionAndIntersectionInference3.ts, 31, 9))
 >T : Symbol(T, Decl(unionAndIntersectionInference3.ts, 30, 10))
 >PromiseLike : Symbol(PromiseLike, Decl(lib.es5.d.ts, --, --))

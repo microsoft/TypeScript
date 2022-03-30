@@ -44,19 +44,19 @@ type WithConditionalCSSProp<P> = 'className' extends keyof P
   : P
 
 type ReactJSXElement = JSX.Element
->ReactJSXElement : JSX.Element
+>ReactJSXElement : ReactJSXElement
 >JSX : any
 
 type ReactJSXElementClass = JSX.ElementClass
->ReactJSXElementClass : JSX.ElementClass
+>ReactJSXElementClass : ReactJSXElementClass
 >JSX : any
 
 type ReactJSXElementAttributesProperty = JSX.ElementAttributesProperty
->ReactJSXElementAttributesProperty : JSX.ElementAttributesProperty
+>ReactJSXElementAttributesProperty : ReactJSXElementAttributesProperty
 >JSX : any
 
 type ReactJSXElementChildrenAttribute = JSX.ElementChildrenAttribute
->ReactJSXElementChildrenAttribute : JSX.ElementChildrenAttribute
+>ReactJSXElementChildrenAttribute : ReactJSXElementChildrenAttribute
 >JSX : any
 
 type ReactJSXLibraryManagedAttributes<C, P> = JSX.LibraryManagedAttributes<C, P>
@@ -64,7 +64,7 @@ type ReactJSXLibraryManagedAttributes<C, P> = JSX.LibraryManagedAttributes<C, P>
 >JSX : any
 
 type ReactJSXIntrinsicAttributes = JSX.IntrinsicAttributes
->ReactJSXIntrinsicAttributes : JSX.IntrinsicAttributes
+>ReactJSXIntrinsicAttributes : ReactJSXIntrinsicAttributes
 >JSX : any
 
 type ReactJSXIntrinsicClassAttributes<T> = JSX.IntrinsicClassAttributes<T>
@@ -72,7 +72,7 @@ type ReactJSXIntrinsicClassAttributes<T> = JSX.IntrinsicClassAttributes<T>
 >JSX : any
 
 type ReactJSXIntrinsicElements = JSX.IntrinsicElements
->ReactJSXIntrinsicElements : JSX.IntrinsicElements
+>ReactJSXIntrinsicElements : ReactJSXIntrinsicElements
 >JSX : any
 
 export namespace EmotionJSX {

@@ -4370,6 +4370,9 @@ namespace ts {
                             return [symbol!];
                         }
                     }
+                    if (symbolFromSymbolTable.flags & SymbolFlags.TypeAlias && isAccessible(symbolFromSymbolTable, getDeclaredTypeOfTypeAlias(symbolFromSymbolTable).symbol)) {
+                        return [symbolFromSymbolTable];
+                    }
                 });
 
                 // If there's no result and we're looking at the global symbol table, treat `globalThis` like an alias and try to lookup thru that

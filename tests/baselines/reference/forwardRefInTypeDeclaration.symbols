@@ -19,7 +19,7 @@ const s2 = "x";
 // or in a type definition
 type Foo3 = { [s3]: number; }
 >Foo3 : Symbol(Foo3, Decl(forwardRefInTypeDeclaration.ts, 6, 15))
->[s3] : Symbol([s3], Decl(forwardRefInTypeDeclaration.ts, 9, 13))
+>[s3] : Symbol(Foo3[s3], Decl(forwardRefInTypeDeclaration.ts, 9, 13))
 >s3 : Symbol(s3, Decl(forwardRefInTypeDeclaration.ts, 10, 5))
 
 const s3 = "x";

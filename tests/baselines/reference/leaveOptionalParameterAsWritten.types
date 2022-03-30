@@ -24,12 +24,24 @@ declare global {
 
 === tests/cases/conformance/declarationEmit/c.ts ===
 type Foo = teams.calling.Foo;
->Foo : import("tests/cases/conformance/declarationEmit/a").Foo
+>Foo : Foo
 >teams : any
 >calling : any
 
-export const bar = (p?: Foo) => {}
->bar : (p?: Foo) => void
+export const f = (p?: Foo) => {}
+>f : (p?: Foo) => void
 >(p?: Foo) => {} : (p?: Foo) => void
->p : import("tests/cases/conformance/declarationEmit/a").Foo | undefined
+>p : Foo | undefined
+
+export const o = {
+>o : { p: Foo; }
+>{  p: undefined! as Foo} : { p: Foo; }
+
+  p: undefined! as Foo
+>p : Foo
+>undefined! as Foo : Foo
+>undefined! : never
+>undefined : undefined
+
+};
 

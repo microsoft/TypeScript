@@ -1,11 +1,11 @@
 === tests/cases/conformance/types/intersection/intersectionWithIndexSignatures.ts ===
 type A = { a: string };
 >A : Symbol(A, Decl(intersectionWithIndexSignatures.ts, 0, 0))
->a : Symbol(a, Decl(intersectionWithIndexSignatures.ts, 0, 10))
+>a : Symbol(A.a, Decl(intersectionWithIndexSignatures.ts, 0, 10))
 
 type B = { b: string };
 >B : Symbol(B, Decl(intersectionWithIndexSignatures.ts, 0, 23))
->b : Symbol(b, Decl(intersectionWithIndexSignatures.ts, 1, 10))
+>b : Symbol(B.b, Decl(intersectionWithIndexSignatures.ts, 1, 10))
 
 declare let sa1: { x: A & B };
 >sa1 : Symbol(sa1, Decl(intersectionWithIndexSignatures.ts, 3, 11))

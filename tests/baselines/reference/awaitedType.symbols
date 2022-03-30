@@ -21,7 +21,7 @@ type T4 = Awaited<number | Promise<string>>;
 type T5 = Awaited<{ then: number }>;
 >T5 : Symbol(T5, Decl(awaitedType.ts, 3, 44))
 >Awaited : Symbol(Awaited, Decl(lib.es5.d.ts, --, --))
->then : Symbol(then, Decl(awaitedType.ts, 4, 19))
+>then : Symbol(T5.then, Decl(awaitedType.ts, 4, 19))
 
 type T6 = Awaited<{ then(): void }>; // never (non-promise "thenable")
 >T6 : Symbol(T6, Decl(awaitedType.ts, 4, 36))

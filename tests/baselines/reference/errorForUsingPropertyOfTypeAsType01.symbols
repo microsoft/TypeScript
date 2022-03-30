@@ -50,7 +50,7 @@ namespace Test3 {
 >Foo : Symbol(Foo, Decl(errorForUsingPropertyOfTypeAsType01.ts, 18, 17))
 
         bar: string;
->bar : Symbol(bar, Decl(errorForUsingPropertyOfTypeAsType01.ts, 19, 23))
+>bar : Symbol(Foo.bar, Decl(errorForUsingPropertyOfTypeAsType01.ts, 19, 23))
     }
 
     var x: Foo.bar = "";

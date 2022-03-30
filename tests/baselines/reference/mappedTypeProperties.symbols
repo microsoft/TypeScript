@@ -6,10 +6,10 @@ type Before = {
 >Before : Symbol(Before, Decl(mappedTypeProperties.ts, 0, 55))
 
     model: 'hour' | 'day';
->model : Symbol(model, Decl(mappedTypeProperties.ts, 1, 15))
+>model : Symbol(Before.model, Decl(mappedTypeProperties.ts, 1, 15))
 
     [placeType in PlaceType]: void;
->[placeType in PlaceType] : Symbol([placeType in PlaceType], Decl(mappedTypeProperties.ts, 2, 26))
+>[placeType in PlaceType] : Symbol(Before[placeType in PlaceType], Decl(mappedTypeProperties.ts, 2, 26))
 }
 
 type After = {

@@ -290,9 +290,9 @@ type P1<T extends Function> = T extends (head: infer A, ...tail: infer B) => any
 >A : Symbol(A, Decl(genericRestParameters2.ts, 73, 52))
 >tail : Symbol(tail, Decl(genericRestParameters2.ts, 73, 55))
 >B : Symbol(B, Decl(genericRestParameters2.ts, 73, 70))
->head : Symbol(head, Decl(genericRestParameters2.ts, 73, 84))
+>head : Symbol(T10.head, Decl(genericRestParameters2.ts, 73, 84))
 >A : Symbol(A, Decl(genericRestParameters2.ts, 73, 52))
->tail : Symbol(tail, Decl(genericRestParameters2.ts, 73, 93))
+>tail : Symbol(T10.tail, Decl(genericRestParameters2.ts, 73, 93))
 >B : Symbol(B, Decl(genericRestParameters2.ts, 73, 70))
 
 type T10 = P1<(x: number, y: string, ...z: boolean[]) => void>;

@@ -4,7 +4,7 @@ namespace Foo {
 
   export type Yep = { type: "foo.yep" };
 >Yep : Symbol(Yep, Decl(namespaceDisambiguationInUnion.ts, 0, 15))
->type : Symbol(type, Decl(namespaceDisambiguationInUnion.ts, 1, 21))
+>type : Symbol(Yep.type, Decl(namespaceDisambiguationInUnion.ts, 1, 21))
 }
 
 namespace Bar {
@@ -12,7 +12,7 @@ namespace Bar {
 
   export type Yep = { type: "bar.yep" };
 >Yep : Symbol(Yep, Decl(namespaceDisambiguationInUnion.ts, 4, 15))
->type : Symbol(type, Decl(namespaceDisambiguationInUnion.ts, 5, 21))
+>type : Symbol(Yep.type, Decl(namespaceDisambiguationInUnion.ts, 5, 21))
 }
 
 const x = { type: "wat.nup" };

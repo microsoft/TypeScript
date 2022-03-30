@@ -105,7 +105,7 @@ var x9: T9;
 
 type T10 = { x: number };
 >T10 : Symbol(T10, Decl(typeAliases.ts, 38, 11))
->x : Symbol(x, Decl(typeAliases.ts, 40, 12))
+>x : Symbol(T10.x, Decl(typeAliases.ts, 40, 12))
 
 var x10: { x: number };
 >x10 : Symbol(x10, Decl(typeAliases.ts, 41, 3), Decl(typeAliases.ts, 42, 3))

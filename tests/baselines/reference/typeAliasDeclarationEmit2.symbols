@@ -2,6 +2,6 @@
 export type A<a> = { value: a };
 >A : Symbol(A, Decl(typeAliasDeclarationEmit2.ts, 0, 0))
 >a : Symbol(a, Decl(typeAliasDeclarationEmit2.ts, 0, 14))
->value : Symbol(value, Decl(typeAliasDeclarationEmit2.ts, 0, 20))
+>value : Symbol(A.value, Decl(typeAliasDeclarationEmit2.ts, 0, 20))
 >a : Symbol(a, Decl(typeAliasDeclarationEmit2.ts, 0, 14))
 

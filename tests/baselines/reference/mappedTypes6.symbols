@@ -358,16 +358,16 @@ type Foo = {
 >Foo : Symbol(Foo, Decl(mappedTypes6.ts, 75, 1))
 
     a: number;
->a : Symbol(a, Decl(mappedTypes6.ts, 77, 12))
+>a : Symbol(Foo.a, Decl(mappedTypes6.ts, 77, 12))
 
     b: number | undefined;
->b : Symbol(b, Decl(mappedTypes6.ts, 78, 14))
+>b : Symbol(Foo.b, Decl(mappedTypes6.ts, 78, 14))
 
     c?: number;
->c : Symbol(c, Decl(mappedTypes6.ts, 79, 26))
+>c : Symbol(Foo.c, Decl(mappedTypes6.ts, 79, 26))
 
     d?: number | undefined;
->d : Symbol(d, Decl(mappedTypes6.ts, 80, 15))
+>d : Symbol(Foo.d, Decl(mappedTypes6.ts, 80, 15))
 }
 
 declare let x1: Foo;
@@ -375,24 +375,24 @@ declare let x1: Foo;
 >Foo : Symbol(Foo, Decl(mappedTypes6.ts, 75, 1))
 
 x1.a;  // number
->x1.a : Symbol(a, Decl(mappedTypes6.ts, 77, 12))
+>x1.a : Symbol(Foo.a, Decl(mappedTypes6.ts, 77, 12))
 >x1 : Symbol(x1, Decl(mappedTypes6.ts, 84, 11))
->a : Symbol(a, Decl(mappedTypes6.ts, 77, 12))
+>a : Symbol(Foo.a, Decl(mappedTypes6.ts, 77, 12))
 
 x1.b;  // number | undefined
->x1.b : Symbol(b, Decl(mappedTypes6.ts, 78, 14))
+>x1.b : Symbol(Foo.b, Decl(mappedTypes6.ts, 78, 14))
 >x1 : Symbol(x1, Decl(mappedTypes6.ts, 84, 11))
->b : Symbol(b, Decl(mappedTypes6.ts, 78, 14))
+>b : Symbol(Foo.b, Decl(mappedTypes6.ts, 78, 14))
 
 x1.c;  // number | undefined
->x1.c : Symbol(c, Decl(mappedTypes6.ts, 79, 26))
+>x1.c : Symbol(Foo.c, Decl(mappedTypes6.ts, 79, 26))
 >x1 : Symbol(x1, Decl(mappedTypes6.ts, 84, 11))
->c : Symbol(c, Decl(mappedTypes6.ts, 79, 26))
+>c : Symbol(Foo.c, Decl(mappedTypes6.ts, 79, 26))
 
 x1.d;  // number | undefined
->x1.d : Symbol(d, Decl(mappedTypes6.ts, 80, 15))
+>x1.d : Symbol(Foo.d, Decl(mappedTypes6.ts, 80, 15))
 >x1 : Symbol(x1, Decl(mappedTypes6.ts, 84, 11))
->d : Symbol(d, Decl(mappedTypes6.ts, 80, 15))
+>d : Symbol(Foo.d, Decl(mappedTypes6.ts, 80, 15))
 
 x1 = { a: 1 };  // Error
 >x1 : Symbol(x1, Decl(mappedTypes6.ts, 84, 11))
@@ -422,24 +422,24 @@ declare let x2: Required<Foo>;
 >Foo : Symbol(Foo, Decl(mappedTypes6.ts, 75, 1))
 
 x1.a;  // number
->x1.a : Symbol(a, Decl(mappedTypes6.ts, 77, 12))
+>x1.a : Symbol(Foo.a, Decl(mappedTypes6.ts, 77, 12))
 >x1 : Symbol(x1, Decl(mappedTypes6.ts, 84, 11))
->a : Symbol(a, Decl(mappedTypes6.ts, 77, 12))
+>a : Symbol(Foo.a, Decl(mappedTypes6.ts, 77, 12))
 
 x1.b;  // number | undefined
->x1.b : Symbol(b, Decl(mappedTypes6.ts, 78, 14))
+>x1.b : Symbol(Foo.b, Decl(mappedTypes6.ts, 78, 14))
 >x1 : Symbol(x1, Decl(mappedTypes6.ts, 84, 11))
->b : Symbol(b, Decl(mappedTypes6.ts, 78, 14))
+>b : Symbol(Foo.b, Decl(mappedTypes6.ts, 78, 14))
 
 x1.c;  // number
->x1.c : Symbol(c, Decl(mappedTypes6.ts, 79, 26))
+>x1.c : Symbol(Foo.c, Decl(mappedTypes6.ts, 79, 26))
 >x1 : Symbol(x1, Decl(mappedTypes6.ts, 84, 11))
->c : Symbol(c, Decl(mappedTypes6.ts, 79, 26))
+>c : Symbol(Foo.c, Decl(mappedTypes6.ts, 79, 26))
 
 x1.d;  // number
->x1.d : Symbol(d, Decl(mappedTypes6.ts, 80, 15))
+>x1.d : Symbol(Foo.d, Decl(mappedTypes6.ts, 80, 15))
 >x1 : Symbol(x1, Decl(mappedTypes6.ts, 84, 11))
->d : Symbol(d, Decl(mappedTypes6.ts, 80, 15))
+>d : Symbol(Foo.d, Decl(mappedTypes6.ts, 80, 15))
 
 x2 = { a: 1 };  // Error
 >x2 : Symbol(x2, Decl(mappedTypes6.ts, 96, 11))
@@ -467,10 +467,10 @@ type Bar = {
 >Bar : Symbol(Bar, Decl(mappedTypes6.ts, 106, 32))
 
     a: number;
->a : Symbol(a, Decl(mappedTypes6.ts, 108, 12))
+>a : Symbol(Bar.a, Decl(mappedTypes6.ts, 108, 12))
 
     readonly b: number;
->b : Symbol(b, Decl(mappedTypes6.ts, 109, 14))
+>b : Symbol(Bar.b, Decl(mappedTypes6.ts, 109, 14))
 }
 
 declare let x3: Bar;
@@ -478,14 +478,14 @@ declare let x3: Bar;
 >Bar : Symbol(Bar, Decl(mappedTypes6.ts, 106, 32))
 
 x3.a = 1;
->x3.a : Symbol(a, Decl(mappedTypes6.ts, 108, 12))
+>x3.a : Symbol(Bar.a, Decl(mappedTypes6.ts, 108, 12))
 >x3 : Symbol(x3, Decl(mappedTypes6.ts, 113, 11))
->a : Symbol(a, Decl(mappedTypes6.ts, 108, 12))
+>a : Symbol(Bar.a, Decl(mappedTypes6.ts, 108, 12))
 
 x3.b = 1;  // Error
->x3.b : Symbol(b, Decl(mappedTypes6.ts, 109, 14))
+>x3.b : Symbol(Bar.b, Decl(mappedTypes6.ts, 109, 14))
 >x3 : Symbol(x3, Decl(mappedTypes6.ts, 113, 11))
->b : Symbol(b, Decl(mappedTypes6.ts, 109, 14))
+>b : Symbol(Bar.b, Decl(mappedTypes6.ts, 109, 14))
 
 declare let x4: Readonly<Bar>;
 >x4 : Symbol(x4, Decl(mappedTypes6.ts, 117, 11))

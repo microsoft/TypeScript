@@ -4,7 +4,7 @@ export class A {}
 
 export type B  = { b: string };
 >B : Symbol(B, Decl(abc.ts, 0, 17))
->b : Symbol(b, Decl(abc.ts, 1, 18))
+>b : Symbol(B.b, Decl(abc.ts, 1, 18))
 
 export const C = "";
 >C : Symbol(C, Decl(abc.ts, 2, 12))

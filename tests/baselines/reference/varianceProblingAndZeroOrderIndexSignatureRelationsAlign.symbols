@@ -209,7 +209,7 @@ type NeededInfo<MyNamespaceSchema = {}> = {
 >MyNamespaceSchema : Symbol(MyNamespaceSchema, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 54, 16))
 
   ASchema: ToA<MyNamespaceSchema>;
->ASchema : Symbol(ASchema, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 54, 43))
+>ASchema : Symbol(NeededInfo.ASchema, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 54, 43))
 >ToA : Symbol(ToA, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 51, 94))
 >MyNamespaceSchema : Symbol(MyNamespaceSchema, Decl(varianceProblingAndZeroOrderIndexSignatureRelationsAlign.ts, 54, 16))
 

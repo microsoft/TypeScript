@@ -602,9 +602,9 @@ function f01(x: unknown) {
 
 type Thing = { foo: string | number, bar(): number, baz: object };
 >Thing : Symbol(Thing, Decl(controlFlowOptionalChain.ts, 159, 1))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
->bar : Symbol(bar, Decl(controlFlowOptionalChain.ts, 161, 36))
->baz : Symbol(baz, Decl(controlFlowOptionalChain.ts, 161, 51))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>bar : Symbol(Thing.bar, Decl(controlFlowOptionalChain.ts, 161, 36))
+>baz : Symbol(Thing.baz, Decl(controlFlowOptionalChain.ts, 161, 51))
 
 function f10(o: Thing | undefined, value: number) {
 >f10 : Symbol(f10, Decl(controlFlowOptionalChain.ts, 161, 66))
@@ -613,15 +613,15 @@ function f10(o: Thing | undefined, value: number) {
 >value : Symbol(value, Decl(controlFlowOptionalChain.ts, 163, 34))
 
     if (o?.foo === value) {
->o?.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o?.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 163, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >value : Symbol(value, Decl(controlFlowOptionalChain.ts, 163, 34))
 
         o.foo;
->o.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 163, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
     }
     if (o?.["foo"] === value) {
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 163, 13))
@@ -629,29 +629,29 @@ function f10(o: Thing | undefined, value: number) {
 
         o["foo"];
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 163, 13))
->"foo" : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>"foo" : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
     }
     if (o?.bar() === value) {
->o?.bar : Symbol(bar, Decl(controlFlowOptionalChain.ts, 161, 36))
+>o?.bar : Symbol(Thing.bar, Decl(controlFlowOptionalChain.ts, 161, 36))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 163, 13))
->bar : Symbol(bar, Decl(controlFlowOptionalChain.ts, 161, 36))
+>bar : Symbol(Thing.bar, Decl(controlFlowOptionalChain.ts, 161, 36))
 >value : Symbol(value, Decl(controlFlowOptionalChain.ts, 163, 34))
 
         o.bar;
->o.bar : Symbol(bar, Decl(controlFlowOptionalChain.ts, 161, 36))
+>o.bar : Symbol(Thing.bar, Decl(controlFlowOptionalChain.ts, 161, 36))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 163, 13))
->bar : Symbol(bar, Decl(controlFlowOptionalChain.ts, 161, 36))
+>bar : Symbol(Thing.bar, Decl(controlFlowOptionalChain.ts, 161, 36))
     }
     if (o?.foo == value) {
->o?.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o?.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 163, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >value : Symbol(value, Decl(controlFlowOptionalChain.ts, 163, 34))
 
         o.foo;
->o.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 163, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
     }
     if (o?.["foo"] == value) {
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 163, 13))
@@ -659,18 +659,18 @@ function f10(o: Thing | undefined, value: number) {
 
         o["foo"];
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 163, 13))
->"foo" : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>"foo" : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
     }
     if (o?.bar() == value) {
->o?.bar : Symbol(bar, Decl(controlFlowOptionalChain.ts, 161, 36))
+>o?.bar : Symbol(Thing.bar, Decl(controlFlowOptionalChain.ts, 161, 36))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 163, 13))
->bar : Symbol(bar, Decl(controlFlowOptionalChain.ts, 161, 36))
+>bar : Symbol(Thing.bar, Decl(controlFlowOptionalChain.ts, 161, 36))
 >value : Symbol(value, Decl(controlFlowOptionalChain.ts, 163, 34))
 
         o.bar;
->o.bar : Symbol(bar, Decl(controlFlowOptionalChain.ts, 161, 36))
+>o.bar : Symbol(Thing.bar, Decl(controlFlowOptionalChain.ts, 161, 36))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 163, 13))
->bar : Symbol(bar, Decl(controlFlowOptionalChain.ts, 161, 36))
+>bar : Symbol(Thing.bar, Decl(controlFlowOptionalChain.ts, 161, 36))
     }
 }
 
@@ -681,15 +681,15 @@ function f11(o: Thing | null, value: number) {
 >value : Symbol(value, Decl(controlFlowOptionalChain.ts, 184, 29))
 
     if (o?.foo === value) {
->o?.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o?.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 184, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >value : Symbol(value, Decl(controlFlowOptionalChain.ts, 184, 29))
 
         o.foo;
->o.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 184, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
     }
     if (o?.["foo"] === value) {
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 184, 13))
@@ -697,29 +697,29 @@ function f11(o: Thing | null, value: number) {
 
         o["foo"];
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 184, 13))
->"foo" : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>"foo" : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
     }
     if (o?.bar() === value) {
->o?.bar : Symbol(bar, Decl(controlFlowOptionalChain.ts, 161, 36))
+>o?.bar : Symbol(Thing.bar, Decl(controlFlowOptionalChain.ts, 161, 36))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 184, 13))
->bar : Symbol(bar, Decl(controlFlowOptionalChain.ts, 161, 36))
+>bar : Symbol(Thing.bar, Decl(controlFlowOptionalChain.ts, 161, 36))
 >value : Symbol(value, Decl(controlFlowOptionalChain.ts, 184, 29))
 
         o.bar;
->o.bar : Symbol(bar, Decl(controlFlowOptionalChain.ts, 161, 36))
+>o.bar : Symbol(Thing.bar, Decl(controlFlowOptionalChain.ts, 161, 36))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 184, 13))
->bar : Symbol(bar, Decl(controlFlowOptionalChain.ts, 161, 36))
+>bar : Symbol(Thing.bar, Decl(controlFlowOptionalChain.ts, 161, 36))
     }
     if (o?.foo == value) {
->o?.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o?.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 184, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >value : Symbol(value, Decl(controlFlowOptionalChain.ts, 184, 29))
 
         o.foo;
->o.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 184, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
     }
     if (o?.["foo"] == value) {
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 184, 13))
@@ -727,18 +727,18 @@ function f11(o: Thing | null, value: number) {
 
         o["foo"];
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 184, 13))
->"foo" : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>"foo" : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
     }
     if (o?.bar() == value) {
->o?.bar : Symbol(bar, Decl(controlFlowOptionalChain.ts, 161, 36))
+>o?.bar : Symbol(Thing.bar, Decl(controlFlowOptionalChain.ts, 161, 36))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 184, 13))
->bar : Symbol(bar, Decl(controlFlowOptionalChain.ts, 161, 36))
+>bar : Symbol(Thing.bar, Decl(controlFlowOptionalChain.ts, 161, 36))
 >value : Symbol(value, Decl(controlFlowOptionalChain.ts, 184, 29))
 
         o.bar;
->o.bar : Symbol(bar, Decl(controlFlowOptionalChain.ts, 161, 36))
+>o.bar : Symbol(Thing.bar, Decl(controlFlowOptionalChain.ts, 161, 36))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 184, 13))
->bar : Symbol(bar, Decl(controlFlowOptionalChain.ts, 161, 36))
+>bar : Symbol(Thing.bar, Decl(controlFlowOptionalChain.ts, 161, 36))
     }
 }
 
@@ -749,15 +749,15 @@ function f12(o: Thing | undefined, value: number | undefined) {
 >value : Symbol(value, Decl(controlFlowOptionalChain.ts, 205, 34))
 
     if (o?.foo === value) {
->o?.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o?.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 205, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >value : Symbol(value, Decl(controlFlowOptionalChain.ts, 205, 34))
 
         o.foo;  // Error
->o.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 205, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
     }
     if (o?.["foo"] === value) {
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 205, 13))
@@ -767,26 +767,26 @@ function f12(o: Thing | undefined, value: number | undefined) {
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 205, 13))
     }
     if (o?.bar() === value) {
->o?.bar : Symbol(bar, Decl(controlFlowOptionalChain.ts, 161, 36))
+>o?.bar : Symbol(Thing.bar, Decl(controlFlowOptionalChain.ts, 161, 36))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 205, 13))
->bar : Symbol(bar, Decl(controlFlowOptionalChain.ts, 161, 36))
+>bar : Symbol(Thing.bar, Decl(controlFlowOptionalChain.ts, 161, 36))
 >value : Symbol(value, Decl(controlFlowOptionalChain.ts, 205, 34))
 
         o.bar;  // Error
->o.bar : Symbol(bar, Decl(controlFlowOptionalChain.ts, 161, 36))
+>o.bar : Symbol(Thing.bar, Decl(controlFlowOptionalChain.ts, 161, 36))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 205, 13))
->bar : Symbol(bar, Decl(controlFlowOptionalChain.ts, 161, 36))
+>bar : Symbol(Thing.bar, Decl(controlFlowOptionalChain.ts, 161, 36))
     }
     if (o?.foo == value) {
->o?.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o?.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 205, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >value : Symbol(value, Decl(controlFlowOptionalChain.ts, 205, 34))
 
         o.foo;  // Error
->o.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 205, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
     }
     if (o?.["foo"] == value) {
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 205, 13))
@@ -796,15 +796,15 @@ function f12(o: Thing | undefined, value: number | undefined) {
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 205, 13))
     }
     if (o?.bar() == value) {
->o?.bar : Symbol(bar, Decl(controlFlowOptionalChain.ts, 161, 36))
+>o?.bar : Symbol(Thing.bar, Decl(controlFlowOptionalChain.ts, 161, 36))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 205, 13))
->bar : Symbol(bar, Decl(controlFlowOptionalChain.ts, 161, 36))
+>bar : Symbol(Thing.bar, Decl(controlFlowOptionalChain.ts, 161, 36))
 >value : Symbol(value, Decl(controlFlowOptionalChain.ts, 205, 34))
 
         o.bar;  // Error
->o.bar : Symbol(bar, Decl(controlFlowOptionalChain.ts, 161, 36))
+>o.bar : Symbol(Thing.bar, Decl(controlFlowOptionalChain.ts, 161, 36))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 205, 13))
->bar : Symbol(bar, Decl(controlFlowOptionalChain.ts, 161, 36))
+>bar : Symbol(Thing.bar, Decl(controlFlowOptionalChain.ts, 161, 36))
     }
 }
 
@@ -815,15 +815,15 @@ function f12a(o: Thing | undefined, value: number | null) {
 >value : Symbol(value, Decl(controlFlowOptionalChain.ts, 226, 35))
 
     if (o?.foo === value) {
->o?.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o?.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 226, 14))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >value : Symbol(value, Decl(controlFlowOptionalChain.ts, 226, 35))
 
         o.foo;
->o.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 226, 14))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
     }
     if (o?.["foo"] === value) {
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 226, 14))
@@ -831,29 +831,29 @@ function f12a(o: Thing | undefined, value: number | null) {
 
         o["foo"];
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 226, 14))
->"foo" : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>"foo" : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
     }
     if (o?.bar() === value) {
->o?.bar : Symbol(bar, Decl(controlFlowOptionalChain.ts, 161, 36))
+>o?.bar : Symbol(Thing.bar, Decl(controlFlowOptionalChain.ts, 161, 36))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 226, 14))
->bar : Symbol(bar, Decl(controlFlowOptionalChain.ts, 161, 36))
+>bar : Symbol(Thing.bar, Decl(controlFlowOptionalChain.ts, 161, 36))
 >value : Symbol(value, Decl(controlFlowOptionalChain.ts, 226, 35))
 
         o.bar;
->o.bar : Symbol(bar, Decl(controlFlowOptionalChain.ts, 161, 36))
+>o.bar : Symbol(Thing.bar, Decl(controlFlowOptionalChain.ts, 161, 36))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 226, 14))
->bar : Symbol(bar, Decl(controlFlowOptionalChain.ts, 161, 36))
+>bar : Symbol(Thing.bar, Decl(controlFlowOptionalChain.ts, 161, 36))
     }
     if (o?.foo == value) {
->o?.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o?.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 226, 14))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >value : Symbol(value, Decl(controlFlowOptionalChain.ts, 226, 35))
 
         o.foo;  // Error
->o.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 226, 14))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
     }
     if (o?.["foo"] == value) {
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 226, 14))
@@ -863,15 +863,15 @@ function f12a(o: Thing | undefined, value: number | null) {
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 226, 14))
     }
     if (o?.bar() == value) {
->o?.bar : Symbol(bar, Decl(controlFlowOptionalChain.ts, 161, 36))
+>o?.bar : Symbol(Thing.bar, Decl(controlFlowOptionalChain.ts, 161, 36))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 226, 14))
->bar : Symbol(bar, Decl(controlFlowOptionalChain.ts, 161, 36))
+>bar : Symbol(Thing.bar, Decl(controlFlowOptionalChain.ts, 161, 36))
 >value : Symbol(value, Decl(controlFlowOptionalChain.ts, 226, 35))
 
         o.bar;  // Error
->o.bar : Symbol(bar, Decl(controlFlowOptionalChain.ts, 161, 36))
+>o.bar : Symbol(Thing.bar, Decl(controlFlowOptionalChain.ts, 161, 36))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 226, 14))
->bar : Symbol(bar, Decl(controlFlowOptionalChain.ts, 161, 36))
+>bar : Symbol(Thing.bar, Decl(controlFlowOptionalChain.ts, 161, 36))
     }
 }
 
@@ -881,15 +881,15 @@ function f13(o: Thing | undefined) {
 >Thing : Symbol(Thing, Decl(controlFlowOptionalChain.ts, 159, 1))
 
     if (o?.foo !== undefined) {
->o?.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o?.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 247, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >undefined : Symbol(undefined)
 
         o.foo;
->o.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 247, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
     }
     if (o?.["foo"] !== undefined) {
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 247, 13))
@@ -897,29 +897,29 @@ function f13(o: Thing | undefined) {
 
         o["foo"];
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 247, 13))
->"foo" : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>"foo" : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
     }
     if (o?.bar() !== undefined) {
->o?.bar : Symbol(bar, Decl(controlFlowOptionalChain.ts, 161, 36))
+>o?.bar : Symbol(Thing.bar, Decl(controlFlowOptionalChain.ts, 161, 36))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 247, 13))
->bar : Symbol(bar, Decl(controlFlowOptionalChain.ts, 161, 36))
+>bar : Symbol(Thing.bar, Decl(controlFlowOptionalChain.ts, 161, 36))
 >undefined : Symbol(undefined)
 
         o.bar;
->o.bar : Symbol(bar, Decl(controlFlowOptionalChain.ts, 161, 36))
+>o.bar : Symbol(Thing.bar, Decl(controlFlowOptionalChain.ts, 161, 36))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 247, 13))
->bar : Symbol(bar, Decl(controlFlowOptionalChain.ts, 161, 36))
+>bar : Symbol(Thing.bar, Decl(controlFlowOptionalChain.ts, 161, 36))
     }
     if (o?.foo != undefined) {
->o?.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o?.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 247, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >undefined : Symbol(undefined)
 
         o.foo;
->o.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 247, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
     }
     if (o?.["foo"] != undefined) {
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 247, 13))
@@ -927,18 +927,18 @@ function f13(o: Thing | undefined) {
 
         o["foo"];
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 247, 13))
->"foo" : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>"foo" : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
     }
     if (o?.bar() != undefined) {
->o?.bar : Symbol(bar, Decl(controlFlowOptionalChain.ts, 161, 36))
+>o?.bar : Symbol(Thing.bar, Decl(controlFlowOptionalChain.ts, 161, 36))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 247, 13))
->bar : Symbol(bar, Decl(controlFlowOptionalChain.ts, 161, 36))
+>bar : Symbol(Thing.bar, Decl(controlFlowOptionalChain.ts, 161, 36))
 >undefined : Symbol(undefined)
 
         o.bar;
->o.bar : Symbol(bar, Decl(controlFlowOptionalChain.ts, 161, 36))
+>o.bar : Symbol(Thing.bar, Decl(controlFlowOptionalChain.ts, 161, 36))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 247, 13))
->bar : Symbol(bar, Decl(controlFlowOptionalChain.ts, 161, 36))
+>bar : Symbol(Thing.bar, Decl(controlFlowOptionalChain.ts, 161, 36))
     }
 }
 
@@ -948,14 +948,14 @@ function f13a(o: Thing | undefined) {
 >Thing : Symbol(Thing, Decl(controlFlowOptionalChain.ts, 159, 1))
 
     if (o?.foo !== null) {
->o?.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o?.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 268, 14))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 
         o.foo;  // Error
->o.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 268, 14))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
     }
     if (o?.["foo"] !== null) {
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 268, 14))
@@ -964,41 +964,41 @@ function f13a(o: Thing | undefined) {
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 268, 14))
     }
     if (o?.bar() !== null) {
->o?.bar : Symbol(bar, Decl(controlFlowOptionalChain.ts, 161, 36))
+>o?.bar : Symbol(Thing.bar, Decl(controlFlowOptionalChain.ts, 161, 36))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 268, 14))
->bar : Symbol(bar, Decl(controlFlowOptionalChain.ts, 161, 36))
+>bar : Symbol(Thing.bar, Decl(controlFlowOptionalChain.ts, 161, 36))
 
         o.bar;  // Error
->o.bar : Symbol(bar, Decl(controlFlowOptionalChain.ts, 161, 36))
+>o.bar : Symbol(Thing.bar, Decl(controlFlowOptionalChain.ts, 161, 36))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 268, 14))
->bar : Symbol(bar, Decl(controlFlowOptionalChain.ts, 161, 36))
+>bar : Symbol(Thing.bar, Decl(controlFlowOptionalChain.ts, 161, 36))
     }
     if (o?.foo != null) {
->o?.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o?.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 268, 14))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 
         o.foo;
->o.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 268, 14))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
     }
     if (o?.["foo"] != null) {
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 268, 14))
 
         o["foo"];
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 268, 14))
->"foo" : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>"foo" : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
     }
     if (o?.bar() != null) {
->o?.bar : Symbol(bar, Decl(controlFlowOptionalChain.ts, 161, 36))
+>o?.bar : Symbol(Thing.bar, Decl(controlFlowOptionalChain.ts, 161, 36))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 268, 14))
->bar : Symbol(bar, Decl(controlFlowOptionalChain.ts, 161, 36))
+>bar : Symbol(Thing.bar, Decl(controlFlowOptionalChain.ts, 161, 36))
 
         o.bar;
->o.bar : Symbol(bar, Decl(controlFlowOptionalChain.ts, 161, 36))
+>o.bar : Symbol(Thing.bar, Decl(controlFlowOptionalChain.ts, 161, 36))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 268, 14))
->bar : Symbol(bar, Decl(controlFlowOptionalChain.ts, 161, 36))
+>bar : Symbol(Thing.bar, Decl(controlFlowOptionalChain.ts, 161, 36))
     }
 }
 
@@ -1008,15 +1008,15 @@ function f14(o: Thing | null) {
 >Thing : Symbol(Thing, Decl(controlFlowOptionalChain.ts, 159, 1))
 
     if (o?.foo !== undefined) {
->o?.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o?.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 289, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >undefined : Symbol(undefined)
 
         o.foo;
->o.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 289, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
     }
     if (o?.["foo"] !== undefined) {
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 289, 13))
@@ -1024,18 +1024,18 @@ function f14(o: Thing | null) {
 
         o["foo"];
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 289, 13))
->"foo" : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>"foo" : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
     }
     if (o?.bar() !== undefined) {
->o?.bar : Symbol(bar, Decl(controlFlowOptionalChain.ts, 161, 36))
+>o?.bar : Symbol(Thing.bar, Decl(controlFlowOptionalChain.ts, 161, 36))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 289, 13))
->bar : Symbol(bar, Decl(controlFlowOptionalChain.ts, 161, 36))
+>bar : Symbol(Thing.bar, Decl(controlFlowOptionalChain.ts, 161, 36))
 >undefined : Symbol(undefined)
 
         o.bar;
->o.bar : Symbol(bar, Decl(controlFlowOptionalChain.ts, 161, 36))
+>o.bar : Symbol(Thing.bar, Decl(controlFlowOptionalChain.ts, 161, 36))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 289, 13))
->bar : Symbol(bar, Decl(controlFlowOptionalChain.ts, 161, 36))
+>bar : Symbol(Thing.bar, Decl(controlFlowOptionalChain.ts, 161, 36))
     }
 }
 
@@ -1046,72 +1046,72 @@ function f15(o: Thing | undefined, value: number) {
 >value : Symbol(value, Decl(controlFlowOptionalChain.ts, 301, 34))
 
     if (o?.foo === value) {
->o?.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o?.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 301, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >value : Symbol(value, Decl(controlFlowOptionalChain.ts, 301, 34))
 
         o.foo;
->o.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 301, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
     }
     else {
         o.foo;  // Error
->o.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 301, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
     }
     if (o?.foo !== value) {
->o?.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o?.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 301, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >value : Symbol(value, Decl(controlFlowOptionalChain.ts, 301, 34))
 
         o.foo;  // Error
->o.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 301, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
     }
     else {
         o.foo;
->o.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 301, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
     }
     if (o?.foo == value) {
->o?.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o?.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 301, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >value : Symbol(value, Decl(controlFlowOptionalChain.ts, 301, 34))
 
         o.foo;
->o.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 301, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
     }
     else {
         o.foo;  // Error
->o.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 301, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
     }
     if (o?.foo != value) {
->o?.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o?.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 301, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >value : Symbol(value, Decl(controlFlowOptionalChain.ts, 301, 34))
 
         o.foo;  // Error
->o.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 301, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
     }
     else {
         o.foo;
->o.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 301, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
     }
 }
 
@@ -1122,72 +1122,72 @@ function f15a(o: Thing | undefined, value: unknown) {
 >value : Symbol(value, Decl(controlFlowOptionalChain.ts, 328, 35))
 
     if (o?.foo === value) {
->o?.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o?.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 328, 14))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >value : Symbol(value, Decl(controlFlowOptionalChain.ts, 328, 35))
 
         o.foo;  // Error
->o.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 328, 14))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
     }
     else {
         o.foo;  // Error
->o.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 328, 14))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
     }
     if (o?.foo !== value) {
->o?.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o?.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 328, 14))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >value : Symbol(value, Decl(controlFlowOptionalChain.ts, 328, 35))
 
         o.foo;  // Error
->o.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 328, 14))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
     }
     else {
         o.foo;  // Error
->o.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 328, 14))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
     }
     if (o?.foo == value) {
->o?.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o?.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 328, 14))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >value : Symbol(value, Decl(controlFlowOptionalChain.ts, 328, 35))
 
         o.foo;  // Error
->o.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 328, 14))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
     }
     else {
         o.foo;  // Error
->o.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 328, 14))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
     }
     if (o?.foo != value) {
->o?.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o?.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 328, 14))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >value : Symbol(value, Decl(controlFlowOptionalChain.ts, 328, 35))
 
         o.foo;  // Error
->o.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 328, 14))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
     }
     else {
         o.foo;  // Error
->o.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 328, 14))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
     }
 }
 
@@ -1197,72 +1197,72 @@ function f16(o: Thing | undefined) {
 >Thing : Symbol(Thing, Decl(controlFlowOptionalChain.ts, 159, 1))
 
     if (o?.foo === undefined) {
->o?.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o?.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 355, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >undefined : Symbol(undefined)
 
         o.foo;  // Error
->o.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 355, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
     }
     else {
         o.foo;
->o.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 355, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
     }
     if (o?.foo !== undefined) {
->o?.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o?.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 355, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >undefined : Symbol(undefined)
 
         o.foo;
->o.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 355, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
     }
     else {
         o.foo;  // Error
->o.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 355, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
     }
     if (o?.foo == undefined) {
->o?.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o?.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 355, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >undefined : Symbol(undefined)
 
         o.foo;  // Error
->o.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 355, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
     }
     else {
         o.foo;
->o.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 355, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
     }
     if (o?.foo != undefined) {
->o?.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o?.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 355, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >undefined : Symbol(undefined)
 
         o.foo;
->o.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 355, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
     }
     else {
         o.foo;  // Error
->o.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 355, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
     }
 }
 
@@ -1272,42 +1272,42 @@ function f20(o: Thing | undefined) {
 >Thing : Symbol(Thing, Decl(controlFlowOptionalChain.ts, 159, 1))
 
     if (typeof o?.foo === "number") {
->o?.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o?.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 382, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 
         o.foo;
->o.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 382, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
     }
     if (typeof o?.["foo"] === "number") {
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 382, 13))
 
         o["foo"];
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 382, 13))
->"foo" : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>"foo" : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
     }
     if (typeof o?.bar() === "number") {
->o?.bar : Symbol(bar, Decl(controlFlowOptionalChain.ts, 161, 36))
+>o?.bar : Symbol(Thing.bar, Decl(controlFlowOptionalChain.ts, 161, 36))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 382, 13))
->bar : Symbol(bar, Decl(controlFlowOptionalChain.ts, 161, 36))
+>bar : Symbol(Thing.bar, Decl(controlFlowOptionalChain.ts, 161, 36))
 
         o.bar;
->o.bar : Symbol(bar, Decl(controlFlowOptionalChain.ts, 161, 36))
+>o.bar : Symbol(Thing.bar, Decl(controlFlowOptionalChain.ts, 161, 36))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 382, 13))
->bar : Symbol(bar, Decl(controlFlowOptionalChain.ts, 161, 36))
+>bar : Symbol(Thing.bar, Decl(controlFlowOptionalChain.ts, 161, 36))
     }
     if (o?.baz instanceof Error) {
->o?.baz : Symbol(baz, Decl(controlFlowOptionalChain.ts, 161, 51))
+>o?.baz : Symbol(Thing.baz, Decl(controlFlowOptionalChain.ts, 161, 51))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 382, 13))
->baz : Symbol(baz, Decl(controlFlowOptionalChain.ts, 161, 51))
+>baz : Symbol(Thing.baz, Decl(controlFlowOptionalChain.ts, 161, 51))
 >Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
         o.baz;
->o.baz : Symbol(baz, Decl(controlFlowOptionalChain.ts, 161, 51))
+>o.baz : Symbol(Thing.baz, Decl(controlFlowOptionalChain.ts, 161, 51))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 382, 13))
->baz : Symbol(baz, Decl(controlFlowOptionalChain.ts, 161, 51))
+>baz : Symbol(Thing.baz, Decl(controlFlowOptionalChain.ts, 161, 51))
     }
 }
 
@@ -1317,42 +1317,42 @@ function f21(o: Thing | null) {
 >Thing : Symbol(Thing, Decl(controlFlowOptionalChain.ts, 159, 1))
 
     if (typeof o?.foo === "number") {
->o?.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o?.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 397, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 
         o.foo;
->o.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 397, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
     }
     if (typeof o?.["foo"] === "number") {
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 397, 13))
 
         o["foo"];
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 397, 13))
->"foo" : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>"foo" : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
     }
     if (typeof o?.bar() === "number") {
->o?.bar : Symbol(bar, Decl(controlFlowOptionalChain.ts, 161, 36))
+>o?.bar : Symbol(Thing.bar, Decl(controlFlowOptionalChain.ts, 161, 36))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 397, 13))
->bar : Symbol(bar, Decl(controlFlowOptionalChain.ts, 161, 36))
+>bar : Symbol(Thing.bar, Decl(controlFlowOptionalChain.ts, 161, 36))
 
         o.bar;
->o.bar : Symbol(bar, Decl(controlFlowOptionalChain.ts, 161, 36))
+>o.bar : Symbol(Thing.bar, Decl(controlFlowOptionalChain.ts, 161, 36))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 397, 13))
->bar : Symbol(bar, Decl(controlFlowOptionalChain.ts, 161, 36))
+>bar : Symbol(Thing.bar, Decl(controlFlowOptionalChain.ts, 161, 36))
     }
     if (o?.baz instanceof Error) {
->o?.baz : Symbol(baz, Decl(controlFlowOptionalChain.ts, 161, 51))
+>o?.baz : Symbol(Thing.baz, Decl(controlFlowOptionalChain.ts, 161, 51))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 397, 13))
->baz : Symbol(baz, Decl(controlFlowOptionalChain.ts, 161, 51))
+>baz : Symbol(Thing.baz, Decl(controlFlowOptionalChain.ts, 161, 51))
 >Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
         o.baz;
->o.baz : Symbol(baz, Decl(controlFlowOptionalChain.ts, 161, 51))
+>o.baz : Symbol(Thing.baz, Decl(controlFlowOptionalChain.ts, 161, 51))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 397, 13))
->baz : Symbol(baz, Decl(controlFlowOptionalChain.ts, 161, 51))
+>baz : Symbol(Thing.baz, Decl(controlFlowOptionalChain.ts, 161, 51))
     }
 }
 
@@ -1362,68 +1362,68 @@ function f22(o: Thing | undefined) {
 >Thing : Symbol(Thing, Decl(controlFlowOptionalChain.ts, 159, 1))
 
     if (typeof o?.foo === "number") {
->o?.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o?.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 412, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 
         o.foo;
->o.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 412, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
     }
     else {
         o.foo;  // Error
->o.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 412, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
     }
     if (typeof o?.foo !== "number") {
->o?.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o?.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 412, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 
         o.foo;  // Error
->o.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 412, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
     }
     else {
         o.foo;
->o.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 412, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
     }
     if (typeof o?.foo == "number") {
->o?.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o?.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 412, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 
         o.foo;
->o.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 412, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
     }
     else {
         o.foo;  // Error
->o.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 412, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
     }
     if (typeof o?.foo != "number") {
->o?.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o?.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 412, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 
         o.foo;  // Error
->o.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 412, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
     }
     else {
         o.foo;
->o.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 412, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
     }
 }
 
@@ -1433,68 +1433,68 @@ function f23(o: Thing | undefined) {
 >Thing : Symbol(Thing, Decl(controlFlowOptionalChain.ts, 159, 1))
 
     if (typeof o?.foo === "undefined") {
->o?.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o?.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 439, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 
         o.foo;  // Error
->o.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 439, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
     }
     else {
         o.foo;
->o.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 439, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
     }
     if (typeof o?.foo !== "undefined") {
->o?.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o?.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 439, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 
         o.foo;
->o.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 439, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
     }
     else {
         o.foo;  // Error
->o.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 439, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
     }
     if (typeof o?.foo == "undefined") {
->o?.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o?.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 439, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 
         o.foo;  // Error
->o.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 439, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
     }
     else {
         o.foo;
->o.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 439, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
     }
     if (typeof o?.foo != "undefined") {
->o?.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o?.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 439, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 
         o.foo;
->o.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 439, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
     }
     else {
         o.foo;  // Error
->o.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 439, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
     }
 }
 
@@ -1520,50 +1520,50 @@ function f30(o: Thing | undefined) {
     if (!!true) {
         assert(o?.foo);
 >assert : Symbol(assert, Decl(controlFlowOptionalChain.ts, 464, 1))
->o?.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o?.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 469, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 
         o.foo;
->o.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 469, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
     }
     if (!!true) {
         assert(o?.foo === 42);
 >assert : Symbol(assert, Decl(controlFlowOptionalChain.ts, 464, 1))
->o?.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o?.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 469, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 
         o.foo;
->o.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 469, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
     }
     if (!!true) {
         assert(typeof o?.foo === "number");
 >assert : Symbol(assert, Decl(controlFlowOptionalChain.ts, 464, 1))
->o?.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o?.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 469, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 
         o.foo;
->o.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 469, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
     }
     if (!!true) {
         assertNonNull(o?.foo);
 >assertNonNull : Symbol(assertNonNull, Decl(controlFlowOptionalChain.ts, 466, 47))
->o?.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o?.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 469, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 
         o.foo;
->o.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 469, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
     }
 }
 
@@ -1573,38 +1573,38 @@ function f40(o: Thing | undefined) {
 >Thing : Symbol(Thing, Decl(controlFlowOptionalChain.ts, 159, 1))
 
     switch (o?.foo) {
->o?.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o?.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 488, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 
         case "abc":
             o.foo;
->o.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 488, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 
             break;
         case 42:
             o.foo;
->o.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 488, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 
             break;
         case undefined:
 >undefined : Symbol(undefined)
 
             o.foo;  // Error
->o.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 488, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 
             break;
         default:
             o.foo;  // Error
->o.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 488, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 
             break;
     }
@@ -1616,36 +1616,36 @@ function f41(o: Thing | undefined) {
 >Thing : Symbol(Thing, Decl(controlFlowOptionalChain.ts, 159, 1))
 
     switch (typeof o?.foo) {
->o?.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o?.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 505, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 
         case "string":
             o.foo;
->o.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 505, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 
             break;
         case "number":
             o.foo;
->o.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 505, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 
             break;
         case "undefined":
             o.foo;  // Error
->o.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 505, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 
             break;
         default:
             o.foo;  // Error
->o.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>o.foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 505, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
+>foo : Symbol(Thing.foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 
             break;
     }
@@ -1702,10 +1702,10 @@ type Feature = {
 >Feature : Symbol(Feature, Decl(controlFlowOptionalChain.ts, 537, 1))
 
   id: string;
->id : Symbol(id, Decl(controlFlowOptionalChain.ts, 539, 16))
+>id : Symbol(Feature.id, Decl(controlFlowOptionalChain.ts, 539, 16))
 
   geometry?: {
->geometry : Symbol(geometry, Decl(controlFlowOptionalChain.ts, 540, 13))
+>geometry : Symbol(Feature.geometry, Decl(controlFlowOptionalChain.ts, 540, 13))
 
     type: string;
 >type : Symbol(type, Decl(controlFlowOptionalChain.ts, 541, 14))
@@ -1724,18 +1724,18 @@ function extractCoordinates(f: Feature): number[] {
 
     if (f.geometry?.type !== 'test') {
 >f.geometry?.type : Symbol(type, Decl(controlFlowOptionalChain.ts, 541, 14))
->f.geometry : Symbol(geometry, Decl(controlFlowOptionalChain.ts, 540, 13))
+>f.geometry : Symbol(Feature.geometry, Decl(controlFlowOptionalChain.ts, 540, 13))
 >f : Symbol(f, Decl(controlFlowOptionalChain.ts, 548, 28))
->geometry : Symbol(geometry, Decl(controlFlowOptionalChain.ts, 540, 13))
+>geometry : Symbol(Feature.geometry, Decl(controlFlowOptionalChain.ts, 540, 13))
 >type : Symbol(type, Decl(controlFlowOptionalChain.ts, 541, 14))
 
         return [];
     }
     return f.geometry.coordinates;
 >f.geometry.coordinates : Symbol(coordinates, Decl(controlFlowOptionalChain.ts, 542, 17))
->f.geometry : Symbol(geometry, Decl(controlFlowOptionalChain.ts, 540, 13))
+>f.geometry : Symbol(Feature.geometry, Decl(controlFlowOptionalChain.ts, 540, 13))
 >f : Symbol(f, Decl(controlFlowOptionalChain.ts, 548, 28))
->geometry : Symbol(geometry, Decl(controlFlowOptionalChain.ts, 540, 13))
+>geometry : Symbol(Feature.geometry, Decl(controlFlowOptionalChain.ts, 540, 13))
 >coordinates : Symbol(coordinates, Decl(controlFlowOptionalChain.ts, 542, 17))
 }
 

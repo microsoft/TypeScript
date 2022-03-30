@@ -2,7 +2,7 @@
 type Box<T> = { value: T };
 >Box : Symbol(Box, Decl(genericContextualTypes1.ts, 0, 0))
 >T : Symbol(T, Decl(genericContextualTypes1.ts, 0, 9))
->value : Symbol(value, Decl(genericContextualTypes1.ts, 0, 15))
+>value : Symbol(Box.value, Decl(genericContextualTypes1.ts, 0, 15))
 >T : Symbol(T, Decl(genericContextualTypes1.ts, 0, 9))
 
 declare function wrap<A, B>(f: (a: A) => B): (a: A) => B;
@@ -284,9 +284,9 @@ const f31: <T extends Box<number>>(a: T[]) => T[] = arrayFilter(x => x.value > 1
 >T : Symbol(T, Decl(genericContextualTypes1.ts, 41, 12))
 >arrayFilter : Symbol(arrayFilter, Decl(genericContextualTypes1.ts, 33, 5))
 >x : Symbol(x, Decl(genericContextualTypes1.ts, 41, 64))
->x.value : Symbol(value, Decl(genericContextualTypes1.ts, 0, 15))
+>x.value : Symbol(Box.value, Decl(genericContextualTypes1.ts, 0, 15))
 >x : Symbol(x, Decl(genericContextualTypes1.ts, 41, 64))
->value : Symbol(value, Decl(genericContextualTypes1.ts, 0, 15))
+>value : Symbol(Box.value, Decl(genericContextualTypes1.ts, 0, 15))
 
 const f40: <A, B>(b: B, a: A) => [A, B] = flip(zip);
 >f40 : Symbol(f40, Decl(genericContextualTypes1.ts, 43, 5))

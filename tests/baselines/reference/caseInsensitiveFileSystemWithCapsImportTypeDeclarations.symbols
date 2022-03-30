@@ -33,7 +33,7 @@ export type TypeA = {
 >TypeA : Symbol(TypeA, Decl(type-a.ts, 0, 0))
 
     a: string;
->a : Symbol(a, Decl(type-a.ts, 0, 21))
+>a : Symbol(TypeA.a, Decl(type-a.ts, 0, 21))
 }
 === tests/cases/compiler/Uppercased_Dir/src/types.ts ===
 export type Merge<T, U> = T & U;

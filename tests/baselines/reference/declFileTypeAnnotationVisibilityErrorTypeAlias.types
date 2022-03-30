@@ -68,11 +68,11 @@ module M2 {
 >t12 : public1
 
     type t111 = m3.public1;
->t111 : m3.public1
+>t111 : t111
 >m3 : any
 
     export type t112 = m3.public1; // error
->t112 : m3.public1
+>t112 : t111
 >m3 : any
 }
 

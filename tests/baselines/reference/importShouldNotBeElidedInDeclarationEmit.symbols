@@ -6,7 +6,7 @@ export type Thing = {
 >Thing : Symbol(Thing, Decl(umd.d.ts, 0, 24))
 
     a: number;
->a : Symbol(a, Decl(umd.d.ts, 2, 21))
+>a : Symbol(Thing.a, Decl(umd.d.ts, 2, 21))
 }
 
 export declare function makeThing(): Thing;

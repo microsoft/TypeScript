@@ -36,14 +36,14 @@ function f1<T, K1 extends keyof T, K2 extends keyof T[K1]>() {
 type Foo<T> = { x: Foo<T> };
 >Foo : Symbol(Foo, Decl(deepComparisons.ts, 4, 1))
 >T : Symbol(T, Decl(deepComparisons.ts, 6, 9))
->x : Symbol(x, Decl(deepComparisons.ts, 6, 15))
+>x : Symbol(Foo.x, Decl(deepComparisons.ts, 6, 15))
 >Foo : Symbol(Foo, Decl(deepComparisons.ts, 4, 1))
 >T : Symbol(T, Decl(deepComparisons.ts, 6, 9))
 
 type Bar<T> = { x: Bar<T[]> };
 >Bar : Symbol(Bar, Decl(deepComparisons.ts, 6, 28))
 >T : Symbol(T, Decl(deepComparisons.ts, 7, 9))
->x : Symbol(x, Decl(deepComparisons.ts, 7, 15))
+>x : Symbol(Bar.x, Decl(deepComparisons.ts, 7, 15))
 >Bar : Symbol(Bar, Decl(deepComparisons.ts, 6, 28))
 >T : Symbol(T, Decl(deepComparisons.ts, 7, 9))
 
@@ -62,14 +62,14 @@ function f2<U>() {
 type Foo1<T> = { x: Foo2<T> };
 >Foo1 : Symbol(Foo1, Decl(deepComparisons.ts, 11, 1))
 >T : Symbol(T, Decl(deepComparisons.ts, 13, 10))
->x : Symbol(x, Decl(deepComparisons.ts, 13, 16))
+>x : Symbol(Foo1.x, Decl(deepComparisons.ts, 13, 16))
 >Foo2 : Symbol(Foo2, Decl(deepComparisons.ts, 13, 30))
 >T : Symbol(T, Decl(deepComparisons.ts, 13, 10))
 
 type Foo2<T> = { x: Foo1<T> };
 >Foo2 : Symbol(Foo2, Decl(deepComparisons.ts, 13, 30))
 >T : Symbol(T, Decl(deepComparisons.ts, 14, 10))
->x : Symbol(x, Decl(deepComparisons.ts, 14, 16))
+>x : Symbol(Foo2.x, Decl(deepComparisons.ts, 14, 16))
 >Foo1 : Symbol(Foo1, Decl(deepComparisons.ts, 11, 1))
 >T : Symbol(T, Decl(deepComparisons.ts, 14, 10))
 

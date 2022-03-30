@@ -4,7 +4,7 @@ export namespace Library {
 
     export type Bar = { a: number };
 >Bar : Symbol(Bar, Decl(file1.ts, 0, 26))
->a : Symbol(a, Decl(file1.ts, 1, 23))
+>a : Symbol(Bar.a, Decl(file1.ts, 1, 23))
 }
 var x: Library.Bar; // should work
 >x : Symbol(x, Decl(file1.ts, 3, 3))

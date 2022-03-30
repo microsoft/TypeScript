@@ -11,10 +11,10 @@ type DiscriminatorTrue = {
 >DiscriminatorTrue : Symbol(DiscriminatorTrue, Decl(tsxDiscriminantPropertyInference.tsx, 3, 1))
 
     disc: true;
->disc : Symbol(disc, Decl(tsxDiscriminantPropertyInference.tsx, 5, 26))
+>disc : Symbol(DiscriminatorTrue.disc, Decl(tsxDiscriminantPropertyInference.tsx, 5, 26))
 
     cb: (x: string) => void;
->cb : Symbol(cb, Decl(tsxDiscriminantPropertyInference.tsx, 6, 15))
+>cb : Symbol(DiscriminatorTrue.cb, Decl(tsxDiscriminantPropertyInference.tsx, 6, 15))
 >x : Symbol(x, Decl(tsxDiscriminantPropertyInference.tsx, 7, 9))
 }
 
@@ -22,10 +22,10 @@ type DiscriminatorFalse = {
 >DiscriminatorFalse : Symbol(DiscriminatorFalse, Decl(tsxDiscriminantPropertyInference.tsx, 8, 1))
 
     disc?: false;
->disc : Symbol(disc, Decl(tsxDiscriminantPropertyInference.tsx, 10, 27))
+>disc : Symbol(DiscriminatorFalse.disc, Decl(tsxDiscriminantPropertyInference.tsx, 10, 27))
 
     cb: (x: number) => void;
->cb : Symbol(cb, Decl(tsxDiscriminantPropertyInference.tsx, 11, 17))
+>cb : Symbol(DiscriminatorFalse.cb, Decl(tsxDiscriminantPropertyInference.tsx, 11, 17))
 >x : Symbol(x, Decl(tsxDiscriminantPropertyInference.tsx, 12, 9))
 }
 
