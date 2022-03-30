@@ -1,0 +1,4 @@
+=== /index.ts ===
+import { base } from "./foo";
+>base : Symbol(base, Decl(index.ts, 0, 8))
+

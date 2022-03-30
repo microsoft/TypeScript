@@ -420,6 +420,70 @@ namespace ts {
             );
         });
 
+        it("Convert empty string option of moduleSuffixes to compiler-options ", () => {
+            assertCompilerOptions(
+                {
+                    compilerOptions: {
+                        moduleSuffixes: [".ios", ""]
+                    }
+                }, "tsconfig.json",
+                {
+                    compilerOptions: {
+                        moduleSuffixes: [".ios", ""]
+                    },
+                    errors: []
+                }
+            );
+        });
+
+        it("Convert empty string option of moduleSuffixes to compiler-options ", () => {
+            assertCompilerOptions(
+                {
+                    compilerOptions: {
+                        moduleSuffixes: [""]
+                    }
+                }, "tsconfig.json",
+                {
+                    compilerOptions: {
+                        moduleSuffixes: [""]
+                    },
+                    errors: []
+                }
+            );
+        });
+
+        it("Convert trailing-whitespace string option of moduleSuffixes to compiler-options ", () => {
+            assertCompilerOptions(
+                {
+                    compilerOptions: {
+                        moduleSuffixes: ["   "]
+                    }
+                }, "tsconfig.json",
+                {
+                    compilerOptions: {
+                        moduleSuffixes: ["   "]
+                    },
+                    errors: []
+                }
+            );
+        });
+
+        it("Convert empty option of moduleSuffixes to compiler-options ", () => {
+            assertCompilerOptions(
+                {
+                    compilerOptions: {
+                        moduleSuffixes: []
+                    }
+                }, "tsconfig.json",
+                {
+                    compilerOptions: {
+                        moduleSuffixes: []
+                    },
+                    errors: []
+                }
+            );
+        });
+
         it("Convert incorrectly format tsconfig.json to compiler-options ", () => {
             assertCompilerOptions(
                 {
