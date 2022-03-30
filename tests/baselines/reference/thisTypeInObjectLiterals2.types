@@ -84,7 +84,7 @@ type Point = {
 >z : number | undefined
 
     moveBy(dx: number, dy: number, dz?: number): void;
->moveBy : (dx: number, dy: number, dz?: number | undefined) => void
+>moveBy : (dx: number, dy: number, dz?: number) => void
 >dx : number
 >dy : number
 >dz : number | undefined

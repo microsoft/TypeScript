@@ -7655,4 +7655,8 @@ namespace ts {
 
         return state > States.NodeModules ? { topLevelNodeModulesIndex, topLevelPackageNameIndex, packageRootIndex, fileNameIndex } : undefined;
     }
+
+    export function getParameterTypeNode(parameter: ParameterDeclaration | JSDocParameterTag) {
+        return parameter.kind === SyntaxKind.JSDocParameterTag ? parameter.typeExpression?.type : parameter.type;
+    }
 }

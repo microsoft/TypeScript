@@ -532,7 +532,7 @@ function f27(outer: { obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: nu
 }
 
 function f28(obj?: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
->f28 : (obj?: { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; } | undefined) => void
+>f28 : (obj?: {    kind: 'foo';    foo: string;} | {    kind: 'bar';    bar: number;}) => void
 >obj : { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; } | undefined
 >kind : "foo"
 >foo : string

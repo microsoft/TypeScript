@@ -1882,7 +1882,7 @@ type Shape =
 >radius : number
 
 function getArea(shape?: Shape) {
->getArea : (shape?: Shape | undefined) => number
+>getArea : (shape?: Shape) => number
 >shape : Shape | undefined
 
     switch (shape?.type) {

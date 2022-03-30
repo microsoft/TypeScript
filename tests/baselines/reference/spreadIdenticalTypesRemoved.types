@@ -17,7 +17,7 @@ interface Animal {
 }
 
 function clonePet(pet: Animal, fullCopy?: boolean) {
->clonePet : (pet: Animal, fullCopy?: boolean | undefined) => { name: string; kind: string; age?: number | undefined; location?: string | undefined; owner?: object | undefined; }
+>clonePet : (pet: Animal, fullCopy?: boolean) => { name: string; kind: string; age?: number | undefined; location?: string | undefined; owner?: object | undefined; }
 >pet : Animal
 >fullCopy : boolean | undefined
 

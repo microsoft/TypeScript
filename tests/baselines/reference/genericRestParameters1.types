@@ -570,7 +570,7 @@ f23();
 >f23 : () => string[]
 
 declare const g20: (x: number, y?: string, z?: boolean) => string[];
->g20 : (x: number, y?: string | undefined, z?: boolean | undefined) => string[]
+>g20 : (x: number, y?: string, z?: boolean) => string[]
 >x : number
 >y : string | undefined
 >z : boolean | undefined
