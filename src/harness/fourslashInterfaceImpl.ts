@@ -1719,8 +1719,14 @@ namespace FourSlashInterface {
         readonly text?: string;
         readonly documentation?: string;
         readonly sourceDisplay?: string;
+        readonly labelDetails?: ExpectedCompletionEntryLabelDetails;
         readonly tags?: readonly ts.JSDocTagInfo[];
         readonly sortText?: ts.Completions.SortText;
+    }
+
+    export interface ExpectedCompletionEntryLabelDetails {
+        detail?: string;
+        description?: string;
     }
 
     export type ExpectedExactCompletionsPlus = readonly ExpectedCompletionEntry[] & {

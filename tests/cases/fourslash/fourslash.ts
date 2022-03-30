@@ -648,6 +648,7 @@ declare namespace FourSlashInterface {
         readonly includeCompletionsWithInsertText?: boolean;
         readonly includeCompletionsWithClassMemberSnippets?: boolean;
         readonly includeCompletionsWithObjectLiteralMethodSnippets?: boolean;
+        readonly useLabelDetailsInCompletionEntries?: boolean;
         readonly allowIncompleteCompletions?: boolean;
         /** @deprecated use `includeCompletionsWithInsertText` */
         readonly includeInsertTextCompletions?: boolean;
@@ -699,6 +700,12 @@ declare namespace FourSlashInterface {
         readonly documentation?: string;
         readonly tags?: ReadonlyArray<JSDocTagInfo>;
         readonly sourceDisplay?: string;
+        readonly labelDetails?: ExpectedCompletionEntryLabelDetails;
+    }
+
+    export interface ExpectedCompletionEntryLabelDetails {
+        detail?: string;
+        description?: string;
     }
 
     interface VerifySignatureHelpOptions {

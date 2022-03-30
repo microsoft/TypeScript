@@ -24,6 +24,7 @@ verify.completions({
         includeCompletionsWithInsertText: true,
         includeCompletionsWithSnippetText: false,
         includeCompletionsWithObjectLiteralMethodSnippets: true,
+        useLabelDetailsInCompletionEntries: true,
     },
     includes: [
         {
@@ -38,6 +39,9 @@ verify.completions({
             source: completion.CompletionSource.ObjectLiteralMethodSnippet,
             insertText: "foo(f: IFoo): void {\n},",
             hasAction: true,
+            labelDetails: {
+                detail: "(f: IFoo): void",
+            },
         },
     ],
 });
@@ -47,6 +51,7 @@ verify.applyCodeActionFromCompletion("a", {
         includeCompletionsWithInsertText: true,
         includeCompletionsWithSnippetText: false,
         includeCompletionsWithObjectLiteralMethodSnippets: true,
+        useLabelDetailsInCompletionEntries: true,
     },
     name: "foo",
     source: completion.CompletionSource.ObjectLiteralMethodSnippet,
