@@ -886,7 +886,7 @@ namespace ts {
 
     export interface ReferenceEntry extends DocumentSpan {
         isWriteAccess: boolean;
-        isDefinition: boolean;
+        isDefinition?: boolean;
         isInString?: true;
     }
 

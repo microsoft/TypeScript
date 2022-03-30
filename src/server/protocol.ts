@@ -1159,8 +1159,9 @@ namespace ts.server.protocol {
 
         /**
          * True if reference is a definition, false otherwise.
+         * TODO (acasey)
          */
-        isDefinition: boolean;
+        isDefinition?: boolean;
     }
 
     /**

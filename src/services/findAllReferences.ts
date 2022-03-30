@@ -209,13 +209,22 @@ namespace ts.FindAllReferences {
         const options = { use: FindReferencesUse.References };
         const referencedSymbols = Core.getReferencedSymbolsForNode(position, node, program, sourceFiles, cancellationToken, options);
         const checker = program.getTypeChecker();
-        const symbol = checker.getSymbolAtLocation(getAdjustedReferenceLocation(Core.getAdjustedNode(node, options)));
+        // Unless the starting node is a declaration (vs e.g. JSDoc), don't attempt to compute isDefinition
+        const adjustedNode = Core.getAdjustedNode(node, options);
+        const symbol = isDefinitionForReference(adjustedNode) ? checker.getSymbolAtLocation(adjustedNode) : undefined;
         return !referencedSymbols || !referencedSymbols.length ? undefined : mapDefined<SymbolAndEntries, ReferencedSymbol>(referencedSymbols, ({ definition, references }) =>
             // Only include referenced symbols that have a valid definition.
             definition && {
                 definition: checker.runWithCancellationToken(cancellationToken, checker => definitionToReferencedSymbolDefinitionInfo(definition, checker, node)),
                 references: references.map(r => toReferenceEntry(r, symbol))
             });
+    }
+
+    function isDefinitionForReference(node: Node): boolean {
+        return node.kind === SyntaxKind.DefaultKeyword
+            || !!getDeclarationFromName(node)
+            || isLiteralComputedPropertyDeclarationName(node)
+            || (node.kind === SyntaxKind.ConstructorKeyword && isConstructorDeclaration(node.parent));
     }
 
     export function getImplementationsAtPosition(program: Program, cancellationToken: CancellationToken, sourceFiles: readonly SourceFile[], sourceFile: SourceFile, position: number): ImplementationLocation[] | undefined {
@@ -398,7 +407,7 @@ namespace ts.FindAllReferences {
         return {
             ...documentSpan,
             isWriteAccess: isWriteAccessForReference(node),
-            isDefinition: isDeclarationOfSymbol(node, symbol),
+            isDefinition: symbol ? isDeclarationOfSymbol(node, symbol) : undefined,
             isInString: kind === EntryKind.StringLiteral ? true : undefined,
         };
     }
