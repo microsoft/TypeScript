@@ -4100,7 +4100,7 @@ declare namespace ts {
         readonly includeCompletionsWithInsertText?: boolean;
         readonly includeCompletionsWithClassMemberSnippets?: boolean;
         readonly includeCompletionsWithObjectLiteralMethodSnippets?: boolean;
-        readonly includeCompletionsWithLabelDetails?: boolean;
+        readonly useLabelDetailsInCompletionEntries?: boolean;
         readonly allowIncompleteCompletions?: boolean;
         readonly importModuleSpecifierPreference?: "shortest" | "project-relative" | "relative" | "non-relative";
         /** Determines whether we import `foo/index.ts` as "foo", "foo/index", or "foo/index.js" */
@@ -9662,8 +9662,9 @@ declare namespace ts.server.protocol {
         readonly includeCompletionsWithObjectLiteralMethodSnippets?: boolean;
         /**
          * Indicates whether {@link CompletionEntry.labelDetails completion entry label details} are supported.
+         * If not, contents of `labelDetails` may be included in the {@link CompletionEntry.name} property.
          */
-        readonly includeCompletionsWithLabelDetails?: boolean;
+        readonly useLabelDetailsInCompletionEntries?: boolean;
         readonly allowIncompleteCompletions?: boolean;
         readonly importModuleSpecifierPreference?: "shortest" | "project-relative" | "relative" | "non-relative";
         /** Determines whether we import `foo/index.ts` as "foo", "foo/index", or "foo/index.js" */

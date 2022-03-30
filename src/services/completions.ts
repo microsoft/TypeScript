@@ -1072,7 +1072,7 @@ namespace ts.Completions {
         options: CompilerOptions,
         preferences: UserPreferences,
         formatContext: formatting.FormatContext | undefined,
-        ): { insertText: string, isSnippet?: true, importAdder: codefix.ImportAdder, labelDetails: CompletionEntryLabelDetails } | undefined {
+    ): { insertText: string, isSnippet?: true, importAdder: codefix.ImportAdder, labelDetails: CompletionEntryLabelDetails } | undefined {
         const isSnippet = preferences.includeCompletionsWithSnippetText || undefined;
         let insertText: string = name;
 
