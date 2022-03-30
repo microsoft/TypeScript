@@ -18,6 +18,7 @@
         { "path": "../jsTyping", "prepend": true },
         { "path": "../server", "prepend": true },
         { "path": "../webServer", "prepend": true },
+        { "path": "../vfs", "prepend": true },
         { "path": "../deprecatedCompat", "prepend": true }
     ]
 }

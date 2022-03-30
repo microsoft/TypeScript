@@ -46,6 +46,18 @@ namespace ts.server {
         };
     }
 
+    export function initializeVirtualFileSystem(args: string[]): StartInput {
+        createVirtualFileSystem();
+        return {
+            args,
+            logger: createLogger(),
+            cancellationToken: nullCancellationToken,
+            // Only semantic mode right now
+            serverMode: LanguageServiceMode.Semantic,
+            startSession: startVirtualFileSystemSession
+        };
+    }
+
     function createLogger() {
         const cmdLineVerbosity = getLogLevel(findArgument("--logVerbosity"));
         return cmdLineVerbosity !== undefined ? new MainProcessLogger(cmdLineVerbosity, { writeMessage }) : nullLogger;
@@ -75,6 +87,19 @@ namespace ts.server {
         // Do this after sys has been set as findArguments is going to work only then
         const sys = server.createWebSystem(webHost, args, () => findArgument("--executingFilePath") || location + "");
         setSys(sys);
+        const localeStr = findArgument("--locale");
+        if (localeStr) {
+            validateLocaleAndSetLanguage(localeStr, sys);
+        }
+    }
+
+
+    function createVirtualFileSystem() {
+        Debug.assert(ts.sys === undefined);
+        // TODO: I don't think I need the XMLHttpRequest code since vfs will get its files from messages sent by the owner
+        // ...but this means I may not need the webSession-copied code in startVirtualFileSystemSession
+        const vfshost = ts.TestFSWithWatch.createVirtualServerHost([])
+        setSys(vfshost);
         const localeStr = findArgument("--locale");
         if (localeStr) {
             validateLocaleAndSetLanguage(localeStr, sys);
@@ -115,6 +140,30 @@ namespace ts.server {
             }
         }
 
+        const session = new WorkerSession();
+
+        // Start listening
+        session.listen();
+    }
+
+    function startVirtualFileSystemSession(options: StartSessionOptions, logger: Logger, cancellationToken: ServerCancellationToken) {
+        class WorkerSession extends server.WorkerSession {
+            constructor() {
+                super(sys as ServerHost, { writeMessage }, options, logger, cancellationToken, hrtime);
+            }
+
+            exit() {
+                this.logger.info("Exiting...");
+                this.projectService.closeLog();
+                close();
+            }
+
+            listen() {
+                addEventListener("message", (message: any) => {
+                    this.onMessage(message.data);
+                });
+            }
+        }
         const session = new WorkerSession();
 
         // Start listening

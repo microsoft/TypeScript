@@ -45,7 +45,7 @@ ${'content' in file ? file.content :  file.fileContent}`;
             // 1. make sure that everything in files is there
             assert.isDefined(host)
             const fs = (host as any).fs as ESMap<string, ts.TestFSWithWatch.FSEntry>
-            console.log(Array.from(fs.values() as any as Iterable<ts.TestFSWithWatch.FSEntry>).filter(ts.TestFSWithWatch.isFsFile))
+            // console.log(Array.from(fs.values() as any as Iterable<ts.TestFSWithWatch.FSEntry>).filter(ts.TestFSWithWatch.isFsFile))
             assert.equal(Array.from(fs.values() as any as Iterable<ts.TestFSWithWatch.FSEntry>).filter(ts.TestFSWithWatch.isFsFile).length, files.length)
             for (const { file, fileContent } of files) {
                 assert(host?.fileExists(file))
@@ -54,11 +54,8 @@ ${'content' in file ? file.content :  file.fileContent}`;
             // 2. make sure nothing else is
         }
         it("with updateFileSystem request", () => {
-            // TODO: Create a virtual host and make sure it works with session etc
-            // TODO: File watchers still seem wrong
-            // 5. send updateFS request with a create/update/delete of a watched file, assert that file watchers fired
-            // 6. probably some other watcher tests, not sure what
-            const host = createServerHost([]); // old path goes into virtualFileSystemWithWatch.ts, so I guess it's getting the old host, not the replaced one
+            // TODO: probably some other watcher tests, not sure what
+            const host = ts.TestFSWithWatch.createVirtualServerHost([], { withSafeList: false });
             const session = createSession(host);
             const created = [app, file1, file2, file3, config, lib]
             session.executeCommandSeq<protocol.UpdateFileSystemRequest>({
@@ -79,8 +76,8 @@ ${'content' in file ? file.content :  file.fileContent}`;
             const fakehost = (session as any).host as ts.TestFSWithWatch.VirtualServerHost
             assert.isDefined(project);
             assert.equal(fakehost.fsWatches.size, 0)
-            assert.equal(fakehost.fsWatchesRecursive.size, 0)
-            assert.equal(fakehost.watchedFiles.size, 0)
+            assert.equal(fakehost.fsWatchesRecursive.size, 2)
+            assert.equal(fakehost.watchedFiles.size, 5)
             verifyProjectVersion(project, 1);
             session.executeCommandSeq<protocol.OpenRequest>({
                 command: protocol.CommandTypes.Open,
@@ -92,14 +89,14 @@ ${'content' in file ? file.content :  file.fileContent}`;
             verifyProjectVersion(project, 2);
 
             // Verify Texts
-            verifyFileSystem(service.fs, created)
+            verifyFileSystem(host, created)
             verifyText(service, file1.file, file1.fileContent!);
             verifyText(service, commonFile2.path, commonFile2.content);
             verifyText(service, app.file, app.fileContent!);
             verifyText(service, file3.file, fileContentWithComment(file3));
             assert.equal(fakehost.fsWatches.size, 0)
-            assert.equal(fakehost.fsWatchesRecursive.size, 0)
-            assert.equal(fakehost.watchedFiles.size, 0)
+            assert.equal(fakehost.fsWatchesRecursive.size, 2)
+            assert.equal(fakehost.watchedFiles.size, 4)
 
             session.executeCommandSeq<protocol.UpdateFileSystemRequest>({
                 command: protocol.CommandTypes.UpdateFileSystem,
@@ -114,14 +111,14 @@ ${'content' in file ? file.content :  file.fileContent}`;
             verifyProjectVersion(project, 2);
 
             // Verify Texts
-            verifyFileSystem(service.fs, created)
+            verifyFileSystem(host, created)
             verifyText(service, file1.file, file1.fileContent!);
             verifyText(service, commonFile2.path, commonFile2.content);
             verifyText(service, app.file, app.fileContent!);
             verifyText(service, file3.file, fileContentWithComment(file3));
             assert.equal(fakehost.fsWatches.size, 0)
-            assert.equal(fakehost.fsWatchesRecursive.size, 0)
-            assert.equal(fakehost.watchedFiles.size, 0)
+            assert.equal(fakehost.fsWatchesRecursive.size, 2)
+            assert.equal(fakehost.watchedFiles.size, 4)
 
             session.executeCommandSeq<protocol.UpdateFileSystemRequest>({
                 command: protocol.CommandTypes.UpdateFileSystem,
@@ -132,18 +129,16 @@ ${'content' in file ? file.content :  file.fileContent}`;
                     updated: [], //FileSystemRequestArgs[];
                 }
             });
-            // also no change when deleting a file (changes session version but not project version?)
-            verifyProjectVersion(project, 2);
+            verifyProjectVersion(project, 3);
 
             // Verify Texts
-            verifyFileSystem(service.fs, [app, file2, file3, config, lib])
-            verifyText(service, file1.file, file1.fileContent!);
+            verifyFileSystem(host, [app, file2, file3, config, lib])
             verifyText(service, commonFile2.path, commonFile2.content);
             verifyText(service, app.file, app.fileContent!);
             verifyText(service, file3.file, fileContentWithComment(file3));
             assert.equal(fakehost.fsWatches.size, 0)
-            assert.equal(fakehost.fsWatchesRecursive.size, 0)
-            assert.equal(fakehost.watchedFiles.size, 0)
+            assert.equal(fakehost.fsWatchesRecursive.size, 2)
+            assert.equal(fakehost.watchedFiles.size, 3)
 
             session.executeCommandSeq<protocol.CloseRequest>({
                 command: protocol.CommandTypes.Close,
@@ -151,17 +146,16 @@ ${'content' in file ? file.content :  file.fileContent}`;
             });
 
             // also no change when closing a file??? (changes session version but not project version?)
-            verifyProjectVersion(project, 2);
+            verifyProjectVersion(project, 3);
 
             // Verify Texts
-            verifyFileSystem(service.fs, [app, file2, file3, config, lib])
-            verifyText(service, file1.file, file1.fileContent!);
+            verifyFileSystem(host, [app, file2, file3, config, lib])
             verifyText(service, commonFile2.path, commonFile2.content);
             verifyText(service, app.file, app.fileContent!);
             verifyText(service, file3.file, fileContentWithComment(file3));
             assert.equal(fakehost.fsWatches.size, 0)
-            assert.equal(fakehost.fsWatchesRecursive.size, 0)
-            assert.equal(fakehost.watchedFiles.size, 0)
+            assert.equal(fakehost.fsWatchesRecursive.size, 2)
+            assert.equal(fakehost.watchedFiles.size, 4)
         });
 
         function verifyText(service: server.ProjectService, file: string, expected: string) {

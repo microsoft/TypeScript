@@ -10496,7 +10496,7 @@ declare namespace ts.server {
         private ensureProjectForOpenFiles;
         /**
          * Open file whose contents is managed by the client
-         * @param filename is absolute pathname
+         * @param fileName is absolute pathname
          * @param fileContent is a known version of the file content that is more up to date than the one on disk
          */
         openClientFile(fileName: string, fileContent?: string, scriptKind?: ScriptKind, projectRootPath?: string): OpenConfiguredProjectResult;
@@ -10512,7 +10512,7 @@ declare namespace ts.server {
         private telemetryOnOpenFile;
         /**
          * Close file whose contents is managed by the client
-         * @param filename is absolute pathname
+         * @param uncheckedFileName is absolute pathname
          */
         closeClientFile(uncheckedFileName: string): void;
         private collectChanges;
