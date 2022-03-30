@@ -306,7 +306,7 @@ namespace ts.server {
     function getRenameLocationsWorker(
         projects: Projects,
         defaultProject: Project,
-        initialPosition: DocumentPosition,
+        initialLocation: DocumentPosition,
         findInStrings: boolean,
         findInComments: boolean,
         { providePrefixAndSuffixTextForRename }: UserPreferences
@@ -314,7 +314,7 @@ namespace ts.server {
         const perProjectResults = getPerProjectReferences(
             projects,
             defaultProject,
-            initialPosition,
+            initialLocation,
             (project, position) => project.getLanguageService().findRenameLocations(position.fileName, position.pos, findInStrings, findInComments, providePrefixAndSuffixTextForRename),
             (renameLocation, cb) => cb(documentSpanLocation(renameLocation)),
         );
@@ -327,10 +327,7 @@ namespace ts.server {
         const results: RenameLocation[] = [];
         const seen = createDocumentSpanSet();
 
-        for (const project of perProjectResults.projects) {
-            const projectResults = perProjectResults.resultsMap.get(project);
-            if (!projectResults) continue;
-
+        perProjectResults.forEach((projectResults, project) => {
             for (const result of projectResults) {
                 // If there's a mapped location, it'll appear in the results for another project
                 if (!seen.has(result) && !getMappedLocation(documentSpanLocation(result), project)) {
@@ -338,7 +335,7 @@ namespace ts.server {
                     seen.add(result);
                 }
             }
-        }
+        });
 
         return results;
     }
@@ -352,13 +349,13 @@ namespace ts.server {
     function getReferencesWorker(
         projects: Projects,
         defaultProject: Project,
-        initialPosition: DocumentPosition,
+        initialLocation: DocumentPosition,
         logger: Logger,
     ): readonly ReferencedSymbol[] {
         const perProjectResults = getPerProjectReferences(
             projects,
             defaultProject,
-            initialPosition,
+            initialLocation,
             (project, position) => {
                 logger.info(`Finding references to ${position.fileName} position ${position.pos} in project ${project.getProjectName()}`);
                 return project.getLanguageService().findReferences(position.fileName, position.pos);
@@ -381,12 +378,9 @@ namespace ts.server {
 
         const results: ReferencedSymbol[] = [];
 
-        for (const project of perProjectResults.projects) {
-            const projectResults = perProjectResults.resultsMap.get(project);
-            if (!projectResults) continue;
+        const clearIsDefinition = perProjectResults.get(defaultProject)![0].references[0].isDefinition === undefined;
 
-            const clearIsDefinition = projectOutputs[0].references[0].isDefinition === undefined;
-
+        perProjectResults.forEach((projectResults, project) => {
             for (const referencedSymbol of projectResults) {
                 const mappedDefinitionFile = getMappedLocation(documentSpanLocation(referencedSymbol.definition), project);
                 const definition: ReferencedSymbolDefinitionInfo = mappedDefinitionFile === undefined ?
@@ -413,14 +407,14 @@ namespace ts.server {
                     }
                 }
             }
-        }
+        });
 
         return results.filter(o => o.references.length !== 0);
     }
 
-    interface ProjectAndPosition {
+    interface ProjectAndLocation {
         readonly project: Project;
-        readonly position: DocumentPosition;
+        readonly location: DocumentPosition;
     }
 
     function forEachProjectInProjects(projects: Projects, path: string | undefined, cb: (project: Project, path: string | undefined) => void): void {
@@ -436,55 +430,43 @@ namespace ts.server {
         }
     }
 
-    interface PerProjectResults<TResult> {
-        // The projects that were searched in the order in which they were searched.
-        // (The order may be slightly fudged to prioritize "authoritative" projects.)
-        projects: readonly Project[];
-        // The results for each project.
-        // May not have an entry for every member of `projects`.
-        resultsMap: ESMap<Project, readonly TResult[]>;
-    }
-
     /**
-     * @param projects Projects initially known to contain {@link initialPosition}
-     * @param defaultProject The default project containing {@link initialPosition}
-     * @param initialPosition Where the search operation was triggered
+     * @param projects Projects initially known to contain {@link initialLocation}
+     * @param defaultProject The default project containing {@link initialLocation}
+     * @param initialLocation Where the search operation was triggered
      * @param getResultsForPosition This is where you plug in `findReferences`, `renameLocation`, etc
      * @param forPositionInResult Given an item returned by {@link getResultsForPosition} enumerate the positions referred to by that result
      * @returns In the common case where there's only one project, returns an array of results from {@link getResultsForPosition}.
-     * If multiple projects were searched - even if they didn't return results - the result will be a {@link PerProjectResults}.
+     * If multiple projects were searched - even if they didn't return results - the result will be a map from project to per-project results.
      */
     function getPerProjectReferences<TResult>(
         projects: Projects,
         defaultProject: Project,
-        initialPosition: DocumentPosition,
-        getResultsForPosition: (project: Project, position: DocumentPosition) => readonly TResult[] | undefined,
-        forPositionInResult: (result: TResult, cb: (position: DocumentPosition) => void) => void,
-    ): readonly TResult[] | PerProjectResults<TResult> {
+        initialLocation: DocumentPosition,
+        getResultsForPosition: (project: Project, location: DocumentPosition) => readonly TResult[] | undefined,
+        forPositionInResult: (result: TResult, cb: (location: DocumentPosition) => void) => void,
+    ): readonly TResult[] | ESMap<Project, readonly TResult[]> {
         // If `getResultsForPosition` returns results for a project, they go in here
         const resultsMap = new Map<Project, readonly TResult[]>();
 
-        // The `isDefinition` property in a FAR result depends on where the search was started.
-        // This matters when a symbol is aliased (e.g. in an import or an export) because either
-        // the original declaration or the alias can be the one flagged `isDefinition`.
-        // As a result, searches starting from `initialPosition` are more authoritative than
-        // searches started from locations discovered during other searches.  To ensure that
-        // these searches are prioritized, both during search (since we try to avoid searching a
-        // given project multiple times) and during aggregation (i.e. in the caller), we maintain
-        // separate work queues for the two types of searches.
+        const queue: ProjectAndLocation[] = [];
 
-        const initialPositionQueue: ProjectAndPosition[] = [];
-        forEachProjectInProjects(projects, initialPosition.fileName, (project, path) => {
-            const position = { fileName: path!, pos: initialPosition.pos };
-            initialPositionQueue.push({ project, position });
+        // In order to get accurate isDefinition values for `defaultProject`,
+        // we need to ensure that it is searched from `initialLocation`.
+        // The easiest way to do this is to search it first.
+        queue.push({ project: defaultProject, location: initialLocation });
+
+        // This will queue `defaultProject` a second time, but it will be dropped
+        // as a dup when it is dequeued.
+        forEachProjectInProjects(projects, initialLocation.fileName, (project, path) => {
+            const location = { fileName: path!, pos: initialLocation.pos };
+            queue.push({ project, location });
         });
-
-        const otherPositionQueue: ProjectAndPosition[] = [];
 
         const projectService = defaultProject.projectService;
         const cancellationToken = defaultProject.getCancellationToken();
 
-        const defaultDefinition = getDefinitionLocation(defaultProject, initialPosition);
+        const defaultDefinition = getDefinitionLocation(defaultProject, initialLocation);
 
         // Don't call these unless !!defaultDefinition
         const getGeneratedDefinition = memoize(() => defaultProject.isSourceOfProjectReferenceRedirect(defaultDefinition!.fileName) ?
@@ -498,36 +480,20 @@ namespace ts.server {
         // We store the project key, rather than the project, because that's what `loadAncestorProjectTree` wants.
         // (For that same reason, we don't use `resultsMap` for this check.)
         const searchedProjects = new Set<string>();
-        // Caveat: We *can* re-search an already-searched project if the previous search was not initiated from `initialPosition`.
-        // Our search order should make this rare or impossible.
-        const initialPositionSearchedProjects = new Set<string>();
-
-        // The caller needs to know the search order to aggregate properly, so we track it as we go.
-        // As with the sets and work queues, we need to track the two kinds of searches separately
-        // so that we can prioritize `initialPosition` searches over other position searches in the
-        // final result.
-
-        const initialPositionProjects: Project[] = [];
-        const otherPositionProjects: Project[] = [];
 
         onCancellation:
-        while (initialPositionQueue.length || otherPositionQueue.length) {
-            // Drain the `initialPositionQueue` before doing anything else
-            while (initialPositionQueue.length) {
+        while (queue.length) {
+            while (queue.length) {
                 if (cancellationToken.isCancellationRequested()) break onCancellation;
 
-                const { project, position } = initialPositionQueue.shift()!;
+                const { project, location } = queue.shift()!;
 
-                if (isLocationProjectReferenceRedirect(project, position)) continue;
+                if (isLocationProjectReferenceRedirect(project, location)) continue;
 
-                if (!tryAddToSet(initialPositionSearchedProjects, getProjectKey(project))) continue;
-                searchedProjects.add(getProjectKey(project)); // Unconditional
-                initialPositionProjects.push(project);
+                if (!tryAddToSet(searchedProjects, getProjectKey(project))) continue;
 
-                const projectResults = searchPosition(project, position);
+                const projectResults = searchPosition(project, location);
                 if (projectResults) {
-                    // There may already be an other-position search result in the map,
-                    // in which case, clobbering it is desirable
                     resultsMap.set(project, projectResults);
                 }
             }
@@ -535,76 +501,47 @@ namespace ts.server {
             // At this point, we know about all projects passed in as arguments and any projects in which
             // `getResultsForPosition` has returned results.  We expand that set to include any projects
             // downstream from any of these and then queue new initial-position searches for any new project
-            // containing `initialPosition`.
+            // containing `initialLocation`.
             if (defaultDefinition) {
                 // This seems to mean "load all projects downstream from any member of `seenProjects`".
                 projectService.loadAncestorProjectTree(searchedProjects);
                 projectService.forEachEnabledProject(project => {
                     if (cancellationToken.isCancellationRequested()) return; // There's no mechanism for skipping the remaining projects
-                    if (initialPositionSearchedProjects.has(getProjectKey(project))) return; // Can loop forever without this (enqueue here, dequeue above, repeat)
-                    const position = mapDefinitionInProject(defaultDefinition, project, getGeneratedDefinition, getSourceDefinition);
-                    if (position) {
-                        initialPositionQueue.push({ project, position });
+                    if (searchedProjects.has(getProjectKey(project))) return; // Can loop forever without this (enqueue here, dequeue above, repeat)
+                    const location = mapDefinitionInProject(defaultDefinition, project, getGeneratedDefinition, getSourceDefinition);
+                    if (location) {
+                        queue.push({ project, location });
                     }
                 });
-            }
-
-            // Ignore `otherPositionQueue` until `initialPositionQueue` is empty.
-            // If we didn't, we would still prioritize initial-position results, but we'd likely search more projects twice.
-            if (initialPositionQueue.length) continue;
-
-            // Drain the `otherPositionQueue`.  This can't add to `initialPositionQueue`, but it could cause more projects to
-            // be loaded, which might lead to more initial-position searches.
-            while (otherPositionQueue.length) {
-                if (cancellationToken.isCancellationRequested()) break onCancellation;
-
-                const { project, position } = otherPositionQueue.shift()!;
-
-                if (isLocationProjectReferenceRedirect(project, position)) continue;
-
-                if (!tryAddToSet(searchedProjects, getProjectKey(project))) continue;
-                otherPositionProjects.push(project);
-
-                const projectResults = searchPosition(project, position);
-                if (projectResults) {
-                    Debug.assert(!resultsMap.has(project)); // Or we wouldn't have tried searching
-                    resultsMap.set(project, projectResults);
-                }
-            }
-        }
-
-        // It's not worth allocating a new array to hold the concatenation
-        const allProjects = initialPositionProjects;
-        for (const project of otherPositionProjects) {
-            if (!initialPositionSearchedProjects.has(getProjectKey(project))) {
-                allProjects.push(project);
             }
         }
 
         // In the common case where there's only one project, return a simpler result to make
         // it easier for the caller to skip post-processing.
-        if (allProjects.length === 1) {
-            return resultsMap.get(allProjects[0]) ?? [];
+        if (searchedProjects.size === 1) {
+            const it = resultsMap.values().next();
+            Debug.assert(!it.done);
+            return it.value;
         }
 
-        return { projects: allProjects, resultsMap };
+        return resultsMap;
 
         // May enqueue to otherPositionQueue
-        function searchPosition(project: Project, position: DocumentPosition): readonly TResult[] | undefined {
-            const projectResults = getResultsForPosition(project, position);
+        function searchPosition(project: Project, location: DocumentPosition): readonly TResult[] | undefined {
+            const projectResults = getResultsForPosition(project, location);
             if (!projectResults) return undefined;
 
             for (const result of projectResults) {
                 forPositionInResult(result, position => {
                     // This may trigger a search for a tsconfig, but there are several layers of caching that make it inexpensive
-                    const originalPosition = projectService.getOriginalLocationEnsuringConfiguredProject(project, position);
-                    if (!originalPosition) return;
+                    const originalLocation = projectService.getOriginalLocationEnsuringConfiguredProject(project, position);
+                    if (!originalLocation) return;
 
-                    const originalScriptInfo = projectService.getScriptInfo(originalPosition.fileName)!;
+                    const originalScriptInfo = projectService.getScriptInfo(originalLocation.fileName)!;
 
                     for (const project of originalScriptInfo.containingProjects) {
                         if (!project.isOrphan()) {
-                            otherPositionQueue.push({ project, position: originalPosition });
+                            queue.push({ project, location: originalLocation });
                         }
                     }
 
@@ -613,7 +550,7 @@ namespace ts.server {
                         symlinkedProjectsMap.forEach((symlinkedProjects, symlinkedPath) => {
                             for (const symlinkedProject of symlinkedProjects) {
                                 if (!symlinkedProject.isOrphan()) {
-                                    otherPositionQueue.push({ project: symlinkedProject, position: { fileName: symlinkedPath as string, pos: originalPosition.pos } });
+                                    queue.push({ project: symlinkedProject, location: { fileName: symlinkedPath as string, pos: originalLocation.pos } });
                                 }
                             }
                         });
