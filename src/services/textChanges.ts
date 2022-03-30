@@ -618,27 +618,27 @@ namespace ts.textChanges {
             });
         }
 
-        public insertNodeAtClassStart(sourceFile: SourceFile, cls: ClassLikeDeclaration | InterfaceDeclaration, newElement: ClassElement): void {
-            this.insertNodeAtStartWorker(sourceFile, cls, newElement);
+        public insertMemberAtStart(sourceFile: SourceFile, node: ClassLikeDeclaration | InterfaceDeclaration | TypeLiteralNode, newElement: ClassElement | PropertySignature | MethodSignature): void {
+            this.insertNodeAtStartWorker(sourceFile, node, newElement);
         }
 
         public insertNodeAtObjectStart(sourceFile: SourceFile, obj: ObjectLiteralExpression, newElement: ObjectLiteralElementLike): void {
             this.insertNodeAtStartWorker(sourceFile, obj, newElement);
         }
 
-        private insertNodeAtStartWorker(sourceFile: SourceFile, cls: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression, newElement: ClassElement | ObjectLiteralElementLike): void {
-            const indentation = this.guessIndentationFromExistingMembers(sourceFile, cls) ?? this.computeIndentationForNewMember(sourceFile, cls);
-            this.insertNodeAt(sourceFile, getMembersOrProperties(cls).pos, newElement, this.getInsertNodeAtStartInsertOptions(sourceFile, cls, indentation));
+        private insertNodeAtStartWorker(sourceFile: SourceFile, node: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression | TypeLiteralNode, newElement: ClassElement | ObjectLiteralElementLike | PropertySignature | MethodSignature): void {
+            const indentation = this.guessIndentationFromExistingMembers(sourceFile, node) ?? this.computeIndentationForNewMember(sourceFile, node);
+            this.insertNodeAt(sourceFile, getMembersOrProperties(node).pos, newElement, this.getInsertNodeAtStartInsertOptions(sourceFile, node, indentation));
         }
 
         /**
          * Tries to guess the indentation from the existing members of a class/interface/object. All members must be on
          * new lines and must share the same indentation.
          */
-        private guessIndentationFromExistingMembers(sourceFile: SourceFile, cls: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression) {
+        private guessIndentationFromExistingMembers(sourceFile: SourceFile, node: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression | TypeLiteralNode) {
             let indentation: number | undefined;
-            let lastRange: TextRange = cls;
-            for (const member of getMembersOrProperties(cls)) {
+            let lastRange: TextRange = node;
+            for (const member of getMembersOrProperties(node)) {
                 if (rangeStartPositionsAreOnSameLine(lastRange, member, sourceFile)) {
                     // each indented member must be on a new line
                     return undefined;
@@ -657,13 +657,13 @@ namespace ts.textChanges {
             return indentation;
         }
 
-        private computeIndentationForNewMember(sourceFile: SourceFile, cls: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression) {
-            const clsStart = cls.getStart(sourceFile);
-            return formatting.SmartIndenter.findFirstNonWhitespaceColumn(getLineStartPositionForPosition(clsStart, sourceFile), clsStart, sourceFile, this.formatContext.options)
+        private computeIndentationForNewMember(sourceFile: SourceFile, node: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression | TypeLiteralNode) {
+            const nodeStart = node.getStart(sourceFile);
+            return formatting.SmartIndenter.findFirstNonWhitespaceColumn(getLineStartPositionForPosition(nodeStart, sourceFile), nodeStart, sourceFile, this.formatContext.options)
                 + (this.formatContext.options.indentSize ?? 4);
         }
 
-        private getInsertNodeAtStartInsertOptions(sourceFile: SourceFile, cls: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression, indentation: number): InsertNodeOptions {
+        private getInsertNodeAtStartInsertOptions(sourceFile: SourceFile, node: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression | TypeLiteralNode, indentation: number): InsertNodeOptions {
             // Rules:
             // - Always insert leading newline.
             // - For object literals:
@@ -674,11 +674,11 @@ namespace ts.textChanges {
             // - Only insert a trailing newline if body is single-line and there are no other insertions for the node.
             //   NOTE: This is handled in `finishClassesWithNodesInsertedAtStart`.
 
-            const members = getMembersOrProperties(cls);
+            const members = getMembersOrProperties(node);
             const isEmpty = members.length === 0;
-            const isFirstInsertion = addToSeen(this.classesWithNodesInsertedAtStart, getNodeId(cls), { node: cls, sourceFile });
-            const insertTrailingComma = isObjectLiteralExpression(cls) && (!isJsonSourceFile(sourceFile) || !isEmpty);
-            const insertLeadingComma = isObjectLiteralExpression(cls) && isJsonSourceFile(sourceFile) && isEmpty && !isFirstInsertion;
+            const isFirstInsertion = addToSeen(this.classesWithNodesInsertedAtStart, getNodeId(node), { node, sourceFile });
+            const insertTrailingComma = isObjectLiteralExpression(node) && (!isJsonSourceFile(sourceFile) || !isEmpty);
+            const insertLeadingComma = isObjectLiteralExpression(node) && isJsonSourceFile(sourceFile) && isEmpty && !isFirstInsertion;
             return {
                 indentation,
                 prefix: (insertLeadingComma ? "," : "") + this.newLineCharacter,
@@ -998,8 +998,8 @@ namespace ts.textChanges {
         const close = findChildOfKind(cls, SyntaxKind.CloseBraceToken, sourceFile);
         return [open?.end, close?.end];
     }
-    function getMembersOrProperties(cls: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression): NodeArray<Node> {
-        return isObjectLiteralExpression(cls) ? cls.properties : cls.members;
+    function getMembersOrProperties(node: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression | TypeLiteralNode): NodeArray<Node> {
+        return isObjectLiteralExpression(node) ? node.properties : node.members;
     }
 
     export type ValidateNonFormattedText = (node: Node, text: string) => void;
