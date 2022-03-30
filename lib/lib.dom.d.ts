@@ -7478,6 +7478,10 @@ interface HTMLMediaElement extends HTMLElement {
      */
     readonly played: TimeRanges;
     /**
+     * Gets or sets a flag that indicate whether or not the browser should adjust the pitch of the audio to compensate for changes to the playback rate.
+     */
+    preservesPitch: boolean;
+    /**
      * Gets or sets the current playback position, in seconds.
      */
     preload: string;
