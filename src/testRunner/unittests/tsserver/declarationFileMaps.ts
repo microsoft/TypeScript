@@ -13,13 +13,13 @@ namespace ts.projectSystem {
     }
 
     interface MakeReferenceEntry extends DocumentSpanFromSubstring {
-        isDefinition: boolean;
+        isDefinition?: boolean;
     }
-    function makeReferenceEntry({ isDefinition, ...rest }: MakeReferenceEntry): ReferenceEntry {
+    function makeReferencedSymbolEntry({ isDefinition, ...rest }: MakeReferenceEntry): ReferencedSymbolEntry {
         return {
             ...documentSpanFromSubstring(rest),
             isDefinition,
-            isWriteAccess: isDefinition,
+            isWriteAccess: !!isDefinition,
             isInString: undefined,
         };
     }
@@ -448,8 +448,8 @@ namespace ts.projectSystem {
                         ],
                     },
                     references: [
-                        makeReferenceEntry({ file: userTs, /*isDefinition*/ isDefinition: false, text: "fnA" }),
-                        makeReferenceEntry({ file: aTs, /*isDefinition*/ isDefinition: true, text: "fnA", contextText: "export function fnA() {}" }),
+                        makeReferencedSymbolEntry({ file: userTs, /*isDefinition*/ isDefinition: false, text: "fnA" }),
+                        makeReferencedSymbolEntry({ file: aTs, /*isDefinition*/ isDefinition: true, text: "fnA", contextText: "export function fnA() {}" }),
                     ],
                 },
             ]);
@@ -502,7 +502,7 @@ namespace ts.projectSystem {
                         name: "function f(): void",
                     },
                     references: [
-                        makeReferenceEntry({
+                        makeReferencedSymbolEntry({
                             file: aTs,
                             text: "f",
                             options: { index: 1 },

@@ -3260,7 +3260,7 @@ namespace ts.server {
         return text;
     }
 
-    function referenceEntryToReferencesResponseItem(projectService: ProjectService, { fileName, textSpan, contextSpan, isWriteAccess, isDefinition }: ReferenceEntry): protocol.ReferencesResponseItem {
+    function referenceEntryToReferencesResponseItem(projectService: ProjectService, { fileName, textSpan, contextSpan, isWriteAccess, isDefinition }: ReferencedSymbolEntry): protocol.ReferencesResponseItem {
         const scriptInfo = Debug.checkDefined(projectService.getScriptInfo(fileName));
         const span = toProtocolTextSpanWithContext(textSpan, contextSpan, scriptInfo);
         const lineSpan = scriptInfo.lineToTextSpan(span.start.line - 1);

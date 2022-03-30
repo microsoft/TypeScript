@@ -216,7 +216,7 @@ namespace ts.FindAllReferences {
             // Only include referenced symbols that have a valid definition.
             definition && {
                 definition: checker.runWithCancellationToken(cancellationToken, checker => definitionToReferencedSymbolDefinitionInfo(definition, checker, node)),
-                references: references.map(r => toReferenceEntry(r, symbol))
+                references: references.map(r => toReferencedSymbolEntry(r, symbol))
             });
     }
 
@@ -398,16 +398,24 @@ namespace ts.FindAllReferences {
         return { ...entryToDocumentSpan(entry), ...(providePrefixAndSuffixText && getPrefixAndSuffixText(entry, originalNode, checker)) };
     }
 
-    export function toReferenceEntry(entry: Entry, symbol: Symbol | undefined): ReferenceEntry {
+    function toReferencedSymbolEntry(entry: Entry, symbol: Symbol | undefined): ReferencedSymbolEntry {
+        const referenceEntry = toReferenceEntry(entry);
+        if (!symbol) return referenceEntry;
+        return {
+            ...referenceEntry,
+            isDefinition: entry.kind !== EntryKind.Span && isDeclarationOfSymbol(entry.node, symbol)
+        };
+    }
+
+    export function toReferenceEntry(entry: Entry): ReferenceEntry {
         const documentSpan = entryToDocumentSpan(entry);
         if (entry.kind === EntryKind.Span) {
-            return { ...documentSpan, isWriteAccess: false, isDefinition: false };
+            return { ...documentSpan, isWriteAccess: false };
         }
         const { kind, node } = entry;
         return {
             ...documentSpan,
             isWriteAccess: isWriteAccessForReference(node),
-            isDefinition: symbol ? isDeclarationOfSymbol(node, symbol) : undefined,
             isInString: kind === EntryKind.StringLiteral ? true : undefined,
         };
     }
