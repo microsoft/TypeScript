@@ -1,0 +1,218 @@
+=== tests/cases/compiler/contextualNarrowingFromUnknownToObjects.ts ===
+declare function keysOfEmptyObject(o: {}): string[];
+>keysOfEmptyObject : Symbol(keysOfEmptyObject, Decl(contextualNarrowingFromUnknownToObjects.ts, 0, 0))
+>o : Symbol(o, Decl(contextualNarrowingFromUnknownToObjects.ts, 0, 35))
+
+declare function keysOfNonPrimitive(o: object): string[];
+>keysOfNonPrimitive : Symbol(keysOfNonPrimitive, Decl(contextualNarrowingFromUnknownToObjects.ts, 0, 52))
+>o : Symbol(o, Decl(contextualNarrowingFromUnknownToObjects.ts, 1, 36))
+
+namespace implicitConstraints {
+>implicitConstraints : Symbol(implicitConstraints, Decl(contextualNarrowingFromUnknownToObjects.ts, 1, 57))
+
+    export function keyLengthsEqualUsingEmptyObjectFn<T>(a: T, b: T): [T, T] | undefined {
+>keyLengthsEqualUsingEmptyObjectFn : Symbol(keyLengthsEqualUsingEmptyObjectFn, Decl(contextualNarrowingFromUnknownToObjects.ts, 3, 31))
+>T : Symbol(T, Decl(contextualNarrowingFromUnknownToObjects.ts, 4, 54))
+>a : Symbol(a, Decl(contextualNarrowingFromUnknownToObjects.ts, 4, 57))
+>T : Symbol(T, Decl(contextualNarrowingFromUnknownToObjects.ts, 4, 54))
+>b : Symbol(b, Decl(contextualNarrowingFromUnknownToObjects.ts, 4, 62))
+>T : Symbol(T, Decl(contextualNarrowingFromUnknownToObjects.ts, 4, 54))
+>T : Symbol(T, Decl(contextualNarrowingFromUnknownToObjects.ts, 4, 54))
+>T : Symbol(T, Decl(contextualNarrowingFromUnknownToObjects.ts, 4, 54))
+
+        if (typeof a !== "object" || typeof b !== "object" || !a || !b) {
+>a : Symbol(a, Decl(contextualNarrowingFromUnknownToObjects.ts, 4, 57))
+>b : Symbol(b, Decl(contextualNarrowingFromUnknownToObjects.ts, 4, 62))
+>a : Symbol(a, Decl(contextualNarrowingFromUnknownToObjects.ts, 4, 57))
+>b : Symbol(b, Decl(contextualNarrowingFromUnknownToObjects.ts, 4, 62))
+
+            return undefined;
+>undefined : Symbol(undefined)
+        }
+        if (Array.isArray(a) || Array.isArray(b)) {
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 3 more)
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(contextualNarrowingFromUnknownToObjects.ts, 4, 57))
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 3 more)
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>b : Symbol(b, Decl(contextualNarrowingFromUnknownToObjects.ts, 4, 62))
+
+            return undefined;
+>undefined : Symbol(undefined)
+        }
+        if (keysOfEmptyObject(a).length !== keysOfEmptyObject(b).length) {
+>keysOfEmptyObject(a).length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>keysOfEmptyObject : Symbol(keysOfEmptyObject, Decl(contextualNarrowingFromUnknownToObjects.ts, 0, 0))
+>a : Symbol(a, Decl(contextualNarrowingFromUnknownToObjects.ts, 4, 57))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>keysOfEmptyObject(b).length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>keysOfEmptyObject : Symbol(keysOfEmptyObject, Decl(contextualNarrowingFromUnknownToObjects.ts, 0, 0))
+>b : Symbol(b, Decl(contextualNarrowingFromUnknownToObjects.ts, 4, 62))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+
+            return [a, b];
+>a : Symbol(a, Decl(contextualNarrowingFromUnknownToObjects.ts, 4, 57))
+>b : Symbol(b, Decl(contextualNarrowingFromUnknownToObjects.ts, 4, 62))
+        }
+        return undefined;
+>undefined : Symbol(undefined)
+    }
+    
+    export function keyLengthsEqualUsingNonPrimitiveFn<T>(a: T, b: T): [T, T] | undefined {
+>keyLengthsEqualUsingNonPrimitiveFn : Symbol(keyLengthsEqualUsingNonPrimitiveFn, Decl(contextualNarrowingFromUnknownToObjects.ts, 15, 5))
+>T : Symbol(T, Decl(contextualNarrowingFromUnknownToObjects.ts, 17, 55))
+>a : Symbol(a, Decl(contextualNarrowingFromUnknownToObjects.ts, 17, 58))
+>T : Symbol(T, Decl(contextualNarrowingFromUnknownToObjects.ts, 17, 55))
+>b : Symbol(b, Decl(contextualNarrowingFromUnknownToObjects.ts, 17, 63))
+>T : Symbol(T, Decl(contextualNarrowingFromUnknownToObjects.ts, 17, 55))
+>T : Symbol(T, Decl(contextualNarrowingFromUnknownToObjects.ts, 17, 55))
+>T : Symbol(T, Decl(contextualNarrowingFromUnknownToObjects.ts, 17, 55))
+
+        if (typeof a !== "object" || typeof b !== "object" || !a || !b) {
+>a : Symbol(a, Decl(contextualNarrowingFromUnknownToObjects.ts, 17, 58))
+>b : Symbol(b, Decl(contextualNarrowingFromUnknownToObjects.ts, 17, 63))
+>a : Symbol(a, Decl(contextualNarrowingFromUnknownToObjects.ts, 17, 58))
+>b : Symbol(b, Decl(contextualNarrowingFromUnknownToObjects.ts, 17, 63))
+
+            return undefined;
+>undefined : Symbol(undefined)
+        }
+        if (Array.isArray(a) || Array.isArray(b)) {
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 3 more)
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(contextualNarrowingFromUnknownToObjects.ts, 17, 58))
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 3 more)
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>b : Symbol(b, Decl(contextualNarrowingFromUnknownToObjects.ts, 17, 63))
+
+            return undefined;
+>undefined : Symbol(undefined)
+        }
+        if (keysOfNonPrimitive(a).length !== keysOfNonPrimitive(b).length) {
+>keysOfNonPrimitive(a).length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>keysOfNonPrimitive : Symbol(keysOfNonPrimitive, Decl(contextualNarrowingFromUnknownToObjects.ts, 0, 52))
+>a : Symbol(a, Decl(contextualNarrowingFromUnknownToObjects.ts, 17, 58))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>keysOfNonPrimitive(b).length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>keysOfNonPrimitive : Symbol(keysOfNonPrimitive, Decl(contextualNarrowingFromUnknownToObjects.ts, 0, 52))
+>b : Symbol(b, Decl(contextualNarrowingFromUnknownToObjects.ts, 17, 63))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+
+            return [a, b];
+>a : Symbol(a, Decl(contextualNarrowingFromUnknownToObjects.ts, 17, 58))
+>b : Symbol(b, Decl(contextualNarrowingFromUnknownToObjects.ts, 17, 63))
+        }
+        return undefined;
+>undefined : Symbol(undefined)
+    }
+}
+
+// Explicit Constraints of 'unknown'
+namespace explicitConstraintsOfUnknown {
+>explicitConstraintsOfUnknown : Symbol(explicitConstraintsOfUnknown, Decl(contextualNarrowingFromUnknownToObjects.ts, 29, 1))
+
+    export function keyLengthsEqualUsingEmptyObjectFn<T extends unknown>(a: T, b: T): [T, T] | undefined {
+>keyLengthsEqualUsingEmptyObjectFn : Symbol(keyLengthsEqualUsingEmptyObjectFn, Decl(contextualNarrowingFromUnknownToObjects.ts, 32, 40))
+>T : Symbol(T, Decl(contextualNarrowingFromUnknownToObjects.ts, 33, 54))
+>a : Symbol(a, Decl(contextualNarrowingFromUnknownToObjects.ts, 33, 73))
+>T : Symbol(T, Decl(contextualNarrowingFromUnknownToObjects.ts, 33, 54))
+>b : Symbol(b, Decl(contextualNarrowingFromUnknownToObjects.ts, 33, 78))
+>T : Symbol(T, Decl(contextualNarrowingFromUnknownToObjects.ts, 33, 54))
+>T : Symbol(T, Decl(contextualNarrowingFromUnknownToObjects.ts, 33, 54))
+>T : Symbol(T, Decl(contextualNarrowingFromUnknownToObjects.ts, 33, 54))
+
+        if (typeof a !== "object" || typeof b !== "object" || !a || !b) {
+>a : Symbol(a, Decl(contextualNarrowingFromUnknownToObjects.ts, 33, 73))
+>b : Symbol(b, Decl(contextualNarrowingFromUnknownToObjects.ts, 33, 78))
+>a : Symbol(a, Decl(contextualNarrowingFromUnknownToObjects.ts, 33, 73))
+>b : Symbol(b, Decl(contextualNarrowingFromUnknownToObjects.ts, 33, 78))
+
+            return undefined;
+>undefined : Symbol(undefined)
+        }
+        if (Array.isArray(a) || Array.isArray(b)) {
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 3 more)
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(contextualNarrowingFromUnknownToObjects.ts, 33, 73))
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 3 more)
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>b : Symbol(b, Decl(contextualNarrowingFromUnknownToObjects.ts, 33, 78))
+
+            return undefined;
+>undefined : Symbol(undefined)
+        }
+        if (keysOfEmptyObject(a).length !== keysOfEmptyObject(b).length) {
+>keysOfEmptyObject(a).length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>keysOfEmptyObject : Symbol(keysOfEmptyObject, Decl(contextualNarrowingFromUnknownToObjects.ts, 0, 0))
+>a : Symbol(a, Decl(contextualNarrowingFromUnknownToObjects.ts, 33, 73))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>keysOfEmptyObject(b).length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>keysOfEmptyObject : Symbol(keysOfEmptyObject, Decl(contextualNarrowingFromUnknownToObjects.ts, 0, 0))
+>b : Symbol(b, Decl(contextualNarrowingFromUnknownToObjects.ts, 33, 78))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+
+            return [a, b];
+>a : Symbol(a, Decl(contextualNarrowingFromUnknownToObjects.ts, 33, 73))
+>b : Symbol(b, Decl(contextualNarrowingFromUnknownToObjects.ts, 33, 78))
+        }
+        return undefined;
+>undefined : Symbol(undefined)
+    }
+    
+    export function keyLengthsEqualUsingNonPrimitiveFn<T extends unknown>(a: T, b: T): [T, T] | undefined {
+>keyLengthsEqualUsingNonPrimitiveFn : Symbol(keyLengthsEqualUsingNonPrimitiveFn, Decl(contextualNarrowingFromUnknownToObjects.ts, 44, 5))
+>T : Symbol(T, Decl(contextualNarrowingFromUnknownToObjects.ts, 46, 55))
+>a : Symbol(a, Decl(contextualNarrowingFromUnknownToObjects.ts, 46, 74))
+>T : Symbol(T, Decl(contextualNarrowingFromUnknownToObjects.ts, 46, 55))
+>b : Symbol(b, Decl(contextualNarrowingFromUnknownToObjects.ts, 46, 79))
+>T : Symbol(T, Decl(contextualNarrowingFromUnknownToObjects.ts, 46, 55))
+>T : Symbol(T, Decl(contextualNarrowingFromUnknownToObjects.ts, 46, 55))
+>T : Symbol(T, Decl(contextualNarrowingFromUnknownToObjects.ts, 46, 55))
+
+        if (typeof a !== "object" || typeof b !== "object" || !a || !b) {
+>a : Symbol(a, Decl(contextualNarrowingFromUnknownToObjects.ts, 46, 74))
+>b : Symbol(b, Decl(contextualNarrowingFromUnknownToObjects.ts, 46, 79))
+>a : Symbol(a, Decl(contextualNarrowingFromUnknownToObjects.ts, 46, 74))
+>b : Symbol(b, Decl(contextualNarrowingFromUnknownToObjects.ts, 46, 79))
+
+            return undefined;
+>undefined : Symbol(undefined)
+        }
+        if (Array.isArray(a) || Array.isArray(b)) {
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 3 more)
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(contextualNarrowingFromUnknownToObjects.ts, 46, 74))
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 3 more)
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>b : Symbol(b, Decl(contextualNarrowingFromUnknownToObjects.ts, 46, 79))
+
+            return undefined;
+>undefined : Symbol(undefined)
+        }
+        if (keysOfNonPrimitive(a).length !== keysOfNonPrimitive(b).length) {
+>keysOfNonPrimitive(a).length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>keysOfNonPrimitive : Symbol(keysOfNonPrimitive, Decl(contextualNarrowingFromUnknownToObjects.ts, 0, 52))
+>a : Symbol(a, Decl(contextualNarrowingFromUnknownToObjects.ts, 46, 74))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>keysOfNonPrimitive(b).length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>keysOfNonPrimitive : Symbol(keysOfNonPrimitive, Decl(contextualNarrowingFromUnknownToObjects.ts, 0, 52))
+>b : Symbol(b, Decl(contextualNarrowingFromUnknownToObjects.ts, 46, 79))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+
+            return [a, b];
+>a : Symbol(a, Decl(contextualNarrowingFromUnknownToObjects.ts, 46, 74))
+>b : Symbol(b, Decl(contextualNarrowingFromUnknownToObjects.ts, 46, 79))
+        }
+        return undefined;
+>undefined : Symbol(undefined)
+    }
+}
+

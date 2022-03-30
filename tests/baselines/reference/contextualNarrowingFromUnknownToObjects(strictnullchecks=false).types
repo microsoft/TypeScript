@@ -1,0 +1,270 @@
+=== tests/cases/compiler/contextualNarrowingFromUnknownToObjects.ts ===
+declare function keysOfEmptyObject(o: {}): string[];
+>keysOfEmptyObject : (o: {}) => string[]
+>o : {}
+
+declare function keysOfNonPrimitive(o: object): string[];
+>keysOfNonPrimitive : (o: object) => string[]
+>o : object
+
+namespace implicitConstraints {
+>implicitConstraints : typeof implicitConstraints
+
+    export function keyLengthsEqualUsingEmptyObjectFn<T>(a: T, b: T): [T, T] | undefined {
+>keyLengthsEqualUsingEmptyObjectFn : <T>(a: T, b: T) => [T, T] | undefined
+>a : T
+>b : T
+
+        if (typeof a !== "object" || typeof b !== "object" || !a || !b) {
+>typeof a !== "object" || typeof b !== "object" || !a || !b : boolean
+>typeof a !== "object" || typeof b !== "object" || !a : boolean
+>typeof a !== "object" || typeof b !== "object" : boolean
+>typeof a !== "object" : boolean
+>typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>a : T
+>"object" : "object"
+>typeof b !== "object" : boolean
+>typeof b : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>b : T
+>"object" : "object"
+>!a : boolean
+>a : T
+>!b : boolean
+>b : T
+
+            return undefined;
+>undefined : undefined
+        }
+        if (Array.isArray(a) || Array.isArray(b)) {
+>Array.isArray(a) || Array.isArray(b) : boolean
+>Array.isArray(a) : boolean
+>Array.isArray : (arg: any) => arg is any[]
+>Array : ArrayConstructor
+>isArray : (arg: any) => arg is any[]
+>a : T
+>Array.isArray(b) : boolean
+>Array.isArray : (arg: any) => arg is any[]
+>Array : ArrayConstructor
+>isArray : (arg: any) => arg is any[]
+>b : T
+
+            return undefined;
+>undefined : undefined
+        }
+        if (keysOfEmptyObject(a).length !== keysOfEmptyObject(b).length) {
+>keysOfEmptyObject(a).length !== keysOfEmptyObject(b).length : boolean
+>keysOfEmptyObject(a).length : number
+>keysOfEmptyObject(a) : string[]
+>keysOfEmptyObject : (o: {}) => string[]
+>a : T
+>length : number
+>keysOfEmptyObject(b).length : number
+>keysOfEmptyObject(b) : string[]
+>keysOfEmptyObject : (o: {}) => string[]
+>b : T
+>length : number
+
+            return [a, b];
+>[a, b] : [T, T]
+>a : T
+>b : T
+        }
+        return undefined;
+>undefined : undefined
+    }
+    
+    export function keyLengthsEqualUsingNonPrimitiveFn<T>(a: T, b: T): [T, T] | undefined {
+>keyLengthsEqualUsingNonPrimitiveFn : <T>(a: T, b: T) => [T, T] | undefined
+>a : T
+>b : T
+
+        if (typeof a !== "object" || typeof b !== "object" || !a || !b) {
+>typeof a !== "object" || typeof b !== "object" || !a || !b : boolean
+>typeof a !== "object" || typeof b !== "object" || !a : boolean
+>typeof a !== "object" || typeof b !== "object" : boolean
+>typeof a !== "object" : boolean
+>typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>a : T
+>"object" : "object"
+>typeof b !== "object" : boolean
+>typeof b : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>b : T
+>"object" : "object"
+>!a : boolean
+>a : T
+>!b : boolean
+>b : T
+
+            return undefined;
+>undefined : undefined
+        }
+        if (Array.isArray(a) || Array.isArray(b)) {
+>Array.isArray(a) || Array.isArray(b) : boolean
+>Array.isArray(a) : boolean
+>Array.isArray : (arg: any) => arg is any[]
+>Array : ArrayConstructor
+>isArray : (arg: any) => arg is any[]
+>a : T
+>Array.isArray(b) : boolean
+>Array.isArray : (arg: any) => arg is any[]
+>Array : ArrayConstructor
+>isArray : (arg: any) => arg is any[]
+>b : T
+
+            return undefined;
+>undefined : undefined
+        }
+        if (keysOfNonPrimitive(a).length !== keysOfNonPrimitive(b).length) {
+>keysOfNonPrimitive(a).length !== keysOfNonPrimitive(b).length : boolean
+>keysOfNonPrimitive(a).length : number
+>keysOfNonPrimitive(a) : string[]
+>keysOfNonPrimitive : (o: object) => string[]
+>a : T
+>length : number
+>keysOfNonPrimitive(b).length : number
+>keysOfNonPrimitive(b) : string[]
+>keysOfNonPrimitive : (o: object) => string[]
+>b : T
+>length : number
+
+            return [a, b];
+>[a, b] : [T, T]
+>a : T
+>b : T
+        }
+        return undefined;
+>undefined : undefined
+    }
+}
+
+// Explicit Constraints of 'unknown'
+namespace explicitConstraintsOfUnknown {
+>explicitConstraintsOfUnknown : typeof explicitConstraintsOfUnknown
+
+    export function keyLengthsEqualUsingEmptyObjectFn<T extends unknown>(a: T, b: T): [T, T] | undefined {
+>keyLengthsEqualUsingEmptyObjectFn : <T extends unknown>(a: T, b: T) => [T, T] | undefined
+>a : T
+>b : T
+
+        if (typeof a !== "object" || typeof b !== "object" || !a || !b) {
+>typeof a !== "object" || typeof b !== "object" || !a || !b : boolean
+>typeof a !== "object" || typeof b !== "object" || !a : boolean
+>typeof a !== "object" || typeof b !== "object" : boolean
+>typeof a !== "object" : boolean
+>typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>a : T
+>"object" : "object"
+>typeof b !== "object" : boolean
+>typeof b : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>b : T
+>"object" : "object"
+>!a : boolean
+>a : T
+>!b : boolean
+>b : T
+
+            return undefined;
+>undefined : undefined
+        }
+        if (Array.isArray(a) || Array.isArray(b)) {
+>Array.isArray(a) || Array.isArray(b) : boolean
+>Array.isArray(a) : boolean
+>Array.isArray : (arg: any) => arg is any[]
+>Array : ArrayConstructor
+>isArray : (arg: any) => arg is any[]
+>a : T
+>Array.isArray(b) : boolean
+>Array.isArray : (arg: any) => arg is any[]
+>Array : ArrayConstructor
+>isArray : (arg: any) => arg is any[]
+>b : T
+
+            return undefined;
+>undefined : undefined
+        }
+        if (keysOfEmptyObject(a).length !== keysOfEmptyObject(b).length) {
+>keysOfEmptyObject(a).length !== keysOfEmptyObject(b).length : boolean
+>keysOfEmptyObject(a).length : number
+>keysOfEmptyObject(a) : string[]
+>keysOfEmptyObject : (o: {}) => string[]
+>a : T
+>length : number
+>keysOfEmptyObject(b).length : number
+>keysOfEmptyObject(b) : string[]
+>keysOfEmptyObject : (o: {}) => string[]
+>b : T
+>length : number
+
+            return [a, b];
+>[a, b] : [T, T]
+>a : T
+>b : T
+        }
+        return undefined;
+>undefined : undefined
+    }
+    
+    export function keyLengthsEqualUsingNonPrimitiveFn<T extends unknown>(a: T, b: T): [T, T] | undefined {
+>keyLengthsEqualUsingNonPrimitiveFn : <T extends unknown>(a: T, b: T) => [T, T] | undefined
+>a : T
+>b : T
+
+        if (typeof a !== "object" || typeof b !== "object" || !a || !b) {
+>typeof a !== "object" || typeof b !== "object" || !a || !b : boolean
+>typeof a !== "object" || typeof b !== "object" || !a : boolean
+>typeof a !== "object" || typeof b !== "object" : boolean
+>typeof a !== "object" : boolean
+>typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>a : T
+>"object" : "object"
+>typeof b !== "object" : boolean
+>typeof b : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>b : T
+>"object" : "object"
+>!a : boolean
+>a : T
+>!b : boolean
+>b : T
+
+            return undefined;
+>undefined : undefined
+        }
+        if (Array.isArray(a) || Array.isArray(b)) {
+>Array.isArray(a) || Array.isArray(b) : boolean
+>Array.isArray(a) : boolean
+>Array.isArray : (arg: any) => arg is any[]
+>Array : ArrayConstructor
+>isArray : (arg: any) => arg is any[]
+>a : T
+>Array.isArray(b) : boolean
+>Array.isArray : (arg: any) => arg is any[]
+>Array : ArrayConstructor
+>isArray : (arg: any) => arg is any[]
+>b : T
+
+            return undefined;
+>undefined : undefined
+        }
+        if (keysOfNonPrimitive(a).length !== keysOfNonPrimitive(b).length) {
+>keysOfNonPrimitive(a).length !== keysOfNonPrimitive(b).length : boolean
+>keysOfNonPrimitive(a).length : number
+>keysOfNonPrimitive(a) : string[]
+>keysOfNonPrimitive : (o: object) => string[]
+>a : T
+>length : number
+>keysOfNonPrimitive(b).length : number
+>keysOfNonPrimitive(b) : string[]
+>keysOfNonPrimitive : (o: object) => string[]
+>b : T
+>length : number
+
+            return [a, b];
+>[a, b] : [T, T]
+>a : T
+>b : T
+        }
+        return undefined;
+>undefined : undefined
+    }
+}
+
