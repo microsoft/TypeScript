@@ -3406,6 +3406,13 @@ namespace ts.server.protocol {
          * `class A { foo }`.
          */
         readonly includeCompletionsWithClassMemberSnippets?: boolean;
+        /**
+         * If enabled, object literal methods will have a method declaration completion entry in addition
+         * to the regular completion entry containing just the method name.
+         * E.g., `const objectLiteral: T = { f| }` could be completed to `const objectLiteral: T = { foo(): void {} }`,
+         * in addition to `const objectLiteral: T = { foo }`.
+         */
+        readonly includeCompletionsWithObjectLiteralMethodSnippets?: boolean;
         readonly allowIncompleteCompletions?: boolean;
         readonly importModuleSpecifierPreference?: "shortest" | "project-relative" | "relative" | "non-relative";
         /** Determines whether we import `foo/index.ts` as "foo", "foo/index", or "foo/index.js" */
