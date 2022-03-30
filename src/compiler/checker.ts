@@ -6504,7 +6504,7 @@ namespace ts {
                 if (typeFromTypeNode === type) {
                     return true;
                 }
-                if ((isParameter(annotatedDeclaration) || !compilerOptions.exactOptionalPropertyTypes && isPropertyDeclaration(annotatedDeclaration)) && annotatedDeclaration.questionToken) {
+                if (isParameter(annotatedDeclaration) && annotatedDeclaration.questionToken) {
                     return getTypeWithFacts(type, TypeFacts.NEUndefined) === typeFromTypeNode;
                 }
                 return false;
