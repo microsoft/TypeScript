@@ -1,5 +1,5 @@
 /* @internal */
-namespace  ts.TestFSWithWatch {
+namespace ts.TestFSWithWatch {
     export const libFile: File = {
         path: "/a/lib/lib.d.ts",
         content: `/// <reference no-default-lib="true"/>
@@ -860,12 +860,12 @@ interface Array<T> { length: number; [n: number]: T; }`
 
             const base = getDirectoryPath(folder.path);
             if (recursive && base !== directoryName && !this.getRealFolder(base)) {
-                if (base === '/') {
+                if (base === "/") {
                     // create / if not present, then continue
-                    this.ensureFolder('/', false);
+                    this.ensureFolder("/", /*ignoreWatch*/ false);
                 }
                 else {
-                    this.createDirectory(base, recursive)
+                    this.createDirectory(base, recursive);
                 }
             }
 

@@ -95,10 +95,10 @@ namespace ts.server {
 
 
     function createVirtualFileSystem() {
-        Debug.assert(ts.sys === undefined);
+        Debug.assert(sys === undefined);
         // TODO: I don't think I need the XMLHttpRequest code since vfs will get its files from messages sent by the owner
         // ...but this means I may not need the webSession-copied code in startVirtualFileSystemSession
-        const vfshost = ts.TestFSWithWatch.createVirtualServerHost([])
+        const vfshost = TestFSWithWatch.createVirtualServerHost([]);
         setSys(vfshost);
         const localeStr = findArgument("--locale");
         if (localeStr) {

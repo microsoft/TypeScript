@@ -3695,28 +3695,29 @@ namespace ts.server {
             // 2. update vfs
             // I THINK that only vfs needs to update, because none of these files should be open.
             // (I guess files could update from the filesystem while they are still open, but that's something to solve at the end of prototyping I think)
-            const fs = this.host as ts.TestFSWithWatch.VirtualServerHost;
+            const fs = this.host as TestFSWithWatch.VirtualServerHost;
             if (createdFiles) {
-                let it
+                let it;
                 while (!(it = createdFiles.next()).done) {
-                    const document = it.value
+                    const document = it.value;
                     if (document.fileContent) {
-                        if (!fs.directoryExists(ts.getDirectoryPath(document.file)))
-                            fs.createDirectory(ts.getDirectoryPath(document.file), /*recursive*/ true);
+                        if (!fs.directoryExists(getDirectoryPath(document.file))) {
+                            fs.createDirectory(getDirectoryPath(document.file), /*recursive*/ true);
+                        }
                         fs.writeFile(document.file, document.fileContent);
                     }
                 }
             }
 
             if (updatedFiles) {
-                let it
+                let it;
                 while (!(it = updatedFiles.next()).done) {
                     if (it.value.fileContent) {
                         if (fs.fileExists(it.value.file)) {
-                            fs.modifyFile(it.value.file, it.value.fileContent)
+                            fs.modifyFile(it.value.file, it.value.fileContent);
                         }
                         else {
-                            fs.createDirectory(ts.getDirectoryPath(it.value.file), /*recursive*/ true);
+                            fs.createDirectory(getDirectoryPath(it.value.file), /*recursive*/ true);
                             fs.writeFile(it.value.file, it.value.fileContent);
                         }
                     }
@@ -3725,7 +3726,7 @@ namespace ts.server {
             if (deletedFiles) {
                 // TODO: Probably want to delete empty parent folders while they are empty too
                 for (const file of deletedFiles) {
-                    fs.deleteFile(file)
+                    fs.deleteFile(file);
                 }
             }
         }

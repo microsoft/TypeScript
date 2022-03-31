@@ -2715,7 +2715,7 @@ namespace ts.server {
                     request.arguments.updated && arrayIterator(request.arguments.updated), //change
                     request.arguments.deleted, // close
                 );
-                return this.requiredResponse(/*response*/ true)
+                return this.requiredResponse(/*response*/ true);
             },
             [CommandNames.Exit]: () => {
                 this.exit();

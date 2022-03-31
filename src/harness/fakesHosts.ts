@@ -215,8 +215,8 @@ namespace fakes {
     }
 
    /**
-     * A fake `ts.CompilerHost` that leverages a virtual file system.
-     */
+    * A fake `ts.CompilerHost` that leverages a virtual file system.
+    */
     export class CompilerHost implements ts.CompilerHost {
         public readonly sys: System;
         public readonly defaultLibLocation: string;
