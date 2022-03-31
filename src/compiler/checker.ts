@@ -23074,7 +23074,7 @@ namespace ts {
                 if (prop && getCheckFlags(prop) & CheckFlags.SyntheticProperty) {
                     if ((prop as TransientSymbol).isDiscriminantProperty === undefined) {
                         (prop as TransientSymbol).isDiscriminantProperty =
-                            ((prop as TransientSymbol).checkFlags & CheckFlags.Discriminant) === CheckFlags.Discriminant &&
+                            !!((prop as TransientSymbol).checkFlags & CheckFlags.Discriminant) &&
                             !isGenericType(getTypeOfSymbol(prop));
                     }
                     return !!(prop as TransientSymbol).isDiscriminantProperty;

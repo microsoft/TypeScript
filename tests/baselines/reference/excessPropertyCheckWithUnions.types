@@ -28,12 +28,12 @@ let wrong: ADT = { tag: "T", a1: "extra" }
 >"extra" : "extra"
 
 wrong = { tag: "A", d20: 12 }
->wrong = { tag: "A", d20: 12 } : { tag: "A"; d20: number; }
+>wrong = { tag: "A", d20: 12 } : { tag: "A"; d20: 12; }
 >wrong : ADT
->{ tag: "A", d20: 12 } : { tag: "A"; d20: number; }
+>{ tag: "A", d20: 12 } : { tag: "A"; d20: 12; }
 >tag : "A"
 >"A" : "A"
->d20 : number
+>d20 : 12
 >12 : 12
 
 wrong = { tag: "D" }

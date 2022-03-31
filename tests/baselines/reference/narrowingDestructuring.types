@@ -145,6 +145,6 @@ function farr<T extends [number, string, string] | [string, number, number]>(x: 
         const [head, ...tail] = x;
 >head : "number"
 >tail : (string | number)[]
->x : [number, string, string] | [string, number, number]
+>x : [string, number, number]
     }
 }

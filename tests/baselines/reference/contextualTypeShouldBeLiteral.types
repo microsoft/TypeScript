@@ -99,12 +99,12 @@ foo2({
 >method : () => void
 
         this;
->this : X2 | Y2
+>this : Y2
 
         this.value;
->this.value : string
->this : X2 | Y2
->value : string
+>this.value : "none" | "done"
+>this : Y2
+>value : "none" | "done"
     }
 });
 

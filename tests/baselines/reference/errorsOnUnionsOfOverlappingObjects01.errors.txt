@@ -5,6 +5,7 @@ tests/cases/compiler/errorsOnUnionsOfOverlappingObjects01.ts(18,3): error TS2345
 tests/cases/compiler/errorsOnUnionsOfOverlappingObjects01.ts(19,12): error TS2322: Type 'string' is not assignable to type 'number'.
 tests/cases/compiler/errorsOnUnionsOfOverlappingObjects01.ts(24,5): error TS2345: Argument of type '{ a: string; b: string; }' is not assignable to parameter of type 'Bar | Other'.
   Object literal may only specify known properties, and 'a' does not exist in type 'Bar | Other'.
+tests/cases/compiler/errorsOnUnionsOfOverlappingObjects01.ts(29,12): error TS2322: Type 'string' is not assignable to type 'number'.
 tests/cases/compiler/errorsOnUnionsOfOverlappingObjects01.ts(42,10): error TS2345: Argument of type '{ dog: string; }' is not assignable to parameter of type 'ExoticAnimal'.
   Property 'cat' is missing in type '{ dog: string; }' but required in type 'CatDog'.
 tests/cases/compiler/errorsOnUnionsOfOverlappingObjects01.ts(43,10): error TS2345: Argument of type '{ man: string; bear: string; }' is not assignable to parameter of type 'ExoticAnimal'.
@@ -15,7 +16,7 @@ tests/cases/compiler/errorsOnUnionsOfOverlappingObjects01.ts(47,10): error TS234
   Type '{ man: string; beer: string; }' is missing the following properties from type 'ManBearPig': bear, pig
 
 
-==== tests/cases/compiler/errorsOnUnionsOfOverlappingObjects01.ts (7 errors) ====
+==== tests/cases/compiler/errorsOnUnionsOfOverlappingObjects01.ts (8 errors) ====
     interface Foo {
         a: string;
         b: number;
@@ -55,6 +56,8 @@ tests/cases/compiler/errorsOnUnionsOfOverlappingObjects01.ts(47,10): error TS234
     
     h(x);
     h({ a: '', b: '' })
+               ~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
     
     interface CatDog { cat: any, dog: any }
     interface ManBearPig { man: any, bear: any, pig: any }

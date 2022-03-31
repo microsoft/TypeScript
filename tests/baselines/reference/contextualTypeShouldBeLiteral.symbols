@@ -103,9 +103,12 @@ foo2({
 >method : Symbol(method, Decl(contextualTypeShouldBeLiteral.ts, 40, 18))
 
         this;
+>this : Symbol(Y2, Decl(contextualTypeShouldBeLiteral.ts, 28, 1))
+
         this.value;
->this.value : Symbol(value, Decl(contextualTypeShouldBeLiteral.ts, 25, 15), Decl(contextualTypeShouldBeLiteral.ts, 31, 15))
->value : Symbol(value, Decl(contextualTypeShouldBeLiteral.ts, 25, 15), Decl(contextualTypeShouldBeLiteral.ts, 31, 15))
+>this.value : Symbol(Y2.value, Decl(contextualTypeShouldBeLiteral.ts, 31, 15))
+>this : Symbol(Y2, Decl(contextualTypeShouldBeLiteral.ts, 28, 1))
+>value : Symbol(Y2.value, Decl(contextualTypeShouldBeLiteral.ts, 31, 15))
     }
 });
 
