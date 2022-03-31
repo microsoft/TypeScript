@@ -46,11 +46,11 @@ a = new Foo({doer: Foo.Bar});
 >a = new Foo({doer: Foo.Bar}) : Foo
 >a : Foo
 >new Foo({doer: Foo.Bar}) : Foo
->Foo : typeof Foo
+>Foo : typeof import("tests/cases/conformance/types/import/externs")
 >{doer: Foo.Bar} : { doer: (x: string, y?: number) => void; }
 >doer : (x: string, y?: number) => void
 >Foo.Bar : (x: string, y?: number) => void
->Foo : typeof Foo
+>Foo : typeof import("tests/cases/conformance/types/import/externs")
 >Bar : (x: string, y?: number) => void
 
 const q = /** @type {import("./externs").Bar} */({ doer: q => q });

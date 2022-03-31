@@ -4370,7 +4370,7 @@ namespace ts {
                             return [symbol!];
                         }
                     }
-                    if (symbolFromSymbolTable.flags & SymbolFlags.TypeAlias && isAccessible(symbolFromSymbolTable, getDeclaredTypeOfTypeAlias(symbolFromSymbolTable).symbol)) {
+                    if (meaning !== SymbolFlags.Value && symbolFromSymbolTable.flags & SymbolFlags.TypeAlias && isAccessible(symbolFromSymbolTable, getDeclaredTypeOfTypeAlias(symbolFromSymbolTable).symbol)) {
                         return [symbolFromSymbolTable];
                     }
                 });
