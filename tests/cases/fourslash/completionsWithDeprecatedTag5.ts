@@ -17,7 +17,7 @@ verify.completions({
             name: "m",
             kind: "method",
             kindModifiers: "static,deprecated",
-            sortText: completion.SortText.DeprecatedLocalDeclarationPriority
+            sortText: completion.SortText.Deprecated(completion.SortText.LocalDeclarationPriority),
         },
     ])
 });

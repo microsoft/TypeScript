@@ -364,7 +364,7 @@ declare namespace FourSlashInterface {
         fileAfterApplyingRefactorAtMarker(markerName: string, expectedContent: string, refactorNameToApply: string, formattingOptions?: FormatCodeOptions): void;
         getAndApplyCodeFix(errorCode?: number, index?: number): void;
         importFixAtPosition(expectedTextArray: string[], errorCode?: number, options?: UserPreferences): void;
-        importFixModuleSpecifiers(marker: string, moduleSpecifiers: string[]): void;
+        importFixModuleSpecifiers(marker: string, moduleSpecifiers: string[], options?: UserPreferences): void;
 
         navigationBar(json: any, options?: { checkSpans?: boolean }): void;
         navigationTree(json: any, options?: { checkSpans?: boolean }): void;
@@ -399,9 +399,9 @@ declare namespace FourSlashInterface {
         baselineRename(marker: string, options: RenameOptions): void;
 
         /** Verify the quick info available at the current marker. */
-        quickInfoIs(expectedText: string, expectedDocumentation?: string): void;
+        quickInfoIs(expectedText: string, expectedDocumentation?: string, expectedTags?: { name: string; text: string; }[]): void;
         /** Goto a marker and call `quickInfoIs`. */
-        quickInfoAt(markerName: string | Range, expectedText?: string, expectedDocumentation?: string): void;
+        quickInfoAt(markerName: string | Range, expectedText?: string, expectedDocumentation?: string, expectedTags?: { name: string; text: string; }[]): void;
         /**
          * Call `quickInfoAt` for each pair in the object.
          * (If the value is an array, it is [expectedText, expectedDocumentation].)
@@ -647,6 +647,8 @@ declare namespace FourSlashInterface {
         readonly includeCompletionsWithSnippetText?: boolean;
         readonly includeCompletionsWithInsertText?: boolean;
         readonly includeCompletionsWithClassMemberSnippets?: boolean;
+        readonly includeCompletionsWithObjectLiteralMethodSnippets?: boolean;
+        readonly useLabelDetailsInCompletionEntries?: boolean;
         readonly allowIncompleteCompletions?: boolean;
         /** @deprecated use `includeCompletionsWithInsertText` */
         readonly includeInsertTextCompletions?: boolean;
@@ -698,6 +700,12 @@ declare namespace FourSlashInterface {
         readonly documentation?: string;
         readonly tags?: ReadonlyArray<JSDocTagInfo>;
         readonly sourceDisplay?: string;
+        readonly labelDetails?: ExpectedCompletionEntryLabelDetails;
+    }
+
+    export interface ExpectedCompletionEntryLabelDetails {
+        detail?: string;
+        description?: string;
     }
 
     interface VerifySignatureHelpOptions {
@@ -772,7 +780,7 @@ declare namespace FourSlashInterface {
     export interface VerifyInlayHintsOptions {
         text: string;
         position: number;
-        kind?: VerifyInlayHintKind;
+        kind?: ts.InlayHintKind;
         whitespaceBefore?: boolean;
         whitespaceAfter?: boolean;
     }
@@ -838,26 +846,28 @@ declare namespace completion {
     interface GlobalsPlusOptions {
         noLib?: boolean;
     }
-    export const enum SortText {
-        LocalDeclarationPriority = "10",
-        LocationPriority = "11",
-        OptionalMember = "12",
-        MemberDeclaredBySpreadAssignment = "13",
-        SuggestedClassMembers = "14",
-        GlobalsOrKeywords = "15",
-        AutoImportSuggestions = "16",
-        JavascriptIdentifiers = "17",
-        DeprecatedLocalDeclarationPriority = "18",
-        DeprecatedLocationPriority = "19",
-        DeprecatedOptionalMember = "20",
-        DeprecatedMemberDeclaredBySpreadAssignment = "21",
-        DeprecatedSuggestedClassMembers = "22",
-        DeprecatedGlobalsOrKeywords = "23",
-        DeprecatedAutoImportSuggestions = "24"
-    }
+    export type SortText = string & { __sortText: any };
+    export const SortText: {
+        LocalDeclarationPriority: SortText,
+        LocationPriority: SortText,
+        OptionalMember: SortText,
+        MemberDeclaredBySpreadAssignment: SortText,
+        SuggestedClassMembers: SortText,
+        GlobalsOrKeywords: SortText,
+        AutoImportSuggestions: SortText,
+        ClassMemberSnippets: SortText,
+        JavascriptIdentifiers: SortText,
+
+        Deprecated(sortText: SortText): SortText,
+        ObjectLiteralProperty(presetSortText: SortText, symbolDisplayName: string): SortText,
+        SortBelow(sortText: SortText): SortText,
+    };
+
     export const enum CompletionSource {
         ThisProperty = "ThisProperty/",
         ClassMemberSnippet = "ClassMemberSnippet/",
+        TypeOnlyAlias = "TypeOnlyAlias/",
+        ObjectLiteralMethodSnippet = "ObjectLiteralMethodSnippet/",
     }
     export const globalThisEntry: Entry;
     export const undefinedVarEntry: Entry;

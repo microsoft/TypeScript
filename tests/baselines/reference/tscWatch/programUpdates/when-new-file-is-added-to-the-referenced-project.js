@@ -171,10 +171,10 @@ Output::
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Wild card directory of referenced project
 Scheduling update
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Wild card directory of referenced project
-[[90m12:00:45 AM[0m] File change detected. Starting incremental compilation...
-
 Synchronizing program
 Reloading new file names and options
+[[90m12:00:45 AM[0m] File change detected. Starting incremental compilation...
+
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/projects/project2/class2.ts"]
   options: {"module":0,"composite":true,"watch":true,"project":"/user/username/projects/myproject/projects/project2/tsconfig.json","extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/projects/project2/tsconfig.json"}
@@ -251,9 +251,9 @@ Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/pro
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Wild card directory of referenced project
 Project: /user/username/projects/myproject/projects/project1/tsconfig.json Detected output file: /user/username/projects/myproject/projects/project1/class3.d.ts
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Wild card directory of referenced project
+Synchronizing program
 [[90m12:00:49 AM[0m] File change detected. Starting incremental compilation...
 
-Synchronizing program
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/projects/project2/class2.ts"]
   options: {"module":0,"composite":true,"watch":true,"project":"/user/username/projects/myproject/projects/project2/tsconfig.json","extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/projects/project2/tsconfig.json"}
@@ -424,9 +424,9 @@ Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/pro
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Wild card directory of referenced project
 Project: /user/username/projects/myproject/projects/project1/tsconfig.json Detected output file: /user/username/projects/myproject/projects/project1/class3.d.ts
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Wild card directory of referenced project
+Synchronizing program
 [[90m12:01:08 AM[0m] File change detected. Starting incremental compilation...
 
-Synchronizing program
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/projects/project2/class2.ts"]
   options: {"module":0,"composite":true,"watch":true,"project":"/user/username/projects/myproject/projects/project2/tsconfig.json","extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/projects/project2/tsconfig.json"}
@@ -550,9 +550,9 @@ Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/pro
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Wild card directory of referenced project
 Project: /user/username/projects/myproject/projects/project1/tsconfig.json Detected output file: /user/username/projects/myproject/projects/project1/class3.d.ts
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Wild card directory of referenced project
+Synchronizing program
 [[90m12:01:24 AM[0m] File change detected. Starting incremental compilation...
 
-Synchronizing program
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/projects/project2/class2.ts"]
   options: {"module":0,"composite":true,"watch":true,"project":"/user/username/projects/myproject/projects/project2/tsconfig.json","extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/projects/project2/tsconfig.json"}

@@ -10,7 +10,7 @@ namespace ts.refactor {
     };
     registerRefactor(refactorName, {
         kinds: [moveToNewFileAction.kind],
-        getAvailableActions(context): readonly ApplicableRefactorInfo[] {
+        getAvailableActions: function getRefactorActionsToMoveToNewFile(context): readonly ApplicableRefactorInfo[] {
             const statements = getStatementsToMove(context);
             if (context.preferences.allowTextChangesInNewFiles && statements) {
                 return [{ name: refactorName, description, actions: [moveToNewFileAction] }];
@@ -22,7 +22,7 @@ namespace ts.refactor {
             }
             return emptyArray;
         },
-        getEditsForAction(context, actionName): RefactorEditInfo {
+        getEditsForAction: function getRefactorEditsToMoveToNewFile(context, actionName): RefactorEditInfo {
             Debug.assert(actionName === refactorName, "Wrong refactor invoked");
             const statements = Debug.checkDefined(getStatementsToMove(context));
             const edits = textChanges.ChangeTracker.with(context, t => doChange(context.file, context.program, statements, t, context.host, context.preferences));
@@ -473,7 +473,7 @@ namespace ts.refactor {
         let newModuleName = moduleName;
         for (let i = 1; ; i++) {
             const name = combinePaths(inDirectory, newModuleName + extension);
-            if (!host.fileExists!(name)) return newModuleName; // TODO: GH#18217
+            if (!host.fileExists(name)) return newModuleName;
             newModuleName = `${moduleName}.${i}`;
         }
     }

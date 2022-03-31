@@ -159,7 +159,7 @@ namespace ts.GoToDefinition {
 
         const typeReferenceDirective = findReferenceInPosition(sourceFile.typeReferenceDirectives, position);
         if (typeReferenceDirective) {
-            const reference = program.getResolvedTypeReferenceDirectives().get(typeReferenceDirective.fileName);
+            const reference = program.getResolvedTypeReferenceDirectives().get(typeReferenceDirective.fileName, typeReferenceDirective.resolutionMode || sourceFile.impliedNodeFormat);
             const file = reference && program.getSourceFile(reference.resolvedFileName!); // TODO:GH#18217
             return file && { reference: typeReferenceDirective, fileName: file.fileName, file, unverified: false };
         }
@@ -171,7 +171,7 @@ namespace ts.GoToDefinition {
         }
 
         if (sourceFile.resolvedModules?.size()) {
-            const node = getTokenAtPosition(sourceFile, position);
+            const node = getTouchingToken(sourceFile, position);
             if (isModuleSpecifierLike(node) && isExternalModuleNameRelative(node.text) && sourceFile.resolvedModules.has(node.text, getModeForUsageLocation(sourceFile, node))) {
                 const verifiedFileName = sourceFile.resolvedModules.get(node.text, getModeForUsageLocation(sourceFile, node))?.resolvedFileName;
                 const fileName = verifiedFileName || resolvePath(getDirectoryPath(sourceFile.fileName), node.text);
@@ -196,6 +196,10 @@ namespace ts.GoToDefinition {
         const node = getTouchingPropertyName(sourceFile, position);
         if (node === sourceFile) {
             return undefined;
+        }
+
+        if (isImportMeta(node.parent) && node.parent.name === node) {
+            return definitionFromType(typeChecker.getTypeAtLocation(node.parent), typeChecker, node.parent);
         }
 
         const symbol = getSymbol(node, typeChecker);
@@ -290,7 +294,7 @@ namespace ts.GoToDefinition {
                 return declaration.parent.kind === SyntaxKind.NamedImports;
             case SyntaxKind.BindingElement:
             case SyntaxKind.VariableDeclaration:
-                return isInJSFile(declaration) && isRequireVariableDeclaration(declaration);
+                return isInJSFile(declaration) && isVariableDeclarationInitializedToBareOrAccessedRequire(declaration);
             default:
                 return false;
         }

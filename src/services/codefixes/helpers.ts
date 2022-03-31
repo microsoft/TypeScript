@@ -222,6 +222,7 @@ namespace ts.codefix {
                     }
                     return factory.updateTypeParameterDeclaration(
                         typeParameterDecl,
+                        typeParameterDecl.modifiers,
                         typeParameterDecl.name,
                         constraint,
                         defaultType
@@ -276,7 +277,7 @@ namespace ts.codefix {
     }
 
     export function createSignatureDeclarationFromCallExpression(
-        kind: SyntaxKind.MethodDeclaration | SyntaxKind.FunctionDeclaration,
+        kind: SyntaxKind.MethodDeclaration | SyntaxKind.FunctionDeclaration | SyntaxKind.MethodSignature,
         context: CodeFixContextBase,
         importAdder: ImportAdder,
         call: CallExpression,
@@ -306,35 +307,48 @@ namespace ts.codefix {
         const typeParameters = isJs || typeArguments === undefined
             ? undefined
             : map(typeArguments, (_, i) =>
-                factory.createTypeParameterDeclaration(CharacterCodes.T + typeArguments.length - 1 <= CharacterCodes.Z ? String.fromCharCode(CharacterCodes.T + i) : `T${i}`));
+                factory.createTypeParameterDeclaration(/*modifiers*/ undefined, CharacterCodes.T + typeArguments.length - 1 <= CharacterCodes.Z ? String.fromCharCode(CharacterCodes.T + i) : `T${i}`));
         const parameters = createDummyParameters(args.length, names, types, /*minArgumentCount*/ undefined, isJs);
         const type = isJs || contextualType === undefined
             ? undefined
             : checker.typeToTypeNode(contextualType, contextNode, /*flags*/ undefined, tracker);
 
-        if (kind === SyntaxKind.MethodDeclaration) {
-            return factory.createMethodDeclaration(
-                /*decorators*/ undefined,
-                modifiers,
-                asteriskToken,
-                name,
-                /*questionToken*/ undefined,
-                typeParameters,
-                parameters,
-                type,
-                isInterfaceDeclaration(contextNode) ? undefined : createStubbedMethodBody(quotePreference)
-            );
+        switch (kind) {
+            case SyntaxKind.MethodDeclaration:
+                return factory.createMethodDeclaration(
+                    /*decorators*/ undefined,
+                    modifiers,
+                    asteriskToken,
+                    name,
+                    /*questionToken*/ undefined,
+                    typeParameters,
+                    parameters,
+                    type,
+                    createStubbedMethodBody(quotePreference)
+                );
+            case SyntaxKind.MethodSignature:
+                return factory.createMethodSignature(
+                    modifiers,
+                    name,
+                    /*questionToken*/ undefined,
+                    typeParameters,
+                    parameters,
+                    type
+                );
+            case SyntaxKind.FunctionDeclaration:
+                return factory.createFunctionDeclaration(
+                    /*decorators*/ undefined,
+                    modifiers,
+                    asteriskToken,
+                    name,
+                    typeParameters,
+                    parameters,
+                    type,
+                    createStubbedBody(Diagnostics.Function_not_implemented.message, quotePreference)
+                );
+            default:
+                Debug.fail("Unexpected kind");
         }
-        return factory.createFunctionDeclaration(
-            /*decorators*/ undefined,
-            modifiers,
-            asteriskToken,
-            name,
-            typeParameters,
-            parameters,
-            type,
-            createStubbedBody(Diagnostics.Function_not_implemented.message, quotePreference)
-        );
     }
 
     export function typeToAutoImportableTypeNode(checker: TypeChecker, importAdder: ImportAdder, type: Type, contextNode: Node | undefined, scriptTarget: ScriptTarget, flags?: NodeBuilderFlags, tracker?: SymbolTracker): TypeNode | undefined {
@@ -359,7 +373,7 @@ namespace ts.codefix {
                 /*dotDotDotToken*/ undefined,
                 /*name*/ names && names[i] || `arg${i}`,
                 /*questionToken*/ minArgumentCount !== undefined && i >= minArgumentCount ? factory.createToken(SyntaxKind.QuestionToken) : undefined,
-                /*type*/ inJs ? undefined : types && types[i] || factory.createKeywordTypeNode(SyntaxKind.AnyKeyword),
+                /*type*/ inJs ? undefined : types && types[i] || factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword),
                 /*initializer*/ undefined);
             parameters.push(newParameter);
         }
@@ -398,14 +412,13 @@ namespace ts.codefix {
         const parameters = createDummyParameters(maxNonRestArgs, maxArgsParameterSymbolNames, /* types */ undefined, minArgumentCount, /*inJs*/ false);
 
         if (someSigHasRestParameter) {
-            const anyArrayType = factory.createArrayTypeNode(factory.createKeywordTypeNode(SyntaxKind.AnyKeyword));
             const restParameter = factory.createParameterDeclaration(
                 /*decorators*/ undefined,
                 /*modifiers*/ undefined,
                 factory.createToken(SyntaxKind.DotDotDotToken),
                 maxArgsParameterSymbolNames[maxNonRestArgs] || "rest",
                 /*questionToken*/ maxNonRestArgs >= minArgumentCount ? factory.createToken(SyntaxKind.QuestionToken) : undefined,
-                anyArrayType,
+                factory.createArrayTypeNode(factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword)),
                 /*initializer*/ undefined);
             parameters.push(restParameter);
         }

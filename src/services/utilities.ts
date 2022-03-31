@@ -200,7 +200,7 @@ namespace ts {
             case SyntaxKind.ImportType:
                 return !(node.parent as ImportTypeNode).isTypeOf;
             case SyntaxKind.ExpressionWithTypeArguments:
-                return !isExpressionWithTypeArgumentsInClassExtendsClause(node.parent as ExpressionWithTypeArguments);
+                return isPartOfTypeNode(node.parent);
         }
 
         return false;
@@ -1256,8 +1256,10 @@ namespace ts {
      * Finds the rightmost token satisfying `token.end <= position`,
      * excluding `JsxText` tokens containing only whitespace.
      */
-    export function findPrecedingToken(position: number, sourceFile: SourceFile, startNode?: Node, excludeJsdoc?: boolean): Node | undefined {
-        const result = find(startNode || sourceFile);
+    export function findPrecedingToken(position: number, sourceFile: SourceFileLike, startNode: Node, excludeJsdoc?: boolean): Node | undefined;
+    export function findPrecedingToken(position: number, sourceFile: SourceFile, startNode?: Node, excludeJsdoc?: boolean): Node | undefined;
+    export function findPrecedingToken(position: number, sourceFile: SourceFileLike, startNode?: Node, excludeJsdoc?: boolean): Node | undefined {
+        const result = find((startNode || sourceFile) as Node);
         Debug.assert(!(result && isWhiteSpaceOnlyJsxText(result)));
         return result;
 
@@ -1297,7 +1299,7 @@ namespace ts {
 
                     if (lookInPreviousChild) {
                         // actual start of the node is past the position - previous token should be at the end of previous child
-                        const candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ i, sourceFile);
+                        const candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ i, sourceFile, n.kind);
                         return candidate && findRightmostToken(candidate, sourceFile);
                     }
                     else {
@@ -1313,7 +1315,7 @@ namespace ts {
             // the only known case is when position is at the end of the file.
             // Try to find the rightmost token in the file without filtering.
             // Namely we are skipping the check: 'position < node.end'
-            const candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ children.length, sourceFile);
+            const candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ children.length, sourceFile, n.kind);
             return candidate && findRightmostToken(candidate, sourceFile);
         }
     }
@@ -1322,7 +1324,7 @@ namespace ts {
         return isToken(n) && !isWhiteSpaceOnlyJsxText(n);
     }
 
-    function findRightmostToken(n: Node, sourceFile: SourceFile): Node | undefined {
+    function findRightmostToken(n: Node, sourceFile: SourceFileLike): Node | undefined {
         if (isNonWhitespaceToken(n)) {
             return n;
         }
@@ -1332,19 +1334,21 @@ namespace ts {
             return n;
         }
 
-        const candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ children.length, sourceFile);
+        const candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ children.length, sourceFile, n.kind);
         return candidate && findRightmostToken(candidate, sourceFile);
     }
 
     /**
      * Finds the rightmost child to the left of `children[exclusiveStartPosition]` which is a non-all-whitespace token or has constituent tokens.
      */
-    function findRightmostChildNodeWithTokens(children: Node[], exclusiveStartPosition: number, sourceFile: SourceFile): Node | undefined {
+    function findRightmostChildNodeWithTokens(children: Node[], exclusiveStartPosition: number, sourceFile: SourceFileLike, parentKind: SyntaxKind): Node | undefined {
         for (let i = exclusiveStartPosition - 1; i >= 0; i--) {
             const child = children[i];
 
             if (isWhiteSpaceOnlyJsxText(child)) {
-                Debug.assert(i > 0, "`JsxText` tokens should not be the first child of `JsxElement | JsxSelfClosingElement`");
+                if (i === 0 && (parentKind === SyntaxKind.JsxText || parentKind === SyntaxKind.JsxSelfClosingElement)) {
+                    Debug.fail("`JsxText` tokens should not be the first child of `JsxElement | JsxSelfClosingElement`");
+                }
             }
             else if (nodeHasTokens(children[i], sourceFile)) {
                 return children[i];
@@ -1907,6 +1911,7 @@ namespace ts {
             useCaseSensitiveFileNames: maybeBind(host, host.useCaseSensitiveFileNames),
             getSymlinkCache: maybeBind(host, host.getSymlinkCache) || program.getSymlinkCache,
             getModuleSpecifierCache: maybeBind(host, host.getModuleSpecifierCache),
+            getPackageJsonInfoCache: () => program.getModuleResolutionCache()?.getPackageJsonInfoCache(),
             getGlobalTypingsCacheLocation: maybeBind(host, host.getGlobalTypingsCacheLocation),
             redirectTargetsMap: program.redirectTargetsMap,
             getProjectReferenceRedirect: fileName => program.getProjectReferenceRedirect(fileName),
@@ -2304,24 +2309,35 @@ namespace ts {
             : "linkplain";
         const parts = [linkPart(`{@${prefix} `)];
         if (!link.name) {
-            if (link.text) parts.push(linkTextPart(link.text));
+            if (link.text) {
+                parts.push(linkTextPart(link.text));
+            }
         }
         else {
             const symbol = checker?.getSymbolAtLocation(link.name);
             const suffix = findLinkNameEnd(link.text);
             const name = getTextOfNode(link.name) + link.text.slice(0, suffix);
-            const text = link.text.slice(suffix);
+            const text = skipSeparatorFromLinkText(link.text.slice(suffix));
             const decl = symbol?.valueDeclaration || symbol?.declarations?.[0];
             if (decl) {
                 parts.push(linkNamePart(name, decl));
                 if (text) parts.push(linkTextPart(text));
             }
             else {
-                parts.push(linkTextPart(name + (suffix ? "" : " ") + text));
+                parts.push(linkTextPart(name + (suffix || text.indexOf("://") === 0 ? "" : " ") + text));
             }
         }
         parts.push(linkPart("}"));
         return parts;
+    }
+
+    function skipSeparatorFromLinkText(text: string) {
+        let pos = 0;
+        if (text.charCodeAt(pos++) === CharacterCodes.bar) {
+            while (pos < text.length && text.charCodeAt(pos) === CharacterCodes.space) pos++;
+            return text.slice(pos);
+        }
+        return text;
     }
 
     function findLinkNameEnd(text: string) {
@@ -2378,6 +2394,14 @@ namespace ts {
         flags |= TypeFormatFlags.UseAliasDefinedOutsideCurrentScope | TypeFormatFlags.MultilineObjectLiterals | TypeFormatFlags.WriteTypeArgumentsOfSignature | TypeFormatFlags.OmitParameterModifiers;
         return mapToDisplayParts(writer => {
             typechecker.writeSignature(signature, enclosingDeclaration, flags, /*signatureKind*/ undefined, writer);
+        });
+    }
+
+    export function nodeToDisplayParts(node: Node, enclosingDeclaration: Node): SymbolDisplayPart[] {
+        const file = enclosingDeclaration.getSourceFile();
+        return mapToDisplayParts(writer => {
+            const printer = createPrinter({ removeComments: true, omitTrailingSemicolon: true });
+            printer.writeNode(EmitHint.Unspecified, node, file, writer);
         });
     }
 
@@ -2927,7 +2951,7 @@ namespace ts {
         const packageJsons: PackageJsonInfo[] = [];
         forEachAncestorDirectory(getDirectoryPath(fileName), ancestor => {
             const packageJsonFileName = combinePaths(ancestor, "package.json");
-            if (host.fileExists!(packageJsonFileName)) {
+            if (host.fileExists(packageJsonFileName)) {
                 const info = createPackageJsonInfo(packageJsonFileName, host);
                 if (info) {
                     packageJsons.push(info);
@@ -3085,7 +3109,7 @@ namespace ts {
             }
             const specifier = moduleSpecifiers.getNodeModulesPackageName(
                 host.getCompilationSettings(),
-                fromFile.path,
+                fromFile,
                 importedFileName,
                 moduleSpecifierResolutionHost,
                 preferences,
@@ -3207,13 +3231,34 @@ namespace ts {
         return isArray(valueOrArray) ? first(valueOrArray) : valueOrArray;
     }
 
-    export function getNameForExportedSymbol(symbol: Symbol, scriptTarget: ScriptTarget | undefined) {
-        if (!(symbol.flags & SymbolFlags.Transient) && (symbol.escapedName === InternalSymbolName.ExportEquals || symbol.escapedName === InternalSymbolName.Default)) {
-            // Name of "export default foo;" is "foo". Name of "export default 0" is the filename converted to camelCase.
-            return firstDefined(symbol.declarations, d => isExportAssignment(d) ? tryCast(skipOuterExpressions(d.expression), isIdentifier)?.text : undefined)
-                || codefix.moduleSymbolToValidIdentifier(getSymbolParentOrFail(symbol), scriptTarget);
+    export function getNamesForExportedSymbol(symbol: Symbol, scriptTarget: ScriptTarget | undefined): string | [lowercase: string, capitalized: string] {
+        if (needsNameFromDeclaration(symbol)) {
+            const fromDeclaration = getDefaultLikeExportNameFromDeclaration(symbol);
+            if (fromDeclaration) return fromDeclaration;
+            const fileNameCase = codefix.moduleSymbolToValidIdentifier(getSymbolParentOrFail(symbol), scriptTarget, /*preferCapitalized*/ false);
+            const capitalized = codefix.moduleSymbolToValidIdentifier(getSymbolParentOrFail(symbol), scriptTarget, /*preferCapitalized*/ true);
+            if (fileNameCase === capitalized) return fileNameCase;
+            return [fileNameCase, capitalized];
         }
         return symbol.name;
+    }
+
+    export function getNameForExportedSymbol(symbol: Symbol, scriptTarget: ScriptTarget | undefined, preferCapitalized?: boolean) {
+        if (needsNameFromDeclaration(symbol)) {
+            // Name of "export default foo;" is "foo". Name of "export default 0" is the filename converted to camelCase.
+            return getDefaultLikeExportNameFromDeclaration(symbol)
+                || codefix.moduleSymbolToValidIdentifier(getSymbolParentOrFail(symbol), scriptTarget, !!preferCapitalized);
+        }
+        return symbol.name;
+
+    }
+
+    function needsNameFromDeclaration(symbol: Symbol) {
+        return !(symbol.flags & SymbolFlags.Transient) && (symbol.escapedName === InternalSymbolName.ExportEquals || symbol.escapedName === InternalSymbolName.Default);
+    }
+
+    function getDefaultLikeExportNameFromDeclaration(symbol: Symbol) {
+        return firstDefined(symbol.declarations, d => isExportAssignment(d) ? tryCast(skipOuterExpressions(d.expression), isIdentifier)?.text : undefined);
     }
 
     function getSymbolParentOrFail(symbol: Symbol) {
@@ -3297,6 +3342,22 @@ namespace ts {
         return isArray(diag)
             ? formatStringFromArgs(getLocaleSpecificMessage(diag[0]), diag.slice(1) as readonly string[])
             : getLocaleSpecificMessage(diag);
+    }
+
+    /**
+     * Get format code settings for a code writing context (e.g. when formatting text changes or completions code).
+     */
+    export function getFormatCodeSettingsForWriting({ options }: formatting.FormatContext, sourceFile: SourceFile): FormatCodeSettings {
+        const shouldAutoDetectSemicolonPreference = !options.semicolons || options.semicolons === SemicolonPreference.Ignore;
+        const shouldRemoveSemicolons = options.semicolons === SemicolonPreference.Remove || shouldAutoDetectSemicolonPreference && !probablyUsesSemicolons(sourceFile);
+        return {
+            ...options,
+            semicolons: shouldRemoveSemicolons ? SemicolonPreference.Remove : SemicolonPreference.Ignore,
+        };
+    }
+
+    export function jsxModeNeedsExplicitImport(jsx: JsxEmit | undefined) {
+        return jsx === JsxEmit.React || jsx === JsxEmit.ReactNative;
     }
 
     // #endregion

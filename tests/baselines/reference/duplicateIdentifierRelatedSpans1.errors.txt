@@ -95,6 +95,6 @@
 Found 6 errors in 3 files.
 
 Errors  Files
-     2  tests/cases/compiler/file1.ts:1
-     2  tests/cases/compiler/file2.ts:1
-     2  tests/cases/compiler/file3.ts:1
+     2  tests/cases/compiler/file1.ts[90m:1[0m
+     2  tests/cases/compiler/file2.ts[90m:1[0m
+     2  tests/cases/compiler/file3.ts[90m:1[0m

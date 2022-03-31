@@ -26,12 +26,7 @@ verify.completions({
   },
   includes: [{
     name: "method",
-    sortText: completion.SortText.LocationPriority,
-    replacementSpan: {
-      fileName: "",
-      pos: 0,
-      end: 0,
-    },
+    sortText: completion.SortText.ClassMemberSnippets,
     insertText: "method(p: I): void {\n}",
     hasAction: true,
     source: completion.CompletionSource.ClassMemberSnippet,

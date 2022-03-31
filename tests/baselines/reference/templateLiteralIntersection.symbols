@@ -1,0 +1,80 @@
+=== tests/cases/compiler/templateLiteralIntersection.ts ===
+// https://github.com/microsoft/TypeScript/issues/48034
+const a = 'a'
+>a : Symbol(a, Decl(templateLiteralIntersection.ts, 1, 5))
+
+type A = typeof a
+>A : Symbol(A, Decl(templateLiteralIntersection.ts, 1, 13))
+>a : Symbol(a, Decl(templateLiteralIntersection.ts, 1, 5))
+
+type MixA = A & {foo: string}
+>MixA : Symbol(MixA, Decl(templateLiteralIntersection.ts, 3, 17))
+>A : Symbol(A, Decl(templateLiteralIntersection.ts, 1, 13))
+>foo : Symbol(foo, Decl(templateLiteralIntersection.ts, 4, 17))
+
+type OriginA1 = `${A}`
+>OriginA1 : Symbol(OriginA1, Decl(templateLiteralIntersection.ts, 4, 29))
+>A : Symbol(A, Decl(templateLiteralIntersection.ts, 1, 13))
+
+type OriginA2 = `${MixA}`
+>OriginA2 : Symbol(OriginA2, Decl(templateLiteralIntersection.ts, 6, 22))
+>MixA : Symbol(MixA, Decl(templateLiteralIntersection.ts, 3, 17))
+
+type B = `${typeof a}`
+>B : Symbol(B, Decl(templateLiteralIntersection.ts, 7, 25))
+>a : Symbol(a, Decl(templateLiteralIntersection.ts, 1, 5))
+
+type MixB = B & { foo: string }
+>MixB : Symbol(MixB, Decl(templateLiteralIntersection.ts, 9, 22))
+>B : Symbol(B, Decl(templateLiteralIntersection.ts, 7, 25))
+>foo : Symbol(foo, Decl(templateLiteralIntersection.ts, 10, 17))
+
+type OriginB1 = `${B}`
+>OriginB1 : Symbol(OriginB1, Decl(templateLiteralIntersection.ts, 10, 31))
+>B : Symbol(B, Decl(templateLiteralIntersection.ts, 7, 25))
+
+type OriginB2 = `${MixB}`
+>OriginB2 : Symbol(OriginB2, Decl(templateLiteralIntersection.ts, 12, 22))
+>MixB : Symbol(MixB, Decl(templateLiteralIntersection.ts, 9, 22))
+
+type MixC = { foo: string } & A
+>MixC : Symbol(MixC, Decl(templateLiteralIntersection.ts, 13, 25))
+>foo : Symbol(foo, Decl(templateLiteralIntersection.ts, 15, 13))
+>A : Symbol(A, Decl(templateLiteralIntersection.ts, 1, 13))
+
+type OriginC = `${MixC}`
+>OriginC : Symbol(OriginC, Decl(templateLiteralIntersection.ts, 15, 31))
+>MixC : Symbol(MixC, Decl(templateLiteralIntersection.ts, 13, 25))
+
+type MixD<T extends string> =
+>MixD : Symbol(MixD, Decl(templateLiteralIntersection.ts, 17, 24))
+>T : Symbol(T, Decl(templateLiteralIntersection.ts, 19, 10))
+
+    `${T & { foo: string }}`
+>T : Symbol(T, Decl(templateLiteralIntersection.ts, 19, 10))
+>foo : Symbol(foo, Decl(templateLiteralIntersection.ts, 20, 12))
+
+type OriginD = `${MixD<A & { foo: string }> & { foo: string }}`;
+>OriginD : Symbol(OriginD, Decl(templateLiteralIntersection.ts, 20, 28))
+>MixD : Symbol(MixD, Decl(templateLiteralIntersection.ts, 17, 24))
+>A : Symbol(A, Decl(templateLiteralIntersection.ts, 1, 13))
+>foo : Symbol(foo, Decl(templateLiteralIntersection.ts, 21, 28))
+>foo : Symbol(foo, Decl(templateLiteralIntersection.ts, 21, 47))
+
+type E = `${A & {}}`;
+>E : Symbol(E, Decl(templateLiteralIntersection.ts, 21, 64))
+>A : Symbol(A, Decl(templateLiteralIntersection.ts, 1, 13))
+
+type MixE = E & {}
+>MixE : Symbol(MixE, Decl(templateLiteralIntersection.ts, 23, 21))
+>E : Symbol(E, Decl(templateLiteralIntersection.ts, 21, 64))
+
+type OriginE = `${MixE}`
+>OriginE : Symbol(OriginE, Decl(templateLiteralIntersection.ts, 24, 18))
+>MixE : Symbol(MixE, Decl(templateLiteralIntersection.ts, 23, 21))
+
+type OriginF = `${A}foo${A}`;
+>OriginF : Symbol(OriginF, Decl(templateLiteralIntersection.ts, 25, 24))
+>A : Symbol(A, Decl(templateLiteralIntersection.ts, 1, 13))
+>A : Symbol(A, Decl(templateLiteralIntersection.ts, 1, 13))
+

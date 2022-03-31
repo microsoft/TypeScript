@@ -573,3 +573,254 @@ function ff1() {
 >apply : Symbol(apply, Decl(correlatedUnions.ts, 150, 5))
 }
 
+// Repro from #47368
+
+type ArgMap = { a: number, b: string };
+>ArgMap : Symbol(ArgMap, Decl(correlatedUnions.ts, 157, 1))
+>a : Symbol(a, Decl(correlatedUnions.ts, 161, 15))
+>b : Symbol(b, Decl(correlatedUnions.ts, 161, 26))
+
+type Func<K extends keyof ArgMap> = (x: ArgMap[K]) => void;
+>Func : Symbol(Func, Decl(correlatedUnions.ts, 161, 39))
+>K : Symbol(K, Decl(correlatedUnions.ts, 162, 10))
+>ArgMap : Symbol(ArgMap, Decl(correlatedUnions.ts, 157, 1))
+>x : Symbol(x, Decl(correlatedUnions.ts, 162, 37))
+>ArgMap : Symbol(ArgMap, Decl(correlatedUnions.ts, 157, 1))
+>K : Symbol(K, Decl(correlatedUnions.ts, 162, 10))
+
+type Funcs = { [K in keyof ArgMap]: Func<K> };
+>Funcs : Symbol(Funcs, Decl(correlatedUnions.ts, 162, 59))
+>K : Symbol(K, Decl(correlatedUnions.ts, 163, 16))
+>ArgMap : Symbol(ArgMap, Decl(correlatedUnions.ts, 157, 1))
+>Func : Symbol(Func, Decl(correlatedUnions.ts, 161, 39))
+>K : Symbol(K, Decl(correlatedUnions.ts, 163, 16))
+
+function f1<K extends keyof ArgMap>(funcs: Funcs, key: K, arg: ArgMap[K]) {
+>f1 : Symbol(f1, Decl(correlatedUnions.ts, 163, 46))
+>K : Symbol(K, Decl(correlatedUnions.ts, 165, 12))
+>ArgMap : Symbol(ArgMap, Decl(correlatedUnions.ts, 157, 1))
+>funcs : Symbol(funcs, Decl(correlatedUnions.ts, 165, 36))
+>Funcs : Symbol(Funcs, Decl(correlatedUnions.ts, 162, 59))
+>key : Symbol(key, Decl(correlatedUnions.ts, 165, 49))
+>K : Symbol(K, Decl(correlatedUnions.ts, 165, 12))
+>arg : Symbol(arg, Decl(correlatedUnions.ts, 165, 57))
+>ArgMap : Symbol(ArgMap, Decl(correlatedUnions.ts, 157, 1))
+>K : Symbol(K, Decl(correlatedUnions.ts, 165, 12))
+
+    funcs[key](arg);
+>funcs : Symbol(funcs, Decl(correlatedUnions.ts, 165, 36))
+>key : Symbol(key, Decl(correlatedUnions.ts, 165, 49))
+>arg : Symbol(arg, Decl(correlatedUnions.ts, 165, 57))
+}
+
+function f2<K extends keyof ArgMap>(funcs: Funcs, key: K, arg: ArgMap[K]) {
+>f2 : Symbol(f2, Decl(correlatedUnions.ts, 167, 1))
+>K : Symbol(K, Decl(correlatedUnions.ts, 169, 12))
+>ArgMap : Symbol(ArgMap, Decl(correlatedUnions.ts, 157, 1))
+>funcs : Symbol(funcs, Decl(correlatedUnions.ts, 169, 36))
+>Funcs : Symbol(Funcs, Decl(correlatedUnions.ts, 162, 59))
+>key : Symbol(key, Decl(correlatedUnions.ts, 169, 49))
+>K : Symbol(K, Decl(correlatedUnions.ts, 169, 12))
+>arg : Symbol(arg, Decl(correlatedUnions.ts, 169, 57))
+>ArgMap : Symbol(ArgMap, Decl(correlatedUnions.ts, 157, 1))
+>K : Symbol(K, Decl(correlatedUnions.ts, 169, 12))
+
+    const func = funcs[key];  // Type Funcs[K]
+>func : Symbol(func, Decl(correlatedUnions.ts, 170, 9))
+>funcs : Symbol(funcs, Decl(correlatedUnions.ts, 169, 36))
+>key : Symbol(key, Decl(correlatedUnions.ts, 169, 49))
+
+    func(arg);
+>func : Symbol(func, Decl(correlatedUnions.ts, 170, 9))
+>arg : Symbol(arg, Decl(correlatedUnions.ts, 169, 57))
+}
+
+function f3<K extends keyof ArgMap>(funcs: Funcs, key: K, arg: ArgMap[K]) {
+>f3 : Symbol(f3, Decl(correlatedUnions.ts, 172, 1))
+>K : Symbol(K, Decl(correlatedUnions.ts, 174, 12))
+>ArgMap : Symbol(ArgMap, Decl(correlatedUnions.ts, 157, 1))
+>funcs : Symbol(funcs, Decl(correlatedUnions.ts, 174, 36))
+>Funcs : Symbol(Funcs, Decl(correlatedUnions.ts, 162, 59))
+>key : Symbol(key, Decl(correlatedUnions.ts, 174, 49))
+>K : Symbol(K, Decl(correlatedUnions.ts, 174, 12))
+>arg : Symbol(arg, Decl(correlatedUnions.ts, 174, 57))
+>ArgMap : Symbol(ArgMap, Decl(correlatedUnions.ts, 157, 1))
+>K : Symbol(K, Decl(correlatedUnions.ts, 174, 12))
+
+    const func: Func<K> = funcs[key];  // Error, Funcs[K] not assignable to Func<K>
+>func : Symbol(func, Decl(correlatedUnions.ts, 175, 9))
+>Func : Symbol(Func, Decl(correlatedUnions.ts, 161, 39))
+>K : Symbol(K, Decl(correlatedUnions.ts, 174, 12))
+>funcs : Symbol(funcs, Decl(correlatedUnions.ts, 174, 36))
+>key : Symbol(key, Decl(correlatedUnions.ts, 174, 49))
+
+    func(arg);
+>func : Symbol(func, Decl(correlatedUnions.ts, 175, 9))
+>arg : Symbol(arg, Decl(correlatedUnions.ts, 174, 57))
+}
+
+function f4<K extends keyof ArgMap>(x: Funcs[keyof ArgMap], y: Funcs[K]) {
+>f4 : Symbol(f4, Decl(correlatedUnions.ts, 177, 1))
+>K : Symbol(K, Decl(correlatedUnions.ts, 179, 12))
+>ArgMap : Symbol(ArgMap, Decl(correlatedUnions.ts, 157, 1))
+>x : Symbol(x, Decl(correlatedUnions.ts, 179, 36))
+>Funcs : Symbol(Funcs, Decl(correlatedUnions.ts, 162, 59))
+>ArgMap : Symbol(ArgMap, Decl(correlatedUnions.ts, 157, 1))
+>y : Symbol(y, Decl(correlatedUnions.ts, 179, 59))
+>Funcs : Symbol(Funcs, Decl(correlatedUnions.ts, 162, 59))
+>K : Symbol(K, Decl(correlatedUnions.ts, 179, 12))
+
+    x = y;
+>x : Symbol(x, Decl(correlatedUnions.ts, 179, 36))
+>y : Symbol(y, Decl(correlatedUnions.ts, 179, 59))
+}
+
+// Repro from #47890
+
+interface MyObj {
+>MyObj : Symbol(MyObj, Decl(correlatedUnions.ts, 181, 1))
+
+    someKey: {
+>someKey : Symbol(MyObj.someKey, Decl(correlatedUnions.ts, 185, 17))
+
+      name: string;
+>name : Symbol(name, Decl(correlatedUnions.ts, 186, 14))
+    }
+    someOtherKey: {
+>someOtherKey : Symbol(MyObj.someOtherKey, Decl(correlatedUnions.ts, 188, 5))
+
+      name: number;
+>name : Symbol(name, Decl(correlatedUnions.ts, 189, 19))
+    }
+}
+
+const ref: MyObj = {
+>ref : Symbol(ref, Decl(correlatedUnions.ts, 194, 5))
+>MyObj : Symbol(MyObj, Decl(correlatedUnions.ts, 181, 1))
+
+    someKey: { name: "" },
+>someKey : Symbol(someKey, Decl(correlatedUnions.ts, 194, 20))
+>name : Symbol(name, Decl(correlatedUnions.ts, 195, 14))
+
+    someOtherKey: { name: 42 }
+>someOtherKey : Symbol(someOtherKey, Decl(correlatedUnions.ts, 195, 26))
+>name : Symbol(name, Decl(correlatedUnions.ts, 196, 19))
+
+};
+
+function func<K extends keyof MyObj>(k: K): MyObj[K]['name'] | undefined {
+>func : Symbol(func, Decl(correlatedUnions.ts, 197, 2))
+>K : Symbol(K, Decl(correlatedUnions.ts, 199, 14))
+>MyObj : Symbol(MyObj, Decl(correlatedUnions.ts, 181, 1))
+>k : Symbol(k, Decl(correlatedUnions.ts, 199, 37))
+>K : Symbol(K, Decl(correlatedUnions.ts, 199, 14))
+>MyObj : Symbol(MyObj, Decl(correlatedUnions.ts, 181, 1))
+>K : Symbol(K, Decl(correlatedUnions.ts, 199, 14))
+
+    const myObj: Partial<MyObj>[K] = ref[k];
+>myObj : Symbol(myObj, Decl(correlatedUnions.ts, 200, 9))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>MyObj : Symbol(MyObj, Decl(correlatedUnions.ts, 181, 1))
+>K : Symbol(K, Decl(correlatedUnions.ts, 199, 14))
+>ref : Symbol(ref, Decl(correlatedUnions.ts, 194, 5))
+>k : Symbol(k, Decl(correlatedUnions.ts, 199, 37))
+
+    if (myObj) {
+>myObj : Symbol(myObj, Decl(correlatedUnions.ts, 200, 9))
+
+      return myObj.name;
+>myObj.name : Symbol(name, Decl(correlatedUnions.ts, 186, 14), Decl(correlatedUnions.ts, 189, 19))
+>myObj : Symbol(myObj, Decl(correlatedUnions.ts, 200, 9))
+>name : Symbol(name, Decl(correlatedUnions.ts, 186, 14), Decl(correlatedUnions.ts, 189, 19))
+    }
+    const myObj2: Partial<MyObj>[keyof MyObj] = ref[k];
+>myObj2 : Symbol(myObj2, Decl(correlatedUnions.ts, 204, 9))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>MyObj : Symbol(MyObj, Decl(correlatedUnions.ts, 181, 1))
+>MyObj : Symbol(MyObj, Decl(correlatedUnions.ts, 181, 1))
+>ref : Symbol(ref, Decl(correlatedUnions.ts, 194, 5))
+>k : Symbol(k, Decl(correlatedUnions.ts, 199, 37))
+
+    if (myObj2) {
+>myObj2 : Symbol(myObj2, Decl(correlatedUnions.ts, 204, 9))
+
+      return myObj2.name;
+>myObj2.name : Symbol(name, Decl(correlatedUnions.ts, 186, 14), Decl(correlatedUnions.ts, 189, 19))
+>myObj2 : Symbol(myObj2, Decl(correlatedUnions.ts, 204, 9))
+>name : Symbol(name, Decl(correlatedUnions.ts, 186, 14), Decl(correlatedUnions.ts, 189, 19))
+    }
+    return undefined;
+>undefined : Symbol(undefined)
+}
+
+// Repro from #48157
+
+interface Foo {
+>Foo : Symbol(Foo, Decl(correlatedUnions.ts, 209, 1))
+
+    bar?: string
+>bar : Symbol(Foo.bar, Decl(correlatedUnions.ts, 213, 15))
+}
+
+function foo<T extends keyof Foo>(prop: T, f: Required<Foo>) {
+>foo : Symbol(foo, Decl(correlatedUnions.ts, 215, 1))
+>T : Symbol(T, Decl(correlatedUnions.ts, 217, 13))
+>Foo : Symbol(Foo, Decl(correlatedUnions.ts, 209, 1))
+>prop : Symbol(prop, Decl(correlatedUnions.ts, 217, 34))
+>T : Symbol(T, Decl(correlatedUnions.ts, 217, 13))
+>f : Symbol(f, Decl(correlatedUnions.ts, 217, 42))
+>Required : Symbol(Required, Decl(lib.es5.d.ts, --, --))
+>Foo : Symbol(Foo, Decl(correlatedUnions.ts, 209, 1))
+
+    bar(f[prop]);
+>bar : Symbol(bar, Decl(correlatedUnions.ts, 219, 1))
+>f : Symbol(f, Decl(correlatedUnions.ts, 217, 42))
+>prop : Symbol(prop, Decl(correlatedUnions.ts, 217, 34))
+}
+
+declare function bar(t: string): void;
+>bar : Symbol(bar, Decl(correlatedUnions.ts, 219, 1))
+>t : Symbol(t, Decl(correlatedUnions.ts, 221, 21))
+
+// Repro from #48246
+
+declare function makeCompleteLookupMapping<T extends ReadonlyArray<any>, Attr extends keyof T[number]>(
+>makeCompleteLookupMapping : Symbol(makeCompleteLookupMapping, Decl(correlatedUnions.ts, 221, 38))
+>T : Symbol(T, Decl(correlatedUnions.ts, 225, 43))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+>Attr : Symbol(Attr, Decl(correlatedUnions.ts, 225, 72))
+>T : Symbol(T, Decl(correlatedUnions.ts, 225, 43))
+
+    ops: T, attr: Attr): { [Item in T[number]as Item[Attr]]: Item };
+>ops : Symbol(ops, Decl(correlatedUnions.ts, 225, 103))
+>T : Symbol(T, Decl(correlatedUnions.ts, 225, 43))
+>attr : Symbol(attr, Decl(correlatedUnions.ts, 226, 11))
+>Attr : Symbol(Attr, Decl(correlatedUnions.ts, 225, 72))
+>Item : Symbol(Item, Decl(correlatedUnions.ts, 226, 28))
+>T : Symbol(T, Decl(correlatedUnions.ts, 225, 43))
+>Item : Symbol(Item, Decl(correlatedUnions.ts, 226, 28))
+>Attr : Symbol(Attr, Decl(correlatedUnions.ts, 225, 72))
+>Item : Symbol(Item, Decl(correlatedUnions.ts, 226, 28))
+
+const ALL_BARS = [{ name: 'a'}, {name: 'b'}] as const;
+>ALL_BARS : Symbol(ALL_BARS, Decl(correlatedUnions.ts, 228, 5))
+>name : Symbol(name, Decl(correlatedUnions.ts, 228, 19))
+>name : Symbol(name, Decl(correlatedUnions.ts, 228, 33))
+>const : Symbol(const)
+
+const BAR_LOOKUP = makeCompleteLookupMapping(ALL_BARS, 'name');
+>BAR_LOOKUP : Symbol(BAR_LOOKUP, Decl(correlatedUnions.ts, 230, 5))
+>makeCompleteLookupMapping : Symbol(makeCompleteLookupMapping, Decl(correlatedUnions.ts, 221, 38))
+>ALL_BARS : Symbol(ALL_BARS, Decl(correlatedUnions.ts, 228, 5))
+
+type BarLookup = typeof BAR_LOOKUP;
+>BarLookup : Symbol(BarLookup, Decl(correlatedUnions.ts, 230, 63))
+>BAR_LOOKUP : Symbol(BAR_LOOKUP, Decl(correlatedUnions.ts, 230, 5))
+
+type Baz = { [K in keyof BarLookup]: BarLookup[K]['name'] };
+>Baz : Symbol(Baz, Decl(correlatedUnions.ts, 232, 35))
+>K : Symbol(K, Decl(correlatedUnions.ts, 234, 14))
+>BarLookup : Symbol(BarLookup, Decl(correlatedUnions.ts, 230, 63))
+>BarLookup : Symbol(BarLookup, Decl(correlatedUnions.ts, 230, 63))
+>K : Symbol(K, Decl(correlatedUnions.ts, 234, 14))
+

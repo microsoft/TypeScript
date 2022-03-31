@@ -215,7 +215,7 @@ namespace ts.tscWatch {
             [
                 ...map(errors, hostOutputDiagnostic),
                 ...reportErrorSummary ?
-                    [hostOutputWatchDiagnostic(getErrorSummaryText(errors.length, files, host.newLine))] :
+                    [hostOutputWatchDiagnostic(getErrorSummaryText(errors.length, files, host.newLine, host))] :
                     emptyArray
             ]
         );

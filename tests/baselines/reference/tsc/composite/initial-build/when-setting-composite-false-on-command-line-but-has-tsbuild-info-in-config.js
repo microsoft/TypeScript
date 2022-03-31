@@ -40,7 +40,7 @@ Output::
 [7m [0m [91m        ~~~~~~~~~~~~~~~~~[0m
 
 
-Found 1 error in src/project/tsconfig.json:6
+Found 1 error in src/project/tsconfig.json[90m:6[0m
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 

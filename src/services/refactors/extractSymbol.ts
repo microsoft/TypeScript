@@ -17,15 +17,15 @@ namespace ts.refactor.extractSymbol {
             extractConstantAction.kind,
             extractFunctionAction.kind
         ],
-        getAvailableActions,
-        getEditsForAction
+        getEditsForAction: getRefactorEditsToExtractSymbol,
+        getAvailableActions: getRefactorActionsToExtractSymbol,
     });
 
     /**
      * Compute the associated code actions
      * Exported for tests.
      */
-    export function getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
+    export function getRefactorActionsToExtractSymbol(context: RefactorContext): readonly ApplicableRefactorInfo[] {
         const requestedRefactor = context.kind;
         const rangeToExtract = getRangeToExtract(context.file, getRefactorContextSpan(context), context.triggerReason === "invoked");
         const targetRange = rangeToExtract.targetRange;
@@ -168,7 +168,7 @@ namespace ts.refactor.extractSymbol {
     }
 
     /* Exported for tests */
-    export function getEditsForAction(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
+    export function getRefactorEditsToExtractSymbol(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
         const rangeToExtract = getRangeToExtract(context.file, getRefactorContextSpan(context));
         const targetRange = rangeToExtract.targetRange!; // TODO:GH#18217
 
@@ -283,7 +283,7 @@ namespace ts.refactor.extractSymbol {
 
         // Walk up starting from the the start position until we find a non-SourceFile node that subsumes the selected span.
         // This may fail (e.g. you select two statements in the root of a source file)
-        const start = cursorRequest ? getExtractableParent(startToken): getParentNodeInSpan(startToken, sourceFile, adjustedSpan);
+        const start = cursorRequest ? getExtractableParent(startToken) : getParentNodeInSpan(startToken, sourceFile, adjustedSpan);
 
         // Do the same for the ending position
         const end = cursorRequest ? start : getParentNodeInSpan(endToken, sourceFile, adjustedSpan);
@@ -299,7 +299,7 @@ namespace ts.refactor.extractSymbol {
             return { errors: [createFileDiagnostic(sourceFile, span.start, length, Messages.cannotExtractRange)] };
         }
 
-        if (isJSDoc(start)) {
+        if (start.flags & NodeFlags.JSDoc) {
             return { errors: [createFileDiagnostic(sourceFile, span.start, length, Messages.cannotExtractJSDoc)] };
         }
 
@@ -433,7 +433,7 @@ namespace ts.refactor.extractSymbol {
             // For understanding how skipTrivia functioned:
             Debug.assert(!positionIsSynthesized(nodeToCheck.pos), "This failure could trigger https://github.com/Microsoft/TypeScript/issues/20809 (2)");
 
-            if (!isStatement(nodeToCheck) && !(isExpressionNode(nodeToCheck) && isExtractableExpression(nodeToCheck))) {
+            if (!isStatement(nodeToCheck) && !(isExpressionNode(nodeToCheck) && isExtractableExpression(nodeToCheck)) && !isStringLiteralJsxAttribute(nodeToCheck)) {
                 return [createDiagnosticForNode(nodeToCheck, Messages.statementOrExpressionExpected)];
             }
 
@@ -486,8 +486,8 @@ namespace ts.refactor.extractSymbol {
                         // but a super *method call* simply implies a 'this' reference
                         if (node.parent.kind === SyntaxKind.CallExpression) {
                             // Super constructor call
-                            const containingClass = getContainingClass(node)!; // TODO:GH#18217
-                            if (containingClass.pos < span.start || containingClass.end >= (span.start + span.length)) {
+                            const containingClass = getContainingClass(node);
+                            if (containingClass === undefined || containingClass.pos < span.start || containingClass.end >= (span.start + span.length)) {
                                 (errors ||= []).push(createDiagnosticForNode(node, Messages.cannotExtractSuper));
                                 return true;
                             }
@@ -625,12 +625,15 @@ namespace ts.refactor.extractSymbol {
         if (isStatement(node)) {
             return [node];
         }
-        else if (isExpressionNode(node)) {
+        if (isExpressionNode(node)) {
             // If our selection is the expression in an ExpressionStatement, expand
             // the selection to include the enclosing Statement (this stops us
             // from trying to care about the return value of the extracted function
             // and eliminates double semicolon insertion in certain scenarios)
             return isExpressionStatement(node.parent) ? [node.parent] : node as Expression;
+        }
+        if (isStringLiteralJsxAttribute(node)) {
+            return node;
         }
         return undefined;
     }
@@ -1133,7 +1136,9 @@ namespace ts.refactor.extractSymbol {
 
         // Make a unique name for the extracted variable
         const file = scope.getSourceFile();
-        const localNameText = getUniqueName(isClassLike(scope) ? "newProperty" : "newLocal", file);
+        const localNameText = isPropertyAccessExpression(node) && !isClassLike(scope) && !checker.resolveName(node.name.text, node, SymbolFlags.Value, /*excludeGlobals*/ false) && !isPrivateIdentifier(node.name) && !isKeyword(node.name.originalKeywordKind!)
+            ? node.name.text
+            : getUniqueName(isClassLike(scope) ? "newProperty" : "newLocal", file);
         const isJS = isInJSFile(scope);
 
         let variableType = isJS || !checker.isContextSensitive(node)
@@ -1649,7 +1654,7 @@ namespace ts.refactor.extractSymbol {
         // Unfortunately, this code takes advantage of the knowledge that the generated method
         // will use the contextual type of an expression as the return type of the extracted
         // method (and will therefore "use" all the types involved).
-        if (inGenericContext && !isReadonlyArray(targetRange.range)) {
+        if (inGenericContext && !isReadonlyArray(targetRange.range) && !isJsxAttribute(targetRange.range)) {
             const contextualType = checker.getContextualType(targetRange.range)!; // TODO: GH#18217
             recordTypeParameterUsages(contextualType);
         }
@@ -1997,6 +2002,11 @@ namespace ts.refactor.extractSymbol {
     }
 
     function isInJSXContent(node: Node) {
-        return (isJsxElement(node) || isJsxSelfClosingElement(node) || isJsxFragment(node)) && (isJsxElement(node.parent) || isJsxFragment(node.parent));
+        return isStringLiteralJsxAttribute(node) ||
+            (isJsxElement(node) || isJsxSelfClosingElement(node) || isJsxFragment(node)) && (isJsxElement(node.parent) || isJsxFragment(node.parent));
+    }
+
+    function isStringLiteralJsxAttribute(node: Node): node is StringLiteral {
+        return isStringLiteral(node) && node.parent && isJsxAttribute(node.parent);
     }
 }

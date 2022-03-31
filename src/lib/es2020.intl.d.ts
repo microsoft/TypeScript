@@ -59,6 +59,13 @@ declare namespace Intl {
     type BCP47LanguageTag = string;
 
     /**
+     * The locale(s) to use
+     *
+     * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl#locales_argument).
+     */
+    type LocalesArgument = UnicodeBCP47LocaleIdentifier | UnicodeBCP47LocaleIdentifier[] | Locale | Locale[] | undefined;
+
+    /**
      * An object with some or all of properties of `options` parameter
      * of `Intl.RelativeTimeFormat` constructor.
      *
@@ -203,6 +210,8 @@ declare namespace Intl {
         signDisplay?: "auto" | "never" | "always" | "exceptZero" | undefined;
         unit?: string | undefined;
         unitDisplay?: "short" | "long" | "narrow" | undefined;
+        currencyDisplay?: string | undefined;
+        currencySign?: string | undefined;
     }
 
     interface ResolvedNumberFormatOptions {
@@ -211,6 +220,8 @@ declare namespace Intl {
         signDisplay?: "auto" | "never" | "always" | "exceptZero";
         unit?: string;
         unitDisplay?: "short" | "long" | "narrow";
+        currencyDisplay?: string;
+        currencySign?: string;
     }
 
     interface DateTimeFormatOptions {
@@ -250,6 +261,10 @@ declare namespace Intl {
     }
 
     interface Locale extends LocaleOptions {
+        /** A string containing the language, and the script and region if available. */
+        baseName: string;
+        /** The primary language subtag associated with the locale. */
+        language: string;
         /** Gets the most likely values for the language, script, and region of the locale based on existing values. */
         maximize(): Locale;
         /** Attempts to remove information about the locale that would be added by calling `Locale.maximize()`. */
@@ -273,14 +288,37 @@ declare namespace Intl {
      * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Locale).
      */
     const Locale: {
-        new (tag?: BCP47LanguageTag, options?: LocaleOptions): Locale;
+        new (tag: BCP47LanguageTag | Locale, options?: LocaleOptions): Locale;
     };
 
-     interface DisplayNamesOptions {
+    type DisplayNamesFallback =
+        | "code"
+        | "none";
+
+    type ResolvedDisplayNamesType =
+        | "language"
+        | "region"
+        | "script"
+        | "currency";
+
+    type DisplayNamesType =
+        | ResolvedDisplayNamesType
+        | "calendar"
+        | "datetimeField";
+
+    interface DisplayNamesOptions {
         localeMatcher: RelativeTimeFormatLocaleMatcher;
         style: RelativeTimeFormatStyle;
-        type: "language" | "region" | "script" | "currency";
-        fallback: "code" | "none";
+        type: DisplayNamesType;
+        languageDisplay: "dialect" | "standard";
+        fallback: DisplayNamesFallback;
+    }
+
+    interface ResolvedDisplayNamesOptions {
+        locale: UnicodeBCP47LocaleIdentifier;
+        style: RelativeTimeFormatStyle;
+        type: ResolvedDisplayNamesType;
+        fallback: DisplayNamesFallback;
     }
 
     interface DisplayNames {
@@ -306,7 +344,7 @@ declare namespace Intl {
          *
          * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DisplayNames/resolvedOptions).
          */
-        resolvedOptions(): DisplayNamesOptions;
+        resolvedOptions(): ResolvedDisplayNamesOptions;
     }
 
     /**
