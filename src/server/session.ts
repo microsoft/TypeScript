@@ -1837,10 +1837,41 @@ namespace ts.server {
             const prefix = args.prefix || "";
             const entries = mapDefined<CompletionEntry, protocol.CompletionEntry>(completions.entries, entry => {
                 if (completions.isMemberCompletion || startsWith(entry.name.toLowerCase(), prefix.toLowerCase())) {
-                    const { name, kind, kindModifiers, sortText, insertText, replacementSpan, hasAction, source, sourceDisplay, isSnippet, isRecommended, isPackageJsonImport, isImportStatementCompletion, data } = entry;
+                    const {
+                        name,
+                        kind,
+                        kindModifiers,
+                        sortText,
+                        insertText,
+                        replacementSpan,
+                        hasAction,
+                        source,
+                        sourceDisplay,
+                        labelDetails,
+                        isSnippet,
+                        isRecommended,
+                        isPackageJsonImport,
+                        isImportStatementCompletion,
+                        data } = entry;
                     const convertedSpan = replacementSpan ? toProtocolTextSpan(replacementSpan, scriptInfo) : undefined;
                     // Use `hasAction || undefined` to avoid serializing `false`.
-                    return { name, kind, kindModifiers, sortText, insertText, replacementSpan: convertedSpan, isSnippet, hasAction: hasAction || undefined, source, sourceDisplay, isRecommended, isPackageJsonImport, isImportStatementCompletion, data };
+                    return {
+                        name,
+                        kind,
+                        kindModifiers,
+                        sortText,
+                        insertText,
+                        replacementSpan: convertedSpan,
+                        isSnippet,
+                        hasAction: hasAction || undefined,
+                        source,
+                        sourceDisplay,
+                        labelDetails,
+                        isRecommended,
+                        isPackageJsonImport,
+                        isImportStatementCompletion,
+                        data
+                    };
                 }
             });
 

@@ -176,15 +176,16 @@ namespace ts {
     }
 
     const enum CheckMode {
-        Normal = 0,                        // Normal type checking
-        Contextual = 1 << 0,               // Explicitly assigned contextual type, therefore not cacheable
-        Inferential = 1 << 1,              // Inferential typing
-        SkipContextSensitive = 1 << 2,     // Skip context sensitive function expressions
-        SkipGenericFunctions = 1 << 3,     // Skip single signature generic functions
-        IsForSignatureHelp = 1 << 4,       // Call resolution for purposes of signature help
-        RestBindingElement = 1 << 5,       // Checking a type that is going to be used to determine the type of a rest binding element
-                                           //   e.g. in `const { a, ...rest } = foo`, when checking the type of `foo` to determine the type of `rest`,
-                                           //   we need to preserve generic types instead of substituting them for constraints
+        Normal = 0,                                     // Normal type checking
+        Contextual = 1 << 0,                            // Explicitly assigned contextual type, therefore not cacheable
+        Inferential = 1 << 1,                           // Inferential typing
+        SkipContextSensitive = 1 << 2,                  // Skip context sensitive function expressions
+        SkipGenericFunctions = 1 << 3,                  // Skip single signature generic functions
+        IsForSignatureHelp = 1 << 4,                    // Call resolution for purposes of signature help
+        IsForStringLiteralArgumentCompletions = 1 << 5, // Do not infer from the argument currently being typed
+        RestBindingElement = 1 << 6,                    // Checking a type that is going to be used to determine the type of a rest binding element
+                                                        //   e.g. in `const { a, ...rest } = foo`, when checking the type of `foo` to determine the type of `rest`,
+                                                        //   we need to preserve generic types instead of substituting them for constraints
     }
 
     const enum SignatureCheckMode {
@@ -540,26 +541,10 @@ namespace ts {
                 if (!node) {
                     return undefined;
                 }
-                const containingCall = findAncestor(node, isCallLikeExpression);
-                const containingCallResolvedSignature = containingCall && getNodeLinks(containingCall).resolvedSignature;
-                if (contextFlags! & ContextFlags.Completions && containingCall) {
-                    let toMarkSkip = node as Node;
-                    do {
-                        getNodeLinks(toMarkSkip).skipDirectInference = true;
-                        toMarkSkip = toMarkSkip.parent;
-                    } while (toMarkSkip && toMarkSkip !== containingCall);
-                    getNodeLinks(containingCall).resolvedSignature = undefined;
+                if (contextFlags! & ContextFlags.Completions) {
+                    return runWithInferenceBlockedFromSourceNode(node, () => getContextualType(node, contextFlags));
                 }
-                const result = getContextualType(node, contextFlags);
-                if (contextFlags! & ContextFlags.Completions && containingCall) {
-                    let toMarkSkip = node as Node;
-                    do {
-                        getNodeLinks(toMarkSkip).skipDirectInference = undefined;
-                        toMarkSkip = toMarkSkip.parent;
-                    } while (toMarkSkip && toMarkSkip !== containingCall);
-                    getNodeLinks(containingCall).resolvedSignature = containingCallResolvedSignature;
-                }
-                return result;
+                return getContextualType(node, contextFlags);
             },
             getContextualTypeForObjectLiteralElement: nodeIn => {
                 const node = getParseTreeNode(nodeIn, isObjectLiteralElementLike);
@@ -578,6 +563,8 @@ namespace ts {
             getFullyQualifiedName,
             getResolvedSignature: (node, candidatesOutArray, argumentCount) =>
                 getResolvedSignatureWorker(node, candidatesOutArray, argumentCount, CheckMode.Normal),
+            getResolvedSignatureForStringLiteralCompletions: (call, editingArgument, candidatesOutArray) =>
+                getResolvedSignatureWorker(call, candidatesOutArray, /*argumentCount*/ undefined, CheckMode.IsForStringLiteralArgumentCompletions, editingArgument),
             getResolvedSignatureForSignatureHelp: (node, candidatesOutArray, argumentCount) =>
                 getResolvedSignatureWorker(node, candidatesOutArray, argumentCount, CheckMode.IsForSignatureHelp),
             getExpandedParameters,
@@ -747,10 +734,36 @@ namespace ts {
             getMemberOverrideModifierStatus,
         };
 
-        function getResolvedSignatureWorker(nodeIn: CallLikeExpression, candidatesOutArray: Signature[] | undefined, argumentCount: number | undefined, checkMode: CheckMode): Signature | undefined {
+        function runWithInferenceBlockedFromSourceNode<T>(node: Node | undefined, fn: () => T): T {
+            const containingCall = findAncestor(node, isCallLikeExpression);
+            const containingCallResolvedSignature = containingCall && getNodeLinks(containingCall).resolvedSignature;
+            if (containingCall) {
+                let toMarkSkip = node!;
+                do {
+                    getNodeLinks(toMarkSkip).skipDirectInference = true;
+                    toMarkSkip = toMarkSkip.parent;
+                } while (toMarkSkip && toMarkSkip !== containingCall);
+                getNodeLinks(containingCall).resolvedSignature = undefined;
+            }
+            const result = fn();
+            if (containingCall) {
+                let toMarkSkip = node!;
+                do {
+                    getNodeLinks(toMarkSkip).skipDirectInference = undefined;
+                    toMarkSkip = toMarkSkip.parent;
+                } while (toMarkSkip && toMarkSkip !== containingCall);
+                getNodeLinks(containingCall).resolvedSignature = containingCallResolvedSignature;
+            }
+            return result;
+        }
+
+        function getResolvedSignatureWorker(nodeIn: CallLikeExpression, candidatesOutArray: Signature[] | undefined, argumentCount: number | undefined, checkMode: CheckMode, editingArgument?: Node): Signature | undefined {
             const node = getParseTreeNode(nodeIn, isCallLikeExpression);
             apparentArgumentCount = argumentCount;
-            const res = node ? getResolvedSignature(node, candidatesOutArray, checkMode) : undefined;
+            const res =
+                !node ? undefined :
+                editingArgument ? runWithInferenceBlockedFromSourceNode(editingArgument, () => getResolvedSignature(node, candidatesOutArray, checkMode)) :
+                getResolvedSignature(node, candidatesOutArray, checkMode);
             apparentArgumentCount = undefined;
             return res;
         }
@@ -5249,7 +5262,18 @@ namespace ts {
                         if (!nodeIsSynthesized(node) && getParseTreeNode(node) === node) {
                             return node;
                         }
-                        return setTextRange(factory.cloneNode(visitEachChild(node, deepCloneOrReuseNode, nullTransformationContext)), node);
+                        return setTextRange(factory.cloneNode(visitEachChild(node, deepCloneOrReuseNode, nullTransformationContext, deepCloneOrReuseNodes)), node);
+                    }
+
+                    function deepCloneOrReuseNodes<T extends Node>(nodes: NodeArray<T>, visitor: Visitor | undefined, test?: (node: Node) => boolean, start?: number, count?: number): NodeArray<T>;
+                    function deepCloneOrReuseNodes<T extends Node>(nodes: NodeArray<T> | undefined, visitor: Visitor | undefined, test?: (node: Node) => boolean, start?: number, count?: number): NodeArray<T> | undefined;
+                    function deepCloneOrReuseNodes<T extends Node>(nodes: NodeArray<T> | undefined, visitor: Visitor | undefined, test?: (node: Node) => boolean, start?: number, count?: number): NodeArray<T> | undefined {
+                        if (nodes && nodes.length === 0) {
+                            // Ensure we explicitly make a copy of an empty array; visitNodes will not do this unless the array has elements,
+                            // which can lead to us reusing the same empty NodeArray more than once within the same AST during type noding.
+                            return setTextRange(factory.createNodeArray<T>(/*nodes*/ undefined, nodes.hasTrailingComma), nodes);
+                        }
+                        return visitNodes(nodes, visitor, test, start, count);
                     }
                 }
 
@@ -22664,7 +22688,7 @@ namespace ts {
                 const properties = getPropertiesOfObjectType(target);
                 for (const targetProp of properties) {
                     const sourceProp = getPropertyOfType(source, targetProp.escapedName);
-                    if (sourceProp) {
+                    if (sourceProp && !some(sourceProp.declarations, hasSkipDirectInferenceFlag)) {
                         inferFromTypes(getTypeOfSymbol(sourceProp), getTypeOfSymbol(targetProp));
                     }
                 }
@@ -25426,7 +25450,7 @@ namespace ts {
                     if (func.parameters.length >= 2 && isContextSensitiveFunctionOrObjectLiteralMethod(func)) {
                         const contextualSignature = getContextualSignature(func);
                         if (contextualSignature && contextualSignature.parameters.length === 1 && signatureHasRestParameter(contextualSignature)) {
-                            const restType = getTypeOfSymbol(contextualSignature.parameters[0]);
+                            const restType = getReducedApparentType(getTypeOfSymbol(contextualSignature.parameters[0]));
                             if (restType.flags & TypeFlags.Union && everyType(restType, isTupleType) && !isSymbolAssigned(symbol)) {
                                 const narrowedType = getFlowTypeOfReference(func, restType, restType, /*flowContainer*/ undefined, location.flowNode);
                                 const index = func.parameters.indexOf(declaration) - (getThisParameter(func) ? 1 : 0);
@@ -26878,9 +26902,14 @@ namespace ts {
                         return instantiateInstantiableTypes(contextualType, inferenceContext.nonFixingMapper);
                     }
                     // For other purposes (e.g. determining whether to produce literal types) we only
-                    // incorporate inferences made from the return type in a function call.
+                    // incorporate inferences made from the return type in a function call. We remove
+                    // the 'boolean' type from the contextual type such that contextually typed boolean
+                    // literals actually end up widening to 'boolean' (see #48363).
                     if (inferenceContext.returnMapper) {
-                        return instantiateInstantiableTypes(contextualType, inferenceContext.returnMapper);
+                        const type = instantiateInstantiableTypes(contextualType, inferenceContext.returnMapper);
+                        return type.flags & TypeFlags.Union && containsType((type as UnionType).types, regularFalseType) && containsType((type as UnionType).types, regularTrueType) ?
+                            filterType(type, t => t !== regularFalseType && t !== regularTrueType) :
+                            type;
                     }
                 }
             }
@@ -29746,7 +29775,7 @@ namespace ts {
 
             for (let i = 0; i < argCount; i++) {
                 const arg = args[i];
-                if (arg.kind !== SyntaxKind.OmittedExpression) {
+                if (arg.kind !== SyntaxKind.OmittedExpression && !(checkMode & CheckMode.IsForStringLiteralArgumentCompletions && hasSkipDirectInferenceFlag(arg))) {
                     const paramType = getTypeAtPosition(signature, i);
                     const argType = checkExpressionWithContextualType(arg, paramType, context, checkMode);
                     inferTypes(context.inferences, argType, paramType);
@@ -30486,7 +30515,7 @@ namespace ts {
                 }
             }
 
-            return getCandidateForOverloadFailure(node, candidates, args, !!candidatesOutArray);
+            return getCandidateForOverloadFailure(node, candidates, args, !!candidatesOutArray, checkMode);
 
             function addImplementationSuccessElaboration(failed: Signature, diagnostic: Diagnostic) {
                 const oldCandidatesForArgumentError = candidatesForArgumentError;
@@ -30600,6 +30629,7 @@ namespace ts {
             candidates: Signature[],
             args: readonly Expression[],
             hasCandidatesOutArray: boolean,
+            checkMode: CheckMode,
         ): Signature {
             Debug.assert(candidates.length > 0); // Else should not have called this.
             checkNodeDeferred(node);
@@ -30607,7 +30637,7 @@ namespace ts {
             // Don't do this if there is a `candidatesOutArray`,
             // because then we want the chosen best candidate to be one of the overloads, not a combination.
             return hasCandidatesOutArray || candidates.length === 1 || candidates.some(c => !!c.typeParameters)
-                ? pickLongestCandidateSignature(node, candidates, args)
+                ? pickLongestCandidateSignature(node, candidates, args, checkMode)
                 : createUnionOfSignaturesForOverloadFailure(candidates);
         }
 
@@ -30661,7 +30691,7 @@ namespace ts {
             return createSymbolWithType(first(sources), type);
         }
 
-        function pickLongestCandidateSignature(node: CallLikeExpression, candidates: Signature[], args: readonly Expression[]): Signature {
+        function pickLongestCandidateSignature(node: CallLikeExpression, candidates: Signature[], args: readonly Expression[], checkMode: CheckMode): Signature {
             // Pick the longest signature. This way we can get a contextual type for cases like:
             //     declare function f(a: { xa: number; xb: number; }, b: number);
             //     f({ |
@@ -30678,7 +30708,7 @@ namespace ts {
             const typeArgumentNodes: readonly TypeNode[] | undefined = callLikeExpressionMayHaveTypeArguments(node) ? node.typeArguments : undefined;
             const instantiated = typeArgumentNodes
                 ? createSignatureInstantiation(candidate, getTypeArgumentsFromNodes(typeArgumentNodes, typeParameters, isInJSFile(node)))
-                : inferSignatureInstantiationForOverloadFailure(node, typeParameters, candidate, args);
+                : inferSignatureInstantiationForOverloadFailure(node, typeParameters, candidate, args, checkMode);
             candidates[bestIndex] = instantiated;
             return instantiated;
         }
@@ -30694,9 +30724,9 @@ namespace ts {
             return typeArguments;
         }
 
-        function inferSignatureInstantiationForOverloadFailure(node: CallLikeExpression, typeParameters: readonly TypeParameter[], candidate: Signature, args: readonly Expression[]): Signature {
+        function inferSignatureInstantiationForOverloadFailure(node: CallLikeExpression, typeParameters: readonly TypeParameter[], candidate: Signature, args: readonly Expression[], checkMode: CheckMode): Signature {
             const inferenceContext = createInferenceContext(typeParameters, candidate, /*flags*/ isInJSFile(node) ? InferenceFlags.AnyDefault : InferenceFlags.None);
-            const typeArgumentTypes = inferTypeArguments(node, candidate, args, CheckMode.SkipContextSensitive | CheckMode.SkipGenericFunctions, inferenceContext);
+            const typeArgumentTypes = inferTypeArguments(node, candidate, args, checkMode | CheckMode.SkipContextSensitive | CheckMode.SkipGenericFunctions, inferenceContext);
             return createSignatureInstantiation(candidate, typeArgumentTypes);
         }
 

@@ -168,7 +168,7 @@ namespace FourSlash {
         // The position of the end of the current selection, or -1 if nothing is selected
         public selectionEnd = -1;
 
-        public lastKnownMarker = "";
+        public lastKnownMarker: string | undefined;
 
         // The file that's currently 'opened'
         public activeFile!: FourSlashFile;
@@ -400,7 +400,7 @@ namespace FourSlash {
                         continue;
                     }
                     const memo = Utils.memoize(
-                        (_version: number, _active: string, _caret: number, _selectEnd: number, _marker: string, ...args: any[]) => (ls[key] as Function)(...args),
+                        (_version: number, _active: string, _caret: number, _selectEnd: number, _marker: string | undefined, ...args: any[]) => (ls[key] as Function)(...args),
                         (...args) => args.map(a => a && typeof a === "object" ? JSON.stringify(a) : a).join("|,|")
                     );
                     proxy[key] = (...args: any[]) => memo(
@@ -540,8 +540,8 @@ namespace FourSlash {
         }
 
         private messageAtLastKnownMarker(message: string) {
-            const locationDescription = this.lastKnownMarker ? this.lastKnownMarker : this.getLineColStringAtPosition(this.currentCaretPosition);
-            return `At ${locationDescription}: ${message}`;
+            const locationDescription = this.lastKnownMarker !== undefined ? this.lastKnownMarker : this.getLineColStringAtPosition(this.currentCaretPosition);
+            return `At marker '${locationDescription}': ${message}`;
         }
 
         private assertionMessageAtLastKnownMarker(msg: string) {
@@ -864,7 +864,7 @@ namespace FourSlash {
             else {
                 for (const marker of toArray(options.marker)) {
                     this.goToMarker(marker);
-                    this.verifyCompletionsWorker(options);
+                    this.verifyCompletionsWorker({ ...options, marker });
                 }
             }
         }
@@ -960,7 +960,7 @@ namespace FourSlash {
             expected = typeof expected === "string" ? { name: expected } : expected;
 
             if (actual.insertText !== expected.insertText) {
-                this.raiseError(`Completion insert text did not match: ${showTextDiff(expected.insertText || "", actual.insertText || "")}`);
+                this.raiseError(`At entry ${actual.name}: Completion insert text did not match: ${showTextDiff(expected.insertText || "", actual.insertText || "")}`);
             }
             const convertedReplacementSpan = expected.replacementSpan && ts.createTextSpanFromRange(expected.replacementSpan);
             if (convertedReplacementSpan?.length) {
@@ -968,28 +968,30 @@ namespace FourSlash {
                     assert.deepEqual(actual.replacementSpan, convertedReplacementSpan);
                 }
                 catch {
-                    this.raiseError(`Expected completion replacementSpan to be ${stringify(convertedReplacementSpan)}, got ${stringify(actual.replacementSpan)}`);
+                    this.raiseError(`At entry ${actual.name}: Expected completion replacementSpan to be ${stringify(convertedReplacementSpan)}, got ${stringify(actual.replacementSpan)}`);
                 }
             }
 
             if (expected.kind !== undefined || expected.kindModifiers !== undefined) {
-                assert.equal(actual.kind, expected.kind, `Expected 'kind' for ${actual.name} to match`);
-                assert.equal(actual.kindModifiers, expected.kindModifiers || "", `Expected 'kindModifiers' for ${actual.name} to match`);
+                assert.equal(actual.kind, expected.kind, `At entry ${actual.name}: Expected 'kind' for ${actual.name} to match`);
+                assert.equal(actual.kindModifiers, expected.kindModifiers || "", `At entry ${actual.name}:  Expected 'kindModifiers' for ${actual.name} to match`);
             }
             if (expected.isFromUncheckedFile !== undefined) {
-                assert.equal<boolean | undefined>(actual.isFromUncheckedFile, expected.isFromUncheckedFile, "Expected 'isFromUncheckedFile' properties to match");
+                assert.equal<boolean | undefined>(actual.isFromUncheckedFile, expected.isFromUncheckedFile, `At entry ${actual.name}: Expected 'isFromUncheckedFile' properties to match`);
             }
             if (expected.isPackageJsonImport !== undefined) {
-                assert.equal<boolean | undefined>(actual.isPackageJsonImport, expected.isPackageJsonImport, "Expected 'isPackageJsonImport' properties to match");
+                assert.equal<boolean | undefined>(actual.isPackageJsonImport, expected.isPackageJsonImport, `At entry ${actual.name}: Expected 'isPackageJsonImport' properties to match`);
             }
 
-            assert.equal(actual.hasAction, expected.hasAction, `Expected 'hasAction' properties to match`);
-            assert.equal(actual.isRecommended, expected.isRecommended, `Expected 'isRecommended' properties to match'`);
-            assert.equal(actual.isSnippet, expected.isSnippet, `Expected 'isSnippet' properties to match`);
-            assert.equal(actual.source, expected.source, `Expected 'source' values to match`);
-            assert.equal(actual.sortText, expected.sortText || ts.Completions.SortText.LocationPriority, `Expected 'sortText' properties to match`);
+            assert.equal(actual.labelDetails?.description, expected.labelDetails?.description, `At entry ${actual.name}: Expected 'labelDetails.description' properties to match`);
+            assert.equal(actual.labelDetails?.detail, expected.labelDetails?.detail, `At entry ${actual.name}: Expected 'labelDetails.detail' properties to match`);
+            assert.equal(actual.hasAction, expected.hasAction, `At entry ${actual.name}: Expected 'hasAction' properties to match`);
+            assert.equal(actual.isRecommended, expected.isRecommended, `At entry ${actual.name}: Expected 'isRecommended' properties to match'`);
+            assert.equal(actual.isSnippet, expected.isSnippet, `At entry ${actual.name}: Expected 'isSnippet' properties to match`);
+            assert.equal(actual.source, expected.source, `At entry ${actual.name}: Expected 'source' values to match`);
+            assert.equal(actual.sortText, expected.sortText || ts.Completions.SortText.LocationPriority, `At entry ${actual.name}: Expected 'sortText' properties to match`);
             if (expected.sourceDisplay && actual.sourceDisplay) {
-                assert.equal(ts.displayPartsToString(actual.sourceDisplay), expected.sourceDisplay, `Expected 'sourceDisplay' properties to match`);
+                assert.equal(ts.displayPartsToString(actual.sourceDisplay), expected.sourceDisplay, `At entry ${actual.name}: Expected 'sourceDisplay' properties to match`);
             }
 
             if (expected.text !== undefined) {

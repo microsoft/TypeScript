@@ -4130,7 +4130,7 @@
           "name": "escape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "24",
+          "sortText": "z15",
           "displayParts": [
             {
               "text": "function",
@@ -4220,7 +4220,7 @@
           "name": "unescape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "24",
+          "sortText": "z15",
           "displayParts": [
             {
               "text": "function",
@@ -7606,7 +7606,7 @@
           "name": "escape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "24",
+          "sortText": "z15",
           "displayParts": [
             {
               "text": "function",
@@ -7696,7 +7696,7 @@
           "name": "unescape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "24",
+          "sortText": "z15",
           "displayParts": [
             {
               "text": "function",
@@ -11916,7 +11916,7 @@
           "name": "escape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "24",
+          "sortText": "z15",
           "displayParts": [
             {
               "text": "function",
@@ -12006,7 +12006,7 @@
           "name": "unescape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "24",
+          "sortText": "z15",
           "displayParts": [
             {
               "text": "function",

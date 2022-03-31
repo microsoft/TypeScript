@@ -855,3 +855,39 @@ let fooAsyncGenM: FooAsyncGenMethod = {
   }
 };
 
+// Repro from #48345
+
+type Func = <T extends ["a", number] | ["b", string]>(...args: T) => void;
+>Func : Func
+>args : T
+
+const f60: Func = (kind, payload) => {
+>f60 : Func
+>(kind, payload) => {    if (kind === "a") {        payload.toFixed();  // error    }    if (kind === "b") {        payload.toUpperCase();  // error    }} : <T extends ["a", number] | ["b", string]>(kind: T[0], payload: T[1]) => void
+>kind : T[0]
+>payload : T[1]
+
+    if (kind === "a") {
+>kind === "a" : boolean
+>kind : "a" | "b"
+>"a" : "a"
+
+        payload.toFixed();  // error
+>payload.toFixed() : string
+>payload.toFixed : (fractionDigits?: number | undefined) => string
+>payload : number
+>toFixed : (fractionDigits?: number | undefined) => string
+    }
+    if (kind === "b") {
+>kind === "b" : boolean
+>kind : "a" | "b"
+>"b" : "b"
+
+        payload.toUpperCase();  // error
+>payload.toUpperCase() : string
+>payload.toUpperCase : () => string
+>payload : string
+>toUpperCase : () => string
+    }
+};
+

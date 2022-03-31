@@ -24,6 +24,13 @@
 ////
 ////enum En {}
 ////En.A;
+////
+////type T = {};
+////function foo(t: T) {
+////    t.x;
+////    t.y = 1;
+////    t.test(1, 2);
+////}
 
 verify.codeFixAll({
     fixId: "fixMissingMember",
@@ -60,5 +67,16 @@ class Unrelated {
 enum En {
     A
 }
-En.A;`,
+En.A;
+
+type T = {
+    x: any;
+    y: number;
+    test(arg0: number, arg1: number);
+};
+function foo(t: T) {
+    t.x;
+    t.y = 1;
+    t.test(1, 2);
+}`,
 });

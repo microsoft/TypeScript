@@ -2977,6 +2977,7 @@ declare namespace ts {
         maxNodeModuleJsDepth?: number;
         module?: ModuleKind;
         moduleResolution?: ModuleResolutionKind;
+        moduleSuffixes?: string[];
         moduleDetection?: ModuleDetectionKind;
         newLine?: NewLineKind;
         noEmit?: boolean;
@@ -4099,6 +4100,8 @@ declare namespace ts {
         readonly includeAutomaticOptionalChainCompletions?: boolean;
         readonly includeCompletionsWithInsertText?: boolean;
         readonly includeCompletionsWithClassMemberSnippets?: boolean;
+        readonly includeCompletionsWithObjectLiteralMethodSnippets?: boolean;
+        readonly useLabelDetailsInCompletionEntries?: boolean;
         readonly allowIncompleteCompletions?: boolean;
         readonly importModuleSpecifierPreference?: "shortest" | "project-relative" | "relative" | "non-relative";
         /** Determines whether we import `foo/index.ts` as "foo", "foo/index", or "foo/index.js" */
@@ -6484,6 +6487,7 @@ declare namespace ts {
         hasAction?: true;
         source?: string;
         sourceDisplay?: SymbolDisplayPart[];
+        labelDetails?: CompletionEntryLabelDetails;
         isRecommended?: true;
         isFromUncheckedFile?: true;
         isPackageJsonImport?: true;
@@ -6497,6 +6501,10 @@ declare namespace ts {
          * is an auto-import.
          */
         data?: CompletionEntryData;
+    }
+    interface CompletionEntryLabelDetails {
+        detail?: string;
+        description?: string;
     }
     interface CompletionEntryDetails {
         name: string;
@@ -8738,6 +8746,10 @@ declare namespace ts.server.protocol {
          */
         sourceDisplay?: SymbolDisplayPart[];
         /**
+         * Additional details for the label.
+         */
+        labelDetails?: CompletionEntryLabelDetails;
+        /**
          * If true, this completion should be highlighted as recommended. There will only be one of these.
          * This will be set when we know the user should write an expression with a certain type and that type is an enum or constructable class.
          * Then either that enum/class or a namespace containing it will be the recommended symbol.
@@ -8764,6 +8776,20 @@ declare namespace ts.server.protocol {
          * items with the same name.
          */
         data?: unknown;
+    }
+    interface CompletionEntryLabelDetails {
+        /**
+         * An optional string which is rendered less prominently directly after
+         * {@link CompletionEntry.name name}, without any spacing. Should be
+         * used for function signatures or type annotations.
+         */
+        detail?: string;
+        /**
+         * An optional string which is rendered less prominently after
+         * {@link CompletionEntryLabelDetails.detail}. Should be used for fully qualified
+         * names or file path.
+         */
+        description?: string;
     }
     /**
      * Additional completion entry details, available on demand
@@ -9658,6 +9684,18 @@ declare namespace ts.server.protocol {
          * `class A { foo }`.
          */
         readonly includeCompletionsWithClassMemberSnippets?: boolean;
+        /**
+         * If enabled, object literal methods will have a method declaration completion entry in addition
+         * to the regular completion entry containing just the method name.
+         * E.g., `const objectLiteral: T = { f| }` could be completed to `const objectLiteral: T = { foo(): void {} }`,
+         * in addition to `const objectLiteral: T = { foo }`.
+         */
+        readonly includeCompletionsWithObjectLiteralMethodSnippets?: boolean;
+        /**
+         * Indicates whether {@link CompletionEntry.labelDetails completion entry label details} are supported.
+         * If not, contents of `labelDetails` may be included in the {@link CompletionEntry.name} property.
+         */
+        readonly useLabelDetailsInCompletionEntries?: boolean;
         readonly allowIncompleteCompletions?: boolean;
         readonly importModuleSpecifierPreference?: "shortest" | "project-relative" | "relative" | "non-relative";
         /** Determines whether we import `foo/index.ts` as "foo", "foo/index", or "foo/index.js" */
