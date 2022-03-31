@@ -3929,8 +3929,25 @@ namespace ts {
         function emitJSDocComment(comment: string | NodeArray<JSDocComment> | undefined) {
             const text = getTextOfJSDocComment(comment);
             if (text) {
-                writeSpace();
-                write(text);
+                const lines = text.split(/\r\n?|\n/g);
+                for (let lineIndex = 0, length = lines.length ; lineIndex < length ; ++ lineIndex) {
+                    const line = lines[lineIndex];
+                    if (lineIndex === 0) {
+                        if (line.length > 0) {
+                            writeSpace();
+                        }
+                        write(line);
+                    }
+                    else {
+                        writeLine();
+                        writeSpace();
+                        writePunctuation("*");
+                        if (line.length > 0) {
+                            writeSpace();
+                        }
+                        write(line);
+                    }
+                }
             }
         }
 
