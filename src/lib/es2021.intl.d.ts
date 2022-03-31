@@ -25,7 +25,7 @@ declare namespace Intl {
     /**
      * The locale matching algorithm to use.
      *
-     * [MDN](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Intl#Locale_negotiation).
+     * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/ListFormat/ListFormat#parameters).
      */
     type ListFormatLocaleMatcher = "lookup" | "best fit";
 
