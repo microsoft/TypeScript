@@ -50,11 +50,11 @@ declare namespace Intl {
      */
     interface ListFormatOptions {
         /** The locale matching algorithm to use. For information about this option, see [Intl page](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Intl#Locale_negotiation). */
-        localeMatcher?: ListFormatLocaleMatcher;
+        localeMatcher?: ListFormatLocaleMatcher | undefined;
         /** The format of output message. */
-        type?: ListFormatType;
+        type?: ListFormatType | undefined;
         /** The length of the internationalized message. */
-        style?: ListFormatStyle;
+        style?: ListFormatStyle | undefined;
     }
 
     interface ListFormat {
