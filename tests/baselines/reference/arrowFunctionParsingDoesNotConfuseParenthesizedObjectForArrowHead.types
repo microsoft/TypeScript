@@ -1,0 +1,36 @@
+=== tests/cases/compiler/arrowFunctionParsingDoesNotConfuseParenthesizedObjectForArrowHead.ts ===
+// regression test for https://github.com/microsoft/TypeScript/issues/32914
+declare var value: boolean;
+>value : boolean
+
+declare var a: any;
+>a : any
+
+const test = () => ({
+>test : () => ({ prop:  }: { prop: any; }, : any, value: any, run: () => { (): any; if(: any, a: any, b: any): any; }) => string
+>() => ({    // "Identifier expected." error on "!" and two "Duplicate identifier '(Missing)'." errors on space.    prop: !value, // remove ! to see that errors will be gone    run: () => { //replace arrow function with regular function to see that errors will be gone        // comment next line or remove "()" to see that errors will be gone        if(!a.b()) { return 'special'; } : () => ({ prop:  }: { prop: any; }, : any, value: any, run: () => { (): any; if(: any, a: any, b: any): any; }) => string
+>({    // "Identifier expected." error on "!" and two "Duplicate identifier '(Missing)'." errors on space.    prop: !value, // remove ! to see that errors will be gone    run: () => { //replace arrow function with regular function to see that errors will be gone        // comment next line or remove "()" to see that errors will be gone        if(!a.b()) { return 'special'; } : ({ prop:  }: { prop: any; }, : any, value: any, run: () => { (): any; if(: any, a: any, b: any): any; }) => string
+
+    // "Identifier expected." error on "!" and two "Duplicate identifier '(Missing)'." errors on space.
+    prop: !value, // remove ! to see that errors will be gone
+>prop : any
+> : any
+> : any
+>value : any
+
+    run: () => { //replace arrow function with regular function to see that errors will be gone
+>run : () => { (): any; if(: any, a: any, b: any): any; }
+
+        // comment next line or remove "()" to see that errors will be gone
+        if(!a.b()) { return 'special'; }
+>if : (: any, a: any, b: any) => any
+> : any
+>a : any
+>b : any
+>'special' : "special"
+
+        return 'default';
+>'default' : "default"
+    }
+}); 
+
