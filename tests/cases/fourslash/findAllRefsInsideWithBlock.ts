@@ -4,7 +4,7 @@
 ////
 ////with ({}) {
 ////    var y = x;  // Reference of x here should not be picked
-////    /*2*/y++;        // also reference for y should be ignored
+////    y++;        // also reference for y should be ignored
 ////}
 ////
 ////[|{| "isWriteAccess": true |}x|] = [|x|] + 1;
