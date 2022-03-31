@@ -6,11 +6,11 @@ type Box<T> = {
 >T : Symbol(T, Decl(contextuallyTypedBooleanLiterals.ts, 2, 9))
 
     get: () => T,
->get : Symbol(get, Decl(contextuallyTypedBooleanLiterals.ts, 2, 15))
+>get : Symbol(Box.get, Decl(contextuallyTypedBooleanLiterals.ts, 2, 15))
 >T : Symbol(T, Decl(contextuallyTypedBooleanLiterals.ts, 2, 9))
 
     set: (value: T) => void
->set : Symbol(set, Decl(contextuallyTypedBooleanLiterals.ts, 3, 17))
+>set : Symbol(Box.set, Decl(contextuallyTypedBooleanLiterals.ts, 3, 17))
 >value : Symbol(value, Decl(contextuallyTypedBooleanLiterals.ts, 4, 10))
 >T : Symbol(T, Decl(contextuallyTypedBooleanLiterals.ts, 2, 9))
 }
