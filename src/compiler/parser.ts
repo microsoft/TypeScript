@@ -3246,7 +3246,10 @@ namespace ts {
         }
 
         function isParameterNameStart() {
-            return isIdentifier() || token() === SyntaxKind.OpenBracketToken || token() === SyntaxKind.OpenBraceToken;
+            // Be permissive about await and yield; disallowing them during a speculative parse
+            // leads to many more follow-on errors than allowing the function to parse then later
+            // complaining about the use of the keywords.
+            return isBindingIdentifier() || token() === SyntaxKind.OpenBracketToken || token() === SyntaxKind.OpenBraceToken;
         }
 
         function parseParameter(inOuterAwaitContext: boolean): ParameterDeclaration {
@@ -3293,7 +3296,7 @@ namespace ts {
             const modifiers = parseModifiers();
             const dotDotDotToken = parseOptionalToken(SyntaxKind.DotDotDotToken);
 
-            if (!allowAmbiguity && inOuterAwaitContext && !isParameterNameStart()) {
+            if (!allowAmbiguity && !isParameterNameStart()) {
                 return undefined;
             }
 
