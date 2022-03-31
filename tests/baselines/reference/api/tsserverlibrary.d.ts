@@ -8282,7 +8282,6 @@ declare namespace ts.server.protocol {
     }
     /**
      * Request to synchronize list of open files with the client
-     * TODO: Lots of unit tests refer to this too, a good starting point for UpdateFileSystemRequest
      */
     interface UpdateOpenRequest extends Request {
         command: CommandTypes.UpdateOpen;
@@ -8309,14 +8308,17 @@ declare namespace ts.server.protocol {
         command: CommandTypes.UpdateFileSystem;
         arguments: UpdateFileSystemRequestArgs;
     }
+    /**
+     * Arguments to UpdateFileSystemRequest. Tracks changes to non-opened files.
+     */
     interface UpdateFileSystemRequestArgs {
         /** For now, only 'memfs', initially for exclusive in-memory operation, but it could be other in-memory names later */
         fileSystem: string;
-        /** For now, a list of newly created or newly available files. Probably need to ADD mocked file watchers */
+        /** List of newly created or newly available files. */
         created: FileSystemRequestArgs[];
-        /** Just-deleted files. Also needs to trigger and then remove file watchers (I think) */
+        /** Names of just-deleted files. */
         deleted: string[];
-        /** Needs to replace what file watchers would normally listen to */
+        /** List of updated files. */
         updated: FileSystemRequestArgs[];
     }
     interface FileSystemRequestArgs extends FileRequestArgs {
@@ -8328,7 +8330,6 @@ declare namespace ts.server.protocol {
         /**
          * Used to specify the script kind of the file explicitly. It could be one of the following:
          *      "TS", "JS", "TSX", "JSX"
-         * TODO: Not 100% sure this is needed.
          */
         scriptKindName?: ScriptKindName;
     }
