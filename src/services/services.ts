@@ -648,13 +648,10 @@ namespace ts {
 
         const isStaticMember = hasStaticModifier(declaration);
         return firstDefined(getAllSuperTypeNodes(classOrInterfaceDeclaration), superTypeNode => {
-            if (isStaticMember) {
-                // For nodes like `class Foo extends Bar {}`, superTypeNode refers to an ExpressionWithTypeArguments with its expression being `Bar`.
-                const baseClassSymbol = checker.getSymbolAtLocation(isExpressionWithTypeArguments(superTypeNode) && !superTypeNode.typeArguments?.length ? superTypeNode.expression : superTypeNode);
-                const symbol = baseClassSymbol?.declarations?.[0] && checker.getPropertyOfType(checker.getTypeOfSymbolAtLocation(baseClassSymbol, baseClassSymbol.declarations[0]), declaration.symbol.name);
-                return symbol ? cb(symbol) : undefined;
-            }
-            const symbol = checker.getPropertyOfType(checker.getTypeAtLocation(superTypeNode), declaration.symbol.name);
+            const baseType = checker.getTypeAtLocation(superTypeNode);
+            const symbol = isStaticMember
+                ? find(checker.getExportsOfModule(baseType.symbol), s => s.escapedName === declaration.symbol.name)
+                : checker.getPropertyOfType(baseType, declaration.symbol.name);
             return symbol ? cb(symbol) : undefined;
         });
     }
