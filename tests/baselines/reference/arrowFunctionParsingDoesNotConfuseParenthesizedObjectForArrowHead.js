@@ -16,12 +16,14 @@ const test = () => ({
 
 
 //// [arrowFunctionParsingDoesNotConfuseParenthesizedObjectForArrowHead.js]
-var test = function () { return function (_a, , value, // remove ! to see that errors will be gone
-run) {
-    var 
+var test = function () { return ({
     // "Identifier expected." error on "!" and two "Duplicate identifier '(Missing)'." errors on space.
-     = _a.prop;
-    return 'special';
-}; };
-return 'default';
-;
+    prop: !value,
+    run: function () {
+        // comment next line or remove "()" to see that errors will be gone
+        if (!a.b()) {
+            return 'special';
+        }
+        return 'default';
+    }
+}); };

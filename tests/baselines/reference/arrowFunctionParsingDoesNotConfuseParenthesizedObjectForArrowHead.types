@@ -7,24 +7,26 @@ declare var a: any;
 >a : any
 
 const test = () => ({
->test : () => ({ prop:  }: { prop: any; }, : any, value: any, run: () => { (): any; if(: any, a: any, b: any): any; }) => string
->() => ({    // "Identifier expected." error on "!" and two "Duplicate identifier '(Missing)'." errors on space.    prop: !value, // remove ! to see that errors will be gone    run: () => { //replace arrow function with regular function to see that errors will be gone        // comment next line or remove "()" to see that errors will be gone        if(!a.b()) { return 'special'; } : () => ({ prop:  }: { prop: any; }, : any, value: any, run: () => { (): any; if(: any, a: any, b: any): any; }) => string
->({    // "Identifier expected." error on "!" and two "Duplicate identifier '(Missing)'." errors on space.    prop: !value, // remove ! to see that errors will be gone    run: () => { //replace arrow function with regular function to see that errors will be gone        // comment next line or remove "()" to see that errors will be gone        if(!a.b()) { return 'special'; } : ({ prop:  }: { prop: any; }, : any, value: any, run: () => { (): any; if(: any, a: any, b: any): any; }) => string
+>test : () => { prop: boolean; run: () => "special" | "default"; }
+>() => ({    // "Identifier expected." error on "!" and two "Duplicate identifier '(Missing)'." errors on space.    prop: !value, // remove ! to see that errors will be gone    run: () => { //replace arrow function with regular function to see that errors will be gone        // comment next line or remove "()" to see that errors will be gone        if(!a.b()) { return 'special'; }        return 'default';    }}) : () => { prop: boolean; run: () => "special" | "default"; }
+>({    // "Identifier expected." error on "!" and two "Duplicate identifier '(Missing)'." errors on space.    prop: !value, // remove ! to see that errors will be gone    run: () => { //replace arrow function with regular function to see that errors will be gone        // comment next line or remove "()" to see that errors will be gone        if(!a.b()) { return 'special'; }        return 'default';    }}) : { prop: boolean; run: () => "special" | "default"; }
+>{    // "Identifier expected." error on "!" and two "Duplicate identifier '(Missing)'." errors on space.    prop: !value, // remove ! to see that errors will be gone    run: () => { //replace arrow function with regular function to see that errors will be gone        // comment next line or remove "()" to see that errors will be gone        if(!a.b()) { return 'special'; }        return 'default';    }} : { prop: boolean; run: () => "special" | "default"; }
 
     // "Identifier expected." error on "!" and two "Duplicate identifier '(Missing)'." errors on space.
     prop: !value, // remove ! to see that errors will be gone
->prop : any
-> : any
-> : any
->value : any
+>prop : boolean
+>!value : boolean
+>value : boolean
 
     run: () => { //replace arrow function with regular function to see that errors will be gone
->run : () => { (): any; if(: any, a: any, b: any): any; }
+>run : () => "special" | "default"
+>() => { //replace arrow function with regular function to see that errors will be gone        // comment next line or remove "()" to see that errors will be gone        if(!a.b()) { return 'special'; }        return 'default';    } : () => "special" | "default"
 
         // comment next line or remove "()" to see that errors will be gone
         if(!a.b()) { return 'special'; }
->if : (: any, a: any, b: any) => any
-> : any
+>!a.b() : boolean
+>a.b() : any
+>a.b : any
 >a : any
 >b : any
 >'special' : "special"
