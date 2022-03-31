@@ -277,7 +277,7 @@ namespace ts.codefix {
     }
 
     export function createSignatureDeclarationFromCallExpression(
-        kind: SyntaxKind.MethodDeclaration | SyntaxKind.FunctionDeclaration,
+        kind: SyntaxKind.MethodDeclaration | SyntaxKind.FunctionDeclaration | SyntaxKind.MethodSignature,
         context: CodeFixContextBase,
         importAdder: ImportAdder,
         call: CallExpression,
@@ -313,29 +313,42 @@ namespace ts.codefix {
             ? undefined
             : checker.typeToTypeNode(contextualType, contextNode, /*flags*/ undefined, tracker);
 
-        if (kind === SyntaxKind.MethodDeclaration) {
-            return factory.createMethodDeclaration(
-                /*decorators*/ undefined,
-                modifiers,
-                asteriskToken,
-                name,
-                /*questionToken*/ undefined,
-                typeParameters,
-                parameters,
-                type,
-                isInterfaceDeclaration(contextNode) ? undefined : createStubbedMethodBody(quotePreference)
-            );
+        switch (kind) {
+            case SyntaxKind.MethodDeclaration:
+                return factory.createMethodDeclaration(
+                    /*decorators*/ undefined,
+                    modifiers,
+                    asteriskToken,
+                    name,
+                    /*questionToken*/ undefined,
+                    typeParameters,
+                    parameters,
+                    type,
+                    createStubbedMethodBody(quotePreference)
+                );
+            case SyntaxKind.MethodSignature:
+                return factory.createMethodSignature(
+                    modifiers,
+                    name,
+                    /*questionToken*/ undefined,
+                    typeParameters,
+                    parameters,
+                    type
+                );
+            case SyntaxKind.FunctionDeclaration:
+                return factory.createFunctionDeclaration(
+                    /*decorators*/ undefined,
+                    modifiers,
+                    asteriskToken,
+                    name,
+                    typeParameters,
+                    parameters,
+                    type,
+                    createStubbedBody(Diagnostics.Function_not_implemented.message, quotePreference)
+                );
+            default:
+                Debug.fail("Unexpected kind");
         }
-        return factory.createFunctionDeclaration(
-            /*decorators*/ undefined,
-            modifiers,
-            asteriskToken,
-            name,
-            typeParameters,
-            parameters,
-            type,
-            createStubbedBody(Diagnostics.Function_not_implemented.message, quotePreference)
-        );
     }
 
     export function typeToAutoImportableTypeNode(checker: TypeChecker, importAdder: ImportAdder, type: Type, contextNode: Node | undefined, scriptTarget: ScriptTarget, flags?: NodeBuilderFlags, tracker?: SymbolTracker): TypeNode | undefined {

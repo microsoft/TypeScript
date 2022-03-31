@@ -1576,6 +1576,16 @@ namespace ts {
 
     /** Return the file if it exists. */
     function tryFile(fileName: string, onlyRecordFailures: boolean, state: ModuleResolutionState): string | undefined {
+        if (!state.compilerOptions.moduleSuffixes?.length) {
+            return tryFileLookup(fileName, onlyRecordFailures, state);
+        }
+
+        const ext = tryGetExtensionFromPath(fileName) ?? "";
+        const fileNameNoExtension = ext ? removeExtension(fileName, ext) : fileName;
+        return forEach(state.compilerOptions.moduleSuffixes, suffix => tryFileLookup(fileNameNoExtension + suffix + ext, onlyRecordFailures, state));
+    }
+
+    function tryFileLookup(fileName: string, onlyRecordFailures: boolean, state: ModuleResolutionState): string | undefined {
         if (!onlyRecordFailures) {
             if (state.host.fileExists(fileName)) {
                 if (state.traceEnabled) {

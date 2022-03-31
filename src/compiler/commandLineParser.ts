@@ -884,6 +884,18 @@ namespace ts {
             description: Diagnostics.Allow_accessing_UMD_globals_from_modules,
             defaultValueDescription: false,
         },
+        {
+            name: "moduleSuffixes",
+            type: "list",
+            element: {
+                name: "suffix",
+                type: "string",
+            },
+            listPreserveFalsyValues: true,
+            affectsModuleResolution: true,
+            category: Diagnostics.Modules,
+            description: Diagnostics.List_of_file_name_suffixes_to_search_when_resolving_a_module,
+        },
 
         // Source Maps
         {
@@ -3192,7 +3204,7 @@ namespace ts {
         if (option.type === "list") {
             const listOption = option;
             if (listOption.element.isFilePath || !isString(listOption.element.type)) {
-                return filter(map(value, v => normalizeOptionValue(listOption.element, basePath, v)), v => !!v) as CompilerOptionsValue;
+                return filter(map(value, v => normalizeOptionValue(listOption.element, basePath, v)), v => listOption.listPreserveFalsyValues ? true : !!v) as CompilerOptionsValue;
             }
             return value;
         }
@@ -3233,7 +3245,7 @@ namespace ts {
     }
 
     function convertJsonOptionOfListType(option: CommandLineOptionOfListType, values: readonly any[], basePath: string, errors: Push<Diagnostic>): any[] {
-        return filter(map(values, v => convertJsonOption(option.element, v, basePath, errors)), v => !!v);
+        return filter(map(values, v => convertJsonOption(option.element, v, basePath, errors)), v => option.listPreserveFalsyValues ? true : !!v);
     }
 
     /**

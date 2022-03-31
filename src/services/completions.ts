@@ -98,7 +98,7 @@ namespace ts.Completions {
     interface SymbolOriginInfoObjectLiteralMethod extends SymbolOriginInfo {
         importAdder: codefix.ImportAdder,
         insertText: string,
-        sourceDisplay: SymbolDisplayPart[],
+        labelDetails: CompletionEntryLabelDetails,
         isSnippet?: true,
     }
 
@@ -706,6 +706,7 @@ namespace ts.Completions {
         let source = getSourceFromOrigin(origin);
         let sourceDisplay;
         let hasAction;
+        let labelDetails;
 
         const typeChecker = program.getTypeChecker();
         const insertQuestionDot = origin && originIsNullableMember(origin);
@@ -780,7 +781,11 @@ namespace ts.Completions {
 
         if (origin && originIsObjectLiteralMethod(origin)) {
             let importAdder;
-            ({ insertText, isSnippet, importAdder, sourceDisplay } = origin);
+            ({ insertText, isSnippet, importAdder, labelDetails } = origin);
+            if (!preferences.useLabelDetailsInCompletionEntries) {
+                name = name + labelDetails.detail;
+                labelDetails = undefined;
+            }
             source = CompletionSource.ObjectLiteralMethodSnippet;
             sortText = SortText.SortBelow(sortText);
             if (importAdder.hasFixes()) {
@@ -842,6 +847,7 @@ namespace ts.Completions {
             insertText,
             replacementSpan,
             sourceDisplay,
+            labelDetails,
             isSnippet,
             isPackageJsonImport: originIsPackageJsonImport(origin) || undefined,
             isImportStatementCompletion: !!importCompletionNode || undefined,
@@ -1066,7 +1072,7 @@ namespace ts.Completions {
         options: CompilerOptions,
         preferences: UserPreferences,
         formatContext: formatting.FormatContext | undefined,
-    ): { insertText: string, isSnippet?: true, importAdder: codefix.ImportAdder, sourceDisplay: SymbolDisplayPart[] } | undefined {
+    ): { insertText: string, isSnippet?: true, importAdder: codefix.ImportAdder, labelDetails: CompletionEntryLabelDetails } | undefined {
         const isSnippet = preferences.includeCompletionsWithSnippetText || undefined;
         let insertText: string = name;
 
@@ -1092,16 +1098,24 @@ namespace ts.Completions {
             insertText = printer.printSnippetList(ListFormat.CommaDelimited | ListFormat.AllowTrailingComma, factory.createNodeArray([method], /*hasTrailingComma*/ true), sourceFile);
         }
 
+        const signaturePrinter = createPrinter({
+            removeComments: true,
+            module: options.module,
+            target: options.target,
+            omitTrailingSemicolon: true,
+        });
+        // The `labelDetails.detail` will be displayed right beside the method name,
+        // so we drop the name (and modifiers) from the signature.
         const methodSignature = factory.createMethodSignature(
-            method.modifiers,
-            method.name,
+            /*modifiers*/ undefined,
+            /*name*/ "",
             method.questionToken,
             method.typeParameters,
             method.parameters,
             method.type);
-        const sourceDisplay = nodeToDisplayParts(methodSignature, enclosingDeclaration);
+        const labelDetails = { detail: signaturePrinter.printNode(EmitHint.Unspecified, methodSignature, sourceFile) };
 
-        return { isSnippet, insertText, importAdder, sourceDisplay };
+        return { isSnippet, insertText, importAdder, labelDetails };
 
     };
 

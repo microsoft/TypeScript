@@ -38,6 +38,7 @@ verify.completions({
         includeCompletionsWithInsertText: true,
         includeCompletionsWithSnippetText: false,
         includeCompletionsWithObjectLiteralMethodSnippets: true,
+        useLabelDetailsInCompletionEntries: true,
     },
     includes: [
         {
@@ -51,6 +52,9 @@ verify.completions({
                 completion.SortText.ObjectLiteralProperty(completion.SortText.LocationPriority, "bar")),
             source: completion.CompletionSource.ObjectLiteralMethodSnippet,
             insertText: "bar(x: number): void {\n},",
+            labelDetails: {
+                detail: "(x: number): void",
+            },
         },
     ],
 });
@@ -60,6 +64,7 @@ verify.completions({
         includeCompletionsWithInsertText: true,
         includeCompletionsWithSnippetText: false,
         includeCompletionsWithObjectLiteralMethodSnippets: true,
+        useLabelDetailsInCompletionEntries: true,
     },
     includes: [
         {
@@ -73,6 +78,9 @@ verify.completions({
                 completion.SortText.ObjectLiteralProperty(completion.SortText.LocationPriority, "bar")),
             source: completion.CompletionSource.ObjectLiteralMethodSnippet,
             insertText: "bar(x: number): void {\n},",
+            labelDetails: {
+                detail: "(x: number): void",
+            },
         },
         {
             name: "foo",
@@ -85,6 +93,9 @@ verify.completions({
                 completion.SortText.ObjectLiteralProperty(completion.SortText.LocationPriority, "foo")),
             source: completion.CompletionSource.ObjectLiteralMethodSnippet,
             insertText: "foo(x: string): string {\n},",
+            labelDetails: {
+                detail: "(x: string): string",
+            },
         },
     ],
 });
@@ -110,6 +121,7 @@ verify.completions({
         includeCompletionsWithInsertText: true,
         includeCompletionsWithSnippetText: false,
         includeCompletionsWithObjectLiteralMethodSnippets: true,
+        useLabelDetailsInCompletionEntries: true,
     },
     includes: [
         {
@@ -123,6 +135,9 @@ verify.completions({
                 completion.SortText.ObjectLiteralProperty(completion.SortText.LocationPriority, "\"space bar\"")),
             source: completion.CompletionSource.ObjectLiteralMethodSnippet,
             insertText: "\"space bar\"(): string {\n},",
+            labelDetails: {
+                detail: "(): string",
+            },
         },
     ],
 });
@@ -132,6 +147,7 @@ verify.completions({
         includeCompletionsWithInsertText: true,
         includeCompletionsWithSnippetText: true,
         includeCompletionsWithObjectLiteralMethodSnippets: true,
+        useLabelDetailsInCompletionEntries: true,
     },
     includes: [
         {
@@ -141,6 +157,33 @@ verify.completions({
         },
         {
             name: "bar",
+            sortText: completion.SortText.SortBelow(
+                completion.SortText.ObjectLiteralProperty(completion.SortText.LocationPriority, "bar")),
+            source: completion.CompletionSource.ObjectLiteralMethodSnippet,
+            isSnippet: true,
+            insertText: "bar(x: number): void {\n    $0\n},",
+            labelDetails: {
+                detail: "(x: number): void",
+            },
+        },
+    ],
+});
+verify.completions({
+    marker: "a",
+    preferences: {
+        includeCompletionsWithInsertText: true,
+        includeCompletionsWithSnippetText: true,
+        includeCompletionsWithObjectLiteralMethodSnippets: true,
+        useLabelDetailsInCompletionEntries: false,
+    },
+    includes: [
+        {
+            name: "bar",
+            sortText: completion.SortText.ObjectLiteralProperty(completion.SortText.LocationPriority, "bar"),
+            insertText: undefined,
+        },
+        {
+            name: "bar(x: number): void",
             sortText: completion.SortText.SortBelow(
                 completion.SortText.ObjectLiteralProperty(completion.SortText.LocationPriority, "bar")),
             source: completion.CompletionSource.ObjectLiteralMethodSnippet,

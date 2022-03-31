@@ -5878,6 +5878,10 @@
         "category": "Message",
         "code": 6930
     },
+    "List of file name suffixes to search when resolving a module." : {
+      "category": "Error",
+      "code": 6931
+    },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",

@@ -752,3 +752,35 @@ let fooAsyncGenM: FooAsyncGenMethod = {
   }
 };
 
+// Repro from #48345
+
+type Func = <T extends ["a", number] | ["b", string]>(...args: T) => void;
+>Func : Symbol(Func, Decl(dependentDestructuredVariables.ts, 295, 2))
+>T : Symbol(T, Decl(dependentDestructuredVariables.ts, 299, 13))
+>args : Symbol(args, Decl(dependentDestructuredVariables.ts, 299, 54))
+>T : Symbol(T, Decl(dependentDestructuredVariables.ts, 299, 13))
+
+const f60: Func = (kind, payload) => {
+>f60 : Symbol(f60, Decl(dependentDestructuredVariables.ts, 301, 5))
+>Func : Symbol(Func, Decl(dependentDestructuredVariables.ts, 295, 2))
+>kind : Symbol(kind, Decl(dependentDestructuredVariables.ts, 301, 19))
+>payload : Symbol(payload, Decl(dependentDestructuredVariables.ts, 301, 24))
+
+    if (kind === "a") {
+>kind : Symbol(kind, Decl(dependentDestructuredVariables.ts, 301, 19))
+
+        payload.toFixed();  // error
+>payload.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>payload : Symbol(payload, Decl(dependentDestructuredVariables.ts, 301, 24))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+    }
+    if (kind === "b") {
+>kind : Symbol(kind, Decl(dependentDestructuredVariables.ts, 301, 19))
+
+        payload.toUpperCase();  // error
+>payload.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>payload : Symbol(payload, Decl(dependentDestructuredVariables.ts, 301, 24))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+    }
+};
+
