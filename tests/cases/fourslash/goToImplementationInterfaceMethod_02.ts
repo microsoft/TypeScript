@@ -3,7 +3,7 @@
 // Should return implementations when left hand side of function call is an abstract class
 
 //// interface Foo {
-////     he/*declaration*/llo(): void
+////     they/*declaration*/llo(): void
 //// }
 ////
 //// abstract class AbstractBar implements Foo {
@@ -15,7 +15,7 @@
 //// }
 ////
 //// function whatever(a: AbstractBar) {
-////     a.he/*function_call*/llo();
+////     a.they/*function_call*/llo();
 //// }
 
 verify.allRangesAppearInImplementationList("function_call");

@@ -15,7 +15,7 @@
 //// }
 ////
 //// function someFunction(d : A) {
-////     d.he/*function_call*/llo();
+////     d.they/*function_call*/llo();
 //// }
 
 verify.allRangesAppearInImplementationList("function_call");

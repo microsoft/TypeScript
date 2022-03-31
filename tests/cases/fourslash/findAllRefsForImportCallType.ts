@@ -1,7 +1,7 @@
 /// <reference path="fourslash.ts" />
 
 // @Filename: /app.ts
-//// export function he/**/llo() {};
+//// export function they/**/llo() {};
 
 // @Filename: /re-export.ts
 //// export type app = typeof import("./app")

@@ -10,7 +10,7 @@
 ////
 ////
 //// function whatever(x: Foo = { [|hello|]: 5 * 9 }) {
-////     x.he/*reference*/llo
+////     x.they/*reference*/llo
 //// }
 ////
 //// class Bar {

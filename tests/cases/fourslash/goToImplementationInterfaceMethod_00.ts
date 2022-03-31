@@ -3,7 +3,7 @@
 // Should return method implementations in object literals within variable-like declarations
 
 //// interface Foo {
-////     he/*declaration*/llo: () => void
+////     they/*declaration*/llo: () => void
 //// }
 ////
 //// var bar: Foo = { [|hello|]: helloImpl };
@@ -12,7 +12,7 @@
 //// function helloImpl () {}
 ////
 //// function whatever(x: Foo = { [|hello|]() {/**1*/} }) {
-////     x.he/*function_call*/llo()
+////     x.they/*function_call*/llo()
 //// }
 ////
 //// class Bar {

@@ -2501,7 +2501,7 @@ namespace ts {
             if (isNumericLiteral(expression)) {
                 // check if numeric literal is a decimal literal that was originally written with a dot
                 const text = getLiteralTextOfNode(expression as LiteralExpression, /*neverAsciiEscape*/ true, /*jsxAttributeEscape*/ false);
-                // If he number will be printed verbatim and it doesn't already contain a dot, add one
+                // If they number will be printed verbatim and it doesn't already contain a dot, add one
                 // if the expression doesn't have any comments that will be emitted.
                 return !expression.numericLiteralFlags && !stringContains(text, tokenToString(SyntaxKind.DotToken)!);
             }

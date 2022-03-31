@@ -2,7 +2,7 @@
 
 //// const x = { [|hello|]: () => {} };
 ////
-//// x.he/*function_call*/llo();
+//// x.they/*function_call*/llo();
 ////
 
 verify.allRangesAppearInImplementationList("function_call");

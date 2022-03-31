@@ -11,7 +11,7 @@
 //// }
 ////
 //// class Bar extends SuperBar {
-////    whatever() { this.he/*function_call*/llo(); }
+////    whatever() { this.they/*function_call*/llo(); }
 //// }
 ////
 //// class SubBar extends Bar {

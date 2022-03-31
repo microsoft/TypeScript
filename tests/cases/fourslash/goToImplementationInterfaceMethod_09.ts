@@ -14,7 +14,7 @@
 ////     hello() {}
 ////
 ////     whatever() {
-////         super.he/*function_call*/llo();
+////         super.they/*function_call*/llo();
 ////         super["hel/*element_access*/lo"]();
 ////     }
 //// }

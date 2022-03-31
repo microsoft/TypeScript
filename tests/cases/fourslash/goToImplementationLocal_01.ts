@@ -3,6 +3,6 @@
 // Should return the defintion of locally defined variables
 
 //// const [|hello|] = function() {};
-//// he/*function_call*/llo();
+//// they/*function_call*/llo();
 
 verify.allRangesAppearInImplementationList("function_call");

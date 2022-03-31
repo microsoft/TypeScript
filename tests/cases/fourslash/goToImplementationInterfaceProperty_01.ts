@@ -9,7 +9,7 @@
 //// }
 ////
 //// function whatever(foo: Foo) {
-////     foo.he/*reference*/llo;
+////     foo.they/*reference*/llo;
 //// }
 
 verify.allRangesAppearInImplementationList("reference");

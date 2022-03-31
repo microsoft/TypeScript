@@ -2,7 +2,7 @@
 // @traceResolution: true
 // @typeRoots: types
 
-// @filename: /node_modules/@cow/boy/index.d.ts
+// @filename: /node_modules/@cow/child/index.d.ts
 export const x: number;
 
 // @filename: /node_modules/@types/be__bop/index.d.ts

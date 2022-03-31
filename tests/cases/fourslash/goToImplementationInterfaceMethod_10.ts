@@ -36,11 +36,11 @@
 //// }
 ////
 //// function someFunction(x: Foo | Bar) {
-//// 	 x.he/*function_call0*/llo();
+//// 	 x.they/*function_call0*/llo();
 //// }
 ////
 //// function anotherFunction(x: Foo & Bar) {
-//// 	 x.he/*function_call1*/llo();
+//// 	 x.they/*function_call1*/llo();
 //// }
 
 for (var i = 0; i < 2; i++) {

@@ -13,7 +13,7 @@
 //// }
 ////
 //// function whatever(a: Foo) {
-////     a.he/*function_call*/llo();
+////     a.they/*function_call*/llo();
 //// }
 ////
 //// whatever(new Bar());

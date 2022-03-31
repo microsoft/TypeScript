@@ -3,7 +3,7 @@
 // Should handle calls made on member declared in an abstract class
 
 //// abstract class AbstractBar {
-////     abstract he/*declaration*/llo(): void;
+////     abstract they/*declaration*/llo(): void;
 //// }
 ////
 //// class Bar extends AbstractBar{
@@ -11,7 +11,7 @@
 //// }
 ////
 //// function whatever(x: AbstractBar) {
-////     x.he/*reference*/llo();
+////     x.they/*reference*/llo();
 //// }
 
 verify.allRangesAppearInImplementationList("reference");
