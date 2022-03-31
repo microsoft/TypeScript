@@ -206,9 +206,10 @@ namespace ts.FindAllReferences {
 
     export function findReferencedSymbols(program: Program, cancellationToken: CancellationToken, sourceFiles: readonly SourceFile[], sourceFile: SourceFile, position: number): ReferencedSymbol[] | undefined {
         const node = getTouchingPropertyName(sourceFile, position);
-        const referencedSymbols = Core.getReferencedSymbolsForNode(position, node, program, sourceFiles, cancellationToken, { use: FindReferencesUse.References });
+        const options = { use: FindReferencesUse.References };
+        const referencedSymbols = Core.getReferencedSymbolsForNode(position, node, program, sourceFiles, cancellationToken, options);
         const checker = program.getTypeChecker();
-        const symbol = checker.getSymbolAtLocation(node);
+        const symbol = checker.getSymbolAtLocation(getAdjustedReferenceLocation(Core.getAdjustedNode(node, options)));
         return !referencedSymbols || !referencedSymbols.length ? undefined : mapDefined<SymbolAndEntries, ReferencedSymbol>(referencedSymbols, ({ definition, references }) =>
             // Only include referenced symbols that have a valid definition.
             definition && {
@@ -622,12 +623,7 @@ namespace ts.FindAllReferences {
     export namespace Core {
         /** Core find-all-references algorithm. Handles special cases before delegating to `getReferencedSymbolsForSymbol`. */
         export function getReferencedSymbolsForNode(position: number, node: Node, program: Program, sourceFiles: readonly SourceFile[], cancellationToken: CancellationToken, options: Options = {}, sourceFilesSet: ReadonlySet<string> = new Set(sourceFiles.map(f => f.fileName))): readonly SymbolAndEntries[] | undefined {
-            if (options.use === FindReferencesUse.References) {
-                node = getAdjustedReferenceLocation(node);
-            }
-            else if (options.use === FindReferencesUse.Rename) {
-                node = getAdjustedRenameLocation(node);
-            }
+            node = getAdjustedNode(node, options);
             if (isSourceFile(node)) {
                 const resolvedRef = GoToDefinition.getReferenceAtPosition(node, position, program);
                 if (!resolvedRef?.file) {
@@ -693,6 +689,16 @@ namespace ts.FindAllReferences {
 
             const references = getReferencedSymbolsForSymbol(symbol, node, sourceFiles, sourceFilesSet, checker, cancellationToken, options);
             return mergeReferences(program, moduleReferences, references, moduleReferencesOfExportTarget);
+        }
+
+        export function getAdjustedNode(node: Node, options: Options) {
+            if (options.use === FindReferencesUse.References) {
+                node = getAdjustedReferenceLocation(node);
+            }
+            else if (options.use === FindReferencesUse.Rename) {
+                node = getAdjustedRenameLocation(node);
+            }
+            return node;
         }
 
         export function getReferencesForFileName(fileName: string, program: Program, sourceFiles: readonly SourceFile[], sourceFilesSet: ReadonlySet<string> = new Set(sourceFiles.map(f => f.fileName))): readonly Entry[] {
