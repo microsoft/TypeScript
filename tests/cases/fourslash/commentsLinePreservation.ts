@@ -129,22 +129,22 @@ verify.quickInfos({
     3: ["(parameter) param1: string", "first line of param\n\nparam information third line"],
 
     g: ["function g(param1: string): void", "This is firstLine\nThis is second Line"],
-    4: ["(parameter) param1: string", " param information first line"],
+    4: ["(parameter) param1: string", "\n\nparam information first line"],
 
     h: ["function h(param1: string): void", "This is firstLine\nThis is second Line"],
-    5: ["(parameter) param1: string", " param information first line\n\n param information third line"],
+    5: ["(parameter) param1: string", "\n\nparam information first line\n\nparam information third line"],
 
     i: ["function i(param1: string): void", "This is firstLine\nThis is second Line"],
-    6: ["(parameter) param1: string", " param information first line\n\n param information third line"],
+    6: ["(parameter) param1: string", "\n\nparam information first line\n\nparam information third line"],
 
     j: ["function j(param1: string): void", "This is firstLine\nThis is second Line"],
-    7: ["(parameter) param1: string", " param information first line\n\n param information third line"],
+    7: ["(parameter) param1: string", "\n\nparam information first line\n\nparam information third line"],
 
     k: ["function k(param1: string): void", "This is firstLine\nThis is second Line"],
     8: ["(parameter) param1: string", "hello"],
 
     l: ["function l(param1: string): void", "This is firstLine\nThis is second Line"],
-    9: ["(parameter) param1: string", "first Line text\nblank line that shouldnt be shown when starting this \nsecond time information about the param again"],
+    9: ["(parameter) param1: string", "first Line text\n\n\nblank line that shouldnt be shown when starting this \nsecond time information about the param again"],
 
     m: ["function m(param1: string): void", "This is firstLine\nThis is second Line\n[1]: third * line"],
     10: ["(parameter) param1: string", "first Line text\nsecond line text"]
