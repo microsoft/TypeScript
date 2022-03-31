@@ -9,8 +9,8 @@ verify.quickInfos({
     1: "(type parameter) AA in type Call<AA>",
     2: "(type parameter) AA in type Index<AA>",
     3: "(type parameter) AA in type GenericMethod<AA>",
-    4: "(type parameter) BB in method<BB>(): AA & BB",
+    4: "(type parameter) BB in GenericMethod<AA>.method<BB>(): AA & BB",
     5: "(type parameter) TT in type Nesting<TT>",
-    6: "(type parameter) UU in method<UU>(): new <WW>() => TT & UU & WW",
+    6: "(type parameter) UU in Nesting<TT>.method<UU>(): new <WW>() => TT & UU & WW",
     7: "(type parameter) WW in <WW>(): TT & UU & WW"
 });

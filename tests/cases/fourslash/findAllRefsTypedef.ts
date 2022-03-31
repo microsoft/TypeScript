@@ -12,4 +12,4 @@
 ////let x;
 ////x.[|p|];
 
-verify.singleReferenceGroup("(property) p: number", "p");
+verify.singleReferenceGroup("(property) I.p: number", "p");

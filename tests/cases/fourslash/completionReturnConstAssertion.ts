@@ -11,7 +11,7 @@
 verify.completions({
     marker: "1",
     exact: [
-        { name: "foo1", text: "(property) foo1: 1" },
-        { name: "foo2", text: "(property) foo2: 2" },
+        { name: "foo1", text: "(property) T.foo1: 1" },
+        { name: "foo2", text: "(property) T.foo2: 2" },
     ],
 });
