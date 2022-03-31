@@ -79,7 +79,7 @@ namespace ts.server {
     if (typeof process !== "undefined") {
         start(initializeNodeSystem(), require("os").platform());
     }
-    // TODO: Learn how to pass arguments to server
+    // TODO: Not sure this is right
     else if (findArgument("vfs")) {
         // Get args from first message
         const listener = (e: any) => {

@@ -214,9 +214,9 @@ namespace fakes {
         }
     }
 
-   /**
-    * A fake `ts.CompilerHost` that leverages a virtual file system.
-    */
+    /**
+     * A fake `ts.CompilerHost` that leverages a virtual file system.
+     */
     export class CompilerHost implements ts.CompilerHost {
         public readonly sys: System;
         public readonly defaultLibLocation: string;
@@ -416,7 +416,7 @@ namespace fakes {
         diagnostic: ts.Diagnostic;
     }
 
-   function indentedText(indent: number, text: string) {
+    function indentedText(indent: number, text: string) {
         if (!indent) return text;
         let indentText = "";
         for (let i = 0; i < indent; i++) {
@@ -427,7 +427,7 @@ ${indentText}${text}`;
     }
 
     function expectedDiagnosticMessageToText([message, ...args]: ExpectedDiagnosticMessage) {
-        let text = ts.getLocaleSpecificMessage(message);
+        let text = ts.getLocaleSpecificMessage(message);
         if (args.length) {
             text = ts.formatStringFromArgs(text, args);
         }

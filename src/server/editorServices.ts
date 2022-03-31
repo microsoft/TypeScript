@@ -1830,8 +1830,6 @@ namespace ts.server {
             if (this.serverMode !== LanguageServiceMode.Semantic) {
                 return undefined;
             }
-            // TODO: My code leaves deleted files as: the scriptinfo doesn't list a containing project, but the contianing ProjectService.openFiles still has the file
-            // OR maybe vice versa
             Debug.assert(!isOpenScriptInfo(info) || this.openFiles.has(info.path));
             const projectRootPath = this.openFiles.get(info.path);
             const scriptInfo = Debug.checkDefined(this.getScriptInfo(info.path));
@@ -3691,10 +3689,7 @@ namespace ts.server {
 
         /* @internal */
         updateFileSystem(createdFiles: Iterator<protocol.FileSystemRequestArgs> | undefined, updatedFiles?: Iterator<protocol.FileSystemRequestArgs>, deletedFiles?: string[]) {
-            // TODO: Maybe it is somehow gauche or verboten to use protocol types but the translation in applyChangesInOpenFiles seems stupid
-            // 2. update vfs
-            // I THINK that only vfs needs to update, because none of these files should be open.
-            // (I guess files could update from the filesystem while they are still open, but that's something to solve at the end of prototyping I think)
+            // TODO: Not sure it's OK to use protocol.FileSystemRequestArgs here
             const fs = this.host as TestFSWithWatch.VirtualServerHost;
             if (createdFiles) {
                 let it;

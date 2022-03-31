@@ -665,7 +665,6 @@ namespace ts.server {
 
     export class Session<TMessage = string> implements EventSender {
         private readonly gcTimer: GcTimer;
-        // TODO: This will need to be replaced too
         protected projectService: ProjectService;
         private changeSeq = 0;
 
@@ -674,7 +673,6 @@ namespace ts.server {
         private currentRequestId!: number;
         private errorCheck: MultistepOperation;
 
-        // TODO: Replace this one?
         protected host: ServerHost;
         private readonly cancellationToken: ServerCancellationToken;
         protected readonly typingsInstaller: ITypingsInstaller;
@@ -2675,16 +2673,16 @@ namespace ts.server {
             [CommandNames.UpdateOpen]: (request: protocol.UpdateOpenRequest) => {
                 this.changeSeq++;
                 this.projectService.applyChangesInOpenFiles(
-                    request.arguments.openFiles && mapIterator(arrayIterator(request.arguments.openFiles), ({ file, fileContent, scriptKindName, projectRootPath }) => ({
-                        fileName: file,
-                        content: fileContent,
-                        scriptKind: scriptKindName,
-                        projectRootPath
+                    request.arguments.openFiles && mapIterator(arrayIterator(request.arguments.openFiles), file => ({
+                        fileName: file.file,
+                        content: file.fileContent,
+                        scriptKind: file.scriptKindName,
+                        projectRootPath: file.projectRootPath
                     })),
-                    request.arguments.changedFiles && mapIterator(arrayIterator(request.arguments.changedFiles), ({ fileName, textChanges}) => ({
-                        fileName,
-                        changes: mapDefinedIterator(arrayReverseIterator(textChanges), change => {
-                            const scriptInfo = Debug.checkDefined(this.projectService.getScriptInfo(fileName));
+                    request.arguments.changedFiles && mapIterator(arrayIterator(request.arguments.changedFiles), file => ({
+                        fileName: file.fileName,
+                        changes: mapDefinedIterator(arrayReverseIterator(file.textChanges), change => {
+                            const scriptInfo = Debug.checkDefined(this.projectService.getScriptInfo(file.fileName));
                             const start = scriptInfo.lineOffsetToPosition(change.start.line, change.start.offset);
                             const end = scriptInfo.lineOffsetToPosition(change.end.line, change.end.offset);
                             return start >= 0 ? { span: { start, length: end - start }, newText: change.newText } : undefined;
@@ -2711,9 +2709,9 @@ namespace ts.server {
             [CommandNames.UpdateFileSystem]: (request: protocol.UpdateFileSystemRequest) => {
                 this.changeSeq++;
                 this.projectService.updateFileSystem(
-                    request.arguments.created && arrayIterator(request.arguments.created), // open
-                    request.arguments.updated && arrayIterator(request.arguments.updated), //change
-                    request.arguments.deleted, // close
+                    request.arguments.created && arrayIterator(request.arguments.created),
+                    request.arguments.updated && arrayIterator(request.arguments.updated),
+                    request.arguments.deleted,
                 );
                 return this.requiredResponse(/*response*/ true);
             },
