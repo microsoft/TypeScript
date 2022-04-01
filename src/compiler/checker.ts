@@ -32963,7 +32963,7 @@ namespace ts {
                         }
                         if(languageVersion < ScriptTarget.ES2017) {
                             const diagnostic = createFileDiagnostic(sourceFile, span.start, span.length,
-                                Diagnostics.The_0_setting_1_does_not_support_top_level_await_expressions_Consider_switching_to_2, "target", ScriptTarget[languageVersion], ScriptTarget[ScriptTarget.ES2017]);
+                                Diagnostics.The_0_setting_1_does_not_support_top_level_await_expressions_Consider_switching_to_2, "target", (ts as any).ScriptTarget[languageVersion], (ts as any).ScriptTarget[ScriptTarget.ES2017]);
                             diagnostics.add(diagnostic);
                         }
                     }
@@ -44015,7 +44015,7 @@ namespace ts {
                             }
                             if(languageVersion < ScriptTarget.ES2017) {
                                 const diagnostic = createDiagnosticForNode(forInOrOfStatement.awaitModifier,
-                                    Diagnostics.The_0_setting_1_does_not_support_top_level_for_await_loops_Consider_switching_to_2, "target", ScriptTarget[languageVersion], ScriptTarget[ScriptTarget.ES2017]);
+                                    Diagnostics.The_0_setting_1_does_not_support_top_level_for_await_loops_Consider_switching_to_2, "target", (ts as any).ScriptTarget[languageVersion], (ts as any).ScriptTarget[ScriptTarget.ES2017]);
                                 diagnostics.add(diagnostic);
                             }
                         }
