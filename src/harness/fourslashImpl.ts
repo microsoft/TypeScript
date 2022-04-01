@@ -2120,7 +2120,8 @@ namespace FourSlash {
         }
 
         private getBaselineFileNameForContainingTestFile(ext = ".baseline") {
-            return ts.getBaseFileName(this.originalInputFileName).replace(ts.Extension.Ts, ext);
+            return this.testData.globalOptions[MetadataOptionNames.baselineFile] ||
+                ts.getBaseFileName(this.originalInputFileName).replace(ts.Extension.Ts, ext);
         }
 
         private getSignatureHelp({ triggerReason }: FourSlashInterface.VerifySignatureHelpOptions): ts.SignatureHelpItems | undefined {
