@@ -55,7 +55,7 @@ ${file.fileContent}`;
         }
         it("with updateFileSystem request", () => {
             // TODO: probably some other watcher tests, not sure what
-            const host = TestFSWithWatch.createVirtualServerHost([], { withSafeList: false });
+            const host = TestFSWithWatch.createVirtualServerHost([], { executingFilePath: "/a/tsc.js" });
             const session = createSession(host);
             const created = [app, file1, file2, file3, config, lib];
             session.executeCommandSeq<protocol.UpdateFileSystemRequest>({

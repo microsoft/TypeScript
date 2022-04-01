@@ -1,4 +1,47 @@
 namespace ts.TestFSWithWatch {
+    export const safeList = {
+        path: "/safeList.json" as Path,
+        content: JSON.stringify({
+            commander: "commander",
+            express: "express",
+            jquery: "jquery",
+            lodash: "lodash",
+            moment: "moment",
+            chroma: "chroma-js"
+        })
+    };
+
+    export const libFile: File = {
+        path: "/a/lib/lib.d.ts",
+        content: `/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }`
+    };
+
+    function getExecutingFilePathFromLibFile(): string {
+        return combinePaths(getDirectoryPath(libFile.path), "tsc.js");
+    }
+
+    export interface TestServerHostCreationParameters {
+        useCaseSensitiveFileNames?: boolean;
+        executingFilePath?: string;
+        currentDirectory?: string;
+        newLine?: string;
+        windowsStyleRoot?: string;
+        environmentVariables?: ESMap<string, string>;
+        runWithoutRecursiveWatches?: boolean;
+        runWithFallbackPolling?: boolean;
+        withSafeList?: boolean;
+    }
+
     export function createWatchedSystem(fileOrFolderList: readonly FileOrFolderOrSymLink[], params?: TestServerHostCreationParameters): TestServerHost {
         return new TestServerHost(/*withSafelist*/ false, fileOrFolderList, params);
     }
@@ -9,6 +52,34 @@ namespace ts.TestFSWithWatch {
         patchWriteFileEnsuringDirectory(host);
         return host;
     }
+
+    export function getDiffInKeys<T>(map: ESMap<string, T>, expectedKeys: readonly string[]) {
+        if (map.size === expectedKeys.length) {
+            return "";
+        }
+        const notInActual: string[] = [];
+        const duplicates: string[] = [];
+        const seen = new Map<string, true>();
+        forEach(expectedKeys, expectedKey => {
+            if (seen.has(expectedKey)) {
+                duplicates.push(expectedKey);
+                return;
+            }
+            seen.set(expectedKey, true);
+            if (!map.has(expectedKey)) {
+                notInActual.push(expectedKey);
+            }
+        });
+        const inActualNotExpected: string[] = [];
+        map.forEach((_value, key) => {
+            if (!seen.has(key)) {
+                inActualNotExpected.push(key);
+            }
+            seen.set(key, true);
+        });
+        return `\n\nNotInActual: ${notInActual}\nDuplicates: ${duplicates}\nInActualButNotInExpected: ${inActualNotExpected}`;
+    }
+
     export function verifyMapSize(caption: string, map: ESMap<string, any>, expectedKeys: readonly string[]) {
         assert.equal(map.size, expectedKeys.length, `${caption}: incorrect size of map: Actual keys: ${arrayFrom(map.keys())} Expected: ${expectedKeys}${getDiffInKeys(map, expectedKeys)}`);
     }
@@ -155,11 +226,13 @@ namespace ts.TestFSWithWatch {
     }
 
     export class TestServerHost extends VirtualServerHost implements server.ServerHost {
+        readonly screenClears: number[] = [];
+        private readonly output: string[] = [];
         constructor(
             public withSafeList: boolean,
             fileOrFolderorSymLinkList: readonly FileOrFolderOrSymLink[],
             options: TestServerHostCreationParameters = {}) {
-            super(withSafeList, fileOrFolderorSymLinkList, options);
+            super(fileOrFolderorSymLinkList.concat(withSafeList ? safeList : []), { ...options, executingFilePath: options.executingFilePath || getExecutingFilePathFromLibFile() });
         }
         runQueuedImmediateCallbacks(checkCount?: number) {
             if (checkCount !== undefined) {
@@ -177,5 +250,178 @@ namespace ts.TestFSWithWatch {
             const callbacksCount = this.timeoutCallbacks.count();
             assert.equal(callbacksCount, expected, `expected ${expected} timeout callbacks queued but found ${callbacksCount}.`);
         }
+
+        clearScreen(): void {
+            this.screenClears.push(this.output.length);
+        }
+
+        override write(message: string) {
+            this.output.push(message);
+        }
+
+        getOutput(): readonly string[] {
+            return this.output;
+        }
+
+        clearOutput() {
+            clear(this.output);
+            this.screenClears.length = 0;
+        }
+
+        serializeOutput(baseline: string[]) {
+            const output = this.getOutput();
+            let start = 0;
+            baseline.push("Output::");
+            for (const screenClear of this.screenClears) {
+                baselineOutputs(baseline, output, start, screenClear);
+                start = screenClear;
+                baseline.push(">> Screen clear");
+            }
+            baselineOutputs(baseline, output, start);
+            baseline.push("");
+            this.clearOutput();
+        }
+
+        snap(): ESMap<Path, FSEntry> {
+            const result = new Map<Path, FSEntry>();
+            this.fs.forEach((value, key) => {
+                const cloneValue = clone(value);
+                if (isFsFolder(cloneValue)) {
+                    cloneValue.entries = cloneValue.entries.map(clone) as SortedArray<FSEntry>;
+                }
+                result.set(key, cloneValue);
+            });
+
+            return result;
+        }
+
+        writtenFiles?: ESMap<Path, number>;
+        diff(baseline: string[], base: ESMap<string, FSEntry> = new Map()) {
+            this.fs.forEach(newFsEntry => {
+                diffFsEntry(baseline, base.get(newFsEntry.path), newFsEntry, this.writtenFiles);
+            });
+            base.forEach(oldFsEntry => {
+                const newFsEntry = this.fs.get(oldFsEntry.path);
+                if (!newFsEntry) {
+                    diffFsEntry(baseline, oldFsEntry, newFsEntry, this.writtenFiles);
+                }
+            });
+            baseline.push("");
+        }
+
+        serializeWatches(baseline: string[]) {
+            serializeMultiMap(baseline, "WatchedFiles", this.watchedFiles, ({ fileName, pollingInterval }) => ({ fileName, pollingInterval }));
+            baseline.push("");
+            serializeMultiMap(baseline, "FsWatches", this.fsWatches, serializeTestFsWatcher);
+            baseline.push("");
+            serializeMultiMap(baseline, "FsWatchesRecursive", this.fsWatchesRecursive, serializeTestFsWatcher);
+            baseline.push("");
+        }
+    }
+
+    function diffFsFile(baseline: string[], fsEntry: FsFile) {
+        baseline.push(`//// [${fsEntry.fullPath}]\r\n${fsEntry.content}`, "");
+    }
+    function diffFsSymLink(baseline: string[], fsEntry: FsSymLink) {
+        baseline.push(`//// [${fsEntry.fullPath}] symlink(${fsEntry.symLink})`);
+    }
+    function diffFsEntry(baseline: string[], oldFsEntry: FSEntry | undefined, newFsEntry: FSEntry | undefined, writtenFiles: ESMap<string, any> | undefined): void {
+        const file = newFsEntry && newFsEntry.fullPath;
+        if (isFsFile(oldFsEntry)) {
+            if (isFsFile(newFsEntry)) {
+                if (oldFsEntry.content !== newFsEntry.content) {
+                    diffFsFile(baseline, newFsEntry);
+                }
+                else if (oldFsEntry.modifiedTime !== newFsEntry.modifiedTime) {
+                    if (oldFsEntry.fullPath !== newFsEntry.fullPath) {
+                        baseline.push(`//// [${file}] file was renamed from file ${oldFsEntry.fullPath}`);
+                    }
+                    else if (writtenFiles && !writtenFiles.has(newFsEntry.path)) {
+                        baseline.push(`//// [${file}] file changed its modified time`);
+                    }
+                    else {
+                        baseline.push(`//// [${file}] file written with same contents`);
+                    }
+                }
+            }
+            else {
+                baseline.push(`//// [${oldFsEntry.fullPath}] deleted`);
+                if (isFsSymLink(newFsEntry)) {
+                    diffFsSymLink(baseline, newFsEntry);
+                }
+            }
+        }
+        else if (isFsSymLink(oldFsEntry)) {
+            if (isFsSymLink(newFsEntry)) {
+                if (oldFsEntry.symLink !== newFsEntry.symLink) {
+                    diffFsSymLink(baseline, newFsEntry);
+                }
+                else if (oldFsEntry.modifiedTime !== newFsEntry.modifiedTime) {
+                    if (oldFsEntry.fullPath !== newFsEntry.fullPath) {
+                        baseline.push(`//// [${file}] symlink was renamed from symlink ${oldFsEntry.fullPath}`);
+                    }
+                    else if (writtenFiles && !writtenFiles.has(newFsEntry.path)) {
+                        baseline.push(`//// [${file}] symlink changed its modified time`);
+                    }
+                    else {
+                        baseline.push(`//// [${file}] symlink written with same link`);
+                    }
+                }
+            }
+            else {
+                baseline.push(`//// [${oldFsEntry.fullPath}] deleted symlink`);
+                if (isFsFile(newFsEntry)) {
+                    diffFsFile(baseline, newFsEntry);
+                }
+            }
+        }
+        else if (isFsFile(newFsEntry)) {
+            diffFsFile(baseline, newFsEntry);
+        }
+        else if (isFsSymLink(newFsEntry)) {
+            diffFsSymLink(baseline, newFsEntry);
+        }
+    }
+
+    function serializeTestFsWatcher({ directoryName, fallbackPollingInterval, fallbackOptions }: VirtualFsWatcher) {
+        return {
+            directoryName,
+            fallbackPollingInterval,
+            fallbackOptions: serializeWatchOptions(fallbackOptions)
+        };
+    }
+
+    function serializeWatchOptions(fallbackOptions: WatchOptions | undefined) {
+        if (!fallbackOptions) return undefined;
+        const { watchFile, watchDirectory, fallbackPolling, ...rest } = fallbackOptions;
+        return {
+            watchFile: watchFile !== undefined ? WatchFileKind[watchFile] : undefined,
+            watchDirectory: watchDirectory !== undefined ? WatchDirectoryKind[watchDirectory] : undefined,
+            fallbackPolling: fallbackPolling !== undefined ? PollingWatchKind[fallbackPolling] : undefined,
+            ...rest
+        };
+    }
+
+    function serializeMultiMap<T, U>(baseline: string[], caption: string, multiMap: MultiMap<string, T>, valueMapper: (value: T) => U) {
+        baseline.push(`${caption}::`);
+        multiMap.forEach((values, key) => {
+            baseline.push(`${key}:`);
+            for (const value of values) {
+                baseline.push(`  ${JSON.stringify(valueMapper(value))}`);
+            }
+        });
+    }
+
+    function baselineOutputs(baseline: string[], output: readonly string[], start: number, end = output.length) {
+        let baselinedOutput: string[] | undefined;
+        for (let i = start; i < end; i++) {
+            (baselinedOutput ||= []).push(output[i].replace(/Elapsed::\s[0-9]+(?:\.\d+)?ms/g, "Elapsed:: *ms"));
+        }
+        if (baselinedOutput) baseline.push(baselinedOutput.join(""));
+    }
+
+    export const tsbuildProjectsLocation = "/user/username/projects";
+    export function getTsBuildProjectFilePath(project: string, file: string) {
+        return `${tsbuildProjectsLocation}/${project}/${file}`;
     }
 }

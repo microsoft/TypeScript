@@ -1,55 +1,22 @@
 /* @internal */
 namespace ts.TestFSWithWatch {
-    export const libFile: File = {
-        path: "/a/lib/lib.d.ts",
-        content: `/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }`
-    };
-
-    export const safeList = {
-        path: "/safeList.json" as Path,
-        content: JSON.stringify({
-            commander: "commander",
-            express: "express",
-            jquery: "jquery",
-            lodash: "lodash",
-            moment: "moment",
-            chroma: "chroma-js"
-        })
-    };
-
-    function getExecutingFilePathFromLibFile(): string {
-        return combinePaths(getDirectoryPath(libFile.path), "tsc.js");
-    }
-
-    export interface TestServerHostCreationParameters {
+    export interface VirtualServerHostCreationParameters {
         useCaseSensitiveFileNames?: boolean;
-        executingFilePath?: string;
+        executingFilePath: string;
         currentDirectory?: string;
         newLine?: string;
         windowsStyleRoot?: string;
         environmentVariables?: ESMap<string, string>;
         runWithoutRecursiveWatches?: boolean;
         runWithFallbackPolling?: boolean;
-        withSafeList?: boolean;
     }
 
-    export function createVirtualWatchedSystem(fileOrFolderList: readonly FileOrFolderOrSymLink[], params?: TestServerHostCreationParameters): VirtualServerHost {
-        return new VirtualServerHost(!!params?.withSafeList, fileOrFolderList, params);
+    export function createVirtualWatchedSystem(fileOrFolderList: readonly FileOrFolderOrSymLink[], params?: VirtualServerHostCreationParameters): VirtualServerHost {
+        return new VirtualServerHost(fileOrFolderList, params);
     }
 
-    export function createVirtualServerHost(fileOrFolderList: readonly FileOrFolderOrSymLink[], params?: TestServerHostCreationParameters): VirtualServerHost {
-        const withSafeList = params?.withSafeList !== undefined ? params.withSafeList : true;
-        const host = new VirtualServerHost(withSafeList, fileOrFolderList, params);
+    export function createVirtualServerHost(fileOrFolderList: readonly FileOrFolderOrSymLink[], params?: VirtualServerHostCreationParameters): VirtualServerHost {
+        const host = new VirtualServerHost(fileOrFolderList, params);
         // Just like sys, patch the host to use writeFile
         patchWriteFileEnsuringDirectory(host);
         return host;
@@ -130,33 +97,6 @@ interface Array<T> { length: number; [n: number]: T; }`
         return { close: () => map.remove(path, callback) };
     }
 
-    export function getDiffInKeys<T>(map: ESMap<string, T>, expectedKeys: readonly string[]) {
-        if (map.size === expectedKeys.length) {
-            return "";
-        }
-        const notInActual: string[] = [];
-        const duplicates: string[] = [];
-        const seen = new Map<string, true>();
-        forEach(expectedKeys, expectedKey => {
-            if (seen.has(expectedKey)) {
-                duplicates.push(expectedKey);
-                return;
-            }
-            seen.set(expectedKey, true);
-            if (!map.has(expectedKey)) {
-                notInActual.push(expectedKey);
-            }
-        });
-        const inActualNotExpected: string[] = [];
-        map.forEach((_value, key) => {
-            if (!seen.has(key)) {
-                inActualNotExpected.push(key);
-            }
-            seen.set(key, true);
-        });
-        return `\n\nNotInActual: ${notInActual}\nDuplicates: ${duplicates}\nInActualButNotInExpected: ${inActualNotExpected}`;
-    }
-
     class Callbacks {
         private map: TimeOutCallback[] = [];
         private nextId = 1;
@@ -205,13 +145,13 @@ interface Array<T> { length: number; [n: number]: T; }`
 
     type TimeOutCallback = () => any;
 
-    export interface TestFileWatcher {
+    export interface VirtualFileWatcher {
         cb: FileWatcherCallback;
         fileName: string;
         pollingInterval: PollingInterval;
     }
 
-    export interface TestFsWatcher {
+    export interface VirtualFsWatcher {
         cb: FsWatchCallback;
         directoryName: string;
         fallbackPollingInterval: PollingInterval;
@@ -239,35 +179,22 @@ interface Array<T> { length: number; [n: number]: T; }`
     }
 
     const timeIncrements = 1000;
-    export interface TestServerHostOptions {
-        useCaseSensitiveFileNames: boolean;
-        executingFilePath: string;
-        currentDirectory: string;
-        fileOrFolderorSymLinkList: readonly FileOrFolderOrSymLink[];
-        newLine?: string;
-        useWindowsStylePaths?: boolean;
-        environmentVariables?: ESMap<string, string>;
-    }
-
     /**
      * also implements {server.ServerHost} but that would create a circular dependency
      */
     export class VirtualServerHost implements FormatDiagnosticsHost, ModuleResolutionHost {
         args: string[] = [];
 
-        private readonly output: string[] = [];
-
-        private fs: ESMap<Path, FSEntry> = new Map();
+        protected fs: ESMap<Path, FSEntry> = new Map();
         private time = timeIncrements;
         getCanonicalFileName: (s: string) => string;
         private toPath: (f: string) => Path;
         protected timeoutCallbacks = new Callbacks();
         protected immediateCallbacks = new Callbacks();
-        readonly screenClears: number[] = [];
 
-        readonly watchedFiles = createMultiMap<Path, TestFileWatcher>();
-        readonly fsWatches = createMultiMap<Path, TestFsWatcher>();
-        readonly fsWatchesRecursive = createMultiMap<Path, TestFsWatcher>();
+        readonly watchedFiles = createMultiMap<Path, VirtualFileWatcher>();
+        readonly fsWatches = createMultiMap<Path, VirtualFsWatcher>();
+        readonly fsWatchesRecursive = createMultiMap<Path, VirtualFsWatcher>();
         runWithFallbackPolling: boolean;
         public readonly useCaseSensitiveFileNames: boolean;
         public readonly newLine: string;
@@ -280,13 +207,12 @@ interface Array<T> { length: number; [n: number]: T; }`
         watchFile: HostWatchFile;
         watchDirectory: HostWatchDirectory;
         constructor(
-            public withSafeList: boolean,
-            fileOrFolderorSymLinkList: readonly FileOrFolderOrSymLink[],
+            fileOrFolderOrSymLinkList: readonly FileOrFolderOrSymLink[],
             {
                 useCaseSensitiveFileNames, executingFilePath, currentDirectory,
                 newLine, windowsStyleRoot, environmentVariables,
                 runWithoutRecursiveWatches, runWithFallbackPolling
-            }: TestServerHostCreationParameters = {}) {
+            }: VirtualServerHostCreationParameters = { executingFilePath: "" }) {
             this.useCaseSensitiveFileNames = !!useCaseSensitiveFileNames;
             this.newLine = newLine || "\n";
             this.windowsStyleRoot = windowsStyleRoot;
@@ -294,7 +220,7 @@ interface Array<T> { length: number; [n: number]: T; }`
             currentDirectory = currentDirectory || "/";
             this.getCanonicalFileName = createGetCanonicalFileName(!!useCaseSensitiveFileNames);
             this.toPath = s => toPath(s, currentDirectory, this.getCanonicalFileName);
-            this.executingFilePath = this.getHostSpecificPath(executingFilePath || getExecutingFilePathFromLibFile());
+            this.executingFilePath = this.getHostSpecificPath(executingFilePath);
             this.currentDirectory = this.getHostSpecificPath(currentDirectory);
             this.runWithFallbackPolling = !!runWithFallbackPolling;
             const tscWatchFile = this.environmentVariables && this.environmentVariables.get("TSC_WATCHFILE");
@@ -326,41 +252,11 @@ interface Array<T> { length: number; [n: number]: T; }`
             });
             this.watchFile = watchFile;
             this.watchDirectory = watchDirectory;
-            this.reloadFS(fileOrFolderorSymLinkList);
-        }
-
-        // Output is pretty
-        writeOutputIsTTY() {
-            return true;
-        }
-
-        getNewLine() {
-            return this.newLine;
-        }
-
-        toNormalizedAbsolutePath(s: string) {
-            return getNormalizedAbsolutePath(s, this.currentDirectory);
-        }
-
-        toFullPath(s: string) {
-            return this.toPath(this.toNormalizedAbsolutePath(s));
-        }
-
-        getHostSpecificPath(s: string) {
-            if (this.windowsStyleRoot && s.startsWith(directorySeparator)) {
-                return this.windowsStyleRoot + s.substring(1);
-            }
-            return s;
-        }
-
-        now() {
-            this.time += timeIncrements;
-            return new Date(this.time);
+            this.reloadFS(fileOrFolderOrSymLinkList);
         }
 
         private reloadFS(fileOrFolderOrSymLinkList: readonly FileOrFolderOrSymLink[], options?: Partial<ReloadWatchInvokeOptions>) {
             Debug.assert(this.fs.size === 0);
-            fileOrFolderOrSymLinkList = fileOrFolderOrSymLinkList.concat(this.withSafeList ? safeList : []);
             const filesOrFoldersToLoad: readonly FileOrFolderOrSymLink[] = !this.windowsStyleRoot ? fileOrFolderOrSymLinkList :
                 fileOrFolderOrSymLinkList.map<FileOrFolderOrSymLink>(f => {
                     const result = clone(f);
@@ -402,6 +298,35 @@ interface Array<T> { length: number; [n: number]: T; }`
                     this.ensureFileOrFolder(fileOrDirectory, options && options.ignoreWatchInvokedWithTriggerAsFileCreate);
                 }
             }
+        }
+
+        // Output is pretty
+        writeOutputIsTTY() {
+            return true;
+        }
+
+        getNewLine() {
+            return this.newLine;
+        }
+
+        toNormalizedAbsolutePath(s: string) {
+            return getNormalizedAbsolutePath(s, this.currentDirectory);
+        }
+
+        toFullPath(s: string) {
+            return this.toPath(this.toNormalizedAbsolutePath(s));
+        }
+
+        getHostSpecificPath(s: string) {
+            if (this.windowsStyleRoot && s.startsWith(directorySeparator)) {
+                return this.windowsStyleRoot + s.substring(1);
+            }
+            return s;
+        }
+
+        now() {
+            this.time += timeIncrements;
+            return new Date(this.time);
         }
 
         modifyFile(filePath: string, content: string, options?: Partial<ReloadWatchInvokeOptions>) {
@@ -634,7 +559,7 @@ interface Array<T> { length: number; [n: number]: T; }`
             invokeWatcherCallbacks(this.watchedFiles.get(this.toPath(fileFullPath)), ({ cb, fileName }) => cb(useFileNameInCallback ? fileName : fileFullPath, eventKind));
         }
 
-        private fsWatchCallback(map: MultiMap<Path, TestFsWatcher>, fullPath: string, eventName: "rename" | "change", entryFullPath?: string) {
+        private fsWatchCallback(map: MultiMap<Path, VirtualFsWatcher>, fullPath: string, eventName: "rename" | "change", entryFullPath?: string) {
             invokeWatcherCallbacks(map.get(this.toPath(fullPath)), ({ cb }) => cb(eventName, entryFullPath ? this.getRelativePathToDirectory(fullPath, entryFullPath) : ""));
         }
 
@@ -827,10 +752,6 @@ interface Array<T> { length: number; [n: number]: T; }`
             this.timeoutCallbacks.unregister(timeoutId);
         }
 
-        clearScreen(): void {
-            this.screenClears.push(this.output.length);
-        }
-
         runQueuedTimeoutCallbacks(timeoutId?: number) {
             try {
                 this.timeoutCallbacks.invoke(timeoutId);
@@ -905,67 +826,8 @@ interface Array<T> { length: number; [n: number]: T; }`
             this.modifyFile(path, this.readFile(path) + content, options);
         }
 
-        write(message: string) {
-            this.output.push(message);
-        }
-
-        getOutput(): readonly string[] {
-            return this.output;
-        }
-
-        clearOutput() {
-            clear(this.output);
-            this.screenClears.length = 0;
-        }
-
-        serializeOutput(baseline: string[]) {
-            const output = this.getOutput();
-            let start = 0;
-            baseline.push("Output::");
-            for (const screenClear of this.screenClears) {
-                baselineOutputs(baseline, output, start, screenClear);
-                start = screenClear;
-                baseline.push(">> Screen clear");
-            }
-            baselineOutputs(baseline, output, start);
-            baseline.push("");
-            this.clearOutput();
-        }
-
-        snap(): ESMap<Path, FSEntry> {
-            const result = new Map<Path, FSEntry>();
-            this.fs.forEach((value, key) => {
-                const cloneValue = clone(value);
-                if (isFsFolder(cloneValue)) {
-                    cloneValue.entries = cloneValue.entries.map(clone) as SortedArray<FSEntry>;
-                }
-                result.set(key, cloneValue);
-            });
-
-            return result;
-        }
-
-        writtenFiles?: ESMap<Path, number>;
-        diff(baseline: string[], base: ESMap<string, FSEntry> = new Map()) {
-            this.fs.forEach(newFsEntry => {
-                diffFsEntry(baseline, base.get(newFsEntry.path), newFsEntry, this.writtenFiles);
-            });
-            base.forEach(oldFsEntry => {
-                const newFsEntry = this.fs.get(oldFsEntry.path);
-                if (!newFsEntry) {
-                    diffFsEntry(baseline, oldFsEntry, newFsEntry, this.writtenFiles);
-                }
-            });
-            baseline.push("");
-        }
-
-        serializeWatches(baseline: string[]) {
-            serializeMultiMap(baseline, "WatchedFiles", this.watchedFiles, ({ fileName, pollingInterval }) => ({ fileName, pollingInterval }));
-            baseline.push("");
-            serializeMultiMap(baseline, "FsWatches", this.fsWatches, serializeTestFsWatcher);
-            baseline.push("");
-            serializeMultiMap(baseline, "FsWatchesRecursive", this.fsWatchesRecursive, serializeTestFsWatcher);
-            baseline.push("");
+        write(_message: string) {
+            // Do nothing
         }
 
         realpath(s: string): string {
@@ -995,114 +857,9 @@ interface Array<T> { length: number; [n: number]: T; }`
             this.exitCode = exitCode;
             throw new Error(this.exitMessage);
         }
+
         getEnvironmentVariable(name: string) {
             return this.environmentVariables && this.environmentVariables.get(name) || "";
         }
-    }
-
-    function diffFsFile(baseline: string[], fsEntry: FsFile) {
-        baseline.push(`//// [${fsEntry.fullPath}]\r\n${fsEntry.content}`, "");
-    }
-    function diffFsSymLink(baseline: string[], fsEntry: FsSymLink) {
-        baseline.push(`//// [${fsEntry.fullPath}] symlink(${fsEntry.symLink})`);
-    }
-    function diffFsEntry(baseline: string[], oldFsEntry: FSEntry | undefined, newFsEntry: FSEntry | undefined, writtenFiles: ESMap<string, any> | undefined): void {
-        const file = newFsEntry && newFsEntry.fullPath;
-        if (isFsFile(oldFsEntry)) {
-            if (isFsFile(newFsEntry)) {
-                if (oldFsEntry.content !== newFsEntry.content) {
-                    diffFsFile(baseline, newFsEntry);
-                }
-                else if (oldFsEntry.modifiedTime !== newFsEntry.modifiedTime) {
-                    if (oldFsEntry.fullPath !== newFsEntry.fullPath) {
-                        baseline.push(`//// [${file}] file was renamed from file ${oldFsEntry.fullPath}`);
-                    }
-                    else if (writtenFiles && !writtenFiles.has(newFsEntry.path)) {
-                        baseline.push(`//// [${file}] file changed its modified time`);
-                    }
-                    else {
-                        baseline.push(`//// [${file}] file written with same contents`);
-                    }
-                }
-            }
-            else {
-                baseline.push(`//// [${oldFsEntry.fullPath}] deleted`);
-                if (isFsSymLink(newFsEntry)) {
-                    diffFsSymLink(baseline, newFsEntry);
-                }
-            }
-        }
-        else if (isFsSymLink(oldFsEntry)) {
-            if (isFsSymLink(newFsEntry)) {
-                if (oldFsEntry.symLink !== newFsEntry.symLink) {
-                    diffFsSymLink(baseline, newFsEntry);
-                }
-                else if (oldFsEntry.modifiedTime !== newFsEntry.modifiedTime) {
-                    if (oldFsEntry.fullPath !== newFsEntry.fullPath) {
-                        baseline.push(`//// [${file}] symlink was renamed from symlink ${oldFsEntry.fullPath}`);
-                    }
-                    else if (writtenFiles && !writtenFiles.has(newFsEntry.path)) {
-                        baseline.push(`//// [${file}] symlink changed its modified time`);
-                    }
-                    else {
-                        baseline.push(`//// [${file}] symlink written with same link`);
-                    }
-                }
-            }
-            else {
-                baseline.push(`//// [${oldFsEntry.fullPath}] deleted symlink`);
-                if (isFsFile(newFsEntry)) {
-                    diffFsFile(baseline, newFsEntry);
-                }
-            }
-        }
-        else if (isFsFile(newFsEntry)) {
-            diffFsFile(baseline, newFsEntry);
-        }
-        else if (isFsSymLink(newFsEntry)) {
-            diffFsSymLink(baseline, newFsEntry);
-        }
-    }
-
-    function serializeTestFsWatcher({ directoryName, fallbackPollingInterval, fallbackOptions }: TestFsWatcher) {
-        return {
-            directoryName,
-            fallbackPollingInterval,
-            fallbackOptions: serializeWatchOptions(fallbackOptions)
-        };
-    }
-
-    function serializeWatchOptions(fallbackOptions: WatchOptions | undefined) {
-        if (!fallbackOptions) return undefined;
-        const { watchFile, watchDirectory, fallbackPolling, ...rest } = fallbackOptions;
-        return {
-            watchFile: watchFile !== undefined ? WatchFileKind[watchFile] : undefined,
-            watchDirectory: watchDirectory !== undefined ? WatchDirectoryKind[watchDirectory] : undefined,
-            fallbackPolling: fallbackPolling !== undefined ? PollingWatchKind[fallbackPolling] : undefined,
-            ...rest
-        };
-    }
-
-    function serializeMultiMap<T, U>(baseline: string[], caption: string, multiMap: MultiMap<string, T>, valueMapper: (value: T) => U) {
-        baseline.push(`${caption}::`);
-        multiMap.forEach((values, key) => {
-            baseline.push(`${key}:`);
-            for (const value of values) {
-                baseline.push(`  ${JSON.stringify(valueMapper(value))}`);
-            }
-        });
-    }
-
-    function baselineOutputs(baseline: string[], output: readonly string[], start: number, end = output.length) {
-        let baselinedOutput: string[] | undefined;
-        for (let i = start; i < end; i++) {
-            (baselinedOutput ||= []).push(output[i].replace(/Elapsed::\s[0-9]+(?:\.\d+)?ms/g, "Elapsed:: *ms"));
-        }
-        if (baselinedOutput) baseline.push(baselinedOutput.join(""));
-    }
-
-    export const tsbuildProjectsLocation = "/user/username/projects";
-    export function getTsBuildProjectFilePath(project: string, file: string) {
-        return `${tsbuildProjectsLocation}/${project}/${file}`;
     }
 }

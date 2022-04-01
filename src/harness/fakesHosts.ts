@@ -427,7 +427,7 @@ ${indentText}${text}`;
     }
 
     function expectedDiagnosticMessageToText([message, ...args]: ExpectedDiagnosticMessage) {
-        let text = ts.getLocaleSpecificMessage(message);
+        let text = ts.getLocaleSpecificMessage(message);
         if (args.length) {
             text = ts.formatStringFromArgs(text, args);
         }
