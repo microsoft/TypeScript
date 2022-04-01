@@ -32957,7 +32957,7 @@ namespace ts {
                             }
                             else {
                                 const diagnostic = createFileDiagnostic(sourceFile, span.start, span.length,
-                                    Diagnostics._0_is_not_allowed_in_CommonJS_modules_Please_convert_to_ES_module, "Top-level 'await' expression");
+                                    Diagnostics.Top_level_await_expression_is_not_allowed_in_CommonJS_modules_Please_convert_to_ES_module);
                                 diagnostics.add(diagnostic);
                             }
                         }
@@ -44009,7 +44009,7 @@ namespace ts {
                                 }
                                 else {
                                     const diagnostic = createDiagnosticForNode(forInOrOfStatement.awaitModifier,
-                                        Diagnostics._0_is_not_allowed_in_CommonJS_modules_Please_convert_to_ES_module, "Top-level 'for await' loop");
+                                        Diagnostics.Top_level_for_await_loop_is_not_allowed_in_CommonJS_modules_Please_convert_to_ES_module);
                                     diagnostics.add(diagnostic);
                                 }
                             }
