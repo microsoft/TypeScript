@@ -8840,6 +8840,30 @@ namespace ts {
             return undefined;
         }
 
+        function getTypeForCatchClauseVariableDeclaration(declaration: VariableDeclaration | BindingElement) {
+            const typeNode = getEffectiveTypeAnnotationNode(getRootDeclaration(declaration));
+            const type = typeNode ? getTypeOfNode(typeNode) :
+                useUnknownInCatchVariables ? unknownType : anyType;
+
+            if (isCatchClauseVariableDeclaration(declaration)) {
+                if (typeNode === undefined) {
+                    if (isBindingPattern(declaration.name)) {
+                        return getTypeFromBindingPattern(declaration.name, /*includePatternInType*/ false, /*reportErrors*/ false);
+                    }
+                    return useUnknownInCatchVariables ? unknownType : anyType;
+                }
+                // an errorType will make `checkTryStatement` issue an error
+                return isTypeAny(type) || type === unknownType ? type : errorType;
+            }
+
+            if (isBindingElement(declaration) && isBindingPattern(declaration.parent)) {
+                if (isCatchClauseVariableDeclaration(declaration.parent.parent) && type === unknownType) {
+                    return getBindingElementTypeFromParentType(declaration, unknownType);
+                }
+                return declaration.dotDotDotToken ? anyType : getTypeForBindingElement(declaration);
+            }
+        }
+
         function isNullOrUndefined(node: Expression) {
             const expr = skipParentheses(node, /*excludeJSDocTypeAssertions*/ true);
             return expr.kind === SyntaxKind.NullKeyword || expr.kind === SyntaxKind.Identifier && getResolvedSymbol(expr as Identifier) === undefinedSymbol;
@@ -8874,6 +8898,10 @@ namespace ts {
                 // or it may have led to an error inside getElementTypeOfIterable.
                 const forOfStatement = declaration.parent.parent;
                 return checkRightHandSideOfForOf(forOfStatement) || anyType;
+            }
+
+            if (isCatchClauseVariableDeclarationOrBindingElement(declaration)) {
+                return getTypeForCatchClauseVariableDeclaration(declaration as VariableDeclaration | BindingElement);
             }
 
             if (isBindingPattern(declaration.parent)) {
@@ -9520,18 +9548,8 @@ namespace ts {
                 members.set("exports" as __String, result);
                 return createAnonymousType(symbol, members, emptyArray, emptyArray, emptyArray);
             }
-            // Handle catch clause variables
             Debug.assertIsDefined(symbol.valueDeclaration);
             const declaration = symbol.valueDeclaration;
-            if (isCatchClauseVariableDeclarationOrBindingElement(declaration)) {
-                const typeNode = getEffectiveTypeAnnotationNode(declaration);
-                if (typeNode === undefined) {
-                    return useUnknownInCatchVariables ? unknownType : anyType;
-                }
-                const type = getTypeOfNode(typeNode);
-                // an errorType will make `checkTryStatement` issue an error
-                return isTypeAny(type) || type === unknownType ? type : errorType;
-            }
             // Handle export default expressions
             if (isSourceFile(declaration) && isJsonSourceFile(declaration)) {
                 if (!declaration.statements.length) {
@@ -38872,17 +38890,20 @@ namespace ts {
         function checkTryStatement(node: TryStatement) {
             // Grammar checking
             checkGrammarStatementInAmbientContext(node);
-
             checkBlock(node.tryBlock);
+
             const catchClause = node.catchClause;
             if (catchClause) {
                 // Grammar checking
                 if (catchClause.variableDeclaration) {
                     const declaration = catchClause.variableDeclaration;
+                    if (isBindingPattern(declaration.name)) {
+                        forEach(declaration.name.elements, checkSourceElement);
+                    }
                     const typeNode = getEffectiveTypeAnnotationNode(getRootDeclaration(declaration));
                     if (typeNode) {
                         const type = getTypeForVariableLikeDeclaration(declaration, /*includeOptionality*/ false, CheckMode.Normal);
-                        if (type && !(type.flags & TypeFlags.AnyOrUnknown)) {
+                        if (type && isErrorType(type)) {
                             grammarErrorOnFirstToken(typeNode, Diagnostics.Catch_clause_variable_type_annotation_must_be_any_or_unknown_if_specified);
                         }
                     }

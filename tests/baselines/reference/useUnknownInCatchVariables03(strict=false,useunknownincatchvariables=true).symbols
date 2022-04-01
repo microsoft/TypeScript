@@ -1,0 +1,30 @@
+=== tests/cases/compiler/useUnknownInCatchVariables03.ts ===
+try {}
+catch ({ name }: unknown) { name; }
+>name : Symbol(name, Decl(useUnknownInCatchVariables03.ts, 1, 8))
+>name : Symbol(name, Decl(useUnknownInCatchVariables03.ts, 1, 8))
+
+try {}
+catch ({ name }: unknown) {}
+>name : Symbol(name, Decl(useUnknownInCatchVariables03.ts, 4, 8))
+
+try {}
+catch ({ a: { b } }: unknown) { b; }
+>b : Symbol(b, Decl(useUnknownInCatchVariables03.ts, 7, 13))
+>b : Symbol(b, Decl(useUnknownInCatchVariables03.ts, 7, 13))
+
+try {}
+catch ({ a: { b } }: unknown) {}
+>b : Symbol(b, Decl(useUnknownInCatchVariables03.ts, 10, 13))
+
+try {}
+catch ([a, { b }]: unknown) { a; }
+>a : Symbol(a, Decl(useUnknownInCatchVariables03.ts, 13, 8))
+>b : Symbol(b, Decl(useUnknownInCatchVariables03.ts, 13, 12))
+>a : Symbol(a, Decl(useUnknownInCatchVariables03.ts, 13, 8))
+
+try {}
+catch ([a, { b }]: unknown) {}
+>a : Symbol(a, Decl(useUnknownInCatchVariables03.ts, 16, 8))
+>b : Symbol(b, Decl(useUnknownInCatchVariables03.ts, 16, 12))
+
