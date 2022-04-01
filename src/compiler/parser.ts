@@ -8146,11 +8146,12 @@ namespace ts {
                             case SyntaxKind.AsteriskToken:
                                 // if there are two ** after a newline, considering it as a pure comment
                                 if (state === JSDocState.BeginningOfLine && lookAhead(() => nextTokenJSDoc() !== SyntaxKind.AsteriskToken)) {
-                                    // if the tag without comment the next line should be consider as its comment
                                     /*
                                     * @param x
                                     * in the first line
                                     */
+                                    // to check tag starting newline without comments like above
+                                    // it needs to actually encounter a newline
                                     if (states.length === 1 && lookAhead(() => nextTokenJSDoc() !== SyntaxKind.NewLineTrivia)) {
                                         removeTrailingWhitespace(comments);
                                     }
@@ -8162,12 +8163,15 @@ namespace ts {
                                 // record the * as a comment
                                 // falls through
                             default:
-                                // if the tag without comment the next line should be consider as its comment
                                 /*
                                  * @param x
                                 still in the first line
                                  */
-                                if (state === JSDocState.BeginningOfLine && !sameLineWithTag && comments.length === 1) {
+                                // by default state starts with BeginningOfLine
+                                // to check tag starting newline without comments like above
+                                // it needs to actually encounter a newline
+                                // we cannot check `comments` since it is reset after {}
+                                if (state === JSDocState.BeginningOfLine && !sameLineWithTag && states.length === 1) {
                                     removeTrailingWhitespace(comments);
                                 }
                                 if (state !== JSDocState.SavingBackticks) {

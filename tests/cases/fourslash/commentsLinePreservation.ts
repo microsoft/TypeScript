@@ -63,7 +63,7 @@
 ////  * @random tag This should be third line
 ////  */
 ////function /*h*/h(param1: string) { /*5*/param1 = "hello"; }
-/////** 
+/////**
 ////  * This is firstLine
 ////  * This is second Line
 ////  * @param param1
