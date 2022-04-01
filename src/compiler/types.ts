@@ -6311,7 +6311,7 @@ namespace ts {
         Deferred = 7
     }
 
-    export enum ScriptTarget {
+    export const enum ScriptTarget {
         ES3 = 0,
         ES5 = 1,
         ES2015 = 2,
