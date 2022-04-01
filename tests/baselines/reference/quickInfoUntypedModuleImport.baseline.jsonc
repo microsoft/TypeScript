@@ -1,0 +1,165 @@
+// === /tests/cases/fourslash/a.ts ===
+// import /*FIND ALL REFS*/[|foo|] from "foo";
+// [|foo|]();
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/a.ts",
+      "kind": "alias",
+      "name": "import foo",
+      "textSpan": {
+        "start": 7,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "foo",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 22
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 7,
+          "length": 3
+        },
+        "fileName": "/tests/cases/fourslash/a.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 22
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 23,
+          "length": 3
+        },
+        "fileName": "/tests/cases/fourslash/a.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/a.ts ===
+// import foo from /*FIND ALL REFS*/"[|foo|]";
+// foo();
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/a.ts",
+      "kind": "var",
+      "name": "foo",
+      "textSpan": {
+        "start": 17,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "\"foo\"",
+          "kind": "stringLiteral"
+        }
+      ]
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 17,
+          "length": 3
+        },
+        "fileName": "/tests/cases/fourslash/a.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 22
+        },
+        "isWriteAccess": false,
+        "isDefinition": false,
+        "isInString": true
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/a.ts ===
+// import [|foo|] from "foo";
+// /*FIND ALL REFS*/[|foo|]();
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/a.ts",
+      "kind": "alias",
+      "name": "import foo",
+      "textSpan": {
+        "start": 7,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "foo",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 22
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 7,
+          "length": 3
+        },
+        "fileName": "/tests/cases/fourslash/a.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 22
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 23,
+          "length": 3
+        },
+        "fileName": "/tests/cases/fourslash/a.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]

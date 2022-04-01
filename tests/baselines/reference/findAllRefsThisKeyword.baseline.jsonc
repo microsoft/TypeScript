@@ -1,0 +1,984 @@
+// === /tests/cases/fourslash/findAllRefsThisKeyword.ts ===
+// /*FIND ALL REFS*/[|this|];
+// function f(this) {
+//     return this;
+//     function g(this) { return this; }
+// }
+// class C {
+//     static x() {
+//         this;
+//     }
+//     static y() {
+//         () => this;
+//     }
+//     constructor() {
+//         this;
+//     }
+//     method() {
+//         () => this;
+//     }
+// }
+// // These are *not* real uses of the 'this' keyword, they are identifiers.
+// const x = { this: 0 }
+// x.this;
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsThisKeyword.ts",
+      "kind": "var",
+      "name": "this",
+      "textSpan": {
+        "start": 0,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "this",
+          "kind": "keyword"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "typeof",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "globalThis",
+          "kind": "moduleName"
+        }
+      ]
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 0,
+          "length": 4
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsThisKeyword.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/findAllRefsThisKeyword.ts ===
+// this;
+// function f(/*FIND ALL REFS*/[|this|]) {
+//     return [|this|];
+//     function g(this) { return this; }
+// }
+// class C {
+//     static x() {
+//         this;
+//     }
+//     static y() {
+//         () => this;
+//     }
+//     constructor() {
+//         this;
+//     }
+//     method() {
+//         () => this;
+//     }
+// }
+// // These are *not* real uses of the 'this' keyword, they are identifiers.
+// const x = { this: 0 }
+// x.this;
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsThisKeyword.ts",
+      "kind": "var",
+      "name": "this",
+      "textSpan": {
+        "start": 17,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "this",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        }
+      ]
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 17,
+          "length": 4
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsThisKeyword.ts",
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 36,
+          "length": 4
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsThisKeyword.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/findAllRefsThisKeyword.ts ===
+// this;
+// function f([|this|]) {
+//     return /*FIND ALL REFS*/[|this|];
+//     function g(this) { return this; }
+// }
+// class C {
+//     static x() {
+//         this;
+//     }
+//     static y() {
+//         () => this;
+//     }
+//     constructor() {
+//         this;
+//     }
+//     method() {
+//         () => this;
+//     }
+// }
+// // These are *not* real uses of the 'this' keyword, they are identifiers.
+// const x = { this: 0 }
+// x.this;
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsThisKeyword.ts",
+      "kind": "var",
+      "name": "this",
+      "textSpan": {
+        "start": 17,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "this",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        }
+      ]
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 17,
+          "length": 4
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsThisKeyword.ts",
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 36,
+          "length": 4
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsThisKeyword.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/findAllRefsThisKeyword.ts ===
+// this;
+// function f(this) {
+//     return this;
+//     function g(/*FIND ALL REFS*/[|this|]) { return [|this|]; }
+// }
+// class C {
+//     static x() {
+//         this;
+//     }
+//     static y() {
+//         () => this;
+//     }
+//     constructor() {
+//         this;
+//     }
+//     method() {
+//         () => this;
+//     }
+// }
+// // These are *not* real uses of the 'this' keyword, they are identifiers.
+// const x = { this: 0 }
+// x.this;
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsThisKeyword.ts",
+      "kind": "var",
+      "name": "this",
+      "textSpan": {
+        "start": 57,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "this",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        }
+      ]
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 57,
+          "length": 4
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsThisKeyword.ts",
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 72,
+          "length": 4
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsThisKeyword.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/findAllRefsThisKeyword.ts ===
+// this;
+// function f(this) {
+//     return this;
+//     function g([|this|]) { return /*FIND ALL REFS*/[|this|]; }
+// }
+// class C {
+//     static x() {
+//         this;
+//     }
+//     static y() {
+//         () => this;
+//     }
+//     constructor() {
+//         this;
+//     }
+//     method() {
+//         () => this;
+//     }
+// }
+// // These are *not* real uses of the 'this' keyword, they are identifiers.
+// const x = { this: 0 }
+// x.this;
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsThisKeyword.ts",
+      "kind": "var",
+      "name": "this",
+      "textSpan": {
+        "start": 57,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "this",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        }
+      ]
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 57,
+          "length": 4
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsThisKeyword.ts",
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 72,
+          "length": 4
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsThisKeyword.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/findAllRefsThisKeyword.ts ===
+// this;
+// function f(this) {
+//     return this;
+//     function g(this) { return this; }
+// }
+// class C {
+//     static x() {
+//         /*FIND ALL REFS*/[|this|];
+//     }
+//     static y() {
+//         () => [|this|];
+//     }
+//     constructor() {
+//         this;
+//     }
+//     method() {
+//         () => this;
+//     }
+// }
+// // These are *not* real uses of the 'this' keyword, they are identifiers.
+// const x = { this: 0 }
+// x.this;
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsThisKeyword.ts",
+      "kind": "var",
+      "name": "this",
+      "textSpan": {
+        "start": 117,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "this",
+          "kind": "keyword"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "typeof",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "C",
+          "kind": "className"
+        }
+      ]
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 117,
+          "length": 4
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsThisKeyword.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 160,
+          "length": 4
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsThisKeyword.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/findAllRefsThisKeyword.ts ===
+// this;
+// function f(this) {
+//     return this;
+//     function g(this) { return this; }
+// }
+// class C {
+//     static x() {
+//         [|this|];
+//     }
+//     static y() {
+//         () => /*FIND ALL REFS*/[|this|];
+//     }
+//     constructor() {
+//         this;
+//     }
+//     method() {
+//         () => this;
+//     }
+// }
+// // These are *not* real uses of the 'this' keyword, they are identifiers.
+// const x = { this: 0 }
+// x.this;
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsThisKeyword.ts",
+      "kind": "var",
+      "name": "this",
+      "textSpan": {
+        "start": 160,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "this",
+          "kind": "keyword"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "typeof",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "C",
+          "kind": "className"
+        }
+      ]
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 117,
+          "length": 4
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsThisKeyword.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 160,
+          "length": 4
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsThisKeyword.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/findAllRefsThisKeyword.ts ===
+// this;
+// function f(this) {
+//     return this;
+//     function g(this) { return this; }
+// }
+// class C {
+//     static x() {
+//         this;
+//     }
+//     static y() {
+//         () => this;
+//     }
+//     constructor() {
+//         /*FIND ALL REFS*/[|this|];
+//     }
+//     method() {
+//         () => [|this|];
+//     }
+// }
+// // These are *not* real uses of the 'this' keyword, they are identifiers.
+// const x = { this: 0 }
+// x.this;
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsThisKeyword.ts",
+      "kind": "var",
+      "name": "this",
+      "textSpan": {
+        "start": 200,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "this",
+          "kind": "keyword"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "this",
+          "kind": "keyword"
+        }
+      ]
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 200,
+          "length": 4
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsThisKeyword.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 241,
+          "length": 4
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsThisKeyword.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/findAllRefsThisKeyword.ts ===
+// this;
+// function f(this) {
+//     return this;
+//     function g(this) { return this; }
+// }
+// class C {
+//     static x() {
+//         this;
+//     }
+//     static y() {
+//         () => this;
+//     }
+//     constructor() {
+//         [|this|];
+//     }
+//     method() {
+//         () => /*FIND ALL REFS*/[|this|];
+//     }
+// }
+// // These are *not* real uses of the 'this' keyword, they are identifiers.
+// const x = { this: 0 }
+// x.this;
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsThisKeyword.ts",
+      "kind": "var",
+      "name": "this",
+      "textSpan": {
+        "start": 241,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "this",
+          "kind": "keyword"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "this",
+          "kind": "keyword"
+        }
+      ]
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 200,
+          "length": 4
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsThisKeyword.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 241,
+          "length": 4
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsThisKeyword.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/findAllRefsThisKeyword.ts ===
+// this;
+// function f(this) {
+//     return this;
+//     function g(this) { return this; }
+// }
+// class C {
+//     static x() {
+//         this;
+//     }
+//     static y() {
+//         () => this;
+//     }
+//     constructor() {
+//         this;
+//     }
+//     method() {
+//         () => this;
+//     }
+// }
+// // These are *not* real uses of the 'this' keyword, they are identifiers.
+// const x = { /*FIND ALL REFS*/[|this|]: 0 }
+// x.[|this|];
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsThisKeyword.ts",
+      "kind": "property",
+      "name": "(property) this: number",
+      "textSpan": {
+        "start": 341,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "this",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 341,
+        "length": 7
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 341,
+          "length": 4
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsThisKeyword.ts",
+        "contextSpan": {
+          "start": 341,
+          "length": 7
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 353,
+          "length": 4
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsThisKeyword.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/findAllRefsThisKeyword.ts ===
+// this;
+// function f(this) {
+//     return this;
+//     function g(this) { return this; }
+// }
+// class C {
+//     static x() {
+//         this;
+//     }
+//     static y() {
+//         () => this;
+//     }
+//     constructor() {
+//         this;
+//     }
+//     method() {
+//         () => this;
+//     }
+// }
+// // These are *not* real uses of the 'this' keyword, they are identifiers.
+// const x = { [|this|]: 0 }
+// x./*FIND ALL REFS*/[|this|];
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsThisKeyword.ts",
+      "kind": "property",
+      "name": "(property) this: number",
+      "textSpan": {
+        "start": 341,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "this",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 341,
+        "length": 7
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 341,
+          "length": 4
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsThisKeyword.ts",
+        "contextSpan": {
+          "start": 341,
+          "length": 7
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 353,
+          "length": 4
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsThisKeyword.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
