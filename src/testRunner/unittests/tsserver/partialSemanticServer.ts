@@ -75,6 +75,7 @@ import { something } from "something";
                     data: undefined,
                     sourceDisplay: undefined,
                     isSnippet: undefined,
+                    labelDetails: undefined,
                 };
             }
         });

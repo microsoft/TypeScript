@@ -80,7 +80,7 @@ verify.completions({
 verify.applyCodeActionFromCompletion("", {
   name: "ref",
   source: "vue",
-  description: `Add 'ref' to existing import declaration from "vue"`,
+  description: `Update import from "vue"`,
   data: {
     exportName: "ref",
     fileName: "/node_modules/vue/dist/vue.d.ts",

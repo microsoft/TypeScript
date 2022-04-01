@@ -5,7 +5,7 @@ namespace ts.codefix {
             Diagnostics.The_0_setting_1_does_not_support_top_level_await_expressions_Consider_switching_to_2.code,
             Diagnostics.The_0_setting_1_does_not_support_top_level_for_await_loops_Consider_switching_to_2.code,
         ],
-        getCodeActions: context => {
+        getCodeActions: function getCodeActionsToFixModuleAndTarget(context) {
             const compilerOptions = context.program.getCompilerOptions();
             const { configFile } = compilerOptions;
             if (configFile === undefined) {

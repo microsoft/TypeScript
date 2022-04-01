@@ -1,0 +1,4 @@
+=== /index.ts ===
+import { base } from "./foo";
+>base : any
+

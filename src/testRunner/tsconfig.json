@@ -2,7 +2,6 @@
     "extends": "../tsconfig-noncomposite-base",
     "compilerOptions": {
         "outFile": "../../built/local/run.js",
-        "moduleResolution": "node",
         "composite": false,
         "declaration": false,
         "declarationMap": false,

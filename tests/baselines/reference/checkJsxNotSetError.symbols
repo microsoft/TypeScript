@@ -1,0 +1,17 @@
+=== /foo.jsx ===
+const Foo = () => (
+>Foo : Symbol(Foo, Decl(foo.jsx, 0, 5))
+
+    <div>foo</div>
+);
+export default Foo;
+>Foo : Symbol(Foo, Decl(foo.jsx, 0, 5))
+
+=== /bar.jsx ===
+import Foo from '/foo';
+>Foo : Symbol(Foo, Decl(bar.jsx, 0, 6))
+
+const a = <Foo />
+>a : Symbol(a, Decl(bar.jsx, 1, 5))
+>Foo : Symbol(Foo, Decl(bar.jsx, 0, 6))
+

@@ -21,7 +21,7 @@ class C implements I {
     method(a: number, ...b: string[]): boolean;
     method(a: string, ...b: number[]): Function;
     method(a: string): Function;
-    method(a: any, ...b?: any[]): boolean | Function {
+    method(a: unknown, ...b?: unknown[]): boolean | Function {
         throw new Error("Method not implemented.");
     }
 }`,

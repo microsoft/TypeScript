@@ -1051,7 +1051,7 @@ namespace ts {
                 writeLine();
                 const pos = writer.getTextPos();
                 const savedSections = bundleFileInfo && bundleFileInfo.sections;
-                if (savedSections) bundleFileInfo!.sections = [];
+                if (savedSections) bundleFileInfo.sections = [];
                 print(EmitHint.Unspecified, prepend, /*sourceFile*/ undefined);
                 if (bundleFileInfo) {
                     const newSections = bundleFileInfo.sections;
@@ -1283,7 +1283,13 @@ namespace ts {
             currentParenthesizerRule = undefined;
         }
 
-        function pipelineEmitWithHintWorker(hint: EmitHint, node: Node): void {
+        function pipelineEmitWithHintWorker(hint: EmitHint, node: Node, allowSnippets = true): void {
+            if (allowSnippets) {
+                const snippet = getSnippetElement(node);
+                if (snippet) {
+                    return emitSnippetNode(hint, node, snippet);
+                }
+            }
             if (hint === EmitHint.SourceFile) return emitSourceFile(cast(node, isSourceFile));
             if (hint === EmitHint.IdentifierName) return emitIdentifier(cast(node, isIdentifier));
             if (hint === EmitHint.JsxAttributeValue) return emitLiteral(cast(node, isStringLiteral), /*jsxAttributeEscape*/ true);
@@ -1590,7 +1596,7 @@ namespace ts {
                         return emitRestOrJSDocVariadicType(node as RestTypeNode | JSDocVariadicType);
                     case SyntaxKind.JSDocNamepathType:
                         return;
-                    case SyntaxKind.JSDocComment:
+                    case SyntaxKind.JSDoc:
                         return emitJSDoc(node as JSDoc);
                     case SyntaxKind.JSDocTypeLiteral:
                         return emitJSDocTypeLiteral(node as JSDocTypeLiteral);
@@ -1598,6 +1604,7 @@ namespace ts {
                         return emitJSDocSignature(node as JSDocSignature);
                     case SyntaxKind.JSDocTag:
                     case SyntaxKind.JSDocClassTag:
+                    case SyntaxKind.JSDocOverrideTag:
                         return emitJSDocSimpleTag(node as JSDocTag);
                     case SyntaxKind.JSDocAugmentsTag:
                     case SyntaxKind.JSDocImplementsTag:
@@ -1610,7 +1617,6 @@ namespace ts {
                     case SyntaxKind.JSDocPrivateTag:
                     case SyntaxKind.JSDocProtectedTag:
                     case SyntaxKind.JSDocReadonlyTag:
-                    case SyntaxKind.JSDocOverrideTag:
                         return;
                     case SyntaxKind.JSDocCallbackTag:
                         return emitJSDocCallbackTag(node as JSDocCallbackTag);
@@ -1721,6 +1727,8 @@ namespace ts {
                         return emitAsExpression(node as AsExpression);
                     case SyntaxKind.NonNullExpression:
                         return emitNonNullExpression(node as NonNullExpression);
+                    case SyntaxKind.ExpressionWithTypeArguments:
+                        return emitExpressionWithTypeArguments(node as ExpressionWithTypeArguments);
                     case SyntaxKind.MetaProperty:
                         return emitMetaProperty(node as MetaProperty);
                     case SyntaxKind.SyntheticExpression:
@@ -1925,6 +1933,37 @@ namespace ts {
         }
 
         //
+        // Snippet Elements
+        //
+
+        function emitSnippetNode(hint: EmitHint, node: Node, snippet: SnippetElement) {
+            switch (snippet.kind) {
+                case SnippetKind.Placeholder:
+                    emitPlaceholder(hint, node, snippet);
+                    break;
+                case SnippetKind.TabStop:
+                    emitTabStop(hint, node, snippet);
+                    break;
+            }
+        }
+
+        function emitPlaceholder(hint: EmitHint, node: Node, snippet: Placeholder) {
+            nonEscapingWrite(`\$\{${snippet.order}:`); // `${2:`
+            pipelineEmitWithHintWorker(hint, node, /*allowSnippets*/ false); // `...`
+            nonEscapingWrite(`\}`); // `}`
+            // `${2:...}`
+        }
+
+        function emitTabStop(hint: EmitHint, node: Node, snippet: TabStop) {
+            // A tab stop should only be attached to an empty node, i.e. a node that doesn't emit any text.
+            Debug.assert(node.kind === SyntaxKind.EmptyStatement,
+                `A tab stop cannot be attached to a node of kind ${Debug.formatSyntaxKind(node.kind)}.`);
+            Debug.assert(hint !== EmitHint.EmbeddedStatement,
+                `A tab stop cannot be attached to an embedded statement.`);
+            nonEscapingWrite(`\$${snippet.order}`);
+        }
+
+        //
         // Identifiers
         //
 
@@ -1970,6 +2009,7 @@ namespace ts {
         //
 
         function emitTypeParameter(node: TypeParameterDeclaration) {
+            emitModifiers(node, node.modifiers);
             emit(node.name);
             if (node.constraint) {
                 writeSpace();
@@ -2190,6 +2230,7 @@ namespace ts {
             writeKeyword("typeof");
             writeSpace();
             emit(node.exprName);
+            emitTypeArguments(node, node.typeArguments);
         }
 
         function emitTypeLiteral(node: TypeLiteralNode) {
@@ -2329,6 +2370,7 @@ namespace ts {
                 writeLine();
                 decreaseIndent();
             }
+            emitList(node, node.members, ListFormat.PreserveLines);
             writePunctuation("}");
         }
 
@@ -2349,6 +2391,19 @@ namespace ts {
             writeKeyword("import");
             writePunctuation("(");
             emit(node.argument);
+            if (node.assertions) {
+                writePunctuation(",");
+                writeSpace();
+                writePunctuation("{");
+                writeSpace();
+                writeKeyword("assert");
+                writePunctuation(":");
+                writeSpace();
+                const elements = node.assertions.assertClause.elements;
+                emitList(node.assertions.assertClause, elements, ListFormat.ImportClauseEntries);
+                writeSpace();
+                writePunctuation("}");
+            }
             writePunctuation(")");
             if (node.qualifier) {
                 writePunctuation(".");
@@ -2734,7 +2789,7 @@ namespace ts {
         function emitYieldExpression(node: YieldExpression) {
             emitTokenWithComment(SyntaxKind.YieldKeyword, node.pos, writeKeyword, node);
             emit(node.asteriskToken);
-            emitExpressionWithLeadingSpace(node.expression, parenthesizer.parenthesizeExpressionForDisallowedComma);
+            emitExpressionWithLeadingSpace(node.expression && parenthesizeExpressionForNoAsi(node.expression), parenthesizeExpressionForNoAsiAndDisallowedComma);
         }
 
         function emitSpreadElement(node: SpreadElement) {
@@ -2958,9 +3013,49 @@ namespace ts {
             return pos;
         }
 
+        function commentWillEmitNewLine(node: CommentRange) {
+            return node.kind === SyntaxKind.SingleLineCommentTrivia || !!node.hasTrailingNewLine;
+        }
+
+        function willEmitLeadingNewLine(node: Expression): boolean {
+            if (!currentSourceFile) return false;
+            if (some(getLeadingCommentRanges(currentSourceFile.text, node.pos), commentWillEmitNewLine)) return true;
+            if (some(getSyntheticLeadingComments(node), commentWillEmitNewLine)) return true;
+            if (isPartiallyEmittedExpression(node)) {
+                if (node.pos !== node.expression.pos) {
+                    if (some(getTrailingCommentRanges(currentSourceFile.text, node.expression.pos), commentWillEmitNewLine)) return true;
+                }
+                return willEmitLeadingNewLine(node.expression);
+            }
+            return false;
+        }
+
+        /**
+         * Wraps an expression in parens if we would emit a leading comment that would introduce a line separator
+         * between the node and its parent.
+         */
+        function parenthesizeExpressionForNoAsi(node: Expression) {
+            if (!commentsDisabled && isPartiallyEmittedExpression(node) && willEmitLeadingNewLine(node)) {
+                const parseNode = getParseTreeNode(node);
+                if (parseNode && isParenthesizedExpression(parseNode)) {
+                    // If the original node was a parenthesized expression, restore it to preserve comment and source map emit
+                    const parens = factory.createParenthesizedExpression(node.expression);
+                    setOriginalNode(parens, node);
+                    setTextRange(parens, parseNode);
+                    return parens;
+                }
+                return factory.createParenthesizedExpression(node);
+            }
+            return node;
+        }
+
+        function parenthesizeExpressionForNoAsiAndDisallowedComma(node: Expression) {
+            return parenthesizeExpressionForNoAsi(parenthesizer.parenthesizeExpressionForDisallowedComma(node));
+        }
+
         function emitReturnStatement(node: ReturnStatement) {
             emitTokenWithComment(SyntaxKind.ReturnKeyword, node.pos, writeKeyword, /*contextNode*/ node);
-            emitExpressionWithLeadingSpace(node.expression);
+            emitExpressionWithLeadingSpace(node.expression && parenthesizeExpressionForNoAsi(node.expression), parenthesizeExpressionForNoAsi);
             writeTrailingSemicolon();
         }
 
@@ -2992,7 +3087,7 @@ namespace ts {
 
         function emitThrowStatement(node: ThrowStatement) {
             emitTokenWithComment(SyntaxKind.ThrowKeyword, node.pos, writeKeyword, node);
-            emitExpressionWithLeadingSpace(node.expression);
+            emitExpressionWithLeadingSpace(parenthesizeExpressionForNoAsi(node.expression), parenthesizeExpressionForNoAsi);
             writeTrailingSemicolon();
         }
 
@@ -3025,7 +3120,7 @@ namespace ts {
             emit(node.name);
             emit(node.exclamationToken);
             emitTypeAnnotation(node.type);
-            emitInitializer(node.initializer, node.type ? node.type.end : node.name.end, node, parenthesizer.parenthesizeExpressionForDisallowedComma);
+            emitInitializer(node.initializer, node.type?.end ?? node.name.emitNode?.typeNode?.end ?? node.name.end, node, parenthesizer.parenthesizeExpressionForDisallowedComma);
         }
 
         function emitVariableDeclarationList(node: VariableDeclarationList) {
@@ -3916,8 +4011,11 @@ namespace ts {
             }
             for (const directive of types) {
                 const pos = writer.getTextPos();
-                writeComment(`/// <reference types="${directive.fileName}" />`);
-                if (bundleFileInfo) bundleFileInfo.sections.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.Type, data: directive.fileName });
+                const resolutionMode = directive.resolutionMode && directive.resolutionMode !== currentSourceFile?.impliedNodeFormat
+                    ? `resolution-mode="${directive.resolutionMode === ModuleKind.ESNext ? "import" : "require"}"`
+                    : "";
+                writeComment(`/// <reference types="${directive.fileName}" ${resolutionMode}/>`);
+                if (bundleFileInfo) bundleFileInfo.sections.push({ pos, end: writer.getTextPos(), kind: !directive.resolutionMode ? BundleFileSectionKind.Type : directive.resolutionMode === ModuleKind.ESNext ? BundleFileSectionKind.TypeResolutionModeImport : BundleFileSectionKind.TypeResolutionModeRequire, data: directive.fileName });
                 writeLine();
             }
             for (const directive of libs) {
@@ -3942,7 +4040,14 @@ namespace ts {
         // Transformation nodes
 
         function emitPartiallyEmittedExpression(node: PartiallyEmittedExpression) {
+            const emitFlags = getEmitFlags(node);
+            if (!(emitFlags & EmitFlags.NoLeadingComments) && node.pos !== node.expression.pos) {
+                emitTrailingCommentsOfPosition(node.expression.pos);
+            }
             emitExpression(node.expression);
+            if (!(emitFlags & EmitFlags.NoTrailingComments) && node.end !== node.expression.end) {
+                emitLeadingCommentsOfPosition(node.expression.end);
+            }
         }
 
         function emitCommaList(node: CommaListExpression) {
@@ -4330,10 +4435,8 @@ namespace ts {
                     // Emit this child.
                     previousSourceFileTextKind = recordBundleFileInternalSectionStart(child);
                     if (shouldEmitInterveningComments) {
-                        if (emitTrailingCommentsOfPosition) {
-                            const commentRange = getCommentRange(child);
-                            emitTrailingCommentsOfPosition(commentRange.pos);
-                        }
+                        const commentRange = getCommentRange(child);
+                        emitTrailingCommentsOfPosition(commentRange.pos);
                     }
                     else {
                         shouldEmitInterveningComments = mayEmitInterveningComments;
@@ -4455,6 +4558,16 @@ namespace ts {
 
         function writeProperty(s: string) {
             writer.writeProperty(s);
+        }
+
+        function nonEscapingWrite(s: string) {
+            // This should be defined in a snippet-escaping text writer.
+            if (writer.nonEscapingWrite) {
+                writer.nonEscapingWrite(s);
+            }
+            else {
+                writer.write(s);
+            }
         }
 
         function writeLine(count = 1) {
@@ -4701,7 +4814,7 @@ namespace ts {
         function writeLineSeparatorsAndIndentBefore(node: Node, parent: Node): boolean {
             const leadingNewlines = preserveSourceNewlines && getLeadingLineTerminatorCount(parent, [node], ListFormat.None);
             if (leadingNewlines) {
-                writeLinesAndIndent(leadingNewlines, /*writeLinesIfNotIndenting*/ false);
+                writeLinesAndIndent(leadingNewlines, /*writeSpaceIfNotIndenting*/ false);
             }
             return !!leadingNewlines;
         }
@@ -5233,6 +5346,10 @@ namespace ts {
                 commentsDisabled = false;
             }
             emitTrailingCommentsOfNode(node, emitFlags, commentRange.pos, commentRange.end, savedContainerPos, savedContainerEnd, savedDeclarationListContainerEnd);
+            const typeNode = getTypeNode(node);
+            if (typeNode) {
+                emitTrailingCommentsOfNode(node, emitFlags, typeNode.pos, typeNode.end, savedContainerPos, savedContainerEnd, savedDeclarationListContainerEnd);
+            }
         }
 
         function emitLeadingCommentsOfNode(node: Node, emitFlags: EmitFlags, pos: number, end: number) {

@@ -49,24 +49,23 @@ namespace ts.server {
         readonly data: ProjectInfoTelemetryEventData;
     }
 
-    /*
-     * __GDPR__
-     * "projectInfo" : {
-     *      "${include}": ["${TypeScriptCommonProperties}"],
-     *      "projectId": { "classification": "EndUserPseudonymizedInformation", "purpose": "FeatureInsight", "endpoint": "ProjectId" },
-     *      "fileStats": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
-     *      "compilerOptions": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
-     *      "extends": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
-     *      "files": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
-     *      "include": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
-     *      "exclude": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
-     *      "compileOnSave": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
-     *      "typeAcquisition": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
-     *      "configFileName": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
-     *      "projectType": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
-     *      "languageServiceEnabled": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
-     *      "version": { "classification": "SystemMetaData", "purpose": "FeatureInsight" }
-     * }
+    /* __GDPR__
+        "projectInfo" : {
+            "${include}": ["${TypeScriptCommonProperties}"],
+            "projectId": { "classification": "EndUserPseudonymizedInformation", "purpose": "FeatureInsight", "endpoint": "ProjectId" },
+            "fileStats": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
+            "compilerOptions": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
+            "extends": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
+            "files": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
+            "include": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
+            "exclude": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
+            "compileOnSave": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
+            "typeAcquisition": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
+            "configFileName": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
+            "projectType": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
+            "languageServiceEnabled": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
+            "version": { "classification": "SystemMetaData", "purpose": "FeatureInsight" }
+        }
      */
     export interface ProjectInfoTelemetryEventData {
         /** Cryptographically secure hash of project file location. */
@@ -2063,6 +2062,7 @@ namespace ts.server {
 
         /* @internal */
         createConfiguredProject(configFileName: NormalizedPath) {
+            tracing?.instant(tracing.Phase.Session, "createConfiguredProject", { configFilePath: configFileName });
             this.logger.info(`Creating configuration project ${configFileName}`);
             const canonicalConfigFilePath = asNormalizedPath(this.toCanonicalFileName(configFileName));
             let configFileExistenceInfo = this.configFileExistenceInfoCache.get(canonicalConfigFilePath);
@@ -2120,6 +2120,7 @@ namespace ts.server {
          */
         /* @internal */
         private loadConfiguredProject(project: ConfiguredProject, reason: string) {
+            tracing?.push(tracing.Phase.Session, "loadConfiguredProject", { configFilePath: project.canonicalConfigFilePath });
             this.sendProjectLoadingStartEvent(project, reason);
 
             // Read updated contents from disk
@@ -2161,6 +2162,7 @@ namespace ts.server {
             project.enablePluginsWithOptions(compilerOptions, this.currentPluginConfigOverrides);
             const filesToAdd = parsedCommandLine.fileNames.concat(project.getExternalFiles());
             this.updateRootAndOptionsOfNonInferredProject(project, filesToAdd, fileNamePropertyReader, compilerOptions, parsedCommandLine.typeAcquisition!, parsedCommandLine.compileOnSave, parsedCommandLine.watchOptions);
+            tracing?.pop();
         }
 
         /*@internal*/

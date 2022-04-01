@@ -385,6 +385,7 @@ namespace ts {
             case SyntaxKind.TypeParameter:
                 Debug.type<TypeParameterDeclaration>(node);
                 return factory.updateTypeParameterDeclaration(node,
+                    nodesVisitor(node.modifiers, visitor, isModifier),
                     nodeVisitor(node.name, visitor, isIdentifier),
                     nodeVisitor(node.constraint, visitor, isTypeNode),
                     nodeVisitor(node.default, visitor, isTypeNode));
@@ -538,7 +539,8 @@ namespace ts {
             case SyntaxKind.TypeQuery:
                 Debug.type<TypeQueryNode>(node);
                 return factory.updateTypeQueryNode(node,
-                    nodeVisitor(node.exprName, visitor, isEntityName));
+                    nodeVisitor(node.exprName, visitor, isEntityName),
+                    nodesVisitor(node.typeArguments, visitor, isTypeNode));
 
             case SyntaxKind.TypeLiteral:
                 Debug.type<TypeLiteralNode>(node);
@@ -592,9 +594,17 @@ namespace ts {
                 Debug.type<ImportTypeNode>(node);
                 return factory.updateImportTypeNode(node,
                     nodeVisitor(node.argument, visitor, isTypeNode),
+                    nodeVisitor(node.assertions, visitor, isNode),
                     nodeVisitor(node.qualifier, visitor, isEntityName),
                     visitNodes(node.typeArguments, visitor, isTypeNode),
                     node.isTypeOf
+                );
+
+            case SyntaxKind.ImportTypeAssertionContainer:
+                Debug.type<ImportTypeAssertionContainer>(node);
+                return factory.updateImportTypeAssertionContainer(node,
+                    nodeVisitor(node.assertClause, visitor, isNode),
+                    node.multiLine
                 );
 
             case SyntaxKind.NamedTupleMember:
@@ -1090,7 +1100,7 @@ namespace ts {
                 Debug.type<AssertEntry>(node);
                 return factory.updateAssertEntry(node,
                     nodeVisitor(node.name, visitor, isAssertionKey),
-                    nodeVisitor(node.value, visitor, isStringLiteral));
+                    nodeVisitor(node.value, visitor, isExpressionNode));
 
             case SyntaxKind.ImportClause:
                 Debug.type<ImportClause>(node);

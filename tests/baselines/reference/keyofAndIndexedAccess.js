@@ -1040,10 +1040,8 @@ var SampleClass = /** @class */ (function () {
 var AnotherSampleClass = /** @class */ (function (_super) {
     __extends(AnotherSampleClass, _super);
     function AnotherSampleClass(props) {
-        var _this = this;
         var foo = { foo: "bar" };
-        _this = _super.call(this, merge(props, foo)) || this;
-        return _this;
+        return _super.call(this, merge(props, foo)) || this;
     }
     AnotherSampleClass.prototype.brokenMethod = function () {
         this.props.foo.concat;

@@ -64,7 +64,7 @@ namespace ts.codefix {
         }
 
         const importAdder = createImportAdder(sourceFile, context.program, preferences, context.host);
-        createMissingMemberNodes(classDeclaration, nonPrivateAndNotExistedInHeritageClauseMembers, sourceFile, context, preferences, importAdder, member => insertInterfaceMemberNode(sourceFile, classDeclaration, member));
+        createMissingMemberNodes(classDeclaration, nonPrivateAndNotExistedInHeritageClauseMembers, sourceFile, context, preferences, importAdder, member => insertInterfaceMemberNode(sourceFile, classDeclaration, member as ClassElement));
         importAdder.writeFixes(changeTracker);
 
         function createMissingIndexSignatureDeclaration(type: InterfaceType, kind: IndexKind): void {
@@ -80,7 +80,7 @@ namespace ts.codefix {
                 changeTracker.insertNodeAfter(sourceFile, constructor, newElement);
             }
             else {
-                changeTracker.insertNodeAtClassStart(sourceFile, cls, newElement);
+                changeTracker.insertMemberAtStart(sourceFile, cls, newElement);
             }
         }
     }

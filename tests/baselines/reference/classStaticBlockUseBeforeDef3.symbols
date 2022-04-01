@@ -1,0 +1,78 @@
+=== tests/cases/conformance/classes/classStaticBlock/classStaticBlockUseBeforeDef3.ts ===
+class A {
+>A : Symbol(A, Decl(classStaticBlockUseBeforeDef3.ts, 0, 0))
+
+    static {
+        A.doSomething(); // should not error
+>A.doSomething : Symbol(A.doSomething, Decl(classStaticBlockUseBeforeDef3.ts, 3, 5))
+>A : Symbol(A, Decl(classStaticBlockUseBeforeDef3.ts, 0, 0))
+>doSomething : Symbol(A.doSomething, Decl(classStaticBlockUseBeforeDef3.ts, 3, 5))
+    }
+
+    static doSomething() {
+>doSomething : Symbol(A.doSomething, Decl(classStaticBlockUseBeforeDef3.ts, 3, 5))
+
+       console.log("gotcha!");
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+    }
+}
+
+
+class Baz {
+>Baz : Symbol(Baz, Decl(classStaticBlockUseBeforeDef3.ts, 8, 1))
+
+    static {
+        console.log(FOO);   // should error
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>FOO : Symbol(FOO, Decl(classStaticBlockUseBeforeDef3.ts, 17, 5))
+    }
+}
+
+const FOO = "FOO";
+>FOO : Symbol(FOO, Decl(classStaticBlockUseBeforeDef3.ts, 17, 5))
+
+class Bar {
+>Bar : Symbol(Bar, Decl(classStaticBlockUseBeforeDef3.ts, 17, 18))
+
+    static {
+        console.log(FOO); // should not error
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>FOO : Symbol(FOO, Decl(classStaticBlockUseBeforeDef3.ts, 17, 5))
+    }
+}
+
+let u = "FOO" as "FOO" | "BAR";
+>u : Symbol(u, Decl(classStaticBlockUseBeforeDef3.ts, 24, 3))
+
+class CFA {
+>CFA : Symbol(CFA, Decl(classStaticBlockUseBeforeDef3.ts, 24, 31))
+
+    static {
+        u = "BAR";
+>u : Symbol(u, Decl(classStaticBlockUseBeforeDef3.ts, 24, 3))
+
+        u;  // should be "BAR"
+>u : Symbol(u, Decl(classStaticBlockUseBeforeDef3.ts, 24, 3))
+    }
+
+    static t = 1;
+>t : Symbol(CFA.t, Decl(classStaticBlockUseBeforeDef3.ts, 30, 5))
+
+    static doSomething() {}
+>doSomething : Symbol(CFA.doSomething, Decl(classStaticBlockUseBeforeDef3.ts, 32, 17))
+
+    static {
+        u;  // should be "BAR"
+>u : Symbol(u, Decl(classStaticBlockUseBeforeDef3.ts, 24, 3))
+    }
+}
+
+u; // should be "BAR"
+>u : Symbol(u, Decl(classStaticBlockUseBeforeDef3.ts, 24, 3))
+

@@ -1,9 +1,9 @@
 === tests/cases/conformance/salsa/bug28014.js ===
 exports.version = 1
 >exports.version = 1 : 1
->exports.version : number
+>exports.version : 1
 >exports : typeof alias
->version : number
+>version : 1
 >1 : 1
 
 function alias() { }
@@ -18,6 +18,6 @@ module.exports = alias
 
 === tests/cases/conformance/salsa/importer.js ===
 import('./bug28014')
->import('./bug28014') : Promise<{ (): void; version: number; }>
+>import('./bug28014') : Promise<{ (): void; version: 1; }>
 >'./bug28014' : "./bug28014"
 

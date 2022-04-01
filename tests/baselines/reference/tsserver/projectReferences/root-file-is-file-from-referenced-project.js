@@ -143,6 +143,8 @@ Open files:
 		Projects: /user/username/projects/project/src/tsconfig.json
 response:{"responseRequired":false}
 request:{"command":"references","arguments":{"file":"/user/username/projects/project/src/common/input/keyboard.ts","line":2,"offset":17},"seq":1,"type":"request"}
+Finding references to /user/username/projects/project/src/common/input/keyboard.ts position 99 in project /user/username/projects/project/src/common/tsconfig.json
+Finding references to /user/username/projects/project/src/common/input/keyboard.ts position 99 in project /user/username/projects/project/src/tsconfig.json
 Search path: /user/username/projects/project/src/common/input
 For info: /user/username/projects/project/src/common/input/keyboard.ts :: Config file name: /user/username/projects/project/src/common/tsconfig.json
 Search path: /user/username/projects/project/src/common/input

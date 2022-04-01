@@ -499,12 +499,16 @@ namespace ts {
     /*@internal*/
     export const ignoredPaths = ["/node_modules/.", "/.git", "/.#"];
 
+    let curSysLog: (s: string) => void = noop; // eslint-disable-line prefer-const
+
     /*@internal*/
-    export let sysLog: (s: string) => void = noop; // eslint-disable-line prefer-const
+    export function sysLog(s: string) {
+        return curSysLog(s);
+    }
 
     /*@internal*/
     export function setSysLog(logger: typeof sysLog) {
-        sysLog = logger;
+        curSysLog = logger;
     }
 
     /*@internal*/
@@ -1625,7 +1629,6 @@ namespace ts {
                         sysLog(`sysLog:: ${fileOrDirectory}:: Defaulting to fsWatchFile`);
                         return watchPresentFileSystemEntryWithFsWatchFile();
                     }
-
                     try {
                         const presentWatcher = _fs.watch(
                             fileOrDirectory,
@@ -1804,7 +1807,7 @@ namespace ts {
             }
 
             function readDirectory(path: string, extensions?: readonly string[], excludes?: readonly string[], includes?: readonly string[], depth?: number): string[] {
-                return matchFiles(path, extensions, excludes, includes, useCaseSensitiveFileNames, process.cwd(), depth, getAccessibleFileSystemEntries, realpath, directoryExists);
+                return matchFiles(path, extensions, excludes, includes, useCaseSensitiveFileNames, process.cwd(), depth, getAccessibleFileSystemEntries, realpath);
             }
 
             function fileSystemEntryExists(path: string, entryKind: FileSystemEntryKind): boolean {
