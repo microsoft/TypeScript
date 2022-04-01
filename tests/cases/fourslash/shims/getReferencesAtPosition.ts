@@ -1,5 +1,6 @@
 /// <reference path="../fourslash.ts" />
 
+//@BaselineFile: getReferencesAtPosition.baseline.jsonc
 //@Filename: findAllRefsOnDefinition-import.ts
 ////export class Test{
 ////
