@@ -1,0 +1,239 @@
+// === /tests/cases/fourslash/findAllRefsOnDefinition2-import.ts ===
+// export module Test{
+// 
+//     /*FIND ALL REFS*/export interface [|start|] { }
+// 
+//     export interface stop { }
+// }
+
+// === /tests/cases/fourslash/findAllRefsOnDefinition2.ts ===
+// import Second = require("./findAllRefsOnDefinition2-import");
+// 
+// var start: Second.Test.[|start|];
+// var stop: Second.Test.stop;
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsOnDefinition2-import.ts",
+      "kind": "interface",
+      "name": "interface Test.start",
+      "textSpan": {
+        "start": 42,
+        "length": 5
+      },
+      "displayParts": [
+        {
+          "text": "interface",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Test",
+          "kind": "moduleName"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "start",
+          "kind": "interfaceName"
+        }
+      ],
+      "contextSpan": {
+        "start": 25,
+        "length": 26
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 42,
+          "length": 5
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsOnDefinition2-import.ts",
+        "contextSpan": {
+          "start": 25,
+          "length": 26
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 86,
+          "length": 5
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsOnDefinition2.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/findAllRefsOnDefinition2-import.ts ===
+// export module Test{
+// 
+//     export interface /*FIND ALL REFS*/[|start|] { }
+// 
+//     export interface stop { }
+// }
+
+// === /tests/cases/fourslash/findAllRefsOnDefinition2.ts ===
+// import Second = require("./findAllRefsOnDefinition2-import");
+// 
+// var start: Second.Test.[|start|];
+// var stop: Second.Test.stop;
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsOnDefinition2-import.ts",
+      "kind": "interface",
+      "name": "interface Test.start",
+      "textSpan": {
+        "start": 42,
+        "length": 5
+      },
+      "displayParts": [
+        {
+          "text": "interface",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Test",
+          "kind": "moduleName"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "start",
+          "kind": "interfaceName"
+        }
+      ],
+      "contextSpan": {
+        "start": 25,
+        "length": 26
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 42,
+          "length": 5
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsOnDefinition2-import.ts",
+        "contextSpan": {
+          "start": 25,
+          "length": 26
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 86,
+          "length": 5
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsOnDefinition2.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/findAllRefsOnDefinition2-import.ts ===
+// export module Test{
+// 
+//     export interface [|start|] { }
+// 
+//     export interface stop { }
+// }
+
+// === /tests/cases/fourslash/findAllRefsOnDefinition2.ts ===
+// import Second = require("./findAllRefsOnDefinition2-import");
+// 
+// var start: Second.Test./*FIND ALL REFS*/[|start|];
+// var stop: Second.Test.stop;
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsOnDefinition2-import.ts",
+      "kind": "interface",
+      "name": "interface Test.start",
+      "textSpan": {
+        "start": 42,
+        "length": 5
+      },
+      "displayParts": [
+        {
+          "text": "interface",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Test",
+          "kind": "moduleName"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "start",
+          "kind": "interfaceName"
+        }
+      ],
+      "contextSpan": {
+        "start": 25,
+        "length": 26
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 42,
+          "length": 5
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsOnDefinition2-import.ts",
+        "contextSpan": {
+          "start": 25,
+          "length": 26
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 86,
+          "length": 5
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsOnDefinition2.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]

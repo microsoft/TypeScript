@@ -7,9 +7,9 @@
 ////
 ////    }
 ////
-////    [|public [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}start|](){
+////    /*1*/public /*2*/start(){
 ////        return this;
-////    }|]
+////    }
 ////
 ////    public stop(){
 ////        return this;
@@ -20,7 +20,7 @@
 ////import Second = require("./findAllRefsOnDefinition-import");
 ////
 ////var second = new Second.Test()
-////second.[|start|]();
+////second./*3*/start();
 ////second.stop();
 
-verify.singleReferenceGroup("(method) Test.start(): this", "start");
+verify.baselineFindAllReferences('1', '2', '3');

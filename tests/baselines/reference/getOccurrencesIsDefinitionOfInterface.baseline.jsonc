@@ -1,0 +1,191 @@
+// === /tests/cases/fourslash/getOccurrencesIsDefinitionOfInterface.ts ===
+// /*FIND ALL REFS*/interface [|I|] {
+//     p: number;
+// }
+// let i: [|I|] = { p: 12 };
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfInterface.ts",
+      "kind": "interface",
+      "name": "interface I",
+      "textSpan": {
+        "start": 10,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "interface",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 30
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 10,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfInterface.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 30
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 38,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfInterface.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/getOccurrencesIsDefinitionOfInterface.ts ===
+// interface /*FIND ALL REFS*/[|I|] {
+//     p: number;
+// }
+// let i: [|I|] = { p: 12 };
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfInterface.ts",
+      "kind": "interface",
+      "name": "interface I",
+      "textSpan": {
+        "start": 10,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "interface",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 30
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 10,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfInterface.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 30
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 38,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfInterface.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/getOccurrencesIsDefinitionOfInterface.ts ===
+// interface [|I|] {
+//     p: number;
+// }
+// let i: /*FIND ALL REFS*/[|I|] = { p: 12 };
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfInterface.ts",
+      "kind": "interface",
+      "name": "interface I",
+      "textSpan": {
+        "start": 10,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "interface",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 30
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 10,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfInterface.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 30
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 38,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfInterface.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]

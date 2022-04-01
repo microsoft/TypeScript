@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts' />
 
-////[|enum [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}E|] { A }|]
-////let e: [|E|].A;
+/////*1*/enum /*2*/E { A }
+////let e: /*3*/E.A;
 
-verify.singleReferenceGroup("enum E", "E");
+verify.baselineFindAllReferences('1', '2', '3');
