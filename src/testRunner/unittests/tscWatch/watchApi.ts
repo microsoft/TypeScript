@@ -204,9 +204,9 @@ namespace ts.tscWatch {
         function createWatch<T extends BuilderProgram>(
             baseline: string[],
             config: File,
-            optionsToExtend: CompilerOptions | undefined,
             sys: TestFSWithWatch.TestServerHostTrackingWrittenFiles,
-            createProgram: CreateProgram<T>
+            createProgram: CreateProgram<T>,
+            optionsToExtend?: CompilerOptions,
         ) {
             const { cb, getPrograms } = commandLineCallbacks(sys);
             baseline.push(`tsc --w${optionsToExtend?.noEmit ? " --noEmit" : ""}`);
@@ -251,9 +251,9 @@ namespace ts.tscWatch {
             change: (sys: TestFSWithWatch.TestServerHostTrackingWrittenFiles) => void,
             caption: string
         ) {
-             // Change file
-             applyChange(sys, baseline, change, caption);
-             applyChange(emitSys, emitBaseline, change, caption);
+            // Change file
+            applyChange(sys, baseline, change, caption);
+            applyChange(emitSys, emitBaseline, change, caption);
         }
 
         function verifyBuilder<T extends BuilderProgram>(
@@ -264,8 +264,8 @@ namespace ts.tscWatch {
             emitSys: TestFSWithWatch.TestServerHostTrackingWrittenFiles,
             createProgram: CreateProgram<T>,
             optionsToExtend?: CompilerOptions) {
-            createWatch(baseline, config, optionsToExtend, sys, createProgram);
-            createWatch(emitBaseline, config, optionsToExtend, emitSys, createEmitAndSemanticDiagnosticsBuilderProgram);
+            createWatch(baseline, config, sys, createProgram, optionsToExtend);
+            createWatch(emitBaseline, config, emitSys, createEmitAndSemanticDiagnosticsBuilderProgram, optionsToExtend);
             verifyOutputs(baseline, sys, emitSys);
         }
 
@@ -374,6 +374,49 @@ namespace ts.tscWatch {
             it("baseline in createEmitAndSemanticDiagnosticsBuilderProgram:: noEmitOnError with composite writes the tsbuildinfo with pending affected files correctly", () => {
                 Harness.Baseline.runBaseline(`tscWatch/watchApi/noEmitOnError-with-composite-with-emit-builder.js`, emitBaseline.join("\r\n"));
             });
+        });
+
+        it("SemanticDiagnosticsBuilderProgram emitDtsOnly does not update affected files pending emit", () => {
+            // Initial
+            const { sys, baseline, config, mainFile } = createSystem(JSON.stringify({ compilerOptions: { composite: true, noEmitOnError: true } }), "export const x: string = 10;");
+            createWatch(baseline, config, sys, createSemanticDiagnosticsBuilderProgram);
+
+            // Fix error and emit
+            applyChange(sys, baseline, sys => sys.writeFile(mainFile.path, "export const x = 10;"), "Fix error");
+
+            const { cb, getPrograms } = commandLineCallbacks(sys);
+            const oldSnap = sys.snap();
+            const reportDiagnostic = createDiagnosticReporter(sys, /*pretty*/ true);
+            const reportWatchStatus = createWatchStatusReporter(sys, /*pretty*/ true);
+            const host = createWatchCompilerHostOfConfigFile({
+                configFileName: config.path,
+                createProgram: createSemanticDiagnosticsBuilderProgram,
+                system: sys,
+                reportDiagnostic,
+                reportWatchStatus,
+            });
+            host.afterProgramCreate = program => {
+                const diagnostics = sortAndDeduplicateDiagnostics(program.getSemanticDiagnostics());
+                diagnostics.forEach(reportDiagnostic);
+                // Buildinfo should still have affectedFilesPendingEmit since we are only emitting dts files
+                program.emit(/*targetSourceFile*/ undefined, /*writeFile*/ undefined, /*cancellationToken*/ undefined, /*emitOnlyDts*/ true);
+                reportWatchStatus(
+                    createCompilerDiagnostic(getWatchErrorSummaryDiagnosticMessage(diagnostics.length), diagnostics.length),
+                    sys.newLine,
+                    program.getCompilerOptions(),
+                    diagnostics.length
+                );
+                cb(program);
+            };
+            createWatchProgram(host);
+            watchBaseline({
+                baseline,
+                getPrograms,
+                oldPrograms: emptyArray,
+                sys,
+                oldSnap,
+            });
+            Harness.Baseline.runBaseline(`tscWatch/watchApi/semantic-builder-emitOnlyDts.js`, baseline.join("\r\n"));
         });
     });
 
