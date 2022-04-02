@@ -137,8 +137,16 @@ namespace ts.InlayHints {
 
             const typeDisplayString = printTypeInSingleLine(declarationType);
             if (typeDisplayString) {
+                const isVariableNameMatchesType = !preferences.includeInlayVariableTypeHintsWhenTypeMatchesName && variableDeclarationNameMatchesTypeString(decl.name.getText(), typeDisplayString);
+                if (isVariableNameMatchesType) {
+                    return;
+                }
                 addTypeHints(typeDisplayString, decl.name.end);
             }
+        }
+
+        function variableDeclarationNameMatchesTypeString(declarationName: string, typeDisplayString: string) {
+            return declarationName.toLowerCase() === typeDisplayString.toLowerCase();
         }
 
         function visitCallOrNewExpression(expr: CallExpression | NewExpression) {
