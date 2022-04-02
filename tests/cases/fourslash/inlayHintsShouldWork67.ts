@@ -1,6 +1,5 @@
 /// <reference path="fourslash.ts" />
 
-//// @Debug
 //// type Client = {};
 //// function getClient(): Client { return {}; };
 //// const client/**/ = getClient();
