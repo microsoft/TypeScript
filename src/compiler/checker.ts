@@ -29544,7 +29544,7 @@ namespace ts {
                                 }
 
                                 if (restTailTypes.length) {
-                                    const syntheticArg = createSyntheticExpression(arg, createIntersectionType(restTailTypes), true);
+                                    const syntheticArg = createSyntheticExpression(arg, createIntersectionType(restTailTypes), /*isSpread*/ true);
                                     effectiveArgs.push(syntheticArg);
                                 }
                             }
