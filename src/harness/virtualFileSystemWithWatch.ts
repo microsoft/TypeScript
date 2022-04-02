@@ -1,16 +1,4 @@
 namespace ts.TestFSWithWatch {
-    export const safeList = {
-        path: "/safeList.json" as Path,
-        content: JSON.stringify({
-            commander: "commander",
-            express: "express",
-            jquery: "jquery",
-            lodash: "lodash",
-            moment: "moment",
-            chroma: "chroma-js"
-        })
-    };
-
     export const libFile: File = {
         path: "/a/lib/lib.d.ts",
         content: `/// <reference no-default-lib="true"/>
@@ -24,6 +12,18 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }`
+    };
+
+    export const safeList = {
+        path: "/safeList.json" as Path,
+        content: JSON.stringify({
+            commander: "commander",
+            express: "express",
+            jquery: "jquery",
+            lodash: "lodash",
+            moment: "moment",
+            chroma: "chroma-js"
+        })
     };
 
     function getExecutingFilePathFromLibFile(): string {
@@ -124,6 +124,7 @@ interface Array<T> { length: number; [n: number]: T; }`
     export function checkWatchedFiles(host: TestServerHost, expectedFiles: readonly string[], additionalInfo?: string) {
         checkMap(`watchedFiles:: ${additionalInfo || ""}::`, host.watchedFiles, expectedFiles, /*eachKeyCount*/ undefined);
     }
+
     export interface WatchFileDetails {
         fileName: string;
         pollingInterval: PollingInterval;
@@ -232,13 +233,22 @@ interface Array<T> { length: number; [n: number]: T; }`
             public withSafeList: boolean,
             fileOrFolderorSymLinkList: readonly FileOrFolderOrSymLink[],
             options: TestServerHostCreationParameters = {}) {
-            super(fileOrFolderorSymLinkList.concat(withSafeList ? safeList : []), { ...options, executingFilePath: options.executingFilePath || getExecutingFilePathFromLibFile() });
+            super(
+                fileOrFolderorSymLinkList.concat(withSafeList ? safeList : []),
+                {
+                    ...options,
+                    executingFilePath: options.executingFilePath || getExecutingFilePathFromLibFile()
+                });
         }
         runQueuedImmediateCallbacks(checkCount?: number) {
             if (checkCount !== undefined) {
                 assert.equal(this.immediateCallbacks.count(), checkCount);
             }
             super.runQueuedImmediateCallbacks();
+        }
+
+        clearScreen(): void {
+            this.screenClears.push(this.output.length);
         }
 
         checkTimeoutQueueLengthAndRun(expected: number) {
@@ -249,10 +259,6 @@ interface Array<T> { length: number; [n: number]: T; }`
         checkTimeoutQueueLength(expected: number) {
             const callbacksCount = this.timeoutCallbacks.count();
             assert.equal(callbacksCount, expected, `expected ${expected} timeout callbacks queued but found ${callbacksCount}.`);
-        }
-
-        clearScreen(): void {
-            this.screenClears.push(this.output.length);
         }
 
         override write(message: string) {
