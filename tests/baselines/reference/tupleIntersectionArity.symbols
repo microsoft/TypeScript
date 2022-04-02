@@ -6,17 +6,38 @@ declare const tuple1: [number, number, number] & { _nominal_a: never };
 declare const tuple2: [number, number, number] & [string, string, string];
 >tuple2 : Symbol(tuple2, Decl(tupleIntersectionArity.ts, 1, 13))
 
+declare const tuple3: [string] & [unknown, ...{ a: string }[]]
+>tuple3 : Symbol(tuple3, Decl(tupleIntersectionArity.ts, 2, 13))
+>a : Symbol(a, Decl(tupleIntersectionArity.ts, 2, 47))
+
+declare const tuple4: [string, string] & { a: string }[];
+>tuple4 : Symbol(tuple4, Decl(tupleIntersectionArity.ts, 3, 13))
+>a : Symbol(a, Decl(tupleIntersectionArity.ts, 3, 42))
+
 declare const f1: (...params: [number, number, number]) => void;
->f1 : Symbol(f1, Decl(tupleIntersectionArity.ts, 3, 13))
->params : Symbol(params, Decl(tupleIntersectionArity.ts, 3, 19))
+>f1 : Symbol(f1, Decl(tupleIntersectionArity.ts, 5, 13))
+>params : Symbol(params, Decl(tupleIntersectionArity.ts, 5, 19))
+
+declare const f2: (...params: [string, ...{ a: string }[]]) => void;
+>f2 : Symbol(f2, Decl(tupleIntersectionArity.ts, 6, 13))
+>params : Symbol(params, Decl(tupleIntersectionArity.ts, 6, 19))
+>a : Symbol(a, Decl(tupleIntersectionArity.ts, 6, 43))
 
 f1(...tuple1);
->f1 : Symbol(f1, Decl(tupleIntersectionArity.ts, 3, 13))
+>f1 : Symbol(f1, Decl(tupleIntersectionArity.ts, 5, 13))
 >tuple1 : Symbol(tuple1, Decl(tupleIntersectionArity.ts, 0, 13))
 
-f1(...tuple2); // Error
->f1 : Symbol(f1, Decl(tupleIntersectionArity.ts, 3, 13))
+f1(...tuple2); // Resolves to [never, never, never]
+>f1 : Symbol(f1, Decl(tupleIntersectionArity.ts, 5, 13))
 >tuple2 : Symbol(tuple2, Decl(tupleIntersectionArity.ts, 1, 13))
+
+f2(...tuple3);
+>f2 : Symbol(f2, Decl(tupleIntersectionArity.ts, 6, 13))
+>tuple3 : Symbol(tuple3, Decl(tupleIntersectionArity.ts, 2, 13))
+
+f2(...tuple4);
+>f2 : Symbol(f2, Decl(tupleIntersectionArity.ts, 6, 13))
+>tuple4 : Symbol(tuple4, Decl(tupleIntersectionArity.ts, 3, 13))
 
 export {}
 

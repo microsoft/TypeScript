@@ -6,9 +6,22 @@ declare const tuple1: [number, number, number] & { _nominal_a: never };
 declare const tuple2: [number, number, number] & [string, string, string];
 >tuple2 : [number, number, number] & [string, string, string]
 
+declare const tuple3: [string] & [unknown, ...{ a: string }[]]
+>tuple3 : [string] & [unknown, ...{ a: string; }[]]
+>a : string
+
+declare const tuple4: [string, string] & { a: string }[];
+>tuple4 : [string, string] & { a: string; }[]
+>a : string
+
 declare const f1: (...params: [number, number, number]) => void;
 >f1 : (params_0: number, params_1: number, params_2: number) => void
 >params : [number, number, number]
+
+declare const f2: (...params: [string, ...{ a: string }[]]) => void;
+>f2 : (params_0: string, ...params_1: { a: string; }[]) => void
+>params : [string, ...{ a: string; }[]]
+>a : string
 
 f1(...tuple1);
 >f1(...tuple1) : void
@@ -16,11 +29,23 @@ f1(...tuple1);
 >...tuple1 : number
 >tuple1 : [number, number, number] & { _nominal_a: never; }
 
-f1(...tuple2); // Error
+f1(...tuple2); // Resolves to [never, never, never]
 >f1(...tuple2) : void
 >f1 : (params_0: number, params_1: number, params_2: number) => void
 >...tuple2 : never
 >tuple2 : [number, number, number] & [string, string, string]
+
+f2(...tuple3);
+>f2(...tuple3) : void
+>f2 : (params_0: string, ...params_1: { a: string; }[]) => void
+>...tuple3 : string
+>tuple3 : [string] & [unknown, ...{ a: string; }[]]
+
+f2(...tuple4);
+>f2(...tuple4) : void
+>f2 : (params_0: string, ...params_1: { a: string; }[]) => void
+>...tuple4 : string & { a: string; }
+>tuple4 : [string, string] & { a: string; }[]
 
 export {}
 
