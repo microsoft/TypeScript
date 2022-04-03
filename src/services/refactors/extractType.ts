@@ -229,6 +229,12 @@ namespace ts.refactor {
     function doTypedefChange(changes: textChanges.ChangeTracker, file: SourceFile, name: string, info: ExtractInfo) {
         const { firstStatement, selection, typeParameters } = info;
 
+        if (selection.kind === SyntaxKind.UnionType) {
+            for (const type of (selection as UnionTypeNode).types) {
+                removeAllComments(type);
+            }
+        }
+
         const node = factory.createJSDocTypedefTag(
             factory.createIdentifier("typedef"),
             factory.createJSDocTypeExpression(selection),

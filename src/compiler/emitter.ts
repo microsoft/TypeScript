@@ -4434,7 +4434,7 @@ namespace ts {
 
                     // Emit this child.
                     previousSourceFileTextKind = recordBundleFileInternalSectionStart(child);
-                    if (shouldEmitInterveningComments) {
+                    if (shouldEmitInterveningComments && (getEmitFlags(child) & EmitFlags.NoLeadingComments) === 0) {
                         const commentRange = getCommentRange(child);
                         emitTrailingCommentsOfPosition(commentRange.pos);
                     }
