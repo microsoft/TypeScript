@@ -229,11 +229,7 @@ namespace ts.refactor {
     function doTypedefChange(changes: textChanges.ChangeTracker, file: SourceFile, name: string, info: ExtractInfo) {
         const { firstStatement, selection, typeParameters } = info;
 
-        if (selection.kind === SyntaxKind.UnionType) {
-            for (const type of (selection as UnionTypeNode).types) {
-                removeAllComments(type);
-            }
-        }
+        removeCommentsFromTypeNode(selection);
 
         const node = factory.createJSDocTypedefTag(
             factory.createIdentifier("typedef"),
@@ -254,5 +250,24 @@ namespace ts.refactor {
 
         changes.insertNodeBefore(file, firstStatement, factory.createJSDocComment(/* comment */ undefined, factory.createNodeArray(concatenate<JSDocTag>(templates, [node]))), /* blankLineBetween */ true);
         changes.replaceNode(file, selection, factory.createTypeReferenceNode(name, typeParameters.map(id => factory.createTypeReferenceNode(id.name, /* typeArguments */ undefined))));
+    }
+
+    function removeCommentsFromTypeNode(node: TypeNode) {
+        let members = factory.createNodeArray<Node>();
+
+        switch (node.kind) {
+            case SyntaxKind.UnionType:
+                members = (node as UnionTypeNode).types;
+                break;
+
+            case SyntaxKind.TypeLiteral:
+                members = (node as TypeLiteralNode).members;
+                break;
+        }
+
+        for (const member of members) {
+            removeAllComments(member);
+        }
+        removeAllComments(node);
     }
 }
