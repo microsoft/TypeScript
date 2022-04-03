@@ -8181,6 +8181,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";List_of_file_name_suffixes_to_search_when_resolving_a_module_6931" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[List of file name suffixes to search when resolving a module.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Liste der Dateinamensuffixe, die beim Auflösen eines Moduls gesucht werden sollen.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";List_of_folders_to_include_type_definitions_from_6161" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[List of folders to include type definitions from.]]></Val>
