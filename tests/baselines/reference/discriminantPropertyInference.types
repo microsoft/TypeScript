@@ -25,12 +25,8 @@ type DiscriminatorFalse = {
 >x : number
 }
 
-type Unrelated = {
->Unrelated : Unrelated
-
-    val: number;
->val : number
-}
+type Props = DiscriminatorTrue | DiscriminatorFalse;
+>Props : Props
 
 declare function f(options: DiscriminatorTrue | DiscriminatorFalse): any;
 >f : (options: DiscriminatorTrue | DiscriminatorFalse) => any
@@ -102,28 +98,6 @@ f({
 f({
 >f({    cb: n => n.toFixed()}) : any
 >f : (options: DiscriminatorTrue | DiscriminatorFalse) => any
->{    cb: n => n.toFixed()} : { cb: (n: number) => string; }
-
-    cb: n => n.toFixed()
->cb : (n: number) => string
->n => n.toFixed() : (n: number) => string
->n : number
->n.toFixed() : string
->n.toFixed : (fractionDigits?: number | undefined) => string
->n : number
->toFixed : (fractionDigits?: number | undefined) => string
-
-});
-
-
-declare function g(options: DiscriminatorTrue | DiscriminatorFalse | Unrelated): any;
->g : (options: DiscriminatorTrue | DiscriminatorFalse | Unrelated) => any
->options : DiscriminatorTrue | DiscriminatorFalse | Unrelated
-
-// requires checking properties of all types, rather than properties of just the union type (e.g. only intersection)
-g({
->g({    cb: n => n.toFixed()}) : any
->g : (options: DiscriminatorTrue | DiscriminatorFalse | Unrelated) => any
 >{    cb: n => n.toFixed()} : { cb: (n: number) => string; }
 
     cb: n => n.toFixed()

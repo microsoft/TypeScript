@@ -568,7 +568,7 @@ namespace ts {
             category: Diagnostics.Projects,
             transpileOptionValue: undefined,
             defaultValueDescription: ".tsbuildinfo",
-            description: Diagnostics.Specify_the_folder_for_tsbuildinfo_incremental_compilation_files,
+            description: Diagnostics.Specify_the_path_to_tsbuildinfo_incremental_compilation_file,
         },
         {
             name: "removeComments",
@@ -883,6 +883,18 @@ namespace ts {
             category: Diagnostics.Modules,
             description: Diagnostics.Allow_accessing_UMD_globals_from_modules,
             defaultValueDescription: false,
+        },
+        {
+            name: "moduleSuffixes",
+            type: "list",
+            element: {
+                name: "suffix",
+                type: "string",
+            },
+            listPreserveFalsyValues: true,
+            affectsModuleResolution: true,
+            category: Diagnostics.Modules,
+            description: Diagnostics.List_of_file_name_suffixes_to_search_when_resolving_a_module,
         },
 
         // Source Maps
@@ -2591,7 +2603,10 @@ namespace ts {
      *    file to. e.g. outDir
      */
     export function parseJsonSourceFileConfigFileContent(sourceFile: TsConfigSourceFile, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[], extraFileExtensions?: readonly FileExtensionInfo[], extendedConfigCache?: Map<ExtendedConfigCacheEntry>, existingWatchOptions?: WatchOptions): ParsedCommandLine {
-        return parseJsonConfigFileContentWorker(/*json*/ undefined, sourceFile, host, basePath, existingOptions, existingWatchOptions, configFileName, resolutionStack, extraFileExtensions, extendedConfigCache);
+        tracing?.push(tracing.Phase.Parse, "parseJsonSourceFileConfigFileContent", { path: sourceFile.fileName });
+        const result = parseJsonConfigFileContentWorker(/*json*/ undefined, sourceFile, host, basePath, existingOptions, existingWatchOptions, configFileName, resolutionStack, extraFileExtensions, extendedConfigCache);
+        tracing?.pop();
+        return result;
     }
 
     /*@internal*/
@@ -3189,7 +3204,7 @@ namespace ts {
         if (option.type === "list") {
             const listOption = option;
             if (listOption.element.isFilePath || !isString(listOption.element.type)) {
-                return filter(map(value, v => normalizeOptionValue(listOption.element, basePath, v)), v => !!v) as CompilerOptionsValue;
+                return filter(map(value, v => normalizeOptionValue(listOption.element, basePath, v)), v => listOption.listPreserveFalsyValues ? true : !!v) as CompilerOptionsValue;
             }
             return value;
         }
@@ -3230,7 +3245,7 @@ namespace ts {
     }
 
     function convertJsonOptionOfListType(option: CommandLineOptionOfListType, values: readonly any[], basePath: string, errors: Push<Diagnostic>): any[] {
-        return filter(map(values, v => convertJsonOption(option.element, v, basePath, errors)), v => !!v);
+        return filter(map(values, v => convertJsonOption(option.element, v, basePath, errors)), v => option.listPreserveFalsyValues ? true : !!v);
     }
 
     /**
@@ -3632,7 +3647,8 @@ namespace ts {
             case "boolean":
                 return true;
             case "string":
-                return option.isFilePath ? "./" : "";
+                const defaultValue = option.defaultValueDescription;
+                return option.isFilePath ? `./${defaultValue && typeof defaultValue === "string" ? defaultValue : ""}` : "";
             case "list":
                 return [];
             case "object":

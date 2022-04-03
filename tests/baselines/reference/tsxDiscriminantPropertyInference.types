@@ -28,22 +28,12 @@ type DiscriminatorFalse = {
 >x : number
 }
 
-type Unrelated = {
->Unrelated : Unrelated
-
-    val: number;
->val : number
-}
-
 type Props = DiscriminatorTrue | DiscriminatorFalse;
 >Props : Props
 
-type UnrelatedProps = Props | Unrelated;
->UnrelatedProps : UnrelatedProps
-
-declare function Comp(props: Props): JSX.Element;
->Comp : (props: Props) => JSX.Element
->props : Props
+declare function Comp(props: DiscriminatorTrue | DiscriminatorFalse): JSX.Element;
+>Comp : (props: DiscriminatorTrue | DiscriminatorFalse) => JSX.Element
+>props : DiscriminatorTrue | DiscriminatorFalse
 >JSX : any
 
 // simple inference
@@ -51,7 +41,7 @@ void (<Comp disc cb={s => parseInt(s)} />);
 >void (<Comp disc cb={s => parseInt(s)} />) : undefined
 >(<Comp disc cb={s => parseInt(s)} />) : JSX.Element
 ><Comp disc cb={s => parseInt(s)} /> : JSX.Element
->Comp : (props: Props) => JSX.Element
+>Comp : (props: DiscriminatorTrue | DiscriminatorFalse) => JSX.Element
 >disc : true
 >cb : (s: string) => number
 >s => parseInt(s) : (s: string) => number
@@ -65,7 +55,7 @@ void (<Comp disc={false} cb={n => n.toFixed()} />);
 >void (<Comp disc={false} cb={n => n.toFixed()} />) : undefined
 >(<Comp disc={false} cb={n => n.toFixed()} />) : JSX.Element
 ><Comp disc={false} cb={n => n.toFixed()} /> : JSX.Element
->Comp : (props: Props) => JSX.Element
+>Comp : (props: DiscriminatorTrue | DiscriminatorFalse) => JSX.Element
 >disc : false
 >false : false
 >cb : (n: number) => string
@@ -81,7 +71,7 @@ void (<Comp disc={undefined} cb={n => n.toFixed()} />);
 >void (<Comp disc={undefined} cb={n => n.toFixed()} />) : undefined
 >(<Comp disc={undefined} cb={n => n.toFixed()} />) : JSX.Element
 ><Comp disc={undefined} cb={n => n.toFixed()} /> : JSX.Element
->Comp : (props: Props) => JSX.Element
+>Comp : (props: DiscriminatorTrue | DiscriminatorFalse) => JSX.Element
 >disc : undefined
 >undefined : undefined
 >cb : (n: number) => string
@@ -97,26 +87,7 @@ void (<Comp cb={n => n.toFixed()} />);
 >void (<Comp cb={n => n.toFixed()} />) : undefined
 >(<Comp cb={n => n.toFixed()} />) : JSX.Element
 ><Comp cb={n => n.toFixed()} /> : JSX.Element
->Comp : (props: Props) => JSX.Element
->cb : (n: number) => string
->n => n.toFixed() : (n: number) => string
->n : number
->n.toFixed() : string
->n.toFixed : (fractionDigits?: number | undefined) => string
->n : number
->toFixed : (fractionDigits?: number | undefined) => string
-
-declare function UnrelatedComp(props: UnrelatedProps): JSX.Element;
->UnrelatedComp : (props: UnrelatedProps) => JSX.Element
->props : UnrelatedProps
->JSX : any
-
-// requires checking properties of all types, rather than properties of just the union type (e.g. only intersection)
-void (<Comp cb={n => n.toFixed()} />);
->void (<Comp cb={n => n.toFixed()} />) : undefined
->(<Comp cb={n => n.toFixed()} />) : JSX.Element
-><Comp cb={n => n.toFixed()} /> : JSX.Element
->Comp : (props: Props) => JSX.Element
+>Comp : (props: DiscriminatorTrue | DiscriminatorFalse) => JSX.Element
 >cb : (n: number) => string
 >n => n.toFixed() : (n: number) => string
 >n : number

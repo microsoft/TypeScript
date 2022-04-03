@@ -903,7 +903,6 @@ namespace ts.server {
         }
 
         public event<T extends object>(body: T, eventName: string): void {
-            tracing?.instant(tracing.Phase.Session, "event", { eventName });
             this.send(toEvent(eventName, body));
         }
 
@@ -955,18 +954,24 @@ namespace ts.server {
         }
 
         private semanticCheck(file: NormalizedPath, project: Project) {
+            tracing?.push(tracing.Phase.Session, "semanticCheck", { file, configFilePath: (project as ConfiguredProject).canonicalConfigFilePath }); // undefined is fine if the cast fails
             const diags = isDeclarationFileInJSOnlyNonConfiguredProject(project, file)
                 ? emptyArray
                 : project.getLanguageService().getSemanticDiagnostics(file).filter(d => !!d.file);
             this.sendDiagnosticsEvent(file, project, diags, "semanticDiag");
+            tracing?.pop();
         }
 
         private syntacticCheck(file: NormalizedPath, project: Project) {
+            tracing?.push(tracing.Phase.Session, "syntacticCheck", { file, configFilePath: (project as ConfiguredProject).canonicalConfigFilePath }); // undefined is fine if the cast fails
             this.sendDiagnosticsEvent(file, project, project.getLanguageService().getSyntacticDiagnostics(file), "syntaxDiag");
+            tracing?.pop();
         }
 
         private suggestionCheck(file: NormalizedPath, project: Project) {
+            tracing?.push(tracing.Phase.Session, "suggestionCheck", { file, configFilePath: (project as ConfiguredProject).canonicalConfigFilePath }); // undefined is fine if the cast fails
             this.sendDiagnosticsEvent(file, project, project.getLanguageService().getSuggestionDiagnostics(file), "suggestionDiag");
+            tracing?.pop();
         }
 
         private sendDiagnosticsEvent(file: NormalizedPath, project: Project, diagnostics: readonly Diagnostic[], kind: protocol.DiagnosticEventKind): void {
@@ -1832,10 +1837,41 @@ namespace ts.server {
             const prefix = args.prefix || "";
             const entries = mapDefined<CompletionEntry, protocol.CompletionEntry>(completions.entries, entry => {
                 if (completions.isMemberCompletion || startsWith(entry.name.toLowerCase(), prefix.toLowerCase())) {
-                    const { name, kind, kindModifiers, sortText, insertText, replacementSpan, hasAction, source, sourceDisplay, isSnippet, isRecommended, isPackageJsonImport, isImportStatementCompletion, data } = entry;
+                    const {
+                        name,
+                        kind,
+                        kindModifiers,
+                        sortText,
+                        insertText,
+                        replacementSpan,
+                        hasAction,
+                        source,
+                        sourceDisplay,
+                        labelDetails,
+                        isSnippet,
+                        isRecommended,
+                        isPackageJsonImport,
+                        isImportStatementCompletion,
+                        data } = entry;
                     const convertedSpan = replacementSpan ? toProtocolTextSpan(replacementSpan, scriptInfo) : undefined;
                     // Use `hasAction || undefined` to avoid serializing `false`.
-                    return { name, kind, kindModifiers, sortText, insertText, replacementSpan: convertedSpan, isSnippet, hasAction: hasAction || undefined, source, sourceDisplay, isRecommended, isPackageJsonImport, isImportStatementCompletion, data };
+                    return {
+                        name,
+                        kind,
+                        kindModifiers,
+                        sortText,
+                        insertText,
+                        replacementSpan: convertedSpan,
+                        isSnippet,
+                        hasAction: hasAction || undefined,
+                        source,
+                        sourceDisplay,
+                        labelDetails,
+                        isRecommended,
+                        isPackageJsonImport,
+                        isImportStatementCompletion,
+                        data
+                    };
                 }
             });
 

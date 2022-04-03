@@ -950,8 +950,35 @@ namespace FourSlashInterface {
     }
 
     export namespace Completion {
-        export import SortText = ts.Completions.SortText;
+        import SortTextType = ts.Completions.SortText;
+        export type SortText = SortTextType;
         export import CompletionSource = ts.Completions.CompletionSource;
+
+        export const SortText = {
+            // Presets
+            LocalDeclarationPriority: "10" as SortText,
+            LocationPriority: "11" as SortText,
+            OptionalMember: "12" as SortText,
+            MemberDeclaredBySpreadAssignment: "13" as SortText,
+            SuggestedClassMembers: "14" as SortText,
+            GlobalsOrKeywords: "15" as SortText,
+            AutoImportSuggestions: "16" as SortText,
+            ClassMemberSnippets: "17" as SortText,
+            JavascriptIdentifiers: "18" as SortText,
+
+            // Transformations
+            Deprecated(sortText: SortText): SortText {
+                return "z" + sortText as SortText;
+            },
+
+            ObjectLiteralProperty(presetSortText: SortText, symbolDisplayName: string): SortText {
+                return `${presetSortText}\0${symbolDisplayName}\0` as SortText;
+            },
+
+            SortBelow(sortText: SortText): SortText {
+                return sortText + "1" as SortText;
+            },
+        };
 
         const functionEntry = (name: string): ExpectedCompletionEntryObject => ({
             name,
@@ -963,7 +990,7 @@ namespace FourSlashInterface {
             name,
             kind: "function",
             kindModifiers: "deprecated,declare",
-            sortText: SortText.DeprecatedGlobalsOrKeywords
+            sortText: "z15" as SortText,
         });
         const varEntry = (name: string): ExpectedCompletionEntryObject => ({
             name,
@@ -992,7 +1019,7 @@ namespace FourSlashInterface {
             name,
             kind: "method",
             kindModifiers: "deprecated,declare",
-            sortText: SortText.DeprecatedLocationPriority
+            sortText: "z11" as SortText,
         });
         const propertyEntry = (name: string): ExpectedCompletionEntryObject => ({
             name,
@@ -1692,8 +1719,14 @@ namespace FourSlashInterface {
         readonly text?: string;
         readonly documentation?: string;
         readonly sourceDisplay?: string;
+        readonly labelDetails?: ExpectedCompletionEntryLabelDetails;
         readonly tags?: readonly ts.JSDocTagInfo[];
         readonly sortText?: ts.Completions.SortText;
+    }
+
+    export interface ExpectedCompletionEntryLabelDetails {
+        detail?: string;
+        description?: string;
     }
 
     export type ExpectedExactCompletionsPlus = readonly ExpectedCompletionEntry[] & {
