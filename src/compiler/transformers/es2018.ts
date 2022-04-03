@@ -149,6 +149,7 @@ namespace ts {
         }
 
         /**
+         * @param node The node to emit.
          * @param expressionResultIsUnused Indicates the result of an expression is unused by the parent node (i.e., the left side of a comma or the
          * expression of an `ExpressionStatement`).
          */
@@ -422,6 +423,7 @@ namespace ts {
         }
 
         /**
+         * @param node The node to emit.
          * @param expressionResultIsUnused Indicates the result of an expression is unused by the parent node (i.e., the left side of a comma or the
          * expression of an `ExpressionStatement`).
          */
@@ -486,6 +488,7 @@ namespace ts {
         }
 
         /**
+         * @param node The node to emit.
          * @param expressionResultIsUnused Indicates the result of an expression is unused by the parent node (i.e., the left side of a comma or the
          * expression of an `ExpressionStatement`).
          */

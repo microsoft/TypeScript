@@ -27,7 +27,7 @@ namespace ts {
         const parenthesizerRules = memoize(() => flags & NodeFactoryFlags.NoParenthesizerRules ? nullParenthesizerRules : createParenthesizerRules(factory));
         const converters = memoize(() => flags & NodeFactoryFlags.NoNodeConverters ? nullNodeConverters : createNodeConverters(factory));
 
-        // lazy initializaton of common operator factories
+        // lazy initialization of common operator factories
         const getBinaryCreateFunction = memoizeOne((operator: BinaryOperator) => (left: Expression, right: Expression) => createBinaryExpression(left, operator, right));
         const getPrefixUnaryCreateFunction = memoizeOne((operator: PrefixUnaryOperator) => (operand: Expression) => createPrefixUnaryExpression(operator, operand));
         const getPostfixUnaryCreateFunction = memoizeOne((operator: PostfixUnaryOperator) => (operand: Expression) => createPostfixUnaryExpression(operand, operator));
@@ -2277,7 +2277,7 @@ namespace ts {
         // @api
         function createArrayLiteralExpression(elements?: readonly Expression[], multiLine?: boolean) {
             const node = createBaseExpression<ArrayLiteralExpression>(SyntaxKind.ArrayLiteralExpression);
-            // Ensure we add a trailing comma for something like `[NumericLiteral(1), NumericLiteral(2), OmittedExpresion]` so that
+            // Ensure we add a trailing comma for something like `[NumericLiteral(1), NumericLiteral(2), OmittedExpression]` so that
             // we end up with `[1, 2, ,]` instead of `[1, 2, ]` otherwise the `OmittedExpression` will just end up being treated like
             // a trailing comma.
             const lastElement = elements && lastOrUndefined(elements);
@@ -5707,11 +5707,7 @@ namespace ts {
                 case SyntaxKind.StringLiteral:
                     return false;
                 case SyntaxKind.ArrayLiteralExpression:
-                    const elements = (target as ArrayLiteralExpression).elements;
-                    if (elements.length === 0) {
-                        return false;
-                    }
-                    return true;
+                    return (target as ArrayLiteralExpression).elements.length > 0;
                 case SyntaxKind.ObjectLiteralExpression:
                     return (target as ObjectLiteralExpression).properties.length > 0;
                 default:
@@ -5841,7 +5837,7 @@ namespace ts {
         /**
          * Gets the internal name of a declaration. This is primarily used for declarations that can be
          * referred to by name in the body of an ES5 class function body. An internal name will *never*
-         * be prefixed with an module or namespace export modifier like "exports." when emitted as an
+         * be prefixed with a module or namespace export modifier like "exports." when emitted as an
          * expression. An internal name will also *never* be renamed due to a collision with a block
          * scoped variable.
          *
@@ -5856,7 +5852,7 @@ namespace ts {
         /**
          * Gets the local name of a declaration. This is primarily used for declarations that can be
          * referred to by name in the declaration's immediate scope (classes, enums, namespaces). A
-         * local name will *never* be prefixed with an module or namespace export modifier like
+         * local name will *never* be prefixed with a module or namespace export modifier like
          * "exports." when emitted as an expression.
          *
          * @param node The declaration.
@@ -5870,7 +5866,7 @@ namespace ts {
         /**
          * Gets the export name of a declaration. This is primarily used for declarations that can be
          * referred to by name in the declaration's immediate scope (classes, enums, namespaces). An
-         * export name will *always* be prefixed with an module or namespace export modifier like
+         * export name will *always* be prefixed with a module or namespace export modifier like
          * `"exports."` when emitted as an expression if the name points to an exported symbol.
          *
          * @param node The declaration.
@@ -5913,7 +5909,7 @@ namespace ts {
         /**
          * Gets the exported name of a declaration for use in expressions.
          *
-         * An exported name will *always* be prefixed with an module or namespace export modifier like
+         * An exported name will *always* be prefixed with a module or namespace export modifier like
          * "exports." if the name points to an exported symbol.
          *
          * @param ns The namespace identifier.
@@ -5985,6 +5981,7 @@ namespace ts {
          * @param target result statements array
          * @param statementOffset The offset at which to begin the copy.
          * @param visitor Optional callback used to visit any custom prologue directives.
+         * @param filter the function that determines whether a statement meets the condition specified
          */
         function copyCustomPrologue(source: readonly Statement[], target: Push<Statement>, statementOffset: number, visitor?: (node: Node) => VisitResult<Node>, filter?: (node: Node) => boolean): number;
         function copyCustomPrologue(source: readonly Statement[], target: Push<Statement>, statementOffset: number | undefined, visitor?: (node: Node) => VisitResult<Node>, filter?: (node: Node) => boolean): number | undefined;

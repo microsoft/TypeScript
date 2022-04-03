@@ -333,6 +333,7 @@ namespace ts {
      * @param factory {@link NodeFactory} used to create the expanded representation.
      * @param node The original prefix or postfix unary node.
      * @param expression The expression to use as the value to increment or decrement
+     * @param recordTempVariable A callback which reference to `hoistVariableDeclaration` from a `TransformationContext` used to record the temporary variable name.
      * @param resultVariable A temporary variable in which to store the result. Pass `undefined` if the result is discarded, or if the value of `<temp>` is the expected result.
      */
     export function expandPreOrPostfixIncrementOrDecrementExpression(factory: NodeFactory, node: PrefixUnaryExpression | PostfixUnaryExpression, expression: Expression, recordTempVariable: (node: Identifier) => void, resultVariable: Identifier | undefined) {
@@ -1161,6 +1162,7 @@ namespace ts {
      * Creates a state machine that walks a `BinaryExpression` using the heap to reduce call-stack depth on a large tree.
      * @param onEnter Callback evaluated when entering a `BinaryExpression`. Returns new user-defined state to associate with the node while walking.
      * @param onLeft Callback evaluated when walking the left side of a `BinaryExpression`. Return a `BinaryExpression` to continue walking, or `void` to advance to the right side.
+     * @param onOperator Callback evaluated when walking the operator of a `BinaryExpression`.
      * @param onRight Callback evaluated when walking the right side of a `BinaryExpression`. Return a `BinaryExpression` to continue walking, or `void` to advance to the end of the node.
      * @param onExit Callback evaluated when exiting a `BinaryExpression`. The result returned will either be folded into the parent's state, or returned from the walker if at the top frame.
      * @param foldState Callback evaluated when the result from a nested `onExit` should be folded into the state of that node's parent.
@@ -1178,6 +1180,7 @@ namespace ts {
      * Creates a state machine that walks a `BinaryExpression` using the heap to reduce call-stack depth on a large tree.
      * @param onEnter Callback evaluated when entering a `BinaryExpression`. Returns new user-defined state to associate with the node while walking.
      * @param onLeft Callback evaluated when walking the left side of a `BinaryExpression`. Return a `BinaryExpression` to continue walking, or `void` to advance to the right side.
+     * @param onOperator Callback evaluated when walking the operator of a `BinaryExpression`.
      * @param onRight Callback evaluated when walking the right side of a `BinaryExpression`. Return a `BinaryExpression` to continue walking, or `void` to advance to the end of the node.
      * @param onExit Callback evaluated when exiting a `BinaryExpression`. The result returned will either be folded into the parent's state, or returned from the walker if at the top frame.
      * @param foldState Callback evaluated when the result from a nested `onExit` should be folded into the state of that node's parent.
