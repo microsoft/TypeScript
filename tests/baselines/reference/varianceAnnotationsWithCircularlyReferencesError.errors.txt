@@ -1,0 +1,17 @@
+tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotationsWithCircularlyReferencesError.ts(1,6): error TS2456: Type alias 'T1' circularly references itself.
+tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotationsWithCircularlyReferencesError.ts(1,11): error TS2300: Duplicate identifier '(Missing)'.
+tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotationsWithCircularlyReferencesError.ts(1,12): error TS1359: Identifier expected. 'in' is a reserved word that cannot be used here.
+tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotationsWithCircularlyReferencesError.ts(2,6): error TS2456: Type alias 'T2' circularly references itself.
+
+
+==== tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotationsWithCircularlyReferencesError.ts (4 errors) ====
+    type T1<in in> = T1 // Error: circularly references 
+         ~~
+!!! error TS2456: Type alias 'T1' circularly references itself.
+              
+!!! error TS2300: Duplicate identifier '(Missing)'.
+               ~~
+!!! error TS1359: Identifier expected. 'in' is a reserved word that cannot be used here.
+    type T2<out out> = T2 // Error: circularly references 
+         ~~
+!!! error TS2456: Type alias 'T2' circularly references itself.
