@@ -360,10 +360,6 @@ namespace FourSlashInterface {
             this.state.verifyBaselineGetFileReferences(fileName);
         }
 
-        public singleReferenceGroup(definition: ReferenceGroupDefinition, ranges?: FourSlash.Range[] | string) {
-            this.state.verifySingleReferenceGroup(definition, ranges);
-        }
-
         public findReferencesDefinitionDisplayPartsAtCaretAre(expected: ts.SymbolDisplayPart[]) {
             this.state.verifyDisplayPartsOfReferencedSymbol(expected);
         }
