@@ -3344,9 +3344,9 @@ namespace ts {
             return false;
         }
 
-        function parseParametersWorker(flags: SignatureFlags): NodeArray<ParameterDeclaration>;
+        function parseParametersWorker(flags: SignatureFlags, allowAmbiguity: true): NodeArray<ParameterDeclaration>;
         function parseParametersWorker(flags: SignatureFlags, allowAmbiguity: false): NodeArray<ParameterDeclaration> | undefined;
-        function parseParametersWorker(flags: SignatureFlags, allowAmbiguity = true): NodeArray<ParameterDeclaration> | undefined {
+        function parseParametersWorker(flags: SignatureFlags, allowAmbiguity: boolean): NodeArray<ParameterDeclaration> | undefined {
             // FormalParameters [Yield,Await]: (modified)
             //      [empty]
             //      FormalParameterList[?Yield,Await]
@@ -3394,7 +3394,7 @@ namespace ts {
                 return createMissingList<ParameterDeclaration>();
             }
 
-            const parameters = parseParametersWorker(flags);
+            const parameters = parseParametersWorker(flags, /*allowAmbiguity*/ true);
             parseExpected(SyntaxKind.CloseParenToken);
             return parameters;
         }
@@ -4673,7 +4673,7 @@ namespace ts {
                     parameters = maybeParameters;
                 }
                 else {
-                    parameters = parseParametersWorker(isAsync);
+                    parameters = parseParametersWorker(isAsync, allowAmbiguity);
                 }
                 if (!parseExpected(SyntaxKind.CloseParenToken) && !allowAmbiguity) {
                     return undefined;

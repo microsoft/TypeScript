@@ -1,69 +1,65 @@
 === tests/cases/compiler/arrowFunctionParsingGenericInObject.ts ===
-// Apparent parser error when first property of returned object is generic function with default type
 const fails1 = () => ({
->fails1 : Symbol(fails1, Decl(arrowFunctionParsingGenericInObject.ts, 1, 5))
+>fails1 : Symbol(fails1, Decl(arrowFunctionParsingGenericInObject.ts, 0, 5))
 
     test: <T = undefined>(value: T): T => value,
->test : Symbol(test, Decl(arrowFunctionParsingGenericInObject.ts, 1, 23))
->T : Symbol(T, Decl(arrowFunctionParsingGenericInObject.ts, 2, 11))
->value : Symbol(value, Decl(arrowFunctionParsingGenericInObject.ts, 2, 26))
->T : Symbol(T, Decl(arrowFunctionParsingGenericInObject.ts, 2, 11))
->T : Symbol(T, Decl(arrowFunctionParsingGenericInObject.ts, 2, 11))
->value : Symbol(value, Decl(arrowFunctionParsingGenericInObject.ts, 2, 26))
+>test : Symbol(test, Decl(arrowFunctionParsingGenericInObject.ts, 0, 23))
+>T : Symbol(T, Decl(arrowFunctionParsingGenericInObject.ts, 1, 11))
+>value : Symbol(value, Decl(arrowFunctionParsingGenericInObject.ts, 1, 26))
+>T : Symbol(T, Decl(arrowFunctionParsingGenericInObject.ts, 1, 11))
+>T : Symbol(T, Decl(arrowFunctionParsingGenericInObject.ts, 1, 11))
+>value : Symbol(value, Decl(arrowFunctionParsingGenericInObject.ts, 1, 26))
 
     extraValue: () => {},
->extraValue : Symbol(extraValue, Decl(arrowFunctionParsingGenericInObject.ts, 2, 48))
+>extraValue : Symbol(extraValue, Decl(arrowFunctionParsingGenericInObject.ts, 1, 48))
 
 })
 
-// Without a default type, it works fine
 const works1 = () => ({
->works1 : Symbol(works1, Decl(arrowFunctionParsingGenericInObject.ts, 7, 5))
+>works1 : Symbol(works1, Decl(arrowFunctionParsingGenericInObject.ts, 5, 5))
 
     test: <T>(value: T): T => value,
->test : Symbol(test, Decl(arrowFunctionParsingGenericInObject.ts, 7, 23))
->T : Symbol(T, Decl(arrowFunctionParsingGenericInObject.ts, 8, 11))
->value : Symbol(value, Decl(arrowFunctionParsingGenericInObject.ts, 8, 14))
->T : Symbol(T, Decl(arrowFunctionParsingGenericInObject.ts, 8, 11))
->T : Symbol(T, Decl(arrowFunctionParsingGenericInObject.ts, 8, 11))
->value : Symbol(value, Decl(arrowFunctionParsingGenericInObject.ts, 8, 14))
+>test : Symbol(test, Decl(arrowFunctionParsingGenericInObject.ts, 5, 23))
+>T : Symbol(T, Decl(arrowFunctionParsingGenericInObject.ts, 6, 11))
+>value : Symbol(value, Decl(arrowFunctionParsingGenericInObject.ts, 6, 14))
+>T : Symbol(T, Decl(arrowFunctionParsingGenericInObject.ts, 6, 11))
+>T : Symbol(T, Decl(arrowFunctionParsingGenericInObject.ts, 6, 11))
+>value : Symbol(value, Decl(arrowFunctionParsingGenericInObject.ts, 6, 14))
 
     extraValue: () => {},
->extraValue : Symbol(extraValue, Decl(arrowFunctionParsingGenericInObject.ts, 8, 36))
+>extraValue : Symbol(extraValue, Decl(arrowFunctionParsingGenericInObject.ts, 6, 36))
 
 })
 
-// As second property, it works fine
 const works2 = () => ({
->works2 : Symbol(works2, Decl(arrowFunctionParsingGenericInObject.ts, 13, 5))
+>works2 : Symbol(works2, Decl(arrowFunctionParsingGenericInObject.ts, 10, 5))
 
     extraValue: () => {},
->extraValue : Symbol(extraValue, Decl(arrowFunctionParsingGenericInObject.ts, 13, 23))
+>extraValue : Symbol(extraValue, Decl(arrowFunctionParsingGenericInObject.ts, 10, 23))
 
     test: <T = undefined>(value: T): T => value,
->test : Symbol(test, Decl(arrowFunctionParsingGenericInObject.ts, 14, 25))
->T : Symbol(T, Decl(arrowFunctionParsingGenericInObject.ts, 15, 11))
->value : Symbol(value, Decl(arrowFunctionParsingGenericInObject.ts, 15, 26))
->T : Symbol(T, Decl(arrowFunctionParsingGenericInObject.ts, 15, 11))
->T : Symbol(T, Decl(arrowFunctionParsingGenericInObject.ts, 15, 11))
->value : Symbol(value, Decl(arrowFunctionParsingGenericInObject.ts, 15, 26))
+>test : Symbol(test, Decl(arrowFunctionParsingGenericInObject.ts, 11, 25))
+>T : Symbol(T, Decl(arrowFunctionParsingGenericInObject.ts, 12, 11))
+>value : Symbol(value, Decl(arrowFunctionParsingGenericInObject.ts, 12, 26))
+>T : Symbol(T, Decl(arrowFunctionParsingGenericInObject.ts, 12, 11))
+>T : Symbol(T, Decl(arrowFunctionParsingGenericInObject.ts, 12, 11))
+>value : Symbol(value, Decl(arrowFunctionParsingGenericInObject.ts, 12, 26))
 
 })
 
-// The first property _must_ be a function, though
 const fails2 = () => ({
->fails2 : Symbol(fails2, Decl(arrowFunctionParsingGenericInObject.ts, 19, 5))
+>fails2 : Symbol(fails2, Decl(arrowFunctionParsingGenericInObject.ts, 15, 5))
 
     extraValue: '',
->extraValue : Symbol(extraValue, Decl(arrowFunctionParsingGenericInObject.ts, 19, 23))
+>extraValue : Symbol(extraValue, Decl(arrowFunctionParsingGenericInObject.ts, 15, 23))
 
     test: <T = undefined>(value: T): T => value,
->test : Symbol(test, Decl(arrowFunctionParsingGenericInObject.ts, 20, 19))
->T : Symbol(T, Decl(arrowFunctionParsingGenericInObject.ts, 21, 11))
->value : Symbol(value, Decl(arrowFunctionParsingGenericInObject.ts, 21, 26))
->T : Symbol(T, Decl(arrowFunctionParsingGenericInObject.ts, 21, 11))
->T : Symbol(T, Decl(arrowFunctionParsingGenericInObject.ts, 21, 11))
->value : Symbol(value, Decl(arrowFunctionParsingGenericInObject.ts, 21, 26))
+>test : Symbol(test, Decl(arrowFunctionParsingGenericInObject.ts, 16, 19))
+>T : Symbol(T, Decl(arrowFunctionParsingGenericInObject.ts, 17, 11))
+>value : Symbol(value, Decl(arrowFunctionParsingGenericInObject.ts, 17, 26))
+>T : Symbol(T, Decl(arrowFunctionParsingGenericInObject.ts, 17, 11))
+>T : Symbol(T, Decl(arrowFunctionParsingGenericInObject.ts, 17, 11))
+>value : Symbol(value, Decl(arrowFunctionParsingGenericInObject.ts, 17, 26))
 
 })
 
