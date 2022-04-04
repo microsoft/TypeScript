@@ -1349,6 +1349,7 @@ namespace ts.FindAllReferences {
                 const depth = getDepth(decl);
                 if (!some(topMost.declarationNames) || depth === topMost.depth) {
                     topMost.declarationNames.push(decl);
+                    topMost.depth = depth;
                 }
                 else if (depth < topMost.depth) {
                     topMost.declarationNames = [decl];
