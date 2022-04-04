@@ -25439,7 +25439,7 @@ namespace ts {
             return !!(type.flags & TypeFlags.Instantiable && !maybeTypeOfKind(getBaseConstraintOrType(type), TypeFlags.Nullable));
         }
 
-        function hasContextualTypeWithNoGenericTypes(node: Node, checkMode: CheckMode | undefined) {
+        function tryGetContextualTypeWithNoGenericTypes(node: Node, checkMode: CheckMode | undefined) {
             // Computing the contextual type for a child of a JSX element involves resolving the type of the
             // element's tag name, so we exclude that here to avoid circularities.
             // If check mode has `CheckMode.RestBindingElement`, we skip binding pattern contextual types,
@@ -25449,7 +25449,7 @@ namespace ts {
                 (checkMode && checkMode & CheckMode.RestBindingElement ?
                     getContextualType(node, ContextFlags.SkipBindingPatterns)
                     : getContextualType(node));
-            return contextualType && !isGenericType(contextualType);
+            return contextualType && !isGenericType(contextualType) ? contextualType : undefined;
         }
 
         function getNarrowableTypeForReference(type: Type, reference: Node, checkMode?: CheckMode) {
@@ -25460,10 +25460,25 @@ namespace ts {
             // control flow analysis an opportunity to narrow it further. For example, for a reference of a type
             // parameter type 'T extends string | undefined' with a contextual type 'string', we substitute
             // 'string | undefined' to give control flow analysis the opportunity to narrow to type 'string'.
-            const substituteConstraints = !(checkMode && checkMode & CheckMode.Inferential) &&
-                someType(type, isGenericTypeWithUnionConstraint) &&
-                (isConstraintPosition(type, reference) || hasContextualTypeWithNoGenericTypes(reference, checkMode));
-            return substituteConstraints ? mapType(type, t => t.flags & TypeFlags.Instantiable ? getBaseConstraintOrType(t) : t) : type;
+            if (checkMode && checkMode & CheckMode.Inferential) {
+                return type;
+            }
+
+            let contextualType: Type | undefined;
+            // If we aren't in a constraint position, or we can't find a contextual type, or the contextual type indicates
+            // that the type in question may be a direct inference source, then don't do anything special.
+            if (!isConstraintPosition(type, reference) && !(contextualType = tryGetContextualTypeWithNoGenericTypes(reference, checkMode))) {
+                return type;
+            }
+
+            const substituteConstraints =
+                // When we have a type parameter constrained to a union type, we can typically narrow to get better results.
+                someType(type, isGenericTypeWithUnionConstraint) ||
+                // When the contextual type is 'unknown', we may need to narrow for compatibility with non-null targets.
+                // This allows some parity with a constraint of '{} | null | undefined'.
+                (type.flags & TypeFlags.Instantiable) && contextualType && isEmptyObjectType(contextualType);
+
+            return substituteConstraints ? mapType(type, t => t.flags & TypeFlags.Instantiable ? getBaseConstraintOfType(t) || unknownType : t) : type;
         }
 
         function isExportOrExportExpression(location: Node) {
