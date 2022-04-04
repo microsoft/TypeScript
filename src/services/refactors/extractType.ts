@@ -252,7 +252,7 @@ namespace ts.refactor {
         changes.replaceNode(file, selection, factory.createTypeReferenceNode(name, typeParameters.map(id => factory.createTypeReferenceNode(id.name, /* typeArguments */ undefined))));
     }
 
-    function removeCommentsFromTypeNode(node: TypeNode) {
+    function removeCommentsFromTypeNode(node: Node) {
         let members = factory.createNodeArray<Node>();
 
         switch (node.kind) {
@@ -263,10 +263,19 @@ namespace ts.refactor {
             case SyntaxKind.TypeLiteral:
                 members = (node as TypeLiteralNode).members;
                 break;
+
+            case SyntaxKind.IntersectionType:
+                members = (node as IntersectionTypeNode).types;
+                break;
+
+            case SyntaxKind.TupleType:
+                members = (node as TupleTypeNode).elements;
+                break;
+
         }
 
         for (const member of members) {
-            removeAllComments(member);
+            removeCommentsFromTypeNode(member);
         }
         removeAllComments(node);
     }
