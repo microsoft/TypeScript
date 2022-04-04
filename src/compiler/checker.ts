@@ -20640,11 +20640,9 @@ namespace ts {
         function createMarkerType(symbol: Symbol, source: TypeParameter, target: Type) {
             const mapper = makeUnaryTypeMapper(source, target);
             const type = getDeclaredTypeOfSymbol(symbol);
-
             if (isErrorType(type)) {
                 return type;
             }
-
             const result = symbol.flags & SymbolFlags.TypeAlias ?
                 getTypeAliasInstantiation(symbol, instantiateTypes(getSymbolLinks(symbol).typeParameters!, mapper)) :
                 createTypeReference(type as GenericType, instantiateTypes((type as GenericType).typeParameters, mapper));
