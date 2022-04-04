@@ -1669,6 +1669,8 @@ interface DataView {
      * Gets the Float32 value at the specified byte offset from the start of the view. There is
      * no alignment constraint; multi-byte values may be fetched from any offset.
      * @param byteOffset The place in the buffer at which the value should be retrieved.
+     * @param littleEndian If false or undefined, a big-endian value should be written,
+     * otherwise a little-endian value should be written.
      */
     getFloat32(byteOffset: number, littleEndian?: boolean): number;
 
@@ -1676,6 +1678,8 @@ interface DataView {
      * Gets the Float64 value at the specified byte offset from the start of the view. There is
      * no alignment constraint; multi-byte values may be fetched from any offset.
      * @param byteOffset The place in the buffer at which the value should be retrieved.
+     * @param littleEndian If false or undefined, a big-endian value should be written,
+     * otherwise a little-endian value should be written.
      */
     getFloat64(byteOffset: number, littleEndian?: boolean): number;
 
@@ -1690,12 +1694,16 @@ interface DataView {
      * Gets the Int16 value at the specified byte offset from the start of the view. There is
      * no alignment constraint; multi-byte values may be fetched from any offset.
      * @param byteOffset The place in the buffer at which the value should be retrieved.
+     * @param littleEndian If false or undefined, a big-endian value should be written,
+     * otherwise a little-endian value should be written.
      */
     getInt16(byteOffset: number, littleEndian?: boolean): number;
     /**
      * Gets the Int32 value at the specified byte offset from the start of the view. There is
      * no alignment constraint; multi-byte values may be fetched from any offset.
      * @param byteOffset The place in the buffer at which the value should be retrieved.
+     * @param littleEndian If false or undefined, a big-endian value should be written,
+     * otherwise a little-endian value should be written.
      */
     getInt32(byteOffset: number, littleEndian?: boolean): number;
 
@@ -1710,6 +1718,8 @@ interface DataView {
      * Gets the Uint16 value at the specified byte offset from the start of the view. There is
      * no alignment constraint; multi-byte values may be fetched from any offset.
      * @param byteOffset The place in the buffer at which the value should be retrieved.
+     * @param littleEndian If false or undefined, a big-endian value should be written,
+     * otherwise a little-endian value should be written.
      */
     getUint16(byteOffset: number, littleEndian?: boolean): number;
 
@@ -1717,6 +1727,8 @@ interface DataView {
      * Gets the Uint32 value at the specified byte offset from the start of the view. There is
      * no alignment constraint; multi-byte values may be fetched from any offset.
      * @param byteOffset The place in the buffer at which the value should be retrieved.
+     * @param littleEndian If false or undefined, a big-endian value should be written,
+     * otherwise a little-endian value should be written.
      */
     getUint32(byteOffset: number, littleEndian?: boolean): number;
 
