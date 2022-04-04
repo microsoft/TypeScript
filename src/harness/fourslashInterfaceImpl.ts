@@ -352,12 +352,12 @@ namespace FourSlashInterface {
             this.state.verifyBaselineFindAllReferences(...markerNames);
         }
 
-        public baselineGetFileReferences(fileName: string) {
-            this.state.verifyBaselineGetFileReferences(fileName);
+        public baselineFindAllReferencesMulti(seq: number, ...markerNames: string[]) {
+            this.state.verifyBaselineFindAllReferencesMulti(seq, ...markerNames);
         }
 
-        public singleReferenceGroup(definition: ReferenceGroupDefinition, ranges?: FourSlash.Range[] | string) {
-            this.state.verifySingleReferenceGroup(definition, ranges);
+        public baselineGetFileReferences(fileName: string) {
+            this.state.verifyBaselineGetFileReferences(fileName);
         }
 
         public findReferencesDefinitionDisplayPartsAtCaretAre(expected: ts.SymbolDisplayPart[]) {

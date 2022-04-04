@@ -1122,83 +1122,18 @@ namespace FourSlash {
             }
         }
 
-        private verifyDocumentHighlightsRespectFilesList(files: readonly string[]): void {
-            const startFile = this.activeFile.fileName;
-            for (const fileName of files) {
-                const searchFileNames = startFile === fileName ? [startFile] : [startFile, fileName];
-                const highlights = this.getDocumentHighlightsAtCurrentPosition(searchFileNames);
-                if (highlights && !highlights.every(dh => ts.contains(searchFileNames, dh.fileName))) {
-                    this.raiseError(`When asking for document highlights only in files ${searchFileNames}, got document highlights in ${unique(highlights, dh => dh.fileName)}`);
-                }
-            }
-        }
-
-        public verifyReferenceGroups(starts: ArrayOrSingle<string> | ArrayOrSingle<Range>, parts: readonly FourSlashInterface.ReferenceGroup[]): void {
-            interface ReferenceGroupJson {
-                definition: string | { text: string, range: ts.TextSpan };
-                references: ts.ReferenceEntry[];
-            }
-            interface RangeMarkerData {
-                id?: string;
-                isWriteAccess?: boolean,
-                isDefinition?: boolean,
-                isInString?: true,
-                contextRangeIndex?: number,
-                contextRangeDelta?: number,
-                contextRangeId?: string
-            }
-            const fullExpected = ts.map<FourSlashInterface.ReferenceGroup, ReferenceGroupJson>(parts, ({ definition, ranges }) => ({
-                definition: typeof definition === "string" ? definition : { ...definition, range: ts.createTextSpanFromRange(definition.range) },
-                references: ranges.map<ts.ReferenceEntry>(r => {
-                    const { isWriteAccess = false, isDefinition = false, isInString, contextRangeIndex, contextRangeDelta, contextRangeId } = (r.marker && r.marker.data || {}) as RangeMarkerData;
-                    let contextSpan: ts.TextSpan | undefined;
-                    if (contextRangeDelta !== undefined) {
-                        const allRanges = this.getRanges();
-                        const index = allRanges.indexOf(r);
-                        if (index !== -1) {
-                            contextSpan = ts.createTextSpanFromRange(allRanges[index + contextRangeDelta]);
-                        }
-                    }
-                    else if (contextRangeId !== undefined) {
-                        const allRanges = this.getRanges();
-                        const contextRange = ts.find(allRanges, range => (range.marker?.data as RangeMarkerData)?.id === contextRangeId);
-                        if (contextRange) {
-                            contextSpan = ts.createTextSpanFromRange(contextRange);
-                        }
-                    }
-                    else if (contextRangeIndex !== undefined) {
-                        contextSpan = ts.createTextSpanFromRange(this.getRanges()[contextRangeIndex]);
-                    }
-                    return {
-                        textSpan: ts.createTextSpanFromRange(r),
-                        fileName: r.fileName,
-                        ...(contextSpan ? { contextSpan } : undefined),
-                        isWriteAccess,
-                        isDefinition,
-                        ...(isInString ? { isInString: true } : undefined),
-                    };
-                }),
-            }));
-
-            for (const start of toArray<string | Range>(starts)) {
-                this.goToMarkerOrRange(start);
-                const fullActual = ts.map<ts.ReferencedSymbol, ReferenceGroupJson>(this.findReferencesAtCaret(), ({ definition, references }, i) => {
-                    const text = definition.displayParts.map(d => d.text).join("");
-                    return {
-                        definition: fullExpected.length > i && typeof fullExpected[i].definition === "string" ? text : { text, range: definition.textSpan },
-                        references,
-                    };
-                });
-                this.assertObjectsEqual(fullActual, fullExpected);
-
-                if (parts) {
-                    this.verifyDocumentHighlightsRespectFilesList(unique(ts.flatMap(parts, p => p.ranges), r => r.fileName));
-                }
-            }
-        }
-
         public verifyBaselineFindAllReferences(...markerNames: string[]) {
+            ts.Debug.assert(markerNames.length > 0, "Must pass at least one marker name to `verifyBaselineFindAllReferences()`");
+            this.verifyBaselineFindAllReferencesWorker("", markerNames);
+        }
+
+        // Used when a single test needs to produce multiple baselines
+        public verifyBaselineFindAllReferencesMulti(seq: number, ...markerNames: string[]) {
             ts.Debug.assert(markerNames.length > 0, "Must pass at least one marker name to `baselineFindAllReferences()`");
+            this.verifyBaselineFindAllReferencesWorker(`.${seq}`, markerNames);
+        }
+
+        private verifyBaselineFindAllReferencesWorker(suffix: string, markerNames: string[]) {
             const baseline = markerNames.map(markerName => {
                 this.goToMarker(markerName);
                 const marker = this.getMarkerByName(markerName);
@@ -1213,7 +1148,7 @@ namespace FourSlash {
                 // Write response JSON
                 return baselineContent + JSON.stringify(references, undefined, 2);
             }).join("\n\n");
-            Harness.Baseline.runBaseline(this.getBaselineFileNameForContainingTestFile(".baseline.jsonc"), baseline);
+            Harness.Baseline.runBaseline(this.getBaselineFileNameForContainingTestFile(`${suffix}.baseline.jsonc`), baseline);
         }
 
         public verifyBaselineGetFileReferences(fileName: string) {
@@ -1278,11 +1213,6 @@ namespace FourSlash {
                 newContent += content.slice(pos);
                 return newContent.split(/\r?\n/).map(l => "// " + l).join("\n");
             }
-        }
-
-        public verifySingleReferenceGroup(definition: FourSlashInterface.ReferenceGroupDefinition, ranges?: Range[] | string) {
-            ranges = ts.isString(ranges) ? this.rangesByText().get(ranges)! : ranges || this.getRanges();
-            this.verifyReferenceGroups(ranges, [{ definition, ranges }]);
         }
 
         private assertObjectsEqual<T>(fullActual: T, fullExpected: T, msgPrefix = ""): void {
@@ -2401,15 +2331,6 @@ namespace FourSlash {
         public goToEOF() {
             const len = this.getFileContent(this.activeFile.fileName).length;
             this.goToPosition(len);
-        }
-
-        private goToMarkerOrRange(markerOrRange: string | Range) {
-            if (typeof markerOrRange === "string") {
-                this.goToMarker(markerOrRange);
-            }
-            else {
-                this.goToRangeStart(markerOrRange);
-            }
         }
 
         public goToRangeStart({ fileName, pos }: Range) {

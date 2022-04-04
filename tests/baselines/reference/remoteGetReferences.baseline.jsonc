@@ -1,0 +1,8919 @@
+// === /tests/cases/fourslash/remoteGetReferences_2.ts ===
+// var remoteglobalVar: number = 2;
+// 
+// class [|remotefooCls|] {
+// 	//Declare
+// 	remoteclsVar = 1;
+// 	static remoteclsSVar = 1;
+// 
+// 	constructor(public remoteclsParam: number) {
+// 		//Increments
+// 		remoteglobalVar++;
+// 		this.remoteclsVar++;
+// 		[|remotefooCls|].remoteclsSVar++;
+// 		this.remoteclsParam++;
+// 		remotemodTest.remotemodVar++;
+// 	}
+// }
+// 
+// function remotefoo(remotex: number) {
+// 	//Declare
+// 	var remotefnVar = 1;
+// 
+// 	//Increments
+// 	[|remotefooCls|].remoteclsSVar++;
+// 	remoteglobalVar++;
+// 	remotemodTest.remotemodVar++;
+// 	remotefnVar++;
+// 
+// 	//Return
+// 	return remotex++;
+// }
+// 
+// module remotemodTest {
+// 	//Declare
+// 	export var remotemodVar: number;
+// 
+// 	//Increments
+// 	remoteglobalVar++;
+// 	[|remotefooCls|].remoteclsSVar++;
+// 	remotemodVar++;
+// 
+// 	class remotetestCls {
+// 		static remoteboo = remotefoo;
+// 	}
+// 
+// 	function remotetestFn(){
+//         static remoteboo = remotefoo;
+// 
+// 		//Increments
+// 		remoteglobalVar++;
+// 		[|remotefooCls|].remoteclsSVar++;
+// 		remotemodVar++;
+//     }
+// 
+// 	module remotetestMod {
+// 		var remoteboo = remotefoo;
+// 	}
+// }
+
+// === /tests/cases/fourslash/remoteGetReferences_1.ts ===
+// // Comment Refence Test: globalVar
+// var globalVar: number = 2;
+// 
+// class fooCls {
+//     static clsSVar = 1;
+//     //Declare
+//     clsVar = 1;
+// 
+//     constructor (public clsParam: number) {
+//         //Increments
+//         globalVar++;
+//         this.clsVar++;
+//         fooCls.clsSVar++;
+//         this.clsParam++;
+//         modTest.modVar++;
+//     }
+// }
+// 
+// function foo(x: number) {
+//     //Declare
+//     var fnVar = 1;
+// 
+//     //Increments
+//     fooCls.clsSVar++;
+//     globalVar++;
+//     modTest.modVar++;
+//     fnVar++;
+// 
+//     //Return
+//     return x++;
+// }
+// 
+// module modTest {
+//     //Declare
+//     export var modVar:number;
+// 
+//     //Increments
+//     globalVar++;
+//     fooCls.clsSVar++;
+//     modVar++;
+// 
+//     class testCls {
+//         static boo = foo;
+//     }
+// 
+//     function testFn(){
+//         static boo = foo;
+// 
+//         //Increments
+//         globalVar++;
+//         fooCls.clsSVar++;
+//         modVar++;
+//     }
+// 
+//     module testMod {
+//         var boo = foo;
+//     }
+// }
+// 
+// //Type test
+// var clsTest: fooCls;
+// 
+// //Arguments
+// clsTest = new fooCls(globalVar);
+// foo(globalVar);
+// 
+// //Increments
+// fooCls.clsSVar++;
+// modTest.modVar++;
+// globalVar = globalVar + globalVar;
+// 
+// //ETC - Other cases
+// globalVar = 3;
+// foo = foo + 1;
+// err = err++;
+// 
+// //Shadowed fn Parameter
+// function shdw(globalVar: number) {
+//     //Increments
+//     globalVar++;
+//     return globalVar;
+// }
+// 
+// //Remotes
+// //Type test
+// var remoteclsTest: /*FIND ALL REFS*/[|remotefooCls|];
+// 
+// //Arguments
+// remoteclsTest = new [|remotefooCls|](remoteglobalVar);
+// remotefoo(remoteglobalVar);
+// 
+// //Increments
+// [|remotefooCls|].remoteclsSVar++;
+// remotemodTest.remotemodVar++;
+// remoteglobalVar = remoteglobalVar + remoteglobalVar;
+// 
+// //ETC - Other cases
+// remoteglobalVar = 3;
+// 
+// //Find References misses method param
+// var
+// 
+// 
+// 
+//  array = ["f", "o", "o"];
+// 
+// array.forEach(
+// 
+// 
+// function(str) {
+// 
+// 
+// 
+//    return str + " ";
+// 
+// });
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+      "kind": "class",
+      "name": "class remotefooCls",
+      "textSpan": {
+        "start": 40,
+        "length": 12
+      },
+      "displayParts": [
+        {
+          "text": "class",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "remotefooCls",
+          "kind": "className"
+        }
+      ],
+      "contextSpan": {
+        "start": 34,
+        "length": 277
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 1298,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1345,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1418,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 40,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "contextSpan": {
+          "start": 34,
+          "length": 277
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 220,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 400,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 634,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 844,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/remoteGetReferences_2.ts ===
+// var remoteglobalVar: number = 2;
+// 
+// class [|remotefooCls|] {
+// 	//Declare
+// 	remoteclsVar = 1;
+// 	static remoteclsSVar = 1;
+// 
+// 	constructor(public remoteclsParam: number) {
+// 		//Increments
+// 		remoteglobalVar++;
+// 		this.remoteclsVar++;
+// 		[|remotefooCls|].remoteclsSVar++;
+// 		this.remoteclsParam++;
+// 		remotemodTest.remotemodVar++;
+// 	}
+// }
+// 
+// function remotefoo(remotex: number) {
+// 	//Declare
+// 	var remotefnVar = 1;
+// 
+// 	//Increments
+// 	[|remotefooCls|].remoteclsSVar++;
+// 	remoteglobalVar++;
+// 	remotemodTest.remotemodVar++;
+// 	remotefnVar++;
+// 
+// 	//Return
+// 	return remotex++;
+// }
+// 
+// module remotemodTest {
+// 	//Declare
+// 	export var remotemodVar: number;
+// 
+// 	//Increments
+// 	remoteglobalVar++;
+// 	[|remotefooCls|].remoteclsSVar++;
+// 	remotemodVar++;
+// 
+// 	class remotetestCls {
+// 		static remoteboo = remotefoo;
+// 	}
+// 
+// 	function remotetestFn(){
+//         static remoteboo = remotefoo;
+// 
+// 		//Increments
+// 		remoteglobalVar++;
+// 		[|remotefooCls|].remoteclsSVar++;
+// 		remotemodVar++;
+//     }
+// 
+// 	module remotetestMod {
+// 		var remoteboo = remotefoo;
+// 	}
+// }
+
+// === /tests/cases/fourslash/remoteGetReferences_1.ts ===
+// // Comment Refence Test: globalVar
+// var globalVar: number = 2;
+// 
+// class fooCls {
+//     static clsSVar = 1;
+//     //Declare
+//     clsVar = 1;
+// 
+//     constructor (public clsParam: number) {
+//         //Increments
+//         globalVar++;
+//         this.clsVar++;
+//         fooCls.clsSVar++;
+//         this.clsParam++;
+//         modTest.modVar++;
+//     }
+// }
+// 
+// function foo(x: number) {
+//     //Declare
+//     var fnVar = 1;
+// 
+//     //Increments
+//     fooCls.clsSVar++;
+//     globalVar++;
+//     modTest.modVar++;
+//     fnVar++;
+// 
+//     //Return
+//     return x++;
+// }
+// 
+// module modTest {
+//     //Declare
+//     export var modVar:number;
+// 
+//     //Increments
+//     globalVar++;
+//     fooCls.clsSVar++;
+//     modVar++;
+// 
+//     class testCls {
+//         static boo = foo;
+//     }
+// 
+//     function testFn(){
+//         static boo = foo;
+// 
+//         //Increments
+//         globalVar++;
+//         fooCls.clsSVar++;
+//         modVar++;
+//     }
+// 
+//     module testMod {
+//         var boo = foo;
+//     }
+// }
+// 
+// //Type test
+// var clsTest: fooCls;
+// 
+// //Arguments
+// clsTest = new fooCls(globalVar);
+// foo(globalVar);
+// 
+// //Increments
+// fooCls.clsSVar++;
+// modTest.modVar++;
+// globalVar = globalVar + globalVar;
+// 
+// //ETC - Other cases
+// globalVar = 3;
+// foo = foo + 1;
+// err = err++;
+// 
+// //Shadowed fn Parameter
+// function shdw(globalVar: number) {
+//     //Increments
+//     globalVar++;
+//     return globalVar;
+// }
+// 
+// //Remotes
+// //Type test
+// var remoteclsTest: [|remotefooCls|];
+// 
+// //Arguments
+// remoteclsTest = new /*FIND ALL REFS*/[|remotefooCls|](remoteglobalVar);
+// remotefoo(remoteglobalVar);
+// 
+// //Increments
+// [|remotefooCls|].remoteclsSVar++;
+// remotemodTest.remotemodVar++;
+// remoteglobalVar = remoteglobalVar + remoteglobalVar;
+// 
+// //ETC - Other cases
+// remoteglobalVar = 3;
+// 
+// //Find References misses method param
+// var
+// 
+// 
+// 
+//  array = ["f", "o", "o"];
+// 
+// array.forEach(
+// 
+// 
+// function(str) {
+// 
+// 
+// 
+//    return str + " ";
+// 
+// });
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+      "kind": "class",
+      "name": "class remotefooCls",
+      "textSpan": {
+        "start": 40,
+        "length": 12
+      },
+      "displayParts": [
+        {
+          "text": "class",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "remotefooCls",
+          "kind": "className"
+        }
+      ],
+      "contextSpan": {
+        "start": 34,
+        "length": 277
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 1298,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1345,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1418,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 40,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "contextSpan": {
+          "start": 34,
+          "length": 277
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 220,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 400,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 634,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 844,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/remoteGetReferences_2.ts ===
+// var [|remoteglobalVar|]: number = 2;
+// 
+// class remotefooCls {
+// 	//Declare
+// 	remoteclsVar = 1;
+// 	static remoteclsSVar = 1;
+// 
+// 	constructor(public remoteclsParam: number) {
+// 		//Increments
+// 		[|remoteglobalVar|]++;
+// 		this.remoteclsVar++;
+// 		remotefooCls.remoteclsSVar++;
+// 		this.remoteclsParam++;
+// 		remotemodTest.remotemodVar++;
+// 	}
+// }
+// 
+// function remotefoo(remotex: number) {
+// 	//Declare
+// 	var remotefnVar = 1;
+// 
+// 	//Increments
+// 	remotefooCls.remoteclsSVar++;
+// 	[|remoteglobalVar|]++;
+// 	remotemodTest.remotemodVar++;
+// 	remotefnVar++;
+// 
+// 	//Return
+// 	return remotex++;
+// }
+// 
+// module remotemodTest {
+// 	//Declare
+// 	export var remotemodVar: number;
+// 
+// 	//Increments
+// 	[|remoteglobalVar|]++;
+// 	remotefooCls.remoteclsSVar++;
+// 	remotemodVar++;
+// 
+// 	class remotetestCls {
+// 		static remoteboo = remotefoo;
+// 	}
+// 
+// 	function remotetestFn(){
+//         static remoteboo = remotefoo;
+// 
+// 		//Increments
+// 		[|remoteglobalVar|]++;
+// 		remotefooCls.remoteclsSVar++;
+// 		remotemodVar++;
+//     }
+// 
+// 	module remotetestMod {
+// 		var remoteboo = remotefoo;
+// 	}
+// }
+
+// === /tests/cases/fourslash/remoteGetReferences_1.ts ===
+// // Comment Refence Test: globalVar
+// var globalVar: number = 2;
+// 
+// class fooCls {
+//     static clsSVar = 1;
+//     //Declare
+//     clsVar = 1;
+// 
+//     constructor (public clsParam: number) {
+//         //Increments
+//         globalVar++;
+//         this.clsVar++;
+//         fooCls.clsSVar++;
+//         this.clsParam++;
+//         modTest.modVar++;
+//     }
+// }
+// 
+// function foo(x: number) {
+//     //Declare
+//     var fnVar = 1;
+// 
+//     //Increments
+//     fooCls.clsSVar++;
+//     globalVar++;
+//     modTest.modVar++;
+//     fnVar++;
+// 
+//     //Return
+//     return x++;
+// }
+// 
+// module modTest {
+//     //Declare
+//     export var modVar:number;
+// 
+//     //Increments
+//     globalVar++;
+//     fooCls.clsSVar++;
+//     modVar++;
+// 
+//     class testCls {
+//         static boo = foo;
+//     }
+// 
+//     function testFn(){
+//         static boo = foo;
+// 
+//         //Increments
+//         globalVar++;
+//         fooCls.clsSVar++;
+//         modVar++;
+//     }
+// 
+//     module testMod {
+//         var boo = foo;
+//     }
+// }
+// 
+// //Type test
+// var clsTest: fooCls;
+// 
+// //Arguments
+// clsTest = new fooCls(globalVar);
+// foo(globalVar);
+// 
+// //Increments
+// fooCls.clsSVar++;
+// modTest.modVar++;
+// globalVar = globalVar + globalVar;
+// 
+// //ETC - Other cases
+// globalVar = 3;
+// foo = foo + 1;
+// err = err++;
+// 
+// //Shadowed fn Parameter
+// function shdw(globalVar: number) {
+//     //Increments
+//     globalVar++;
+//     return globalVar;
+// }
+// 
+// //Remotes
+// //Type test
+// var remoteclsTest: remotefooCls;
+// 
+// //Arguments
+// remoteclsTest = new remotefooCls(/*FIND ALL REFS*/[|remoteglobalVar|]);
+// remotefoo([|remoteglobalVar|]);
+// 
+// //Increments
+// remotefooCls.remoteclsSVar++;
+// remotemodTest.remotemodVar++;
+// [|remoteglobalVar|] = [|remoteglobalVar|] + [|remoteglobalVar|];
+// 
+// //ETC - Other cases
+// [|remoteglobalVar|] = 3;
+// 
+// //Find References misses method param
+// var
+// 
+// 
+// 
+//  array = ["f", "o", "o"];
+// 
+// array.forEach(
+// 
+// 
+// function(str) {
+// 
+// 
+// 
+//    return str + " ";
+// 
+// });
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+      "kind": "var",
+      "name": "var remoteglobalVar: number",
+      "textSpan": {
+        "start": 4,
+        "length": 15
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "remoteglobalVar",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 32
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 1358,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1386,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1478,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1496,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1514,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1552,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 4,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 32
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 176,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 431,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 614,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 823,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/remoteGetReferences_2.ts ===
+// var [|remoteglobalVar|]: number = 2;
+// 
+// class remotefooCls {
+// 	//Declare
+// 	remoteclsVar = 1;
+// 	static remoteclsSVar = 1;
+// 
+// 	constructor(public remoteclsParam: number) {
+// 		//Increments
+// 		[|remoteglobalVar|]++;
+// 		this.remoteclsVar++;
+// 		remotefooCls.remoteclsSVar++;
+// 		this.remoteclsParam++;
+// 		remotemodTest.remotemodVar++;
+// 	}
+// }
+// 
+// function remotefoo(remotex: number) {
+// 	//Declare
+// 	var remotefnVar = 1;
+// 
+// 	//Increments
+// 	remotefooCls.remoteclsSVar++;
+// 	[|remoteglobalVar|]++;
+// 	remotemodTest.remotemodVar++;
+// 	remotefnVar++;
+// 
+// 	//Return
+// 	return remotex++;
+// }
+// 
+// module remotemodTest {
+// 	//Declare
+// 	export var remotemodVar: number;
+// 
+// 	//Increments
+// 	[|remoteglobalVar|]++;
+// 	remotefooCls.remoteclsSVar++;
+// 	remotemodVar++;
+// 
+// 	class remotetestCls {
+// 		static remoteboo = remotefoo;
+// 	}
+// 
+// 	function remotetestFn(){
+//         static remoteboo = remotefoo;
+// 
+// 		//Increments
+// 		[|remoteglobalVar|]++;
+// 		remotefooCls.remoteclsSVar++;
+// 		remotemodVar++;
+//     }
+// 
+// 	module remotetestMod {
+// 		var remoteboo = remotefoo;
+// 	}
+// }
+
+// === /tests/cases/fourslash/remoteGetReferences_1.ts ===
+// // Comment Refence Test: globalVar
+// var globalVar: number = 2;
+// 
+// class fooCls {
+//     static clsSVar = 1;
+//     //Declare
+//     clsVar = 1;
+// 
+//     constructor (public clsParam: number) {
+//         //Increments
+//         globalVar++;
+//         this.clsVar++;
+//         fooCls.clsSVar++;
+//         this.clsParam++;
+//         modTest.modVar++;
+//     }
+// }
+// 
+// function foo(x: number) {
+//     //Declare
+//     var fnVar = 1;
+// 
+//     //Increments
+//     fooCls.clsSVar++;
+//     globalVar++;
+//     modTest.modVar++;
+//     fnVar++;
+// 
+//     //Return
+//     return x++;
+// }
+// 
+// module modTest {
+//     //Declare
+//     export var modVar:number;
+// 
+//     //Increments
+//     globalVar++;
+//     fooCls.clsSVar++;
+//     modVar++;
+// 
+//     class testCls {
+//         static boo = foo;
+//     }
+// 
+//     function testFn(){
+//         static boo = foo;
+// 
+//         //Increments
+//         globalVar++;
+//         fooCls.clsSVar++;
+//         modVar++;
+//     }
+// 
+//     module testMod {
+//         var boo = foo;
+//     }
+// }
+// 
+// //Type test
+// var clsTest: fooCls;
+// 
+// //Arguments
+// clsTest = new fooCls(globalVar);
+// foo(globalVar);
+// 
+// //Increments
+// fooCls.clsSVar++;
+// modTest.modVar++;
+// globalVar = globalVar + globalVar;
+// 
+// //ETC - Other cases
+// globalVar = 3;
+// foo = foo + 1;
+// err = err++;
+// 
+// //Shadowed fn Parameter
+// function shdw(globalVar: number) {
+//     //Increments
+//     globalVar++;
+//     return globalVar;
+// }
+// 
+// //Remotes
+// //Type test
+// var remoteclsTest: remotefooCls;
+// 
+// //Arguments
+// remoteclsTest = new remotefooCls([|remoteglobalVar|]);
+// remotefoo(/*FIND ALL REFS*/[|remoteglobalVar|]);
+// 
+// //Increments
+// remotefooCls.remoteclsSVar++;
+// remotemodTest.remotemodVar++;
+// [|remoteglobalVar|] = [|remoteglobalVar|] + [|remoteglobalVar|];
+// 
+// //ETC - Other cases
+// [|remoteglobalVar|] = 3;
+// 
+// //Find References misses method param
+// var
+// 
+// 
+// 
+//  array = ["f", "o", "o"];
+// 
+// array.forEach(
+// 
+// 
+// function(str) {
+// 
+// 
+// 
+//    return str + " ";
+// 
+// });
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+      "kind": "var",
+      "name": "var remoteglobalVar: number",
+      "textSpan": {
+        "start": 4,
+        "length": 15
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "remoteglobalVar",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 32
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 1358,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1386,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1478,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1496,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1514,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1552,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 4,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 32
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 176,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 431,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 614,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 823,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/remoteGetReferences_2.ts ===
+// var remoteglobalVar: number = 2;
+// 
+// class [|remotefooCls|] {
+// 	//Declare
+// 	remoteclsVar = 1;
+// 	static remoteclsSVar = 1;
+// 
+// 	constructor(public remoteclsParam: number) {
+// 		//Increments
+// 		remoteglobalVar++;
+// 		this.remoteclsVar++;
+// 		[|remotefooCls|].remoteclsSVar++;
+// 		this.remoteclsParam++;
+// 		remotemodTest.remotemodVar++;
+// 	}
+// }
+// 
+// function remotefoo(remotex: number) {
+// 	//Declare
+// 	var remotefnVar = 1;
+// 
+// 	//Increments
+// 	[|remotefooCls|].remoteclsSVar++;
+// 	remoteglobalVar++;
+// 	remotemodTest.remotemodVar++;
+// 	remotefnVar++;
+// 
+// 	//Return
+// 	return remotex++;
+// }
+// 
+// module remotemodTest {
+// 	//Declare
+// 	export var remotemodVar: number;
+// 
+// 	//Increments
+// 	remoteglobalVar++;
+// 	[|remotefooCls|].remoteclsSVar++;
+// 	remotemodVar++;
+// 
+// 	class remotetestCls {
+// 		static remoteboo = remotefoo;
+// 	}
+// 
+// 	function remotetestFn(){
+//         static remoteboo = remotefoo;
+// 
+// 		//Increments
+// 		remoteglobalVar++;
+// 		[|remotefooCls|].remoteclsSVar++;
+// 		remotemodVar++;
+//     }
+// 
+// 	module remotetestMod {
+// 		var remoteboo = remotefoo;
+// 	}
+// }
+
+// === /tests/cases/fourslash/remoteGetReferences_1.ts ===
+// // Comment Refence Test: globalVar
+// var globalVar: number = 2;
+// 
+// class fooCls {
+//     static clsSVar = 1;
+//     //Declare
+//     clsVar = 1;
+// 
+//     constructor (public clsParam: number) {
+//         //Increments
+//         globalVar++;
+//         this.clsVar++;
+//         fooCls.clsSVar++;
+//         this.clsParam++;
+//         modTest.modVar++;
+//     }
+// }
+// 
+// function foo(x: number) {
+//     //Declare
+//     var fnVar = 1;
+// 
+//     //Increments
+//     fooCls.clsSVar++;
+//     globalVar++;
+//     modTest.modVar++;
+//     fnVar++;
+// 
+//     //Return
+//     return x++;
+// }
+// 
+// module modTest {
+//     //Declare
+//     export var modVar:number;
+// 
+//     //Increments
+//     globalVar++;
+//     fooCls.clsSVar++;
+//     modVar++;
+// 
+//     class testCls {
+//         static boo = foo;
+//     }
+// 
+//     function testFn(){
+//         static boo = foo;
+// 
+//         //Increments
+//         globalVar++;
+//         fooCls.clsSVar++;
+//         modVar++;
+//     }
+// 
+//     module testMod {
+//         var boo = foo;
+//     }
+// }
+// 
+// //Type test
+// var clsTest: fooCls;
+// 
+// //Arguments
+// clsTest = new fooCls(globalVar);
+// foo(globalVar);
+// 
+// //Increments
+// fooCls.clsSVar++;
+// modTest.modVar++;
+// globalVar = globalVar + globalVar;
+// 
+// //ETC - Other cases
+// globalVar = 3;
+// foo = foo + 1;
+// err = err++;
+// 
+// //Shadowed fn Parameter
+// function shdw(globalVar: number) {
+//     //Increments
+//     globalVar++;
+//     return globalVar;
+// }
+// 
+// //Remotes
+// //Type test
+// var remoteclsTest: [|remotefooCls|];
+// 
+// //Arguments
+// remoteclsTest = new [|remotefooCls|](remoteglobalVar);
+// remotefoo(remoteglobalVar);
+// 
+// //Increments
+// /*FIND ALL REFS*/[|remotefooCls|].remoteclsSVar++;
+// remotemodTest.remotemodVar++;
+// remoteglobalVar = remoteglobalVar + remoteglobalVar;
+// 
+// //ETC - Other cases
+// remoteglobalVar = 3;
+// 
+// //Find References misses method param
+// var
+// 
+// 
+// 
+//  array = ["f", "o", "o"];
+// 
+// array.forEach(
+// 
+// 
+// function(str) {
+// 
+// 
+// 
+//    return str + " ";
+// 
+// });
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+      "kind": "class",
+      "name": "class remotefooCls",
+      "textSpan": {
+        "start": 40,
+        "length": 12
+      },
+      "displayParts": [
+        {
+          "text": "class",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "remotefooCls",
+          "kind": "className"
+        }
+      ],
+      "contextSpan": {
+        "start": 34,
+        "length": 277
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 1298,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1345,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1418,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 40,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "contextSpan": {
+          "start": 34,
+          "length": 277
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 220,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 400,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 634,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 844,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/remoteGetReferences_2.ts ===
+// var remoteglobalVar: number = 2;
+// 
+// class remotefooCls {
+// 	//Declare
+// 	remoteclsVar = 1;
+// 	static [|remoteclsSVar|] = 1;
+// 
+// 	constructor(public remoteclsParam: number) {
+// 		//Increments
+// 		remoteglobalVar++;
+// 		this.remoteclsVar++;
+// 		remotefooCls.[|remoteclsSVar|]++;
+// 		this.remoteclsParam++;
+// 		remotemodTest.remotemodVar++;
+// 	}
+// }
+// 
+// function remotefoo(remotex: number) {
+// 	//Declare
+// 	var remotefnVar = 1;
+// 
+// 	//Increments
+// 	remotefooCls.[|remoteclsSVar|]++;
+// 	remoteglobalVar++;
+// 	remotemodTest.remotemodVar++;
+// 	remotefnVar++;
+// 
+// 	//Return
+// 	return remotex++;
+// }
+// 
+// module remotemodTest {
+// 	//Declare
+// 	export var remotemodVar: number;
+// 
+// 	//Increments
+// 	remoteglobalVar++;
+// 	remotefooCls.[|remoteclsSVar|]++;
+// 	remotemodVar++;
+// 
+// 	class remotetestCls {
+// 		static remoteboo = remotefoo;
+// 	}
+// 
+// 	function remotetestFn(){
+//         static remoteboo = remotefoo;
+// 
+// 		//Increments
+// 		remoteglobalVar++;
+// 		remotefooCls.[|remoteclsSVar|]++;
+// 		remotemodVar++;
+//     }
+// 
+// 	module remotetestMod {
+// 		var remoteboo = remotefoo;
+// 	}
+// }
+
+// === /tests/cases/fourslash/remoteGetReferences_1.ts ===
+// // Comment Refence Test: globalVar
+// var globalVar: number = 2;
+// 
+// class fooCls {
+//     static clsSVar = 1;
+//     //Declare
+//     clsVar = 1;
+// 
+//     constructor (public clsParam: number) {
+//         //Increments
+//         globalVar++;
+//         this.clsVar++;
+//         fooCls.clsSVar++;
+//         this.clsParam++;
+//         modTest.modVar++;
+//     }
+// }
+// 
+// function foo(x: number) {
+//     //Declare
+//     var fnVar = 1;
+// 
+//     //Increments
+//     fooCls.clsSVar++;
+//     globalVar++;
+//     modTest.modVar++;
+//     fnVar++;
+// 
+//     //Return
+//     return x++;
+// }
+// 
+// module modTest {
+//     //Declare
+//     export var modVar:number;
+// 
+//     //Increments
+//     globalVar++;
+//     fooCls.clsSVar++;
+//     modVar++;
+// 
+//     class testCls {
+//         static boo = foo;
+//     }
+// 
+//     function testFn(){
+//         static boo = foo;
+// 
+//         //Increments
+//         globalVar++;
+//         fooCls.clsSVar++;
+//         modVar++;
+//     }
+// 
+//     module testMod {
+//         var boo = foo;
+//     }
+// }
+// 
+// //Type test
+// var clsTest: fooCls;
+// 
+// //Arguments
+// clsTest = new fooCls(globalVar);
+// foo(globalVar);
+// 
+// //Increments
+// fooCls.clsSVar++;
+// modTest.modVar++;
+// globalVar = globalVar + globalVar;
+// 
+// //ETC - Other cases
+// globalVar = 3;
+// foo = foo + 1;
+// err = err++;
+// 
+// //Shadowed fn Parameter
+// function shdw(globalVar: number) {
+//     //Increments
+//     globalVar++;
+//     return globalVar;
+// }
+// 
+// //Remotes
+// //Type test
+// var remoteclsTest: remotefooCls;
+// 
+// //Arguments
+// remoteclsTest = new remotefooCls(remoteglobalVar);
+// remotefoo(remoteglobalVar);
+// 
+// //Increments
+// remotefooCls./*FIND ALL REFS*/[|remoteclsSVar|]++;
+// remotemodTest.remotemodVar++;
+// remoteglobalVar = remoteglobalVar + remoteglobalVar;
+// 
+// //ETC - Other cases
+// remoteglobalVar = 3;
+// 
+// //Find References misses method param
+// var
+// 
+// 
+// 
+//  array = ["f", "o", "o"];
+// 
+// array.forEach(
+// 
+// 
+// function(str) {
+// 
+// 
+// 
+//    return str + " ";
+// 
+// });
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+      "kind": "property",
+      "name": "(property) remotefooCls.remoteclsSVar: number",
+      "textSpan": {
+        "start": 93,
+        "length": 13
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "remotefooCls",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "remoteclsSVar",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 86,
+        "length": 25
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 1431,
+          "length": 13
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 93,
+          "length": 13
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "contextSpan": {
+          "start": 86,
+          "length": 25
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 233,
+          "length": 13
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 413,
+          "length": 13
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 647,
+          "length": 13
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 857,
+          "length": 13
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/remoteGetReferences_2.ts ===
+// var [|remoteglobalVar|]: number = 2;
+// 
+// class remotefooCls {
+// 	//Declare
+// 	remoteclsVar = 1;
+// 	static remoteclsSVar = 1;
+// 
+// 	constructor(public remoteclsParam: number) {
+// 		//Increments
+// 		[|remoteglobalVar|]++;
+// 		this.remoteclsVar++;
+// 		remotefooCls.remoteclsSVar++;
+// 		this.remoteclsParam++;
+// 		remotemodTest.remotemodVar++;
+// 	}
+// }
+// 
+// function remotefoo(remotex: number) {
+// 	//Declare
+// 	var remotefnVar = 1;
+// 
+// 	//Increments
+// 	remotefooCls.remoteclsSVar++;
+// 	[|remoteglobalVar|]++;
+// 	remotemodTest.remotemodVar++;
+// 	remotefnVar++;
+// 
+// 	//Return
+// 	return remotex++;
+// }
+// 
+// module remotemodTest {
+// 	//Declare
+// 	export var remotemodVar: number;
+// 
+// 	//Increments
+// 	[|remoteglobalVar|]++;
+// 	remotefooCls.remoteclsSVar++;
+// 	remotemodVar++;
+// 
+// 	class remotetestCls {
+// 		static remoteboo = remotefoo;
+// 	}
+// 
+// 	function remotetestFn(){
+//         static remoteboo = remotefoo;
+// 
+// 		//Increments
+// 		[|remoteglobalVar|]++;
+// 		remotefooCls.remoteclsSVar++;
+// 		remotemodVar++;
+//     }
+// 
+// 	module remotetestMod {
+// 		var remoteboo = remotefoo;
+// 	}
+// }
+
+// === /tests/cases/fourslash/remoteGetReferences_1.ts ===
+// // Comment Refence Test: globalVar
+// var globalVar: number = 2;
+// 
+// class fooCls {
+//     static clsSVar = 1;
+//     //Declare
+//     clsVar = 1;
+// 
+//     constructor (public clsParam: number) {
+//         //Increments
+//         globalVar++;
+//         this.clsVar++;
+//         fooCls.clsSVar++;
+//         this.clsParam++;
+//         modTest.modVar++;
+//     }
+// }
+// 
+// function foo(x: number) {
+//     //Declare
+//     var fnVar = 1;
+// 
+//     //Increments
+//     fooCls.clsSVar++;
+//     globalVar++;
+//     modTest.modVar++;
+//     fnVar++;
+// 
+//     //Return
+//     return x++;
+// }
+// 
+// module modTest {
+//     //Declare
+//     export var modVar:number;
+// 
+//     //Increments
+//     globalVar++;
+//     fooCls.clsSVar++;
+//     modVar++;
+// 
+//     class testCls {
+//         static boo = foo;
+//     }
+// 
+//     function testFn(){
+//         static boo = foo;
+// 
+//         //Increments
+//         globalVar++;
+//         fooCls.clsSVar++;
+//         modVar++;
+//     }
+// 
+//     module testMod {
+//         var boo = foo;
+//     }
+// }
+// 
+// //Type test
+// var clsTest: fooCls;
+// 
+// //Arguments
+// clsTest = new fooCls(globalVar);
+// foo(globalVar);
+// 
+// //Increments
+// fooCls.clsSVar++;
+// modTest.modVar++;
+// globalVar = globalVar + globalVar;
+// 
+// //ETC - Other cases
+// globalVar = 3;
+// foo = foo + 1;
+// err = err++;
+// 
+// //Shadowed fn Parameter
+// function shdw(globalVar: number) {
+//     //Increments
+//     globalVar++;
+//     return globalVar;
+// }
+// 
+// //Remotes
+// //Type test
+// var remoteclsTest: remotefooCls;
+// 
+// //Arguments
+// remoteclsTest = new remotefooCls([|remoteglobalVar|]);
+// remotefoo([|remoteglobalVar|]);
+// 
+// //Increments
+// remotefooCls.remoteclsSVar++;
+// remotemodTest.remotemodVar++;
+// /*FIND ALL REFS*/[|remoteglobalVar|] = [|remoteglobalVar|] + [|remoteglobalVar|];
+// 
+// //ETC - Other cases
+// [|remoteglobalVar|] = 3;
+// 
+// //Find References misses method param
+// var
+// 
+// 
+// 
+//  array = ["f", "o", "o"];
+// 
+// array.forEach(
+// 
+// 
+// function(str) {
+// 
+// 
+// 
+//    return str + " ";
+// 
+// });
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+      "kind": "var",
+      "name": "var remoteglobalVar: number",
+      "textSpan": {
+        "start": 4,
+        "length": 15
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "remoteglobalVar",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 32
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 1358,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1386,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1478,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1496,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1514,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1552,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 4,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 32
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 176,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 431,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 614,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 823,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/remoteGetReferences_2.ts ===
+// var [|remoteglobalVar|]: number = 2;
+// 
+// class remotefooCls {
+// 	//Declare
+// 	remoteclsVar = 1;
+// 	static remoteclsSVar = 1;
+// 
+// 	constructor(public remoteclsParam: number) {
+// 		//Increments
+// 		[|remoteglobalVar|]++;
+// 		this.remoteclsVar++;
+// 		remotefooCls.remoteclsSVar++;
+// 		this.remoteclsParam++;
+// 		remotemodTest.remotemodVar++;
+// 	}
+// }
+// 
+// function remotefoo(remotex: number) {
+// 	//Declare
+// 	var remotefnVar = 1;
+// 
+// 	//Increments
+// 	remotefooCls.remoteclsSVar++;
+// 	[|remoteglobalVar|]++;
+// 	remotemodTest.remotemodVar++;
+// 	remotefnVar++;
+// 
+// 	//Return
+// 	return remotex++;
+// }
+// 
+// module remotemodTest {
+// 	//Declare
+// 	export var remotemodVar: number;
+// 
+// 	//Increments
+// 	[|remoteglobalVar|]++;
+// 	remotefooCls.remoteclsSVar++;
+// 	remotemodVar++;
+// 
+// 	class remotetestCls {
+// 		static remoteboo = remotefoo;
+// 	}
+// 
+// 	function remotetestFn(){
+//         static remoteboo = remotefoo;
+// 
+// 		//Increments
+// 		[|remoteglobalVar|]++;
+// 		remotefooCls.remoteclsSVar++;
+// 		remotemodVar++;
+//     }
+// 
+// 	module remotetestMod {
+// 		var remoteboo = remotefoo;
+// 	}
+// }
+
+// === /tests/cases/fourslash/remoteGetReferences_1.ts ===
+// // Comment Refence Test: globalVar
+// var globalVar: number = 2;
+// 
+// class fooCls {
+//     static clsSVar = 1;
+//     //Declare
+//     clsVar = 1;
+// 
+//     constructor (public clsParam: number) {
+//         //Increments
+//         globalVar++;
+//         this.clsVar++;
+//         fooCls.clsSVar++;
+//         this.clsParam++;
+//         modTest.modVar++;
+//     }
+// }
+// 
+// function foo(x: number) {
+//     //Declare
+//     var fnVar = 1;
+// 
+//     //Increments
+//     fooCls.clsSVar++;
+//     globalVar++;
+//     modTest.modVar++;
+//     fnVar++;
+// 
+//     //Return
+//     return x++;
+// }
+// 
+// module modTest {
+//     //Declare
+//     export var modVar:number;
+// 
+//     //Increments
+//     globalVar++;
+//     fooCls.clsSVar++;
+//     modVar++;
+// 
+//     class testCls {
+//         static boo = foo;
+//     }
+// 
+//     function testFn(){
+//         static boo = foo;
+// 
+//         //Increments
+//         globalVar++;
+//         fooCls.clsSVar++;
+//         modVar++;
+//     }
+// 
+//     module testMod {
+//         var boo = foo;
+//     }
+// }
+// 
+// //Type test
+// var clsTest: fooCls;
+// 
+// //Arguments
+// clsTest = new fooCls(globalVar);
+// foo(globalVar);
+// 
+// //Increments
+// fooCls.clsSVar++;
+// modTest.modVar++;
+// globalVar = globalVar + globalVar;
+// 
+// //ETC - Other cases
+// globalVar = 3;
+// foo = foo + 1;
+// err = err++;
+// 
+// //Shadowed fn Parameter
+// function shdw(globalVar: number) {
+//     //Increments
+//     globalVar++;
+//     return globalVar;
+// }
+// 
+// //Remotes
+// //Type test
+// var remoteclsTest: remotefooCls;
+// 
+// //Arguments
+// remoteclsTest = new remotefooCls([|remoteglobalVar|]);
+// remotefoo([|remoteglobalVar|]);
+// 
+// //Increments
+// remotefooCls.remoteclsSVar++;
+// remotemodTest.remotemodVar++;
+// [|remoteglobalVar|] = /*FIND ALL REFS*/[|remoteglobalVar|] + [|remoteglobalVar|];
+// 
+// //ETC - Other cases
+// [|remoteglobalVar|] = 3;
+// 
+// //Find References misses method param
+// var
+// 
+// 
+// 
+//  array = ["f", "o", "o"];
+// 
+// array.forEach(
+// 
+// 
+// function(str) {
+// 
+// 
+// 
+//    return str + " ";
+// 
+// });
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+      "kind": "var",
+      "name": "var remoteglobalVar: number",
+      "textSpan": {
+        "start": 4,
+        "length": 15
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "remoteglobalVar",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 32
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 1358,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1386,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1478,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1496,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1514,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1552,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 4,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 32
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 176,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 431,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 614,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 823,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/remoteGetReferences_2.ts ===
+// var [|remoteglobalVar|]: number = 2;
+// 
+// class remotefooCls {
+// 	//Declare
+// 	remoteclsVar = 1;
+// 	static remoteclsSVar = 1;
+// 
+// 	constructor(public remoteclsParam: number) {
+// 		//Increments
+// 		[|remoteglobalVar|]++;
+// 		this.remoteclsVar++;
+// 		remotefooCls.remoteclsSVar++;
+// 		this.remoteclsParam++;
+// 		remotemodTest.remotemodVar++;
+// 	}
+// }
+// 
+// function remotefoo(remotex: number) {
+// 	//Declare
+// 	var remotefnVar = 1;
+// 
+// 	//Increments
+// 	remotefooCls.remoteclsSVar++;
+// 	[|remoteglobalVar|]++;
+// 	remotemodTest.remotemodVar++;
+// 	remotefnVar++;
+// 
+// 	//Return
+// 	return remotex++;
+// }
+// 
+// module remotemodTest {
+// 	//Declare
+// 	export var remotemodVar: number;
+// 
+// 	//Increments
+// 	[|remoteglobalVar|]++;
+// 	remotefooCls.remoteclsSVar++;
+// 	remotemodVar++;
+// 
+// 	class remotetestCls {
+// 		static remoteboo = remotefoo;
+// 	}
+// 
+// 	function remotetestFn(){
+//         static remoteboo = remotefoo;
+// 
+// 		//Increments
+// 		[|remoteglobalVar|]++;
+// 		remotefooCls.remoteclsSVar++;
+// 		remotemodVar++;
+//     }
+// 
+// 	module remotetestMod {
+// 		var remoteboo = remotefoo;
+// 	}
+// }
+
+// === /tests/cases/fourslash/remoteGetReferences_1.ts ===
+// // Comment Refence Test: globalVar
+// var globalVar: number = 2;
+// 
+// class fooCls {
+//     static clsSVar = 1;
+//     //Declare
+//     clsVar = 1;
+// 
+//     constructor (public clsParam: number) {
+//         //Increments
+//         globalVar++;
+//         this.clsVar++;
+//         fooCls.clsSVar++;
+//         this.clsParam++;
+//         modTest.modVar++;
+//     }
+// }
+// 
+// function foo(x: number) {
+//     //Declare
+//     var fnVar = 1;
+// 
+//     //Increments
+//     fooCls.clsSVar++;
+//     globalVar++;
+//     modTest.modVar++;
+//     fnVar++;
+// 
+//     //Return
+//     return x++;
+// }
+// 
+// module modTest {
+//     //Declare
+//     export var modVar:number;
+// 
+//     //Increments
+//     globalVar++;
+//     fooCls.clsSVar++;
+//     modVar++;
+// 
+//     class testCls {
+//         static boo = foo;
+//     }
+// 
+//     function testFn(){
+//         static boo = foo;
+// 
+//         //Increments
+//         globalVar++;
+//         fooCls.clsSVar++;
+//         modVar++;
+//     }
+// 
+//     module testMod {
+//         var boo = foo;
+//     }
+// }
+// 
+// //Type test
+// var clsTest: fooCls;
+// 
+// //Arguments
+// clsTest = new fooCls(globalVar);
+// foo(globalVar);
+// 
+// //Increments
+// fooCls.clsSVar++;
+// modTest.modVar++;
+// globalVar = globalVar + globalVar;
+// 
+// //ETC - Other cases
+// globalVar = 3;
+// foo = foo + 1;
+// err = err++;
+// 
+// //Shadowed fn Parameter
+// function shdw(globalVar: number) {
+//     //Increments
+//     globalVar++;
+//     return globalVar;
+// }
+// 
+// //Remotes
+// //Type test
+// var remoteclsTest: remotefooCls;
+// 
+// //Arguments
+// remoteclsTest = new remotefooCls([|remoteglobalVar|]);
+// remotefoo([|remoteglobalVar|]);
+// 
+// //Increments
+// remotefooCls.remoteclsSVar++;
+// remotemodTest.remotemodVar++;
+// [|remoteglobalVar|] = [|remoteglobalVar|] + /*FIND ALL REFS*/[|remoteglobalVar|];
+// 
+// //ETC - Other cases
+// [|remoteglobalVar|] = 3;
+// 
+// //Find References misses method param
+// var
+// 
+// 
+// 
+//  array = ["f", "o", "o"];
+// 
+// array.forEach(
+// 
+// 
+// function(str) {
+// 
+// 
+// 
+//    return str + " ";
+// 
+// });
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+      "kind": "var",
+      "name": "var remoteglobalVar: number",
+      "textSpan": {
+        "start": 4,
+        "length": 15
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "remoteglobalVar",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 32
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 1358,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1386,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1478,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1496,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1514,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1552,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 4,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 32
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 176,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 431,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 614,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 823,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/remoteGetReferences_2.ts ===
+// var [|remoteglobalVar|]: number = 2;
+// 
+// class remotefooCls {
+// 	//Declare
+// 	remoteclsVar = 1;
+// 	static remoteclsSVar = 1;
+// 
+// 	constructor(public remoteclsParam: number) {
+// 		//Increments
+// 		[|remoteglobalVar|]++;
+// 		this.remoteclsVar++;
+// 		remotefooCls.remoteclsSVar++;
+// 		this.remoteclsParam++;
+// 		remotemodTest.remotemodVar++;
+// 	}
+// }
+// 
+// function remotefoo(remotex: number) {
+// 	//Declare
+// 	var remotefnVar = 1;
+// 
+// 	//Increments
+// 	remotefooCls.remoteclsSVar++;
+// 	[|remoteglobalVar|]++;
+// 	remotemodTest.remotemodVar++;
+// 	remotefnVar++;
+// 
+// 	//Return
+// 	return remotex++;
+// }
+// 
+// module remotemodTest {
+// 	//Declare
+// 	export var remotemodVar: number;
+// 
+// 	//Increments
+// 	[|remoteglobalVar|]++;
+// 	remotefooCls.remoteclsSVar++;
+// 	remotemodVar++;
+// 
+// 	class remotetestCls {
+// 		static remoteboo = remotefoo;
+// 	}
+// 
+// 	function remotetestFn(){
+//         static remoteboo = remotefoo;
+// 
+// 		//Increments
+// 		[|remoteglobalVar|]++;
+// 		remotefooCls.remoteclsSVar++;
+// 		remotemodVar++;
+//     }
+// 
+// 	module remotetestMod {
+// 		var remoteboo = remotefoo;
+// 	}
+// }
+
+// === /tests/cases/fourslash/remoteGetReferences_1.ts ===
+// // Comment Refence Test: globalVar
+// var globalVar: number = 2;
+// 
+// class fooCls {
+//     static clsSVar = 1;
+//     //Declare
+//     clsVar = 1;
+// 
+//     constructor (public clsParam: number) {
+//         //Increments
+//         globalVar++;
+//         this.clsVar++;
+//         fooCls.clsSVar++;
+//         this.clsParam++;
+//         modTest.modVar++;
+//     }
+// }
+// 
+// function foo(x: number) {
+//     //Declare
+//     var fnVar = 1;
+// 
+//     //Increments
+//     fooCls.clsSVar++;
+//     globalVar++;
+//     modTest.modVar++;
+//     fnVar++;
+// 
+//     //Return
+//     return x++;
+// }
+// 
+// module modTest {
+//     //Declare
+//     export var modVar:number;
+// 
+//     //Increments
+//     globalVar++;
+//     fooCls.clsSVar++;
+//     modVar++;
+// 
+//     class testCls {
+//         static boo = foo;
+//     }
+// 
+//     function testFn(){
+//         static boo = foo;
+// 
+//         //Increments
+//         globalVar++;
+//         fooCls.clsSVar++;
+//         modVar++;
+//     }
+// 
+//     module testMod {
+//         var boo = foo;
+//     }
+// }
+// 
+// //Type test
+// var clsTest: fooCls;
+// 
+// //Arguments
+// clsTest = new fooCls(globalVar);
+// foo(globalVar);
+// 
+// //Increments
+// fooCls.clsSVar++;
+// modTest.modVar++;
+// globalVar = globalVar + globalVar;
+// 
+// //ETC - Other cases
+// globalVar = 3;
+// foo = foo + 1;
+// err = err++;
+// 
+// //Shadowed fn Parameter
+// function shdw(globalVar: number) {
+//     //Increments
+//     globalVar++;
+//     return globalVar;
+// }
+// 
+// //Remotes
+// //Type test
+// var remoteclsTest: remotefooCls;
+// 
+// //Arguments
+// remoteclsTest = new remotefooCls([|remoteglobalVar|]);
+// remotefoo([|remoteglobalVar|]);
+// 
+// //Increments
+// remotefooCls.remoteclsSVar++;
+// remotemodTest.remotemodVar++;
+// [|remoteglobalVar|] = [|remoteglobalVar|] + [|remoteglobalVar|];
+// 
+// //ETC - Other cases
+// /*FIND ALL REFS*/[|remoteglobalVar|] = 3;
+// 
+// //Find References misses method param
+// var
+// 
+// 
+// 
+//  array = ["f", "o", "o"];
+// 
+// array.forEach(
+// 
+// 
+// function(str) {
+// 
+// 
+// 
+//    return str + " ";
+// 
+// });
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+      "kind": "var",
+      "name": "var remoteglobalVar: number",
+      "textSpan": {
+        "start": 4,
+        "length": 15
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "remoteglobalVar",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 32
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 1358,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1386,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1478,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1496,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1514,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1552,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 4,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 32
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 176,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 431,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 614,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 823,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/remoteGetReferences_2.ts ===
+// /*FIND ALL REFS*/var [|remoteglobalVar|]: number = 2;
+// 
+// class remotefooCls {
+// 	//Declare
+// 	remoteclsVar = 1;
+// 	static remoteclsSVar = 1;
+// 
+// 	constructor(public remoteclsParam: number) {
+// 		//Increments
+// 		[|remoteglobalVar|]++;
+// 		this.remoteclsVar++;
+// 		remotefooCls.remoteclsSVar++;
+// 		this.remoteclsParam++;
+// 		remotemodTest.remotemodVar++;
+// 	}
+// }
+// 
+// function remotefoo(remotex: number) {
+// 	//Declare
+// 	var remotefnVar = 1;
+// 
+// 	//Increments
+// 	remotefooCls.remoteclsSVar++;
+// 	[|remoteglobalVar|]++;
+// 	remotemodTest.remotemodVar++;
+// 	remotefnVar++;
+// 
+// 	//Return
+// 	return remotex++;
+// }
+// 
+// module remotemodTest {
+// 	//Declare
+// 	export var remotemodVar: number;
+// 
+// 	//Increments
+// 	[|remoteglobalVar|]++;
+// 	remotefooCls.remoteclsSVar++;
+// 	remotemodVar++;
+// 
+// 	class remotetestCls {
+// 		static remoteboo = remotefoo;
+// 	}
+// 
+// 	function remotetestFn(){
+//         static remoteboo = remotefoo;
+// 
+// 		//Increments
+// 		[|remoteglobalVar|]++;
+// 		remotefooCls.remoteclsSVar++;
+// 		remotemodVar++;
+//     }
+// 
+// 	module remotetestMod {
+// 		var remoteboo = remotefoo;
+// 	}
+// }
+
+// === /tests/cases/fourslash/remoteGetReferences_1.ts ===
+// // Comment Refence Test: globalVar
+// var globalVar: number = 2;
+// 
+// class fooCls {
+//     static clsSVar = 1;
+//     //Declare
+//     clsVar = 1;
+// 
+//     constructor (public clsParam: number) {
+//         //Increments
+//         globalVar++;
+//         this.clsVar++;
+//         fooCls.clsSVar++;
+//         this.clsParam++;
+//         modTest.modVar++;
+//     }
+// }
+// 
+// function foo(x: number) {
+//     //Declare
+//     var fnVar = 1;
+// 
+//     //Increments
+//     fooCls.clsSVar++;
+//     globalVar++;
+//     modTest.modVar++;
+//     fnVar++;
+// 
+//     //Return
+//     return x++;
+// }
+// 
+// module modTest {
+//     //Declare
+//     export var modVar:number;
+// 
+//     //Increments
+//     globalVar++;
+//     fooCls.clsSVar++;
+//     modVar++;
+// 
+//     class testCls {
+//         static boo = foo;
+//     }
+// 
+//     function testFn(){
+//         static boo = foo;
+// 
+//         //Increments
+//         globalVar++;
+//         fooCls.clsSVar++;
+//         modVar++;
+//     }
+// 
+//     module testMod {
+//         var boo = foo;
+//     }
+// }
+// 
+// //Type test
+// var clsTest: fooCls;
+// 
+// //Arguments
+// clsTest = new fooCls(globalVar);
+// foo(globalVar);
+// 
+// //Increments
+// fooCls.clsSVar++;
+// modTest.modVar++;
+// globalVar = globalVar + globalVar;
+// 
+// //ETC - Other cases
+// globalVar = 3;
+// foo = foo + 1;
+// err = err++;
+// 
+// //Shadowed fn Parameter
+// function shdw(globalVar: number) {
+//     //Increments
+//     globalVar++;
+//     return globalVar;
+// }
+// 
+// //Remotes
+// //Type test
+// var remoteclsTest: remotefooCls;
+// 
+// //Arguments
+// remoteclsTest = new remotefooCls([|remoteglobalVar|]);
+// remotefoo([|remoteglobalVar|]);
+// 
+// //Increments
+// remotefooCls.remoteclsSVar++;
+// remotemodTest.remotemodVar++;
+// [|remoteglobalVar|] = [|remoteglobalVar|] + [|remoteglobalVar|];
+// 
+// //ETC - Other cases
+// [|remoteglobalVar|] = 3;
+// 
+// //Find References misses method param
+// var
+// 
+// 
+// 
+//  array = ["f", "o", "o"];
+// 
+// array.forEach(
+// 
+// 
+// function(str) {
+// 
+// 
+// 
+//    return str + " ";
+// 
+// });
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+      "kind": "var",
+      "name": "var remoteglobalVar: number",
+      "textSpan": {
+        "start": 4,
+        "length": 15
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "remoteglobalVar",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 32
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 1358,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1386,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1478,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1496,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1514,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1552,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 4,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 32
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 176,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 431,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 614,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 823,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/remoteGetReferences_2.ts ===
+// var /*FIND ALL REFS*/[|remoteglobalVar|]: number = 2;
+// 
+// class remotefooCls {
+// 	//Declare
+// 	remoteclsVar = 1;
+// 	static remoteclsSVar = 1;
+// 
+// 	constructor(public remoteclsParam: number) {
+// 		//Increments
+// 		[|remoteglobalVar|]++;
+// 		this.remoteclsVar++;
+// 		remotefooCls.remoteclsSVar++;
+// 		this.remoteclsParam++;
+// 		remotemodTest.remotemodVar++;
+// 	}
+// }
+// 
+// function remotefoo(remotex: number) {
+// 	//Declare
+// 	var remotefnVar = 1;
+// 
+// 	//Increments
+// 	remotefooCls.remoteclsSVar++;
+// 	[|remoteglobalVar|]++;
+// 	remotemodTest.remotemodVar++;
+// 	remotefnVar++;
+// 
+// 	//Return
+// 	return remotex++;
+// }
+// 
+// module remotemodTest {
+// 	//Declare
+// 	export var remotemodVar: number;
+// 
+// 	//Increments
+// 	[|remoteglobalVar|]++;
+// 	remotefooCls.remoteclsSVar++;
+// 	remotemodVar++;
+// 
+// 	class remotetestCls {
+// 		static remoteboo = remotefoo;
+// 	}
+// 
+// 	function remotetestFn(){
+//         static remoteboo = remotefoo;
+// 
+// 		//Increments
+// 		[|remoteglobalVar|]++;
+// 		remotefooCls.remoteclsSVar++;
+// 		remotemodVar++;
+//     }
+// 
+// 	module remotetestMod {
+// 		var remoteboo = remotefoo;
+// 	}
+// }
+
+// === /tests/cases/fourslash/remoteGetReferences_1.ts ===
+// // Comment Refence Test: globalVar
+// var globalVar: number = 2;
+// 
+// class fooCls {
+//     static clsSVar = 1;
+//     //Declare
+//     clsVar = 1;
+// 
+//     constructor (public clsParam: number) {
+//         //Increments
+//         globalVar++;
+//         this.clsVar++;
+//         fooCls.clsSVar++;
+//         this.clsParam++;
+//         modTest.modVar++;
+//     }
+// }
+// 
+// function foo(x: number) {
+//     //Declare
+//     var fnVar = 1;
+// 
+//     //Increments
+//     fooCls.clsSVar++;
+//     globalVar++;
+//     modTest.modVar++;
+//     fnVar++;
+// 
+//     //Return
+//     return x++;
+// }
+// 
+// module modTest {
+//     //Declare
+//     export var modVar:number;
+// 
+//     //Increments
+//     globalVar++;
+//     fooCls.clsSVar++;
+//     modVar++;
+// 
+//     class testCls {
+//         static boo = foo;
+//     }
+// 
+//     function testFn(){
+//         static boo = foo;
+// 
+//         //Increments
+//         globalVar++;
+//         fooCls.clsSVar++;
+//         modVar++;
+//     }
+// 
+//     module testMod {
+//         var boo = foo;
+//     }
+// }
+// 
+// //Type test
+// var clsTest: fooCls;
+// 
+// //Arguments
+// clsTest = new fooCls(globalVar);
+// foo(globalVar);
+// 
+// //Increments
+// fooCls.clsSVar++;
+// modTest.modVar++;
+// globalVar = globalVar + globalVar;
+// 
+// //ETC - Other cases
+// globalVar = 3;
+// foo = foo + 1;
+// err = err++;
+// 
+// //Shadowed fn Parameter
+// function shdw(globalVar: number) {
+//     //Increments
+//     globalVar++;
+//     return globalVar;
+// }
+// 
+// //Remotes
+// //Type test
+// var remoteclsTest: remotefooCls;
+// 
+// //Arguments
+// remoteclsTest = new remotefooCls([|remoteglobalVar|]);
+// remotefoo([|remoteglobalVar|]);
+// 
+// //Increments
+// remotefooCls.remoteclsSVar++;
+// remotemodTest.remotemodVar++;
+// [|remoteglobalVar|] = [|remoteglobalVar|] + [|remoteglobalVar|];
+// 
+// //ETC - Other cases
+// [|remoteglobalVar|] = 3;
+// 
+// //Find References misses method param
+// var
+// 
+// 
+// 
+//  array = ["f", "o", "o"];
+// 
+// array.forEach(
+// 
+// 
+// function(str) {
+// 
+// 
+// 
+//    return str + " ";
+// 
+// });
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+      "kind": "var",
+      "name": "var remoteglobalVar: number",
+      "textSpan": {
+        "start": 4,
+        "length": 15
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "remoteglobalVar",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 32
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 1358,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1386,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1478,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1496,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1514,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1552,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 4,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 32
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 176,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 431,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 614,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 823,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/remoteGetReferences_2.ts ===
+// var remoteglobalVar: number = 2;
+// 
+// /*FIND ALL REFS*/class [|remotefooCls|] {
+// 	//Declare
+// 	remoteclsVar = 1;
+// 	static remoteclsSVar = 1;
+// 
+// 	constructor(public remoteclsParam: number) {
+// 		//Increments
+// 		remoteglobalVar++;
+// 		this.remoteclsVar++;
+// 		[|remotefooCls|].remoteclsSVar++;
+// 		this.remoteclsParam++;
+// 		remotemodTest.remotemodVar++;
+// 	}
+// }
+// 
+// function remotefoo(remotex: number) {
+// 	//Declare
+// 	var remotefnVar = 1;
+// 
+// 	//Increments
+// 	[|remotefooCls|].remoteclsSVar++;
+// 	remoteglobalVar++;
+// 	remotemodTest.remotemodVar++;
+// 	remotefnVar++;
+// 
+// 	//Return
+// 	return remotex++;
+// }
+// 
+// module remotemodTest {
+// 	//Declare
+// 	export var remotemodVar: number;
+// 
+// 	//Increments
+// 	remoteglobalVar++;
+// 	[|remotefooCls|].remoteclsSVar++;
+// 	remotemodVar++;
+// 
+// 	class remotetestCls {
+// 		static remoteboo = remotefoo;
+// 	}
+// 
+// 	function remotetestFn(){
+//         static remoteboo = remotefoo;
+// 
+// 		//Increments
+// 		remoteglobalVar++;
+// 		[|remotefooCls|].remoteclsSVar++;
+// 		remotemodVar++;
+//     }
+// 
+// 	module remotetestMod {
+// 		var remoteboo = remotefoo;
+// 	}
+// }
+
+// === /tests/cases/fourslash/remoteGetReferences_1.ts ===
+// // Comment Refence Test: globalVar
+// var globalVar: number = 2;
+// 
+// class fooCls {
+//     static clsSVar = 1;
+//     //Declare
+//     clsVar = 1;
+// 
+//     constructor (public clsParam: number) {
+//         //Increments
+//         globalVar++;
+//         this.clsVar++;
+//         fooCls.clsSVar++;
+//         this.clsParam++;
+//         modTest.modVar++;
+//     }
+// }
+// 
+// function foo(x: number) {
+//     //Declare
+//     var fnVar = 1;
+// 
+//     //Increments
+//     fooCls.clsSVar++;
+//     globalVar++;
+//     modTest.modVar++;
+//     fnVar++;
+// 
+//     //Return
+//     return x++;
+// }
+// 
+// module modTest {
+//     //Declare
+//     export var modVar:number;
+// 
+//     //Increments
+//     globalVar++;
+//     fooCls.clsSVar++;
+//     modVar++;
+// 
+//     class testCls {
+//         static boo = foo;
+//     }
+// 
+//     function testFn(){
+//         static boo = foo;
+// 
+//         //Increments
+//         globalVar++;
+//         fooCls.clsSVar++;
+//         modVar++;
+//     }
+// 
+//     module testMod {
+//         var boo = foo;
+//     }
+// }
+// 
+// //Type test
+// var clsTest: fooCls;
+// 
+// //Arguments
+// clsTest = new fooCls(globalVar);
+// foo(globalVar);
+// 
+// //Increments
+// fooCls.clsSVar++;
+// modTest.modVar++;
+// globalVar = globalVar + globalVar;
+// 
+// //ETC - Other cases
+// globalVar = 3;
+// foo = foo + 1;
+// err = err++;
+// 
+// //Shadowed fn Parameter
+// function shdw(globalVar: number) {
+//     //Increments
+//     globalVar++;
+//     return globalVar;
+// }
+// 
+// //Remotes
+// //Type test
+// var remoteclsTest: [|remotefooCls|];
+// 
+// //Arguments
+// remoteclsTest = new [|remotefooCls|](remoteglobalVar);
+// remotefoo(remoteglobalVar);
+// 
+// //Increments
+// [|remotefooCls|].remoteclsSVar++;
+// remotemodTest.remotemodVar++;
+// remoteglobalVar = remoteglobalVar + remoteglobalVar;
+// 
+// //ETC - Other cases
+// remoteglobalVar = 3;
+// 
+// //Find References misses method param
+// var
+// 
+// 
+// 
+//  array = ["f", "o", "o"];
+// 
+// array.forEach(
+// 
+// 
+// function(str) {
+// 
+// 
+// 
+//    return str + " ";
+// 
+// });
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+      "kind": "class",
+      "name": "class remotefooCls",
+      "textSpan": {
+        "start": 40,
+        "length": 12
+      },
+      "displayParts": [
+        {
+          "text": "class",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "remotefooCls",
+          "kind": "className"
+        }
+      ],
+      "contextSpan": {
+        "start": 34,
+        "length": 277
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 1298,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1345,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1418,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 40,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "contextSpan": {
+          "start": 34,
+          "length": 277
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 220,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 400,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 634,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 844,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/remoteGetReferences_2.ts ===
+// var remoteglobalVar: number = 2;
+// 
+// class /*FIND ALL REFS*/[|remotefooCls|] {
+// 	//Declare
+// 	remoteclsVar = 1;
+// 	static remoteclsSVar = 1;
+// 
+// 	constructor(public remoteclsParam: number) {
+// 		//Increments
+// 		remoteglobalVar++;
+// 		this.remoteclsVar++;
+// 		[|remotefooCls|].remoteclsSVar++;
+// 		this.remoteclsParam++;
+// 		remotemodTest.remotemodVar++;
+// 	}
+// }
+// 
+// function remotefoo(remotex: number) {
+// 	//Declare
+// 	var remotefnVar = 1;
+// 
+// 	//Increments
+// 	[|remotefooCls|].remoteclsSVar++;
+// 	remoteglobalVar++;
+// 	remotemodTest.remotemodVar++;
+// 	remotefnVar++;
+// 
+// 	//Return
+// 	return remotex++;
+// }
+// 
+// module remotemodTest {
+// 	//Declare
+// 	export var remotemodVar: number;
+// 
+// 	//Increments
+// 	remoteglobalVar++;
+// 	[|remotefooCls|].remoteclsSVar++;
+// 	remotemodVar++;
+// 
+// 	class remotetestCls {
+// 		static remoteboo = remotefoo;
+// 	}
+// 
+// 	function remotetestFn(){
+//         static remoteboo = remotefoo;
+// 
+// 		//Increments
+// 		remoteglobalVar++;
+// 		[|remotefooCls|].remoteclsSVar++;
+// 		remotemodVar++;
+//     }
+// 
+// 	module remotetestMod {
+// 		var remoteboo = remotefoo;
+// 	}
+// }
+
+// === /tests/cases/fourslash/remoteGetReferences_1.ts ===
+// // Comment Refence Test: globalVar
+// var globalVar: number = 2;
+// 
+// class fooCls {
+//     static clsSVar = 1;
+//     //Declare
+//     clsVar = 1;
+// 
+//     constructor (public clsParam: number) {
+//         //Increments
+//         globalVar++;
+//         this.clsVar++;
+//         fooCls.clsSVar++;
+//         this.clsParam++;
+//         modTest.modVar++;
+//     }
+// }
+// 
+// function foo(x: number) {
+//     //Declare
+//     var fnVar = 1;
+// 
+//     //Increments
+//     fooCls.clsSVar++;
+//     globalVar++;
+//     modTest.modVar++;
+//     fnVar++;
+// 
+//     //Return
+//     return x++;
+// }
+// 
+// module modTest {
+//     //Declare
+//     export var modVar:number;
+// 
+//     //Increments
+//     globalVar++;
+//     fooCls.clsSVar++;
+//     modVar++;
+// 
+//     class testCls {
+//         static boo = foo;
+//     }
+// 
+//     function testFn(){
+//         static boo = foo;
+// 
+//         //Increments
+//         globalVar++;
+//         fooCls.clsSVar++;
+//         modVar++;
+//     }
+// 
+//     module testMod {
+//         var boo = foo;
+//     }
+// }
+// 
+// //Type test
+// var clsTest: fooCls;
+// 
+// //Arguments
+// clsTest = new fooCls(globalVar);
+// foo(globalVar);
+// 
+// //Increments
+// fooCls.clsSVar++;
+// modTest.modVar++;
+// globalVar = globalVar + globalVar;
+// 
+// //ETC - Other cases
+// globalVar = 3;
+// foo = foo + 1;
+// err = err++;
+// 
+// //Shadowed fn Parameter
+// function shdw(globalVar: number) {
+//     //Increments
+//     globalVar++;
+//     return globalVar;
+// }
+// 
+// //Remotes
+// //Type test
+// var remoteclsTest: [|remotefooCls|];
+// 
+// //Arguments
+// remoteclsTest = new [|remotefooCls|](remoteglobalVar);
+// remotefoo(remoteglobalVar);
+// 
+// //Increments
+// [|remotefooCls|].remoteclsSVar++;
+// remotemodTest.remotemodVar++;
+// remoteglobalVar = remoteglobalVar + remoteglobalVar;
+// 
+// //ETC - Other cases
+// remoteglobalVar = 3;
+// 
+// //Find References misses method param
+// var
+// 
+// 
+// 
+//  array = ["f", "o", "o"];
+// 
+// array.forEach(
+// 
+// 
+// function(str) {
+// 
+// 
+// 
+//    return str + " ";
+// 
+// });
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+      "kind": "class",
+      "name": "class remotefooCls",
+      "textSpan": {
+        "start": 40,
+        "length": 12
+      },
+      "displayParts": [
+        {
+          "text": "class",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "remotefooCls",
+          "kind": "className"
+        }
+      ],
+      "contextSpan": {
+        "start": 34,
+        "length": 277
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 1298,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1345,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1418,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 40,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "contextSpan": {
+          "start": 34,
+          "length": 277
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 220,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 400,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 634,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 844,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/remoteGetReferences_2.ts ===
+// var remoteglobalVar: number = 2;
+// 
+// class remotefooCls {
+// 	//Declare
+// 	/*FIND ALL REFS*/[|remoteclsVar|] = 1;
+// 	static remoteclsSVar = 1;
+// 
+// 	constructor(public remoteclsParam: number) {
+// 		//Increments
+// 		remoteglobalVar++;
+// 		this.[|remoteclsVar|]++;
+// 		remotefooCls.remoteclsSVar++;
+// 		this.remoteclsParam++;
+// 		remotemodTest.remotemodVar++;
+// 	}
+// }
+// 
+// function remotefoo(remotex: number) {
+// 	//Declare
+// 	var remotefnVar = 1;
+// 
+// 	//Increments
+// 	remotefooCls.remoteclsSVar++;
+// 	remoteglobalVar++;
+// 	remotemodTest.remotemodVar++;
+// 	remotefnVar++;
+// 
+// 	//Return
+// 	return remotex++;
+// }
+// 
+// module remotemodTest {
+// 	//Declare
+// 	export var remotemodVar: number;
+// 
+// 	//Increments
+// 	remoteglobalVar++;
+// 	remotefooCls.remoteclsSVar++;
+// 	remotemodVar++;
+// 
+// 	class remotetestCls {
+// 		static remoteboo = remotefoo;
+// 	}
+// 
+// 	function remotetestFn(){
+//         static remoteboo = remotefoo;
+// 
+// 		//Increments
+// 		remoteglobalVar++;
+// 		remotefooCls.remoteclsSVar++;
+// 		remotemodVar++;
+//     }
+// 
+// 	module remotetestMod {
+// 		var remoteboo = remotefoo;
+// 	}
+// }
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+      "kind": "property",
+      "name": "(property) remotefooCls.remoteclsVar: number",
+      "textSpan": {
+        "start": 67,
+        "length": 12
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "remotefooCls",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "remoteclsVar",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 67,
+        "length": 17
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 67,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "contextSpan": {
+          "start": 67,
+          "length": 17
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 202,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/remoteGetReferences_2.ts ===
+// var remoteglobalVar: number = 2;
+// 
+// class remotefooCls {
+// 	//Declare
+// 	remoteclsVar = 1;
+// 	/*FIND ALL REFS*/static [|remoteclsSVar|] = 1;
+// 
+// 	constructor(public remoteclsParam: number) {
+// 		//Increments
+// 		remoteglobalVar++;
+// 		this.remoteclsVar++;
+// 		remotefooCls.[|remoteclsSVar|]++;
+// 		this.remoteclsParam++;
+// 		remotemodTest.remotemodVar++;
+// 	}
+// }
+// 
+// function remotefoo(remotex: number) {
+// 	//Declare
+// 	var remotefnVar = 1;
+// 
+// 	//Increments
+// 	remotefooCls.[|remoteclsSVar|]++;
+// 	remoteglobalVar++;
+// 	remotemodTest.remotemodVar++;
+// 	remotefnVar++;
+// 
+// 	//Return
+// 	return remotex++;
+// }
+// 
+// module remotemodTest {
+// 	//Declare
+// 	export var remotemodVar: number;
+// 
+// 	//Increments
+// 	remoteglobalVar++;
+// 	remotefooCls.[|remoteclsSVar|]++;
+// 	remotemodVar++;
+// 
+// 	class remotetestCls {
+// 		static remoteboo = remotefoo;
+// 	}
+// 
+// 	function remotetestFn(){
+//         static remoteboo = remotefoo;
+// 
+// 		//Increments
+// 		remoteglobalVar++;
+// 		remotefooCls.[|remoteclsSVar|]++;
+// 		remotemodVar++;
+//     }
+// 
+// 	module remotetestMod {
+// 		var remoteboo = remotefoo;
+// 	}
+// }
+
+// === /tests/cases/fourslash/remoteGetReferences_1.ts ===
+// // Comment Refence Test: globalVar
+// var globalVar: number = 2;
+// 
+// class fooCls {
+//     static clsSVar = 1;
+//     //Declare
+//     clsVar = 1;
+// 
+//     constructor (public clsParam: number) {
+//         //Increments
+//         globalVar++;
+//         this.clsVar++;
+//         fooCls.clsSVar++;
+//         this.clsParam++;
+//         modTest.modVar++;
+//     }
+// }
+// 
+// function foo(x: number) {
+//     //Declare
+//     var fnVar = 1;
+// 
+//     //Increments
+//     fooCls.clsSVar++;
+//     globalVar++;
+//     modTest.modVar++;
+//     fnVar++;
+// 
+//     //Return
+//     return x++;
+// }
+// 
+// module modTest {
+//     //Declare
+//     export var modVar:number;
+// 
+//     //Increments
+//     globalVar++;
+//     fooCls.clsSVar++;
+//     modVar++;
+// 
+//     class testCls {
+//         static boo = foo;
+//     }
+// 
+//     function testFn(){
+//         static boo = foo;
+// 
+//         //Increments
+//         globalVar++;
+//         fooCls.clsSVar++;
+//         modVar++;
+//     }
+// 
+//     module testMod {
+//         var boo = foo;
+//     }
+// }
+// 
+// //Type test
+// var clsTest: fooCls;
+// 
+// //Arguments
+// clsTest = new fooCls(globalVar);
+// foo(globalVar);
+// 
+// //Increments
+// fooCls.clsSVar++;
+// modTest.modVar++;
+// globalVar = globalVar + globalVar;
+// 
+// //ETC - Other cases
+// globalVar = 3;
+// foo = foo + 1;
+// err = err++;
+// 
+// //Shadowed fn Parameter
+// function shdw(globalVar: number) {
+//     //Increments
+//     globalVar++;
+//     return globalVar;
+// }
+// 
+// //Remotes
+// //Type test
+// var remoteclsTest: remotefooCls;
+// 
+// //Arguments
+// remoteclsTest = new remotefooCls(remoteglobalVar);
+// remotefoo(remoteglobalVar);
+// 
+// //Increments
+// remotefooCls.[|remoteclsSVar|]++;
+// remotemodTest.remotemodVar++;
+// remoteglobalVar = remoteglobalVar + remoteglobalVar;
+// 
+// //ETC - Other cases
+// remoteglobalVar = 3;
+// 
+// //Find References misses method param
+// var
+// 
+// 
+// 
+//  array = ["f", "o", "o"];
+// 
+// array.forEach(
+// 
+// 
+// function(str) {
+// 
+// 
+// 
+//    return str + " ";
+// 
+// });
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+      "kind": "property",
+      "name": "(property) remotefooCls.remoteclsSVar: number",
+      "textSpan": {
+        "start": 93,
+        "length": 13
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "remotefooCls",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "remoteclsSVar",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 86,
+        "length": 25
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 1431,
+          "length": 13
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 93,
+          "length": 13
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "contextSpan": {
+          "start": 86,
+          "length": 25
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 233,
+          "length": 13
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 413,
+          "length": 13
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 647,
+          "length": 13
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 857,
+          "length": 13
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/remoteGetReferences_2.ts ===
+// var remoteglobalVar: number = 2;
+// 
+// class remotefooCls {
+// 	//Declare
+// 	remoteclsVar = 1;
+// 	static /*FIND ALL REFS*/[|remoteclsSVar|] = 1;
+// 
+// 	constructor(public remoteclsParam: number) {
+// 		//Increments
+// 		remoteglobalVar++;
+// 		this.remoteclsVar++;
+// 		remotefooCls.[|remoteclsSVar|]++;
+// 		this.remoteclsParam++;
+// 		remotemodTest.remotemodVar++;
+// 	}
+// }
+// 
+// function remotefoo(remotex: number) {
+// 	//Declare
+// 	var remotefnVar = 1;
+// 
+// 	//Increments
+// 	remotefooCls.[|remoteclsSVar|]++;
+// 	remoteglobalVar++;
+// 	remotemodTest.remotemodVar++;
+// 	remotefnVar++;
+// 
+// 	//Return
+// 	return remotex++;
+// }
+// 
+// module remotemodTest {
+// 	//Declare
+// 	export var remotemodVar: number;
+// 
+// 	//Increments
+// 	remoteglobalVar++;
+// 	remotefooCls.[|remoteclsSVar|]++;
+// 	remotemodVar++;
+// 
+// 	class remotetestCls {
+// 		static remoteboo = remotefoo;
+// 	}
+// 
+// 	function remotetestFn(){
+//         static remoteboo = remotefoo;
+// 
+// 		//Increments
+// 		remoteglobalVar++;
+// 		remotefooCls.[|remoteclsSVar|]++;
+// 		remotemodVar++;
+//     }
+// 
+// 	module remotetestMod {
+// 		var remoteboo = remotefoo;
+// 	}
+// }
+
+// === /tests/cases/fourslash/remoteGetReferences_1.ts ===
+// // Comment Refence Test: globalVar
+// var globalVar: number = 2;
+// 
+// class fooCls {
+//     static clsSVar = 1;
+//     //Declare
+//     clsVar = 1;
+// 
+//     constructor (public clsParam: number) {
+//         //Increments
+//         globalVar++;
+//         this.clsVar++;
+//         fooCls.clsSVar++;
+//         this.clsParam++;
+//         modTest.modVar++;
+//     }
+// }
+// 
+// function foo(x: number) {
+//     //Declare
+//     var fnVar = 1;
+// 
+//     //Increments
+//     fooCls.clsSVar++;
+//     globalVar++;
+//     modTest.modVar++;
+//     fnVar++;
+// 
+//     //Return
+//     return x++;
+// }
+// 
+// module modTest {
+//     //Declare
+//     export var modVar:number;
+// 
+//     //Increments
+//     globalVar++;
+//     fooCls.clsSVar++;
+//     modVar++;
+// 
+//     class testCls {
+//         static boo = foo;
+//     }
+// 
+//     function testFn(){
+//         static boo = foo;
+// 
+//         //Increments
+//         globalVar++;
+//         fooCls.clsSVar++;
+//         modVar++;
+//     }
+// 
+//     module testMod {
+//         var boo = foo;
+//     }
+// }
+// 
+// //Type test
+// var clsTest: fooCls;
+// 
+// //Arguments
+// clsTest = new fooCls(globalVar);
+// foo(globalVar);
+// 
+// //Increments
+// fooCls.clsSVar++;
+// modTest.modVar++;
+// globalVar = globalVar + globalVar;
+// 
+// //ETC - Other cases
+// globalVar = 3;
+// foo = foo + 1;
+// err = err++;
+// 
+// //Shadowed fn Parameter
+// function shdw(globalVar: number) {
+//     //Increments
+//     globalVar++;
+//     return globalVar;
+// }
+// 
+// //Remotes
+// //Type test
+// var remoteclsTest: remotefooCls;
+// 
+// //Arguments
+// remoteclsTest = new remotefooCls(remoteglobalVar);
+// remotefoo(remoteglobalVar);
+// 
+// //Increments
+// remotefooCls.[|remoteclsSVar|]++;
+// remotemodTest.remotemodVar++;
+// remoteglobalVar = remoteglobalVar + remoteglobalVar;
+// 
+// //ETC - Other cases
+// remoteglobalVar = 3;
+// 
+// //Find References misses method param
+// var
+// 
+// 
+// 
+//  array = ["f", "o", "o"];
+// 
+// array.forEach(
+// 
+// 
+// function(str) {
+// 
+// 
+// 
+//    return str + " ";
+// 
+// });
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+      "kind": "property",
+      "name": "(property) remotefooCls.remoteclsSVar: number",
+      "textSpan": {
+        "start": 93,
+        "length": 13
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "remotefooCls",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "remoteclsSVar",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 86,
+        "length": 25
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 1431,
+          "length": 13
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 93,
+          "length": 13
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "contextSpan": {
+          "start": 86,
+          "length": 25
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 233,
+          "length": 13
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 413,
+          "length": 13
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 647,
+          "length": 13
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 857,
+          "length": 13
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/remoteGetReferences_2.ts ===
+// var [|remoteglobalVar|]: number = 2;
+// 
+// class remotefooCls {
+// 	//Declare
+// 	remoteclsVar = 1;
+// 	static remoteclsSVar = 1;
+// 
+// 	constructor(public remoteclsParam: number) {
+// 		//Increments
+// 		/*FIND ALL REFS*/[|remoteglobalVar|]++;
+// 		this.remoteclsVar++;
+// 		remotefooCls.remoteclsSVar++;
+// 		this.remoteclsParam++;
+// 		remotemodTest.remotemodVar++;
+// 	}
+// }
+// 
+// function remotefoo(remotex: number) {
+// 	//Declare
+// 	var remotefnVar = 1;
+// 
+// 	//Increments
+// 	remotefooCls.remoteclsSVar++;
+// 	[|remoteglobalVar|]++;
+// 	remotemodTest.remotemodVar++;
+// 	remotefnVar++;
+// 
+// 	//Return
+// 	return remotex++;
+// }
+// 
+// module remotemodTest {
+// 	//Declare
+// 	export var remotemodVar: number;
+// 
+// 	//Increments
+// 	[|remoteglobalVar|]++;
+// 	remotefooCls.remoteclsSVar++;
+// 	remotemodVar++;
+// 
+// 	class remotetestCls {
+// 		static remoteboo = remotefoo;
+// 	}
+// 
+// 	function remotetestFn(){
+//         static remoteboo = remotefoo;
+// 
+// 		//Increments
+// 		[|remoteglobalVar|]++;
+// 		remotefooCls.remoteclsSVar++;
+// 		remotemodVar++;
+//     }
+// 
+// 	module remotetestMod {
+// 		var remoteboo = remotefoo;
+// 	}
+// }
+
+// === /tests/cases/fourslash/remoteGetReferences_1.ts ===
+// // Comment Refence Test: globalVar
+// var globalVar: number = 2;
+// 
+// class fooCls {
+//     static clsSVar = 1;
+//     //Declare
+//     clsVar = 1;
+// 
+//     constructor (public clsParam: number) {
+//         //Increments
+//         globalVar++;
+//         this.clsVar++;
+//         fooCls.clsSVar++;
+//         this.clsParam++;
+//         modTest.modVar++;
+//     }
+// }
+// 
+// function foo(x: number) {
+//     //Declare
+//     var fnVar = 1;
+// 
+//     //Increments
+//     fooCls.clsSVar++;
+//     globalVar++;
+//     modTest.modVar++;
+//     fnVar++;
+// 
+//     //Return
+//     return x++;
+// }
+// 
+// module modTest {
+//     //Declare
+//     export var modVar:number;
+// 
+//     //Increments
+//     globalVar++;
+//     fooCls.clsSVar++;
+//     modVar++;
+// 
+//     class testCls {
+//         static boo = foo;
+//     }
+// 
+//     function testFn(){
+//         static boo = foo;
+// 
+//         //Increments
+//         globalVar++;
+//         fooCls.clsSVar++;
+//         modVar++;
+//     }
+// 
+//     module testMod {
+//         var boo = foo;
+//     }
+// }
+// 
+// //Type test
+// var clsTest: fooCls;
+// 
+// //Arguments
+// clsTest = new fooCls(globalVar);
+// foo(globalVar);
+// 
+// //Increments
+// fooCls.clsSVar++;
+// modTest.modVar++;
+// globalVar = globalVar + globalVar;
+// 
+// //ETC - Other cases
+// globalVar = 3;
+// foo = foo + 1;
+// err = err++;
+// 
+// //Shadowed fn Parameter
+// function shdw(globalVar: number) {
+//     //Increments
+//     globalVar++;
+//     return globalVar;
+// }
+// 
+// //Remotes
+// //Type test
+// var remoteclsTest: remotefooCls;
+// 
+// //Arguments
+// remoteclsTest = new remotefooCls([|remoteglobalVar|]);
+// remotefoo([|remoteglobalVar|]);
+// 
+// //Increments
+// remotefooCls.remoteclsSVar++;
+// remotemodTest.remotemodVar++;
+// [|remoteglobalVar|] = [|remoteglobalVar|] + [|remoteglobalVar|];
+// 
+// //ETC - Other cases
+// [|remoteglobalVar|] = 3;
+// 
+// //Find References misses method param
+// var
+// 
+// 
+// 
+//  array = ["f", "o", "o"];
+// 
+// array.forEach(
+// 
+// 
+// function(str) {
+// 
+// 
+// 
+//    return str + " ";
+// 
+// });
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+      "kind": "var",
+      "name": "var remoteglobalVar: number",
+      "textSpan": {
+        "start": 4,
+        "length": 15
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "remoteglobalVar",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 32
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 1358,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1386,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1478,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1496,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1514,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1552,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 4,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 32
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 176,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 431,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 614,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 823,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/remoteGetReferences_2.ts ===
+// var remoteglobalVar: number = 2;
+// 
+// class remotefooCls {
+// 	//Declare
+// 	[|remoteclsVar|] = 1;
+// 	static remoteclsSVar = 1;
+// 
+// 	constructor(public remoteclsParam: number) {
+// 		//Increments
+// 		remoteglobalVar++;
+// 		this./*FIND ALL REFS*/[|remoteclsVar|]++;
+// 		remotefooCls.remoteclsSVar++;
+// 		this.remoteclsParam++;
+// 		remotemodTest.remotemodVar++;
+// 	}
+// }
+// 
+// function remotefoo(remotex: number) {
+// 	//Declare
+// 	var remotefnVar = 1;
+// 
+// 	//Increments
+// 	remotefooCls.remoteclsSVar++;
+// 	remoteglobalVar++;
+// 	remotemodTest.remotemodVar++;
+// 	remotefnVar++;
+// 
+// 	//Return
+// 	return remotex++;
+// }
+// 
+// module remotemodTest {
+// 	//Declare
+// 	export var remotemodVar: number;
+// 
+// 	//Increments
+// 	remoteglobalVar++;
+// 	remotefooCls.remoteclsSVar++;
+// 	remotemodVar++;
+// 
+// 	class remotetestCls {
+// 		static remoteboo = remotefoo;
+// 	}
+// 
+// 	function remotetestFn(){
+//         static remoteboo = remotefoo;
+// 
+// 		//Increments
+// 		remoteglobalVar++;
+// 		remotefooCls.remoteclsSVar++;
+// 		remotemodVar++;
+//     }
+// 
+// 	module remotetestMod {
+// 		var remoteboo = remotefoo;
+// 	}
+// }
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+      "kind": "property",
+      "name": "(property) remotefooCls.remoteclsVar: number",
+      "textSpan": {
+        "start": 67,
+        "length": 12
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "remotefooCls",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "remoteclsVar",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 67,
+        "length": 17
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 67,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "contextSpan": {
+          "start": 67,
+          "length": 17
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 202,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/remoteGetReferences_2.ts ===
+// var remoteglobalVar: number = 2;
+// 
+// class [|remotefooCls|] {
+// 	//Declare
+// 	remoteclsVar = 1;
+// 	static remoteclsSVar = 1;
+// 
+// 	constructor(public remoteclsParam: number) {
+// 		//Increments
+// 		remoteglobalVar++;
+// 		this.remoteclsVar++;
+// 		/*FIND ALL REFS*/[|remotefooCls|].remoteclsSVar++;
+// 		this.remoteclsParam++;
+// 		remotemodTest.remotemodVar++;
+// 	}
+// }
+// 
+// function remotefoo(remotex: number) {
+// 	//Declare
+// 	var remotefnVar = 1;
+// 
+// 	//Increments
+// 	[|remotefooCls|].remoteclsSVar++;
+// 	remoteglobalVar++;
+// 	remotemodTest.remotemodVar++;
+// 	remotefnVar++;
+// 
+// 	//Return
+// 	return remotex++;
+// }
+// 
+// module remotemodTest {
+// 	//Declare
+// 	export var remotemodVar: number;
+// 
+// 	//Increments
+// 	remoteglobalVar++;
+// 	[|remotefooCls|].remoteclsSVar++;
+// 	remotemodVar++;
+// 
+// 	class remotetestCls {
+// 		static remoteboo = remotefoo;
+// 	}
+// 
+// 	function remotetestFn(){
+//         static remoteboo = remotefoo;
+// 
+// 		//Increments
+// 		remoteglobalVar++;
+// 		[|remotefooCls|].remoteclsSVar++;
+// 		remotemodVar++;
+//     }
+// 
+// 	module remotetestMod {
+// 		var remoteboo = remotefoo;
+// 	}
+// }
+
+// === /tests/cases/fourslash/remoteGetReferences_1.ts ===
+// // Comment Refence Test: globalVar
+// var globalVar: number = 2;
+// 
+// class fooCls {
+//     static clsSVar = 1;
+//     //Declare
+//     clsVar = 1;
+// 
+//     constructor (public clsParam: number) {
+//         //Increments
+//         globalVar++;
+//         this.clsVar++;
+//         fooCls.clsSVar++;
+//         this.clsParam++;
+//         modTest.modVar++;
+//     }
+// }
+// 
+// function foo(x: number) {
+//     //Declare
+//     var fnVar = 1;
+// 
+//     //Increments
+//     fooCls.clsSVar++;
+//     globalVar++;
+//     modTest.modVar++;
+//     fnVar++;
+// 
+//     //Return
+//     return x++;
+// }
+// 
+// module modTest {
+//     //Declare
+//     export var modVar:number;
+// 
+//     //Increments
+//     globalVar++;
+//     fooCls.clsSVar++;
+//     modVar++;
+// 
+//     class testCls {
+//         static boo = foo;
+//     }
+// 
+//     function testFn(){
+//         static boo = foo;
+// 
+//         //Increments
+//         globalVar++;
+//         fooCls.clsSVar++;
+//         modVar++;
+//     }
+// 
+//     module testMod {
+//         var boo = foo;
+//     }
+// }
+// 
+// //Type test
+// var clsTest: fooCls;
+// 
+// //Arguments
+// clsTest = new fooCls(globalVar);
+// foo(globalVar);
+// 
+// //Increments
+// fooCls.clsSVar++;
+// modTest.modVar++;
+// globalVar = globalVar + globalVar;
+// 
+// //ETC - Other cases
+// globalVar = 3;
+// foo = foo + 1;
+// err = err++;
+// 
+// //Shadowed fn Parameter
+// function shdw(globalVar: number) {
+//     //Increments
+//     globalVar++;
+//     return globalVar;
+// }
+// 
+// //Remotes
+// //Type test
+// var remoteclsTest: [|remotefooCls|];
+// 
+// //Arguments
+// remoteclsTest = new [|remotefooCls|](remoteglobalVar);
+// remotefoo(remoteglobalVar);
+// 
+// //Increments
+// [|remotefooCls|].remoteclsSVar++;
+// remotemodTest.remotemodVar++;
+// remoteglobalVar = remoteglobalVar + remoteglobalVar;
+// 
+// //ETC - Other cases
+// remoteglobalVar = 3;
+// 
+// //Find References misses method param
+// var
+// 
+// 
+// 
+//  array = ["f", "o", "o"];
+// 
+// array.forEach(
+// 
+// 
+// function(str) {
+// 
+// 
+// 
+//    return str + " ";
+// 
+// });
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+      "kind": "class",
+      "name": "class remotefooCls",
+      "textSpan": {
+        "start": 40,
+        "length": 12
+      },
+      "displayParts": [
+        {
+          "text": "class",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "remotefooCls",
+          "kind": "className"
+        }
+      ],
+      "contextSpan": {
+        "start": 34,
+        "length": 277
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 1298,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1345,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1418,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 40,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "contextSpan": {
+          "start": 34,
+          "length": 277
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 220,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 400,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 634,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 844,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/remoteGetReferences_2.ts ===
+// var remoteglobalVar: number = 2;
+// 
+// class remotefooCls {
+// 	//Declare
+// 	remoteclsVar = 1;
+// 	static [|remoteclsSVar|] = 1;
+// 
+// 	constructor(public remoteclsParam: number) {
+// 		//Increments
+// 		remoteglobalVar++;
+// 		this.remoteclsVar++;
+// 		remotefooCls./*FIND ALL REFS*/[|remoteclsSVar|]++;
+// 		this.remoteclsParam++;
+// 		remotemodTest.remotemodVar++;
+// 	}
+// }
+// 
+// function remotefoo(remotex: number) {
+// 	//Declare
+// 	var remotefnVar = 1;
+// 
+// 	//Increments
+// 	remotefooCls.[|remoteclsSVar|]++;
+// 	remoteglobalVar++;
+// 	remotemodTest.remotemodVar++;
+// 	remotefnVar++;
+// 
+// 	//Return
+// 	return remotex++;
+// }
+// 
+// module remotemodTest {
+// 	//Declare
+// 	export var remotemodVar: number;
+// 
+// 	//Increments
+// 	remoteglobalVar++;
+// 	remotefooCls.[|remoteclsSVar|]++;
+// 	remotemodVar++;
+// 
+// 	class remotetestCls {
+// 		static remoteboo = remotefoo;
+// 	}
+// 
+// 	function remotetestFn(){
+//         static remoteboo = remotefoo;
+// 
+// 		//Increments
+// 		remoteglobalVar++;
+// 		remotefooCls.[|remoteclsSVar|]++;
+// 		remotemodVar++;
+//     }
+// 
+// 	module remotetestMod {
+// 		var remoteboo = remotefoo;
+// 	}
+// }
+
+// === /tests/cases/fourslash/remoteGetReferences_1.ts ===
+// // Comment Refence Test: globalVar
+// var globalVar: number = 2;
+// 
+// class fooCls {
+//     static clsSVar = 1;
+//     //Declare
+//     clsVar = 1;
+// 
+//     constructor (public clsParam: number) {
+//         //Increments
+//         globalVar++;
+//         this.clsVar++;
+//         fooCls.clsSVar++;
+//         this.clsParam++;
+//         modTest.modVar++;
+//     }
+// }
+// 
+// function foo(x: number) {
+//     //Declare
+//     var fnVar = 1;
+// 
+//     //Increments
+//     fooCls.clsSVar++;
+//     globalVar++;
+//     modTest.modVar++;
+//     fnVar++;
+// 
+//     //Return
+//     return x++;
+// }
+// 
+// module modTest {
+//     //Declare
+//     export var modVar:number;
+// 
+//     //Increments
+//     globalVar++;
+//     fooCls.clsSVar++;
+//     modVar++;
+// 
+//     class testCls {
+//         static boo = foo;
+//     }
+// 
+//     function testFn(){
+//         static boo = foo;
+// 
+//         //Increments
+//         globalVar++;
+//         fooCls.clsSVar++;
+//         modVar++;
+//     }
+// 
+//     module testMod {
+//         var boo = foo;
+//     }
+// }
+// 
+// //Type test
+// var clsTest: fooCls;
+// 
+// //Arguments
+// clsTest = new fooCls(globalVar);
+// foo(globalVar);
+// 
+// //Increments
+// fooCls.clsSVar++;
+// modTest.modVar++;
+// globalVar = globalVar + globalVar;
+// 
+// //ETC - Other cases
+// globalVar = 3;
+// foo = foo + 1;
+// err = err++;
+// 
+// //Shadowed fn Parameter
+// function shdw(globalVar: number) {
+//     //Increments
+//     globalVar++;
+//     return globalVar;
+// }
+// 
+// //Remotes
+// //Type test
+// var remoteclsTest: remotefooCls;
+// 
+// //Arguments
+// remoteclsTest = new remotefooCls(remoteglobalVar);
+// remotefoo(remoteglobalVar);
+// 
+// //Increments
+// remotefooCls.[|remoteclsSVar|]++;
+// remotemodTest.remotemodVar++;
+// remoteglobalVar = remoteglobalVar + remoteglobalVar;
+// 
+// //ETC - Other cases
+// remoteglobalVar = 3;
+// 
+// //Find References misses method param
+// var
+// 
+// 
+// 
+//  array = ["f", "o", "o"];
+// 
+// array.forEach(
+// 
+// 
+// function(str) {
+// 
+// 
+// 
+//    return str + " ";
+// 
+// });
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+      "kind": "property",
+      "name": "(property) remotefooCls.remoteclsSVar: number",
+      "textSpan": {
+        "start": 93,
+        "length": 13
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "remotefooCls",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "remoteclsSVar",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 86,
+        "length": 25
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 1431,
+          "length": 13
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 93,
+          "length": 13
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "contextSpan": {
+          "start": 86,
+          "length": 25
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 233,
+          "length": 13
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 413,
+          "length": 13
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 647,
+          "length": 13
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 857,
+          "length": 13
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/remoteGetReferences_2.ts ===
+// var remoteglobalVar: number = 2;
+// 
+// class [|remotefooCls|] {
+// 	//Declare
+// 	remoteclsVar = 1;
+// 	static remoteclsSVar = 1;
+// 
+// 	constructor(public remoteclsParam: number) {
+// 		//Increments
+// 		remoteglobalVar++;
+// 		this.remoteclsVar++;
+// 		[|remotefooCls|].remoteclsSVar++;
+// 		this.remoteclsParam++;
+// 		remotemodTest.remotemodVar++;
+// 	}
+// }
+// 
+// function remotefoo(remotex: number) {
+// 	//Declare
+// 	var remotefnVar = 1;
+// 
+// 	//Increments
+// 	/*FIND ALL REFS*/[|remotefooCls|].remoteclsSVar++;
+// 	remoteglobalVar++;
+// 	remotemodTest.remotemodVar++;
+// 	remotefnVar++;
+// 
+// 	//Return
+// 	return remotex++;
+// }
+// 
+// module remotemodTest {
+// 	//Declare
+// 	export var remotemodVar: number;
+// 
+// 	//Increments
+// 	remoteglobalVar++;
+// 	[|remotefooCls|].remoteclsSVar++;
+// 	remotemodVar++;
+// 
+// 	class remotetestCls {
+// 		static remoteboo = remotefoo;
+// 	}
+// 
+// 	function remotetestFn(){
+//         static remoteboo = remotefoo;
+// 
+// 		//Increments
+// 		remoteglobalVar++;
+// 		[|remotefooCls|].remoteclsSVar++;
+// 		remotemodVar++;
+//     }
+// 
+// 	module remotetestMod {
+// 		var remoteboo = remotefoo;
+// 	}
+// }
+
+// === /tests/cases/fourslash/remoteGetReferences_1.ts ===
+// // Comment Refence Test: globalVar
+// var globalVar: number = 2;
+// 
+// class fooCls {
+//     static clsSVar = 1;
+//     //Declare
+//     clsVar = 1;
+// 
+//     constructor (public clsParam: number) {
+//         //Increments
+//         globalVar++;
+//         this.clsVar++;
+//         fooCls.clsSVar++;
+//         this.clsParam++;
+//         modTest.modVar++;
+//     }
+// }
+// 
+// function foo(x: number) {
+//     //Declare
+//     var fnVar = 1;
+// 
+//     //Increments
+//     fooCls.clsSVar++;
+//     globalVar++;
+//     modTest.modVar++;
+//     fnVar++;
+// 
+//     //Return
+//     return x++;
+// }
+// 
+// module modTest {
+//     //Declare
+//     export var modVar:number;
+// 
+//     //Increments
+//     globalVar++;
+//     fooCls.clsSVar++;
+//     modVar++;
+// 
+//     class testCls {
+//         static boo = foo;
+//     }
+// 
+//     function testFn(){
+//         static boo = foo;
+// 
+//         //Increments
+//         globalVar++;
+//         fooCls.clsSVar++;
+//         modVar++;
+//     }
+// 
+//     module testMod {
+//         var boo = foo;
+//     }
+// }
+// 
+// //Type test
+// var clsTest: fooCls;
+// 
+// //Arguments
+// clsTest = new fooCls(globalVar);
+// foo(globalVar);
+// 
+// //Increments
+// fooCls.clsSVar++;
+// modTest.modVar++;
+// globalVar = globalVar + globalVar;
+// 
+// //ETC - Other cases
+// globalVar = 3;
+// foo = foo + 1;
+// err = err++;
+// 
+// //Shadowed fn Parameter
+// function shdw(globalVar: number) {
+//     //Increments
+//     globalVar++;
+//     return globalVar;
+// }
+// 
+// //Remotes
+// //Type test
+// var remoteclsTest: [|remotefooCls|];
+// 
+// //Arguments
+// remoteclsTest = new [|remotefooCls|](remoteglobalVar);
+// remotefoo(remoteglobalVar);
+// 
+// //Increments
+// [|remotefooCls|].remoteclsSVar++;
+// remotemodTest.remotemodVar++;
+// remoteglobalVar = remoteglobalVar + remoteglobalVar;
+// 
+// //ETC - Other cases
+// remoteglobalVar = 3;
+// 
+// //Find References misses method param
+// var
+// 
+// 
+// 
+//  array = ["f", "o", "o"];
+// 
+// array.forEach(
+// 
+// 
+// function(str) {
+// 
+// 
+// 
+//    return str + " ";
+// 
+// });
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+      "kind": "class",
+      "name": "class remotefooCls",
+      "textSpan": {
+        "start": 40,
+        "length": 12
+      },
+      "displayParts": [
+        {
+          "text": "class",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "remotefooCls",
+          "kind": "className"
+        }
+      ],
+      "contextSpan": {
+        "start": 34,
+        "length": 277
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 1298,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1345,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1418,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 40,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "contextSpan": {
+          "start": 34,
+          "length": 277
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 220,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 400,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 634,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 844,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/remoteGetReferences_2.ts ===
+// var remoteglobalVar: number = 2;
+// 
+// class remotefooCls {
+// 	//Declare
+// 	remoteclsVar = 1;
+// 	static [|remoteclsSVar|] = 1;
+// 
+// 	constructor(public remoteclsParam: number) {
+// 		//Increments
+// 		remoteglobalVar++;
+// 		this.remoteclsVar++;
+// 		remotefooCls.[|remoteclsSVar|]++;
+// 		this.remoteclsParam++;
+// 		remotemodTest.remotemodVar++;
+// 	}
+// }
+// 
+// function remotefoo(remotex: number) {
+// 	//Declare
+// 	var remotefnVar = 1;
+// 
+// 	//Increments
+// 	remotefooCls./*FIND ALL REFS*/[|remoteclsSVar|]++;
+// 	remoteglobalVar++;
+// 	remotemodTest.remotemodVar++;
+// 	remotefnVar++;
+// 
+// 	//Return
+// 	return remotex++;
+// }
+// 
+// module remotemodTest {
+// 	//Declare
+// 	export var remotemodVar: number;
+// 
+// 	//Increments
+// 	remoteglobalVar++;
+// 	remotefooCls.[|remoteclsSVar|]++;
+// 	remotemodVar++;
+// 
+// 	class remotetestCls {
+// 		static remoteboo = remotefoo;
+// 	}
+// 
+// 	function remotetestFn(){
+//         static remoteboo = remotefoo;
+// 
+// 		//Increments
+// 		remoteglobalVar++;
+// 		remotefooCls.[|remoteclsSVar|]++;
+// 		remotemodVar++;
+//     }
+// 
+// 	module remotetestMod {
+// 		var remoteboo = remotefoo;
+// 	}
+// }
+
+// === /tests/cases/fourslash/remoteGetReferences_1.ts ===
+// // Comment Refence Test: globalVar
+// var globalVar: number = 2;
+// 
+// class fooCls {
+//     static clsSVar = 1;
+//     //Declare
+//     clsVar = 1;
+// 
+//     constructor (public clsParam: number) {
+//         //Increments
+//         globalVar++;
+//         this.clsVar++;
+//         fooCls.clsSVar++;
+//         this.clsParam++;
+//         modTest.modVar++;
+//     }
+// }
+// 
+// function foo(x: number) {
+//     //Declare
+//     var fnVar = 1;
+// 
+//     //Increments
+//     fooCls.clsSVar++;
+//     globalVar++;
+//     modTest.modVar++;
+//     fnVar++;
+// 
+//     //Return
+//     return x++;
+// }
+// 
+// module modTest {
+//     //Declare
+//     export var modVar:number;
+// 
+//     //Increments
+//     globalVar++;
+//     fooCls.clsSVar++;
+//     modVar++;
+// 
+//     class testCls {
+//         static boo = foo;
+//     }
+// 
+//     function testFn(){
+//         static boo = foo;
+// 
+//         //Increments
+//         globalVar++;
+//         fooCls.clsSVar++;
+//         modVar++;
+//     }
+// 
+//     module testMod {
+//         var boo = foo;
+//     }
+// }
+// 
+// //Type test
+// var clsTest: fooCls;
+// 
+// //Arguments
+// clsTest = new fooCls(globalVar);
+// foo(globalVar);
+// 
+// //Increments
+// fooCls.clsSVar++;
+// modTest.modVar++;
+// globalVar = globalVar + globalVar;
+// 
+// //ETC - Other cases
+// globalVar = 3;
+// foo = foo + 1;
+// err = err++;
+// 
+// //Shadowed fn Parameter
+// function shdw(globalVar: number) {
+//     //Increments
+//     globalVar++;
+//     return globalVar;
+// }
+// 
+// //Remotes
+// //Type test
+// var remoteclsTest: remotefooCls;
+// 
+// //Arguments
+// remoteclsTest = new remotefooCls(remoteglobalVar);
+// remotefoo(remoteglobalVar);
+// 
+// //Increments
+// remotefooCls.[|remoteclsSVar|]++;
+// remotemodTest.remotemodVar++;
+// remoteglobalVar = remoteglobalVar + remoteglobalVar;
+// 
+// //ETC - Other cases
+// remoteglobalVar = 3;
+// 
+// //Find References misses method param
+// var
+// 
+// 
+// 
+//  array = ["f", "o", "o"];
+// 
+// array.forEach(
+// 
+// 
+// function(str) {
+// 
+// 
+// 
+//    return str + " ";
+// 
+// });
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+      "kind": "property",
+      "name": "(property) remotefooCls.remoteclsSVar: number",
+      "textSpan": {
+        "start": 93,
+        "length": 13
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "remotefooCls",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "remoteclsSVar",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 86,
+        "length": 25
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 1431,
+          "length": 13
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 93,
+          "length": 13
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "contextSpan": {
+          "start": 86,
+          "length": 25
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 233,
+          "length": 13
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 413,
+          "length": 13
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 647,
+          "length": 13
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 857,
+          "length": 13
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/remoteGetReferences_2.ts ===
+// var [|remoteglobalVar|]: number = 2;
+// 
+// class remotefooCls {
+// 	//Declare
+// 	remoteclsVar = 1;
+// 	static remoteclsSVar = 1;
+// 
+// 	constructor(public remoteclsParam: number) {
+// 		//Increments
+// 		[|remoteglobalVar|]++;
+// 		this.remoteclsVar++;
+// 		remotefooCls.remoteclsSVar++;
+// 		this.remoteclsParam++;
+// 		remotemodTest.remotemodVar++;
+// 	}
+// }
+// 
+// function remotefoo(remotex: number) {
+// 	//Declare
+// 	var remotefnVar = 1;
+// 
+// 	//Increments
+// 	remotefooCls.remoteclsSVar++;
+// 	/*FIND ALL REFS*/[|remoteglobalVar|]++;
+// 	remotemodTest.remotemodVar++;
+// 	remotefnVar++;
+// 
+// 	//Return
+// 	return remotex++;
+// }
+// 
+// module remotemodTest {
+// 	//Declare
+// 	export var remotemodVar: number;
+// 
+// 	//Increments
+// 	[|remoteglobalVar|]++;
+// 	remotefooCls.remoteclsSVar++;
+// 	remotemodVar++;
+// 
+// 	class remotetestCls {
+// 		static remoteboo = remotefoo;
+// 	}
+// 
+// 	function remotetestFn(){
+//         static remoteboo = remotefoo;
+// 
+// 		//Increments
+// 		[|remoteglobalVar|]++;
+// 		remotefooCls.remoteclsSVar++;
+// 		remotemodVar++;
+//     }
+// 
+// 	module remotetestMod {
+// 		var remoteboo = remotefoo;
+// 	}
+// }
+
+// === /tests/cases/fourslash/remoteGetReferences_1.ts ===
+// // Comment Refence Test: globalVar
+// var globalVar: number = 2;
+// 
+// class fooCls {
+//     static clsSVar = 1;
+//     //Declare
+//     clsVar = 1;
+// 
+//     constructor (public clsParam: number) {
+//         //Increments
+//         globalVar++;
+//         this.clsVar++;
+//         fooCls.clsSVar++;
+//         this.clsParam++;
+//         modTest.modVar++;
+//     }
+// }
+// 
+// function foo(x: number) {
+//     //Declare
+//     var fnVar = 1;
+// 
+//     //Increments
+//     fooCls.clsSVar++;
+//     globalVar++;
+//     modTest.modVar++;
+//     fnVar++;
+// 
+//     //Return
+//     return x++;
+// }
+// 
+// module modTest {
+//     //Declare
+//     export var modVar:number;
+// 
+//     //Increments
+//     globalVar++;
+//     fooCls.clsSVar++;
+//     modVar++;
+// 
+//     class testCls {
+//         static boo = foo;
+//     }
+// 
+//     function testFn(){
+//         static boo = foo;
+// 
+//         //Increments
+//         globalVar++;
+//         fooCls.clsSVar++;
+//         modVar++;
+//     }
+// 
+//     module testMod {
+//         var boo = foo;
+//     }
+// }
+// 
+// //Type test
+// var clsTest: fooCls;
+// 
+// //Arguments
+// clsTest = new fooCls(globalVar);
+// foo(globalVar);
+// 
+// //Increments
+// fooCls.clsSVar++;
+// modTest.modVar++;
+// globalVar = globalVar + globalVar;
+// 
+// //ETC - Other cases
+// globalVar = 3;
+// foo = foo + 1;
+// err = err++;
+// 
+// //Shadowed fn Parameter
+// function shdw(globalVar: number) {
+//     //Increments
+//     globalVar++;
+//     return globalVar;
+// }
+// 
+// //Remotes
+// //Type test
+// var remoteclsTest: remotefooCls;
+// 
+// //Arguments
+// remoteclsTest = new remotefooCls([|remoteglobalVar|]);
+// remotefoo([|remoteglobalVar|]);
+// 
+// //Increments
+// remotefooCls.remoteclsSVar++;
+// remotemodTest.remotemodVar++;
+// [|remoteglobalVar|] = [|remoteglobalVar|] + [|remoteglobalVar|];
+// 
+// //ETC - Other cases
+// [|remoteglobalVar|] = 3;
+// 
+// //Find References misses method param
+// var
+// 
+// 
+// 
+//  array = ["f", "o", "o"];
+// 
+// array.forEach(
+// 
+// 
+// function(str) {
+// 
+// 
+// 
+//    return str + " ";
+// 
+// });
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+      "kind": "var",
+      "name": "var remoteglobalVar: number",
+      "textSpan": {
+        "start": 4,
+        "length": 15
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "remoteglobalVar",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 32
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 1358,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1386,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1478,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1496,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1514,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1552,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 4,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 32
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 176,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 431,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 614,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 823,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/remoteGetReferences_2.ts ===
+// var [|remoteglobalVar|]: number = 2;
+// 
+// class remotefooCls {
+// 	//Declare
+// 	remoteclsVar = 1;
+// 	static remoteclsSVar = 1;
+// 
+// 	constructor(public remoteclsParam: number) {
+// 		//Increments
+// 		[|remoteglobalVar|]++;
+// 		this.remoteclsVar++;
+// 		remotefooCls.remoteclsSVar++;
+// 		this.remoteclsParam++;
+// 		remotemodTest.remotemodVar++;
+// 	}
+// }
+// 
+// function remotefoo(remotex: number) {
+// 	//Declare
+// 	var remotefnVar = 1;
+// 
+// 	//Increments
+// 	remotefooCls.remoteclsSVar++;
+// 	[|remoteglobalVar|]++;
+// 	remotemodTest.remotemodVar++;
+// 	remotefnVar++;
+// 
+// 	//Return
+// 	return remotex++;
+// }
+// 
+// module remotemodTest {
+// 	//Declare
+// 	export var remotemodVar: number;
+// 
+// 	//Increments
+// 	/*FIND ALL REFS*/[|remoteglobalVar|]++;
+// 	remotefooCls.remoteclsSVar++;
+// 	remotemodVar++;
+// 
+// 	class remotetestCls {
+// 		static remoteboo = remotefoo;
+// 	}
+// 
+// 	function remotetestFn(){
+//         static remoteboo = remotefoo;
+// 
+// 		//Increments
+// 		[|remoteglobalVar|]++;
+// 		remotefooCls.remoteclsSVar++;
+// 		remotemodVar++;
+//     }
+// 
+// 	module remotetestMod {
+// 		var remoteboo = remotefoo;
+// 	}
+// }
+
+// === /tests/cases/fourslash/remoteGetReferences_1.ts ===
+// // Comment Refence Test: globalVar
+// var globalVar: number = 2;
+// 
+// class fooCls {
+//     static clsSVar = 1;
+//     //Declare
+//     clsVar = 1;
+// 
+//     constructor (public clsParam: number) {
+//         //Increments
+//         globalVar++;
+//         this.clsVar++;
+//         fooCls.clsSVar++;
+//         this.clsParam++;
+//         modTest.modVar++;
+//     }
+// }
+// 
+// function foo(x: number) {
+//     //Declare
+//     var fnVar = 1;
+// 
+//     //Increments
+//     fooCls.clsSVar++;
+//     globalVar++;
+//     modTest.modVar++;
+//     fnVar++;
+// 
+//     //Return
+//     return x++;
+// }
+// 
+// module modTest {
+//     //Declare
+//     export var modVar:number;
+// 
+//     //Increments
+//     globalVar++;
+//     fooCls.clsSVar++;
+//     modVar++;
+// 
+//     class testCls {
+//         static boo = foo;
+//     }
+// 
+//     function testFn(){
+//         static boo = foo;
+// 
+//         //Increments
+//         globalVar++;
+//         fooCls.clsSVar++;
+//         modVar++;
+//     }
+// 
+//     module testMod {
+//         var boo = foo;
+//     }
+// }
+// 
+// //Type test
+// var clsTest: fooCls;
+// 
+// //Arguments
+// clsTest = new fooCls(globalVar);
+// foo(globalVar);
+// 
+// //Increments
+// fooCls.clsSVar++;
+// modTest.modVar++;
+// globalVar = globalVar + globalVar;
+// 
+// //ETC - Other cases
+// globalVar = 3;
+// foo = foo + 1;
+// err = err++;
+// 
+// //Shadowed fn Parameter
+// function shdw(globalVar: number) {
+//     //Increments
+//     globalVar++;
+//     return globalVar;
+// }
+// 
+// //Remotes
+// //Type test
+// var remoteclsTest: remotefooCls;
+// 
+// //Arguments
+// remoteclsTest = new remotefooCls([|remoteglobalVar|]);
+// remotefoo([|remoteglobalVar|]);
+// 
+// //Increments
+// remotefooCls.remoteclsSVar++;
+// remotemodTest.remotemodVar++;
+// [|remoteglobalVar|] = [|remoteglobalVar|] + [|remoteglobalVar|];
+// 
+// //ETC - Other cases
+// [|remoteglobalVar|] = 3;
+// 
+// //Find References misses method param
+// var
+// 
+// 
+// 
+//  array = ["f", "o", "o"];
+// 
+// array.forEach(
+// 
+// 
+// function(str) {
+// 
+// 
+// 
+//    return str + " ";
+// 
+// });
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+      "kind": "var",
+      "name": "var remoteglobalVar: number",
+      "textSpan": {
+        "start": 4,
+        "length": 15
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "remoteglobalVar",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 32
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 1358,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1386,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1478,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1496,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1514,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1552,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 4,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 32
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 176,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 431,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 614,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 823,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/remoteGetReferences_2.ts ===
+// var remoteglobalVar: number = 2;
+// 
+// class [|remotefooCls|] {
+// 	//Declare
+// 	remoteclsVar = 1;
+// 	static remoteclsSVar = 1;
+// 
+// 	constructor(public remoteclsParam: number) {
+// 		//Increments
+// 		remoteglobalVar++;
+// 		this.remoteclsVar++;
+// 		[|remotefooCls|].remoteclsSVar++;
+// 		this.remoteclsParam++;
+// 		remotemodTest.remotemodVar++;
+// 	}
+// }
+// 
+// function remotefoo(remotex: number) {
+// 	//Declare
+// 	var remotefnVar = 1;
+// 
+// 	//Increments
+// 	[|remotefooCls|].remoteclsSVar++;
+// 	remoteglobalVar++;
+// 	remotemodTest.remotemodVar++;
+// 	remotefnVar++;
+// 
+// 	//Return
+// 	return remotex++;
+// }
+// 
+// module remotemodTest {
+// 	//Declare
+// 	export var remotemodVar: number;
+// 
+// 	//Increments
+// 	remoteglobalVar++;
+// 	/*FIND ALL REFS*/[|remotefooCls|].remoteclsSVar++;
+// 	remotemodVar++;
+// 
+// 	class remotetestCls {
+// 		static remoteboo = remotefoo;
+// 	}
+// 
+// 	function remotetestFn(){
+//         static remoteboo = remotefoo;
+// 
+// 		//Increments
+// 		remoteglobalVar++;
+// 		[|remotefooCls|].remoteclsSVar++;
+// 		remotemodVar++;
+//     }
+// 
+// 	module remotetestMod {
+// 		var remoteboo = remotefoo;
+// 	}
+// }
+
+// === /tests/cases/fourslash/remoteGetReferences_1.ts ===
+// // Comment Refence Test: globalVar
+// var globalVar: number = 2;
+// 
+// class fooCls {
+//     static clsSVar = 1;
+//     //Declare
+//     clsVar = 1;
+// 
+//     constructor (public clsParam: number) {
+//         //Increments
+//         globalVar++;
+//         this.clsVar++;
+//         fooCls.clsSVar++;
+//         this.clsParam++;
+//         modTest.modVar++;
+//     }
+// }
+// 
+// function foo(x: number) {
+//     //Declare
+//     var fnVar = 1;
+// 
+//     //Increments
+//     fooCls.clsSVar++;
+//     globalVar++;
+//     modTest.modVar++;
+//     fnVar++;
+// 
+//     //Return
+//     return x++;
+// }
+// 
+// module modTest {
+//     //Declare
+//     export var modVar:number;
+// 
+//     //Increments
+//     globalVar++;
+//     fooCls.clsSVar++;
+//     modVar++;
+// 
+//     class testCls {
+//         static boo = foo;
+//     }
+// 
+//     function testFn(){
+//         static boo = foo;
+// 
+//         //Increments
+//         globalVar++;
+//         fooCls.clsSVar++;
+//         modVar++;
+//     }
+// 
+//     module testMod {
+//         var boo = foo;
+//     }
+// }
+// 
+// //Type test
+// var clsTest: fooCls;
+// 
+// //Arguments
+// clsTest = new fooCls(globalVar);
+// foo(globalVar);
+// 
+// //Increments
+// fooCls.clsSVar++;
+// modTest.modVar++;
+// globalVar = globalVar + globalVar;
+// 
+// //ETC - Other cases
+// globalVar = 3;
+// foo = foo + 1;
+// err = err++;
+// 
+// //Shadowed fn Parameter
+// function shdw(globalVar: number) {
+//     //Increments
+//     globalVar++;
+//     return globalVar;
+// }
+// 
+// //Remotes
+// //Type test
+// var remoteclsTest: [|remotefooCls|];
+// 
+// //Arguments
+// remoteclsTest = new [|remotefooCls|](remoteglobalVar);
+// remotefoo(remoteglobalVar);
+// 
+// //Increments
+// [|remotefooCls|].remoteclsSVar++;
+// remotemodTest.remotemodVar++;
+// remoteglobalVar = remoteglobalVar + remoteglobalVar;
+// 
+// //ETC - Other cases
+// remoteglobalVar = 3;
+// 
+// //Find References misses method param
+// var
+// 
+// 
+// 
+//  array = ["f", "o", "o"];
+// 
+// array.forEach(
+// 
+// 
+// function(str) {
+// 
+// 
+// 
+//    return str + " ";
+// 
+// });
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+      "kind": "class",
+      "name": "class remotefooCls",
+      "textSpan": {
+        "start": 40,
+        "length": 12
+      },
+      "displayParts": [
+        {
+          "text": "class",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "remotefooCls",
+          "kind": "className"
+        }
+      ],
+      "contextSpan": {
+        "start": 34,
+        "length": 277
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 1298,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1345,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1418,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 40,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "contextSpan": {
+          "start": 34,
+          "length": 277
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 220,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 400,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 634,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 844,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/remoteGetReferences_2.ts ===
+// var remoteglobalVar: number = 2;
+// 
+// class remotefooCls {
+// 	//Declare
+// 	remoteclsVar = 1;
+// 	static [|remoteclsSVar|] = 1;
+// 
+// 	constructor(public remoteclsParam: number) {
+// 		//Increments
+// 		remoteglobalVar++;
+// 		this.remoteclsVar++;
+// 		remotefooCls.[|remoteclsSVar|]++;
+// 		this.remoteclsParam++;
+// 		remotemodTest.remotemodVar++;
+// 	}
+// }
+// 
+// function remotefoo(remotex: number) {
+// 	//Declare
+// 	var remotefnVar = 1;
+// 
+// 	//Increments
+// 	remotefooCls.[|remoteclsSVar|]++;
+// 	remoteglobalVar++;
+// 	remotemodTest.remotemodVar++;
+// 	remotefnVar++;
+// 
+// 	//Return
+// 	return remotex++;
+// }
+// 
+// module remotemodTest {
+// 	//Declare
+// 	export var remotemodVar: number;
+// 
+// 	//Increments
+// 	remoteglobalVar++;
+// 	remotefooCls./*FIND ALL REFS*/[|remoteclsSVar|]++;
+// 	remotemodVar++;
+// 
+// 	class remotetestCls {
+// 		static remoteboo = remotefoo;
+// 	}
+// 
+// 	function remotetestFn(){
+//         static remoteboo = remotefoo;
+// 
+// 		//Increments
+// 		remoteglobalVar++;
+// 		remotefooCls.[|remoteclsSVar|]++;
+// 		remotemodVar++;
+//     }
+// 
+// 	module remotetestMod {
+// 		var remoteboo = remotefoo;
+// 	}
+// }
+
+// === /tests/cases/fourslash/remoteGetReferences_1.ts ===
+// // Comment Refence Test: globalVar
+// var globalVar: number = 2;
+// 
+// class fooCls {
+//     static clsSVar = 1;
+//     //Declare
+//     clsVar = 1;
+// 
+//     constructor (public clsParam: number) {
+//         //Increments
+//         globalVar++;
+//         this.clsVar++;
+//         fooCls.clsSVar++;
+//         this.clsParam++;
+//         modTest.modVar++;
+//     }
+// }
+// 
+// function foo(x: number) {
+//     //Declare
+//     var fnVar = 1;
+// 
+//     //Increments
+//     fooCls.clsSVar++;
+//     globalVar++;
+//     modTest.modVar++;
+//     fnVar++;
+// 
+//     //Return
+//     return x++;
+// }
+// 
+// module modTest {
+//     //Declare
+//     export var modVar:number;
+// 
+//     //Increments
+//     globalVar++;
+//     fooCls.clsSVar++;
+//     modVar++;
+// 
+//     class testCls {
+//         static boo = foo;
+//     }
+// 
+//     function testFn(){
+//         static boo = foo;
+// 
+//         //Increments
+//         globalVar++;
+//         fooCls.clsSVar++;
+//         modVar++;
+//     }
+// 
+//     module testMod {
+//         var boo = foo;
+//     }
+// }
+// 
+// //Type test
+// var clsTest: fooCls;
+// 
+// //Arguments
+// clsTest = new fooCls(globalVar);
+// foo(globalVar);
+// 
+// //Increments
+// fooCls.clsSVar++;
+// modTest.modVar++;
+// globalVar = globalVar + globalVar;
+// 
+// //ETC - Other cases
+// globalVar = 3;
+// foo = foo + 1;
+// err = err++;
+// 
+// //Shadowed fn Parameter
+// function shdw(globalVar: number) {
+//     //Increments
+//     globalVar++;
+//     return globalVar;
+// }
+// 
+// //Remotes
+// //Type test
+// var remoteclsTest: remotefooCls;
+// 
+// //Arguments
+// remoteclsTest = new remotefooCls(remoteglobalVar);
+// remotefoo(remoteglobalVar);
+// 
+// //Increments
+// remotefooCls.[|remoteclsSVar|]++;
+// remotemodTest.remotemodVar++;
+// remoteglobalVar = remoteglobalVar + remoteglobalVar;
+// 
+// //ETC - Other cases
+// remoteglobalVar = 3;
+// 
+// //Find References misses method param
+// var
+// 
+// 
+// 
+//  array = ["f", "o", "o"];
+// 
+// array.forEach(
+// 
+// 
+// function(str) {
+// 
+// 
+// 
+//    return str + " ";
+// 
+// });
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+      "kind": "property",
+      "name": "(property) remotefooCls.remoteclsSVar: number",
+      "textSpan": {
+        "start": 93,
+        "length": 13
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "remotefooCls",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "remoteclsSVar",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 86,
+        "length": 25
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 1431,
+          "length": 13
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 93,
+          "length": 13
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "contextSpan": {
+          "start": 86,
+          "length": 25
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 233,
+          "length": 13
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 413,
+          "length": 13
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 647,
+          "length": 13
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 857,
+          "length": 13
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/remoteGetReferences_2.ts ===
+// var [|remoteglobalVar|]: number = 2;
+// 
+// class remotefooCls {
+// 	//Declare
+// 	remoteclsVar = 1;
+// 	static remoteclsSVar = 1;
+// 
+// 	constructor(public remoteclsParam: number) {
+// 		//Increments
+// 		[|remoteglobalVar|]++;
+// 		this.remoteclsVar++;
+// 		remotefooCls.remoteclsSVar++;
+// 		this.remoteclsParam++;
+// 		remotemodTest.remotemodVar++;
+// 	}
+// }
+// 
+// function remotefoo(remotex: number) {
+// 	//Declare
+// 	var remotefnVar = 1;
+// 
+// 	//Increments
+// 	remotefooCls.remoteclsSVar++;
+// 	[|remoteglobalVar|]++;
+// 	remotemodTest.remotemodVar++;
+// 	remotefnVar++;
+// 
+// 	//Return
+// 	return remotex++;
+// }
+// 
+// module remotemodTest {
+// 	//Declare
+// 	export var remotemodVar: number;
+// 
+// 	//Increments
+// 	[|remoteglobalVar|]++;
+// 	remotefooCls.remoteclsSVar++;
+// 	remotemodVar++;
+// 
+// 	class remotetestCls {
+// 		static remoteboo = remotefoo;
+// 	}
+// 
+// 	function remotetestFn(){
+//         static remoteboo = remotefoo;
+// 
+// 		//Increments
+// 		/*FIND ALL REFS*/[|remoteglobalVar|]++;
+// 		remotefooCls.remoteclsSVar++;
+// 		remotemodVar++;
+//     }
+// 
+// 	module remotetestMod {
+// 		var remoteboo = remotefoo;
+// 	}
+// }
+
+// === /tests/cases/fourslash/remoteGetReferences_1.ts ===
+// // Comment Refence Test: globalVar
+// var globalVar: number = 2;
+// 
+// class fooCls {
+//     static clsSVar = 1;
+//     //Declare
+//     clsVar = 1;
+// 
+//     constructor (public clsParam: number) {
+//         //Increments
+//         globalVar++;
+//         this.clsVar++;
+//         fooCls.clsSVar++;
+//         this.clsParam++;
+//         modTest.modVar++;
+//     }
+// }
+// 
+// function foo(x: number) {
+//     //Declare
+//     var fnVar = 1;
+// 
+//     //Increments
+//     fooCls.clsSVar++;
+//     globalVar++;
+//     modTest.modVar++;
+//     fnVar++;
+// 
+//     //Return
+//     return x++;
+// }
+// 
+// module modTest {
+//     //Declare
+//     export var modVar:number;
+// 
+//     //Increments
+//     globalVar++;
+//     fooCls.clsSVar++;
+//     modVar++;
+// 
+//     class testCls {
+//         static boo = foo;
+//     }
+// 
+//     function testFn(){
+//         static boo = foo;
+// 
+//         //Increments
+//         globalVar++;
+//         fooCls.clsSVar++;
+//         modVar++;
+//     }
+// 
+//     module testMod {
+//         var boo = foo;
+//     }
+// }
+// 
+// //Type test
+// var clsTest: fooCls;
+// 
+// //Arguments
+// clsTest = new fooCls(globalVar);
+// foo(globalVar);
+// 
+// //Increments
+// fooCls.clsSVar++;
+// modTest.modVar++;
+// globalVar = globalVar + globalVar;
+// 
+// //ETC - Other cases
+// globalVar = 3;
+// foo = foo + 1;
+// err = err++;
+// 
+// //Shadowed fn Parameter
+// function shdw(globalVar: number) {
+//     //Increments
+//     globalVar++;
+//     return globalVar;
+// }
+// 
+// //Remotes
+// //Type test
+// var remoteclsTest: remotefooCls;
+// 
+// //Arguments
+// remoteclsTest = new remotefooCls([|remoteglobalVar|]);
+// remotefoo([|remoteglobalVar|]);
+// 
+// //Increments
+// remotefooCls.remoteclsSVar++;
+// remotemodTest.remotemodVar++;
+// [|remoteglobalVar|] = [|remoteglobalVar|] + [|remoteglobalVar|];
+// 
+// //ETC - Other cases
+// [|remoteglobalVar|] = 3;
+// 
+// //Find References misses method param
+// var
+// 
+// 
+// 
+//  array = ["f", "o", "o"];
+// 
+// array.forEach(
+// 
+// 
+// function(str) {
+// 
+// 
+// 
+//    return str + " ";
+// 
+// });
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+      "kind": "var",
+      "name": "var remoteglobalVar: number",
+      "textSpan": {
+        "start": 4,
+        "length": 15
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "remoteglobalVar",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 32
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 1358,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1386,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1478,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1496,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1514,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1552,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 4,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 32
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 176,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 431,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 614,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 823,
+          "length": 15
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/remoteGetReferences_2.ts ===
+// var remoteglobalVar: number = 2;
+// 
+// class [|remotefooCls|] {
+// 	//Declare
+// 	remoteclsVar = 1;
+// 	static remoteclsSVar = 1;
+// 
+// 	constructor(public remoteclsParam: number) {
+// 		//Increments
+// 		remoteglobalVar++;
+// 		this.remoteclsVar++;
+// 		[|remotefooCls|].remoteclsSVar++;
+// 		this.remoteclsParam++;
+// 		remotemodTest.remotemodVar++;
+// 	}
+// }
+// 
+// function remotefoo(remotex: number) {
+// 	//Declare
+// 	var remotefnVar = 1;
+// 
+// 	//Increments
+// 	[|remotefooCls|].remoteclsSVar++;
+// 	remoteglobalVar++;
+// 	remotemodTest.remotemodVar++;
+// 	remotefnVar++;
+// 
+// 	//Return
+// 	return remotex++;
+// }
+// 
+// module remotemodTest {
+// 	//Declare
+// 	export var remotemodVar: number;
+// 
+// 	//Increments
+// 	remoteglobalVar++;
+// 	[|remotefooCls|].remoteclsSVar++;
+// 	remotemodVar++;
+// 
+// 	class remotetestCls {
+// 		static remoteboo = remotefoo;
+// 	}
+// 
+// 	function remotetestFn(){
+//         static remoteboo = remotefoo;
+// 
+// 		//Increments
+// 		remoteglobalVar++;
+// 		/*FIND ALL REFS*/[|remotefooCls|].remoteclsSVar++;
+// 		remotemodVar++;
+//     }
+// 
+// 	module remotetestMod {
+// 		var remoteboo = remotefoo;
+// 	}
+// }
+
+// === /tests/cases/fourslash/remoteGetReferences_1.ts ===
+// // Comment Refence Test: globalVar
+// var globalVar: number = 2;
+// 
+// class fooCls {
+//     static clsSVar = 1;
+//     //Declare
+//     clsVar = 1;
+// 
+//     constructor (public clsParam: number) {
+//         //Increments
+//         globalVar++;
+//         this.clsVar++;
+//         fooCls.clsSVar++;
+//         this.clsParam++;
+//         modTest.modVar++;
+//     }
+// }
+// 
+// function foo(x: number) {
+//     //Declare
+//     var fnVar = 1;
+// 
+//     //Increments
+//     fooCls.clsSVar++;
+//     globalVar++;
+//     modTest.modVar++;
+//     fnVar++;
+// 
+//     //Return
+//     return x++;
+// }
+// 
+// module modTest {
+//     //Declare
+//     export var modVar:number;
+// 
+//     //Increments
+//     globalVar++;
+//     fooCls.clsSVar++;
+//     modVar++;
+// 
+//     class testCls {
+//         static boo = foo;
+//     }
+// 
+//     function testFn(){
+//         static boo = foo;
+// 
+//         //Increments
+//         globalVar++;
+//         fooCls.clsSVar++;
+//         modVar++;
+//     }
+// 
+//     module testMod {
+//         var boo = foo;
+//     }
+// }
+// 
+// //Type test
+// var clsTest: fooCls;
+// 
+// //Arguments
+// clsTest = new fooCls(globalVar);
+// foo(globalVar);
+// 
+// //Increments
+// fooCls.clsSVar++;
+// modTest.modVar++;
+// globalVar = globalVar + globalVar;
+// 
+// //ETC - Other cases
+// globalVar = 3;
+// foo = foo + 1;
+// err = err++;
+// 
+// //Shadowed fn Parameter
+// function shdw(globalVar: number) {
+//     //Increments
+//     globalVar++;
+//     return globalVar;
+// }
+// 
+// //Remotes
+// //Type test
+// var remoteclsTest: [|remotefooCls|];
+// 
+// //Arguments
+// remoteclsTest = new [|remotefooCls|](remoteglobalVar);
+// remotefoo(remoteglobalVar);
+// 
+// //Increments
+// [|remotefooCls|].remoteclsSVar++;
+// remotemodTest.remotemodVar++;
+// remoteglobalVar = remoteglobalVar + remoteglobalVar;
+// 
+// //ETC - Other cases
+// remoteglobalVar = 3;
+// 
+// //Find References misses method param
+// var
+// 
+// 
+// 
+//  array = ["f", "o", "o"];
+// 
+// array.forEach(
+// 
+// 
+// function(str) {
+// 
+// 
+// 
+//    return str + " ";
+// 
+// });
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+      "kind": "class",
+      "name": "class remotefooCls",
+      "textSpan": {
+        "start": 40,
+        "length": 12
+      },
+      "displayParts": [
+        {
+          "text": "class",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "remotefooCls",
+          "kind": "className"
+        }
+      ],
+      "contextSpan": {
+        "start": 34,
+        "length": 277
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 1298,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1345,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 1418,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 40,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "contextSpan": {
+          "start": 34,
+          "length": 277
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 220,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 400,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 634,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 844,
+          "length": 12
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/remoteGetReferences_2.ts ===
+// var remoteglobalVar: number = 2;
+// 
+// class remotefooCls {
+// 	//Declare
+// 	remoteclsVar = 1;
+// 	static [|remoteclsSVar|] = 1;
+// 
+// 	constructor(public remoteclsParam: number) {
+// 		//Increments
+// 		remoteglobalVar++;
+// 		this.remoteclsVar++;
+// 		remotefooCls.[|remoteclsSVar|]++;
+// 		this.remoteclsParam++;
+// 		remotemodTest.remotemodVar++;
+// 	}
+// }
+// 
+// function remotefoo(remotex: number) {
+// 	//Declare
+// 	var remotefnVar = 1;
+// 
+// 	//Increments
+// 	remotefooCls.[|remoteclsSVar|]++;
+// 	remoteglobalVar++;
+// 	remotemodTest.remotemodVar++;
+// 	remotefnVar++;
+// 
+// 	//Return
+// 	return remotex++;
+// }
+// 
+// module remotemodTest {
+// 	//Declare
+// 	export var remotemodVar: number;
+// 
+// 	//Increments
+// 	remoteglobalVar++;
+// 	remotefooCls.[|remoteclsSVar|]++;
+// 	remotemodVar++;
+// 
+// 	class remotetestCls {
+// 		static remoteboo = remotefoo;
+// 	}
+// 
+// 	function remotetestFn(){
+//         static remoteboo = remotefoo;
+// 
+// 		//Increments
+// 		remoteglobalVar++;
+// 		remotefooCls./*FIND ALL REFS*/[|remoteclsSVar|]++;
+// 		remotemodVar++;
+//     }
+// 
+// 	module remotetestMod {
+// 		var remoteboo = remotefoo;
+// 	}
+// }
+
+// === /tests/cases/fourslash/remoteGetReferences_1.ts ===
+// // Comment Refence Test: globalVar
+// var globalVar: number = 2;
+// 
+// class fooCls {
+//     static clsSVar = 1;
+//     //Declare
+//     clsVar = 1;
+// 
+//     constructor (public clsParam: number) {
+//         //Increments
+//         globalVar++;
+//         this.clsVar++;
+//         fooCls.clsSVar++;
+//         this.clsParam++;
+//         modTest.modVar++;
+//     }
+// }
+// 
+// function foo(x: number) {
+//     //Declare
+//     var fnVar = 1;
+// 
+//     //Increments
+//     fooCls.clsSVar++;
+//     globalVar++;
+//     modTest.modVar++;
+//     fnVar++;
+// 
+//     //Return
+//     return x++;
+// }
+// 
+// module modTest {
+//     //Declare
+//     export var modVar:number;
+// 
+//     //Increments
+//     globalVar++;
+//     fooCls.clsSVar++;
+//     modVar++;
+// 
+//     class testCls {
+//         static boo = foo;
+//     }
+// 
+//     function testFn(){
+//         static boo = foo;
+// 
+//         //Increments
+//         globalVar++;
+//         fooCls.clsSVar++;
+//         modVar++;
+//     }
+// 
+//     module testMod {
+//         var boo = foo;
+//     }
+// }
+// 
+// //Type test
+// var clsTest: fooCls;
+// 
+// //Arguments
+// clsTest = new fooCls(globalVar);
+// foo(globalVar);
+// 
+// //Increments
+// fooCls.clsSVar++;
+// modTest.modVar++;
+// globalVar = globalVar + globalVar;
+// 
+// //ETC - Other cases
+// globalVar = 3;
+// foo = foo + 1;
+// err = err++;
+// 
+// //Shadowed fn Parameter
+// function shdw(globalVar: number) {
+//     //Increments
+//     globalVar++;
+//     return globalVar;
+// }
+// 
+// //Remotes
+// //Type test
+// var remoteclsTest: remotefooCls;
+// 
+// //Arguments
+// remoteclsTest = new remotefooCls(remoteglobalVar);
+// remotefoo(remoteglobalVar);
+// 
+// //Increments
+// remotefooCls.[|remoteclsSVar|]++;
+// remotemodTest.remotemodVar++;
+// remoteglobalVar = remoteglobalVar + remoteglobalVar;
+// 
+// //ETC - Other cases
+// remoteglobalVar = 3;
+// 
+// //Find References misses method param
+// var
+// 
+// 
+// 
+//  array = ["f", "o", "o"];
+// 
+// array.forEach(
+// 
+// 
+// function(str) {
+// 
+// 
+// 
+//    return str + " ";
+// 
+// });
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+      "kind": "property",
+      "name": "(property) remotefooCls.remoteclsSVar: number",
+      "textSpan": {
+        "start": 93,
+        "length": 13
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "remotefooCls",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "remoteclsSVar",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 86,
+        "length": 25
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 1431,
+          "length": 13
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_1.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 93,
+          "length": 13
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "contextSpan": {
+          "start": 86,
+          "length": 25
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 233,
+          "length": 13
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 413,
+          "length": 13
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 647,
+          "length": 13
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 857,
+          "length": 13
+        },
+        "fileName": "/tests/cases/fourslash/remoteGetReferences_2.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  }
+]
