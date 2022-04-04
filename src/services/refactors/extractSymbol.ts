@@ -627,19 +627,14 @@ namespace ts.refactor.extractSymbol {
      */
     function collectEnclosingScopes(range: TargetRange): Scope[] {
         let current: Node = isReadonlyArray(range.range) ? first(range.range) : range.range;
-        if (range.facts & RangeFacts.UsesThis) {
-            if (range.facts & RangeFacts.UsesThisInFunction) {
-                // fall through
-            }
-            else {
-                // if range uses this as keyword or as type inside the class then it can only be extracted to a method of the containing class
-                const containingClass = getContainingClass(current);
-                if (containingClass) {
-                    const containingFunction = findAncestor(current, isFunctionLikeDeclaration);
-                    return containingFunction
-                        ? [containingFunction, containingClass]
-                        : [containingClass];
-                }
+        if (range.facts & RangeFacts.UsesThis && !(range.facts & RangeFacts.UsesThisInFunction)) {
+            // if range uses this as keyword or as type inside the class then it can only be extracted to a method of the containing class
+            const containingClass = getContainingClass(current);
+            if (containingClass) {
+                const containingFunction = findAncestor(current, isFunctionLikeDeclaration);
+                return containingFunction
+                    ? [containingFunction, containingClass]
+                    : [containingClass];
             }
         }
 
