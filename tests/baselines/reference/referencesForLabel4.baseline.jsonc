@@ -1,0 +1,115 @@
+// === /tests/cases/fourslash/referencesForLabel4.ts ===
+// /*FIND ALL REFS*/[|label|]: function foo(label) {
+//     while (true) {
+//         break [|label|];
+//     }
+// }
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/referencesForLabel4.ts",
+      "kind": "label",
+      "name": "label",
+      "textSpan": {
+        "start": 0,
+        "length": 5
+      },
+      "displayParts": [
+        {
+          "text": "label",
+          "kind": "text"
+        }
+      ]
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 0,
+          "length": 5
+        },
+        "fileName": "/tests/cases/fourslash/referencesForLabel4.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 76
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 62,
+          "length": 5
+        },
+        "fileName": "/tests/cases/fourslash/referencesForLabel4.ts",
+        "contextSpan": {
+          "start": 56,
+          "length": 12
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+undefined
+
+// === /tests/cases/fourslash/referencesForLabel4.ts ===
+// [|label|]: function foo(label) {
+//     while (true) {
+//         break /*FIND ALL REFS*/[|label|];
+//     }
+// }
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/referencesForLabel4.ts",
+      "kind": "label",
+      "name": "label",
+      "textSpan": {
+        "start": 0,
+        "length": 5
+      },
+      "displayParts": [
+        {
+          "text": "label",
+          "kind": "text"
+        }
+      ]
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 0,
+          "length": 5
+        },
+        "fileName": "/tests/cases/fourslash/referencesForLabel4.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 76
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 62,
+          "length": 5
+        },
+        "fileName": "/tests/cases/fourslash/referencesForLabel4.ts",
+        "contextSpan": {
+          "start": 56,
+          "length": 12
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
