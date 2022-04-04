@@ -31560,16 +31560,15 @@ namespace ts {
         }
 
         function isWellKnownSymbol(node: Node) {
-            if (!(
-                isPropertyAccessExpression(node) &&
-                isIdentifier(node.name) &&
-                isIdentifier(node.expression) &&
-                node.expression.escapedText === "Symbol"
-            )) {
+            const symbol = getSymbolAtLocation(node);
+            if (!symbol) {
                 return false;
             }
-
-            return isReferenceToGlobalESSymbolConstructorSymbol(node.expression);
+            const symbolConstructorSymbol = getGlobalESSymbolConstructorSymbol(/*reportErrors*/ false);
+            if (!symbolConstructorSymbol) {
+                return false;
+            }
+            return !!getPropertiesOfObjectType((getTypeOfSymbol(symbolConstructorSymbol) as ObjectType)).includes(symbol);
         }
 
         function isSymbolOrSymbolForCall(node: Node) {

@@ -134,3 +134,10 @@ export function testLocalSymbols() {
     }
   }
 }
+
+const iteratorSymbol = Symbol.iterator;
+export class C {
+  private *[iteratorSymbol]() {
+    
+  }
+}

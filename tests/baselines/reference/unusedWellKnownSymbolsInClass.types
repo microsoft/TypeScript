@@ -404,3 +404,19 @@ export function testLocalSymbols() {
     }
   }
 }
+
+const iteratorSymbol = Symbol.iterator;
+>iteratorSymbol : symbol
+>Symbol.iterator : unique symbol
+>Symbol : SymbolConstructor
+>iterator : unique symbol
+
+export class C {
+>C : C
+
+  private *[iteratorSymbol]() {
+>[iteratorSymbol] : () => Generator<never, void, unknown>
+>iteratorSymbol : symbol
+    
+  }
+}

@@ -1,7 +1,8 @@
 tests/cases/compiler/unusedWellKnownSymbolsInClass.ts(128,14): error TS6133: '[Symbol.iterator]' is declared but its value is never read.
+tests/cases/compiler/unusedWellKnownSymbolsInClass.ts(136,12): error TS6133: '[iteratorSymbol]' is declared but its value is never read.
 
 
-==== tests/cases/compiler/unusedWellKnownSymbolsInClass.ts (1 errors) ====
+==== tests/cases/compiler/unusedWellKnownSymbolsInClass.ts (2 errors) ====
     export class Polling {
       private async *[Symbol.asyncIterator]() {}
       private *[Symbol.iterator]() {}
@@ -134,5 +135,14 @@ tests/cases/compiler/unusedWellKnownSymbolsInClass.ts(128,14): error TS6133: '[S
 !!! error TS6133: '[Symbol.iterator]' is declared but its value is never read.
           yield 1;
         }
+      }
+    }
+    
+    const iteratorSymbol = Symbol.iterator;
+    export class C {
+      private *[iteratorSymbol]() {
+               ~~~~~~~~~~~~~~~~
+!!! error TS6133: '[iteratorSymbol]' is declared but its value is never read.
+        
       }
     }

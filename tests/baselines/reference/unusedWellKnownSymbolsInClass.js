@@ -132,6 +132,13 @@ export function testLocalSymbols() {
   }
 }
 
+const iteratorSymbol = Symbol.iterator;
+export class C {
+  private *[iteratorSymbol]() {
+    
+  }
+}
+
 //// [unusedWellKnownSymbolsInClass.js]
 export class Polling {
     async *[Symbol.asyncIterator]() { }
@@ -235,4 +242,9 @@ export function testLocalSymbols() {
             yield 1;
         }
     };
+}
+const iteratorSymbol = Symbol.iterator;
+export class C {
+    *[iteratorSymbol]() {
+    }
 }

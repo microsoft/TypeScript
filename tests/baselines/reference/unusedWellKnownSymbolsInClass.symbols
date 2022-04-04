@@ -59,7 +59,7 @@ export class WellknownSymbolMethods {
 
     return Array.isArray(instance);
 >Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 3 more)
 >isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
 >instance : Symbol(instance, Decl(unusedWellKnownSymbolsInClass.ts, 21, 38))
   }
@@ -147,7 +147,7 @@ export class WellknownSymbolMethods {
 >Symbol.species : Symbol(SymbolConstructor.species, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
 >species : Symbol(SymbolConstructor.species, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 3 more)
 
   private [Symbol.toPrimitive](hint: any) {
 >[Symbol.toPrimitive] : Symbol(WellknownSymbolMethods[Symbol.toPrimitive], Decl(unusedWellKnownSymbolsInClass.ts, 54, 57))
@@ -204,7 +204,7 @@ export class WellknownSymbolProperties {
 
     return Array.isArray(instance);
 >Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 3 more)
 >isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
 >instance : Symbol(instance, Decl(unusedWellKnownSymbolsInClass.ts, 77, 41))
   }
@@ -286,7 +286,7 @@ export class WellknownSymbolProperties {
 >Symbol.species : Symbol(SymbolConstructor.species, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
 >species : Symbol(SymbolConstructor.species, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 3 more)
 
   private [Symbol.toPrimitive] = (hint: any) => {
 >[Symbol.toPrimitive] : Symbol(WellknownSymbolProperties[Symbol.toPrimitive], Decl(unusedWellKnownSymbolsInClass.ts, 106, 42))
@@ -343,5 +343,21 @@ export function testLocalSymbols() {
 
       yield 1;
     }
+  }
+}
+
+const iteratorSymbol = Symbol.iterator;
+>iteratorSymbol : Symbol(iteratorSymbol, Decl(unusedWellKnownSymbolsInClass.ts, 133, 5))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+
+export class C {
+>C : Symbol(C, Decl(unusedWellKnownSymbolsInClass.ts, 133, 39))
+
+  private *[iteratorSymbol]() {
+>[iteratorSymbol] : Symbol(C[iteratorSymbol], Decl(unusedWellKnownSymbolsInClass.ts, 134, 16))
+>iteratorSymbol : Symbol(iteratorSymbol, Decl(unusedWellKnownSymbolsInClass.ts, 133, 5))
+    
   }
 }
