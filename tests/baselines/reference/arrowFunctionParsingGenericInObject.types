@@ -1,0 +1,77 @@
+=== tests/cases/compiler/arrowFunctionParsingGenericInObject.ts ===
+// Apparent parser error when first property of returned object is generic function with default type
+const fails1 = () => ({
+>fails1 : () => { test: <T = undefined>(value: T) => T; extraValue: () => void; }
+>() => ({    test: <T = undefined>(value: T): T => value,    extraValue: () => {},}) : () => { test: <T = undefined>(value: T) => T; extraValue: () => void; }
+>({    test: <T = undefined>(value: T): T => value,    extraValue: () => {},}) : { test: <T = undefined>(value: T) => T; extraValue: () => void; }
+>{    test: <T = undefined>(value: T): T => value,    extraValue: () => {},} : { test: <T = undefined>(value: T) => T; extraValue: () => void; }
+
+    test: <T = undefined>(value: T): T => value,
+>test : <T = undefined>(value: T) => T
+><T = undefined>(value: T): T => value : <T = undefined>(value: T) => T
+>value : T
+>value : T
+
+    extraValue: () => {},
+>extraValue : () => void
+>() => {} : () => void
+
+})
+
+// Without a default type, it works fine
+const works1 = () => ({
+>works1 : () => { test: <T>(value: T) => T; extraValue: () => void; }
+>() => ({    test: <T>(value: T): T => value,    extraValue: () => {},}) : () => { test: <T>(value: T) => T; extraValue: () => void; }
+>({    test: <T>(value: T): T => value,    extraValue: () => {},}) : { test: <T>(value: T) => T; extraValue: () => void; }
+>{    test: <T>(value: T): T => value,    extraValue: () => {},} : { test: <T>(value: T) => T; extraValue: () => void; }
+
+    test: <T>(value: T): T => value,
+>test : <T>(value: T) => T
+><T>(value: T): T => value : <T>(value: T) => T
+>value : T
+>value : T
+
+    extraValue: () => {},
+>extraValue : () => void
+>() => {} : () => void
+
+})
+
+// As second property, it works fine
+const works2 = () => ({
+>works2 : () => { extraValue: () => void; test: <T = undefined>(value: T) => T; }
+>() => ({    extraValue: () => {},    test: <T = undefined>(value: T): T => value,}) : () => { extraValue: () => void; test: <T = undefined>(value: T) => T; }
+>({    extraValue: () => {},    test: <T = undefined>(value: T): T => value,}) : { extraValue: () => void; test: <T = undefined>(value: T) => T; }
+>{    extraValue: () => {},    test: <T = undefined>(value: T): T => value,} : { extraValue: () => void; test: <T = undefined>(value: T) => T; }
+
+    extraValue: () => {},
+>extraValue : () => void
+>() => {} : () => void
+
+    test: <T = undefined>(value: T): T => value,
+>test : <T = undefined>(value: T) => T
+><T = undefined>(value: T): T => value : <T = undefined>(value: T) => T
+>value : T
+>value : T
+
+})
+
+// The first property _must_ be a function, though
+const fails2 = () => ({
+>fails2 : () => { extraValue: string; test: <T = undefined>(value: T) => T; }
+>() => ({    extraValue: '',    test: <T = undefined>(value: T): T => value,}) : () => { extraValue: string; test: <T = undefined>(value: T) => T; }
+>({    extraValue: '',    test: <T = undefined>(value: T): T => value,}) : { extraValue: string; test: <T = undefined>(value: T) => T; }
+>{    extraValue: '',    test: <T = undefined>(value: T): T => value,} : { extraValue: string; test: <T = undefined>(value: T) => T; }
+
+    extraValue: '',
+>extraValue : string
+>'' : ""
+
+    test: <T = undefined>(value: T): T => value,
+>test : <T = undefined>(value: T) => T
+><T = undefined>(value: T): T => value : <T = undefined>(value: T) => T
+>value : T
+>value : T
+
+})
+
