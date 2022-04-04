@@ -1269,9 +1269,9 @@ namespace ts.server {
                             if (!fileNameToSearch || !ensureRoot(fileNameToSearch)) {
                                 continue;
                             }
-                            const auxiliaryProgram = ls.getProgram()!;
-                            const fileToSearch = Debug.checkDefined(auxiliaryProgram.getSourceFile(fileNameToSearch));
-                            for (const match of searchForDeclaration(candidate.name, fileToSearch, auxiliaryProgram)) {
+                            const noDtsProgram = ls.getProgram()!;
+                            const fileToSearch = Debug.checkDefined(noDtsProgram.getSourceFile(fileNameToSearch));
+                            for (const match of searchForDeclaration(candidate.name, fileToSearch, noDtsProgram)) {
                                 pushIfUnique(definitions, match, documentSpansEqual);
                             }
                         }
@@ -1336,8 +1336,8 @@ namespace ts.server {
                 return undefined;
             }
 
-            function tryRefineDefinition(definition: DefinitionInfo, program: Program, auxiliaryProgram: Program) {
-                const fileToSearch = auxiliaryProgram.getSourceFile(definition.fileName);
+            function tryRefineDefinition(definition: DefinitionInfo, program: Program, noDtsProgram: Program) {
+                const fileToSearch = noDtsProgram.getSourceFile(definition.fileName);
                 if (!fileToSearch) {
                     return undefined;
                 }
@@ -1347,18 +1347,18 @@ namespace ts.server {
                 if (!importSpecifier) return undefined;
 
                 const nameToSearch = importSpecifier.propertyName?.text || importSpecifier.name.text;
-                return searchForDeclaration(nameToSearch, fileToSearch, auxiliaryProgram);
+                return searchForDeclaration(nameToSearch, fileToSearch, noDtsProgram);
             }
 
-            function searchForDeclaration(declarationName: string, fileToSearch: SourceFile, auxiliaryProgram: Program) {
+            function searchForDeclaration(declarationName: string, fileToSearch: SourceFile, noDtsProgram: Program) {
                 const matches = FindAllReferences.Core.getTopMostDeclarationNamesInFile(declarationName, fileToSearch);
                 return mapDefined(matches, match => {
-                    const symbol = auxiliaryProgram.getTypeChecker().getSymbolAtLocation(match);
+                    const symbol = noDtsProgram.getTypeChecker().getSymbolAtLocation(match);
                     const decl = getDeclarationFromName(match);
                     if (symbol && decl) {
                         // I think the last argument to this is supposed to be the start node, but it doesn't seem important.
                         // Callers internal to GoToDefinition already get confused about this.
-                        return GoToDefinition.createDefinitionInfo(decl, auxiliaryProgram.getTypeChecker(), symbol, decl, /*unverified*/ true);
+                        return GoToDefinition.createDefinitionInfo(decl, noDtsProgram.getTypeChecker(), symbol, decl, /*unverified*/ true);
                     }
                 });
             }
