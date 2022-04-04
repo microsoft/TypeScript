@@ -769,7 +769,7 @@ namespace ts {
         HasAggregatedChildData = 1 << 19, // If we've computed data from children and cached it in this node
 
         // These flags will be set when the parser encounters a dynamic import expression or 'import.meta' to avoid
-        // walking the tree if the flags are not set. However, these flags are just a approximation
+        // walking the tree if the flags are not set. However, these flags are just an approximation
         // (hence why it's named "PossiblyContainsDynamicImport") because once set, the flags never get cleared.
         // During editing, if a dynamic import is removed, incremental parsing will *NOT* clear this flag.
         // This means that the tree will always be traversed during module resolution, or when looking for external module indicators.
@@ -4133,7 +4133,7 @@ namespace ts {
     /** Return code used by getEmitOutput function to indicate status of the function */
     export enum ExitStatus {
         // Compiler ran successfully.  Either this was a simple do-nothing compilation (for example,
-        // when -version or -help was provided, or this was a normal compilation, no diagnostics
+        // when -version or -help was provided), or this was a normal compilation, no diagnostics
         // were produced, and all outputs were generated successfully.
         Success = 0,
 
@@ -4280,6 +4280,9 @@ namespace ts {
         /**
          * returns unknownSignature in the case of an error.
          * returns undefined if the node is not valid.
+         * @param node The original node.
+         * @param candidatesOutArray an array of signature to be filled in by the function. It is passed by signature help in the language service;
+         *                           the function will fill it up with appropriate candidate signatures
          * @param argumentCount Apparent number of arguments, passed in case of a possibly incomplete call. This should come from an ArgumentListInfo. See `signatureHelp.ts`.
          */
         getResolvedSignature(node: CallLikeExpression, candidatesOutArray?: Signature[], argumentCount?: number): Signature | undefined;
@@ -6388,7 +6391,7 @@ namespace ts {
         isFilePath?: boolean;                                   // True if option value is a path or fileName
         shortName?: string;                                     // A short mnemonic for convenience - for instance, 'h' can be used in place of 'help'
         description?: DiagnosticMessage;                        // The message describing what the command line switch does.
-        defaultValueDescription?: string | number | boolean | DiagnosticMessage;   // The message describing what the dafault value is. string type is prepared for fixed chosen like "false" which do not need I18n.
+        defaultValueDescription?: string | number | boolean | DiagnosticMessage;   // The message describing what the default value is. string type is prepared for fixed chosen like "false" which do not need I18n.
         paramType?: DiagnosticMessage;                          // The name to be used for a non-boolean option's parameter
         isTSConfigOnly?: boolean;                               // True if option can only be specified via tsconfig.json file
         isCommandLineOnly?: boolean;

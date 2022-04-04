@@ -345,6 +345,8 @@ namespace ts {
      * @param node The Node whose children will be visited.
      * @param visitor The callback used to visit each child.
      * @param context A lexical environment context for the visitor.
+     * @param nodesVisitor A wrapper function visits child using the supplied visitor if the child of Node has multiple values.
+     * @param tokenVisitor The special callback used to visit the token of node.
      */
     export function visitEachChild<T extends Node>(node: T | undefined, visitor: Visitor, context: TransformationContext, nodesVisitor?: typeof visitNodes, tokenVisitor?: Visitor): T | undefined;
     /* @internal */

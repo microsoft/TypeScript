@@ -322,7 +322,7 @@ namespace ts {
     }
 
     // Sometimes tools can see the following line as a source mapping url comment, so we mangle it a bit (the [M])
-    const sourceMapCommentRegExp = /^\/\/[@#] source[M]appingURL=(.+)\r?\n?$/;
+    const sourceMapCommentRegExp = /^\/\/[@#] sourceMappingURL=(.+)\r?\n?$/;
 
     const whitespaceOrMapCommentRegExp = /^\s*(\/\/[@#] .*)?$/;
 

@@ -146,9 +146,10 @@ namespace ts {
      *
      * @param resolver The emit resolver provided by the checker.
      * @param host The emit host object used to interact with the file system.
+     * @param factory {@link NodeFactory} used to create the expanded representation.
      * @param options Compiler options to surface in the `TransformationContext`.
      * @param nodes An array of nodes to transform.
-     * @param transforms An array of `TransformerFactory` callbacks.
+     * @param transformers An array of `TransformerFactory` callbacks.
      * @param allowDtsFiles A value indicating whether to allow the transformation of .d.ts files.
      */
     export function transformNodes<T extends Node>(resolver: EmitResolver | undefined, host: EmitHost | undefined, factory: NodeFactory, options: CompilerOptions, nodes: readonly T[], transformers: readonly TransformerFactory<T>[], allowDtsFiles: boolean): TransformationResult<T> {
@@ -282,7 +283,6 @@ namespace ts {
          *
          * @param hint A hint as to the intended usage of the node.
          * @param node The node to emit.
-         * @param emitCallback The callback used to emit the node or its substitute.
          */
         function substituteNode(hint: EmitHint, node: Node) {
             Debug.assert(state < TransformationState.Disposed, "Cannot substitute a node after the result is disposed.");

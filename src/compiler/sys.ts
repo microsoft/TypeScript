@@ -1521,7 +1521,7 @@ namespace ts {
                 if (platform === "win32" || platform === "win64") {
                     return false;
                 }
-                // If this file exists under a different case, we must be case-insensitve.
+                // If this file exists under a different case, we must be case-insensitive.
                 return !fileExists(swapCase(__filename));
             }
 
@@ -1541,7 +1541,7 @@ namespace ts {
                 };
 
                 function fileChanged(curr: any, prev: any) {
-                    // previous event kind check is to ensure we recongnize the file as previously also missing when it is restored or renamed twice (that is it disappears and reappears)
+                    // previous event kind check is to ensure we recognize the file as previously also missing when it is restored or renamed twice (that is it disappears and reappears)
                     // In such case, prevTime returned is same as prev time of event when file was deleted as per node documentation
                     const isPreviouslyDeleted = +prev.mtime === 0 || eventKind === FileWatcherEventKind.Deleted;
                     if (+curr.mtime === 0) {

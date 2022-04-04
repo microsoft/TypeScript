@@ -25,7 +25,7 @@ namespace ts { // eslint-disable-line one-namespace-per-file
         // The actual constraint is that JSON.stringify be able to serialize it without throwing.
         interface Args {
             [key: string]: string | number | boolean | null | undefined | Args | readonly (string | number | boolean | null | undefined | Args)[];
-        };
+        }
 
         /** Starts tracing for the given project. */
         export function startTracing(tracingMode: Mode, traceDir: string, configFilePath?: string) {
@@ -120,6 +120,9 @@ namespace ts { // eslint-disable-line one-namespace-per-file
         const eventStack: { phase: Phase, name: string, args?: Args, time: number, separateBeginAndEnd: boolean }[] = [];
 
         /**
+         * @param phase event's phase
+         * @param name event's name
+         * @param args the parameter object associated with the event
          * @param separateBeginAndEnd - used for special cases where we need the trace point even if the event
          * never terminates (typically for reducing a scenario too big to trace to one that can be completed).
          * In the future we might implement an exit handler to dump unfinished events which would deprecate

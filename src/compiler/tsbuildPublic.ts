@@ -155,7 +155,7 @@ namespace ts {
     }
 
     /**
-     * Create a function that reports watch status by writing to the system and handles the formating of the diagnostic
+     * Create a function that reports watch status by writing to the system and handles the formatting of the diagnostic
      */
     export function createBuilderStatusReporter(system: System, pretty?: boolean): DiagnosticReporter {
         return diagnostic => {
@@ -1473,7 +1473,7 @@ namespace ts {
                     }
 
                     // If the upstream project has only change .d.ts files, and we've built
-                    // *after* those files, then we're "psuedo up to date" and eligible for a fast rebuild
+                    // *after* those files, then we're "pseudo up to date" and eligible for a fast rebuild
                     if (refStatus.newestDeclarationFileContentChangedTime && refStatus.newestDeclarationFileContentChangedTime <= oldestOutputFileTime) {
                         pseudoUpToDate = true;
                         upstreamChangedProject = ref.path;
@@ -1938,7 +1938,7 @@ namespace ts {
         clearMap(state.allWatchedExtendedConfigFiles, closeFileWatcherOf);
         clearMap(state.allWatchedWildcardDirectories, watchedWildcardDirectories => clearMap(watchedWildcardDirectories, closeFileWatcherOf));
         clearMap(state.allWatchedInputFiles, watchedWildcardDirectories => clearMap(watchedWildcardDirectories, closeFileWatcher));
-        clearMap(state.allWatchedPackageJsonFiles, watchedPacageJsonFiles => clearMap(watchedPacageJsonFiles, closeFileWatcher));
+        clearMap(state.allWatchedPackageJsonFiles, watchedPackageJsonFiles => clearMap(watchedPackageJsonFiles, closeFileWatcher));
     }
 
     /**

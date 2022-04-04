@@ -15,6 +15,9 @@ namespace ts {
      * @param sourceFilesOrTargetSourceFile
      *   If an array, the full list of source files to emit.
      *   Else, calls `getSourceFilesToEmit` with the (optional) target source file to determine the list of source files to emit.
+     * @param forceDtsEmit whether to always generate declaration files.
+     * @param onlyBuildInfo Whether to build only the target file.
+     * @param includeBuildInfo Whether to include the built files in the result.
      */
     export function forEachEmittedFile<T>(
         host: EmitHost, action: (emitFileNames: EmitFileNames, sourceFileOrBundle: SourceFile | Bundle | undefined) => T,
@@ -1084,7 +1087,7 @@ namespace ts {
                         bundleFileInfo.sources.prologues = prologues;
                     }
 
-                    // Store helpes
+                    // Store helps
                     const helpers = getHelpersFromBundledSourceFiles(bundle);
                     if (helpers) {
                         if (!bundleFileInfo.sources) bundleFileInfo.sources = {};
@@ -5802,7 +5805,8 @@ namespace ts {
          *
          * @param node The node containing the token.
          * @param token The token to emit.
-         * @param tokenStartPos The start pos of the token.
+         * @param writer The operation of EmitTextWriter.
+         * @param tokenPos The start pos of the token.
          * @param emitCallback The callback used to emit the token.
          */
         function emitTokenWithSourceMap(node: Node | undefined, token: SyntaxKind, writer: (s: string) => void, tokenPos: number, emitCallback: (token: SyntaxKind, writer: (s: string) => void, tokenStartPos: number) => number) {
