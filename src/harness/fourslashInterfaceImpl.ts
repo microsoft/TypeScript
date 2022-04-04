@@ -215,8 +215,8 @@ namespace FourSlashInterface {
             this.state.verifyRefactorsAvailable(names);
         }
 
-        public refactorAvailable(name: string, actionName?: string) {
-            this.state.verifyRefactorAvailable(this.negative, "implicit", name, actionName);
+        public refactorAvailable(name: string, actionName?: string, actionDescription?: string) {
+            this.state.verifyRefactorAvailable(this.negative, "implicit", name, actionName, actionDescription);
         }
 
         public refactorAvailableForTriggerReason(triggerReason: ts.RefactorTriggerReason, name: string, actionName?: string) {

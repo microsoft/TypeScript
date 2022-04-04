@@ -271,7 +271,7 @@ declare namespace FourSlashInterface {
         codeFixDiagnosticsAvailableAtMarkers(markerNames: string[], diagnosticCode?: number): void;
         applicableRefactorAvailableForRange(): void;
 
-        refactorAvailable(name: string, actionName?: string): void;
+        refactorAvailable(name: string, actionName?: string, actionDescription?: string): void;
         refactorAvailableForTriggerReason(triggerReason: RefactorTriggerReason, name: string, action?: string): void;
         refactorKindAvailable(refactorKind: string, expected: string[], preferences?: {}): void;
     }
