@@ -1,0 +1,22 @@
+=== tests/cases/compiler/checkJsdocTypeTagOnExportAssignment8.js ===
+
+No type information for this code.=== tests/cases/compiler/a.js ===
+/**
+ * @typedef Foo
+ * @property {string} a
+ * @property {'b'} b
+ */
+
+/** @type {Foo} */
+export default {
+>{    a: 'a',    b: 'b'} : { a: string; b: "b"; }
+
+    a: 'a',
+>a : string
+>'a' : "a"
+
+    b: 'b'
+>b : "b"
+>'b' : "b"
+}
+

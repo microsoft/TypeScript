@@ -102,5 +102,9 @@ async function exec(path: string, args: string[] = []) {
     childProcess.execSync(cmdLine);
 }
 
-process.on("unhandledRejection", err => { throw err; });
-produceLKG().then(() => console.log("Done"), err => { throw err; });
+process.on("unhandledRejection", err => {
+    throw err;
+});
+produceLKG().then(() => console.log("Done"), err => {
+    throw err;
+});

@@ -45,7 +45,7 @@ declare var module: any;
 module.exports = minimatch
 >module.exports = minimatch : typeof minimatch
 >module.exports : typeof minimatch
->module : { "\"tests/cases/conformance/salsa/minimatch\"": typeof minimatch; }
+>module : { exports: typeof minimatch; }
 >exports : typeof minimatch
 >minimatch : typeof minimatch
 

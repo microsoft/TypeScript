@@ -1,7 +1,6 @@
 // @target: ES5
 // @sourcemap: true
 // @declaration: true
-// @bundledPackageName: out
 // @module: commonjs
 // @outFile: c.js
 // @out: d.js

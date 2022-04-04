@@ -71,7 +71,7 @@ function A() { this.id = 1; }
 module.exports = A;
 >module.exports = A : typeof A
 >module.exports : typeof A
->module : { "\"tests/cases/conformance/salsa/other\"": typeof A; }
+>module : { exports: typeof A; }
 >exports : typeof A
 >A : typeof A
 

@@ -3,7 +3,7 @@ type T = "foo" | "bar" | "baz";
 >T : T
 
 var x: "foo" | "bar" | "baz" = undefined;
->x : T
+>x : "foo" | "bar" | "baz"
 >undefined : undefined
 
 var y: T = undefined;
@@ -12,7 +12,7 @@ var y: T = undefined;
 
 if (x === "foo") {
 >x === "foo" : boolean
->x : T
+>x : "foo" | "bar" | "baz"
 >"foo" : "foo"
 
     let a = x;
@@ -50,11 +50,11 @@ else {
 
 x = y;
 >x = y : T
->x : T
+>x : "foo" | "bar" | "baz"
 >y : T
 
 y = x;
->y = x : T
+>y = x : "foo" | "bar" | "baz"
 >y : T
->x : T
+>x : "foo" | "bar" | "baz"
 

@@ -147,3 +147,10 @@ declare let v1!: number;
 declare var v2!: number;
 >v2 : Symbol(v2, Decl(definiteAssignmentAssertions.ts, 76, 11))
 
+declare namespace foo {
+>foo : Symbol(foo, Decl(definiteAssignmentAssertions.ts, 76, 24))
+
+	var v!: number;
+>v : Symbol(v, Decl(definiteAssignmentAssertions.ts, 79, 4))
+}
+

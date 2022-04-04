@@ -1,0 +1,193 @@
+=== tests/cases/conformance/jsdoc/declarations/index.js ===
+class С1 {
+>С1 : Symbol(С1, Decl(index.js, 0, 0))
+
+    /** @type {string=} */
+    p1 = undefined;
+>p1 : Symbol(С1.p1, Decl(index.js, 0, 10))
+>undefined : Symbol(undefined)
+
+    /** @type {string | undefined} */
+    p2 = undefined;
+>p2 : Symbol(С1.p2, Decl(index.js, 2, 19))
+>undefined : Symbol(undefined)
+
+    /** @type {?string} */
+    p3 = null;
+>p3 : Symbol(С1.p3, Decl(index.js, 5, 19))
+
+    /** @type {string | null} */
+    p4 = null;
+>p4 : Symbol(С1.p4, Decl(index.js, 8, 14))
+}
+
+class С2 {
+>С2 : Symbol(С2, Decl(index.js, 12, 1))
+
+    /** @type {string=} */
+    get p1() {
+>p1 : Symbol(С2.p1, Decl(index.js, 14, 10))
+
+        return undefined;
+>undefined : Symbol(undefined)
+    }
+
+    /** @type {string | undefined} */
+    get p2() {
+>p2 : Symbol(С2.p2, Decl(index.js, 18, 5))
+
+        return undefined;
+>undefined : Symbol(undefined)
+    }
+
+    /** @type {?string} */
+    get p3() {
+>p3 : Symbol(С2.p3, Decl(index.js, 23, 5))
+
+        return null;
+    }
+
+    /** @type {string | null} */
+    get p4() {
+>p4 : Symbol(С2.p4, Decl(index.js, 28, 5))
+
+        return null;
+    }
+}
+
+
+class С3 {
+>С3 : Symbol(С3, Decl(index.js, 34, 1))
+
+    /** @type {string=} */
+    get p1() {
+>p1 : Symbol(С3.p1, Decl(index.js, 37, 10), Decl(index.js, 41, 5))
+
+        return undefined;
+>undefined : Symbol(undefined)
+    }
+
+    /** @param {string=} value */
+    set p1(value) {
+>p1 : Symbol(С3.p1, Decl(index.js, 37, 10), Decl(index.js, 41, 5))
+>value : Symbol(value, Decl(index.js, 44, 11))
+
+        this.p1 = value;
+>this.p1 : Symbol(С3.p1, Decl(index.js, 37, 10), Decl(index.js, 41, 5))
+>this : Symbol(С3, Decl(index.js, 34, 1))
+>p1 : Symbol(С3.p1, Decl(index.js, 37, 10), Decl(index.js, 41, 5))
+>value : Symbol(value, Decl(index.js, 44, 11))
+    }
+
+    /** @type {string | undefined} */
+    get p2() {
+>p2 : Symbol(С3.p2, Decl(index.js, 46, 5), Decl(index.js, 51, 5))
+
+        return undefined;
+>undefined : Symbol(undefined)
+    }
+
+    /** @param {string | undefined} value */
+    set p2(value) {
+>p2 : Symbol(С3.p2, Decl(index.js, 46, 5), Decl(index.js, 51, 5))
+>value : Symbol(value, Decl(index.js, 54, 11))
+
+        this.p2 = value;
+>this.p2 : Symbol(С3.p2, Decl(index.js, 46, 5), Decl(index.js, 51, 5))
+>this : Symbol(С3, Decl(index.js, 34, 1))
+>p2 : Symbol(С3.p2, Decl(index.js, 46, 5), Decl(index.js, 51, 5))
+>value : Symbol(value, Decl(index.js, 54, 11))
+    }
+
+    /** @type {?string} */
+    get p3() {
+>p3 : Symbol(С3.p3, Decl(index.js, 56, 5), Decl(index.js, 61, 5))
+
+        return null;
+    }
+
+    /** @param {?string} value */
+    set p3(value) {
+>p3 : Symbol(С3.p3, Decl(index.js, 56, 5), Decl(index.js, 61, 5))
+>value : Symbol(value, Decl(index.js, 64, 11))
+
+        this.p3 = value;
+>this.p3 : Symbol(С3.p3, Decl(index.js, 56, 5), Decl(index.js, 61, 5))
+>this : Symbol(С3, Decl(index.js, 34, 1))
+>p3 : Symbol(С3.p3, Decl(index.js, 56, 5), Decl(index.js, 61, 5))
+>value : Symbol(value, Decl(index.js, 64, 11))
+    }
+
+    /** @type {string | null} */
+    get p4() {
+>p4 : Symbol(С3.p4, Decl(index.js, 66, 5), Decl(index.js, 71, 5))
+
+        return null;
+    }
+
+    /** @param {string | null} value */
+    set p4(value) {
+>p4 : Symbol(С3.p4, Decl(index.js, 66, 5), Decl(index.js, 71, 5))
+>value : Symbol(value, Decl(index.js, 74, 11))
+
+        this.p4 = value;
+>this.p4 : Symbol(С3.p4, Decl(index.js, 66, 5), Decl(index.js, 71, 5))
+>this : Symbol(С3, Decl(index.js, 34, 1))
+>p4 : Symbol(С3.p4, Decl(index.js, 66, 5), Decl(index.js, 71, 5))
+>value : Symbol(value, Decl(index.js, 74, 11))
+    }
+}
+
+
+class С4 {
+>С4 : Symbol(С4, Decl(index.js, 77, 1))
+
+    /** @param {string=} value */
+    set p1(value) {
+>p1 : Symbol(С4.p1, Decl(index.js, 80, 10))
+>value : Symbol(value, Decl(index.js, 82, 11))
+
+        this.p1 = value;
+>this.p1 : Symbol(С4.p1, Decl(index.js, 80, 10))
+>this : Symbol(С4, Decl(index.js, 77, 1))
+>p1 : Symbol(С4.p1, Decl(index.js, 80, 10))
+>value : Symbol(value, Decl(index.js, 82, 11))
+    }
+
+    /** @param {string | undefined} value */
+    set p2(value) {
+>p2 : Symbol(С4.p2, Decl(index.js, 84, 5))
+>value : Symbol(value, Decl(index.js, 87, 11))
+
+        this.p2 = value;
+>this.p2 : Symbol(С4.p2, Decl(index.js, 84, 5))
+>this : Symbol(С4, Decl(index.js, 77, 1))
+>p2 : Symbol(С4.p2, Decl(index.js, 84, 5))
+>value : Symbol(value, Decl(index.js, 87, 11))
+    }
+
+    /** @param {?string} value */
+    set p3(value) {
+>p3 : Symbol(С4.p3, Decl(index.js, 89, 5))
+>value : Symbol(value, Decl(index.js, 92, 11))
+
+        this.p3 = value;
+>this.p3 : Symbol(С4.p3, Decl(index.js, 89, 5))
+>this : Symbol(С4, Decl(index.js, 77, 1))
+>p3 : Symbol(С4.p3, Decl(index.js, 89, 5))
+>value : Symbol(value, Decl(index.js, 92, 11))
+    }
+
+    /** @param {string | null} value */
+    set p4(value) {
+>p4 : Symbol(С4.p4, Decl(index.js, 94, 5))
+>value : Symbol(value, Decl(index.js, 97, 11))
+
+        this.p4 = value;
+>this.p4 : Symbol(С4.p4, Decl(index.js, 94, 5))
+>this : Symbol(С4, Decl(index.js, 77, 1))
+>p4 : Symbol(С4.p4, Decl(index.js, 94, 5))
+>value : Symbol(value, Decl(index.js, 97, 11))
+    }
+}
+

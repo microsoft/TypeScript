@@ -29,7 +29,7 @@ export type ChannelType = Channel extends { type: infer R } ? R : never;
 >type : R
 
 type Omit<T, K extends keyof T> = Pick<
->Omit : Pick<T, ({ [P in keyof T]: P; } & { [P in K]: never; } & { [x: string]: never; })[keyof T]>
+>Omit : Omit<T, K>
 
     T,
     ({ [P in keyof T]: P } & { [P in K]: never } & { [x: string]: never })[keyof T]

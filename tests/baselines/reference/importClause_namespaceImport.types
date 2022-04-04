@@ -27,7 +27,7 @@ types.Value;
 >Value : {}
 
 let v: types.Value;
->v : any
+>v : types.Value
 >types : any
 
 const a: types.A = {};
@@ -44,4 +44,9 @@ const c: types.C<string> = "";
 >c : string
 >types : any
 >"" : ""
+
+const d = { types };
+>d : { types: typeof types; }
+>{ types } : { types: typeof types; }
+>types : typeof types
 

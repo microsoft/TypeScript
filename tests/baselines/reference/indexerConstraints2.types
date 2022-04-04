@@ -116,7 +116,7 @@ interface R {
 
 interface S {
     [u: "foo" | "bar"]: A;
->u : IndexableUnion
+>u : "foo" | "bar"
 }
 
 type Key = string;

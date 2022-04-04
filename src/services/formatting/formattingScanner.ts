@@ -5,6 +5,7 @@ namespace ts.formatting {
 
     export interface FormattingScanner {
         advance(): void;
+        getStartPos(): number;
         isOnToken(): boolean;
         isOnEOF(): boolean;
         readTokenInfo(n: Node): TokenInfo;
@@ -49,6 +50,7 @@ namespace ts.formatting {
             lastTrailingTriviaWasNewLine: () => wasNewLine,
             skipToEndOf,
             skipToStartOf,
+            getStartPos: () => lastTokenInfo?.token.pos ?? scanner.getTokenPos(),
         });
 
         lastTokenInfo = undefined;
@@ -124,13 +126,7 @@ namespace ts.formatting {
         }
 
         function shouldRescanJsxText(node: Node): boolean {
-            const isJSXText = isJsxText(node);
-            if (isJSXText) {
-                const containingElement = findAncestor(node.parent, p => isJsxElement(p));
-                if (!containingElement) return false; // should never happen
-                return !isParenthesizedExpression(containingElement.parent);
-            }
-            return false;
+            return isJsxText(node);
         }
 
         function shouldRescanSlashToken(container: Node): boolean {
@@ -252,7 +248,7 @@ namespace ts.formatting {
                     return scanner.scanJsxIdentifier();
                 case ScanAction.RescanJsxText:
                     lastScanAction = ScanAction.RescanJsxText;
-                    return scanner.reScanJsxToken();
+                    return scanner.reScanJsxToken(/* allowMultilineJsxText */ false);
                 case ScanAction.RescanJsxAttributeValue:
                     lastScanAction = ScanAction.RescanJsxAttributeValue;
                     return scanner.reScanJsxAttributeValue();
@@ -271,8 +267,7 @@ namespace ts.formatting {
 
         function isOnToken(): boolean {
             const current = lastTokenInfo ? lastTokenInfo.token.kind : scanner.getToken();
-            const startPos = lastTokenInfo ? lastTokenInfo.token.pos : scanner.getStartPos();
-            return startPos < endPos && current !== SyntaxKind.EndOfFileToken && !isTrivia(current);
+            return current !== SyntaxKind.EndOfFileToken && !isTrivia(current);
         }
 
         function isOnEOF(): boolean {

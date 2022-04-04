@@ -1,6 +1,7 @@
 // @target: esnext
 // @lib: esnext
 // @declaration: false
+// @useDefineForClassFields: false
 
 // declarations with call initializer
 const constCall = Symbol();

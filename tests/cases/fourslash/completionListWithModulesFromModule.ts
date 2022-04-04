@@ -258,51 +258,43 @@ const commonTypes: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry> =
 verify.completions(
     {
         marker: ["shadowNamespaceWithNoExport", "shadowNamespaceWithExport"],
-        exact: [
+        unsorted: completion.globalsPlus([
+            ...commonValues,
             { name: "shwfn", text: "function shwfn(shadow: any): void" },
             { name: "shwvar", text: "var shwvar: string" },
             { name: "shwcls", text: "class shwcls" },
             "tmp",
-            completion.globalThisEntry,
-            ...commonValues,
-            completion.undefinedVarEntry,
-            ...completion.statementKeywordsWithTypes,
-        ],
+        ], { noLib: true }),
     }, {
         marker: ["shadowNamespaceWithNoExportType", "shadowNamespaceWithExportType"],
-        exact: [
+        unsorted: completion.typeKeywordsPlus([
+            completion.globalThisEntry,
             { name: "shwcls", text: "class shwcls" },
             { name: "shwint", text: "interface shwint" },
-            completion.globalThisEntry,
             ...commonTypes,
-            ...completion.typeKeywords,
-        ]
+        ]),
     },
     {
         marker: "namespaceWithImport",
-        exact: [
+        unsorted: completion.globalsPlus([
             "Mod1",
             "iMod1",
             "tmp",
-            completion.globalThisEntry,
             { name: "shwfn", text: "function shwfn(): void" },
             ...commonValues,
             { name: "shwcls", text: "class shwcls" },
             { name: "shwvar", text: "var shwvar: number" },
-            completion.undefinedVarEntry,
-            ...completion.statementKeywordsWithTypes,
-        ],
+        ], { noLib: true }),
     },
     {
         marker: "namespaceWithImportType",
-        exact: [
+        unsorted: completion.typeKeywordsPlus([
+            completion.globalThisEntry,
             "Mod1",
             "iMod1",
-            completion.globalThisEntry,
             ...commonTypes,
             { name: "shwcls", text: "class shwcls" },
             { name: "shwint", text: "interface shwint" },
-            ...completion.typeKeywords,
-        ],
+        ]),
     }
 );

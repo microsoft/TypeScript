@@ -1,0 +1,44 @@
+=== tests/cases/compiler/typeAliasDeclarationEmit3.ts ===
+function f1(): void {
+>f1 : Symbol(f1, Decl(typeAliasDeclarationEmit3.ts, 0, 0))
+
+    for (let i = 0; i < 1; i++)
+>i : Symbol(i, Decl(typeAliasDeclarationEmit3.ts, 1, 12))
+>i : Symbol(i, Decl(typeAliasDeclarationEmit3.ts, 1, 12))
+>i : Symbol(i, Decl(typeAliasDeclarationEmit3.ts, 1, 12))
+
+        type foo = [];
+>foo : Symbol(foo, Decl(typeAliasDeclarationEmit3.ts, 1, 31))
+
+        console.log('f1');
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+}
+
+function f2(): void {
+>f2 : Symbol(f2, Decl(typeAliasDeclarationEmit3.ts, 4, 1))
+
+    while (true)
+        type foo = [];
+>foo : Symbol(foo, Decl(typeAliasDeclarationEmit3.ts, 7, 16))
+
+        console.log('f2');
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+}
+
+function f3(): void {
+>f3 : Symbol(f3, Decl(typeAliasDeclarationEmit3.ts, 10, 1))
+
+    if (true)
+        type foo = [];
+>foo : Symbol(foo, Decl(typeAliasDeclarationEmit3.ts, 13, 13))
+
+        console.log('f3');
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+}
+

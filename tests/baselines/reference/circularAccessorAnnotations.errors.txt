@@ -1,0 +1,41 @@
+tests/cases/compiler/circularAccessorAnnotations.ts(2,9): error TS2502: 'foo' is referenced directly or indirectly in its own type annotation.
+tests/cases/compiler/circularAccessorAnnotations.ts(6,9): error TS2502: 'foo' is referenced directly or indirectly in its own type annotation.
+tests/cases/compiler/circularAccessorAnnotations.ts(15,9): error TS2502: 'foo' is referenced directly or indirectly in its own type annotation.
+tests/cases/compiler/circularAccessorAnnotations.ts(19,9): error TS2502: 'foo' is referenced directly or indirectly in its own type annotation.
+
+
+==== tests/cases/compiler/circularAccessorAnnotations.ts (4 errors) ====
+    declare const c1: {
+        get foo(): typeof c1.foo;
+            ~~~
+!!! error TS2502: 'foo' is referenced directly or indirectly in its own type annotation.
+    }
+    
+    declare const c2: {
+        set foo(value: typeof c2.foo);
+            ~~~
+!!! error TS2502: 'foo' is referenced directly or indirectly in its own type annotation.
+    }
+    
+    declare const c3: {
+        get foo(): string;
+        set foo(value: typeof c3.foo);
+    }
+    
+    type T1 = {
+        get foo(): T1["foo"];
+            ~~~
+!!! error TS2502: 'foo' is referenced directly or indirectly in its own type annotation.
+    }
+    
+    type T2 = {
+        set foo(value: T2["foo"]);
+            ~~~
+!!! error TS2502: 'foo' is referenced directly or indirectly in its own type annotation.
+    }
+    
+    type T3 = {
+        get foo(): string;
+        set foo(value: T3["foo"]);
+    }
+    

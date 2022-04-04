@@ -24,10 +24,10 @@ const ok: Properties = {
 
 // As expected, "__property2" is indeed a key of the type
 type Keys = keyof Properties;
->Keys : "property1" | "__property2"
+>Keys : keyof Properties
 
 const k: Keys = "__property2"; // ok
->k : "property1" | "__property2"
+>k : keyof Properties
 >"__property2" : "__property2"
 
 // This should be valid

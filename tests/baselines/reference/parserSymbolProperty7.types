@@ -4,7 +4,7 @@ class C {
 
     [Symbol.toStringTag](): void { }
 >[Symbol.toStringTag] : () => void
->Symbol.toStringTag : symbol
+>Symbol.toStringTag : unique symbol
 >Symbol : SymbolConstructor
->toStringTag : symbol
+>toStringTag : unique symbol
 }

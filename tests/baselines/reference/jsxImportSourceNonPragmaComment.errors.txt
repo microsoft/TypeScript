@@ -1,0 +1,26 @@
+tests/cases/compiler/jsxImportSourceNonPragmaComment.tsx(3,21): error TS2307: Cannot find module '@emotion/react' or its corresponding type declarations.
+tests/cases/compiler/jsxImportSourceNonPragmaComment.tsx(7,5): error TS2307: Cannot find module '@emotion/react/jsx-runtime' or its corresponding type declarations.
+
+
+==== tests/cases/compiler/jsxImportSourceNonPragmaComment.tsx (2 errors) ====
+    /* eslint-disable react/react-in-jsx-scope -- Unaware of @jsxImportSource */
+    /** @jsxImportSource @emotion/react */
+    import { css } from "@emotion/react";
+                        ~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module '@emotion/react' or its corresponding type declarations.
+    
+    export default function Component() {
+      return (
+        <input
+        ~~~~~~
+          css={css`
+    ~~~~~~~~~~~~~~~
+            color: red;
+    ~~~~~~~~~~~~~~~~~~~
+          `}
+    ~~~~~~~~
+        />
+    ~~~~~~
+!!! error TS2307: Cannot find module '@emotion/react/jsx-runtime' or its corresponding type declarations.
+      );
+    }

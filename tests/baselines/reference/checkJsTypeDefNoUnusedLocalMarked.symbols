@@ -22,7 +22,7 @@ export = Foo;
 /** @typedef {(foo: Foo) => string} FooFun */
 
 module.exports = /** @type {FooFun} */(void 0);
->module.exports : Symbol("tests/cases/compiler/something", Decl(something.js, 0, 0))
+>module.exports : Symbol(module.exports, Decl(something.js, 0, 0))
 >module : Symbol(export=, Decl(something.js, 0, 0))
 >exports : Symbol(export=, Decl(something.js, 0, 0))
 

@@ -20,10 +20,10 @@ f1("foo");  // Error
 
 f2 = f1;
 f3 = f1;
-f4 = f1;  // Error, misaligned complex rest types
+f4 = f1;
 f1 = f2;  // Error
 f1 = f3;  // Error
-f1 = f4;  // Error, misaligned complex rest types
+f1 = f4;
 
 // Repro from #26110
 
@@ -65,30 +65,51 @@ declare function foo2(...args: string[] | number[]): void;
 let x2: ReadonlyArray<string> = ["hello"];
 foo2(...x2);
 
+// Repros from #47754
+
+type RestParams = [y: string] | [y: number];
+
+type Signature = (x: string, ...rest: RestParams) => void;
+
+type MergedParams = Parameters<Signature>;  // [x: string, y: string] | [x: string, y: number]
+
+declare let ff1: (...rest: [string, string] | [string, number]) => void;
+declare let ff2: (x: string, ...rest: [string] | [number]) => void;
+
+ff1 = ff2;
+ff2 = ff1;
+
+function ff3<A extends unknown[]>(s1: (...args: [x: string, ...rest: A | [number]]) => void, s2: (x: string, ...rest: A | [number]) => void) {
+    s1 = s2;
+    s2 = s1;
+}
+
 
 //// [genericRestParameters3.js]
 "use strict";
-var __spreadArrays = (this && this.__spreadArrays) || function () {
-    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
-    for (var r = Array(s), k = 0, i = 0; i < il; i++)
-        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
-            r[k] = a[j];
-    return r;
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
 };
 f1("foo", "abc");
 f1("foo", 10, true);
-f1.apply(void 0, __spreadArrays(["foo"], t1));
-f1.apply(void 0, __spreadArrays(["foo"], t2));
-f1.apply(void 0, __spreadArrays(["foo"], t3));
-f1.apply(void 0, __spreadArrays(["foo"], t4));
+f1.apply(void 0, __spreadArray(["foo"], t1, false));
+f1.apply(void 0, __spreadArray(["foo"], t2, false));
+f1.apply(void 0, __spreadArray(["foo"], t3, false));
+f1.apply(void 0, __spreadArray(["foo"], t4, false));
 f1("foo", 10); // Error
 f1("foo"); // Error
 f2 = f1;
 f3 = f1;
-f4 = f1; // Error, misaligned complex rest types
+f4 = f1;
 f1 = f2; // Error
 f1 = f3; // Error
-f1 = f4; // Error, misaligned complex rest types
+f1 = f4;
 foo(); // Error
 foo(100); // Error
 foo(foo); // Error
@@ -110,6 +131,12 @@ hmm(1, "s"); // okay, A = [1, "s"]
 hmm("what"); // no error?  A = [] | [number, string] ?
 var x2 = ["hello"];
 foo2.apply(void 0, x2);
+ff1 = ff2;
+ff2 = ff1;
+function ff3(s1, s2) {
+    s1 = s2;
+    s2 = s1;
+}
 
 
 //// [genericRestParameters3.d.ts]
@@ -133,3 +160,9 @@ declare const ca: CoolArray<number>;
 declare function hmm<A extends [] | [number, string]>(...args: A): void;
 declare function foo2(...args: string[] | number[]): void;
 declare let x2: ReadonlyArray<string>;
+declare type RestParams = [y: string] | [y: number];
+declare type Signature = (x: string, ...rest: RestParams) => void;
+declare type MergedParams = Parameters<Signature>;
+declare let ff1: (...rest: [string, string] | [string, number]) => void;
+declare let ff2: (x: string, ...rest: [string] | [number]) => void;
+declare function ff3<A extends unknown[]>(s1: (...args: [x: string, ...rest: A | [number]]) => void, s2: (x: string, ...rest: A | [number]) => void): void;

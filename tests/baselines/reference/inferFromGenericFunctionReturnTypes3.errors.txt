@@ -1,5 +1,4 @@
 tests/cases/compiler/inferFromGenericFunctionReturnTypes3.ts(28,30): error TS2345: Argument of type 'string' is not assignable to parameter of type '"bar"'.
-tests/cases/compiler/inferFromGenericFunctionReturnTypes3.ts(175,47): error TS2322: Type 'boolean' is not assignable to type 'true'.
 tests/cases/compiler/inferFromGenericFunctionReturnTypes3.ts(180,26): error TS2322: Type '{ state: State.A; }[] | { state: State.B; }[]' is not assignable to type '{ state: State.A; }[]'.
   Type '{ state: State.B; }[]' is not assignable to type '{ state: State.A; }[]'.
     Type '{ state: State.B; }' is not assignable to type '{ state: State.A; }'.
@@ -7,7 +6,7 @@ tests/cases/compiler/inferFromGenericFunctionReturnTypes3.ts(180,26): error TS23
         Type 'State.B' is not assignable to type 'State.A'.
 
 
-==== tests/cases/compiler/inferFromGenericFunctionReturnTypes3.ts (3 errors) ====
+==== tests/cases/compiler/inferFromGenericFunctionReturnTypes3.ts (2 errors) ====
     // Repros from #5487
     
     function truePromise(): Promise<true> {
@@ -185,9 +184,6 @@ tests/cases/compiler/inferFromGenericFunctionReturnTypes3.ts(180,26): error TS23
     
     declare function foldLeft<U>(z: U, f: (acc: U, t: boolean) => U): U;
     let res: boolean = foldLeft(true, (acc, t) => acc && t);  // Error
-                                                  ~~~~~~~~
-!!! error TS2322: Type 'boolean' is not assignable to type 'true'.
-!!! related TS6502 tests/cases/compiler/inferFromGenericFunctionReturnTypes3.ts:174:39: The expected type comes from the return type of this signature.
     
     enum State { A, B }
     type Foo = { state: State }

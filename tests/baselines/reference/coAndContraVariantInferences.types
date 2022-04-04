@@ -1,0 +1,104 @@
+=== tests/cases/compiler/coAndContraVariantInferences.ts ===
+type A = { kind: 'a' };
+>A : A
+>kind : "a"
+
+type B = { kind: 'b' };
+>B : B
+>kind : "b"
+
+declare const a: A;
+>a : A
+
+declare const b: B;
+>b : B
+
+declare function fab(arg: A | B): void;
+>fab : (arg: A | B) => void
+>arg : A | B
+
+declare function foo<T>(x: { kind: T }, f: (arg: { kind: T }) => void): void;
+>foo : <T>(x: {    kind: T;}, f: (arg: {    kind: T;}) => void) => void
+>x : { kind: T; }
+>kind : T
+>f : (arg: {    kind: T;}) => void
+>arg : { kind: T; }
+>kind : T
+
+foo(a, fab);
+>foo(a, fab) : void
+>foo : <T>(x: { kind: T; }, f: (arg: { kind: T; }) => void) => void
+>a : A
+>fab : (arg: A | B) => void
+
+foo(b, fab);
+>foo(b, fab) : void
+>foo : <T>(x: { kind: T; }, f: (arg: { kind: T; }) => void) => void
+>b : B
+>fab : (arg: A | B) => void
+
+// Repro from #45603
+
+interface Action<TName extends string,TPayload> {
+    name: TName,
+>name : TName
+
+    payload: TPayload
+>payload : TPayload
+}
+
+const actionA = { payload: 'any-string' } as Action<'ACTION_A', string>;
+>actionA : Action<"ACTION_A", string>
+>{ payload: 'any-string' } as Action<'ACTION_A', string> : Action<"ACTION_A", string>
+>{ payload: 'any-string' } : { payload: string; }
+>payload : string
+>'any-string' : "any-string"
+
+const actionB = { payload: true } as Action<'ACTION_B', boolean>;
+>actionB : Action<"ACTION_B", boolean>
+>{ payload: true } as Action<'ACTION_B', boolean> : Action<"ACTION_B", boolean>
+>{ payload: true } : { payload: true; }
+>payload : true
+>true : true
+
+function call<TName extends string,TPayload>(
+>call : <TName extends string, TPayload>(action: Action<TName, TPayload>, fn: (action: Action<TName, TPayload>) => any) => void
+
+  action: Action<TName,TPayload>,
+>action : Action<TName, TPayload>
+
+  fn: (action: Action<TName,TPayload>)=> any,
+>fn : (action: Action<TName, TPayload>) => any
+>action : Action<TName, TPayload>
+
+) {
+  fn(action);
+>fn(action) : any
+>fn : (action: Action<TName, TPayload>) => any
+>action : Action<TName, TPayload>
+}
+
+const printFn = (action: typeof actionA | typeof actionB)=> console.log(action);
+>printFn : (action: typeof actionA | typeof actionB) => void
+>(action: typeof actionA | typeof actionB)=> console.log(action) : (action: typeof actionA | typeof actionB) => void
+>action : Action<"ACTION_A", string> | Action<"ACTION_B", boolean>
+>actionA : Action<"ACTION_A", string>
+>actionB : Action<"ACTION_B", boolean>
+>console.log(action) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>action : Action<"ACTION_A", string> | Action<"ACTION_B", boolean>
+
+call(actionA, printFn);
+>call(actionA, printFn) : void
+>call : <TName extends string, TPayload>(action: Action<TName, TPayload>, fn: (action: Action<TName, TPayload>) => any) => void
+>actionA : Action<"ACTION_A", string>
+>printFn : (action: Action<"ACTION_A", string> | Action<"ACTION_B", boolean>) => void
+
+call(actionB, printFn);
+>call(actionB, printFn) : void
+>call : <TName extends string, TPayload>(action: Action<TName, TPayload>, fn: (action: Action<TName, TPayload>) => any) => void
+>actionB : Action<"ACTION_B", boolean>
+>printFn : (action: Action<"ACTION_A", string> | Action<"ACTION_B", boolean>) => void
+

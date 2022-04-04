@@ -1,7 +1,6 @@
 // @allowJs: true
 // @out: out.js
 // @declaration: true
-// @bundledPackageName: out
 // @filename: b.js
 let a = 10;
 b = 30;

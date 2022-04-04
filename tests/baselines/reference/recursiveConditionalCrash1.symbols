@@ -1,0 +1,15 @@
+=== tests/cases/compiler/recursiveConditionalCrash1.ts ===
+type C1<T> = [T extends string ? C1<T> : never][0];
+>C1 : Symbol(C1, Decl(recursiveConditionalCrash1.ts, 0, 0))
+>T : Symbol(T, Decl(recursiveConditionalCrash1.ts, 0, 8))
+>T : Symbol(T, Decl(recursiveConditionalCrash1.ts, 0, 8))
+>C1 : Symbol(C1, Decl(recursiveConditionalCrash1.ts, 0, 0))
+>T : Symbol(T, Decl(recursiveConditionalCrash1.ts, 0, 8))
+
+type C2<T> = [T extends string ? [C2<T>] : never][0];
+>C2 : Symbol(C2, Decl(recursiveConditionalCrash1.ts, 0, 51))
+>T : Symbol(T, Decl(recursiveConditionalCrash1.ts, 1, 8))
+>T : Symbol(T, Decl(recursiveConditionalCrash1.ts, 1, 8))
+>C2 : Symbol(C2, Decl(recursiveConditionalCrash1.ts, 0, 51))
+>T : Symbol(T, Decl(recursiveConditionalCrash1.ts, 1, 8))
+

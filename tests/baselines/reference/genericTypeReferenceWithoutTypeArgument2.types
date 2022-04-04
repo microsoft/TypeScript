@@ -77,8 +77,8 @@ function i<T extends M.E>(x: T) { }
 >x : T
 
 var j = <C>null;
->j : any
-><C>null : any
+>j : C
+><C>null : C
 >null : null
 
 var k = <M.E>null;

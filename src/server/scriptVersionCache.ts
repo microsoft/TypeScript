@@ -67,20 +67,18 @@ namespace ts.server {
             }
             const lm = LineIndex.linesFromText(insertedText);
             const lines = lm.lines;
-            if (lines.length > 1) {
-                if (lines[lines.length - 1] === "") {
-                    lines.pop();
-                }
+            if (lines.length > 1 && lines[lines.length - 1] === "") {
+                lines.pop();
             }
             let branchParent: LineNode | undefined;
             let lastZeroCount: LineCollection | undefined;
 
             for (let k = this.endBranch.length - 1; k >= 0; k--) {
-                (<LineNode>this.endBranch[k]).updateCounts();
+                (this.endBranch[k] as LineNode).updateCounts();
                 if (this.endBranch[k].charCount() === 0) {
                     lastZeroCount = this.endBranch[k];
                     if (k > 0) {
-                        branchParent = <LineNode>this.endBranch[k - 1];
+                        branchParent = this.endBranch[k - 1] as LineNode;
                     }
                     else {
                         branchParent = this.branchNode;
@@ -92,20 +90,20 @@ namespace ts.server {
             }
 
             // path at least length two (root and leaf)
-            const leafNode = <LineLeaf>this.startPath[this.startPath.length - 1];
+            const leafNode = this.startPath[this.startPath.length - 1] as LineLeaf;
 
             if (lines.length > 0) {
                 leafNode.text = lines[0];
 
                 if (lines.length > 1) {
-                    let insertedNodes = <LineCollection[]>new Array(lines.length - 1);
-                    let startNode = <LineCollection>leafNode;
+                    let insertedNodes = new Array(lines.length - 1) as LineCollection[];
+                    let startNode = leafNode as LineCollection;
                     for (let i = 1; i < lines.length; i++) {
                         insertedNodes[i - 1] = new LineLeaf(lines[i]);
                     }
                     let pathIndex = this.startPath.length - 2;
                     while (pathIndex >= 0) {
-                        const insertionNode = <LineNode>this.startPath[pathIndex];
+                        const insertionNode = this.startPath[pathIndex] as LineNode;
                         insertedNodes = insertionNode.insertAt(startNode, insertedNodes);
                         pathIndex--;
                         startNode = insertionNode;
@@ -122,16 +120,16 @@ namespace ts.server {
                 }
                 else {
                     for (let j = this.startPath.length - 2; j >= 0; j--) {
-                        (<LineNode>this.startPath[j]).updateCounts();
+                        (this.startPath[j] as LineNode).updateCounts();
                     }
                 }
             }
             else {
-                const insertionNode = <LineNode>this.startPath[this.startPath.length - 2];
+                const insertionNode = this.startPath[this.startPath.length - 2] as LineNode;
                 // no content for leaf node, so delete it
                 insertionNode.remove(leafNode);
                 for (let j = this.startPath.length - 2; j >= 0; j--) {
-                    (<LineNode>this.startPath[j]).updateCounts();
+                    (this.startPath[j] as LineNode).updateCounts();
                 }
             }
 
@@ -220,7 +218,7 @@ namespace ts.server {
                     break;
             }
             if (this.goSubtree) {
-                this.stack.push(<LineNode>child);
+                this.stack.push(child as LineNode);
             }
         }
         // just gather text from the leaves
@@ -544,9 +542,9 @@ namespace ts.server {
             const lineMap = computeLineStarts(text);
 
             if (lineMap.length === 0) {
-                return { lines: <string[]>[], lineMap };
+                return { lines: [] as string[], lineMap };
             }
-            const lines = <string[]>new Array(lineMap.length);
+            const lines = new Array(lineMap.length) as string[];
             const lc = lineMap.length - 1;
             for (let lmi = 0; lmi < lc; lmi++) {
                 lines[lmi] = text.substring(lineMap[lmi], lineMap[lmi + 1]);
@@ -673,7 +671,7 @@ namespace ts.server {
                         return { oneBasedLine: lineNumberAccumulator, zeroBasedColumn: relativePosition, lineText: child.text };
                     }
                     else {
-                        return (<LineNode>child).charOffsetToLineInfo(lineNumberAccumulator, relativePosition);
+                        return (child as LineNode).charOffsetToLineInfo(lineNumberAccumulator, relativePosition);
                     }
                 }
                 else {
@@ -683,8 +681,12 @@ namespace ts.server {
             }
 
             // Skipped all children
-            const { leaf } = this.lineNumberToInfo(this.lineCount(), 0);
-            return { oneBasedLine: this.lineCount(), zeroBasedColumn: leaf ? leaf.charCount() : 0, lineText: undefined };
+            const lineCount = this.lineCount();
+            if (lineCount === 0) { // it's empty! (and lineNumberToInfo expects a one-based line)
+                return { oneBasedLine: 1, zeroBasedColumn: 0, lineText: undefined };
+            }
+            const leaf = Debug.checkDefined(this.lineNumberToInfo(lineCount, 0).leaf);
+            return { oneBasedLine: lineCount, zeroBasedColumn: leaf.charCount(), lineText: undefined };
         }
 
         /**
@@ -696,7 +698,7 @@ namespace ts.server {
             for (const child of this.children) {
                 const childLineCount = child.lineCount();
                 if (childLineCount >= relativeOneBasedLine) {
-                    return child.isLeaf() ? { position: positionAccumulator, leaf: child } : (<LineNode>child).lineNumberToInfo(relativeOneBasedLine, positionAccumulator);
+                    return child.isLeaf() ? { position: positionAccumulator, leaf: child } : (child as LineNode).lineNumberToInfo(relativeOneBasedLine, positionAccumulator);
                 }
                 else {
                     relativeOneBasedLine -= childLineCount;
@@ -764,7 +766,7 @@ namespace ts.server {
                 let splitNodeCount = 0;
                 if (nodeIndex < nodeCount) {
                     splitNodeCount = Math.ceil((nodeCount - nodeIndex) / lineCollectionCapacity);
-                    splitNodes = <LineNode[]>new Array(splitNodeCount);
+                    splitNodes = new Array(splitNodeCount) as LineNode[];
                     let splitNodeIndex = 0;
                     for (let i = 0; i < splitNodeCount; i++) {
                         splitNodes[i] = new LineNode();

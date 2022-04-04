@@ -27,7 +27,7 @@ var C = /** @class */ (function () {
         this["hello bye"] = 0;
     }
     var _a, _b, _c;
-    _a = n, s + s, _b = s + n, +s, _c = "hello " + a + " bye";
+    _a = n, s + s, _b = s + n, +s, _c = "hello ".concat(a, " bye");
     C[_c] = 0;
     return C;
 }());

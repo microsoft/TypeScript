@@ -37,11 +37,23 @@ namespace ts.projectSystem {
                 name: "foo",
                 replacementSpan: undefined,
                 isPackageJsonImport: undefined,
+                isImportStatementCompletion: undefined,
                 sortText: Completions.SortText.AutoImportSuggestions,
                 source: "/a",
+                sourceDisplay: undefined,
+                isSnippet: undefined,
+                data: { exportName: "foo", fileName: "/a.ts", ambientModuleName: undefined, isPackageJsonImport: undefined },
+                labelDetails: undefined,
             };
+
+            // `data.exportMapKey` contains a SymbolId so should not be mocked up with an expected value here.
+            // Just assert that it's a string and then delete it so we can compare everything else with `deepEqual`.
+            const exportMapKey = (response?.entries[0].data as any)?.exportMapKey;
+            assert.isString(exportMapKey);
+            delete (response?.entries[0].data as any).exportMapKey;
             assert.deepEqual<protocol.CompletionInfo | undefined>(response, {
                 isGlobalCompletion: true,
+                isIncomplete: undefined,
                 isMemberCompletion: false,
                 isNewIdentifierLocation: false,
                 optionalReplacementSpan: { start: { line: 1, offset: 1 }, end: { line: 1, offset: 4 } },
@@ -50,7 +62,7 @@ namespace ts.projectSystem {
 
             const detailsRequestArgs: protocol.CompletionDetailsRequestArgs = {
                 ...requestLocation,
-                entryNames: [{ name: "foo", source: "/a" }],
+                entryNames: [{ name: "foo", source: "/a", data: { exportName: "foo", fileName: "/a.ts", exportMapKey } }],
             };
 
             const detailsResponse = executeSessionRequest<protocol.CompletionDetailsRequest, protocol.CompletionDetailsResponse>(session, protocol.CommandTypes.CompletionDetails, detailsRequestArgs);
@@ -68,13 +80,13 @@ namespace ts.projectSystem {
                 kindModifiers: ScriptElementKindModifier.exportedModifier,
                 name: "foo",
                 source: [{ text: "./a", kind: "text" }],
-                tags: undefined,
+                sourceDisplay: [{ text: "./a", kind: "text" }],
             };
             assert.deepEqual<readonly protocol.CompletionEntryDetails[] | undefined>(detailsResponse, [
                 {
                     codeActions: [
                         {
-                            description: `Import 'foo' from module "./a"`,
+                            description: `Add import from "./a"`,
                             changes: [
                                 {
                                     fileName: "/b.ts",
@@ -90,6 +102,7 @@ namespace ts.projectSystem {
                             commands: undefined,
                         },
                     ],
+                    tags: [],
                     ...detailsCommon,
                 },
             ]);
@@ -106,7 +119,7 @@ namespace ts.projectSystem {
                 {
                     codeActions: [
                         {
-                            description: `Import 'foo' from module "./a"`,
+                            description: `Add import from "./a"`,
                             changes: [
                                 {
                                     fileName: "/b.ts",
@@ -116,6 +129,7 @@ namespace ts.projectSystem {
                             commands: undefined,
                         }
                     ],
+                    tags: [],
                     ...detailsCommon,
                 }
             ]);

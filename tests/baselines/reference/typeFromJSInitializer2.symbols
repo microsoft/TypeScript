@@ -1,0 +1,22 @@
+=== tests/cases/conformance/salsa/a.js ===
+/** @type {() => undefined} */
+function f1() {
+>f1 : Symbol(f1, Decl(a.js, 0, 0))
+
+    return undefined;
+>undefined : Symbol(undefined)
+}
+const a = f1()
+>a : Symbol(a, Decl(a.js, 4, 5))
+>f1 : Symbol(f1, Decl(a.js, 0, 0))
+
+/** @type {() => null} */
+function f2() {
+>f2 : Symbol(f2, Decl(a.js, 4, 14))
+
+    return null;
+}
+const b = f2()
+>b : Symbol(b, Decl(a.js, 10, 5))
+>f2 : Symbol(f2, Decl(a.js, 4, 14))
+

@@ -5,7 +5,7 @@ type Getters<T> = { [P in keyof T & string as `get${Capitalize<P>}`]: () => T[P]
 >Getters : Getters<T>
 
 type TG1 = Getters<{ foo: string, bar: number, baz: { z: boolean } }>;
->TG1 : Getters<{ foo: string; bar: number; baz: {    z: boolean;}; }>
+>TG1 : TG1
 >foo : string
 >bar : number
 >baz : { z: boolean; }
@@ -22,7 +22,7 @@ type TypeFromDefs<T extends PropDef<keyof any, any>> = { [P in T as P['name']]: 
 >TypeFromDefs : TypeFromDefs<T>
 
 type TP1 = TypeFromDefs<{ name: 'a', type: string } | { name: 'b', type: number } | { name: 'a', type: boolean }>;
->TP1 : TypeFromDefs<{ name: 'a'; type: string; } | { name: 'b'; type: number; } | { name: 'a'; type: boolean; }>
+>TP1 : TP1
 >name : "a"
 >type : string
 >name : "b"
@@ -33,10 +33,10 @@ type TP1 = TypeFromDefs<{ name: 'a', type: string } | { name: 'b', type: number 
 // No array or tuple type mapping when 'as N' clause present
 
 type TA1 = Getters<string[]>;
->TA1 : Getters<string[]>
+>TA1 : TA1
 
 type TA2 = Getters<[number, boolean]>;
->TA2 : Getters<[number, boolean]>
+>TA2 : TA2
 
 // Filtering using 'as N' clause
 
@@ -56,7 +56,7 @@ type DoubleProp<T> = { [P in keyof T & string as `${P}1` | `${P}2`]: T[P] }
 >DoubleProp : DoubleProp<T>
 
 type TD1 = DoubleProp<{ a: string, b: number }>;  // { a1: string, a2: string, b1: number, b2: number }
->TD1 : DoubleProp<{ a: string; b: number; }>
+>TD1 : TD1
 >a : string
 >b : number
 
@@ -224,4 +224,80 @@ type Res2 = GetKeyWithIf<Schema, Schema['root']['task']>;  // "Task"
 
 type Res3 = keyof GetObjWithIf<Schema, Schema['root']['task']>;  // "Task"
 >Res3 : "Task"
+
+// Repro from #44019
+
+type KeysExtendedBy<T, U> = keyof { [K in keyof T as U extends T[K] ? K : never] : T[K] };
+>KeysExtendedBy : keyof { [K in keyof T as U extends T[K] ? K : never]: T[K]; }
+
+interface M {
+    a: boolean;
+>a : boolean
+
+    b: number;
+>b : number
+}
+
+function f(x: KeysExtendedBy<M, number>) {
+>f : (x: KeysExtendedBy<M, number>) => "b"
+>x : "b"
+
+    return x;
+>x : "b"
+}
+
+f("a");  // Error, should allow only "b"
+>f("a") : "b"
+>f : (x: "b") => "b"
+>"a" : "a"
+
+type NameMap = { 'a': 'x', 'b': 'y', 'c': 'z' };
+>NameMap : NameMap
+>'a' : "x"
+>'b' : "y"
+>'c' : "z"
+
+// Distributive, will be simplified
+
+type TS0<T> = keyof { [P in keyof T as keyof Record<P, number>]: string };
+>TS0 : keyof { [P in keyof T as P]: string; }
+
+type TS1<T> = keyof { [P in keyof T as Extract<P, 'a' | 'b' | 'c'>]: string };
+>TS1 : keyof { [P in keyof T as Extract<P, "a" | "b" | "c">]: string; }
+
+type TS2<T> = keyof { [P in keyof T as P & ('a' | 'b' | 'c')]: string };
+>TS2 : keyof { [P in keyof T as P & ("a" | "b" | "c")]: string; }
+
+type TS3<T> = keyof { [P in keyof T as Exclude<P, 'a' | 'b' | 'c'>]: string };
+>TS3 : keyof { [P in keyof T as Exclude<P, "a" | "b" | "c">]: string; }
+
+type TS4<T> = keyof { [P in keyof T as NameMap[P & keyof NameMap]]: string };
+>TS4 : keyof { [P in keyof T as NameMap[P & keyof NameMap]]: string; }
+
+type TS5<T> = keyof { [P in keyof T & keyof NameMap as NameMap[P]]: string };
+>TS5 : NameMap[keyof T & "a"] | NameMap[keyof T & "b"] | NameMap[keyof T & "c"]
+
+type TS6<T, U, V> = keyof { [ K in keyof T as V & (K extends U ? K : never)]: string };
+>TS6 : keyof { [K in keyof T as V & (K extends U ? K : never)]: string; }
+
+// Non-distributive, won't be simplified
+
+type TN0<T> = keyof { [P in keyof T as T[P] extends number ? P : never]: string };
+>TN0 : keyof { [P in keyof T as T[P] extends number ? P : never]: string; }
+
+type TN1<T> = keyof { [P in keyof T as number extends T[P] ? P : never]: string };
+>TN1 : keyof { [P in keyof T as number extends T[P] ? P : never]: string; }
+
+type TN2<T> = keyof { [P in keyof T as 'a' extends P ? 'x' : 'y']: string };
+>TN2 : keyof { [P in keyof T as "a" extends P ? "x" : "y"]: string; }
+
+type TN3<T> = keyof { [P in keyof T as Exclude<Exclude<Exclude<P, 'c'>, 'b'>, 'a'>]: string };
+>TN3 : keyof { [P in keyof T as Exclude<Exclude<Exclude<P, "c">, "b">, "a">]: string; }
+
+type TN4<T, U> = keyof { [K in keyof T as (K extends U ? T[K] : never) extends T[K] ? K : never]: string };
+>TN4 : keyof { [K in keyof T as (K extends U ? T[K] : never) extends T[K] ? K : never]: string; }
+
+type TN5<T, U> = keyof { [K in keyof T as keyof { [P in K as T[P] extends U ? K : never]: true }]: string };
+>TN5 : keyof { [K in keyof T as keyof { [P in K as T[P] extends U ? K : never]: true; }]: string; }
+>true : true
 

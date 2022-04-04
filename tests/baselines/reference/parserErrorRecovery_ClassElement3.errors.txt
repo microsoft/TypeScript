@@ -7,7 +7,7 @@ tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ClassElements/parserErr
 ==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ClassElements/parserErrorRecovery_ClassElement3.ts (4 errors) ====
     module M {
        ¬
-       
+       ~
 !!! error TS1127: Invalid character.
        class C {
        }
@@ -16,7 +16,7 @@ tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ClassElements/parserErr
        ~~~~
 !!! error TS1109: Expression expected.
        ¬
-       
+       ~
 !!! error TS1127: Invalid character.
         
 !!! error TS1005: '}' expected.

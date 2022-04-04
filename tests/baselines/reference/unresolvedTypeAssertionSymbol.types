@@ -4,8 +4,8 @@ var x = 1;
 >1 : 1
 
 var y = <asdf>x;
->y : any
-><asdf>x : any
+>y : asdf
+><asdf>x : asdf
 >x : number
  
 

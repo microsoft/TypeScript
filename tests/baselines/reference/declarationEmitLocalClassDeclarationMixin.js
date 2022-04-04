@@ -104,12 +104,10 @@ export declare const Mixed: {
         bar: number;
     };
 } & typeof Unmixed;
-declare const FilteredThing_base: {
-    new (...args: any[]): {
-        match(path: string): boolean;
-        thing: number;
-    };
-} & typeof Unmixed;
+declare const FilteredThing_base: (abstract new (...args: any[]) => {
+    match(path: string): boolean;
+    thing: number;
+}) & typeof Unmixed;
 export declare class FilteredThing extends FilteredThing_base {
     match(path: string): boolean;
 }

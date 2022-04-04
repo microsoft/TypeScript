@@ -1,0 +1,17 @@
+=== tests/cases/conformance/override/override16.ts ===
+class A {
+>A : A
+
+    foo?: string;
+>foo : string
+}
+
+class B extends A {
+>B : B
+>A : A
+
+    override foo = "string";
+>foo : string
+>"string" : "string"
+}
+

@@ -24,35 +24,36 @@ const willErrorSomeDay: typeof A = class {}; // OK for now
 
 //// [privateNamesAndStaticFields.js]
 "use strict";
-var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, privateMap, value) {
-    if (!privateMap.has(receiver)) {
-        throw new TypeError("attempted to set private field on non-instance");
-    }
-    privateMap.set(receiver, value);
-    return value;
+var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
+    if (kind === "m") throw new TypeError("Private method is not writable");
+    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");
+    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
+    return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
 };
-var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, privateMap) {
-    if (!privateMap.has(receiver)) {
-        throw new TypeError("attempted to get private field on non-instance");
-    }
-    return privateMap.get(receiver);
+var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
+    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
+    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
+    return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
 };
-var _foo, _bar, _foo_1;
+var _a, _A_foo, _A_bar, _b, _B_foo;
 class A {
     constructor() {
-        __classPrivateFieldSet(A, _foo, 3);
-        __classPrivateFieldGet(B, _foo); // Error
-        __classPrivateFieldGet(B, _bar); // Error
+        __classPrivateFieldSet(A, _a, 3, "f", _A_foo);
+        __classPrivateFieldGet(B, _a, "f", _A_foo); // Error
+        __classPrivateFieldGet(B, _a, "f", _A_bar); // Error
     }
 }
-_foo = new WeakMap(), _bar = new WeakMap();
+_a = A;
+_A_foo = { value: void 0 };
+_A_bar = { value: void 0 };
 class B extends A {
     constructor() {
         super();
-        __classPrivateFieldSet(B, _foo_1, "some string");
+        __classPrivateFieldSet(B, _b, "some string", "f", _B_foo);
     }
 }
-_foo_1 = new WeakMap();
+_b = B;
+_B_foo = { value: void 0 };
 // We currently filter out static private identifier fields in `getUnmatchedProperties`.
 // We will need a more robust solution when we support static fields
 const willErrorSomeDay = class {

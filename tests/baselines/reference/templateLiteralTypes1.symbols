@@ -508,6 +508,7 @@ let p1 = getProp({ a: { b: {c: 42, d: 'hello' }}} as const, 'a');
 >b : Symbol(b, Decl(templateLiteralTypes1.ts, 136, 23))
 >c : Symbol(c, Decl(templateLiteralTypes1.ts, 136, 28))
 >d : Symbol(d, Decl(templateLiteralTypes1.ts, 136, 34))
+>const : Symbol(const)
 
 let p2 = getProp({ a: { b: {c: 42, d: 'hello' }}} as const, 'a.b');
 >p2 : Symbol(p2, Decl(templateLiteralTypes1.ts, 137, 3))
@@ -516,6 +517,7 @@ let p2 = getProp({ a: { b: {c: 42, d: 'hello' }}} as const, 'a.b');
 >b : Symbol(b, Decl(templateLiteralTypes1.ts, 137, 23))
 >c : Symbol(c, Decl(templateLiteralTypes1.ts, 137, 28))
 >d : Symbol(d, Decl(templateLiteralTypes1.ts, 137, 34))
+>const : Symbol(const)
 
 let p3 = getProp({ a: { b: {c: 42, d: 'hello' }}} as const, 'a.b.d');
 >p3 : Symbol(p3, Decl(templateLiteralTypes1.ts, 138, 3))
@@ -524,6 +526,7 @@ let p3 = getProp({ a: { b: {c: 42, d: 'hello' }}} as const, 'a.b.d');
 >b : Symbol(b, Decl(templateLiteralTypes1.ts, 138, 23))
 >c : Symbol(c, Decl(templateLiteralTypes1.ts, 138, 28))
 >d : Symbol(d, Decl(templateLiteralTypes1.ts, 138, 34))
+>const : Symbol(const)
 
 type PropType<T, Path extends string> =
 >PropType : Symbol(PropType, Decl(templateLiteralTypes1.ts, 138, 69))
@@ -942,9 +945,46 @@ const obj2 = {
 
     ]
 } as const;
+>const : Symbol(const)
 
 let make = getProp2(obj2, 'cars.1.make');  // 'Trabant'
 >make : Symbol(make, Decl(templateLiteralTypes1.ts, 235, 3))
 >getProp2 : Symbol(getProp2, Decl(templateLiteralTypes1.ts, 222, 89))
 >obj2 : Symbol(obj2, Decl(templateLiteralTypes1.ts, 226, 5))
+
+// Repro from #46480
+
+export type Spacing =
+>Spacing : Symbol(Spacing, Decl(templateLiteralTypes1.ts, 235, 41))
+
+    | `0`
+    | `${number}px`
+    | `${number}rem`
+    | `s${1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20}`;
+
+const spacing: Spacing = "s12"
+>spacing : Symbol(spacing, Decl(templateLiteralTypes1.ts, 245, 5))
+>Spacing : Symbol(Spacing, Decl(templateLiteralTypes1.ts, 235, 41))
+
+export type SpacingShorthand =
+>SpacingShorthand : Symbol(SpacingShorthand, Decl(templateLiteralTypes1.ts, 245, 30))
+
+    | `${Spacing} ${Spacing}`
+>Spacing : Symbol(Spacing, Decl(templateLiteralTypes1.ts, 235, 41))
+>Spacing : Symbol(Spacing, Decl(templateLiteralTypes1.ts, 235, 41))
+
+    | `${Spacing} ${Spacing} ${Spacing}`
+>Spacing : Symbol(Spacing, Decl(templateLiteralTypes1.ts, 235, 41))
+>Spacing : Symbol(Spacing, Decl(templateLiteralTypes1.ts, 235, 41))
+>Spacing : Symbol(Spacing, Decl(templateLiteralTypes1.ts, 235, 41))
+
+    | `${Spacing} ${Spacing} ${Spacing} ${Spacing}`;
+>Spacing : Symbol(Spacing, Decl(templateLiteralTypes1.ts, 235, 41))
+>Spacing : Symbol(Spacing, Decl(templateLiteralTypes1.ts, 235, 41))
+>Spacing : Symbol(Spacing, Decl(templateLiteralTypes1.ts, 235, 41))
+>Spacing : Symbol(Spacing, Decl(templateLiteralTypes1.ts, 235, 41))
+
+const test1: SpacingShorthand = "0 0 0";
+>test1 : Symbol(test1, Decl(templateLiteralTypes1.ts, 252, 5))
+>SpacingShorthand : Symbol(SpacingShorthand, Decl(templateLiteralTypes1.ts, 245, 30))
 

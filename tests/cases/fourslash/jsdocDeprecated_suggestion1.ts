@@ -81,8 +81,8 @@ goTo.file('a.ts')
 const ranges = test.ranges();
 verify.getSuggestionDiagnostics([
     {
-        "code": 6385,
-        "message": "'(): void' is deprecated",
+        "code": 6387,
+        "message": "The signature '(): void' of 'faff' is deprecated.",
         "reportsDeprecated": true,
         "range": ranges[0]
     },
@@ -93,92 +93,92 @@ verify.getSuggestionDiagnostics([
         "range": ranges[1]
     },
     {
-        "code": 6385,
-        "message": "'(): void' is deprecated",
+        "code": 6387,
+        "message": "The signature '(): void' of 'foo.faff' is deprecated.",
         "reportsDeprecated": true,
         "range": ranges[2]
     },
     {
         "code": 6385,
-        "message": "'faff' is deprecated",
+        "message": "'faff' is deprecated.",
         "reportsDeprecated": true,
         "range": ranges[3]
     },
     {
         "code": 6385,
-        "message": "'faff' is deprecated",
+        "message": "'faff' is deprecated.",
         "reportsDeprecated": true,
         "range": ranges[4]
     },
     {
-        "code": 6385,
-        "message": "'(): void' is deprecated",
+        "code": 6387,
+        "message": "The signature '(): void' of 'faff' is deprecated.",
         "reportsDeprecated": true,
         "range": ranges[5]
     },
     {
-        "code": 6385,
-        "message": "'(): void' is deprecated",
+        "code": 6387,
+        "message": "The signature '(): void' of 'foo.faff' is deprecated.",
         "reportsDeprecated": true,
         "range": ranges[6]
     },
     {
-        "code": 6385,
-        "message": "'(): void' is deprecated",
+        "code": 6387,
+        "message": "The signature '(): void' of 'foo.faff' is deprecated.",
         "reportsDeprecated": true,
         "range": ranges[7]
     },
     {
-        "code": 6385,
-        "message": "'(): void' is deprecated",
+        "code": 6387,
+        "message": "The signature '(): void' of 'bar' is deprecated.",
         "reportsDeprecated": true,
         "range": ranges[8]
     },
     {
         "code": 6385,
-        "message": "'Foo' is deprecated",
+        "message": "'Foo' is deprecated.",
         "reportsDeprecated": true,
         "range": ranges[9]
     },
     {
         "code": 6385,
-        "message": "'zzz' is deprecated",
+        "message": "'zzz' is deprecated.",
         "reportsDeprecated": true,
         "range": ranges[10]
     },
     {
         "code": 6385,
-        "message": "'QW' is deprecated",
+        "message": "'QW' is deprecated.",
         "reportsDeprecated": true,
         "range": ranges[11]
     },
     {
-        "code": 6385,
-        "message": "'(): C' is deprecated",
+        "code": 6387,
+        "message": "The signature '(): C' of 'C' is deprecated.",
         "reportsDeprecated": true,
         "range": ranges[12]
     },
     {
-        "code": 6385,
-        "message": "'(): void' is deprecated",
+        "code": 6387,
+        "message": "The signature '(): void' of 'c.m' is deprecated.",
         "reportsDeprecated": true,
         "range": ranges[13]
     },
     {
         "code": 6385,
-        "message": "'m' is deprecated",
+        "message": "'m' is deprecated.",
         "reportsDeprecated": true,
         "range": ranges[14]
     },
     {
         "code": 6385,
-        "message": "'D' is deprecated",
+        "message": "'D' is deprecated.",
         "reportsDeprecated": true,
         "range": ranges[15]
     },
     {
         "code": 6385,
-        "message": "'D' is deprecated",
+        "message": "'D' is deprecated.",
         "reportsDeprecated": true,
         "range": ranges[16]
     },
@@ -188,49 +188,49 @@ goTo.file('j.tsx')
 verify.getSuggestionDiagnostics([
     {
         "code": 6385,
-        "message": "'Compi' is deprecated",
+        "message": "'Compi' is deprecated.",
         "reportsDeprecated": true,
         "range": ranges[17]
     },
     {
-        "code": 6385,
-        "message": "'(_props: Props): any' is deprecated",
+        "code": 6387,
+        "message": "The signature '(_props: Props): any' of 'Compi' is deprecated.",
         "reportsDeprecated": true,
         "range": ranges[18]
     },
     {
-        "code": 6385,
-        "message": "'(_props: Props): any' is deprecated",
+        "code": 6387,
+        "message": "The signature '(_props: Props): any' of 'Compi' is deprecated.",
         "reportsDeprecated": true,
         "range": ranges[19]
     },
     {
         "code": 6385,
-        "message": "'Compi' is deprecated",
+        "message": "'Compi' is deprecated.",
         "reportsDeprecated": true,
         "range": ranges[20]
     },
     {
-        "code": 6385,
-        "message": "'(_x: unknown): void' is deprecated",
+        "code": 6387,
+        "message": "The signature '(_x: unknown): void' of 'ttf' is deprecated.",
         "reportsDeprecated": true,
         "range": ranges[21]
     },
     {
         "code": 6385,
-        "message": "'ttf' is deprecated",
+        "message": "'ttf' is deprecated.",
         "reportsDeprecated": true,
         "range": ranges[22]
     },
     {
         "code": 6385,
-        "message": "'dec' is deprecated",
+        "message": "'dec' is deprecated.",
         "reportsDeprecated": true,
         "range": ranges[23]
     },
     {
-        "code": 6385,
-        "message": "'(_c: unknown): void' is deprecated",
+        "code": 6387,
+        "message": "The signature '(_c: unknown): void' of 'dec' is deprecated.",
         "reportsDeprecated": true,
         "range": ranges[24]
     },
@@ -239,49 +239,49 @@ goTo.file('b.ts')
 verify.getSuggestionDiagnostics([
     {
         "code": 6385,
-        "message": "'bar' is deprecated",
+        "message": "'bar' is deprecated.",
         "reportsDeprecated": true,
         "range": ranges[25]
     },
     {
         "code": 6385,
-        "message": "'QW' is deprecated",
+        "message": "'QW' is deprecated.",
         "reportsDeprecated": true,
         "range": ranges[26]
     },
     {
-        "code": 6385,
-        "message": "'(): void' is deprecated",
+        "code": 6387,
+        "message": "The signature '(): void' of 'f.bar' is deprecated.",
         "reportsDeprecated": true,
         "range": ranges[27]
     },
     {
-        "code": 6385,
-        "message": "'(): void' is deprecated",
+        "code": 6387,
+        "message": "The signature '(): void' of 'f.foo.faff' is deprecated.",
         "reportsDeprecated": true,
         "range": ranges[28]
     },
     {
-        "code": 6385,
-        "message": "'(): void' is deprecated",
+        "code": 6387,
+        "message": "The signature '(): void' of 'bar' is deprecated.",
         "reportsDeprecated": true,
         "range": ranges[29]
     },
     {
         "code": 6385,
-        "message": "'QW' is deprecated",
+        "message": "'QW' is deprecated.",
         "reportsDeprecated": true,
         "range": ranges[30]
     },
     {
         "code": 6385,
-        "message": "'Foo' is deprecated",
+        "message": "'Foo' is deprecated.",
         "reportsDeprecated": true,
         "range": ranges[31]
     },
     {
         "code": 6385,
-        "message": "'QW' is deprecated",
+        "message": "'QW' is deprecated.",
         "reportsDeprecated": true,
         "range": ranges[32]
     },

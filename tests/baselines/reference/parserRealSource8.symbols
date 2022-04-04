@@ -12,18 +12,22 @@ module TypeScript {
 
         constructor (public scopeChain: ScopeChain,
 >scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
+>ScopeChain : Symbol(ScopeChain)
 
                      public typeFlow: TypeFlow,
 >typeFlow : Symbol(AssignScopeContext.typeFlow, Decl(parserRealSource8.ts, 8, 51))
+>TypeFlow : Symbol(TypeFlow)
 
                      public modDeclChain: ModuleDeclaration[]) {
 >modDeclChain : Symbol(AssignScopeContext.modDeclChain, Decl(parserRealSource8.ts, 9, 47))
+>ModuleDeclaration : Symbol(ModuleDeclaration)
         }
     }
 
     export function pushAssignScope(scope: SymbolScope,
 >pushAssignScope : Symbol(pushAssignScope, Decl(parserRealSource8.ts, 12, 5))
 >scope : Symbol(scope, Decl(parserRealSource8.ts, 14, 36))
+>SymbolScope : Symbol(SymbolScope)
 
         context: AssignScopeContext,
 >context : Symbol(context, Decl(parserRealSource8.ts, 14, 55))
@@ -31,12 +35,15 @@ module TypeScript {
 
         type: Type,
 >type : Symbol(type, Decl(parserRealSource8.ts, 15, 36))
+>Type : Symbol(Type)
 
         classType: Type,
 >classType : Symbol(classType, Decl(parserRealSource8.ts, 16, 19))
+>Type : Symbol(Type)
 
         fnc: FuncDecl) {
 >fnc : Symbol(fnc, Decl(parserRealSource8.ts, 17, 24))
+>FuncDecl : Symbol(FuncDecl)
 
         var chain = new ScopeChain(null, context.scopeChain, scope);
 >chain : Symbol(chain, Decl(parserRealSource8.ts, 20, 11))
@@ -181,18 +188,22 @@ module TypeScript {
     export function preAssignModuleScopes(ast: AST, context: AssignScopeContext) {
 >preAssignModuleScopes : Symbol(preAssignModuleScopes, Decl(parserRealSource8.ts, 66, 91))
 >ast : Symbol(ast, Decl(parserRealSource8.ts, 68, 42))
+>AST : Symbol(AST)
 >context : Symbol(context, Decl(parserRealSource8.ts, 68, 51))
 >AssignScopeContext : Symbol(AssignScopeContext, Decl(parserRealSource8.ts, 5, 19))
 
         var moduleDecl = <ModuleDeclaration>ast;
 >moduleDecl : Symbol(moduleDecl, Decl(parserRealSource8.ts, 69, 11))
+>ModuleDeclaration : Symbol(ModuleDeclaration)
 >ast : Symbol(ast, Decl(parserRealSource8.ts, 68, 42))
 
         var memberScope: SymbolTableScope = null;
 >memberScope : Symbol(memberScope, Decl(parserRealSource8.ts, 70, 11))
+>SymbolTableScope : Symbol(SymbolTableScope)
 
         var aggScope: SymbolAggregateScope = null;
 >aggScope : Symbol(aggScope, Decl(parserRealSource8.ts, 71, 11))
+>SymbolAggregateScope : Symbol(SymbolAggregateScope)
 
         if (moduleDecl.name && moduleDecl.mod) {
 >moduleDecl : Symbol(moduleDecl, Decl(parserRealSource8.ts, 69, 11))
@@ -280,18 +291,22 @@ module TypeScript {
     export function preAssignClassScopes(ast: AST, context: AssignScopeContext) {
 >preAssignClassScopes : Symbol(preAssignClassScopes, Decl(parserRealSource8.ts, 96, 5))
 >ast : Symbol(ast, Decl(parserRealSource8.ts, 98, 41))
+>AST : Symbol(AST)
 >context : Symbol(context, Decl(parserRealSource8.ts, 98, 50))
 >AssignScopeContext : Symbol(AssignScopeContext, Decl(parserRealSource8.ts, 5, 19))
 
         var classDecl = <InterfaceDeclaration>ast;
 >classDecl : Symbol(classDecl, Decl(parserRealSource8.ts, 99, 11))
+>InterfaceDeclaration : Symbol(InterfaceDeclaration)
 >ast : Symbol(ast, Decl(parserRealSource8.ts, 98, 41))
 
         var memberScope: SymbolTableScope = null;
 >memberScope : Symbol(memberScope, Decl(parserRealSource8.ts, 100, 11))
+>SymbolTableScope : Symbol(SymbolTableScope)
 
         var aggScope: SymbolAggregateScope = null;
 >aggScope : Symbol(aggScope, Decl(parserRealSource8.ts, 101, 11))
+>SymbolAggregateScope : Symbol(SymbolAggregateScope)
 
         if (classDecl.name && classDecl.type) {
 >classDecl : Symbol(classDecl, Decl(parserRealSource8.ts, 99, 11))
@@ -315,6 +330,7 @@ module TypeScript {
 
             memberScope = <SymbolTableScope>context.typeFlow.checker.scopeOf(classType);
 >memberScope : Symbol(memberScope, Decl(parserRealSource8.ts, 100, 11))
+>SymbolTableScope : Symbol(SymbolTableScope)
 >context.typeFlow : Symbol(AssignScopeContext.typeFlow, Decl(parserRealSource8.ts, 8, 51))
 >context : Symbol(context, Decl(parserRealSource8.ts, 98, 50))
 >typeFlow : Symbol(AssignScopeContext.typeFlow, Decl(parserRealSource8.ts, 8, 51))
@@ -348,6 +364,7 @@ module TypeScript {
 
             memberScope = <SymbolTableScope>context.typeFlow.checker.scopeOf(instanceType);
 >memberScope : Symbol(memberScope, Decl(parserRealSource8.ts, 100, 11))
+>SymbolTableScope : Symbol(SymbolTableScope)
 >context.typeFlow : Symbol(AssignScopeContext.typeFlow, Decl(parserRealSource8.ts, 8, 51))
 >context : Symbol(context, Decl(parserRealSource8.ts, 98, 50))
 >typeFlow : Symbol(AssignScopeContext.typeFlow, Decl(parserRealSource8.ts, 8, 51))
@@ -390,18 +407,22 @@ module TypeScript {
     export function preAssignInterfaceScopes(ast: AST, context: AssignScopeContext) {
 >preAssignInterfaceScopes : Symbol(preAssignInterfaceScopes, Decl(parserRealSource8.ts, 133, 5))
 >ast : Symbol(ast, Decl(parserRealSource8.ts, 135, 45))
+>AST : Symbol(AST)
 >context : Symbol(context, Decl(parserRealSource8.ts, 135, 54))
 >AssignScopeContext : Symbol(AssignScopeContext, Decl(parserRealSource8.ts, 5, 19))
 
         var interfaceDecl = <InterfaceDeclaration>ast;
 >interfaceDecl : Symbol(interfaceDecl, Decl(parserRealSource8.ts, 136, 11))
+>InterfaceDeclaration : Symbol(InterfaceDeclaration)
 >ast : Symbol(ast, Decl(parserRealSource8.ts, 135, 45))
 
         var memberScope: SymbolTableScope = null;
 >memberScope : Symbol(memberScope, Decl(parserRealSource8.ts, 137, 11))
+>SymbolTableScope : Symbol(SymbolTableScope)
 
         var aggScope: SymbolAggregateScope = null;
 >aggScope : Symbol(aggScope, Decl(parserRealSource8.ts, 138, 11))
+>SymbolAggregateScope : Symbol(SymbolAggregateScope)
 
         if (interfaceDecl.name && interfaceDecl.type) {
 >interfaceDecl : Symbol(interfaceDecl, Decl(parserRealSource8.ts, 136, 11))
@@ -418,6 +439,7 @@ module TypeScript {
 
         memberScope = <SymbolTableScope>context.typeFlow.checker.scopeOf(interfaceType);
 >memberScope : Symbol(memberScope, Decl(parserRealSource8.ts, 137, 11))
+>SymbolTableScope : Symbol(SymbolTableScope)
 >context.typeFlow : Symbol(AssignScopeContext.typeFlow, Decl(parserRealSource8.ts, 8, 51))
 >context : Symbol(context, Decl(parserRealSource8.ts, 135, 54))
 >typeFlow : Symbol(AssignScopeContext.typeFlow, Decl(parserRealSource8.ts, 8, 51))
@@ -454,11 +476,13 @@ module TypeScript {
     export function preAssignWithScopes(ast: AST, context: AssignScopeContext) {
 >preAssignWithScopes : Symbol(preAssignWithScopes, Decl(parserRealSource8.ts, 152, 5))
 >ast : Symbol(ast, Decl(parserRealSource8.ts, 154, 40))
+>AST : Symbol(AST)
 >context : Symbol(context, Decl(parserRealSource8.ts, 154, 49))
 >AssignScopeContext : Symbol(AssignScopeContext, Decl(parserRealSource8.ts, 5, 19))
 
         var withStmt = <WithStatement>ast;
 >withStmt : Symbol(withStmt, Decl(parserRealSource8.ts, 155, 11))
+>WithStatement : Symbol(WithStatement)
 >ast : Symbol(ast, Decl(parserRealSource8.ts, 154, 40))
 
         var withType = withStmt.type;
@@ -524,11 +548,13 @@ module TypeScript {
     export function preAssignFuncDeclScopes(ast: AST, context: AssignScopeContext) {
 >preAssignFuncDeclScopes : Symbol(preAssignFuncDeclScopes, Decl(parserRealSource8.ts, 173, 5))
 >ast : Symbol(ast, Decl(parserRealSource8.ts, 175, 44))
+>AST : Symbol(AST)
 >context : Symbol(context, Decl(parserRealSource8.ts, 175, 53))
 >AssignScopeContext : Symbol(AssignScopeContext, Decl(parserRealSource8.ts, 5, 19))
 
         var funcDecl = <FuncDecl>ast;
 >funcDecl : Symbol(funcDecl, Decl(parserRealSource8.ts, 176, 11))
+>FuncDecl : Symbol(FuncDecl)
 >ast : Symbol(ast, Decl(parserRealSource8.ts, 175, 44))
 
         var container: Symbol = null;
@@ -624,6 +650,7 @@ module TypeScript {
 >scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
 
                     (<FuncDecl>context.scopeChain.previous.scope.container.declAST).isConstructor) {
+>FuncDecl : Symbol(FuncDecl)
 >context.scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
 >context : Symbol(context, Decl(parserRealSource8.ts, 175, 53))
 >scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
@@ -694,6 +721,7 @@ module TypeScript {
 
             var outerFnc: FuncDecl = context.scopeChain.fnc;
 >outerFnc : Symbol(outerFnc, Decl(parserRealSource8.ts, 236, 15))
+>FuncDecl : Symbol(FuncDecl)
 >context.scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
 >context : Symbol(context, Decl(parserRealSource8.ts, 175, 53))
 >scopeChain : Symbol(AssignScopeContext.scopeChain, Decl(parserRealSource8.ts, 8, 21))
@@ -705,6 +733,7 @@ module TypeScript {
 
             var fgSym: TypeSymbol = null;
 >fgSym : Symbol(fgSym, Decl(parserRealSource8.ts, 238, 15), Decl(parserRealSource8.ts, 352, 15))
+>TypeSymbol : Symbol(TypeSymbol)
 
             if (isStatic) {
 >isStatic : Symbol(isStatic, Decl(parserRealSource8.ts, 184, 11))
@@ -718,6 +747,8 @@ module TypeScript {
 
                     outerFnc.type.members = (<SymbolScopeBuilder>(<TypeSymbol>container).type.memberScope).valueMembers;
 >outerFnc : Symbol(outerFnc, Decl(parserRealSource8.ts, 236, 15))
+>SymbolScopeBuilder : Symbol(SymbolScopeBuilder)
+>TypeSymbol : Symbol(TypeSymbol)
 >container : Symbol(container, Decl(parserRealSource8.ts, 178, 11))
                 }
                 funcScope = context.scopeChain.fnc.type.memberScope;
@@ -746,6 +777,7 @@ module TypeScript {
 >container : Symbol(container, Decl(parserRealSource8.ts, 178, 11))
 
                     (<FuncDecl>container.declAST).isConstructor &&
+>FuncDecl : Symbol(FuncDecl)
 >container : Symbol(container, Decl(parserRealSource8.ts, 178, 11))
 
                     !funcDecl.isMethod()) {
@@ -986,6 +1018,7 @@ module TypeScript {
             // for mapping when type checking
             var fgSym = <TypeSymbol>ast.type.symbol;
 >fgSym : Symbol(fgSym, Decl(parserRealSource8.ts, 238, 15), Decl(parserRealSource8.ts, 352, 15))
+>TypeSymbol : Symbol(TypeSymbol)
 >ast : Symbol(ast, Decl(parserRealSource8.ts, 175, 44))
 
             if (((funcDecl.fncFlags & FncFlags.Signature) == FncFlags.None) && funcDecl.vars) {
@@ -1029,6 +1062,7 @@ module TypeScript {
 
                     var paramSym: ParameterSymbol = signature.parameters[i];
 >paramSym : Symbol(paramSym, Decl(parserRealSource8.ts, 362, 23))
+>ParameterSymbol : Symbol(ParameterSymbol)
 >signature : Symbol(signature, Decl(parserRealSource8.ts, 340, 15))
 >i : Symbol(i, Decl(parserRealSource8.ts, 361, 24))
 
@@ -1077,11 +1111,13 @@ module TypeScript {
     export function preAssignCatchScopes(ast: AST, context: AssignScopeContext) {
 >preAssignCatchScopes : Symbol(preAssignCatchScopes, Decl(parserRealSource8.ts, 375, 5))
 >ast : Symbol(ast, Decl(parserRealSource8.ts, 377, 41))
+>AST : Symbol(AST)
 >context : Symbol(context, Decl(parserRealSource8.ts, 377, 50))
 >AssignScopeContext : Symbol(AssignScopeContext, Decl(parserRealSource8.ts, 5, 19))
 
         var catchBlock = <Catch>ast;
 >catchBlock : Symbol(catchBlock, Decl(parserRealSource8.ts, 378, 11))
+>Catch : Symbol(Catch)
 >ast : Symbol(ast, Decl(parserRealSource8.ts, 377, 41))
 
         if (catchBlock.param) {
@@ -1125,8 +1161,11 @@ module TypeScript {
     export function preAssignScopes(ast: AST, parent: AST, walker: IAstWalker) {
 >preAssignScopes : Symbol(preAssignScopes, Decl(parserRealSource8.ts, 386, 5))
 >ast : Symbol(ast, Decl(parserRealSource8.ts, 388, 36))
+>AST : Symbol(AST)
 >parent : Symbol(parent, Decl(parserRealSource8.ts, 388, 45))
+>AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource8.ts, 388, 58))
+>IAstWalker : Symbol(IAstWalker)
 
         var context:AssignScopeContext = walker.state;
 >context : Symbol(context, Decl(parserRealSource8.ts, 389, 11))
@@ -1144,6 +1183,7 @@ module TypeScript {
 
                 var list = <ASTList>ast;
 >list : Symbol(list, Decl(parserRealSource8.ts, 394, 19))
+>ASTList : Symbol(ASTList)
 >ast : Symbol(ast, Decl(parserRealSource8.ts, 388, 36))
 
                 list.enclosingScope = context.scopeChain.scope;
@@ -1218,8 +1258,11 @@ module TypeScript {
     export function postAssignScopes(ast: AST, parent: AST, walker: IAstWalker) {
 >postAssignScopes : Symbol(postAssignScopes, Decl(parserRealSource8.ts, 421, 5))
 >ast : Symbol(ast, Decl(parserRealSource8.ts, 423, 37))
+>AST : Symbol(AST)
 >parent : Symbol(parent, Decl(parserRealSource8.ts, 423, 46))
+>AST : Symbol(AST)
 >walker : Symbol(walker, Decl(parserRealSource8.ts, 423, 59))
+>IAstWalker : Symbol(IAstWalker)
 
         var context:AssignScopeContext = walker.state;
 >context : Symbol(context, Decl(parserRealSource8.ts, 424, 11))
@@ -1237,6 +1280,7 @@ module TypeScript {
 
                 var prevModDecl = <ModuleDeclaration>ast;
 >prevModDecl : Symbol(prevModDecl, Decl(parserRealSource8.ts, 428, 19))
+>ModuleDeclaration : Symbol(ModuleDeclaration)
 >ast : Symbol(ast, Decl(parserRealSource8.ts, 423, 37))
 
                 popAssignScope(context);
@@ -1297,6 +1341,7 @@ module TypeScript {
 
                 var funcDecl = <FuncDecl>ast;
 >funcDecl : Symbol(funcDecl, Decl(parserRealSource8.ts, 447, 19))
+>FuncDecl : Symbol(FuncDecl)
 >ast : Symbol(ast, Decl(parserRealSource8.ts, 423, 37))
 
                 if ((!funcDecl.isConstructor || hasFlag(funcDecl.fncFlags, FncFlags.ClassMethod)) && !funcDecl.isOverload) {
@@ -1314,6 +1359,7 @@ module TypeScript {
 
                 var catchBlock = <Catch>ast;
 >catchBlock : Symbol(catchBlock, Decl(parserRealSource8.ts, 453, 19))
+>Catch : Symbol(Catch)
 >ast : Symbol(ast, Decl(parserRealSource8.ts, 423, 37))
 
                 if (catchBlock.param) {

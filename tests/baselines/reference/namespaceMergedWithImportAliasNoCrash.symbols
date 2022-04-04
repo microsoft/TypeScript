@@ -30,6 +30,7 @@ Lib.foo; // should work
 var x: Lib.Bar; // should be an error
 >x : Symbol(x, Decl(file2.ts, 5, 3))
 >Lib : Symbol(Lib, Decl(file2.ts, 0, 6), Decl(file2.ts, 0, 31))
+>Bar : Symbol(Lib.Bar)
 
 export { Lib }
 >Lib : Symbol(Lib, Decl(file2.ts, 6, 8))

@@ -176,3 +176,20 @@ export { _await as await };
 >_await : 1
 >await : 1
 
+// for-await-of
+const arr = [Promise.resolve()];
+>arr : Promise<void>[]
+>[Promise.resolve()] : Promise<void>[]
+>Promise.resolve() : Promise<void>
+>Promise.resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
+>Promise : PromiseConstructor
+>resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
+
+for await (const item of arr) {
+>item : void
+>arr : Promise<void>[]
+
+  item;
+>item : void
+}
+

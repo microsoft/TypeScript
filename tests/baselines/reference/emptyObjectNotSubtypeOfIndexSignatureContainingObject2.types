@@ -26,7 +26,7 @@ type ObjectIterator<TObject, TResult> = (
 ) => TResult;
 
 type DictionaryIterator<T, TResult> = ObjectIterator<Dictionary<T>, TResult>;
->DictionaryIterator : ObjectIterator<Dictionary<T>, TResult>
+>DictionaryIterator : DictionaryIterator<T, TResult>
 
 // In lodash.d.ts this function has many overloads, but this seems to be the problematic one.
 function mapValues<T, TResult>(
@@ -37,7 +37,7 @@ function mapValues<T, TResult>(
 >null : null
 
   callback: DictionaryIterator<T, TResult>
->callback : ObjectIterator<Dictionary<T>, TResult>
+>callback : DictionaryIterator<T, TResult>
 
 ): Dictionary<TResult> {
   return null as any;
@@ -68,7 +68,7 @@ export function fooToBar(
   const wat = mapValues(foos, f => f.foo);
 >wat : Dictionary<string>
 >mapValues(foos, f => f.foo) : Dictionary<string>
->mapValues : <T, TResult>(obj: Dictionary<T> | NumericDictionary<T>, callback: ObjectIterator<Dictionary<T>, TResult>) => Dictionary<TResult>
+>mapValues : <T, TResult>(obj: Dictionary<T> | NumericDictionary<T>, callback: DictionaryIterator<T, TResult>) => Dictionary<TResult>
 >foos : Record<string, Foo>
 >f => f.foo : (f: Foo) => string
 >f : Foo
@@ -84,7 +84,7 @@ export function fooToBar(
 >null : null
 >{} : {}
 >mapValues(foos, f => f.foo) : Dictionary<string>
->mapValues : <T, TResult>(obj: Dictionary<T> | NumericDictionary<T>, callback: ObjectIterator<Dictionary<T>, TResult>) => Dictionary<TResult>
+>mapValues : <T, TResult>(obj: Dictionary<T> | NumericDictionary<T>, callback: DictionaryIterator<T, TResult>) => Dictionary<TResult>
 >foos : Record<string, Foo>
 >f => f.foo : (f: Foo) => string
 >f : Foo

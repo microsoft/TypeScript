@@ -14,19 +14,19 @@ const ranges = test.ranges();
 verify.getSuggestionDiagnostics([
     {
         "code": 6385,
-        "message": "'bar' is deprecated",
+        "message": "'bar' is deprecated.",
         "reportsDeprecated": true,
         "range": ranges[0]
     },
     {
         "code": 6385,
-        "message": "'bar' is deprecated",
+        "message": "'bar' is deprecated.",
         "reportsDeprecated": true,
         "range": ranges[1]
     },
     {
         "code": 6385,
-        "message": "'bar' is deprecated",
+        "message": "'bar' is deprecated.",
         "reportsDeprecated": true,
         "range": ranges[2]
     },

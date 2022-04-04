@@ -5,7 +5,6 @@ tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx(27,36): error TS2769:
         Type 'void' is not assignable to type 'boolean'.
   Overload 2 of 2, '(props: Props, context?: any): FieldFeedback<Props>', gave the following error.
     Type '(value: string) => void' is not assignable to type '"a" | "b" | ((value: string) => boolean) | undefined'.
-      Type '(value: string) => void' is not assignable to type '(value: string) => boolean'.
 tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx(43,41): error TS2769: No overload matches this call.
   Overload 1 of 2, '(props: Readonly<Props>): FieldFeedbackBeta<Props>', gave the following error.
     Type '(value: string) => void' is not assignable to type '"a" | "b" | ((value: string) => boolean) | undefined'.
@@ -13,7 +12,6 @@ tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx(43,41): error TS2769:
         Type 'void' is not assignable to type 'boolean'.
   Overload 2 of 2, '(props: Props, context?: any): FieldFeedbackBeta<Props>', gave the following error.
     Type '(value: string) => void' is not assignable to type '"a" | "b" | ((value: string) => boolean) | undefined'.
-      Type '(value: string) => void' is not assignable to type '(value: string) => boolean'.
 tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx(64,37): error TS2769: No overload matches this call.
   Overload 1 of 2, '(props: Readonly<MyPropsProps>): FieldFeedback2<MyPropsProps>', gave the following error.
     Type '(value: string) => void' is not assignable to type '(value: string) => boolean'.
@@ -58,7 +56,6 @@ tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx(64,37): error TS2769:
 !!! error TS2769:         Type 'void' is not assignable to type 'boolean'.
 !!! error TS2769:   Overload 2 of 2, '(props: Props, context?: any): FieldFeedback<Props>', gave the following error.
 !!! error TS2769:     Type '(value: string) => void' is not assignable to type '"a" | "b" | ((value: string) => boolean) | undefined'.
-!!! error TS2769:       Type '(value: string) => void' is not assignable to type '(value: string) => boolean'.
 !!! related TS6500 tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx:6:3: The expected type comes from property 'when' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<FieldFeedback<Props>> & Pick<Readonly<{ children?: ReactNode; }> & Readonly<Props>, "children" | "error"> & Partial<Pick<Readonly<{ children?: ReactNode; }> & Readonly<Props>, "when">> & Partial<Pick<{ when: () => boolean; }, never>>'
 !!! related TS6500 tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx:6:3: The expected type comes from property 'when' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<FieldFeedback<Props>> & Pick<Readonly<{ children?: ReactNode; }> & Readonly<Props>, "children" | "error"> & Partial<Pick<Readonly<{ children?: ReactNode; }> & Readonly<Props>, "when">> & Partial<Pick<{ when: () => boolean; }, never>>'
     
@@ -85,9 +82,8 @@ tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx(64,37): error TS2769:
 !!! error TS2769:         Type 'void' is not assignable to type 'boolean'.
 !!! error TS2769:   Overload 2 of 2, '(props: Props, context?: any): FieldFeedbackBeta<Props>', gave the following error.
 !!! error TS2769:     Type '(value: string) => void' is not assignable to type '"a" | "b" | ((value: string) => boolean) | undefined'.
-!!! error TS2769:       Type '(value: string) => void' is not assignable to type '(value: string) => boolean'.
-!!! related TS6500 tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx:6:3: The expected type comes from property 'when' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<FieldFeedbackBeta<Props>> & Pick<Readonly<{ children?: ReactNode; }> & Readonly<Props>, "children"> & Partial<Pick<Readonly<{ children?: ReactNode; }> & Readonly<Props>, "when" | "error">> & Partial<Pick<BaseProps, never>>'
-!!! related TS6500 tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx:6:3: The expected type comes from property 'when' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<FieldFeedbackBeta<Props>> & Pick<Readonly<{ children?: ReactNode; }> & Readonly<Props>, "children"> & Partial<Pick<Readonly<{ children?: ReactNode; }> & Readonly<Props>, "when" | "error">> & Partial<Pick<BaseProps, never>>'
+!!! related TS6500 tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx:6:3: The expected type comes from property 'when' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<FieldFeedbackBeta<Props>> & Pick<Readonly<{ children?: ReactNode; }> & Readonly<Props>, "children"> & Partial<Pick<Readonly<{ children?: ReactNode; }> & Readonly<Props>, keyof Props>> & Partial<Pick<BaseProps, never>>'
+!!! related TS6500 tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx:6:3: The expected type comes from property 'when' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<FieldFeedbackBeta<Props>> & Pick<Readonly<{ children?: ReactNode; }> & Readonly<Props>, "children"> & Partial<Pick<Readonly<{ children?: ReactNode; }> & Readonly<Props>, keyof Props>> & Partial<Pick<BaseProps, never>>'
     
     interface MyPropsProps extends Props {
       when: (value: string) => boolean;

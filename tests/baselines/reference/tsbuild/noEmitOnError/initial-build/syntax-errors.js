@@ -47,11 +47,6 @@ Output::
 [7m4[0m ;
 [7m [0m [91m~[0m
 
-  [96msrc/src/main.ts[0m:[93m2[0m:[93m11[0m
-    [7m2[0m const a = {
-    [7m [0m [96m          ~[0m
-    The parser expected to find a '}' to match the '{' token here.
-
 
 Found 1 error.
 
@@ -66,6 +61,8 @@ Program files::
 /src/src/other.ts
 
 No cached semantic diagnostics in the builder::
+
+No shapes updated in the builder::
 
 
 
@@ -81,11 +78,6 @@ Output::
 [7m4[0m ;
 [7m [0m [91m~[0m
 
-  [96msrc/src/main.ts[0m:[93m2[0m:[93m11[0m
-    [7m2[0m const a = {
-    [7m [0m [96m          ~[0m
-    The parser expected to find a '}' to match the '{' token here.
-
 
 Found 1 error.
 
@@ -100,6 +92,8 @@ Program files::
 /src/src/other.ts
 
 No cached semantic diagnostics in the builder::
+
+No shapes updated in the builder::
 
 
 
@@ -131,6 +125,12 @@ Semantic diagnostics in builder refreshed for::
 /src/shared/types/db.ts
 /src/src/main.ts
 /src/src/other.ts
+
+Shape signatures in builder refreshed for::
+/lib/lib.d.ts (used version)
+/src/shared/types/db.ts (used version)
+/src/src/main.ts (used version)
+/src/src/other.ts (used version)
 
 
 //// [/src/dev-build/shared/types/db.js]

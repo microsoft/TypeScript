@@ -695,12 +695,41 @@ function ff(o: O, k: K) {
     }
     k === 'c';  // Error
 >k === 'c' : boolean
->k : "a" | "b"
+>k : keyof O
 >'c' : "c"
 
     return o[k];
 >o[k] : number
 >o : O
->k : "a" | "b"
+>k : keyof O
 }
 
+// Repro from #35431
+type A = { kind: "abc" } | { kind: "def" };
+>A : A
+>kind : "abc"
+>kind : "def"
+
+function f35431(a: A) {
+>f35431 : (a: A) => void
+>a : A
+
+  switch (a.kind) {
+>a.kind : "abc" | "def"
+>a : A
+>kind : "abc" | "def"
+
+    case "abc":
+>"abc" : "abc"
+
+    case "def": return;
+>"def" : "def"
+
+    default:
+      a!.kind; // Error expected
+>a!.kind : any
+>a! : never
+>a : never
+>kind : any
+  }
+}

@@ -39,7 +39,7 @@ function parseCommentsIntoDefinition(this: any,
     }
 
     // jsdocs are separate from comments
-    const jsdocs = symbol.getJsDocTags();
+    const jsdocs = symbol.getJsDocTags(this.checker);
     jsdocs.forEach(doc => {
         // if we have @TJS-... annotations, we have to parse them
         const { name, text } = doc;
@@ -63,7 +63,7 @@ function getAnnotations(this: any, node: ts.Node): Annotations | undefined {
         return undefined;
     }
 
-    const jsDocTags: ts.JSDocTagInfo[] = symbol.getJsDocTags();
+    const jsDocTags: ts.JSDocTagInfo[] = symbol.getJsDocTags(this.checker);
     if (!jsDocTags || !jsDocTags.length) {
         return undefined;
     }

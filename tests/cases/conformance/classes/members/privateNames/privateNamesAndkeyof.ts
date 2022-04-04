@@ -2,9 +2,22 @@
 // @target: es6
 
 class A {
-    #foo = 3;
+    #fooField = 3;
+    #fooMethod() { };
+    get #fooProp() { return 1; };
+    set #fooProp(value: number) { };
     bar = 3;
     baz = 3;
 }
 
-type T = keyof A     // should not include '#foo'
+// `keyof A` should not include '#foo*'
+let k: keyof A = "bar"; // OK
+k = "baz"; // OK
+
+k = "#fooField"; // Error
+k = "#fooMethod"; // Error
+k = "#fooProp"; // Error
+
+k = "fooField"; // Error
+k = "fooMethod"; // Error
+k = "fooProp"; // Error

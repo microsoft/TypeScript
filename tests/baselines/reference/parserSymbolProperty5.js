@@ -6,3 +6,4 @@ class C {
 //// [parserSymbolProperty5.js]
 class C {
 }
+Symbol.toPrimitive;

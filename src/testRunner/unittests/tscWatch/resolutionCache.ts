@@ -449,5 +449,84 @@ declare namespace myapp {
             },
             changes: emptyArray
         });
+
+        describe("works when installing something in node_modules or @types when there is no notification from fs for index file", () => {
+            function getNodeAtTypes() {
+                const nodeAtTypesIndex: File = {
+                    path: `${projectRoot}/node_modules/@types/node/index.d.ts`,
+                    content: `/// <reference path="base.d.ts" />`
+                };
+                const nodeAtTypesBase: File = {
+                    path: `${projectRoot}/node_modules/@types/node/base.d.ts`,
+                    content: `// Base definitions for all NodeJS modules that are not specific to any version of TypeScript:
+/// <reference path="ts3.6/base.d.ts" />`
+                };
+                const nodeAtTypes36Base: File = {
+                    path: `${projectRoot}/node_modules/@types/node/ts3.6/base.d.ts`,
+                    content: `/// <reference path="../globals.d.ts" />`
+                };
+                const nodeAtTypesGlobals: File = {
+                    path: `${projectRoot}/node_modules/@types/node/globals.d.ts`,
+                    content: `declare var process: NodeJS.Process;
+declare namespace NodeJS {
+    interface Process {
+        on(msg: string): void;
+    }
+}`
+                };
+                return { nodeAtTypesIndex, nodeAtTypesBase, nodeAtTypes36Base, nodeAtTypesGlobals };
+            }
+            verifyTscWatch({
+                scenario,
+                subScenario: "works when installing something in node_modules or @types when there is no notification from fs for index file",
+                commandLineArgs: ["--w", `--extendedDiagnostics`],
+                sys: () => {
+                    const file: File = {
+                        path: `${projectRoot}/worker.ts`,
+                        content: `process.on("uncaughtException");`
+                    };
+                    const tsconfig: File = {
+                        path: `${projectRoot}/tsconfig.json`,
+                        content: "{}"
+                    };
+                    const { nodeAtTypesIndex, nodeAtTypesBase, nodeAtTypes36Base, nodeAtTypesGlobals } = getNodeAtTypes();
+                    return createWatchedSystem([file, libFile, tsconfig, nodeAtTypesIndex, nodeAtTypesBase, nodeAtTypes36Base, nodeAtTypesGlobals], { currentDirectory: projectRoot });
+                },
+                changes: [
+                    {
+                        caption: "npm ci step one: remove all node_modules files",
+                        change: sys => sys.deleteFolder(`${projectRoot}/node_modules/@types`, /*recursive*/ true),
+                        timeouts: runQueuedTimeoutCallbacks,
+                    },
+                    {
+                        caption: `npm ci step two: create atTypes but something else in the @types folder`,
+                        change: sys => sys.ensureFileOrFolder({
+                            path: `${projectRoot}/node_modules/@types/mocha/index.d.ts`,
+                            content: `export const foo = 10;`
+                        }),
+                        timeouts: runQueuedTimeoutCallbacks
+                    },
+                    {
+                        caption: `npm ci step three: create atTypes node folder`,
+                        change: sys => sys.ensureFileOrFolder({ path: `${projectRoot}/node_modules/@types/node` }),
+                        timeouts: runQueuedTimeoutCallbacks
+                    },
+                    {
+                        caption: `npm ci step four: create atTypes write all the files but dont invoke watcher for index.d.ts`,
+                        change: sys => {
+                            const { nodeAtTypesIndex, nodeAtTypesBase, nodeAtTypes36Base, nodeAtTypesGlobals } = getNodeAtTypes();
+                            sys.ensureFileOrFolder(nodeAtTypesBase);
+                            sys.ensureFileOrFolder(nodeAtTypesIndex, /*ignoreWatchInvokedWithTriggerAsFileCreate*/ true);
+                            sys.ensureFileOrFolder(nodeAtTypes36Base, /*ignoreWatchInvokedWithTriggerAsFileCreate*/ true);
+                            sys.ensureFileOrFolder(nodeAtTypesGlobals, /*ignoreWatchInvokedWithTriggerAsFileCreate*/ true);
+                        },
+                        timeouts: sys => {
+                            sys.runQueuedTimeoutCallbacks(); // update failed lookups
+                            sys.runQueuedTimeoutCallbacks(); // actual program update
+                        },
+                    },
+                ]
+            });
+        });
     });
 }

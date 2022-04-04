@@ -18,6 +18,12 @@ module.exports = BaseFactory;
 
 // @filename: file.js
 /** @typedef {import('./base')} BaseFactory */
+/**
+ * @callback BaseFactoryFactory
+ * @param {import('./base')} factory
+ */
+/** @enum {import('./base')} */
+const couldntThinkOfAny = {}
 
 /**
  *

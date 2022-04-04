@@ -67,7 +67,7 @@ type OK1 = string | (number);
 >OK1 : OK1
 
 type OK2 = string | ((number));
->OK2 : OK1
+>OK2 : OK2
 
 type OK3 = string | (()=> void);
 >OK3 : OK3

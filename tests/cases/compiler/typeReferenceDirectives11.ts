@@ -1,6 +1,5 @@
 // @noImplicitReferences: true
 // @declaration: true
-// @bundledPackageName: out
 // @typeRoots: /types
 // @traceResolution: true
 // @types: lib

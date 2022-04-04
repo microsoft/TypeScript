@@ -9,7 +9,7 @@ var wat = require('./bug24024')
 module.exports = class C {}
 >module.exports = class C {} : typeof wat
 >module.exports : typeof wat
->module : { "\"tests/cases/conformance/salsa/bug24024\"": typeof wat; }
+>module : { exports: typeof wat; }
 >exports : typeof wat
 >class C {} : typeof wat
 >C : typeof wat
@@ -18,7 +18,7 @@ module.exports.D = class D { }
 >module.exports.D = class D { } : typeof wat.D
 >module.exports.D : typeof wat.D
 >module.exports : typeof wat
->module : { "\"tests/cases/conformance/salsa/bug24024\"": typeof wat; }
+>module : { exports: typeof wat; }
 >exports : typeof wat
 >D : typeof wat.D
 >class D { } : typeof wat.D

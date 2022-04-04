@@ -29,7 +29,9 @@ namespace Harness {
 
             const resChildren: ts.Node[] = [];
             // push onto work queue in reverse order to maintain preorder traversal
-            ts.forEachChild(elem, c => { resChildren.unshift(c); });
+            ts.forEachChild(elem, c => {
+                resChildren.unshift(c);
+            });
             work.push(...resChildren);
         }
     }
@@ -39,12 +41,10 @@ namespace Harness {
 
         private checker: ts.TypeChecker;
 
-        constructor(private program: ts.Program, fullTypeCheck: boolean, private hadErrorBaseline: boolean) {
+        constructor(private program: ts.Program, private hadErrorBaseline: boolean) {
             // Consider getting both the diagnostics checker and the non-diagnostics checker to verify
             // they are consistent.
-            this.checker = fullTypeCheck
-                ? program.getDiagnosticsProducingTypeChecker()
-                : program.getTypeChecker();
+            this.checker = program.getTypeChecker();
         }
 
         public *getSymbols(fileName: string): IterableIterator<TypeWriterSymbolResult> {

@@ -1,5 +1,5 @@
 tests/cases/conformance/statements/tryStatements/invalidTryStatements.ts(2,5): error TS1005: 'try' expected.
-tests/cases/conformance/statements/tryStatements/invalidTryStatements.ts(6,12): error TS1005: 'finally' expected.
+tests/cases/conformance/statements/tryStatements/invalidTryStatements.ts(6,12): error TS1472: 'catch' or 'finally' expected.
 tests/cases/conformance/statements/tryStatements/invalidTryStatements.ts(10,5): error TS1005: 'try' expected.
 tests/cases/conformance/statements/tryStatements/invalidTryStatements.ts(11,5): error TS1005: 'try' expected.
 tests/cases/conformance/statements/tryStatements/invalidTryStatements.ts(15,5): error TS1005: 'try' expected.
@@ -17,7 +17,7 @@ tests/cases/conformance/statements/tryStatements/invalidTryStatements.ts(19,20):
     
         try { }; // error missing finally
                ~
-!!! error TS1005: 'finally' expected.
+!!! error TS1472: 'catch' or 'finally' expected.
     }
     
     function fn2() {

@@ -4,7 +4,7 @@ function foo() {
 >foo : Symbol(foo, Decl(index.js, 0, 0))
 
     module.exports = exports = function (o) {
->module.exports : Symbol("tests/cases/conformance/jsdoc/declarations/index", Decl(index.js, 0, 0))
+>module.exports : Symbol(module.exports, Decl(index.js, 0, 0))
 >module : Symbol(export=, Decl(index.js, 1, 16))
 >exports : Symbol(export=, Decl(index.js, 1, 16))
 >exports : Symbol("tests/cases/conformance/jsdoc/declarations/index", Decl(index.js, 0, 0))

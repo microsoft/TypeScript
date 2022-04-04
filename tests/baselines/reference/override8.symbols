@@ -1,0 +1,64 @@
+=== tests/cases/conformance/override/override8.ts ===
+class B {
+>B : Symbol(B, Decl(override8.ts, 0, 0))
+
+    a: string
+>a : Symbol(B.a, Decl(override8.ts, 0, 9))
+}
+
+class D extends B {
+>D : Symbol(D, Decl(override8.ts, 2, 1))
+>B : Symbol(B, Decl(override8.ts, 0, 0))
+
+    constructor(public a: string, public b: string) {
+>a : Symbol(D.a, Decl(override8.ts, 5, 16))
+>b : Symbol(D.b, Decl(override8.ts, 5, 33))
+
+        super();
+>super : Symbol(B, Decl(override8.ts, 0, 0))
+    }
+}
+
+class BB {
+>BB : Symbol(BB, Decl(override8.ts, 8, 1))
+
+    constructor(public a: string) {
+>a : Symbol(BB.a, Decl(override8.ts, 11, 16))
+
+    }
+}
+
+class DD extends BB {
+>DD : Symbol(DD, Decl(override8.ts, 14, 1))
+>BB : Symbol(BB, Decl(override8.ts, 8, 1))
+
+    constructor(public a: string) {
+>a : Symbol(DD.a, Decl(override8.ts, 17, 16))
+
+        super(a)
+>super : Symbol(BB, Decl(override8.ts, 8, 1))
+>a : Symbol(a, Decl(override8.ts, 17, 16))
+    }
+}
+
+class DDD extends BB {
+>DDD : Symbol(DDD, Decl(override8.ts, 20, 1))
+>BB : Symbol(BB, Decl(override8.ts, 8, 1))
+
+    public a: string;
+>a : Symbol(DDD.a, Decl(override8.ts, 22, 22))
+
+    constructor(a: string) {
+>a : Symbol(a, Decl(override8.ts, 25, 16))
+
+        super(a)
+>super : Symbol(BB, Decl(override8.ts, 8, 1))
+>a : Symbol(a, Decl(override8.ts, 25, 16))
+
+        this.a = a
+>this.a : Symbol(DDD.a, Decl(override8.ts, 22, 22))
+>this : Symbol(DDD, Decl(override8.ts, 20, 1))
+>a : Symbol(DDD.a, Decl(override8.ts, 22, 22))
+>a : Symbol(a, Decl(override8.ts, 25, 16))
+    }
+}

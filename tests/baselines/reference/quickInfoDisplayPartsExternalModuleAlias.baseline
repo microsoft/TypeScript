@@ -1,0 +1,294 @@
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsExternalModuleAlias_file1.ts",
+      "position": 7,
+      "name": "1"
+    },
+    "quickInfo": {
+      "kind": "alias",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 7,
+        "length": 2
+      },
+      "displayParts": [
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "a1",
+          "kind": "aliasName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=",
+          "kind": "operator"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "require",
+          "kind": "keyword"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\"./quickInfoDisplayPartsExternalModuleAlias_file0\"",
+          "kind": "stringLiteral"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsExternalModuleAlias_file1.ts",
+      "position": 20,
+      "name": "mod1"
+    },
+    "quickInfo": {
+      "kind": "module",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 20,
+        "length": 50
+      },
+      "displayParts": [
+        {
+          "text": "module",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "a1",
+          "kind": "aliasName"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsExternalModuleAlias_file1.ts",
+      "position": 77,
+      "name": "2"
+    },
+    "quickInfo": {
+      "kind": "alias",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 77,
+        "length": 2
+      },
+      "displayParts": [
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "a1",
+          "kind": "aliasName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=",
+          "kind": "operator"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "require",
+          "kind": "keyword"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\"./quickInfoDisplayPartsExternalModuleAlias_file0\"",
+          "kind": "stringLiteral"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsExternalModuleAlias_file1.ts",
+      "position": 102,
+      "name": "3"
+    },
+    "quickInfo": {
+      "kind": "alias",
+      "kindModifiers": "export",
+      "textSpan": {
+        "start": 102,
+        "length": 2
+      },
+      "displayParts": [
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "a2",
+          "kind": "aliasName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=",
+          "kind": "operator"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "require",
+          "kind": "keyword"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\"./quickInfoDisplayPartsExternalModuleAlias_file0\"",
+          "kind": "stringLiteral"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsExternalModuleAlias_file1.ts",
+      "position": 115,
+      "name": "mod2"
+    },
+    "quickInfo": {
+      "kind": "module",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 115,
+        "length": 50
+      },
+      "displayParts": [
+        {
+          "text": "module",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "a1",
+          "kind": "aliasName"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsExternalModuleAlias_file1.ts",
+      "position": 172,
+      "name": "4"
+    },
+    "quickInfo": {
+      "kind": "alias",
+      "kindModifiers": "export",
+      "textSpan": {
+        "start": 172,
+        "length": 2
+      },
+      "displayParts": [
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "a2",
+          "kind": "aliasName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=",
+          "kind": "operator"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "require",
+          "kind": "keyword"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\"./quickInfoDisplayPartsExternalModuleAlias_file0\"",
+          "kind": "stringLiteral"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  }
+]

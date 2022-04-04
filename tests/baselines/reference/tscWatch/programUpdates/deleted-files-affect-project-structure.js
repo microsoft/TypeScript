@@ -46,6 +46,12 @@ Semantic diagnostics in builder refreshed for::
 /a/b/f2.ts
 /a/b/f1.ts
 
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/a/c/f3.ts (used version)
+/a/b/f2.ts (used version)
+/a/b/f1.ts (used version)
+
 WatchedFiles::
 /a/b/f1.ts:
   {"fileName":"/a/b/f1.ts","pollingInterval":250}
@@ -73,7 +79,11 @@ exports.y = 1;
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
@@ -89,7 +99,11 @@ __exportStar(require("../c/f3"), exports);
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
@@ -129,6 +143,9 @@ Program files::
 
 Semantic diagnostics in builder refreshed for::
 /a/b/f1.ts
+
+Shape signatures in builder refreshed for::
+/a/b/f1.ts (computed .d.ts)
 
 WatchedFiles::
 /a/b/f1.ts:

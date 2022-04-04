@@ -1,0 +1,52 @@
+=== tests/cases/conformance/classes/classStaticBlock/classStaticBlock27.ts ===
+// https://github.com/microsoft/TypeScript/issues/44872
+
+void class Foo {
+>Foo : Symbol(Foo, Decl(classStaticBlock27.ts, 2, 4))
+
+    static prop = 1
+>prop : Symbol(Foo.prop, Decl(classStaticBlock27.ts, 2, 16))
+
+    static {
+        console.log(Foo.prop);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>Foo.prop : Symbol(Foo.prop, Decl(classStaticBlock27.ts, 2, 16))
+>Foo : Symbol(Foo, Decl(classStaticBlock27.ts, 2, 4))
+>prop : Symbol(Foo.prop, Decl(classStaticBlock27.ts, 2, 16))
+
+        Foo.prop++;
+>Foo.prop : Symbol(Foo.prop, Decl(classStaticBlock27.ts, 2, 16))
+>Foo : Symbol(Foo, Decl(classStaticBlock27.ts, 2, 4))
+>prop : Symbol(Foo.prop, Decl(classStaticBlock27.ts, 2, 16))
+    }
+    static {
+        console.log(Foo.prop);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>Foo.prop : Symbol(Foo.prop, Decl(classStaticBlock27.ts, 2, 16))
+>Foo : Symbol(Foo, Decl(classStaticBlock27.ts, 2, 4))
+>prop : Symbol(Foo.prop, Decl(classStaticBlock27.ts, 2, 16))
+
+        Foo.prop++;
+>Foo.prop : Symbol(Foo.prop, Decl(classStaticBlock27.ts, 2, 16))
+>Foo : Symbol(Foo, Decl(classStaticBlock27.ts, 2, 4))
+>prop : Symbol(Foo.prop, Decl(classStaticBlock27.ts, 2, 16))
+    }
+    static {
+        console.log(Foo.prop);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>Foo.prop : Symbol(Foo.prop, Decl(classStaticBlock27.ts, 2, 16))
+>Foo : Symbol(Foo, Decl(classStaticBlock27.ts, 2, 4))
+>prop : Symbol(Foo.prop, Decl(classStaticBlock27.ts, 2, 16))
+
+        Foo.prop++;
+>Foo.prop : Symbol(Foo.prop, Decl(classStaticBlock27.ts, 2, 16))
+>Foo : Symbol(Foo, Decl(classStaticBlock27.ts, 2, 4))
+>prop : Symbol(Foo.prop, Decl(classStaticBlock27.ts, 2, 16))
+    }
+}

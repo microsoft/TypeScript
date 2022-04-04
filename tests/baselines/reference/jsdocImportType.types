@@ -54,7 +54,7 @@ class Chunk {
 module.exports = Chunk;
 >module.exports = Chunk : typeof Chunk
 >module.exports : typeof Chunk
->module : { "\"tests/cases/conformance/jsdoc/mod1\"": typeof Chunk; }
+>module : { exports: typeof Chunk; }
 >exports : typeof Chunk
 >Chunk : typeof Chunk
 

@@ -41,3 +41,12 @@ class G {
     }
     constructor(public p1: number) {}
 }
+class H {
+    constructor(public p1: C) {}
+
+    public p2 = () => {
+        return this.p1.foo;
+    }
+
+    public p3 = () => this.p1.foo;
+}

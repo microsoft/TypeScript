@@ -18,11 +18,11 @@ function Wrapper(props: Props) {
 >Props : Symbol(Props, Decl(jsxEmptyExpressionNotCountedAsChild.tsx, 1, 30))
 
     return <div>{props.children}</div>
->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2420, 114))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
 >props.children : Symbol(Props.children, Decl(jsxEmptyExpressionNotCountedAsChild.tsx, 3, 17))
 >props : Symbol(props, Decl(jsxEmptyExpressionNotCountedAsChild.tsx, 7, 17))
 >children : Symbol(Props.children, Decl(jsxEmptyExpressionNotCountedAsChild.tsx, 3, 17))
->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2420, 114))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
 }
 
 const element = (
@@ -33,8 +33,8 @@ const element = (
 
     {/* comment */}
      <div>Hello</div>
->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2420, 114))
->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2420, 114))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
 
     </Wrapper>
 >Wrapper : Symbol(Wrapper, Decl(jsxEmptyExpressionNotCountedAsChild.tsx, 5, 1))

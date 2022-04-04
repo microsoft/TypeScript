@@ -1,0 +1,74 @@
+tests/cases/conformance/externalModules/typeOnly/c.ts(1,8): error TS1444: 'DefaultA' is a type and must be imported using a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.
+tests/cases/conformance/externalModules/typeOnly/c.ts(2,10): error TS1444: 'A' is a type and must be imported using a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.
+tests/cases/conformance/externalModules/typeOnly/c.ts(3,8): error TS1446: 'DefaultB' resolves to a type-only declaration and must be imported using a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.
+tests/cases/conformance/externalModules/typeOnly/c.ts(4,10): error TS1446: 'B' resolves to a type-only declaration and must be imported using a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.
+tests/cases/conformance/externalModules/typeOnly/d.ts(1,10): error TS1205: Re-exporting a type when the '--isolatedModules' flag is provided requires using 'export type'.
+tests/cases/conformance/externalModules/typeOnly/d.ts(2,10): error TS1448: 'B' resolves to a type-only declaration and must be re-exported using a type-only re-export when 'isolatedModules' is enabled.
+tests/cases/conformance/externalModules/typeOnly/e.ts(1,10): error TS1444: 'AA' is a type and must be imported using a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.
+tests/cases/conformance/externalModules/typeOnly/e.ts(1,14): error TS1446: 'BB' resolves to a type-only declaration and must be imported using a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.
+
+
+==== tests/cases/conformance/externalModules/typeOnly/a.ts (0 errors) ====
+    export type A = {};
+    export type { A as default };
+    
+==== tests/cases/conformance/externalModules/typeOnly/b.ts (0 errors) ====
+    class B {};
+    export type { B, B as default };
+    
+==== tests/cases/conformance/externalModules/typeOnly/c.ts (4 errors) ====
+    import DefaultA from "./a";
+           ~~~~~~~~
+!!! error TS1444: 'DefaultA' is a type and must be imported using a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.
+    import { A } from "./a";
+             ~
+!!! error TS1444: 'A' is a type and must be imported using a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.
+    import DefaultB from "./b";
+           ~~~~~~~~
+!!! error TS1446: 'DefaultB' resolves to a type-only declaration and must be imported using a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.
+!!! related TS1377 tests/cases/conformance/externalModules/typeOnly/b.ts:2:18: 'DefaultB' was exported here.
+    import { B } from "./b";
+             ~
+!!! error TS1446: 'B' resolves to a type-only declaration and must be imported using a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.
+!!! related TS1377 tests/cases/conformance/externalModules/typeOnly/b.ts:2:15: 'B' was exported here.
+    
+==== tests/cases/conformance/externalModules/typeOnly/c.fixed.ts (0 errors) ====
+    import type DefaultA from "./a";
+    import type { A } from "./a";
+    import type DefaultB from "./b";
+    import type { B } from "./b";
+    
+==== tests/cases/conformance/externalModules/typeOnly/d.ts (2 errors) ====
+    export { A as AA } from "./a";
+             ~~~~~~~
+!!! error TS1205: Re-exporting a type when the '--isolatedModules' flag is provided requires using 'export type'.
+    export { B as BB } from "./b";
+             ~~~~~~~
+!!! error TS1448: 'B' resolves to a type-only declaration and must be re-exported using a type-only re-export when 'isolatedModules' is enabled.
+!!! related TS1377 tests/cases/conformance/externalModules/typeOnly/b.ts:2:15: 'B' was exported here.
+    
+==== tests/cases/conformance/externalModules/typeOnly/d.fixed.ts (0 errors) ====
+    export type { A as AA } from "./a";
+    export type { B as BB } from "./b";
+    
+==== tests/cases/conformance/externalModules/typeOnly/e.ts (2 errors) ====
+    import { AA, BB } from "./d";
+             ~~
+!!! error TS1444: 'AA' is a type and must be imported using a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.
+                 ~~
+!!! error TS1446: 'BB' resolves to a type-only declaration and must be imported using a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.
+!!! related TS1377 tests/cases/conformance/externalModules/typeOnly/b.ts:2:15: 'BB' was exported here.
+    
+==== tests/cases/conformance/externalModules/typeOnly/e.fixed.ts (0 errors) ====
+    import type { AA, BB } from "./d";
+    
+==== tests/cases/conformance/externalModules/typeOnly/f.ts (0 errors) ====
+    import type { A } from "./a";
+    import type { B } from "./b";
+    export { A, B as BB };
+    
+==== tests/cases/conformance/externalModules/typeOnly/f.fixed.ts (0 errors) ====
+    import type { A } from "./a";
+    import type { B } from "./b";
+    export type { A, B as BB };
+    
