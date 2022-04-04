@@ -1,0 +1,8 @@
+=== tests/cases/compiler/templateLiteralsSourceMap.ts ===
+const s = `a${0}b${1}c${2}`;
+>s : string
+>`a${0}b${1}c${2}` : string
+>0 : 0
+>1 : 1
+>2 : 2
+

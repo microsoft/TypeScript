@@ -13,12 +13,12 @@ declare function eval(x: string): any;
 
 /**
  * Converts a string to an integer.
- * @param s A string to convert into a number.
- * @param radix A value between 2 and 36 that specifies the base of the number in numString.
+ * @param string A string to convert into a number.
+ * @param radix A value between 2 and 36 that specifies the base of the number in `string`.
  * If this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.
  * All other strings are considered decimal.
  */
-declare function parseInt(s: string, radix?: number): number;
+declare function parseInt(string: string, radix?: number): number;
 
 /**
  * Converts a string to a floating-point number.
@@ -64,12 +64,14 @@ declare function encodeURIComponent(uriComponent: string | number | boolean): st
 
 /**
  * Computes a new string in which certain characters have been replaced by a hexadecimal escape sequence.
+ * @deprecated A legacy feature for browser compatibility
  * @param string A string value
  */
 declare function escape(string: string): string;
 
 /**
  * Computes a new string in which hexadecimal escape sequences are replaced with the character that it represents.
+ * @deprecated A legacy feature for browser compatibility
  * @param string A string value
  */
 declare function unescape(string: string): string;
@@ -94,7 +96,7 @@ interface PropertyDescriptor {
 }
 
 interface PropertyDescriptorMap {
-    [s: string]: PropertyDescriptor;
+    [key: PropertyKey]: PropertyDescriptor;
 }
 
 interface Object {
@@ -177,14 +179,14 @@ interface ObjectConstructor {
      * @param p The property name.
      * @param attributes Descriptor for the property. It can be for a data property or an accessor property.
      */
-    defineProperty(o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>): any;
+    defineProperty<T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>): T;
 
     /**
      * Adds one or more properties to an object, and/or modifies attributes of existing properties.
      * @param o Object on which to add or modify the properties. This can be a native JavaScript object or a DOM object.
      * @param properties JavaScript object that contains one or more descriptor objects. Each descriptor object describes a data property or an accessor property.
      */
-    defineProperties(o: any, properties: PropertyDescriptorMap & ThisType<any>): any;
+    defineProperties<T>(o: T, properties: PropertyDescriptorMap & ThisType<any>): T;
 
     /**
      * Prevents the modification of attributes of existing properties, and prevents the addition of new properties.
@@ -194,15 +196,21 @@ interface ObjectConstructor {
 
     /**
      * Prevents the modification of existing property attributes and values, and prevents the addition of new properties.
-     * @param o Object on which to lock the attributes.
+     * @param a Object on which to lock the attributes.
      */
     freeze<T>(a: T[]): readonly T[];
 
     /**
      * Prevents the modification of existing property attributes and values, and prevents the addition of new properties.
-     * @param o Object on which to lock the attributes.
+     * @param f Object on which to lock the attributes.
      */
     freeze<T extends Function>(f: T): T;
+
+    /**
+     * Prevents the modification of existing property attributes and values, and prevents the addition of new properties.
+     * @param o Object on which to lock the attributes.
+     */
+    freeze<T extends {[idx: string]: U | null | undefined | object}, U extends string | bigint | number | boolean | symbol>(o: T): Readonly<T>;
 
     /**
      * Prevents the modification of existing property attributes and values, and prevents the addition of new properties.
@@ -298,7 +306,7 @@ declare var Function: FunctionConstructor;
 /**
  * Extracts the type of the 'this' parameter of a function type, or 'unknown' if the function type has no 'this' parameter.
  */
-type ThisParameterType<T> = T extends (this: infer U, ...args: any[]) => any ? U : unknown;
+type ThisParameterType<T> = T extends (this: infer U, ...args: never) => any ? U : unknown;
 
 /**
  * Removes the 'this' parameter from a function type.
@@ -483,6 +491,7 @@ interface String {
     // IE extensions
     /**
      * Gets a substring beginning at the specified location and having the specified length.
+     * @deprecated A legacy feature for browser compatibility
      * @param from The starting position of the desired substring. The index of the first character in the string is zero.
      * @param length The number of characters to include in the returned substring.
      */
@@ -592,6 +601,23 @@ interface TemplateStringsArray extends ReadonlyArray<string> {
  * this type may be augmented via interface merging.
  */
 interface ImportMeta {
+}
+
+/**
+ * The type for the optional second argument to `import()`.
+ *
+ * If your host environment supports additional options, this type may be
+ * augmented via interface merging.
+ */
+interface ImportCallOptions {
+    assert?: ImportAssertions;
+}
+
+/**
+ * The type for the `assert` property of the optional second argument to `import()`.
+ */
+interface ImportAssertions {
+    [key: string]: string;
 }
 
 interface Math {
@@ -924,7 +950,8 @@ interface RegExp {
     lastIndex: number;
 
     // Non-standard extensions
-    compile(): this;
+    /** @deprecated A legacy feature for browser compatibility */
+    compile(pattern: string, flags?: string): this;
 }
 
 interface RegExpConstructor {
@@ -935,16 +962,44 @@ interface RegExpConstructor {
     readonly prototype: RegExp;
 
     // Non-standard extensions
+    /** @deprecated A legacy feature for browser compatibility */
     $1: string;
+    /** @deprecated A legacy feature for browser compatibility */
     $2: string;
+    /** @deprecated A legacy feature for browser compatibility */
     $3: string;
+    /** @deprecated A legacy feature for browser compatibility */
     $4: string;
+    /** @deprecated A legacy feature for browser compatibility */
     $5: string;
+    /** @deprecated A legacy feature for browser compatibility */
     $6: string;
+    /** @deprecated A legacy feature for browser compatibility */
     $7: string;
+    /** @deprecated A legacy feature for browser compatibility */
     $8: string;
+    /** @deprecated A legacy feature for browser compatibility */
     $9: string;
+    /** @deprecated A legacy feature for browser compatibility */
+    input: string;
+    /** @deprecated A legacy feature for browser compatibility */
+    $_: string;
+    /** @deprecated A legacy feature for browser compatibility */
     lastMatch: string;
+    /** @deprecated A legacy feature for browser compatibility */
+    "$&": string;
+    /** @deprecated A legacy feature for browser compatibility */
+    lastParen: string;
+    /** @deprecated A legacy feature for browser compatibility */
+    "$+": string;
+    /** @deprecated A legacy feature for browser compatibility */
+    leftContext: string;
+    /** @deprecated A legacy feature for browser compatibility */
+    "$`": string;
+    /** @deprecated A legacy feature for browser compatibility */
+    rightContext: string;
+    /** @deprecated A legacy feature for browser compatibility */
+    "$'": string;
 }
 
 declare var RegExp: RegExpConstructor;
@@ -1073,7 +1128,7 @@ interface ReadonlyArray<T> {
      */
     toString(): string;
     /**
-     * Returns a string representation of an array. The elements are converted to string using their toLocalString methods.
+     * Returns a string representation of an array. The elements are converted to string using their toLocaleString methods.
      */
     toLocaleString(): string;
     /**
@@ -1199,7 +1254,7 @@ interface ConcatArray<T> {
 
 interface Array<T> {
     /**
-     * Gets or sets the length of the array. This is a number one higher than the highest element defined in an array.
+     * Gets or sets the length of the array. This is a number one higher than the highest index in the array.
      */
     length: number;
     /**
@@ -1207,51 +1262,61 @@ interface Array<T> {
      */
     toString(): string;
     /**
-     * Returns a string representation of an array. The elements are converted to string using their toLocalString methods.
+     * Returns a string representation of an array. The elements are converted to string using their toLocaleString methods.
      */
     toLocaleString(): string;
     /**
      * Removes the last element from an array and returns it.
+     * If the array is empty, undefined is returned and the array is not modified.
      */
     pop(): T | undefined;
     /**
-     * Appends new elements to an array, and returns the new length of the array.
-     * @param items New elements of the Array.
+     * Appends new elements to the end of an array, and returns the new length of the array.
+     * @param items New elements to add to the array.
      */
     push(...items: T[]): number;
     /**
      * Combines two or more arrays.
-     * @param items Additional items to add to the end of array1.
+     * This method returns a new array without modifying any existing arrays.
+     * @param items Additional arrays and/or items to add to the end of the array.
      */
     concat(...items: ConcatArray<T>[]): T[];
     /**
      * Combines two or more arrays.
-     * @param items Additional items to add to the end of array1.
+     * This method returns a new array without modifying any existing arrays.
+     * @param items Additional arrays and/or items to add to the end of the array.
      */
     concat(...items: (T | ConcatArray<T>)[]): T[];
     /**
-     * Adds all the elements of an array separated by the specified separator string.
-     * @param separator A string used to separate one element of an array from the next in the resulting String. If omitted, the array elements are separated with a comma.
+     * Adds all the elements of an array into a string, separated by the specified separator string.
+     * @param separator A string used to separate one element of the array from the next in the resulting string. If omitted, the array elements are separated with a comma.
      */
     join(separator?: string): string;
     /**
-     * Reverses the elements in an Array.
+     * Reverses the elements in an array in place.
+     * This method mutates the array and returns a reference to the same array.
      */
     reverse(): T[];
     /**
      * Removes the first element from an array and returns it.
+     * If the array is empty, undefined is returned and the array is not modified.
      */
     shift(): T | undefined;
     /**
-     * Returns a section of an array.
-     * @param start The beginning of the specified portion of the array.
-     * @param end The end of the specified portion of the array. This is exclusive of the element at the index 'end'.
+     * Returns a copy of a section of an array.
+     * For both start and end, a negative index can be used to indicate an offset from the end of the array.
+     * For example, -2 refers to the second to last element of the array.
+     * @param start The beginning index of the specified portion of the array.
+     * If start is undefined, then the slice begins at index 0.
+     * @param end The end index of the specified portion of the array. This is exclusive of the element at the index 'end'.
+     * If end is undefined, then the slice extends to the end of the array.
      */
     slice(start?: number, end?: number): T[];
     /**
-     * Sorts an array.
+     * Sorts an array in place.
+     * This method mutates the array and returns a reference to the same array.
      * @param compareFn Function used to determine the order of the elements. It is expected to return
-     * a negative value if first argument is less than second argument, zero if they're equal and a positive
+     * a negative value if the first argument is less than the second argument, zero if they're equal, and a positive
      * value otherwise. If omitted, the elements are sorted in ascending, ASCII character order.
      * ```ts
      * [11,2,22,1].sort((a, b) => a - b)
@@ -1262,6 +1327,7 @@ interface Array<T> {
      * Removes elements from an array and, if necessary, inserts new elements in their place, returning the deleted elements.
      * @param start The zero-based location in the array from which to start removing elements.
      * @param deleteCount The number of elements to remove.
+     * @returns An array containing the elements that were deleted.
      */
     splice(start: number, deleteCount?: number): T[];
     /**
@@ -1269,23 +1335,24 @@ interface Array<T> {
      * @param start The zero-based location in the array from which to start removing elements.
      * @param deleteCount The number of elements to remove.
      * @param items Elements to insert into the array in place of the deleted elements.
+     * @returns An array containing the elements that were deleted.
      */
     splice(start: number, deleteCount: number, ...items: T[]): T[];
     /**
-     * Inserts new elements at the start of an array.
-     * @param items  Elements to insert at the start of the Array.
+     * Inserts new elements at the start of an array, and returns the new length of the array.
+     * @param items Elements to insert at the start of the array.
      */
     unshift(...items: T[]): number;
     /**
-     * Returns the index of the first occurrence of a value in an array.
+     * Returns the index of the first occurrence of a value in an array, or -1 if it is not present.
      * @param searchElement The value to locate in the array.
      * @param fromIndex The array index at which to begin the search. If fromIndex is omitted, the search starts at index 0.
      */
     indexOf(searchElement: T, fromIndex?: number): number;
     /**
-     * Returns the index of the last occurrence of a specified value in an array.
+     * Returns the index of the last occurrence of a specified value in an array, or -1 if it is not present.
      * @param searchElement The value to locate in the array.
-     * @param fromIndex The array index at which to begin the search. If fromIndex is omitted, the search starts at the last index in the array.
+     * @param fromIndex The array index at which to begin searching backward. If fromIndex is omitted, the search starts at the last index in the array.
      */
     lastIndexOf(searchElement: T, fromIndex?: number): number;
     /**
@@ -1428,6 +1495,17 @@ interface Promise<T> {
     catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;
 }
 
+/**
+ * Recursively unwraps the "awaited type" of a type. Non-promise "thenables" should resolve to `never`. This emulates the behavior of `await`.
+ */
+type Awaited<T> =
+    T extends null | undefined ? T : // special case for `null | undefined` when not in `--strictNullChecks` mode
+        T extends object & { then(onfulfilled: infer F): any } ? // `await` only unwraps object types with a callable `then`. Non-object types are not unwrapped
+            F extends ((value: infer V, ...args: any) => any) ? // if the argument to `then` is callable, extracts the first argument
+                Awaited<V> : // recursively unwrap the value
+                never : // the argument to `then` was not callable
+        T; // non-object or non-thenable
+
 interface ArrayLike<T> {
     readonly length: number;
     readonly [n: number]: T;
@@ -1496,7 +1574,7 @@ type Parameters<T extends (...args: any) => any> = T extends (...args: infer P) 
 /**
  * Obtain the parameters of a constructor function type in a tuple
  */
-type ConstructorParameters<T extends new (...args: any) => any> = T extends new (...args: infer P) => any ? P : never;
+type ConstructorParameters<T extends abstract new (...args: any) => any> = T extends abstract new (...args: infer P) => any ? P : never;
 
 /**
  * Obtain the return type of a function type
@@ -1506,7 +1584,7 @@ type ReturnType<T extends (...args: any) => any> = T extends (...args: any) => i
 /**
  * Obtain the return type of a constructor function type
  */
-type InstanceType<T extends new (...args: any) => any> = T extends new (...args: any) => infer R ? R : any;
+type InstanceType<T extends abstract new (...args: any) => any> = T extends abstract new (...args: any) => infer R ? R : any;
 
 /**
  * Convert string literal type to uppercase
@@ -1764,7 +1842,7 @@ interface Int8Array {
     every(predicate: (value: number, index: number, array: Int8Array) => unknown, thisArg?: any): boolean;
 
     /**
-     * Returns the this object after filling the section identified by start and end with value
+     * Changes all array elements from `start` to `end` index to a static `value` and returns the modified array
      * @param value value to fill array section with
      * @param start index to start filling the array at. If start is negative, it is treated as
      * length+start where length is the length of the array.
@@ -1934,7 +2012,7 @@ interface Int8Array {
      * Sorts an array.
      * @param compareFn Function used to determine the order of the elements. It is expected to return
      * a negative value if first argument is less than second argument, zero if they're equal and a positive
-     * value otherwise. If omitted, the elements are sorted in ascending, ASCII character order.
+     * value otherwise. If omitted, the elements are sorted in ascending order.
      * ```ts
      * [11,2,22,1].sort((a, b) => a - b)
      * ```
@@ -2046,7 +2124,7 @@ interface Uint8Array {
     every(predicate: (value: number, index: number, array: Uint8Array) => unknown, thisArg?: any): boolean;
 
     /**
-     * Returns the this object after filling the section identified by start and end with value
+     * Changes all array elements from `start` to `end` index to a static `value` and returns the modified array
      * @param value value to fill array section with
      * @param start index to start filling the array at. If start is negative, it is treated as
      * length+start where length is the length of the array.
@@ -2216,7 +2294,7 @@ interface Uint8Array {
      * Sorts an array.
      * @param compareFn Function used to determine the order of the elements. It is expected to return
      * a negative value if first argument is less than second argument, zero if they're equal and a positive
-     * value otherwise. If omitted, the elements are sorted in ascending, ASCII character order.
+     * value otherwise. If omitted, the elements are sorted in ascending order.
      * ```ts
      * [11,2,22,1].sort((a, b) => a - b)
      * ```
@@ -2328,7 +2406,7 @@ interface Uint8ClampedArray {
     every(predicate: (value: number, index: number, array: Uint8ClampedArray) => unknown, thisArg?: any): boolean;
 
     /**
-     * Returns the this object after filling the section identified by start and end with value
+     * Changes all array elements from `start` to `end` index to a static `value` and returns the modified array
      * @param value value to fill array section with
      * @param start index to start filling the array at. If start is negative, it is treated as
      * length+start where length is the length of the array.
@@ -2498,7 +2576,7 @@ interface Uint8ClampedArray {
      * Sorts an array.
      * @param compareFn Function used to determine the order of the elements. It is expected to return
      * a negative value if first argument is less than second argument, zero if they're equal and a positive
-     * value otherwise. If omitted, the elements are sorted in ascending, ASCII character order.
+     * value otherwise. If omitted, the elements are sorted in ascending order.
      * ```ts
      * [11,2,22,1].sort((a, b) => a - b)
      * ```
@@ -2609,7 +2687,7 @@ interface Int16Array {
     every(predicate: (value: number, index: number, array: Int16Array) => unknown, thisArg?: any): boolean;
 
     /**
-     * Returns the this object after filling the section identified by start and end with value
+     * Changes all array elements from `start` to `end` index to a static `value` and returns the modified array
      * @param value value to fill array section with
      * @param start index to start filling the array at. If start is negative, it is treated as
      * length+start where length is the length of the array.
@@ -2778,7 +2856,7 @@ interface Int16Array {
      * Sorts an array.
      * @param compareFn Function used to determine the order of the elements. It is expected to return
      * a negative value if first argument is less than second argument, zero if they're equal and a positive
-     * value otherwise. If omitted, the elements are sorted in ascending, ASCII character order.
+     * value otherwise. If omitted, the elements are sorted in ascending order.
      * ```ts
      * [11,2,22,1].sort((a, b) => a - b)
      * ```
@@ -2891,7 +2969,7 @@ interface Uint16Array {
     every(predicate: (value: number, index: number, array: Uint16Array) => unknown, thisArg?: any): boolean;
 
     /**
-     * Returns the this object after filling the section identified by start and end with value
+     * Changes all array elements from `start` to `end` index to a static `value` and returns the modified array
      * @param value value to fill array section with
      * @param start index to start filling the array at. If start is negative, it is treated as
      * length+start where length is the length of the array.
@@ -3061,7 +3139,7 @@ interface Uint16Array {
      * Sorts an array.
      * @param compareFn Function used to determine the order of the elements. It is expected to return
      * a negative value if first argument is less than second argument, zero if they're equal and a positive
-     * value otherwise. If omitted, the elements are sorted in ascending, ASCII character order.
+     * value otherwise. If omitted, the elements are sorted in ascending order.
      * ```ts
      * [11,2,22,1].sort((a, b) => a - b)
      * ```
@@ -3173,7 +3251,7 @@ interface Int32Array {
     every(predicate: (value: number, index: number, array: Int32Array) => unknown, thisArg?: any): boolean;
 
     /**
-     * Returns the this object after filling the section identified by start and end with value
+     * Changes all array elements from `start` to `end` index to a static `value` and returns the modified array
      * @param value value to fill array section with
      * @param start index to start filling the array at. If start is negative, it is treated as
      * length+start where length is the length of the array.
@@ -3343,7 +3421,7 @@ interface Int32Array {
      * Sorts an array.
      * @param compareFn Function used to determine the order of the elements. It is expected to return
      * a negative value if first argument is less than second argument, zero if they're equal and a positive
-     * value otherwise. If omitted, the elements are sorted in ascending, ASCII character order.
+     * value otherwise. If omitted, the elements are sorted in ascending order.
      * ```ts
      * [11,2,22,1].sort((a, b) => a - b)
      * ```
@@ -3455,7 +3533,7 @@ interface Uint32Array {
     every(predicate: (value: number, index: number, array: Uint32Array) => unknown, thisArg?: any): boolean;
 
     /**
-     * Returns the this object after filling the section identified by start and end with value
+     * Changes all array elements from `start` to `end` index to a static `value` and returns the modified array
      * @param value value to fill array section with
      * @param start index to start filling the array at. If start is negative, it is treated as
      * length+start where length is the length of the array.
@@ -3624,7 +3702,7 @@ interface Uint32Array {
      * Sorts an array.
      * @param compareFn Function used to determine the order of the elements. It is expected to return
      * a negative value if first argument is less than second argument, zero if they're equal and a positive
-     * value otherwise. If omitted, the elements are sorted in ascending, ASCII character order.
+     * value otherwise. If omitted, the elements are sorted in ascending order.
      * ```ts
      * [11,2,22,1].sort((a, b) => a - b)
      * ```
@@ -3736,7 +3814,7 @@ interface Float32Array {
     every(predicate: (value: number, index: number, array: Float32Array) => unknown, thisArg?: any): boolean;
 
     /**
-     * Returns the this object after filling the section identified by start and end with value
+     * Changes all array elements from `start` to `end` index to a static `value` and returns the modified array
      * @param value value to fill array section with
      * @param start index to start filling the array at. If start is negative, it is treated as
      * length+start where length is the length of the array.
@@ -3906,7 +3984,7 @@ interface Float32Array {
      * Sorts an array.
      * @param compareFn Function used to determine the order of the elements. It is expected to return
      * a negative value if first argument is less than second argument, zero if they're equal and a positive
-     * value otherwise. If omitted, the elements are sorted in ascending, ASCII character order.
+     * value otherwise. If omitted, the elements are sorted in ascending order.
      * ```ts
      * [11,2,22,1].sort((a, b) => a - b)
      * ```
@@ -4019,7 +4097,7 @@ interface Float64Array {
     every(predicate: (value: number, index: number, array: Float64Array) => unknown, thisArg?: any): boolean;
 
     /**
-     * Returns the this object after filling the section identified by start and end with value
+     * Changes all array elements from `start` to `end` index to a static `value` and returns the modified array
      * @param value value to fill array section with
      * @param start index to start filling the array at. If start is negative, it is treated as
      * length+start where length is the length of the array.
@@ -4189,7 +4267,7 @@ interface Float64Array {
      * Sorts an array.
      * @param compareFn Function used to determine the order of the elements. It is expected to return
      * a negative value if first argument is less than second argument, zero if they're equal and a positive
-     * value otherwise. If omitted, the elements are sorted in ascending, ASCII character order.
+     * value otherwise. If omitted, the elements are sorted in ascending order.
      * ```ts
      * [11,2,22,1].sort((a, b) => a - b)
      * ```
@@ -4251,12 +4329,12 @@ declare var Float64Array: Float64ArrayConstructor;
 
 declare namespace Intl {
     interface CollatorOptions {
-        usage?: string;
-        localeMatcher?: string;
-        numeric?: boolean;
-        caseFirst?: string;
-        sensitivity?: string;
-        ignorePunctuation?: boolean;
+        usage?: string | undefined;
+        localeMatcher?: string | undefined;
+        numeric?: boolean | undefined;
+        caseFirst?: string | undefined;
+        sensitivity?: string | undefined;
+        ignorePunctuation?: boolean | undefined;
     }
 
     interface ResolvedCollatorOptions {
@@ -4280,17 +4358,16 @@ declare namespace Intl {
     };
 
     interface NumberFormatOptions {
-        localeMatcher?: string;
-        style?: string;
-        currency?: string;
-        currencyDisplay?: string;
-        currencySign?: string;
-        useGrouping?: boolean;
-        minimumIntegerDigits?: number;
-        minimumFractionDigits?: number;
-        maximumFractionDigits?: number;
-        minimumSignificantDigits?: number;
-        maximumSignificantDigits?: number;
+        localeMatcher?: string | undefined;
+        style?: string | undefined;
+        currency?: string | undefined;
+        currencySign?: string | undefined;
+        useGrouping?: boolean | undefined;
+        minimumIntegerDigits?: number | undefined;
+        minimumFractionDigits?: number | undefined;
+        maximumFractionDigits?: number | undefined;
+        minimumSignificantDigits?: number | undefined;
+        maximumSignificantDigits?: number | undefined;
     }
 
     interface ResolvedNumberFormatOptions {
@@ -4298,7 +4375,6 @@ declare namespace Intl {
         numberingSystem: string;
         style: string;
         currency?: string;
-        currencyDisplay?: string;
         minimumIntegerDigits: number;
         minimumFractionDigits: number;
         maximumFractionDigits: number;
@@ -4315,22 +4391,23 @@ declare namespace Intl {
         new(locales?: string | string[], options?: NumberFormatOptions): NumberFormat;
         (locales?: string | string[], options?: NumberFormatOptions): NumberFormat;
         supportedLocalesOf(locales: string | string[], options?: NumberFormatOptions): string[];
+        readonly prototype: NumberFormat;
     };
 
     interface DateTimeFormatOptions {
-        localeMatcher?: string;
-        weekday?: string;
-        era?: string;
-        year?: string;
-        month?: string;
-        day?: string;
-        hour?: string;
-        minute?: string;
-        second?: string;
-        timeZoneName?: string;
-        formatMatcher?: string;
-        hour12?: boolean;
-        timeZone?: string;
+        localeMatcher?: "best fit" | "lookup" | undefined;
+        weekday?: "long" | "short" | "narrow" | undefined;
+        era?: "long" | "short" | "narrow" | undefined;
+        year?: "numeric" | "2-digit" | undefined;
+        month?: "numeric" | "2-digit" | "long" | "short" | "narrow" | undefined;
+        day?: "numeric" | "2-digit" | undefined;
+        hour?: "numeric" | "2-digit" | undefined;
+        minute?: "numeric" | "2-digit" | undefined;
+        second?: "numeric" | "2-digit" | undefined;
+        timeZoneName?: "long" | "short" | undefined;
+        formatMatcher?: "best fit" | "basic" | undefined;
+        hour12?: boolean | undefined;
+        timeZone?: string | undefined;
     }
 
     interface ResolvedDateTimeFormatOptions {
@@ -4358,6 +4435,7 @@ declare namespace Intl {
         new(locales?: string | string[], options?: DateTimeFormatOptions): DateTimeFormat;
         (locales?: string | string[], options?: DateTimeFormatOptions): DateTimeFormat;
         supportedLocalesOf(locales: string | string[], options?: DateTimeFormatOptions): string[];
+        readonly prototype: DateTimeFormat;
     };
 }
 

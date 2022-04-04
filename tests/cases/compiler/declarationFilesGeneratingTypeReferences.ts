@@ -1,6 +1,5 @@
 // @declaration: true
 // @outFile: out.js
-// @bundledPackageName: decl
 
 // @filename: /a/node_modules/@types/jquery/index.d.ts
 interface JQuery {

@@ -1,0 +1,89 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameStaticMethodCallExpression.ts ===
+class AA {
+>AA : Symbol(AA, Decl(privateNameStaticMethodCallExpression.ts, 0, 0))
+
+    static #method() { this.x = 10; };
+>#method : Symbol(AA.#method, Decl(privateNameStaticMethodCallExpression.ts, 0, 10))
+>this.x : Symbol(AA.x, Decl(privateNameStaticMethodCallExpression.ts, 2, 32))
+>this : Symbol(AA, Decl(privateNameStaticMethodCallExpression.ts, 0, 0))
+>x : Symbol(AA.x, Decl(privateNameStaticMethodCallExpression.ts, 2, 32))
+
+    static #method2(a, ...b) {};
+>#method2 : Symbol(AA.#method2, Decl(privateNameStaticMethodCallExpression.ts, 1, 38))
+>a : Symbol(a, Decl(privateNameStaticMethodCallExpression.ts, 2, 20))
+>b : Symbol(b, Decl(privateNameStaticMethodCallExpression.ts, 2, 22))
+
+    static x = 1;
+>x : Symbol(AA.x, Decl(privateNameStaticMethodCallExpression.ts, 2, 32))
+
+    test() {
+>test : Symbol(AA.test, Decl(privateNameStaticMethodCallExpression.ts, 3, 17))
+
+        AA.#method();
+>AA.#method : Symbol(AA.#method, Decl(privateNameStaticMethodCallExpression.ts, 0, 10))
+>AA : Symbol(AA, Decl(privateNameStaticMethodCallExpression.ts, 0, 0))
+
+        const func = AA.#method;
+>func : Symbol(func, Decl(privateNameStaticMethodCallExpression.ts, 6, 13))
+>AA.#method : Symbol(AA.#method, Decl(privateNameStaticMethodCallExpression.ts, 0, 10))
+>AA : Symbol(AA, Decl(privateNameStaticMethodCallExpression.ts, 0, 0))
+
+        func();
+>func : Symbol(func, Decl(privateNameStaticMethodCallExpression.ts, 6, 13))
+
+        new AA.#method();
+>AA.#method : Symbol(AA.#method, Decl(privateNameStaticMethodCallExpression.ts, 0, 10))
+>AA : Symbol(AA, Decl(privateNameStaticMethodCallExpression.ts, 0, 0))
+
+        const arr = [ 1, 2 ];
+>arr : Symbol(arr, Decl(privateNameStaticMethodCallExpression.ts, 10, 13))
+
+        AA.#method2(0, ...arr, 3);
+>AA.#method2 : Symbol(AA.#method2, Decl(privateNameStaticMethodCallExpression.ts, 1, 38))
+>AA : Symbol(AA, Decl(privateNameStaticMethodCallExpression.ts, 0, 0))
+>arr : Symbol(arr, Decl(privateNameStaticMethodCallExpression.ts, 10, 13))
+
+        const b = new AA.#method2(0, ...arr, 3); //Error 
+>b : Symbol(b, Decl(privateNameStaticMethodCallExpression.ts, 13, 13))
+>AA.#method2 : Symbol(AA.#method2, Decl(privateNameStaticMethodCallExpression.ts, 1, 38))
+>AA : Symbol(AA, Decl(privateNameStaticMethodCallExpression.ts, 0, 0))
+>arr : Symbol(arr, Decl(privateNameStaticMethodCallExpression.ts, 10, 13))
+
+        const str = AA.#method2`head${1}middle${2}tail`;
+>str : Symbol(str, Decl(privateNameStaticMethodCallExpression.ts, 14, 13))
+>AA.#method2 : Symbol(AA.#method2, Decl(privateNameStaticMethodCallExpression.ts, 1, 38))
+>AA : Symbol(AA, Decl(privateNameStaticMethodCallExpression.ts, 0, 0))
+
+        AA.getClass().#method2`test${1}and${2}`;
+>AA.getClass().#method2 : Symbol(AA.#method2, Decl(privateNameStaticMethodCallExpression.ts, 1, 38))
+>AA.getClass : Symbol(AA.getClass, Decl(privateNameStaticMethodCallExpression.ts, 20, 5))
+>AA : Symbol(AA, Decl(privateNameStaticMethodCallExpression.ts, 0, 0))
+>getClass : Symbol(AA.getClass, Decl(privateNameStaticMethodCallExpression.ts, 20, 5))
+
+        AA.getClass().#method2(0, ...arr, 3); 
+>AA.getClass().#method2 : Symbol(AA.#method2, Decl(privateNameStaticMethodCallExpression.ts, 1, 38))
+>AA.getClass : Symbol(AA.getClass, Decl(privateNameStaticMethodCallExpression.ts, 20, 5))
+>AA : Symbol(AA, Decl(privateNameStaticMethodCallExpression.ts, 0, 0))
+>getClass : Symbol(AA.getClass, Decl(privateNameStaticMethodCallExpression.ts, 20, 5))
+>arr : Symbol(arr, Decl(privateNameStaticMethodCallExpression.ts, 10, 13))
+
+        const b2 = new (AA.getClass().#method2)(0, ...arr, 3); //Error 
+>b2 : Symbol(b2, Decl(privateNameStaticMethodCallExpression.ts, 18, 13))
+>AA.getClass().#method2 : Symbol(AA.#method2, Decl(privateNameStaticMethodCallExpression.ts, 1, 38))
+>AA.getClass : Symbol(AA.getClass, Decl(privateNameStaticMethodCallExpression.ts, 20, 5))
+>AA : Symbol(AA, Decl(privateNameStaticMethodCallExpression.ts, 0, 0))
+>getClass : Symbol(AA.getClass, Decl(privateNameStaticMethodCallExpression.ts, 20, 5))
+>arr : Symbol(arr, Decl(privateNameStaticMethodCallExpression.ts, 10, 13))
+
+        const str2 = AA.getClass().#method2`head${1}middle${2}tail`;
+>str2 : Symbol(str2, Decl(privateNameStaticMethodCallExpression.ts, 19, 13))
+>AA.getClass().#method2 : Symbol(AA.#method2, Decl(privateNameStaticMethodCallExpression.ts, 1, 38))
+>AA.getClass : Symbol(AA.getClass, Decl(privateNameStaticMethodCallExpression.ts, 20, 5))
+>AA : Symbol(AA, Decl(privateNameStaticMethodCallExpression.ts, 0, 0))
+>getClass : Symbol(AA.getClass, Decl(privateNameStaticMethodCallExpression.ts, 20, 5))
+    }
+    static getClass() { return AA; }
+>getClass : Symbol(AA.getClass, Decl(privateNameStaticMethodCallExpression.ts, 20, 5))
+>AA : Symbol(AA, Decl(privateNameStaticMethodCallExpression.ts, 0, 0))
+}
+

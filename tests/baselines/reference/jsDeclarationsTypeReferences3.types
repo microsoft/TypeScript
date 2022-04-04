@@ -12,9 +12,9 @@ const Something = require("fs").Something;
 module.exports.A = {}
 >module.exports.A = {} : typeof A
 >module.exports.A : typeof A
->module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
->module : { "\"tests/cases/conformance/jsdoc/declarations/index\"": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
->exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
+>module.exports : typeof module.exports
+>module : { exports: typeof module.exports; }
+>exports : typeof module.exports
 >A : typeof A
 >{} : {}
 
@@ -22,9 +22,9 @@ module.exports.A.B = {
 >module.exports.A.B = {    thing: new Something()} : { thing: Something; }
 >module.exports.A.B : { thing: Something; }
 >module.exports.A : typeof A
->module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
->module : { "\"tests/cases/conformance/jsdoc/declarations/index\"": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
->exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
+>module.exports : typeof module.exports
+>module : { exports: typeof module.exports; }
+>exports : typeof module.exports
 >A : typeof A
 >B : { thing: Something; }
 >{    thing: new Something()} : { thing: Something; }

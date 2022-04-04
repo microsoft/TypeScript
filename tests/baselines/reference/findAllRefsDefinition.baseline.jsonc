@@ -1,0 +1,147 @@
+// === /tests/cases/fourslash/findAllRefsDefinition.ts ===
+// const /*FIND ALL REFS*/[|x|] = 0;
+// [|x|];
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsDefinition.ts",
+      "kind": "const",
+      "name": "const x: 0",
+      "textSpan": {
+        "start": 6,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "const",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "x",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "0",
+          "kind": "stringLiteral"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 12
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 6,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsDefinition.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 12
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 13,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsDefinition.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/findAllRefsDefinition.ts ===
+// const [|x|] = 0;
+// /*FIND ALL REFS*/[|x|];
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsDefinition.ts",
+      "kind": "const",
+      "name": "const x: 0",
+      "textSpan": {
+        "start": 6,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "const",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "x",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "0",
+          "kind": "stringLiteral"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 12
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 6,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsDefinition.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 12
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 13,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsDefinition.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]

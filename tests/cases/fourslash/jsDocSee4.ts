@@ -24,4 +24,4 @@ goTo.marker("use2");
 verify.goToDefinitionIs(["def2"]);
 
 goTo.marker("use3");
-verify.goToDefinitionIs([]);
+verify.goToDefinitionIs(["def2"]);

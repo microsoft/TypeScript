@@ -1,5 +1,6 @@
 // @strict: true
 // @target: esnext
+// @useDefineForClassFields: false
 class Example {
     #test;
 

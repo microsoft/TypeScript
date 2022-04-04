@@ -28,9 +28,9 @@ const chalk = {
 module.exports.chalk = chalk
 >module.exports.chalk = chalk : { grey: {}; }
 >module.exports.chalk : { grey: {}; }
->module.exports : typeof import("tests/cases/conformance/salsa/mod1")
->module : { "\"tests/cases/conformance/salsa/mod1\"": typeof import("tests/cases/conformance/salsa/mod1"); }
->exports : typeof import("tests/cases/conformance/salsa/mod1")
+>module.exports : typeof module.exports
+>module : { exports: typeof module.exports; }
+>exports : typeof module.exports
 >chalk : { grey: {}; }
 >chalk : { grey: {}; }
 

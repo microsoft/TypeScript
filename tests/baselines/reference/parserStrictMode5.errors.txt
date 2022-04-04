@@ -1,5 +1,5 @@
 tests/cases/conformance/parser/ecmascript5/StrictMode/parserStrictMode5.ts(2,1): error TS1100: Invalid use of 'eval' in strict mode.
-tests/cases/conformance/parser/ecmascript5/StrictMode/parserStrictMode5.ts(2,1): error TS2539: Cannot assign to 'eval' because it is not a variable.
+tests/cases/conformance/parser/ecmascript5/StrictMode/parserStrictMode5.ts(2,1): error TS2630: Cannot assign to 'eval' because it is a function.
 
 
 ==== tests/cases/conformance/parser/ecmascript5/StrictMode/parserStrictMode5.ts (2 errors) ====
@@ -8,4 +8,4 @@ tests/cases/conformance/parser/ecmascript5/StrictMode/parserStrictMode5.ts(2,1):
     ~~~~
 !!! error TS1100: Invalid use of 'eval' in strict mode.
     ~~~~
-!!! error TS2539: Cannot assign to 'eval' because it is not a variable.
+!!! error TS2630: Cannot assign to 'eval' because it is a function.

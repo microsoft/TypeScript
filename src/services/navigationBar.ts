@@ -136,7 +136,7 @@ namespace ts.NavigationBar {
         for (let i = 0; i < depth; i++) endNode();
     }
     function startNestedNodes(targetNode: Node, entityName: BindableStaticNameExpression) {
-        const names: (PropertyNameLiteral | WellKnownSymbolExpression)[] = [];
+        const names: PropertyNameLiteral[] = [];
         while (!isPropertyNameLiteral(entityName)) {
             const name = getNameOrArgument(entityName);
             const nameText = getElementOrPropertyAccessName(entityName);
@@ -183,6 +183,32 @@ namespace ts.NavigationBar {
         endNode();
     }
 
+    function addNodeWithRecursiveInitializer(node: VariableDeclaration | PropertyAssignment | BindingElement | PropertyDeclaration): void {
+        if (node.initializer && isFunctionOrClassExpression(node.initializer)) {
+            startNode(node);
+            forEachChild(node.initializer, addChildrenRecursively);
+            endNode();
+        }
+        else {
+            addNodeWithRecursiveChild(node, node.initializer);
+        }
+    }
+
+    /**
+     * Historically, we've elided dynamic names from the nav tree (including late bound names),
+     * but included certain "well known" symbol names. While we no longer distinguish those well-known
+     * symbols from other unique symbols, we do the below to retain those members in the nav tree.
+     */
+    function hasNavigationBarName(node: Declaration) {
+        return !hasDynamicName(node) ||
+            (
+                node.kind !== SyntaxKind.BinaryExpression &&
+                isPropertyAccessExpression(node.name.expression) &&
+                isIdentifier(node.name.expression.expression) &&
+                idText(node.name.expression.expression) === "Symbol"
+            );
+    }
+
     /** Look for navigation bar items in node's subtree, adding them to the current `parent`. */
     function addChildrenRecursively(node: Node | undefined): void {
         curCancellationToken.throwIfCancellationRequested();
@@ -194,7 +220,7 @@ namespace ts.NavigationBar {
         switch (node.kind) {
             case SyntaxKind.Constructor:
                 // Get parameter properties, and treat them as being on the *same* level as the constructor, not under it.
-                const ctr = <ConstructorDeclaration>node;
+                const ctr = node as ConstructorDeclaration;
                 addNodeWithRecursiveChild(ctr, ctr.body);
 
                 // Parameter properties are children of the class, not the constructor.
@@ -209,20 +235,24 @@ namespace ts.NavigationBar {
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
             case SyntaxKind.MethodSignature:
-                if (!hasDynamicName((<ClassElement | TypeElement>node))) {
-                    addNodeWithRecursiveChild(node, (<FunctionLikeDeclaration>node).body);
+                if (hasNavigationBarName(node as ClassElement | TypeElement)) {
+                    addNodeWithRecursiveChild(node, (node as FunctionLikeDeclaration).body);
                 }
                 break;
 
             case SyntaxKind.PropertyDeclaration:
+                if (hasNavigationBarName(node as ClassElement)) {
+                    addNodeWithRecursiveInitializer(node as PropertyDeclaration);
+                }
+                break;
             case SyntaxKind.PropertySignature:
-                if (!hasDynamicName((<ClassElement | TypeElement>node))) {
+                if (hasNavigationBarName(node as TypeElement)) {
                     addLeafNode(node);
                 }
                 break;
 
             case SyntaxKind.ImportClause:
-                const importClause = <ImportClause>node;
+                const importClause = node as ImportClause;
                 // Handle default import case e.g.:
                 //    import d from "mod";
                 if (importClause.name) {
@@ -246,47 +276,41 @@ namespace ts.NavigationBar {
                 break;
 
             case SyntaxKind.ShorthandPropertyAssignment:
-                addNodeWithRecursiveChild(node, (<ShorthandPropertyAssignment>node).name);
+                addNodeWithRecursiveChild(node, (node as ShorthandPropertyAssignment).name);
                 break;
             case SyntaxKind.SpreadAssignment:
-                const { expression } = <SpreadAssignment>node;
+                const { expression } = node as SpreadAssignment;
                 // Use the expression as the name of the SpreadAssignment, otherwise show as <unknown>.
                 isIdentifier(expression) ? addLeafNode(node, expression) : addLeafNode(node);
                 break;
             case SyntaxKind.BindingElement:
             case SyntaxKind.PropertyAssignment:
-            case SyntaxKind.VariableDeclaration:
-                const { name, initializer } = <VariableDeclaration | PropertyAssignment | BindingElement>node;
-                if (isBindingPattern(name)) {
-                    addChildrenRecursively(name);
-                }
-                else if (initializer && isFunctionOrClassExpression(initializer)) {
-                    // Add a node for the VariableDeclaration, but not for the initializer.
-                    startNode(node);
-                    forEachChild(initializer, addChildrenRecursively);
-                    endNode();
+            case SyntaxKind.VariableDeclaration: {
+                const child = node as VariableDeclaration | PropertyAssignment | BindingElement;
+                if (isBindingPattern(child.name)) {
+                    addChildrenRecursively(child.name);
                 }
                 else {
-                    addNodeWithRecursiveChild(node, initializer);
+                    addNodeWithRecursiveInitializer(child);
                 }
                 break;
-
+            }
             case SyntaxKind.FunctionDeclaration:
-                const nameNode = (<FunctionLikeDeclaration>node).name;
+                const nameNode = (node as FunctionLikeDeclaration).name;
                 // If we see a function declaration track as a possible ES5 class
                 if (nameNode && isIdentifier(nameNode)) {
                     addTrackedEs5Class(nameNode.text);
                 }
-                addNodeWithRecursiveChild(node, (<FunctionLikeDeclaration>node).body);
+                addNodeWithRecursiveChild(node, (node as FunctionLikeDeclaration).body);
                 break;
             case SyntaxKind.ArrowFunction:
             case SyntaxKind.FunctionExpression:
-                addNodeWithRecursiveChild(node, (<FunctionLikeDeclaration>node).body);
+                addNodeWithRecursiveChild(node, (node as FunctionLikeDeclaration).body);
                 break;
 
             case SyntaxKind.EnumDeclaration:
                 startNode(node);
-                for (const member of (<EnumDeclaration>node).members) {
+                for (const member of (node as EnumDeclaration).members) {
                     if (!isComputedProperty(member)) {
                         addLeafNode(member);
                     }
@@ -298,18 +322,18 @@ namespace ts.NavigationBar {
             case SyntaxKind.ClassExpression:
             case SyntaxKind.InterfaceDeclaration:
                 startNode(node);
-                for (const member of (<InterfaceDeclaration>node).members) {
+                for (const member of (node as InterfaceDeclaration).members) {
                     addChildrenRecursively(member);
                 }
                 endNode();
                 break;
 
             case SyntaxKind.ModuleDeclaration:
-                addNodeWithRecursiveChild(node, getInteriorModule(<ModuleDeclaration>node).body);
+                addNodeWithRecursiveChild(node, getInteriorModule(node as ModuleDeclaration).body);
                 break;
 
             case SyntaxKind.ExportAssignment: {
-                const expression = (<ExportAssignment>node).expression;
+                const expression = (node as ExportAssignment).expression;
                 const child = isObjectLiteralExpression(expression) || isCallExpression(expression) ? expression :
                     isArrowFunction(expression) || isFunctionExpression(expression) ? expression.body : undefined;
                 if (child) {
@@ -349,7 +373,7 @@ namespace ts.NavigationBar {
                             assignmentTarget;
 
                         let depth = 0;
-                        let className: PropertyNameLiteral | WellKnownSymbolExpression;
+                        let className: PropertyNameLiteral;
                         // If we see a prototype assignment, start tracking the target as a class
                         // This is only done for simple classes not nested assignments.
                         if (isIdentifier(prototypeAccess.expression)) {
@@ -445,7 +469,7 @@ namespace ts.NavigationBar {
     function mergeChildren(children: NavigationBarNode[], node: NavigationBarNode): void {
         const nameToItems = new Map<string, NavigationBarNode | NavigationBarNode[]>();
         filterMutate(children, (child, index) => {
-            const declName = child.name || getNameOfDeclaration(<Declaration>child.node);
+            const declName = child.name || getNameOfDeclaration(child.node as Declaration);
             const name = declName && nodeText(declName);
             if (!name) {
                 // Anonymous items are never merged.
@@ -603,9 +627,10 @@ namespace ts.NavigationBar {
             case SyntaxKind.MethodDeclaration:
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
-                return hasSyntacticModifier(a, ModifierFlags.Static) === hasSyntacticModifier(b, ModifierFlags.Static);
+                return isStatic(a) === isStatic(b);
             case SyntaxKind.ModuleDeclaration:
-                return areSameModule(<ModuleDeclaration>a, <ModuleDeclaration>b);
+                return areSameModule(a as ModuleDeclaration, b as ModuleDeclaration)
+                    && getFullyQualifiedModuleName(a as ModuleDeclaration) === getFullyQualifiedModuleName(b as ModuleDeclaration);
             default:
                 return true;
         }
@@ -625,8 +650,10 @@ namespace ts.NavigationBar {
     // We use 1 NavNode to represent 'A.B.C', but there are multiple source nodes.
     // Only merge module nodes that have the same chain. Don't merge 'A.B.C' with 'A'!
     function areSameModule(a: ModuleDeclaration, b: ModuleDeclaration): boolean {
-        // TODO: GH#18217
-        return a.body!.kind === b.body!.kind && (a.body!.kind !== SyntaxKind.ModuleDeclaration || areSameModule(<ModuleDeclaration>a.body, <ModuleDeclaration>b.body));
+        if (!a.body || !b.body) {
+            return a.body === b.body;
+        }
+        return a.body.kind === b.body.kind && (a.body.kind !== SyntaxKind.ModuleDeclaration || areSameModule(a.body as ModuleDeclaration, b.body as ModuleDeclaration));
     }
 
     /** Merge source into target. Source should be thrown away after this is called. */
@@ -661,10 +688,10 @@ namespace ts.NavigationBar {
      */
     function tryGetName(node: Node): string | undefined {
         if (node.kind === SyntaxKind.ModuleDeclaration) {
-            return getModuleName(<ModuleDeclaration>node);
+            return getModuleName(node as ModuleDeclaration);
         }
 
-        const declName = getNameOfDeclaration(<Declaration>node);
+        const declName = getNameOfDeclaration(node as Declaration);
         if (declName && isPropertyName(declName)) {
             const propertyName = getPropertyNameForPropertyNameNode(declName);
             return propertyName && unescapeLeadingUnderscores(propertyName);
@@ -673,7 +700,7 @@ namespace ts.NavigationBar {
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.ArrowFunction:
             case SyntaxKind.ClassExpression:
-                return getFunctionOrClassName(<FunctionExpression | ArrowFunction | ClassExpression>node);
+                return getFunctionOrClassName(node as FunctionExpression | ArrowFunction | ClassExpression);
             default:
                 return undefined;
         }
@@ -681,7 +708,7 @@ namespace ts.NavigationBar {
 
     function getItemName(node: Node, name: Node | undefined): string {
         if (node.kind === SyntaxKind.ModuleDeclaration) {
-            return cleanText(getModuleName(<ModuleDeclaration>node));
+            return cleanText(getModuleName(node as ModuleDeclaration));
         }
 
         if (name) {
@@ -695,7 +722,7 @@ namespace ts.NavigationBar {
 
         switch (node.kind) {
             case SyntaxKind.SourceFile:
-                const sourceFile = <SourceFile>node;
+                const sourceFile = node as SourceFile;
                 return isExternalModule(sourceFile)
                     ? `"${escapeString(getBaseFileName(removeFileExtension(normalizePath(sourceFile.fileName))))}"`
                     : "<global>";
@@ -713,7 +740,7 @@ namespace ts.NavigationBar {
                 // We may get a string with newlines or other whitespace in the case of an object dereference
                 // (eg: "app\n.onactivated"), so we should remove the whitespace for readability in the
                 // navigation bar.
-                return getFunctionOrClassName(<ArrowFunction | FunctionExpression | ClassExpression>node);
+                return getFunctionOrClassName(node as ArrowFunction | FunctionExpression | ClassExpression);
             case SyntaxKind.Constructor:
                 return "constructor";
             case SyntaxKind.ConstructSignature:
@@ -775,7 +802,7 @@ namespace ts.NavigationBar {
                     return false;
             }
             function isTopLevelFunctionDeclaration(item: NavigationBarNode): boolean {
-                if (!(<FunctionDeclaration>item.node).body) {
+                if (!(item.node as FunctionDeclaration).body) {
                     return false;
                 }
 
@@ -845,10 +872,14 @@ namespace ts.NavigationBar {
             return getTextOfNode(moduleDeclaration.name);
         }
 
+        return getFullyQualifiedModuleName(moduleDeclaration);
+    }
+
+    function getFullyQualifiedModuleName(moduleDeclaration: ModuleDeclaration): string {
         // Otherwise, we need to aggregate each identifier to build up the qualified name.
         const result = [getTextOfIdentifierOrLiteral(moduleDeclaration.name)];
         while (moduleDeclaration.body && moduleDeclaration.body.kind === SyntaxKind.ModuleDeclaration) {
-            moduleDeclaration = <ModuleDeclaration>moduleDeclaration.body;
+            moduleDeclaration = moduleDeclaration.body;
             result.push(getTextOfIdentifierOrLiteral(moduleDeclaration.name));
         }
         return result.join(".");

@@ -2,7 +2,7 @@ tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenc
 tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument.d.ts(10,21): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
 tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument.d.ts(11,22): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
 tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument.d.ts(11,26): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
-tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument.d.ts(12,19): error TS1023: An index signature parameter type must be either 'string' or 'number'.
+tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument.d.ts(12,19): error TS1268: An index signature parameter type must be 'string', 'number', 'symbol', or a template literal type.
 tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument.d.ts(12,22): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
 tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument.d.ts(12,26): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
 tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument.d.ts(14,23): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
@@ -36,7 +36,7 @@ tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenc
 !!! error TS2314: Generic type 'C<T>' requires 1 type argument(s).
     declare var d: { [x: C]: C };
                       ~
-!!! error TS1023: An index signature parameter type must be either 'string' or 'number'.
+!!! error TS1268: An index signature parameter type must be 'string', 'number', 'symbol', or a template literal type.
                          ~
 !!! error TS2314: Generic type 'C<T>' requires 1 type argument(s).
                              ~

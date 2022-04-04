@@ -1,0 +1,14 @@
+=== tests/cases/compiler/prettyFileWithErrorsAndTabs.ts ===
+function f() {
+>f : Symbol(f, Decl(prettyFileWithErrorsAndTabs.ts, 0, 0))
+	{
+		const x: string = 12;
+>x : Symbol(x, Decl(prettyFileWithErrorsAndTabs.ts, 2, 7))
+
+		const y: string = 12;
+>y : Symbol(y, Decl(prettyFileWithErrorsAndTabs.ts, 3, 7))
+
+		const z: string = 12;
+>z : Symbol(z, Decl(prettyFileWithErrorsAndTabs.ts, 4, 7))
+	}
+}

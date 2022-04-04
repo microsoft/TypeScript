@@ -31,11 +31,11 @@ class FetchUser extends React.Component<IFetchUserProps, any> {
 
             ? this.props.children(this.state.result)
 >this.props.children(this.state.result) : JSX.Element
->this.props.children : ((user: IUser) => JSX.Element) | (((user: IUser) => JSX.Element) & string) | (((user: IUser) => JSX.Element) & number) | (((user: IUser) => JSX.Element) & false) | (((user: IUser) => JSX.Element) & true) | (((user: IUser) => JSX.Element) & React.ReactElement<any>) | (((user: IUser) => JSX.Element) & (string | number | boolean | any[] | React.ReactElement<any>)[])
+>this.props.children : ((user: IUser) => JSX.Element) & React.ReactNode
 >this.props : IFetchUserProps & { children?: React.ReactNode; }
 >this : this
 >props : IFetchUserProps & { children?: React.ReactNode; }
->children : ((user: IUser) => JSX.Element) | (((user: IUser) => JSX.Element) & string) | (((user: IUser) => JSX.Element) & number) | (((user: IUser) => JSX.Element) & false) | (((user: IUser) => JSX.Element) & true) | (((user: IUser) => JSX.Element) & React.ReactElement<any>) | (((user: IUser) => JSX.Element) & (string | number | boolean | any[] | React.ReactElement<any>)[])
+>children : ((user: IUser) => JSX.Element) & React.ReactNode
 >this.state.result : any
 >this.state : any
 >this : this

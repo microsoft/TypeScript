@@ -1,0 +1,7 @@
+=== /index.ts ===
+/// <reference types="pkg" resolution-mode="require" />
+No type information for this code./// <reference types="pkg" resolution-mode="import" />
+No type information for this code.foo; // `resolution-mode` is an error in old resolution settings, which resolves is arbitrary
+No type information for this code.bar;
+No type information for this code.export {};
+No type information for this code.

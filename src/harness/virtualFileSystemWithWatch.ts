@@ -15,7 +15,7 @@ interface Array<T> { length: number; [n: number]: T; }`
     };
 
     export const safeList = {
-        path: <Path>"/safeList.json",
+        path: "/safeList.json" as Path,
         content: JSON.stringify({
             commander: "commander",
             express: "express",
@@ -71,11 +71,11 @@ interface Array<T> { length: number; [n: number]: T; }`
 
     export type FileOrFolderOrSymLink = File | Folder | SymLink;
     export function isFile(fileOrFolderOrSymLink: FileOrFolderOrSymLink): fileOrFolderOrSymLink is File {
-        return isString((<File>fileOrFolderOrSymLink).content);
+        return isString((fileOrFolderOrSymLink as File).content);
     }
 
     export function isSymLink(fileOrFolderOrSymLink: FileOrFolderOrSymLink): fileOrFolderOrSymLink is SymLink {
-        return isString((<SymLink>fileOrFolderOrSymLink).symLink);
+        return isString((fileOrFolderOrSymLink as SymLink).symLink);
     }
 
     interface FSEntryBase {
@@ -100,15 +100,15 @@ interface Array<T> { length: number; [n: number]: T; }`
     type FSEntry = FsFile | FsFolder | FsSymLink;
 
     function isFsFolder(s: FSEntry | undefined): s is FsFolder {
-        return !!s && isArray((<FsFolder>s).entries);
+        return !!s && isArray((s as FsFolder).entries);
     }
 
     function isFsFile(s: FSEntry | undefined): s is FsFile {
-        return !!s && isString((<FsFile>s).content);
+        return !!s && isString((s as FsFile).content);
     }
 
     function isFsSymLink(s: FSEntry | undefined): s is FsSymLink {
-        return !!s && isString((<FsSymLink>s).symLink);
+        return !!s && isString((s as FsSymLink).symLink);
     }
 
     function invokeWatcherCallbacks<T>(callbacks: readonly T[] | undefined, invokeCallback: (cb: T) => void): void {
@@ -127,7 +127,7 @@ interface Array<T> { length: number; [n: number]: T; }`
         return { close: () => map.remove(path, callback) };
     }
 
-    function getDiffInKeys<T>(map: ESMap<string, T>, expectedKeys: readonly string[]) {
+    export function getDiffInKeys<T>(map: ESMap<string, T>, expectedKeys: readonly string[]) {
         if (map.size === expectedKeys.length) {
             return "";
         }
@@ -195,7 +195,7 @@ interface Array<T> { length: number; [n: number]: T; }`
         checkMap(caption, arrayToMap(actual, identity), expected, /*eachKeyCount*/ undefined);
     }
 
-    export function checkWatchedFiles(host: TestServerHost, expectedFiles: string[], additionalInfo?: string) {
+    export function checkWatchedFiles(host: TestServerHost, expectedFiles: readonly string[], additionalInfo?: string) {
         checkMap(`watchedFiles:: ${additionalInfo || ""}::`, host.watchedFiles, expectedFiles, /*eachKeyCount*/ undefined);
     }
 
@@ -395,6 +395,7 @@ interface Array<T> { length: number; [n: number]: T; }`
         private readonly executingFilePath: string;
         private readonly currentDirectory: string;
         public require: ((initialPath: string, moduleName: string) => RequireResult) | undefined;
+        public defaultWatchFileKind?: () => WatchFileKind | undefined;
         watchFile: HostWatchFile;
         watchDirectory: HostWatchDirectory;
         constructor(
@@ -439,7 +440,8 @@ interface Array<T> { length: number; [n: number]: T; }`
                 getAccessibleSortedChildDirectories: path => this.getDirectories(path),
                 realpath: this.realpath.bind(this),
                 tscWatchFile,
-                tscWatchDirectory
+                tscWatchDirectory,
+                defaultWatchFileKind: () => this.defaultWatchFileKind?.(),
             });
             this.watchFile = watchFile;
             this.watchDirectory = watchDirectory;
@@ -828,9 +830,9 @@ interface Array<T> { length: number; [n: number]: T; }`
                 return undefined;
             }
 
-            const realpath = this.realpath(path);
+            const realpath = this.toPath(this.realpath(path));
             if (path !== realpath) {
-                return this.getRealFsEntry(isFsEntry, this.toPath(realpath));
+                return this.getRealFsEntry(isFsEntry, realpath);
             }
 
             return undefined;
@@ -868,6 +870,7 @@ interface Array<T> { length: number; [n: number]: T; }`
             const fsEntry = this.fs.get(path);
             if (fsEntry) {
                 fsEntry.modifiedTime = date;
+                this.invokeFileAndFsWatches(fsEntry.fullPath, FileWatcherEventKind.Changed);
             }
         }
 
@@ -1001,14 +1004,18 @@ interface Array<T> { length: number; [n: number]: T; }`
 
             // base folder has to be present
             const base = getDirectoryPath(file.path);
-            const folder = this.fs.get(base) as FsFolder;
-            Debug.assert(isFsFolder(folder));
+            const folder = Debug.checkDefined(this.getRealFolder(base));
 
-            if (!this.fs.has(file.path)) {
-                this.addFileOrFolderInFolder(folder, file);
+            if (folder.path === base) {
+                if (!this.fs.has(file.path)) {
+                    this.addFileOrFolderInFolder(folder, file);
+                }
+                else {
+                    this.modifyFile(path, content);
+                }
             }
             else {
-                this.modifyFile(path, content);
+                this.writeFile(this.realpath(path), content);
             }
         }
 
@@ -1097,7 +1104,8 @@ interface Array<T> { length: number; [n: number]: T; }`
                 return this.realpath(fsEntry.symLink);
             }
 
-            return realFullPath;
+            // realpath supports non-existent files, so there may not be an fsEntry
+            return fsEntry?.fullPath || realFullPath;
         }
 
         readonly exitMessage = "System Exit";

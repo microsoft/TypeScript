@@ -20,7 +20,7 @@ f(1, n => { })
 module.exports = function (x, k) { return k(x) }
 >module.exports = function (x, k) { return k(x) } : <T>(x: T, k: (t: T) => void) => void
 >module.exports : <T>(x: T, k: (t: T) => void) => void
->module : { "\"tests/cases/conformance/jsdoc/first\"": <T>(x: T, k: (t: T) => void) => void; }
+>module : { exports: <T>(x: T, k: (t: T) => void) => void; }
 >exports : <T>(x: T, k: (t: T) => void) => void
 >function (x, k) { return k(x) } : <T>(x: T, k: (t: T) => void) => void
 >x : T

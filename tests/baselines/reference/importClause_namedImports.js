@@ -11,6 +11,7 @@ new A();
 declare let a: A;
 declare let b: B;
 b.b;
+const c = { A };
 
 
 //// [abc.js]
@@ -29,3 +30,4 @@ exports.C = "";
 exports.__esModule = true;
 new A();
 b.b;
+var c = { A: A };

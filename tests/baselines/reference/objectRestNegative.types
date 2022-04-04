@@ -36,18 +36,18 @@ function stillMustBeLast({ ...mustBeLast, a }: { a: number, b: string }): void {
 >b : string
 }
 function generic<T extends { x, y }>(t: T) {
->generic : <T extends { x: any; y: any; }>(t: T) => Pick<T, Exclude<keyof T, "x">>
+>generic : <T extends { x: any; y: any; }>(t: T) => Omit<T, "x">
 >x : any
 >y : any
 >t : T
 
     let { x, ...rest } = t;
 >x : any
->rest : Pick<T, Exclude<keyof T, "x">>
+>rest : Omit<T, "x">
 >t : T
 
     return rest;
->rest : Pick<T, Exclude<keyof T, "x">>
+>rest : Omit<T, "x">
 }
 
 let rest: { b: string }

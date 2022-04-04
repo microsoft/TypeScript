@@ -1,0 +1,65 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameFieldsESNext.ts ===
+class C {
+>C : Symbol(C, Decl(privateNameFieldsESNext.ts, 0, 0))
+
+    a = 123;
+>a : Symbol(C.a, Decl(privateNameFieldsESNext.ts, 0, 9))
+
+    #a = 10;
+>#a : Symbol(C.#a, Decl(privateNameFieldsESNext.ts, 1, 12))
+
+    c = "hello";
+>c : Symbol(C.c, Decl(privateNameFieldsESNext.ts, 2, 12))
+
+    #b;
+>#b : Symbol(C.#b, Decl(privateNameFieldsESNext.ts, 3, 16))
+
+    method() {
+>method : Symbol(C.method, Decl(privateNameFieldsESNext.ts, 4, 7))
+
+        console.log(this.#a);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>this.#a : Symbol(C.#a, Decl(privateNameFieldsESNext.ts, 1, 12))
+>this : Symbol(C, Decl(privateNameFieldsESNext.ts, 0, 0))
+
+        this.#a = "hello";
+>this.#a : Symbol(C.#a, Decl(privateNameFieldsESNext.ts, 1, 12))
+>this : Symbol(C, Decl(privateNameFieldsESNext.ts, 0, 0))
+
+        console.log(this.#b);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>this.#b : Symbol(C.#b, Decl(privateNameFieldsESNext.ts, 3, 16))
+>this : Symbol(C, Decl(privateNameFieldsESNext.ts, 0, 0))
+    }
+    static #m = "test";
+>#m : Symbol(C.#m, Decl(privateNameFieldsESNext.ts, 9, 5))
+
+    static #x;
+>#x : Symbol(C.#x, Decl(privateNameFieldsESNext.ts, 10, 23))
+
+    static test() {
+>test : Symbol(C.test, Decl(privateNameFieldsESNext.ts, 11, 14))
+
+        console.log(this.#m);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>this.#m : Symbol(C.#m, Decl(privateNameFieldsESNext.ts, 9, 5))
+>this : Symbol(C, Decl(privateNameFieldsESNext.ts, 0, 0))
+
+        console.log(this.#x = "test");
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>this.#x : Symbol(C.#x, Decl(privateNameFieldsESNext.ts, 10, 23))
+>this : Symbol(C, Decl(privateNameFieldsESNext.ts, 0, 0))
+    }
+    #something = () => 1234;
+>#something : Symbol(C.#something, Decl(privateNameFieldsESNext.ts, 15, 5))
+}
+
+

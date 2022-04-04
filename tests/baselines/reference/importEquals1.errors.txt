@@ -20,21 +20,21 @@
     new types.A(); // Error
         ~~~~~
 !!! error TS1361: 'types' cannot be used as a value because it was imported using 'import type'.
-!!! related TS1376 /b.ts:1:13: 'types' was imported here.
+!!! related TS1376 /b.ts:1:18: 'types' was imported here.
     
 ==== /e.ts (1 errors) ====
     import types = require('./b');
     new types.A(); // Error
         ~~~~~
 !!! error TS1361: 'types' cannot be used as a value because it was imported using 'import type'.
-!!! related TS1376 /b.ts:1:13: 'types' was imported here.
+!!! related TS1376 /b.ts:1:18: 'types' was imported here.
     
 ==== /f.ts (1 errors) ====
     import * as types from './b';
     new types.A(); // Error
         ~~~~~
 !!! error TS1361: 'types' cannot be used as a value because it was imported using 'import type'.
-!!! related TS1376 /b.ts:1:13: 'types' was imported here.
+!!! related TS1376 /b.ts:1:18: 'types' was imported here.
     
 ==== /g.ts (1 errors) ====
     import type types from './c'

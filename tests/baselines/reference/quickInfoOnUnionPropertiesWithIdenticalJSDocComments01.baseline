@@ -2,7 +2,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoOnUnionPropertiesWithIdenticalJSDocComments01.ts",
-      "position": 746
+      "position": 746,
+      "name": ""
     },
     "quickInfo": {
       "kind": "property",

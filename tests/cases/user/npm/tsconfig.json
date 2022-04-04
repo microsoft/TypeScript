@@ -1,23 +1,18 @@
 {
     "compilerOptions": {
+        "moduleResolution": "node",
+        "module": "commonjs",
+        "resolveJsonModule": true,
+        "target": "es2019",
         "noImplicitAny": false,
-        "noImplicitThis": false,
-        "maxNodeModuleJsDepth": 0,
+        "noImplicitThis": true,
         "strict": true,
+        "maxNodeModuleJsDepth": 0,
         "noEmit": true,
         "allowJs": true,
         "checkJs": true,
-        "types": [
-            "node"
-        ],
-        "lib": [
-            "esnext",
-            "dom",
-            "scripthost"
-        ]
+        "types": ["node"],
+        "lib": ["esnext"]
     },
-    "include": [
-        "node_modules/npm",
-        "index.ts"
-    ]
+    "include": ["npm/lib"]
 }

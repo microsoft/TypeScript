@@ -49,9 +49,9 @@ class ExportedThing {
 >z : Symbol(ExportedThing.z, Decl(mixed.js, 10, 21))
 }
 module.exports = {
->module.exports : Symbol("tests/cases/conformance/jsdoc/declarations/mixed", Decl(mixed.js, 0, 0))
+>module.exports : Symbol(module.exports, Decl(mixed.js, 0, 0))
 >module : Symbol(module, Decl(mixed.js, 12, 1))
->exports : Symbol("tests/cases/conformance/jsdoc/declarations/mixed", Decl(mixed.js, 0, 0))
+>exports : Symbol(module.exports, Decl(mixed.js, 0, 0))
 
     doTheThing,
 >doTheThing : Symbol(doTheThing, Decl(mixed.js, 13, 18))

@@ -38,7 +38,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.NotificationScenario = void 0;
 var index_1 = require("search/lib/index");
 var NotificationAPIUtils_1 = require("../API/NotificationAPIUtils");
-exports.NotificationScenario = index_1.test(NotificationAPIUtils_1.getNotification);
+exports.NotificationScenario = (0, index_1.test)(NotificationAPIUtils_1.getNotification);
 
 
 //// [NotificationAPIUtils.d.ts]

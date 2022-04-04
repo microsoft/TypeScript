@@ -1,0 +1,31 @@
+=== tests/cases/conformance/jsx/checkJsxNamespaceNamesQuestionableForms.tsx ===
+declare namespace JSX {
+>JSX : Symbol(JSX, Decl(checkJsxNamespaceNamesQuestionableForms.tsx, 0, 0))
+
+    interface IntrinsicElements {
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(checkJsxNamespaceNamesQuestionableForms.tsx, 0, 23))
+
+        'this:b': any;
+>'this:b' : Symbol(IntrinsicElements['this:b'], Decl(checkJsxNamespaceNamesQuestionableForms.tsx, 1, 33))
+
+        'b:c': {
+>'b:c' : Symbol(IntrinsicElements['b:c'], Decl(checkJsxNamespaceNamesQuestionableForms.tsx, 2, 22))
+
+            x: any
+>x : Symbol(x, Decl(checkJsxNamespaceNamesQuestionableForms.tsx, 3, 16))
+
+        };
+        'a:b': any;
+>'a:b' : Symbol(IntrinsicElements['a:b'], Decl(checkJsxNamespaceNamesQuestionableForms.tsx, 5, 10))
+    }
+}
+
+<a:b></a:b>;
+>a:b : Symbol(JSX.IntrinsicElements['a:b'], Decl(checkJsxNamespaceNamesQuestionableForms.tsx, 5, 10))
+>a:b : Symbol(JSX.IntrinsicElements['a:b'], Decl(checkJsxNamespaceNamesQuestionableForms.tsx, 5, 10))
+
+<b:c.x></b:c.x>;
+<this:b></this:b>;
+>this:b : Symbol(JSX.IntrinsicElements['this:b'], Decl(checkJsxNamespaceNamesQuestionableForms.tsx, 1, 33))
+>this:b : Symbol(JSX.IntrinsicElements['this:b'], Decl(checkJsxNamespaceNamesQuestionableForms.tsx, 1, 33))
+

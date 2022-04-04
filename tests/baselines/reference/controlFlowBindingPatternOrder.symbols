@@ -8,6 +8,7 @@
 >a : Symbol(a, Decl(controlFlowBindingPatternOrder.ts, 2, 7))
 >b : Symbol(b, Decl(controlFlowBindingPatternOrder.ts, 3, 12))
 >a : Symbol(a, Decl(controlFlowBindingPatternOrder.ts, 2, 7))
+>const : Symbol(const)
 
     const bb: 0 = b;
 >bb : Symbol(bb, Decl(controlFlowBindingPatternOrder.ts, 4, 9))
@@ -21,6 +22,7 @@
 >a : Symbol(a, Decl(controlFlowBindingPatternOrder.ts, 7, 7))
 >b : Symbol(b, Decl(controlFlowBindingPatternOrder.ts, 8, 12))
 >a : Symbol(a, Decl(controlFlowBindingPatternOrder.ts, 7, 7))
+>const : Symbol(const)
 
     const bb: 9 = b;
 >bb : Symbol(bb, Decl(controlFlowBindingPatternOrder.ts, 9, 9))
@@ -34,6 +36,8 @@
 >a : Symbol(a, Decl(controlFlowBindingPatternOrder.ts, 12, 7))
 >b : Symbol(b, Decl(controlFlowBindingPatternOrder.ts, 13, 12))
 >a : Symbol(a, Decl(controlFlowBindingPatternOrder.ts, 12, 7))
+>const : Symbol(const)
+>const : Symbol(const)
 
     const bb: 0 | 8 = b;
 >bb : Symbol(bb, Decl(controlFlowBindingPatternOrder.ts, 14, 9))
@@ -47,6 +51,8 @@
 >a : Symbol(a, Decl(controlFlowBindingPatternOrder.ts, 17, 7))
 >b : Symbol(b, Decl(controlFlowBindingPatternOrder.ts, 18, 12))
 >a : Symbol(a, Decl(controlFlowBindingPatternOrder.ts, 17, 7))
+>const : Symbol(const)
+>const : Symbol(const)
 
     const bb: 0 | 8 = b;
 >bb : Symbol(bb, Decl(controlFlowBindingPatternOrder.ts, 19, 9))

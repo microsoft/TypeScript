@@ -63,7 +63,7 @@ namespace ts.codefix {
             if (canDeleteEntireVariableStatement(sourceFile, token)) {
                 return [
                     createDeleteFix(textChanges.ChangeTracker.with(context, t =>
-                        deleteEntireVariableStatement(t, sourceFile, <VariableDeclarationList>token.parent)), Diagnostics.Remove_variable_statement)
+                        deleteEntireVariableStatement(t, sourceFile, token.parent as VariableDeclarationList)), Diagnostics.Remove_variable_statement)
                 ];
             }
 
@@ -132,7 +132,7 @@ namespace ts.codefix {
                             break;
                         }
                         else if (canDeleteEntireVariableStatement(sourceFile, token)) {
-                            deleteEntireVariableStatement(changes, sourceFile, <VariableDeclarationList>token.parent);
+                            deleteEntireVariableStatement(changes, sourceFile, token.parent as VariableDeclarationList);
                         }
                         else {
                             tryDeleteDeclaration(sourceFile, token, changes, checker, sourceFiles, program, cancellationToken, /*isFixAll*/ true);
@@ -237,8 +237,10 @@ namespace ts.codefix {
         if (isParameter(parent)) {
             tryDeleteParameter(changes, sourceFile, parent, checker, sourceFiles, program, cancellationToken, isFixAll);
         }
-        else if (!isFixAll || !(isIdentifier(token) && FindAllReferences.Core.isSymbolReferencedInFile(token, checker, sourceFile))) {
-            changes.delete(sourceFile, isImportClause(parent) ? token : isComputedPropertyName(parent) ? parent.parent : parent);
+        else if (!(isFixAll && isIdentifier(token) && FindAllReferences.Core.isSymbolReferencedInFile(token, checker, sourceFile))) {
+            const node = isImportClause(parent) ? token : isComputedPropertyName(parent) ? parent.parent : parent;
+            Debug.assert(node !== sourceFile, "should not delete whole source file");
+            changes.delete(sourceFile, node);
         }
     }
 
@@ -313,6 +315,10 @@ namespace ts.codefix {
             case SyntaxKind.SetAccessor:
                 // Setter must have a parameter
                 return false;
+
+            case SyntaxKind.GetAccessor:
+                // Getter cannot have parameters
+                return true;
 
             default:
                 return Debug.failBadSyntaxKind(parent);

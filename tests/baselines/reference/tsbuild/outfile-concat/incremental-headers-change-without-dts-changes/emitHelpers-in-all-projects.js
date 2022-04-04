@@ -386,35 +386,7 @@ sourceFile:../first_part3.ts
 >>>//# sourceMappingURL=first-output.js.map
 
 //// [/src/first/bin/first-output.tsbuildinfo]
-{
-  "bundle": {
-    "commonSourceDirectory": "..",
-    "sourceFiles": [
-      "../first_PART1.ts",
-      "../first_part2.ts",
-      "../first_part3.ts"
-    ],
-    "js": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 150,
-          "kind": "text"
-        }
-      ]
-    },
-    "dts": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 208,
-          "kind": "text"
-        }
-      ]
-    }
-  },
-  "version": "FakeTSVersion"
-}
+{"bundle":{"commonSourceDirectory":"..","sourceFiles":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"js":{"sections":[{"pos":0,"end":150,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":208,"kind":"text"}]}},"version":"FakeTSVersion"}
 
 //// [/src/first/bin/first-output.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -445,6 +417,38 @@ declare function forfirstfirst_PART1Rest(): void;
 declare function f(): string;
 
 ======================================================================
+
+//// [/src/first/bin/first-output.tsbuildinfo.readable.baseline.txt]
+{
+  "bundle": {
+    "commonSourceDirectory": "..",
+    "sourceFiles": [
+      "../first_PART1.ts",
+      "../first_part2.ts",
+      "../first_part3.ts"
+    ],
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 150,
+          "kind": "text"
+        }
+      ]
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 208,
+          "kind": "text"
+        }
+      ]
+    }
+  },
+  "version": "FakeTSVersion",
+  "size": 252
+}
 
 //// [/src/third/thirdjs/output/third-output.d.ts.map]
 {"version":3,"file":"third-output.d.ts","sourceRoot":"","sources":["../../../first/first_PART1.ts","../../../first/first_part3.ts","../../../second/second_part1.ts","../../../second/second_part2.ts","../../third_part1.ts"],"names":[],"mappings":"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AAGD,iBAAS,uBAAuB,SAAM;ACXtC,iBAAS,CAAC,WAET;ACFD,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;AACD,iBAAS,yBAAyB,SAEjC;ACbD,cAAM,CAAC;IACH,WAAW;CAGd;ACJD,QAAA,IAAI,CAAC,GAAU,CAAC;AAEhB,iBAAS,uBAAuB,SAE/B"}
@@ -1464,96 +1468,7 @@ sourceFile:../../third_part1.ts
 >>>//# sourceMappingURL=third-output.js.map
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo]
-{
-  "bundle": {
-    "commonSourceDirectory": "../..",
-    "sourceFiles": [
-      "../../third_part1.ts"
-    ],
-    "js": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 500,
-          "kind": "emitHelpers",
-          "data": "typescript:rest"
-        },
-        {
-          "pos": 502,
-          "end": 652,
-          "kind": "prepend",
-          "data": "../../../first/bin/first-output.js",
-          "texts": [
-            {
-              "pos": 502,
-              "end": 652,
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "pos": 652,
-          "end": 1056,
-          "kind": "prepend",
-          "data": "../../../2/second-output.js",
-          "texts": [
-            {
-              "pos": 652,
-              "end": 1056,
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "pos": 1056,
-          "end": 1209,
-          "kind": "text"
-        }
-      ],
-      "sources": {
-        "helpers": [
-          "typescript:rest"
-        ]
-      }
-    },
-    "dts": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 208,
-          "kind": "prepend",
-          "data": "../../../first/bin/first-output.d.ts",
-          "texts": [
-            {
-              "pos": 0,
-              "end": 208,
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "pos": 208,
-          "end": 361,
-          "kind": "prepend",
-          "data": "../../../2/second-output.d.ts",
-          "texts": [
-            {
-              "pos": 208,
-              "end": 361,
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "pos": 361,
-          "end": 431,
-          "kind": "text"
-        }
-      ]
-    }
-  },
-  "version": "FakeTSVersion"
-}
+{"bundle":{"commonSourceDirectory":"../..","sourceFiles":["../../third_part1.ts"],"js":{"sections":[{"pos":0,"end":500,"kind":"emitHelpers","data":"typescript:rest"},{"pos":502,"end":652,"kind":"prepend","data":"../../../first/bin/first-output.js","texts":[{"pos":502,"end":652,"kind":"text"}]},{"pos":652,"end":1056,"kind":"prepend","data":"../../../2/second-output.js","texts":[{"pos":652,"end":1056,"kind":"text"}]},{"pos":1056,"end":1209,"kind":"text"}],"sources":{"helpers":["typescript:rest"]}},"dts":{"sections":[{"pos":0,"end":208,"kind":"prepend","data":"../../../first/bin/first-output.d.ts","texts":[{"pos":0,"end":208,"kind":"text"}]},{"pos":208,"end":361,"kind":"prepend","data":"../../../2/second-output.d.ts","texts":[{"pos":208,"end":361,"kind":"text"}]},{"pos":361,"end":431,"kind":"text"}]}},"version":"FakeTSVersion"}
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -1650,4 +1565,97 @@ declare var c: C;
 declare function forthirdthird_part1Rest(): void;
 
 ======================================================================
+
+//// [/src/third/thirdjs/output/third-output.tsbuildinfo.readable.baseline.txt]
+{
+  "bundle": {
+    "commonSourceDirectory": "../..",
+    "sourceFiles": [
+      "../../third_part1.ts"
+    ],
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 500,
+          "kind": "emitHelpers",
+          "data": "typescript:rest"
+        },
+        {
+          "pos": 502,
+          "end": 652,
+          "kind": "prepend",
+          "data": "../../../first/bin/first-output.js",
+          "texts": [
+            {
+              "pos": 502,
+              "end": 652,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 652,
+          "end": 1056,
+          "kind": "prepend",
+          "data": "../../../2/second-output.js",
+          "texts": [
+            {
+              "pos": 652,
+              "end": 1056,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 1056,
+          "end": 1209,
+          "kind": "text"
+        }
+      ],
+      "sources": {
+        "helpers": [
+          "typescript:rest"
+        ]
+      }
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 208,
+          "kind": "prepend",
+          "data": "../../../first/bin/first-output.d.ts",
+          "texts": [
+            {
+              "pos": 0,
+              "end": 208,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 208,
+          "end": 361,
+          "kind": "prepend",
+          "data": "../../../2/second-output.d.ts",
+          "texts": [
+            {
+              "pos": 208,
+              "end": 361,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 361,
+          "end": 431,
+          "kind": "text"
+        }
+      ]
+    }
+  },
+  "version": "FakeTSVersion",
+  "size": 836
+}
 

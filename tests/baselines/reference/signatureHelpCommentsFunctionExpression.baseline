@@ -1,0 +1,444 @@
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/signatureHelpCommentsFunctionExpression.ts",
+      "position": 259,
+      "name": "5"
+    },
+    "signatureHelp": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "lambdaFoo",
+              "kind": "localName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "number",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "a",
+              "documentation": [
+                {
+                  "text": "param a",
+                  "kind": "text"
+                }
+              ],
+              "displayParts": [
+                {
+                  "text": "a",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "b",
+              "documentation": [
+                {
+                  "text": "param b",
+                  "kind": "text"
+                }
+              ],
+              "displayParts": [
+                {
+                  "text": "b",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [
+            {
+              "text": "this is lambda comment",
+              "kind": "text"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "lambdaFoo var comment",
+              "kind": "text"
+            }
+          ],
+          "tags": []
+        }
+      ],
+      "applicableSpan": {
+        "start": 259,
+        "length": 6
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 0,
+      "argumentCount": 2
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/signatureHelpCommentsFunctionExpression.ts",
+      "position": 263,
+      "name": "6"
+    },
+    "signatureHelp": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "lambdaFoo",
+              "kind": "localName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "number",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "a",
+              "documentation": [
+                {
+                  "text": "param a",
+                  "kind": "text"
+                }
+              ],
+              "displayParts": [
+                {
+                  "text": "a",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "b",
+              "documentation": [
+                {
+                  "text": "param b",
+                  "kind": "text"
+                }
+              ],
+              "displayParts": [
+                {
+                  "text": "b",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [
+            {
+              "text": "this is lambda comment",
+              "kind": "text"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "lambdaFoo var comment",
+              "kind": "text"
+            }
+          ],
+          "tags": []
+        }
+      ],
+      "applicableSpan": {
+        "start": 259,
+        "length": 6
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 1,
+      "argumentCount": 2
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/signatureHelpCommentsFunctionExpression.ts",
+      "position": 862,
+      "name": "18"
+    },
+    "signatureHelp": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "assigned",
+              "kind": "localName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "number",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "s",
+              "documentation": [
+                {
+                  "text": "On parameter",
+                  "kind": "text"
+                },
+                {
+                  "text": "\n",
+                  "kind": "lineBreak"
+                },
+                {
+                  "text": "param on expression",
+                  "kind": "text"
+                },
+                {
+                  "text": "\n",
+                  "kind": "lineBreak"
+                },
+                {
+                  "text": "the first parameter!",
+                  "kind": "text"
+                }
+              ],
+              "displayParts": [
+                {
+                  "text": "s",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "string",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [
+            {
+              "text": "Summary on expression",
+              "kind": "text"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "On variable",
+              "kind": "text"
+            }
+          ],
+          "tags": [
+            {
+              "name": "param",
+              "text": [
+                {
+                  "text": "s",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "param on expression",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
+              "name": "returns",
+              "text": [
+                {
+                  "text": "return on expression",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
+              "name": "param",
+              "text": [
+                {
+                  "text": "s",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "the first parameter!",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
+              "name": "returns",
+              "text": [
+                {
+                  "text": "the parameter's length",
+                  "kind": "text"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "applicableSpan": {
+        "start": 862,
+        "length": 5
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 0,
+      "argumentCount": 1
+    }
+  }
+]

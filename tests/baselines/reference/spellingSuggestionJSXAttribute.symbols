@@ -20,19 +20,19 @@ class MyComp extends React.Component<{ className?: string, htmlFor?: string }> {
 >htmlFor : Symbol(htmlFor, Decl(spellingSuggestionJSXAttribute.tsx, 6, 58))
 
 <a class="" />;
->a : Symbol(JSX.IntrinsicElements.a, Decl(react16.d.ts, 2390, 41))
+>a : Symbol(JSX.IntrinsicElements.a, Decl(react16.d.ts, 2516, 41))
 >class : Symbol(class, Decl(spellingSuggestionJSXAttribute.tsx, 7, 2))
 
 <a for="" />; // should have no fix
->a : Symbol(JSX.IntrinsicElements.a, Decl(react16.d.ts, 2390, 41))
+>a : Symbol(JSX.IntrinsicElements.a, Decl(react16.d.ts, 2516, 41))
 >for : Symbol(for, Decl(spellingSuggestionJSXAttribute.tsx, 8, 2))
 
 <label for="" />;
->label : Symbol(JSX.IntrinsicElements.label, Decl(react16.d.ts, 2448, 102))
+>label : Symbol(JSX.IntrinsicElements.label, Decl(react16.d.ts, 2574, 102))
 >for : Symbol(for, Decl(spellingSuggestionJSXAttribute.tsx, 9, 6))
 
 <label for="" class="" />;
->label : Symbol(JSX.IntrinsicElements.label, Decl(react16.d.ts, 2448, 102))
+>label : Symbol(JSX.IntrinsicElements.label, Decl(react16.d.ts, 2574, 102))
 >for : Symbol(for, Decl(spellingSuggestionJSXAttribute.tsx, 10, 6))
 >class : Symbol(class, Decl(spellingSuggestionJSXAttribute.tsx, 10, 13))
 

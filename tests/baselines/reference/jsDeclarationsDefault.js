@@ -117,7 +117,7 @@ exports.default = func;
 
 
 //// [index1.d.ts]
-declare var _default: 12;
+declare const _default: 12;
 export default _default;
 //// [index2.d.ts]
 export default function foo(): typeof foo;
@@ -137,7 +137,7 @@ declare class Bar extends Fab {
 import Fab from "./index3";
 //// [index5.d.ts]
 type _default = string | number;
-declare var _default: 12;
+declare const _default: 12;
 export default _default;
 //// [index6.d.ts]
 declare function func(): void;

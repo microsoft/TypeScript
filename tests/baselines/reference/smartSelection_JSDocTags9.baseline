@@ -8,7 +8,7 @@ const Foo = {
            number    
 
 
-    @enum {number}   
+    @enum {number}•  
 
 
 /** @enum {number} */

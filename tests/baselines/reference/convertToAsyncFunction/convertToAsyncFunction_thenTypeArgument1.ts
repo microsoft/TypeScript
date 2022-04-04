@@ -19,7 +19,7 @@ function wrapResponse<T>(response: T): APIResponse<T> {
 }
 
 async function get() {
-    const response = await Promise.resolve((undefined!));
+    const response = await Promise.resolve(undefined!);
     const result: APIResponse<{ email: string; }> = wrapResponse(response);
     return result;
 }

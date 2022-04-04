@@ -7,5 +7,6 @@ class C {
 
     this.super<T>(0);
 >this : Symbol(C, Decl(parserSuperExpression3.ts, 0, 0))
+>T : Symbol(T)
   }
 }

@@ -5,6 +5,7 @@
 // @checkJs: true
 // @filename: uniqueSymbolsDeclarationsInJs.js
 // @out: uniqueSymbolsDeclarationsInJs-out.js
+// @useDefineForClassFields: false
 
 // classes
 class C {
@@ -30,3 +31,6 @@ class C {
     readonlyCall = Symbol();
     readwriteCall = Symbol();
 }
+
+/** @type {unique symbol} */
+const a = Symbol();

@@ -39,19 +39,21 @@ var React = require("react");
 </div>;
 <div>
     // Not Comment
-    
+    {
+    //Comment just Fine
+    }
     // Another not Comment
 </div>;
 <div>
     // Not Comment
     {
-//Comment just Fine
-"Hi"}
+    //Comment just Fine
+    "Hi"}
     // Another not Comment
 </div>;
 <div>
     /* Not Comment */
     {
-//Comment just Fine
-"Hi"}
+    //Comment just Fine
+    "Hi"}
 </div>;

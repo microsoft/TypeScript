@@ -1,0 +1,17 @@
+=== tests/cases/conformance/es2019/importMeta/importMetaNarrowing.ts ===
+declare global { interface ImportMeta {foo?: () => void} };
+>global : Symbol(global, Decl(importMetaNarrowing.ts, 0, 0))
+>ImportMeta : Symbol(ImportMeta, Decl(lib.es5.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(importMetaNarrowing.ts, 0, 16))
+>foo : Symbol(ImportMeta.foo, Decl(importMetaNarrowing.ts, 0, 39))
+
+if (import.meta.foo) {
+>import.meta.foo : Symbol(ImportMeta.foo, Decl(importMetaNarrowing.ts, 0, 39))
+>import.meta : Symbol(ImportMeta, Decl(lib.es5.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(importMetaNarrowing.ts, 0, 16))
+>foo : Symbol(ImportMeta.foo, Decl(importMetaNarrowing.ts, 0, 39))
+
+  import.meta.foo();
+>import.meta.foo : Symbol(ImportMeta.foo, Decl(importMetaNarrowing.ts, 0, 39))
+>import.meta : Symbol(ImportMeta, Decl(lib.es5.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(importMetaNarrowing.ts, 0, 16))
+>foo : Symbol(ImportMeta.foo, Decl(importMetaNarrowing.ts, 0, 39))
+}
+

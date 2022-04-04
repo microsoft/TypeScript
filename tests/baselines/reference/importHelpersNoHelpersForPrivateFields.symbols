@@ -1,0 +1,26 @@
+=== tests/cases/compiler/main.ts ===
+export class Foo {
+>Foo : Symbol(Foo, Decl(main.ts, 0, 0))
+
+    #field = true;
+>#field : Symbol(Foo.#field, Decl(main.ts, 0, 18))
+
+    f() {
+>f : Symbol(Foo.f, Decl(main.ts, 1, 18))
+
+        this.#field = this.#field;
+>this.#field : Symbol(Foo.#field, Decl(main.ts, 0, 18))
+>this : Symbol(Foo, Decl(main.ts, 0, 0))
+>this.#field : Symbol(Foo.#field, Decl(main.ts, 0, 18))
+>this : Symbol(Foo, Decl(main.ts, 0, 0))
+
+        #field in this;
+>#field : Symbol(Foo.#field, Decl(main.ts, 0, 18))
+>this : Symbol(Foo, Decl(main.ts, 0, 0))
+    }
+}
+
+=== tests/cases/compiler/tslib.d.ts ===
+export {}
+No type information for this code.
+No type information for this code.

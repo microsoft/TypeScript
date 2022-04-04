@@ -77,6 +77,10 @@ function f4() {
 declare let v1!: number;
 declare var v2!: number;
 
+declare namespace foo {
+	var v!: number;
+}
+
 
 //// [definiteAssignmentAssertions.js]
 "use strict";
@@ -166,3 +170,6 @@ declare function f3(): void;
 declare function f4(): void;
 declare let v1: number;
 declare var v2: number;
+declare namespace foo {
+    var v: number;
+}

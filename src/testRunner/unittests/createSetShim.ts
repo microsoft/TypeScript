@@ -128,9 +128,9 @@ namespace ts {
             }
 
             SetShim = ShimCollections.createSetShim(getIterator);
-            afterEach(() => {
-                SetShim = undefined!;
-            });
+        });
+        afterEach(() => {
+            SetShim = undefined!;
         });
 
         it("iterates values in insertion order and handles changes with string keys", () => {
@@ -302,7 +302,7 @@ namespace ts {
             set.add("c");
             set.add("a");
             const actual: [string, string][] = [];
-            set.forEach((value, key) => { actual.push([key, value]); });
+            set.forEach((value, key) => actual.push([key, value]));
             assert.deepEqual(actual, [["c", "c"], ["a", "a"]]);
         });
     });

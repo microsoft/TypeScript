@@ -1,0 +1,14 @@
+=== tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendingOptionalChain.ts ===
+namespace Foo {
+>Foo : Symbol(Foo, Decl(interfaceExtendingOptionalChain.ts, 0, 0))
+
+    export class Bar {}
+>Bar : Symbol(Bar, Decl(interfaceExtendingOptionalChain.ts, 0, 15))
+}
+
+interface C1 extends Foo?.Bar {}
+>C1 : Symbol(C1, Decl(interfaceExtendingOptionalChain.ts, 2, 1))
+>Foo?.Bar : Symbol(Foo.Bar, Decl(interfaceExtendingOptionalChain.ts, 0, 15))
+>Foo : Symbol(Foo, Decl(interfaceExtendingOptionalChain.ts, 0, 0))
+>Bar : Symbol(Foo.Bar, Decl(interfaceExtendingOptionalChain.ts, 0, 15))
+

@@ -1,0 +1,40 @@
+/exports.ts(9,15): error TS2207: The 'type' modifier cannot be used on a named export when 'export type' is used on its export statement.
+/imports.ts(3,1): error TS1362: 'as' cannot be used as a value because it was exported using 'export type'.
+/imports.ts(4,1): error TS1362: 'something' cannot be used as a value because it was exported using 'export type'.
+/imports.ts(5,1): error TS1362: 'foo' cannot be used as a value because it was exported using 'export type'.
+/imports.ts(6,1): error TS1362: 'bar' cannot be used as a value because it was exported using 'export type'.
+
+
+==== /imports.ts (4 errors) ====
+    import { type, as, something, foo, bar } from "./exports.js";
+    type;
+    as; // Error (used in emitting position)
+    ~~
+!!! error TS1362: 'as' cannot be used as a value because it was exported using 'export type'.
+!!! related TS1377 /exports.ts:5:10: 'as' was exported here.
+    something; // Error (used in emitting position)
+    ~~~~~~~~~
+!!! error TS1362: 'something' cannot be used as a value because it was exported using 'export type'.
+!!! related TS1377 /exports.ts:6:10: 'something' was exported here.
+    foo; // Error (used in emitting position)
+    ~~~
+!!! error TS1362: 'foo' cannot be used as a value because it was exported using 'export type'.
+!!! related TS1377 /exports.ts:7:10: 'foo' was exported here.
+    bar; // Error (used in emitting position)
+    ~~~
+!!! error TS1362: 'bar' cannot be used as a value because it was exported using 'export type'.
+!!! related TS1377 /exports.ts:8:10: 'bar' was exported here.
+    
+==== /exports.ts (1 errors) ====
+    const type = 0;
+    const as = 0;
+    const something = 0;
+    export { type };
+    export { type as };
+    export { type something };
+    export { type type as foo };
+    export { type as as bar };
+    export type { type something as whatever }; // Error
+                  ~~~~
+!!! error TS2207: The 'type' modifier cannot be used on a named export when 'export type' is used on its export statement.
+    

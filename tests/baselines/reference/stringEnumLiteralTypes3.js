@@ -146,32 +146,32 @@ function f4(a, b, c, d) {
     d = d;
 }
 function f5(a, b, c, d) {
-    a = "" /* Unknown */;
-    a = "yes" /* Yes */;
-    a = "no" /* No */;
-    b = "" /* Unknown */;
-    b = "yes" /* Yes */;
-    b = "no" /* No */;
-    c = "" /* Unknown */;
-    c = "yes" /* Yes */;
-    c = "no" /* No */;
-    d = "" /* Unknown */;
-    d = "yes" /* Yes */;
-    d = "no" /* No */;
+    a = "" /* Choice.Unknown */;
+    a = "yes" /* Choice.Yes */;
+    a = "no" /* Choice.No */;
+    b = "" /* Choice.Unknown */;
+    b = "yes" /* Choice.Yes */;
+    b = "no" /* Choice.No */;
+    c = "" /* Choice.Unknown */;
+    c = "yes" /* Choice.Yes */;
+    c = "no" /* Choice.No */;
+    d = "" /* Choice.Unknown */;
+    d = "yes" /* Choice.Yes */;
+    d = "no" /* Choice.No */;
 }
 function f6(a, b, c, d) {
-    a === "" /* Unknown */;
-    a === "yes" /* Yes */;
-    a === "no" /* No */;
-    b === "" /* Unknown */;
-    b === "yes" /* Yes */;
-    b === "no" /* No */;
-    c === "" /* Unknown */;
-    c === "yes" /* Yes */;
-    c === "no" /* No */;
-    d === "" /* Unknown */;
-    d === "yes" /* Yes */;
-    d === "no" /* No */;
+    a === "" /* Choice.Unknown */;
+    a === "yes" /* Choice.Yes */;
+    a === "no" /* Choice.No */;
+    b === "" /* Choice.Unknown */;
+    b === "yes" /* Choice.Yes */;
+    b === "no" /* Choice.No */;
+    c === "" /* Choice.Unknown */;
+    c === "yes" /* Choice.Yes */;
+    c === "no" /* Choice.No */;
+    d === "" /* Choice.Unknown */;
+    d === "yes" /* Choice.Yes */;
+    d === "no" /* Choice.No */;
 }
 function f7(a, b, c, d) {
     a === a;
@@ -193,33 +193,33 @@ function f7(a, b, c, d) {
 }
 function f10(x) {
     switch (x) {
-        case "" /* Unknown */: return x;
-        case "yes" /* Yes */: return x;
-        case "no" /* No */: return x;
+        case "" /* Choice.Unknown */: return x;
+        case "yes" /* Choice.Yes */: return x;
+        case "no" /* Choice.No */: return x;
     }
     return x;
 }
 function f11(x) {
     switch (x) {
-        case "" /* Unknown */: return x;
-        case "yes" /* Yes */: return x;
-        case "no" /* No */: return x;
+        case "" /* Choice.Unknown */: return x;
+        case "yes" /* Choice.Yes */: return x;
+        case "no" /* Choice.No */: return x;
     }
     return x;
 }
 function f12(x) {
     switch (x) {
-        case "" /* Unknown */: return x;
-        case "yes" /* Yes */: return x;
-        case "no" /* No */: return x;
+        case "" /* Choice.Unknown */: return x;
+        case "yes" /* Choice.Yes */: return x;
+        case "no" /* Choice.No */: return x;
     }
     return x;
 }
 function f13(x) {
     switch (x) {
-        case "" /* Unknown */: return x;
-        case "yes" /* Yes */: return x;
-        case "no" /* No */: return x;
+        case "" /* Choice.Unknown */: return x;
+        case "yes" /* Choice.Yes */: return x;
+        case "no" /* Choice.No */: return x;
     }
     return x;
 }

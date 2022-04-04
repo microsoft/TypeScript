@@ -31,7 +31,7 @@ class MainThreadTasks {
 module.exports = MainThreadTasks;
 >module.exports = MainThreadTasks : typeof MainThreadTasks
 >module.exports : typeof MainThreadTasks
->module : { "\"tests/cases/conformance/jsdoc/declarations/index\"": typeof MainThreadTasks; }
+>module : { exports: typeof MainThreadTasks; }
 >exports : typeof MainThreadTasks
 >MainThreadTasks : typeof MainThreadTasks
 
@@ -86,10 +86,10 @@ const taskNameToGroup = {};
 >{} : {}
 
 module.exports = {
->module.exports = {    taskGroups,    taskNameToGroup,} : typeof import("tests/cases/conformance/jsdoc/declarations/module")
->module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/module")
->module : { "\"tests/cases/conformance/jsdoc/declarations/module\"": typeof import("tests/cases/conformance/jsdoc/declarations/module"); }
->exports : typeof import("tests/cases/conformance/jsdoc/declarations/module")
+>module.exports = {    taskGroups,    taskNameToGroup,} : typeof module.exports
+>module.exports : typeof module.exports
+>module : { exports: typeof module.exports; }
+>exports : typeof module.exports
 >{    taskGroups,    taskNameToGroup,} : { taskGroups: { parseHTML: { id: "parseHTML"; label: string; }; styleLayout: { id: "styleLayout"; label: string; }; }; taskNameToGroup: { [x: string]: TaskGroup; }; }
 
     taskGroups,

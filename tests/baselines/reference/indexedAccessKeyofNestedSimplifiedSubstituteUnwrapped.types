@@ -4,7 +4,7 @@ type AnyFunction = (...args: any[]) => any;
 >args : any[]
 
 type Params<T> = Parameters<Extract<T, AnyFunction>>;
->Params : Parameters<Extract<T, AnyFunction>>
+>Params : Params<T>
 
 interface Wrapper<T> {
 	call<K extends keyof T>(event: K, ...args: Params<T[K]>): void;

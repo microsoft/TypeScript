@@ -69,7 +69,7 @@ namespace ts {
                 assert.equal(actualError.category, expectedError.category, `Expected error-category: ${JSON.stringify(expectedError.category)}. Actual error-category: ${JSON.stringify(actualError.category)}.`);
                 if (!ignoreLocation) {
                     assert(actualError.file);
-                    assert(actualError.start);
+                    assert.isDefined(actualError.start);
                     assert(actualError.length);
                 }
             }
@@ -184,7 +184,7 @@ namespace ts {
                         file: undefined,
                         start: 0,
                         length: 0,
-                        messageText: "Argument for '--module' option must be: 'none', 'commonjs', 'amd', 'system', 'umd', 'es6', 'es2015', 'esnext'.",
+                        messageText: "Argument for '--module' option must be: 'none', 'commonjs', 'amd', 'system', 'umd', 'es6', 'es2015', 'es2020', 'es2022', 'esnext'.",
                         code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
                         category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category
                     }]
@@ -420,6 +420,70 @@ namespace ts {
             );
         });
 
+        it("Convert empty string option of moduleSuffixes to compiler-options ", () => {
+            assertCompilerOptions(
+                {
+                    compilerOptions: {
+                        moduleSuffixes: [".ios", ""]
+                    }
+                }, "tsconfig.json",
+                {
+                    compilerOptions: {
+                        moduleSuffixes: [".ios", ""]
+                    },
+                    errors: []
+                }
+            );
+        });
+
+        it("Convert empty string option of moduleSuffixes to compiler-options ", () => {
+            assertCompilerOptions(
+                {
+                    compilerOptions: {
+                        moduleSuffixes: [""]
+                    }
+                }, "tsconfig.json",
+                {
+                    compilerOptions: {
+                        moduleSuffixes: [""]
+                    },
+                    errors: []
+                }
+            );
+        });
+
+        it("Convert trailing-whitespace string option of moduleSuffixes to compiler-options ", () => {
+            assertCompilerOptions(
+                {
+                    compilerOptions: {
+                        moduleSuffixes: ["   "]
+                    }
+                }, "tsconfig.json",
+                {
+                    compilerOptions: {
+                        moduleSuffixes: ["   "]
+                    },
+                    errors: []
+                }
+            );
+        });
+
+        it("Convert empty option of moduleSuffixes to compiler-options ", () => {
+            assertCompilerOptions(
+                {
+                    compilerOptions: {
+                        moduleSuffixes: []
+                    }
+                }, "tsconfig.json",
+                {
+                    compilerOptions: {
+                        moduleSuffixes: []
+                    },
+                    errors: []
+                }
+            );
+        });
+
         it("Convert incorrectly format tsconfig.json to compiler-options ", () => {
             assertCompilerOptions(
                 {
@@ -601,6 +665,114 @@ namespace ts {
                     experimentalDecorators: true,
                 },
                 hasParseErrors: true
+            });
+        });
+
+        it("Convert a tsconfig file with stray trailing characters", () => {
+            assertCompilerOptionsWithJsonText(`{
+                "compilerOptions": {
+                    "target": "esnext"
+                }
+            } blah`, "tsconfig.json", {
+                compilerOptions: {
+                    target: ScriptTarget.ESNext
+                },
+                hasParseErrors: true,
+                errors: [{
+                    ...Diagnostics.The_root_value_of_a_0_file_must_be_an_object,
+                    messageText: "The root value of a 'tsconfig.json' file must be an object.",
+                    file: undefined,
+                    start: 0,
+                    length: 0
+                }]
+            });
+        });
+
+        it("Convert a tsconfig file with stray leading characters", () => {
+            assertCompilerOptionsWithJsonText(`blah {
+                "compilerOptions": {
+                    "target": "esnext"
+                }
+            }`, "tsconfig.json", {
+                compilerOptions: {
+                    target: ScriptTarget.ESNext
+                },
+                hasParseErrors: true,
+                errors: [{
+                    ...Diagnostics.The_root_value_of_a_0_file_must_be_an_object,
+                    messageText: "The root value of a 'tsconfig.json' file must be an object.",
+                    file: undefined,
+                    start: 0,
+                    length: 0
+                }]
+            });
+        });
+
+        it("Convert a tsconfig file as an array", () => {
+            assertCompilerOptionsWithJsonText(`[{
+                "compilerOptions": {
+                    "target": "esnext"
+                }
+            }]`, "tsconfig.json", {
+                compilerOptions: {
+                    target: ScriptTarget.ESNext
+                },
+                errors: [{
+                    ...Diagnostics.The_root_value_of_a_0_file_must_be_an_object,
+                    messageText: "The root value of a 'tsconfig.json' file must be an object.",
+                    file: undefined,
+                    start: 0,
+                    length: 0
+                }]
+            });
+        });
+
+        it("raises an error if you've set a compiler flag in the root without including 'compilerOptions'", () => {
+            assertCompilerOptionsWithJsonText(`{
+                "module": "esnext",
+            }`, "tsconfig.json", {
+                compilerOptions: {},
+                errors: [{
+                    ...Diagnostics._0_should_be_set_inside_the_compilerOptions_object_of_the_config_json_file,
+                    messageText: "'module' should be set inside the 'compilerOptions' object of the config json file.",
+                    file: undefined,
+                    start: 0,
+                    length: 0
+                }]
+            });
+        });
+
+        it("does not raise an error if you've set a compiler flag in the root when you have included 'compilerOptions'", () => {
+            assertCompilerOptionsWithJsonText(`{
+                "target": "esnext",
+                "compilerOptions": {
+                    "module": "esnext"
+                }
+            }`, "tsconfig.json", {
+                compilerOptions: {
+                    module: ModuleKind.ESNext
+                },
+                errors: []
+            });
+        });
+
+        it("Don't crash when root expression is not object at all", () => {
+            assertCompilerOptionsWithJsonText(`42`, "tsconfig.json", {
+                compilerOptions: {},
+                errors: [{
+                    ...Diagnostics.The_root_value_of_a_0_file_must_be_an_object,
+                    messageText: "The root value of a 'tsconfig.json' file must be an object.",
+                    file: undefined,
+                    start: 0,
+                    length: 0
+                }]
+            });
+        });
+
+        it("Allow trailing comments", () => {
+            assertCompilerOptionsWithJsonText(`{} // no options`, "tsconfig.json", {
+                compilerOptions: {},
+                errors: []
             });
         });
     });

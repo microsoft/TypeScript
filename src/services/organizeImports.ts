@@ -13,12 +13,13 @@ namespace ts.OrganizeImports {
         host: LanguageServiceHost,
         program: Program,
         preferences: UserPreferences,
+        skipDestructiveCodeActions?: boolean
     ) {
 
         const changeTracker = textChanges.ChangeTracker.fromContext({ host, formatContext, preferences });
 
         const coalesceAndOrganizeImports = (importGroup: readonly ImportDeclaration[]) => stableSort(
-            coalesceImports(removeUnusedImports(importGroup, sourceFile, program)),
+            coalesceImports(removeUnusedImports(importGroup, sourceFile, program, skipDestructiveCodeActions)),
             (s1, s2) => compareImportsOrRequireStatements(s1, s2));
 
         // All of the old ImportDeclarations in the file, in syntactic order.
@@ -30,7 +31,7 @@ namespace ts.OrganizeImports {
         organizeImportsWorker(topLevelExportDecls, coalesceExports);
 
         for (const ambientModule of sourceFile.statements.filter(isAmbientModule)) {
-            if (!ambientModule.body) { continue; }
+            if (!ambientModule.body) continue;
 
             const ambientModuleImportDecls = ambientModule.body.statements.filter(isImportDeclaration);
             organizeImportsWorker(ambientModuleImportDecls, coalesceAndOrganizeImports);
@@ -63,28 +64,38 @@ namespace ts.OrganizeImports {
                     ? coalesce(importGroup)
                     : importGroup);
 
-            // Delete or replace the first import.
+            // Delete all nodes if there are no imports.
             if (newImportDecls.length === 0) {
-                changeTracker.delete(sourceFile, oldImportDecls[0]);
+                // Consider the first node to have trailingTrivia as we want to exclude the
+                // "header" comment.
+                changeTracker.deleteNodes(sourceFile, oldImportDecls, {
+                    trailingTriviaOption: textChanges.TrailingTriviaOption.Include,
+                }, /*hasTrailingComment*/ true);
             }
             else {
                 // Note: Delete the surrounding trivia because it will have been retained in newImportDecls.
-                changeTracker.replaceNodeWithNodes(sourceFile, oldImportDecls[0], newImportDecls, {
+                const replaceOptions = {
                     leadingTriviaOption: textChanges.LeadingTriviaOption.Exclude, // Leave header comment in place
                     trailingTriviaOption: textChanges.TrailingTriviaOption.Include,
                     suffix: getNewLineOrDefaultFromHost(host, formatContext.options),
-                });
-            }
-
-            // Delete any subsequent imports.
-            for (let i = 1; i < oldImportDecls.length; i++) {
-                changeTracker.deleteNode(sourceFile, oldImportDecls[i]);
+                };
+                changeTracker.replaceNodeWithNodes(sourceFile, oldImportDecls[0], newImportDecls, replaceOptions);
+                const hasTrailingComment = changeTracker.nodeHasTrailingComment(sourceFile, oldImportDecls[0], replaceOptions);
+                changeTracker.deleteNodes(sourceFile, oldImportDecls.slice(1), {
+                    trailingTriviaOption: textChanges.TrailingTriviaOption.Include,
+                }, hasTrailingComment);
             }
         }
     }
 
-    function removeUnusedImports(oldImports: readonly ImportDeclaration[], sourceFile: SourceFile, program: Program) {
+    function removeUnusedImports(oldImports: readonly ImportDeclaration[], sourceFile: SourceFile, program: Program, skipDestructiveCodeActions: boolean | undefined) {
+        // As a precaution, consider unused import detection to be destructive (GH #43051)
+        if (skipDestructiveCodeActions) {
+            return oldImports;
+        }
+
         const typeChecker = program.getTypeChecker();
+        const compilerOptions = program.getCompilerOptions();
         const jsxNamespace = typeChecker.getJsxNamespace(sourceFile);
         const jsxFragmentFactory = typeChecker.getJsxFragmentFactory(sourceFile);
         const jsxElementsPresent = !!(sourceFile.transformFlags & TransformFlags.ContainsJsx);
@@ -136,7 +147,8 @@ namespace ts.OrganizeImports {
                         importDecl.decorators,
                         importDecl.modifiers,
                         /*importClause*/ undefined,
-                        moduleSpecifier));
+                        moduleSpecifier,
+                        /*assertClause*/ undefined));
                 }
                 // If we’re not in a declaration file, we can’t remove the import clause even though
                 // the imported symbols are unused, because removing them makes it look like the import
@@ -151,7 +163,7 @@ namespace ts.OrganizeImports {
 
         function isDeclarationUsed(identifier: Identifier) {
             // The JSX factory symbol is always used if JSX elements are present - even if they are not allowed.
-            return jsxElementsPresent && (identifier.text === jsxNamespace || jsxFragmentFactory && identifier.text === jsxFragmentFactory) ||
+            return jsxElementsPresent && (identifier.text === jsxNamespace || jsxFragmentFactory && identifier.text === jsxFragmentFactory) && jsxModeNeedsExplicitImport(compilerOptions.jsx) ||
                 FindAllReferences.Core.isSymbolReferencedInFile(identifier, typeChecker, sourceFile);
         }
     }
@@ -221,14 +233,13 @@ namespace ts.OrganizeImports {
             else {
                 for (const defaultImport of defaultImports) {
                     newImportSpecifiers.push(
-                        factory.createImportSpecifier(factory.createIdentifier("default"), defaultImport.importClause!.name!)); // TODO: GH#18217
+                        factory.createImportSpecifier(/*isTypeOnly*/ false, factory.createIdentifier("default"), defaultImport.importClause!.name!)); // TODO: GH#18217
                 }
             }
 
-            newImportSpecifiers.push(...flatMap(namedImports, i => (i.importClause!.namedBindings as NamedImports).elements)); // TODO: GH#18217
+            newImportSpecifiers.push(...getNewImportSpecifiers(namedImports));
 
             const sortedImportSpecifiers = sortSpecifiers(newImportSpecifiers);
-
             const importDecl = defaultImports.length > 0
                 ? defaultImports[0]
                 : namedImports[0];
@@ -348,7 +359,8 @@ namespace ts.OrganizeImports {
                             factory.updateNamedExports(exportDecl.exportClause, sortedExportSpecifiers) :
                             factory.updateNamespaceExport(exportDecl.exportClause, exportDecl.exportClause.name)
                     ),
-                    exportDecl.moduleSpecifier));
+                    exportDecl.moduleSpecifier,
+                    exportDecl.assertClause));
         }
 
         return coalescedExports;
@@ -395,7 +407,8 @@ namespace ts.OrganizeImports {
             importDeclaration.decorators,
             importDeclaration.modifiers,
             factory.updateImportClause(importDeclaration.importClause!, importDeclaration.importClause!.isTypeOnly, name, namedBindings), // TODO: GH#18217
-            importDeclaration.moduleSpecifier);
+            importDeclaration.moduleSpecifier,
+            importDeclaration.assertClause);
     }
 
     function sortSpecifiers<T extends ImportOrExportSpecifier>(specifiers: readonly T[]) {
@@ -403,7 +416,8 @@ namespace ts.OrganizeImports {
     }
 
     export function compareImportOrExportSpecifiers<T extends ImportOrExportSpecifier>(s1: T, s2: T) {
-        return compareIdentifiers(s1.propertyName || s1.name, s2.propertyName || s2.name)
+        return compareBooleans(s1.isTypeOnly, s2.isTypeOnly)
+            || compareIdentifiers(s1.propertyName || s1.name, s2.propertyName || s2.name)
             || compareIdentifiers(s1.name, s2.name);
     }
 
@@ -477,5 +491,21 @@ namespace ts.OrganizeImports {
             case SyntaxKind.VariableStatement:
                 return 6;
         }
+    }
+
+    function getNewImportSpecifiers(namedImports: ImportDeclaration[]) {
+        return flatMap(namedImports, namedImport =>
+            map(tryGetNamedBindingElements(namedImport), importSpecifier =>
+                importSpecifier.name && importSpecifier.propertyName && importSpecifier.name.escapedText === importSpecifier.propertyName.escapedText
+                    ? factory.updateImportSpecifier(importSpecifier, importSpecifier.isTypeOnly, /*propertyName*/ undefined, importSpecifier.name)
+                    : importSpecifier
+            )
+        );
+    }
+
+    function tryGetNamedBindingElements(namedImport: ImportDeclaration) {
+        return namedImport.importClause?.namedBindings && isNamedImports(namedImport.importClause.namedBindings)
+            ? namedImport.importClause.namedBindings.elements
+            : undefined;
     }
 }

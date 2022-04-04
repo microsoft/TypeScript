@@ -27,7 +27,7 @@ namespace ts.projectSystem {
             assert.isDefined(moduleInfo);
             assert.equal(moduleInfo.isOrphan(), moduleIsOrphan);
             const key = service.documentRegistry.getKeyForCompilationSettings(project.getCompilationSettings());
-            assert.deepEqual(service.documentRegistry.getLanguageServiceRefCounts(moduleInfo.path), [[key, moduleIsOrphan ? undefined : 1]]);
+            assert.deepEqual(service.documentRegistry.getLanguageServiceRefCounts(moduleInfo.path, moduleInfo.scriptKind), [[key, moduleIsOrphan ? undefined : 1]]);
         }
 
         function createServiceAndHost() {

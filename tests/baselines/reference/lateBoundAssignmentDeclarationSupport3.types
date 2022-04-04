@@ -31,26 +31,26 @@ const _str = "my-fake-sym";
 >"my-fake-sym" : "my-fake-sym"
 
 Object.defineProperty(module.exports, _sym, { value: "ok" });
->Object.defineProperty(module.exports, _sym, { value: "ok" }) : any
->Object.defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>Object.defineProperty(module.exports, _sym, { value: "ok" }) : typeof module.exports
+>Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >Object : ObjectConstructor
->defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
->module.exports : typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport3")
->module : { "\"tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport3\"": typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport3"); }
->exports : typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport3")
+>defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>module.exports : typeof module.exports
+>module : { exports: typeof module.exports; }
+>exports : typeof module.exports
 >_sym : unique symbol
 >{ value: "ok" } : { value: string; }
 >value : string
 >"ok" : "ok"
 
 Object.defineProperty(module.exports, _str, { value: "ok" });
->Object.defineProperty(module.exports, _str, { value: "ok" }) : any
->Object.defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>Object.defineProperty(module.exports, _str, { value: "ok" }) : typeof module.exports
+>Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >Object : ObjectConstructor
->defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
->module.exports : typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport3")
->module : { "\"tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport3\"": typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport3"); }
->exports : typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport3")
+>defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>module.exports : typeof module.exports
+>module : { exports: typeof module.exports; }
+>exports : typeof module.exports
 >_str : "my-fake-sym"
 >{ value: "ok" } : { value: string; }
 >value : string
@@ -59,9 +59,9 @@ Object.defineProperty(module.exports, _str, { value: "ok" });
 module.exports.S = _sym;
 >module.exports.S = _sym : unique symbol
 >module.exports.S : unique symbol
->module.exports : typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport3")
->module : { "\"tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport3\"": typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport3"); }
->exports : typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport3")
+>module.exports : typeof module.exports
+>module : { exports: typeof module.exports; }
+>exports : typeof module.exports
 >S : unique symbol
 >_sym : unique symbol
 

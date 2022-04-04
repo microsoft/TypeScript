@@ -1,0 +1,25 @@
+=== tests/cases/conformance/jsdoc/declarations/foo.js ===
+/**
+ * foo
+ *
+ * @public
+ * @param {object} opts
+ * @param {number} opts.a
+ * @param {number} [opts.b]
+ * @param {number} [opts.c]
+ * @returns {number}
+ */
+function foo({ a, b, c }) {
+>foo : ({ a, b, c }: {    a: number;    b?: number;    c?: number;}) => number
+>a : number
+>b : number
+>c : number
+
+    return a + b + c;
+>a + b + c : number
+>a + b : number
+>a : number
+>b : number
+>c : number
+}
+

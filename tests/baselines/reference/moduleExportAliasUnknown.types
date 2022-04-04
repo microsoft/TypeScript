@@ -2,7 +2,7 @@
 module.exports = window.nonprop;
 >module.exports = window.nonprop : any
 >module.exports : any
->module : { "\"tests/cases/conformance/salsa/bug27025\"": any; }
+>module : { exports: any; }
 >exports : any
 >window.nonprop : any
 >window : Window & typeof globalThis

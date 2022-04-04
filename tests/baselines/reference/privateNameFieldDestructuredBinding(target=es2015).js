@@ -25,27 +25,26 @@ class A {
 
 
 //// [privateNameFieldDestructuredBinding.js]
-var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, privateMap, value) {
-    if (!privateMap.has(receiver)) {
-        throw new TypeError("attempted to set private field on non-instance");
-    }
-    privateMap.set(receiver, value);
-    return value;
+var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
+    if (kind === "m") throw new TypeError("Private method is not writable");
+    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");
+    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
+    return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
 };
-var _field;
+var _A_field;
 class A {
     constructor() {
         var _b, _c, _d, _e, _f, _g, _h, _j, _k, _l;
-        _field.set(this, 1);
+        _A_field.set(this, 1);
         this.otherObject = new A();
         let y;
-        (_b = this, { x: ({ set value(_m) { __classPrivateFieldSet(_b, _field, _m); } }).value, y } = this.testObject());
-        (_c = this, [({ set value(_m) { __classPrivateFieldSet(_c, _field, _m); } }).value, y] = this.testArray());
-        (_d = this, _e = this, { a: ({ set value(_m) { __classPrivateFieldSet(_d, _field, _m); } }).value, b: [({ set value(_m) { __classPrivateFieldSet(_e, _field, _m); } }).value] } = { a: 1, b: [2] });
-        _f = this, _g = this, [({ set value(_m) { __classPrivateFieldSet(_f, _field, _m); } }).value, [({ set value(_m) { __classPrivateFieldSet(_g, _field, _m); } }).value]] = [1, [2]];
-        (_h = this, _j = this, { a: ({ set value(_m) { __classPrivateFieldSet(_h, _field, _m); } }).value = 1, b: [({ set value(_m) { __classPrivateFieldSet(_j, _field, _m); } }).value = 1] } = { b: [] });
-        _k = this, [({ set value(_m) { __classPrivateFieldSet(_k, _field, _m); } }).value = 2] = [];
-        _l = this.otherObject, [({ set value(_m) { __classPrivateFieldSet(_l, _field, _m); } }).value = 2] = [];
+        (_b = this, { x: ({ set value(_m) { __classPrivateFieldSet(_b, _A_field, _m, "f"); } }).value, y } = this.testObject());
+        (_c = this, [({ set value(_m) { __classPrivateFieldSet(_c, _A_field, _m, "f"); } }).value, y] = this.testArray());
+        (_d = this, _e = this, { a: ({ set value(_m) { __classPrivateFieldSet(_d, _A_field, _m, "f"); } }).value, b: [({ set value(_m) { __classPrivateFieldSet(_e, _A_field, _m, "f"); } }).value] } = { a: 1, b: [2] });
+        _f = this, _g = this, [({ set value(_m) { __classPrivateFieldSet(_f, _A_field, _m, "f"); } }).value, [({ set value(_m) { __classPrivateFieldSet(_g, _A_field, _m, "f"); } }).value]] = [1, [2]];
+        (_h = this, _j = this, { a: ({ set value(_m) { __classPrivateFieldSet(_h, _A_field, _m, "f"); } }).value = 1, b: [({ set value(_m) { __classPrivateFieldSet(_j, _A_field, _m, "f"); } }).value = 1] } = { b: [] });
+        _k = this, [({ set value(_m) { __classPrivateFieldSet(_k, _A_field, _m, "f"); } }).value = 2] = [];
+        _l = this.otherObject, [({ set value(_m) { __classPrivateFieldSet(_l, _A_field, _m, "f"); } }).value = 2] = [];
     }
     testObject() {
         return { x: 10, y: 6 };
@@ -54,7 +53,7 @@ class A {
         return [10, 11];
     }
     static test(_a) {
-        [({ set value(_b) { __classPrivateFieldSet(_a, _field, _b); } }).value] = [2];
+        [({ set value(_b) { __classPrivateFieldSet(_a, _A_field, _b, "f"); } }).value] = [2];
     }
 }
-_field = new WeakMap();
+_A_field = new WeakMap();

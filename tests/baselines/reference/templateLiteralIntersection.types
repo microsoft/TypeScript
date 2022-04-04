@@ -1,0 +1,64 @@
+=== tests/cases/compiler/templateLiteralIntersection.ts ===
+// https://github.com/microsoft/TypeScript/issues/48034
+const a = 'a'
+>a : "a"
+>'a' : "a"
+
+type A = typeof a
+>A : "a"
+>a : "a"
+
+type MixA = A & {foo: string}
+>MixA : MixA
+>foo : string
+
+type OriginA1 = `${A}`
+>OriginA1 : "a"
+
+type OriginA2 = `${MixA}`
+>OriginA2 : "a"
+
+type B = `${typeof a}`
+>B : "a"
+>a : "a"
+
+type MixB = B & { foo: string }
+>MixB : MixB
+>foo : string
+
+type OriginB1 = `${B}`
+>OriginB1 : "a"
+
+type OriginB2 = `${MixB}`
+>OriginB2 : "a"
+
+type MixC = { foo: string } & A
+>MixC : MixC
+>foo : string
+
+type OriginC = `${MixC}`
+>OriginC : "a"
+
+type MixD<T extends string> =
+>MixD : `${T & { foo: string; }}`
+
+    `${T & { foo: string }}`
+>foo : string
+
+type OriginD = `${MixD<A & { foo: string }> & { foo: string }}`;
+>OriginD : "a"
+>foo : string
+>foo : string
+
+type E = `${A & {}}`;
+>E : "a"
+
+type MixE = E & {}
+>MixE : MixE
+
+type OriginE = `${MixE}`
+>OriginE : "a"
+
+type OriginF = `${A}foo${A}`;
+>OriginF : "afooa"
+

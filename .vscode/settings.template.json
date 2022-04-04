@@ -2,10 +2,7 @@
 // contents into your existing settings.
 {
     "eslint.validate": [
-        {
-            "language": "typescript",
-            "autoFix": true
-        }
+        "typescript"
     ],
     "eslint.options": {
         "rulePaths": ["./scripts/eslint/built/rules/"],

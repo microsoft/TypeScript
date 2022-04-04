@@ -1,0 +1,31 @@
+=== tests/cases/conformance/es6/templates/templateStringWithCommentsInArrowFunction.ts ===
+const a = 1;
+>a : 1
+>1 : 1
+
+const f1 = () =>
+>f1 : () => string
+>() =>    `${      // a      a    }a` : () => string
+
+    `${
+>`${      // a      a    }a` : string
+
+      // a
+      a
+>a : 1
+
+    }a`;
+
+const f2 = () =>
+>f2 : () => string
+>() =>    `${      // a      a    }` : () => string
+
+    `${
+>`${      // a      a    }` : string
+
+      // a
+      a
+>a : 1
+
+    }`;
+
