@@ -10,7 +10,7 @@
 ////}
 
 goTo.select("start", "end");
-verify.not.refactorAvailable("Extract Symbol", "function_scope_0");
+verify.refactorAvailable("Extract Symbol", "function_scope_0");
 verify.refactorAvailable("Extract Symbol", "function_scope_1");
 
 goTo.select("start", "end");

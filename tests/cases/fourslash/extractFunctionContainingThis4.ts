@@ -11,8 +11,7 @@
 
 
 goTo.select("start", "end");
-// cannot extract it to method, reason: Cannot extract method to a function-like scope that is not a function
-verify.not.refactorAvailable("Extract Symbol", "function_scope_1");
+verify.refactorAvailable("Extract Symbol", "function_scope_1");
 verify.not.refactorAvailable("Extract Symbol", "function_scope_2");
 verify.refactorAvailable("Extract Symbol", "function_scope_3");
 
