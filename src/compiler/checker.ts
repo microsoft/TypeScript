@@ -15860,7 +15860,11 @@ namespace ts {
         }
 
         function isSingletonTupleType(node: TypeNode) {
-            return isTupleTypeNode(node) && length(node.elements) === 1 && !isOptionalTypeNode(node.elements[0]) && !isRestTypeNode(node.elements[0]);
+            return isTupleTypeNode(node) &&
+                length(node.elements) === 1 &&
+                !isOptionalTypeNode(node.elements[0]) &&
+                !(isNamedTupleMember(node.elements[0]) && node.elements[0].questionToken) &&
+                !isRestTypeNode(node.elements[0]);
         }
 
         /**
