@@ -1193,9 +1193,14 @@ namespace ts.FindAllReferences {
             cb: (ref: Identifier) => void,
         ): void {
             const importTracker = createImportTracker(sourceFiles, new Set(sourceFiles.map(f => f.fileName)), checker, cancellationToken);
-            const { importSearches, indirectUsers } = importTracker(exportSymbol, { exportKind: isDefaultExport ? ExportKind.Default : ExportKind.Named, exportingModuleSymbol }, /*isForRename*/ false);
+            const { importSearches, indirectUsers, singleReferences } = importTracker(exportSymbol, { exportKind: isDefaultExport ? ExportKind.Default : ExportKind.Named, exportingModuleSymbol }, /*isForRename*/ false);
             for (const [importLocation] of importSearches) {
                 cb(importLocation);
+            }
+            for (const singleReference of singleReferences) {
+                if (isIdentifier(singleReference) && isImportTypeNode(singleReference.parent)) {
+                    cb(singleReference);
+                }
             }
             for (const indirectUser of indirectUsers) {
                 for (const node of getPossibleSymbolReferenceNodes(indirectUser, isDefaultExport ? "default" : exportName)) {
