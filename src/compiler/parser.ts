@@ -3246,8 +3246,8 @@ namespace ts {
         }
 
         function isParameterNameStart() {
-            // Be permissive about await and yield; disallowing them during a speculative parse
-            // leads to many more follow-on errors than allowing the function to parse then later
+            // Be permissive about await and yield by calling isBindingIdentifier instead of isIdentifier; disallowing
+            // them during a speculative parse leads to many more follow-on errors than allowing the function to parse then later
             // complaining about the use of the keywords.
             return isBindingIdentifier() || token() === SyntaxKind.OpenBracketToken || token() === SyntaxKind.OpenBraceToken;
         }
