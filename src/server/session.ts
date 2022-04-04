@@ -1241,7 +1241,10 @@ namespace ts.server {
 
             let definitions = this.mapDefinitionInfoLocations(unmappedDefinitionAndBoundSpan.definitions, project).slice();
             const needsJsResolution = !some(definitions, d => toNormalizedPath(d.fileName) !== file && !d.isAmbient) || some(definitions, d => !!d.failedAliasResolution);
+
             if (needsJsResolution) {
+                const definitionSet = createSet<DefinitionInfo>(d => d.textSpan.start, documentSpansEqual);
+                definitionSet.forEach(d => definitionSet.add(d));
                 project.withNoDtsResolutionProject([file], (noDtsProject, ensureRoot) => {
                     const ls = noDtsProject.getLanguageService();
                     const jsDefinitions = ls
@@ -1254,12 +1257,12 @@ namespace ts.server {
                                 const refined = tryRefineDefinition(jsDefinition, project.getLanguageService().getProgram()!, ls.getProgram()!);
                                 if (some(refined)) {
                                     for (const def of refined) {
-                                        pushIfUnique(definitions, def, documentSpansEqual);
+                                        definitionSet.add(def);
                                     }
                                     continue;
                                 }
                             }
-                            pushIfUnique(definitions, jsDefinition, documentSpansEqual);
+                            definitionSet.add(jsDefinition);
                         }
                     }
                     else {
@@ -1272,11 +1275,12 @@ namespace ts.server {
                             const noDtsProgram = ls.getProgram()!;
                             const fileToSearch = Debug.checkDefined(noDtsProgram.getSourceFile(fileNameToSearch));
                             for (const match of searchForDeclaration(candidate.name, fileToSearch, noDtsProgram)) {
-                                pushIfUnique(definitions, match, documentSpansEqual);
+                                definitionSet.add(match);
                             }
                         }
                     }
                 });
+                definitions = arrayFrom(definitionSet.values());
             }
 
             definitions = definitions.filter(d => !d.isAmbient && !d.failedAliasResolution);
