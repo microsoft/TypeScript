@@ -903,7 +903,6 @@ namespace ts.server {
         }
 
         public event<T extends object>(body: T, eventName: string): void {
-            tracing?.instant(tracing.Phase.Session, "event", { eventName });
             this.send(toEvent(eventName, body));
         }
 
@@ -955,18 +954,24 @@ namespace ts.server {
         }
 
         private semanticCheck(file: NormalizedPath, project: Project) {
+            tracing?.push(tracing.Phase.Session, "semanticCheck", { file, configFilePath: (project as ConfiguredProject).canonicalConfigFilePath }); // undefined is fine if the cast fails
             const diags = isDeclarationFileInJSOnlyNonConfiguredProject(project, file)
                 ? emptyArray
                 : project.getLanguageService().getSemanticDiagnostics(file).filter(d => !!d.file);
             this.sendDiagnosticsEvent(file, project, diags, "semanticDiag");
+            tracing?.pop();
         }
 
         private syntacticCheck(file: NormalizedPath, project: Project) {
+            tracing?.push(tracing.Phase.Session, "syntacticCheck", { file, configFilePath: (project as ConfiguredProject).canonicalConfigFilePath }); // undefined is fine if the cast fails
             this.sendDiagnosticsEvent(file, project, project.getLanguageService().getSyntacticDiagnostics(file), "syntaxDiag");
+            tracing?.pop();
         }
 
         private suggestionCheck(file: NormalizedPath, project: Project) {
+            tracing?.push(tracing.Phase.Session, "suggestionCheck", { file, configFilePath: (project as ConfiguredProject).canonicalConfigFilePath }); // undefined is fine if the cast fails
             this.sendDiagnosticsEvent(file, project, project.getLanguageService().getSuggestionDiagnostics(file), "suggestionDiag");
+            tracing?.pop();
         }
 
         private sendDiagnosticsEvent(file: NormalizedPath, project: Project, diagnostics: readonly Diagnostic[], kind: protocol.DiagnosticEventKind): void {
@@ -1191,36 +1196,36 @@ namespace ts.server {
         }
 
         private getDefinitionAndBoundSpan(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): protocol.DefinitionInfoAndBoundSpan | DefinitionInfoAndBoundSpan {
-        //     const { file, project } = this.getFileAndProject(args);
-        //     const position = this.getPositionInFile(args, file);
-        //     const scriptInfo = Debug.checkDefined(project.getScriptInfo(file));
+            const { file, project } = this.getFileAndProject(args);
+            const position = this.getPositionInFile(args, file);
+            const scriptInfo = Debug.checkDefined(project.getScriptInfo(file));
 
-        //     const unmappedDefinitionAndBoundSpan = project.getLanguageService().getDefinitionAndBoundSpan(file, position);
+            const unmappedDefinitionAndBoundSpan = project.getLanguageService().getDefinitionAndBoundSpan(file, position);
 
-        //     if (!unmappedDefinitionAndBoundSpan || !unmappedDefinitionAndBoundSpan.definitions) {
-        //         return {
-        //             definitions: emptyArray,
-        //             textSpan: undefined! // TODO: GH#18217
-        //         };
-        //     }
+            if (!unmappedDefinitionAndBoundSpan || !unmappedDefinitionAndBoundSpan.definitions) {
+                return {
+                    definitions: emptyArray,
+                    textSpan: undefined! // TODO: GH#18217
+                };
+            }
 
-        //     const definitions = this.mapDefinitionInfoLocations(unmappedDefinitionAndBoundSpan.definitions, project);
-        //     const { textSpan } = unmappedDefinitionAndBoundSpan;
+            const definitions = this.mapDefinitionInfoLocations(unmappedDefinitionAndBoundSpan.definitions, project);
+            const { textSpan } = unmappedDefinitionAndBoundSpan;
 
-        //     if (simplifiedResult) {
-        //         return {
-        //             definitions: this.mapDefinitionInfo(definitions, project),
-        //             textSpan: toProtocolTextSpan(textSpan, scriptInfo)
-        //         };
-        //     }
+            if (simplifiedResult) {
+                return {
+                    definitions: this.mapDefinitionInfo(definitions, project),
+                    textSpan: toProtocolTextSpan(textSpan, scriptInfo)
+                };
+            }
 
-        //     return {
-        //         definitions: definitions.map(Session.mapToOriginalLocation),
-        //         textSpan,
-        //     };
-        // }
+            return {
+                definitions: definitions.map(Session.mapToOriginalLocation),
+                textSpan,
+            };
+        }
 
-        // private getSourceDefinitionAndBoundSpan(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): protocol.DefinitionInfoAndBoundSpan | DefinitionInfoAndBoundSpan {
+        private getSourceDefinitionAndBoundSpan(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): protocol.DefinitionInfoAndBoundSpan | DefinitionInfoAndBoundSpan {
             const { file, project } = this.getFileAndProject(args);
             const position = this.getPositionInFile(args, file);
             const scriptInfo = Debug.checkDefined(project.getScriptInfo(file));
@@ -1972,10 +1977,41 @@ namespace ts.server {
             const prefix = args.prefix || "";
             const entries = mapDefined<CompletionEntry, protocol.CompletionEntry>(completions.entries, entry => {
                 if (completions.isMemberCompletion || startsWith(entry.name.toLowerCase(), prefix.toLowerCase())) {
-                    const { name, kind, kindModifiers, sortText, insertText, replacementSpan, hasAction, source, sourceDisplay, isSnippet, isRecommended, isPackageJsonImport, isImportStatementCompletion, data } = entry;
+                    const {
+                        name,
+                        kind,
+                        kindModifiers,
+                        sortText,
+                        insertText,
+                        replacementSpan,
+                        hasAction,
+                        source,
+                        sourceDisplay,
+                        labelDetails,
+                        isSnippet,
+                        isRecommended,
+                        isPackageJsonImport,
+                        isImportStatementCompletion,
+                        data } = entry;
                     const convertedSpan = replacementSpan ? toProtocolTextSpan(replacementSpan, scriptInfo) : undefined;
                     // Use `hasAction || undefined` to avoid serializing `false`.
-                    return { name, kind, kindModifiers, sortText, insertText, replacementSpan: convertedSpan, isSnippet, hasAction: hasAction || undefined, source, sourceDisplay, isRecommended, isPackageJsonImport, isImportStatementCompletion, data };
+                    return {
+                        name,
+                        kind,
+                        kindModifiers,
+                        sortText,
+                        insertText,
+                        replacementSpan: convertedSpan,
+                        isSnippet,
+                        hasAction: hasAction || undefined,
+                        source,
+                        sourceDisplay,
+                        labelDetails,
+                        isRecommended,
+                        isPackageJsonImport,
+                        isImportStatementCompletion,
+                        data
+                    };
                 }
             });
 
@@ -2857,12 +2893,12 @@ namespace ts.server {
             [CommandNames.DefinitionAndBoundSpanFull]: (request: protocol.DefinitionAndBoundSpanRequest) => {
                 return this.requiredResponse(this.getDefinitionAndBoundSpan(request.arguments, /*simplifiedResult*/ false));
             },
-            // [CommandNames.SourceDefinitionAndBoundSpan]: (request: protocol.SourceDefinitionAndBoundSpanRequest) => {
-            //     return this.requiredResponse(this.getSourceDefinitionAndBoundSpan(request.arguments, /*simplifiedResult*/ true));
-            // },
-            // [CommandNames.SourceDefinitionAndBoundSpanFull]: (request: protocol.SourceDefinitionAndBoundSpanRequest) => {
-            //     return this.requiredResponse(this.getSourceDefinitionAndBoundSpan(request.arguments, /*simplifiedResult*/ false));
-            // },
+            [CommandNames.SourceDefinitionAndBoundSpan]: (request: protocol.SourceDefinitionAndBoundSpanRequest) => {
+                return this.requiredResponse(this.getSourceDefinitionAndBoundSpan(request.arguments, /*simplifiedResult*/ true));
+            },
+            [CommandNames.SourceDefinitionAndBoundSpanFull]: (request: protocol.SourceDefinitionAndBoundSpanRequest) => {
+                return this.requiredResponse(this.getSourceDefinitionAndBoundSpan(request.arguments, /*simplifiedResult*/ false));
+            },
             [CommandNames.EmitOutput]: (request: protocol.EmitOutputRequest) => {
                 return this.requiredResponse(this.getEmitOutput(request.arguments));
             },

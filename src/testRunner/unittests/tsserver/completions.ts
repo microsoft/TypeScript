@@ -42,7 +42,8 @@ namespace ts.projectSystem {
                 source: "/a",
                 sourceDisplay: undefined,
                 isSnippet: undefined,
-                data: { exportName: "foo", fileName: "/a.ts", ambientModuleName: undefined, isPackageJsonImport: undefined }
+                data: { exportName: "foo", fileName: "/a.ts", ambientModuleName: undefined, isPackageJsonImport: undefined },
+                labelDetails: undefined,
             };
 
             // `data.exportMapKey` contains a SymbolId so should not be mocked up with an expected value here.

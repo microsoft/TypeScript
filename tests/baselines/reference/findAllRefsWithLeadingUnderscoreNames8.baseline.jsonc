@@ -1,0 +1,272 @@
+// === /tests/cases/fourslash/findAllRefsWithLeadingUnderscoreNames8.ts ===
+// (/*FIND ALL REFS*/function [|__foo|]() {
+//     [|__foo|]();
+// })
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsWithLeadingUnderscoreNames8.ts",
+      "kind": "local function",
+      "name": "(local function) __foo(): void",
+      "textSpan": {
+        "start": 10,
+        "length": 5
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "local function",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "__foo",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 1,
+        "length": 33
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 10,
+          "length": 5
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsWithLeadingUnderscoreNames8.ts",
+        "contextSpan": {
+          "start": 1,
+          "length": 33
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 24,
+          "length": 5
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsWithLeadingUnderscoreNames8.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/findAllRefsWithLeadingUnderscoreNames8.ts ===
+// (function /*FIND ALL REFS*/[|__foo|]() {
+//     [|__foo|]();
+// })
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsWithLeadingUnderscoreNames8.ts",
+      "kind": "local function",
+      "name": "(local function) __foo(): void",
+      "textSpan": {
+        "start": 10,
+        "length": 5
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "local function",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "__foo",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 1,
+        "length": 33
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 10,
+          "length": 5
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsWithLeadingUnderscoreNames8.ts",
+        "contextSpan": {
+          "start": 1,
+          "length": 33
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 24,
+          "length": 5
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsWithLeadingUnderscoreNames8.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/findAllRefsWithLeadingUnderscoreNames8.ts ===
+// (function [|__foo|]() {
+//     /*FIND ALL REFS*/[|__foo|]();
+// })
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsWithLeadingUnderscoreNames8.ts",
+      "kind": "local function",
+      "name": "(local function) __foo(): void",
+      "textSpan": {
+        "start": 10,
+        "length": 5
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "local function",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "__foo",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 1,
+        "length": 33
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 10,
+          "length": 5
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsWithLeadingUnderscoreNames8.ts",
+        "contextSpan": {
+          "start": 1,
+          "length": 33
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 24,
+          "length": 5
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsWithLeadingUnderscoreNames8.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]

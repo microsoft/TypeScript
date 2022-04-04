@@ -1136,7 +1136,9 @@ namespace ts.refactor.extractSymbol {
 
         // Make a unique name for the extracted variable
         const file = scope.getSourceFile();
-        const localNameText = getUniqueName(isClassLike(scope) ? "newProperty" : "newLocal", file);
+        const localNameText = isPropertyAccessExpression(node) && !isClassLike(scope) && !checker.resolveName(node.name.text, node, SymbolFlags.Value, /*excludeGlobals*/ false) && !isPrivateIdentifier(node.name) && !isKeyword(node.name.originalKeywordKind!)
+            ? node.name.text
+            : getUniqueName(isClassLike(scope) ? "newProperty" : "newLocal", file);
         const isJS = isInJSFile(scope);
 
         let variableType = isJS || !checker.isContextSensitive(node)

@@ -1,0 +1,292 @@
+// === /tests/cases/fourslash/file.tsx ===
+// class RC1 extends React.Component<{}, {}> {
+//     render() {
+//         return null;
+//     }
+// }
+// class RC2 extends React.Component<{}, {}> {
+//     render() {
+//         return null;
+//     }
+//     private method() { }
+// }
+// /*FIND ALL REFS*/var [|RCComp|] = RC1 || RC2;
+// <[|RCComp|] />
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/file.tsx",
+      "kind": "var",
+      "name": "var RCComp: typeof RC1",
+      "textSpan": {
+        "start": 205,
+        "length": 6
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "RCComp",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "typeof",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "RC1",
+          "kind": "className"
+        }
+      ],
+      "contextSpan": {
+        "start": 201,
+        "length": 24
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 205,
+          "length": 6
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 201,
+          "length": 24
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 227,
+          "length": 6
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 226,
+          "length": 10
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/file.tsx ===
+// class RC1 extends React.Component<{}, {}> {
+//     render() {
+//         return null;
+//     }
+// }
+// class RC2 extends React.Component<{}, {}> {
+//     render() {
+//         return null;
+//     }
+//     private method() { }
+// }
+// var /*FIND ALL REFS*/[|RCComp|] = RC1 || RC2;
+// <[|RCComp|] />
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/file.tsx",
+      "kind": "var",
+      "name": "var RCComp: typeof RC1",
+      "textSpan": {
+        "start": 205,
+        "length": 6
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "RCComp",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "typeof",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "RC1",
+          "kind": "className"
+        }
+      ],
+      "contextSpan": {
+        "start": 201,
+        "length": 24
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 205,
+          "length": 6
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 201,
+          "length": 24
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 227,
+          "length": 6
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 226,
+          "length": 10
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+undefined
+
+// === /tests/cases/fourslash/file.tsx ===
+// class RC1 extends React.Component<{}, {}> {
+//     render() {
+//         return null;
+//     }
+// }
+// class RC2 extends React.Component<{}, {}> {
+//     render() {
+//         return null;
+//     }
+//     private method() { }
+// }
+// var [|RCComp|] = RC1 || RC2;
+// </*FIND ALL REFS*/[|RCComp|] />
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/file.tsx",
+      "kind": "var",
+      "name": "var RCComp: typeof RC1",
+      "textSpan": {
+        "start": 205,
+        "length": 6
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "RCComp",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "typeof",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "RC1",
+          "kind": "className"
+        }
+      ],
+      "contextSpan": {
+        "start": 201,
+        "length": 24
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 205,
+          "length": 6
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 201,
+          "length": 24
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 227,
+          "length": 6
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 226,
+          "length": 10
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]

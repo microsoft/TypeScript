@@ -3,6 +3,6 @@
 // References to a unknown index property
 
 ////var a;
-////a["[|{| "isInString": true |}blah|]"];
+////a["/*1*/blah"];
 
-verify.singleReferenceGroup('"blah"');
+verify.baselineFindAllReferences('1');

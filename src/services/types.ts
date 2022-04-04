@@ -1237,6 +1237,7 @@ namespace ts {
         hasAction?: true;
         source?: string;
         sourceDisplay?: SymbolDisplayPart[];
+        labelDetails?: CompletionEntryLabelDetails;
         isRecommended?: true;
         isFromUncheckedFile?: true;
         isPackageJsonImport?: true;
@@ -1250,6 +1251,11 @@ namespace ts {
          * is an auto-import.
          */
         data?: CompletionEntryData;
+    }
+
+    export interface CompletionEntryLabelDetails {
+        detail?: string;
+        description?: string;
     }
 
     export interface CompletionEntryDetails {

@@ -267,7 +267,7 @@ namespace ts {
                         factory.createKeywordTypeNode(SyntaxKind.AnyKeyword)
                     ),
                     factory.createFunctionTypeNode(
-                        [factory.createTypeParameterDeclaration("T")],
+                        [factory.createTypeParameterDeclaration(/*modifiers*/ undefined, "T")],
                         [factory.createParameterDeclaration(
                             /*decorators*/ undefined,
                             /*modifiers*/ undefined,

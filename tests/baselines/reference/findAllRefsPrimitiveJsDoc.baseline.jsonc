@@ -1,0 +1,267 @@
+// === /tests/cases/fourslash/findAllRefsPrimitiveJsDoc.ts ===
+// /**
+//  * @param {/*FIND ALL REFS*/[|number|]} n
+//  * @returns {[|number|]}
+//  */
+// function f(n: [|number|]): [|number|] {}
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsPrimitiveJsDoc.ts",
+      "kind": "keyword",
+      "name": "number",
+      "textSpan": {
+        "start": 15,
+        "length": 6
+      },
+      "displayParts": [
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ]
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 15,
+          "length": 6
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsPrimitiveJsDoc.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 38,
+          "length": 6
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsPrimitiveJsDoc.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 64,
+          "length": 6
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsPrimitiveJsDoc.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 73,
+          "length": 6
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsPrimitiveJsDoc.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/findAllRefsPrimitiveJsDoc.ts ===
+// /**
+//  * @param {[|number|]} n
+//  * @returns {/*FIND ALL REFS*/[|number|]}
+//  */
+// function f(n: [|number|]): [|number|] {}
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsPrimitiveJsDoc.ts",
+      "kind": "keyword",
+      "name": "number",
+      "textSpan": {
+        "start": 15,
+        "length": 6
+      },
+      "displayParts": [
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ]
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 15,
+          "length": 6
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsPrimitiveJsDoc.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 38,
+          "length": 6
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsPrimitiveJsDoc.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 64,
+          "length": 6
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsPrimitiveJsDoc.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 73,
+          "length": 6
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsPrimitiveJsDoc.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/findAllRefsPrimitiveJsDoc.ts ===
+// /**
+//  * @param {[|number|]} n
+//  * @returns {[|number|]}
+//  */
+// function f(n: /*FIND ALL REFS*/[|number|]): [|number|] {}
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsPrimitiveJsDoc.ts",
+      "kind": "keyword",
+      "name": "number",
+      "textSpan": {
+        "start": 15,
+        "length": 6
+      },
+      "displayParts": [
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ]
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 15,
+          "length": 6
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsPrimitiveJsDoc.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 38,
+          "length": 6
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsPrimitiveJsDoc.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 64,
+          "length": 6
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsPrimitiveJsDoc.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 73,
+          "length": 6
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsPrimitiveJsDoc.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/findAllRefsPrimitiveJsDoc.ts ===
+// /**
+//  * @param {[|number|]} n
+//  * @returns {[|number|]}
+//  */
+// function f(n: [|number|]): /*FIND ALL REFS*/[|number|] {}
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsPrimitiveJsDoc.ts",
+      "kind": "keyword",
+      "name": "number",
+      "textSpan": {
+        "start": 15,
+        "length": 6
+      },
+      "displayParts": [
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ]
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 15,
+          "length": 6
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsPrimitiveJsDoc.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 38,
+          "length": 6
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsPrimitiveJsDoc.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 64,
+          "length": 6
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsPrimitiveJsDoc.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 73,
+          "length": 6
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsPrimitiveJsDoc.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]

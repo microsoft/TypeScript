@@ -439,20 +439,21 @@ namespace ts.formatting {
         }
 
         if (previousRange! && formattingScanner.getStartPos() >= originalRange.end) {
-            const token =
+            const tokenInfo =
                 formattingScanner.isOnEOF() ? formattingScanner.readEOFTokenRange() :
                 formattingScanner.isOnToken() ? formattingScanner.readTokenInfo(enclosingNode).token :
                 undefined;
 
-            if (token) {
+            if (tokenInfo) {
+                const parent = findPrecedingToken(tokenInfo.end, sourceFile, enclosingNode)?.parent || previousParent!;
                 processPair(
-                    token,
-                    sourceFile.getLineAndCharacterOfPosition(token.pos).line,
-                    enclosingNode,
+                    tokenInfo,
+                    sourceFile.getLineAndCharacterOfPosition(tokenInfo.pos).line,
+                    parent,
                     previousRange,
                     previousRangeStartLine!,
                     previousParent!,
-                    enclosingNode,
+                    parent,
                     /*dynamicIndentation*/ undefined);
             }
         }

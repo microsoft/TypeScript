@@ -554,7 +554,7 @@ namespace ts {
         }
     }
 
-    function simpleForwardCall(logger: Logger, actionDescription: string, action: () => {}, logPerformance: boolean): {} {
+    function simpleForwardCall(logger: Logger, actionDescription: string, action: () => unknown, logPerformance: boolean): unknown {
         let start: number | undefined;
         if (logPerformance) {
             logger.log(actionDescription);
