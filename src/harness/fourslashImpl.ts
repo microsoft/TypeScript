@@ -3529,9 +3529,10 @@ namespace FourSlash {
             };
         }
 
-        public verifyRefactorAvailable(negative: boolean, triggerReason: ts.RefactorTriggerReason, name: string, actionName?: string) {
+        public verifyRefactorAvailable(negative: boolean, triggerReason: ts.RefactorTriggerReason, name: string, actionName?: string, actionDescription?: string) {
             let refactors = this.getApplicableRefactorsAtSelection(triggerReason);
-            refactors = refactors.filter(r => r.name === name && (actionName === undefined || r.actions.some(a => a.name === actionName)));
+            refactors = refactors.filter(r =>
+                r.name === name && (actionName === undefined || r.actions.some(a => a.name === actionName)) && (actionDescription === undefined || r.actions.some(a => a.description === actionDescription)));
             const isAvailable = refactors.length > 0;
 
             if (negative) {
