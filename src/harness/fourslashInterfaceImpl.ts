@@ -352,6 +352,10 @@ namespace FourSlashInterface {
             this.state.verifyBaselineFindAllReferences(...markerNames);
         }
 
+        public baselineFindAllReferencesMulti(seq: number, ...markerNames: string[]) {
+            this.state.verifyBaselineFindAllReferencesMulti(seq, ...markerNames);
+        }
+
         public baselineGetFileReferences(fileName: string) {
             this.state.verifyBaselineGetFileReferences(fileName);
         }

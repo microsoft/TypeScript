@@ -1198,7 +1198,17 @@ namespace FourSlash {
         }
 
         public verifyBaselineFindAllReferences(...markerNames: string[]) {
+            ts.Debug.assert(markerNames.length > 0, "Must pass at least one marker name to `verifyBaselineFindAllReferences()`");
+            this.verifyBaselineFindAllReferencesWorker("", markerNames);
+        }
+
+        // Used when a single test needs to produce multiple baselines
+        public verifyBaselineFindAllReferencesMulti(seq: number, ...markerNames: string[]) {
             ts.Debug.assert(markerNames.length > 0, "Must pass at least one marker name to `baselineFindAllReferences()`");
+            this.verifyBaselineFindAllReferencesWorker(`.${seq}`, markerNames);
+        }
+
+        private verifyBaselineFindAllReferencesWorker(suffix: string, markerNames: string[]) {
             const baseline = markerNames.map(markerName => {
                 this.goToMarker(markerName);
                 const marker = this.getMarkerByName(markerName);
@@ -1213,7 +1223,7 @@ namespace FourSlash {
                 // Write response JSON
                 return baselineContent + JSON.stringify(references, undefined, 2);
             }).join("\n\n");
-            Harness.Baseline.runBaseline(this.getBaselineFileNameForContainingTestFile(".baseline.jsonc"), baseline);
+            Harness.Baseline.runBaseline(this.getBaselineFileNameForContainingTestFile(`${suffix}.baseline.jsonc`), baseline);
         }
 
         public verifyBaselineGetFileReferences(fileName: string) {
