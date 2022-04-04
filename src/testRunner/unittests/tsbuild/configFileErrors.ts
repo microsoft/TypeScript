@@ -9,7 +9,7 @@ namespace ts {
     });
 
     describe("unittests:: tsbuild:: configFileErrors:: reports syntax errors in config file", () => {
-        verifyTscIncrementalEdits({
+        verifyTscSerializedIncrementalEdits({
             scenario: "configFileErrors",
             subScenario: "reports syntax errors in config file",
             fs: () => loadProjectFromFiles({

@@ -1,11 +1,13 @@
 namespace ts {
     describe("unittests:: tsbuild:: outFile::", () => {
         let outFileFs: vfs.FileSystem;
+        let outFileWithBuildFs: vfs.FileSystem;
         before(() => {
             outFileFs = loadProjectFromDisk("tests/projects/outfile-concat");
         });
         after(() => {
             outFileFs = undefined!;
+            outFileWithBuildFs = undefined!;
         });
 
         function createSolutionBuilder(host: fakes.SolutionBuilderHost, baseOptions?: BuildOptions) {
@@ -61,7 +63,7 @@ namespace ts {
                 incrementalScenarios,
             };
             return incrementalScenarios.length ?
-                verifyTscIncrementalEdits(input) :
+                verifyTscSerializedIncrementalEdits(input) :
                 verifyTsc(input);
         }
 
@@ -104,12 +106,13 @@ namespace ts {
         });
 
         function getOutFileFsAfterBuild() {
+            if (outFileWithBuildFs) return outFileWithBuildFs;
             const fs = outFileFs.shadow();
             const host = fakes.SolutionBuilderHost.create(fs);
             const builder = createSolutionBuilder(host);
             builder.build();
             fs.makeReadonly();
-            return fs;
+            return outFileWithBuildFs = fs;
         }
 
         verifyTscSerializedIncrementalEdits({

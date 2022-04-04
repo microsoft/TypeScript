@@ -19,7 +19,7 @@ namespace ts {
             modifyFs,
             modifyAgainFs
         }: VerifyOutFileScenarioInput) {
-            verifyTscIncrementalEdits({
+            verifyTscSerializedIncrementalEdits({
                 scenario: "amdModulesWithOut",
                 subScenario,
                 fs: () => outFileFs,

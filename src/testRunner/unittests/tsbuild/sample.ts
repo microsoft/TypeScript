@@ -1,12 +1,14 @@
 namespace ts {
     describe("unittests:: tsbuild:: on 'sample1' project", () => {
         let projFs: vfs.FileSystem;
+        let projFsWithBuild: vfs.FileSystem;
         before(() => {
             projFs = loadProjectFromDisk("tests/projects/sample1");
         });
 
         after(() => {
             projFs = undefined!; // Release the contents
+            projFsWithBuild = undefined!;
         });
 
         function getTsBuildProjectFile(project: string, file: string): tscWatch.File {
@@ -17,12 +19,13 @@ namespace ts {
         }
 
         function getSampleFsAfterBuild() {
+            if (projFsWithBuild) return projFsWithBuild;
             const fs = projFs.shadow();
             const host = fakes.SolutionBuilderHost.create(fs);
             const builder = createSolutionBuilder(host, ["/src/tests"], {});
             builder.build();
             fs.makeReadonly();
-            return fs;
+            return projFsWithBuild = fs;
         }
 
         describe("sanity check of clean build of 'sample1' project", () => {
@@ -111,7 +114,7 @@ namespace ts {
         });
 
         describe("can detect when and what to rebuild", () => {
-            verifyTscIncrementalEdits({
+            verifyTscSerializedIncrementalEdits({
                 scenario: "sample1",
                 subScenario: "can detect when and what to rebuild",
                 fs: getSampleFsAfterBuild,
@@ -130,23 +133,25 @@ namespace ts {
                         modifyFs: fs => replaceText(fs, "/src/core/index.ts", "HELLO WORLD", "WELCOME PLANET"),
                     },
                     {
-                        subScenario: "indicates that it would skip builds during a dry build",
-                        buildKind: BuildKind.IncrementalDtsUnchanged,
-                        modifyFs: noop,
-                        commandLineArgs: ["--b", "/src/tests", "--dry"],
-                    },
-                    {
-                        subScenario: "rebuilds from start if force option is set",
-                        buildKind: BuildKind.IncrementalDtsChange,
-                        modifyFs: noop,
-                        commandLineArgs: ["--b", "/src/tests", "--verbose", "--force"],
-                    },
-                    {
                         subScenario: "rebuilds when tsconfig changes",
                         buildKind: BuildKind.IncrementalDtsChange,
                         modifyFs: fs => replaceText(fs, "/src/tests/tsconfig.json", `"composite": true`, `"composite": true, "target": "es3"`),
                     },
                 ]
+            });
+
+            verifyTsc({
+                scenario: "sample1",
+                subScenario: "indicates that it would skip builds during a dry build",
+                fs: getSampleFsAfterBuild,
+                commandLineArgs: ["--b", "/src/tests", "--dry"],
+            });
+
+            verifyTsc({
+                scenario: "sample1",
+                subScenario: "rebuilds from start if force option is set",
+                fs: getSampleFsAfterBuild,
+                commandLineArgs: ["--b", "/src/tests", "--verbose", "--force"],
             });
 
             verifyTscCompileLike(testTscCompileLike, {
