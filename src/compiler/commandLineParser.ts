@@ -885,13 +885,6 @@ namespace ts {
             defaultValueDescription: false,
         },
         {
-            name: "noDtsResolution",
-            type: "boolean",
-            affectsModuleResolution: true,
-            category: Diagnostics.Modules,
-            defaultValueDescription: false,
-        },
-        {
             name: "moduleSuffixes",
             type: "list",
             element: {
