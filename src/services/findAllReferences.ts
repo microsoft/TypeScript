@@ -1346,8 +1346,8 @@ namespace ts.FindAllReferences {
                 }
                 else if (depth < topMost.depth) {
                     topMost.declarationNames = [decl];
+                    topMost.depth = depth;
                 }
-                topMost.depth = depth;
                 return topMost;
             }, { depth: Infinity, declarationNames: [] as Node[] }).declarationNames;
 

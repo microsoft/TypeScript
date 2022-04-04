@@ -1248,7 +1248,7 @@ namespace ts.server {
                             if (jsDefinition.unverified) {
                                 const refined = tryRefineDefinition(jsDefinition, project.getLanguageService().getProgram()!, ls.getProgram()!);
                                 if (some(refined)) {
-                                    for (const def of refined || emptyArray) {
+                                    for (const def of refined) {
                                         pushIfUnique(definitions, def, documentSpansEqual);
                                     }
                                     continue;
