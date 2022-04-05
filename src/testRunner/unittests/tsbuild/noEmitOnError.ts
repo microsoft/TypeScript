@@ -40,9 +40,8 @@ const a = {
 const a = {
     lastName: 'sdsd'
 };`, "utf-8"),
-                    descripencyExplaination: noChangeWithExportsDescripencyRun.descripencyExplaination,
                 },
-                noChangeWithExportsDescripencyRun,
+                noChangeRun,
             ],
             baselinePrograms: true,
         });

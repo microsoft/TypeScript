@@ -48,7 +48,7 @@ Output::
 [7m7[0m         "b.ts"
 [7m [0m [91m        ~~~~~~[0m
 
-[[90m12:00:24 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:00:28 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -77,6 +77,44 @@ FsWatches::
 FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
+
+//// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./a.ts","./b.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","signature":false,"affectsGlobalScope":true},{"version":"4646078106-export function foo() { }","signature":false},{"version":"1045484683-export function bar() { }","signature":false}],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"changeFileSet":[1,2,3]},"version":"FakeTSVersion"}
+
+//// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "program": {
+    "fileNames": [
+      "../../../../a/lib/lib.d.ts",
+      "./a.ts",
+      "./b.ts"
+    ],
+    "fileInfos": {
+      "../../../../a/lib/lib.d.ts": {
+        "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+        "affectsGlobalScope": true
+      },
+      "./a.ts": {
+        "version": "4646078106-export function foo() { }"
+      },
+      "./b.ts": {
+        "version": "1045484683-export function bar() { }"
+      }
+    },
+    "options": {
+      "composite": true
+    },
+    "referencedMap": {},
+    "exportedModulesMap": {},
+    "changeFileSet": [
+      "../../../../a/lib/lib.d.ts",
+      "./a.ts",
+      "./b.ts"
+    ]
+  },
+  "version": "FakeTSVersion",
+  "size": 765
+}
 
 
 fileExists:: {} 
@@ -123,14 +161,14 @@ setModifiedTimes:: {}
 
 Output::
 >> Screen clear
-[[90m12:00:28 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:32 AM[0m] File change detected. Starting incremental compilation...
 
 [96mtsconfig.json[0m:[93m8[0m:[93m9[0m - [91merror[0m[90m TS1005: [0m',' expected.
 
 [7m8[0m         "b.ts"
 [7m [0m [91m        ~~~~~~[0m
 
-[[90m12:00:29 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:00:33 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -194,14 +232,14 @@ setModifiedTimes:: {}
 
 Output::
 >> Screen clear
-[[90m12:00:33 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:37 AM[0m] File change detected. Starting incremental compilation...
 
 [96mtsconfig.json[0m:[93m8[0m:[93m9[0m - [91merror[0m[90m TS1005: [0m',' expected.
 
 [7m8[0m         "b.ts"
 [7m [0m [91m        ~~~~~~[0m
 
-[[90m12:00:34 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:00:38 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -263,14 +301,14 @@ setModifiedTimes:: {}
 
 Output::
 >> Screen clear
-[[90m12:00:38 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:42 AM[0m] File change detected. Starting incremental compilation...
 
 [96mtsconfig.json[0m:[93m8[0m:[93m9[0m - [91merror[0m[90m TS1005: [0m',' expected.
 
 [7m8[0m         "b.ts"
 [7m [0m [91m        ~~~~~~[0m
 
-[[90m12:00:39 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:00:43 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -334,9 +372,9 @@ setModifiedTimes:: {}
 
 Output::
 >> Screen clear
-[[90m12:00:43 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:47 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:56 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:02 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -371,30 +409,6 @@ FsWatches::
 FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/a.js]
-"use strict";
-exports.__esModule = true;
-exports.fooBar = void 0;
-function fooBar() { }
-exports.fooBar = fooBar;
-
-
-//// [/user/username/projects/myproject/a.d.ts]
-export declare function fooBar(): void;
-
-
-//// [/user/username/projects/myproject/b.js]
-"use strict";
-exports.__esModule = true;
-exports.bar = void 0;
-function bar() { }
-exports.bar = bar;
-
-
-//// [/user/username/projects/myproject/b.d.ts]
-export declare function bar(): void;
-
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
 {"program":{"fileNames":["../../../../a/lib/lib.d.ts","./a.ts","./b.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-3260843409-export function fooBar() { }","signature":"-6611919720-export declare function fooBar(): void;\n"},{"version":"1045484683-export function bar() { }","signature":"-2904461644-export declare function bar(): void;\n"}],"options":{"composite":true,"declaration":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3]},"version":"FakeTSVersion"}
@@ -437,6 +451,30 @@ export declare function bar(): void;
   "version": "FakeTSVersion",
   "size": 880
 }
+
+//// [/user/username/projects/myproject/a.js]
+"use strict";
+exports.__esModule = true;
+exports.fooBar = void 0;
+function fooBar() { }
+exports.fooBar = fooBar;
+
+
+//// [/user/username/projects/myproject/a.d.ts]
+export declare function fooBar(): void;
+
+
+//// [/user/username/projects/myproject/b.js]
+"use strict";
+exports.__esModule = true;
+exports.bar = void 0;
+function bar() { }
+exports.bar = bar;
+
+
+//// [/user/username/projects/myproject/b.d.ts]
+export declare function bar(): void;
+
 
 
 fileExists:: {} 

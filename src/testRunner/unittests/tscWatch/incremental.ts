@@ -155,7 +155,7 @@ namespace ts.tscWatch {
                     });
 
                     const state = builderProgram.getState();
-                    assert.equal(state.changedFilesSet!.size, 0, "changes");
+                    assert.equal(state.changedFilesSet.size, 0, "changes");
 
                     assert.equal(state.fileInfos.size, 3, "FileInfo size");
                     assert.deepEqual(state.fileInfos.get(libFile.path as Path), {

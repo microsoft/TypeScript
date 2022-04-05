@@ -1336,7 +1336,7 @@ namespace ts {
         buildResult: BuildResultFlags,
         errorType: string,
     ) {
-        const canEmitBuildInfo = !(buildResult & BuildResultFlags.SyntaxErrors) && program && !outFile(program.getCompilerOptions());
+        const canEmitBuildInfo = program && !outFile(program.getCompilerOptions());
 
         reportAndStoreErrors(state, resolvedPath, diagnostics);
         state.projectStatus.set(resolvedPath, { type: UpToDateStatusType.Unbuildable, reason: `${errorType} errors` });
@@ -1529,7 +1529,7 @@ namespace ts {
             }
 
             if (buildInfo.program) {
-                if (buildInfo.program.hasPendingChange ||
+                if (buildInfo.program.changeFileSet?.length ||
                     (!buildInfo.program.options?.noEmit && buildInfo.program.affectedFilesPendingEmit?.length)) {
                     return {
                         type: UpToDateStatusType.OutOfDateBuildInfo,

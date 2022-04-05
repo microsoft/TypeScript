@@ -207,7 +207,7 @@ interface Symbol {
         exportedModulesMap?: MapLike<string[]>;
         semanticDiagnosticsPerFile?: readonly ReadableProgramBuildInfoDiagnostic[];
         affectedFilesPendingEmit?: readonly ReadableProgramBuilderInfoFilePendingEmit[];
-        hasPendingChange?: boolean
+        changeFileSet?: readonly string[];
     }
     type ReadableBuildInfo = Omit<BuildInfo, "program"> & { program: ReadableProgramBuildInfo | undefined; size: number; };
     function generateBuildInfoProgramBaseline(sys: System, buildInfoPath: string, buildInfo: BuildInfo) {
@@ -232,7 +232,7 @@ interface Symbol {
                     emitKind === BuilderFileEmit.Full ? "Full" :
                         Debug.assertNever(emitKind)
             ]),
-            hasPendingChange: buildInfo.program.hasPendingChange,
+            changeFileSet: buildInfo.program.changeFileSet?.map(toFileName),
         };
         const version = buildInfo.version === ts.version ? fakes.version : buildInfo.version;
         const result: ReadableBuildInfo = {
