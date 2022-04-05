@@ -3376,8 +3376,8 @@ namespace ts {
         }
 
         const expr = isElementAccessExpression(name)
-        ? skipParentheses(name.argumentExpression)
-        : getComputedPropertyNameExpression(name);
+            ? skipParentheses(name.argumentExpression)
+            : getComputedPropertyNameExpression(name);
 
         return !isStringOrNumericLiteralLike(expr) &&
             !isSignedNumericLiteral(expr);
