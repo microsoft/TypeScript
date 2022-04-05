@@ -87,7 +87,7 @@ namespace ts.OrganizeImports {
         }
     }
 
-    function groupImportsByNewlineContiguous(sourceFile: SourceFile,importDecls: ImportDeclaration[]): ImportDeclaration[][] {
+    function groupImportsByNewlineContiguous(sourceFile: SourceFile, importDecls: ImportDeclaration[]): ImportDeclaration[][] {
         const scanner = createScanner(sourceFile.languageVersion, /*skipTrivia*/ false, sourceFile.languageVariant);
         const groupImports: ImportDeclaration[][] = [];
         let groupIndex = 0;
@@ -119,8 +119,9 @@ namespace ts.OrganizeImports {
 
             if (tokenKind === SyntaxKind.NewLineTrivia) {
                 numberOfNewLines++;
+
                 if (numberOfNewLines >= 2) {
-                    return true
+                    return true;
                 }
             }
         }
