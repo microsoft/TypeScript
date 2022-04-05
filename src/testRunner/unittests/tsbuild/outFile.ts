@@ -136,12 +136,12 @@ namespace ts {
             modifyFs: fs => replaceText(fs, "/src/third/tsconfig.json", `"composite": true,`, ""),
         });
 
-        verifyTscCompileLike(tscCompileLike, {
+        verifyTscCompileLike(testTscCompileLike, {
             scenario: "outFile",
             subScenario: "rebuilds completely when version in tsbuildinfo doesnt match ts version",
             fs: getOutFileFsAfterBuild,
             commandLineArgs: ["--b", "/src/third", "--verbose"],
-            worker: sys => {
+            compile: sys => {
                 // Buildinfo will have version which does not match with current ts version
                 fakes.patchHostForBuildInfoWrite(sys, "FakeTSCurrentVersion");
                 const buildHost = createSolutionBuilderHost(sys);
@@ -174,24 +174,24 @@ namespace ts {
             ]
         });
 
-        verifyTscCompileLike(tscCompileLike, {
+        verifyTscCompileLike(testTscCompileLike, {
             scenario: "outFile",
             subScenario: "builds till project specified",
             fs: () => outFileFs,
             commandLineArgs: ["--build", "/src/second/tsconfig.json"],
-            worker: sys => {
+            compile: sys => {
                 const buildHost = createSolutionBuilderHost(sys);
                 const builder = ts.createSolutionBuilder(buildHost, ["/src/third/tsconfig.json"], {});
                 sys.exit(builder.build("/src/second/tsconfig.json"));
             }
         });
 
-        verifyTscCompileLike(tscCompileLike, {
+        verifyTscCompileLike(testTscCompileLike, {
             scenario: "outFile",
             subScenario: "cleans till project specified",
             fs: getOutFileFsAfterBuild,
             commandLineArgs: ["--build", "--clean", "/src/second/tsconfig.json"],
-            worker: sys => {
+            compile: sys => {
                 const buildHost = createSolutionBuilderHost(sys);
                 const builder = ts.createSolutionBuilder(buildHost, ["/src/third/tsconfig.json"], { verbose: true });
                 sys.exit(builder.clean("/src/second/tsconfig.json"));

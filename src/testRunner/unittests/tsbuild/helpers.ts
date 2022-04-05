@@ -332,23 +332,23 @@ interface Symbol {
     }
 
     interface VerifyIncrementalCorrectness {
-        scenario: TscCompile["scenario"];
-        commandLineArgs: TscCompile["commandLineArgs"];
-        modifyFs: TscCompile["modifyFs"];
+        scenario: TestTscCompile["scenario"];
+        commandLineArgs: TestTscCompile["commandLineArgs"];
+        modifyFs: TestTscCompile["modifyFs"];
         incrementalModifyFs: TscIncremental["modifyFs"];
         tick: () => void;
         baseFs: vfs.FileSystem;
         newSys: TscCompileSystem;
         cleanBuildDiscrepancies: TscIncremental["cleanBuildDiscrepancies"];
     }
-    function verifyIncrementalCorrectness(input: () => VerifyIncrementalCorrectness, index: number, subScenario: TscCompile["subScenario"]) {
+    function verifyIncrementalCorrectness(input: () => VerifyIncrementalCorrectness, index: number, subScenario: TestTscCompile["subScenario"]) {
         it(`Verify emit output file text is same when built clean for incremental scenario at:: ${index} ${subScenario}`, () => {
             const {
                 scenario, commandLineArgs, cleanBuildDiscrepancies,
                 modifyFs, incrementalModifyFs,
                 tick, baseFs, newSys
             } = input();
-            const sys = tscCompile({
+            const sys = testTscCompile({
                 scenario,
                 subScenario,
                 fs: () => baseFs.makeReadonly(),
@@ -521,7 +521,7 @@ interface Symbol {
         }
     }
 
-    export interface VerifyTsBuildInputWorker extends TscCompile {
+    export interface VerifyTsBuildInputWorker extends TestTscCompile {
         incrementalScenarios: TscIncremental[];
     }
     function verifyTscIncrementalEditsWorker({
@@ -535,7 +535,7 @@ interface Symbol {
             let baseFs: vfs.FileSystem;
             before(() => {
                 ({ fs: baseFs, tick } = getFsWithTime(fs()));
-                sys = tscCompile({
+                sys = testTscCompile({
                     scenario,
                     subScenario,
                     fs: () => baseFs.makeReadonly(),
@@ -571,7 +571,7 @@ interface Symbol {
                     before(() => {
                         Debug.assert(buildKind !== BuildKind.Initial, "Incremental edit cannot be initial compilation");
                         tick();
-                        newSys = tscCompile({
+                        newSys = testTscCompile({
                             scenario,
                             subScenario: incrementalSubScenario || subScenario,
                             buildKind,
@@ -629,7 +629,7 @@ interface Symbol {
             let incrementalSys: TscCompileSystem[];
             before(() => {
                 ({ fs: baseFs, tick } = getFsWithTime(fs()));
-                sys = tscCompile({
+                sys = testTscCompile({
                     scenario,
                     subScenario,
                     fs: () => baseFs.makeReadonly(),
@@ -648,7 +648,7 @@ interface Symbol {
                 ) => {
                     Debug.assert(buildKind !== BuildKind.Initial, "Incremental edit cannot be initial compilation");
                     tick();
-                    (incrementalSys || (incrementalSys = [])).push(tscCompile({
+                    (incrementalSys || (incrementalSys = [])).push(testTscCompile({
                         scenario,
                         subScenario: incrementalSubScenario || subScenario,
                         buildKind,

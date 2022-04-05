@@ -75,24 +75,24 @@ namespace ts {
                 incrementalScenarios: noChangeOnlyRuns
             });
 
-            verifyTscCompileLike(tscCompileLike, {
+            verifyTscCompileLike(testTscCompileLike, {
                 scenario: "sample1",
                 subScenario: "cleans till project specified",
                 fs: getSampleFsAfterBuild,
                 commandLineArgs: ["--b", "/src/logic", "--clean"],
-                worker: sys => {
+                compile: sys => {
                     const buildHost = createSolutionBuilderHost(sys);
                     const builder = createSolutionBuilder(buildHost, ["/src/third/tsconfig.json"], {});
                     sys.exit(builder.clean("/src/logic"));
                 }
             });
 
-            verifyTscCompileLike(tscCompileLike, {
+            verifyTscCompileLike(testTscCompileLike, {
                 scenario: "sample1",
                 subScenario: "cleaning project in not build order doesnt throw error",
                 fs: getSampleFsAfterBuild,
                 commandLineArgs: ["--b", "/src/logic2", "--clean"],
-                worker: sys => {
+                compile: sys => {
                     const buildHost = createSolutionBuilderHost(sys);
                     const builder = createSolutionBuilder(buildHost, ["/src/third/tsconfig.json"], {});
                     sys.exit(builder.clean("/src/logic2"));
@@ -149,12 +149,12 @@ namespace ts {
                 ]
             });
 
-            verifyTscCompileLike(tscCompileLike, {
+            verifyTscCompileLike(testTscCompileLike, {
                 scenario: "sample1",
                 subScenario: "rebuilds completely when version in tsbuildinfo doesnt match ts version",
                 fs: getSampleFsAfterBuild,
                 commandLineArgs: ["--b", "/src/tests", "--verbose"],
-                worker: sys => {
+                compile: sys => {
                     // Buildinfo will have version which does not match with current ts version
                     fakes.patchHostForBuildInfoWrite(sys, "FakeTSCurrentVersion");
                     const buildHost = createSolutionBuilderHost(sys);
@@ -163,7 +163,7 @@ namespace ts {
                 }
             });
 
-            verifyTscCompileLike(tscCompileLike, {
+            verifyTscCompileLike(testTscCompileLike, {
                 scenario: "sample1",
                 subScenario: "does not rebuild if there is no program and bundle in the ts build info event if version doesnt match ts version",
                 fs: () => {
@@ -175,7 +175,7 @@ namespace ts {
                     return fs;
                 },
                 commandLineArgs: ["--b", "/src/tests", "--verbose"],
-                worker: sys => {
+                compile: sys => {
                     // Buildinfo will have version which does not match with current ts version
                     fakes.patchHostForBuildInfoWrite(sys, "FakeTSCurrentVersion");
                     const buildHost = createSolutionBuilderHost(sys);
@@ -199,24 +199,24 @@ namespace ts {
                 }]
             });
 
-            verifyTscCompileLike(tscCompileLike, {
+            verifyTscCompileLike(testTscCompileLike, {
                 scenario: "sample1",
                 subScenario: "builds till project specified",
                 fs: () => projFs,
                 commandLineArgs: ["--build", "/src/logic/tsconfig.json"],
-                worker: sys => {
+                compile: sys => {
                     const buildHost = createSolutionBuilderHost(sys);
                     const builder = createSolutionBuilder(buildHost, ["/src/tests"], {});
                     sys.exit(builder.build("/src/logic/tsconfig.json"));
                 }
             });
 
-            verifyTscCompileLike(tscCompileLike, {
+            verifyTscCompileLike(testTscCompileLike, {
                 scenario: "sample1",
                 subScenario: "building project in not build order doesnt throw error",
                 fs: () => projFs,
                 commandLineArgs: ["--build", "/src/logic2/tsconfig.json"],
-                worker: sys => {
+                compile: sys => {
                     const buildHost = createSolutionBuilderHost(sys);
                     const builder = createSolutionBuilder(buildHost, ["/src/tests"], {});
                     sys.exit(builder.build("/src/logic2/tsconfig.json"));
@@ -270,12 +270,12 @@ namespace ts {
                 }
             });
 
-            verifyTscCompileLike(tscCompileLike, {
+            verifyTscCompileLike(testTscCompileLike, {
                 scenario: "sample1",
                 subScenario: "building using buildReferencedProject",
                 fs: () => projFs,
                 commandLineArgs: ["--build", "/src/logic2/tsconfig.json"],
-                worker: sys => {
+                compile: sys => {
                     const buildHost = createSolutionBuilderHost(sys);
                     const builder = createSolutionBuilder(buildHost, ["/src/tests"], { verbose: true });
                     sys.exit(builder.buildReferences("/src/tests"));

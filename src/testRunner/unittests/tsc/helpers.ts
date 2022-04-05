@@ -19,7 +19,7 @@ namespace ts {
     };
     export const noChangeOnlyRuns = [noChangeRun];
 
-    export interface TscCompile extends TscCompileLikeBase {
+    export interface TestTscCompile extends TestTscCompileLikeBase {
         baselineSourceMap?: boolean;
         baselineReadFileCalls?: boolean;
         baselinePrograms?: boolean;
@@ -62,7 +62,7 @@ namespace ts {
             }
         };
     }
-    export interface TscCompileLikeBase extends VerifyTscCompileLike {
+    export interface TestTscCompileLikeBase extends VerifyTscCompileLike {
         buildKind?: BuildKind; // Should be defined for tsc --b
 
         modifyFs?: (fs: vfs.FileSystem) => void;
@@ -70,18 +70,21 @@ namespace ts {
         environmentVariables?: Record<string, string>;
     }
 
-    export interface TscCompileLike extends TscCompileLikeBase {
-        worker: (sys: TscCompileSystem) => void;
+    export interface TestTscCompileLike extends TestTscCompileLikeBase {
+        compile: (sys: TscCompileSystem) => void;
         additionalBaseline?: (sys: TscCompileSystem) => void;
     }
-    export function tscCompileLike(input: TscCompileLike) {
+    /**
+     * Initialize FS, run compile function and save baseline
+     */
+    export function testTscCompileLike(input: TestTscCompileLike) {
         const initialFs = input.fs();
         const inputFs = initialFs.shadow();
         const {
             scenario, subScenario, buildKind,
             commandLineArgs, modifyFs,
             environmentVariables,
-            worker, additionalBaseline,
+            compile: worker, additionalBaseline,
         } = input;
         if (modifyFs) modifyFs(inputFs);
         inputFs.makeReadonly();
@@ -115,16 +118,19 @@ ${patch ? vfs.formatPatch(patch) : ""}`
         return sys;
     }
 
-    export function tscCompile(input: TscCompile) {
+    /**
+     * Initialize Fs, execute command line and save baseline
+     */
+    export function testTscCompile(input: TestTscCompile) {
         let actualReadFileMap: MapLike<number> | undefined;
         let getPrograms: CommandLineCallbacks["getPrograms"] | undefined;
-        return tscCompileLike({
+        return testTscCompileLike({
             ...input,
-            worker,
+            compile: commandLineCompile,
             additionalBaseline
         });
 
-        function worker(sys: TscCompileSystem) {
+        function commandLineCompile(sys: TscCompileSystem) {
             fakes.patchHostForBuildInfoReadWrite(sys);
             const writtenFiles = sys.writtenFiles = new Set();
             const originalWriteFile = sys.writeFile;
@@ -182,6 +188,10 @@ ${patch ? vfs.formatPatch(patch) : ""}`
         commandLineArgs: readonly string[];
         fs: () => vfs.FileSystem;
     }
+
+    /**
+     * Verify by baselining after initializing FS and custom compile
+     */
     export function verifyTscCompileLike<T extends VerifyTscCompileLike>(verifier: (input: T) => { baseLine: TscCompileSystem["baseLine"]; }, input: T) {
         describe(`tsc ${input.commandLineArgs.join(" ")} ${input.scenario}:: ${input.subScenario}`, () => {
             describe(input.scenario, () => {
@@ -195,7 +205,10 @@ ${patch ? vfs.formatPatch(patch) : ""}`
         });
     }
 
-    export function verifyTsc(input: TscCompile) {
-        verifyTscCompileLike(tscCompile, input);
+    /**
+     * Verify by baselining after initializing FS and command line compile
+     */
+     export function verifyTsc(input: TestTscCompile) {
+        verifyTscCompileLike(testTscCompile, input);
     }
 }
