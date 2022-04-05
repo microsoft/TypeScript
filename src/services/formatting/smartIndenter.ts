@@ -56,9 +56,9 @@ namespace ts.formatting {
             // for block indentation, we should look for a line which contains something that's not
             // whitespace.
             const currentToken = getTokenAtPosition(sourceFile, position);
-            // for object literal, we want the indentation work like block ident style
-            // if { starts in any position (can be in the middle of a line)
-            // the following indentation should treat { as starting of that line (including leading whitespace)
+            // For object literals, we want indentation to work just like with blocks.
+            // If the `{` starts in any position (even in the middle of a line), then
+            // the following indentation should treat `{` as the start of that line (including leading whitespace).
             // ```
             //     const a: { x: undefined, y: undefined } = {}       // leading 4 whitespaces and { starts in the middle of line
             // ->
