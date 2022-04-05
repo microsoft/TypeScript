@@ -119,10 +119,13 @@ namespace ts.OrganizeImports {
 
             if (tokenKind === SyntaxKind.NewLineTrivia) {
                 numberOfNewLines++;
+                if (numberOfNewLines >= 2) {
+                    return true
+                }
             }
         }
 
-        return numberOfNewLines >= 2;
+        return false;
     }
 
     function removeUnusedImports(oldImports: readonly ImportDeclaration[], sourceFile: SourceFile, program: Program, skipDestructiveCodeActions: boolean | undefined) {
