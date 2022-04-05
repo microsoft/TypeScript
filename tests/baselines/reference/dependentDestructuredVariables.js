@@ -296,6 +296,19 @@ let fooAsyncGenM: FooAsyncGenMethod = {
   }
 };
 
+// Repro from #48345
+
+type Func = <T extends ["a", number] | ["b", string]>(...args: T) => void;
+
+const f60: Func = (kind, payload) => {
+    if (kind === "a") {
+        payload.toFixed();  // error
+    }
+    if (kind === "b") {
+        payload.toUpperCase();  // error
+    }
+};
+
 
 //// [dependentDestructuredVariables.js]
 "use strict";
@@ -529,6 +542,14 @@ let fooAsyncGenM = {
         });
     }
 };
+const f60 = (kind, payload) => {
+    if (kind === "a") {
+        payload.toFixed(); // error
+    }
+    if (kind === "b") {
+        payload.toUpperCase(); // error
+    }
+};
 
 
 //// [dependentDestructuredVariables.d.ts]
@@ -644,3 +665,5 @@ declare type FooAsyncGenMethod = {
     ]): AsyncGenerator<any, any, any>;
 };
 declare let fooAsyncGenM: FooAsyncGenMethod;
+declare type Func = <T extends ["a", number] | ["b", string]>(...args: T) => void;
+declare const f60: Func;

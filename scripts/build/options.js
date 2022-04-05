@@ -31,7 +31,7 @@ module.exports = minimist(process.argv.slice(2), {
         reporter: process.env.reporter || process.env.r,
         lint: process.env.lint || true,
         fix: process.env.fix || process.env.f,
-        workers: process.env.workerCount || os.cpus().length,
+        workers: process.env.workerCount || ((os.cpus().length - (process.env.CI ? 0 : 1)) || 1),
         failed: false,
         keepFailed: false,
         lkg: true,

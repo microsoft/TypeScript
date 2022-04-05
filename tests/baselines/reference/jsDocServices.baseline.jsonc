@@ -1,0 +1,290 @@
+// === /tests/cases/fourslash/jsDocServices.ts ===
+// interface I {}
+// 
+// /**
+//  * @param /*FIND ALL REFS*/[|foo|] I pity the foo
+//  */
+// function f([|foo|]: I) {
+//     return [|foo|];
+// }
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/jsDocServices.ts",
+      "kind": "parameter",
+      "name": "(parameter) foo: I",
+      "textSpan": {
+        "start": 64,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "foo",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        }
+      ],
+      "contextSpan": {
+        "start": 64,
+        "length": 6
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 30,
+          "length": 3
+        },
+        "fileName": "/tests/cases/fourslash/jsDocServices.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 64,
+          "length": 3
+        },
+        "fileName": "/tests/cases/fourslash/jsDocServices.ts",
+        "contextSpan": {
+          "start": 64,
+          "length": 6
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 85,
+          "length": 3
+        },
+        "fileName": "/tests/cases/fourslash/jsDocServices.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/jsDocServices.ts ===
+// interface I {}
+// 
+// /**
+//  * @param [|foo|] I pity the foo
+//  */
+// function f(/*FIND ALL REFS*/[|foo|]: I) {
+//     return [|foo|];
+// }
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/jsDocServices.ts",
+      "kind": "parameter",
+      "name": "(parameter) foo: I",
+      "textSpan": {
+        "start": 64,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "foo",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        }
+      ],
+      "contextSpan": {
+        "start": 64,
+        "length": 6
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 30,
+          "length": 3
+        },
+        "fileName": "/tests/cases/fourslash/jsDocServices.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 64,
+          "length": 3
+        },
+        "fileName": "/tests/cases/fourslash/jsDocServices.ts",
+        "contextSpan": {
+          "start": 64,
+          "length": 6
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 85,
+          "length": 3
+        },
+        "fileName": "/tests/cases/fourslash/jsDocServices.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/jsDocServices.ts ===
+// interface I {}
+// 
+// /**
+//  * @param [|foo|] I pity the foo
+//  */
+// function f([|foo|]: I) {
+//     return /*FIND ALL REFS*/[|foo|];
+// }
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/jsDocServices.ts",
+      "kind": "parameter",
+      "name": "(parameter) foo: I",
+      "textSpan": {
+        "start": 64,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "foo",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        }
+      ],
+      "contextSpan": {
+        "start": 64,
+        "length": 6
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 30,
+          "length": 3
+        },
+        "fileName": "/tests/cases/fourslash/jsDocServices.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 64,
+          "length": 3
+        },
+        "fileName": "/tests/cases/fourslash/jsDocServices.ts",
+        "contextSpan": {
+          "start": 64,
+          "length": 6
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 85,
+          "length": 3
+        },
+        "fileName": "/tests/cases/fourslash/jsDocServices.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]

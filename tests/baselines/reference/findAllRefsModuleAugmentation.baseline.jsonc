@@ -1,0 +1,248 @@
+// === /node_modules/foo/index.d.ts ===
+// /*FIND ALL REFS*/export type [|T|] = number;
+
+// === /a.ts ===
+// import * as foo from "foo";
+// declare module "foo" {
+//     export const x: [|T|];
+// }
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/node_modules/foo/index.d.ts",
+      "kind": "type",
+      "name": "type T = number",
+      "textSpan": {
+        "start": 12,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "type",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "T",
+          "kind": "aliasName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=",
+          "kind": "operator"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 23
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 12,
+          "length": 1
+        },
+        "fileName": "/node_modules/foo/index.d.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 23
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 71,
+          "length": 1
+        },
+        "fileName": "/a.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /node_modules/foo/index.d.ts ===
+// export type /*FIND ALL REFS*/[|T|] = number;
+
+// === /a.ts ===
+// import * as foo from "foo";
+// declare module "foo" {
+//     export const x: [|T|];
+// }
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/node_modules/foo/index.d.ts",
+      "kind": "type",
+      "name": "type T = number",
+      "textSpan": {
+        "start": 12,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "type",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "T",
+          "kind": "aliasName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=",
+          "kind": "operator"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 23
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 12,
+          "length": 1
+        },
+        "fileName": "/node_modules/foo/index.d.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 23
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 71,
+          "length": 1
+        },
+        "fileName": "/a.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /node_modules/foo/index.d.ts ===
+// export type [|T|] = number;
+
+// === /a.ts ===
+// import * as foo from "foo";
+// declare module "foo" {
+//     export const x: /*FIND ALL REFS*/[|T|];
+// }
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/node_modules/foo/index.d.ts",
+      "kind": "type",
+      "name": "type T = number",
+      "textSpan": {
+        "start": 12,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "type",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "T",
+          "kind": "aliasName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=",
+          "kind": "operator"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 23
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 12,
+          "length": 1
+        },
+        "fileName": "/node_modules/foo/index.d.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 23
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 71,
+          "length": 1
+        },
+        "fileName": "/a.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]

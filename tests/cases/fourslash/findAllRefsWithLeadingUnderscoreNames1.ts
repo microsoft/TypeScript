@@ -1,10 +1,10 @@
 /// <reference path='fourslash.ts'/>
 
 ////class Foo {
-////    [|public [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}_bar|]() { return 0; }|]
+////    /*1*/public /*2*/_bar() { return 0; }
 ////}
 ////
 ////var x: Foo;
-////x.[|_bar|];
+////x./*3*/_bar;
 
-verify.singleReferenceGroup("(method) Foo._bar(): number", "_bar");
+verify.baselineFindAllReferences('1', '2', '3');

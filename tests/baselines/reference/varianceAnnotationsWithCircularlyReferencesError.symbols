@@ -1,0 +1,12 @@
+=== tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotationsWithCircularlyReferencesError.ts ===
+type T1<in in> = T1 // Error: circularly references 
+>T1 : Symbol(T1, Decl(varianceAnnotationsWithCircularlyReferencesError.ts, 0, 0))
+> : Symbol((Missing), Decl(varianceAnnotationsWithCircularlyReferencesError.ts, 0, 8), Decl(varianceAnnotationsWithCircularlyReferencesError.ts, 0, 10))
+> : Symbol((Missing), Decl(varianceAnnotationsWithCircularlyReferencesError.ts, 0, 8), Decl(varianceAnnotationsWithCircularlyReferencesError.ts, 0, 10))
+>T1 : Symbol(T1, Decl(varianceAnnotationsWithCircularlyReferencesError.ts, 0, 0))
+
+type T2<out out> = T2 // Error: circularly references 
+>T2 : Symbol(T2, Decl(varianceAnnotationsWithCircularlyReferencesError.ts, 0, 19))
+>out : Symbol(out, Decl(varianceAnnotationsWithCircularlyReferencesError.ts, 1, 8))
+>T2 : Symbol(T2, Decl(varianceAnnotationsWithCircularlyReferencesError.ts, 0, 19))
+

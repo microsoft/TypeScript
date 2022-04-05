@@ -271,7 +271,7 @@
           "length": 16
         },
         "isWriteAccess": true,
-        "isDefinition": false
+        "isDefinition": true
       },
       {
         "textSpan": {

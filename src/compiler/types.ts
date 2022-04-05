@@ -3458,7 +3458,6 @@ namespace ts {
         | FlowStart
         | FlowLabel
         | FlowAssignment
-        | FlowCall
         | FlowCondition
         | FlowSwitchClause
         | FlowArrayMutation
@@ -6149,6 +6148,7 @@ namespace ts {
         maxNodeModuleJsDepth?: number;
         module?: ModuleKind;
         moduleResolution?: ModuleResolutionKind;
+        moduleSuffixes?: string[];
         moduleDetection?: ModuleDetectionKind;
         newLine?: NewLineKind;
         noEmit?: boolean;
@@ -6453,6 +6453,7 @@ namespace ts {
     export interface CommandLineOptionOfListType extends CommandLineOptionBase {
         type: "list";
         element: CommandLineOptionOfCustomType | CommandLineOptionOfStringType | CommandLineOptionOfNumberType | CommandLineOptionOfBooleanType | TsConfigOnlyOption;
+        listPreserveFalsyValues?: boolean;
     }
 
     /* @internal */
@@ -6611,7 +6612,7 @@ namespace ts {
         realpath?(path: string): string;
         getCurrentDirectory?(): string;
         getDirectories?(path: string): string[];
-        useCaseSensitiveFileNames?: boolean | (() => boolean);
+        useCaseSensitiveFileNames?: boolean | (() => boolean) | undefined;
     }
 
     /**
@@ -8753,6 +8754,7 @@ namespace ts {
         readonly includeCompletionsWithInsertText?: boolean;
         readonly includeCompletionsWithClassMemberSnippets?: boolean;
         readonly includeCompletionsWithObjectLiteralMethodSnippets?: boolean;
+        readonly useLabelDetailsInCompletionEntries?: boolean;
         readonly allowIncompleteCompletions?: boolean;
         readonly importModuleSpecifierPreference?: "shortest" | "project-relative" | "relative" | "non-relative";
         /** Determines whether we import `foo/index.ts` as "foo", "foo/index", or "foo/index.js" */

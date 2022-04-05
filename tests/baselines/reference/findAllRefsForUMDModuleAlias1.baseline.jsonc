@@ -1,0 +1,151 @@
+undefined
+
+// === /tests/cases/fourslash/1.ts ===
+// /// <reference path="0.d.ts" />
+// [|myLib|].doThing();
+
+// === /tests/cases/fourslash/0.d.ts ===
+// export function doThing(): string;
+// export function doTheOtherThing(): void;
+// export as namespace /*FIND ALL REFS*/[|myLib|];
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/0.d.ts",
+      "kind": "alias",
+      "name": "export namespace myLib",
+      "textSpan": {
+        "start": 96,
+        "length": 5
+      },
+      "displayParts": [
+        {
+          "text": "export",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "namespace",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "myLib",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 76,
+        "length": 26
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 96,
+          "length": 5
+        },
+        "fileName": "/tests/cases/fourslash/0.d.ts",
+        "contextSpan": {
+          "start": 76,
+          "length": 26
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 32,
+          "length": 5
+        },
+        "fileName": "/tests/cases/fourslash/1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/1.ts ===
+// /// <reference path="0.d.ts" />
+// /*FIND ALL REFS*/[|myLib|].doThing();
+
+// === /tests/cases/fourslash/0.d.ts ===
+// export function doThing(): string;
+// export function doTheOtherThing(): void;
+// export as namespace [|myLib|];
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/0.d.ts",
+      "kind": "alias",
+      "name": "export namespace myLib",
+      "textSpan": {
+        "start": 96,
+        "length": 5
+      },
+      "displayParts": [
+        {
+          "text": "export",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "namespace",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "myLib",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 76,
+        "length": 26
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 96,
+          "length": 5
+        },
+        "fileName": "/tests/cases/fourslash/0.d.ts",
+        "contextSpan": {
+          "start": 76,
+          "length": 26
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 32,
+          "length": 5
+        },
+        "fileName": "/tests/cases/fourslash/1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]

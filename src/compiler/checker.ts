@@ -5262,7 +5262,18 @@ namespace ts {
                         if (!nodeIsSynthesized(node) && getParseTreeNode(node) === node) {
                             return node;
                         }
-                        return setTextRange(factory.cloneNode(visitEachChild(node, deepCloneOrReuseNode, nullTransformationContext)), node);
+                        return setTextRange(factory.cloneNode(visitEachChild(node, deepCloneOrReuseNode, nullTransformationContext, deepCloneOrReuseNodes)), node);
+                    }
+
+                    function deepCloneOrReuseNodes<T extends Node>(nodes: NodeArray<T>, visitor: Visitor | undefined, test?: (node: Node) => boolean, start?: number, count?: number): NodeArray<T>;
+                    function deepCloneOrReuseNodes<T extends Node>(nodes: NodeArray<T> | undefined, visitor: Visitor | undefined, test?: (node: Node) => boolean, start?: number, count?: number): NodeArray<T> | undefined;
+                    function deepCloneOrReuseNodes<T extends Node>(nodes: NodeArray<T> | undefined, visitor: Visitor | undefined, test?: (node: Node) => boolean, start?: number, count?: number): NodeArray<T> | undefined {
+                        if (nodes && nodes.length === 0) {
+                            // Ensure we explicitly make a copy of an empty array; visitNodes will not do this unless the array has elements,
+                            // which can lead to us reusing the same empty NodeArray more than once within the same AST during type noding.
+                            return setTextRange(factory.createNodeArray<T>(/*nodes*/ undefined, nodes.hasTrailingComma), nodes);
+                        }
+                        return visitNodes(nodes, visitor, test, start, count);
                     }
                 }
 
@@ -15849,7 +15860,11 @@ namespace ts {
         }
 
         function isSingletonTupleType(node: TypeNode) {
-            return isTupleTypeNode(node) && length(node.elements) === 1 && !isOptionalTypeNode(node.elements[0]) && !isRestTypeNode(node.elements[0]);
+            return isTupleTypeNode(node) &&
+                length(node.elements) === 1 &&
+                !isOptionalTypeNode(node.elements[0]) &&
+                !isRestTypeNode(node.elements[0]) &&
+                !(isNamedTupleMember(node.elements[0]) && (node.elements[0].questionToken || node.elements[0].dotDotDotToken));
         }
 
         /**
@@ -20629,6 +20644,9 @@ namespace ts {
         function createMarkerType(symbol: Symbol, source: TypeParameter, target: Type) {
             const mapper = makeUnaryTypeMapper(source, target);
             const type = getDeclaredTypeOfSymbol(symbol);
+            if (isErrorType(type)) {
+                return type;
+            }
             const result = symbol.flags & SymbolFlags.TypeAlias ?
                 getTypeAliasInstantiation(symbol, instantiateTypes(getSymbolLinks(symbol).typeParameters!, mapper)) :
                 createTypeReference(type as GenericType, instantiateTypes((type as GenericType).typeParameters, mapper));
@@ -25293,6 +25311,7 @@ namespace ts {
             // a generic type without a nullable constraint and x is a generic type. This is because when both obj
             // and x are of generic types T and K, we want the resulting type to be T[K].
             return parent.kind === SyntaxKind.PropertyAccessExpression ||
+                parent.kind === SyntaxKind.QualifiedName ||
                 parent.kind === SyntaxKind.CallExpression && (parent as CallExpression).expression === node ||
                 parent.kind === SyntaxKind.ElementAccessExpression && (parent as ElementAccessExpression).expression === node &&
                     !(someType(type, isGenericTypeWithoutNullableConstraint) && isGenericIndexType(getTypeOfExpression((parent as ElementAccessExpression).argumentExpression)));
@@ -25439,7 +25458,7 @@ namespace ts {
                     if (func.parameters.length >= 2 && isContextSensitiveFunctionOrObjectLiteralMethod(func)) {
                         const contextualSignature = getContextualSignature(func);
                         if (contextualSignature && contextualSignature.parameters.length === 1 && signatureHasRestParameter(contextualSignature)) {
-                            const restType = getTypeOfSymbol(contextualSignature.parameters[0]);
+                            const restType = getReducedApparentType(getTypeOfSymbol(contextualSignature.parameters[0]));
                             if (restType.flags & TypeFlags.Union && everyType(restType, isTupleType) && !isSymbolAssigned(symbol)) {
                                 const narrowedType = getFlowTypeOfReference(func, restType, restType, /*flowContainer*/ undefined, location.flowNode);
                                 const index = func.parameters.indexOf(declaration) - (getThisParameter(func) ? 1 : 0);
@@ -26891,9 +26910,14 @@ namespace ts {
                         return instantiateInstantiableTypes(contextualType, inferenceContext.nonFixingMapper);
                     }
                     // For other purposes (e.g. determining whether to produce literal types) we only
-                    // incorporate inferences made from the return type in a function call.
+                    // incorporate inferences made from the return type in a function call. We remove
+                    // the 'boolean' type from the contextual type such that contextually typed boolean
+                    // literals actually end up widening to 'boolean' (see #48363).
                     if (inferenceContext.returnMapper) {
-                        return instantiateInstantiableTypes(contextualType, inferenceContext.returnMapper);
+                        const type = instantiateInstantiableTypes(contextualType, inferenceContext.returnMapper);
+                        return type.flags & TypeFlags.Union && containsType((type as UnionType).types, regularFalseType) && containsType((type as UnionType).types, regularTrueType) ?
+                            filterType(type, t => t !== regularFalseType && t !== regularTrueType) :
+                            type;
                     }
                 }
             }

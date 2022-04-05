@@ -1983,7 +1983,7 @@ declare namespace ts {
         Label = 12,
         Condition = 96
     }
-    export type FlowNode = FlowStart | FlowLabel | FlowAssignment | FlowCall | FlowCondition | FlowSwitchClause | FlowArrayMutation | FlowCall | FlowReduceLabel;
+    export type FlowNode = FlowStart | FlowLabel | FlowAssignment | FlowCondition | FlowSwitchClause | FlowArrayMutation | FlowCall | FlowReduceLabel;
     export interface FlowNodeBase {
         flags: FlowFlags;
         id?: number;
@@ -2977,6 +2977,7 @@ declare namespace ts {
         maxNodeModuleJsDepth?: number;
         module?: ModuleKind;
         moduleResolution?: ModuleResolutionKind;
+        moduleSuffixes?: string[];
         moduleDetection?: ModuleDetectionKind;
         newLine?: NewLineKind;
         noEmit?: boolean;
@@ -3163,7 +3164,7 @@ declare namespace ts {
         realpath?(path: string): string;
         getCurrentDirectory?(): string;
         getDirectories?(path: string): string[];
-        useCaseSensitiveFileNames?: boolean | (() => boolean);
+        useCaseSensitiveFileNames?: boolean | (() => boolean) | undefined;
     }
     /**
      * Used by services to specify the minimum host area required to set up source files under any compilation settings
@@ -4100,6 +4101,7 @@ declare namespace ts {
         readonly includeCompletionsWithInsertText?: boolean;
         readonly includeCompletionsWithClassMemberSnippets?: boolean;
         readonly includeCompletionsWithObjectLiteralMethodSnippets?: boolean;
+        readonly useLabelDetailsInCompletionEntries?: boolean;
         readonly allowIncompleteCompletions?: boolean;
         readonly importModuleSpecifierPreference?: "shortest" | "project-relative" | "relative" | "non-relative";
         /** Determines whether we import `foo/index.ts` as "foo", "foo/index", or "foo/index.js" */
@@ -6485,6 +6487,7 @@ declare namespace ts {
         hasAction?: true;
         source?: string;
         sourceDisplay?: SymbolDisplayPart[];
+        labelDetails?: CompletionEntryLabelDetails;
         isRecommended?: true;
         isFromUncheckedFile?: true;
         isPackageJsonImport?: true;
@@ -6498,6 +6501,10 @@ declare namespace ts {
          * is an auto-import.
          */
         data?: CompletionEntryData;
+    }
+    interface CompletionEntryLabelDetails {
+        detail?: string;
+        description?: string;
     }
     interface CompletionEntryDetails {
         name: string;
