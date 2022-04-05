@@ -2743,6 +2743,10 @@
         "category": "Error",
         "code": 2636
     },
+    "Variance annotations are only supported in type aliases for object, function, constructor, and mapped types.": {
+        "category": "Error",
+        "code": 2637
+    },
 
     "Cannot augment module '{0}' with value exports because it resolves to a non-module entity.": {
         "category": "Error",
