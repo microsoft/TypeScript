@@ -99,6 +99,7 @@ namespace ts {
         export interface ManyToManyPathMap extends ReadonlyManyToManyPathMap {
             deleteKey(k: Path): boolean;
             set(k: Path, v: ReadonlySet<Path>): void;
+            clear(): void;
         }
 
         export function createManyToManyPathMap(): ManyToManyPathMap {
@@ -144,6 +145,11 @@ namespace ts {
 
                         return map;
                     },
+                    clear: () => {
+                        forward.clear();
+                        reverse.clear();
+                        deleted?.clear();
+                    }
                 };
 
                 return map;
@@ -161,11 +167,11 @@ namespace ts {
             set.add(v);
         }
 
-        function deleteFromMultimap<K, V>(map: ESMap<K, Set<V>>, k: K, v: V, removeEmpty = true): boolean {
+        function deleteFromMultimap<K, V>(map: ESMap<K, Set<V>>, k: K, v: V): boolean {
             const set = map.get(k);
 
             if (set?.delete(v)) {
-                if (removeEmpty && !set.size) {
+                if (!set.size) {
                     map.delete(k);
                 }
                 return true;
