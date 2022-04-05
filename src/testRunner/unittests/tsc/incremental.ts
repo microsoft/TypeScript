@@ -449,5 +449,36 @@ declare global {
             }, `\ninterface ReadonlyArray<T> { readonly length: number }`),
             incrementalScenarios: noChangeOnlyRuns,
         });
+
+        verifyTsc({
+            scenario: "incremental",
+            subScenario: "ts file with no-default-lib that augments the global scope",
+            fs: () => loadProjectFromFiles({
+                "/src/project/src/main.ts": Utils.dedent`
+                    /// <reference no-default-lib="true"/>
+                    /// <reference lib="esnext" />
+
+                    declare global {
+                        interface Test {
+                        }
+                    }
+
+                    export {};
+                `,
+                "/src/project/tsconfig.json": Utils.dedent`
+                    {
+                        "compilerOptions": {
+                            "target": "ESNext",
+                            "module": "ESNext",
+                            "incremental": true,
+                            "outDir": "dist",
+                        },
+                    }`,
+            }),
+            commandLineArgs: ["--p", "src/project", "--rootDir", "src/project/src"],
+            modifyFs: (fs) => {
+                fs.writeFileSync("/lib/lib.esnext.d.ts", libContent);
+            }
+        });
     });
 }
