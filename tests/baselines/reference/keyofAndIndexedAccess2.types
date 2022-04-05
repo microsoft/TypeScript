@@ -495,7 +495,7 @@ function fn4<K extends number>() {
 >'abc' : "abc"
 
     let y: ReadonlyArray<string>[K] = 'abc';
->y : readonly string[][K]
+>y : (readonly string[])[K]
 >'abc' : "abc"
 }
 

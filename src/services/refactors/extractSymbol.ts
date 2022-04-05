@@ -639,7 +639,8 @@ namespace ts.refactor.extractSymbol {
     }
 
     function isScope(node: Node): node is Scope {
-        return isFunctionLikeDeclaration(node) || isSourceFile(node) || isModuleBlock(node) || isClassLike(node);
+        return isArrowFunction(node) ? isFunctionBody(node.body) :
+            isFunctionLikeDeclaration(node) || isSourceFile(node) || isModuleBlock(node) || isClassLike(node);
     }
 
     /**

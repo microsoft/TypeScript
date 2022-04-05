@@ -3433,6 +3433,10 @@
         "category": "Error",
         "code": 2837
     },
+    "All declarations of '{0}' must have identical constraints.": {
+        "category": "Error",
+        "code": 2838
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -5877,6 +5881,10 @@
     "`true` for ES2022 and above, including ESNext.": {
         "category": "Message",
         "code": 6930
+    },
+    "List of file name suffixes to search when resolving a module." : {
+      "category": "Error",
+      "code": 6931
     },
 
     "Variable '{0}' implicitly has an '{1}' type.": {

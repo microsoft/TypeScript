@@ -1,0 +1,3035 @@
+// === /tests/cases/fourslash/file.tsx ===
+// declare module JSX {
+//     interface Element { }
+//     interface IntrinsicElements {
+//     }
+//     interface ElementAttributesProperty { props; }
+// }
+// interface ClickableProps {
+//     children?: string;
+//     className?: string;
+// }
+// interface ButtonProps extends ClickableProps {
+//     onClick(event?: React.MouseEvent<HTMLButtonElement>): void;
+// }
+// interface LinkProps extends ClickableProps {
+//     goTo: string;
+// }
+// /*FIND ALL REFS*/declare function [|MainButton|](buttonProps: ButtonProps): JSX.Element;
+// declare function [|MainButton|](linkProps: LinkProps): JSX.Element;
+// declare function [|MainButton|](props: ButtonProps | LinkProps): JSX.Element;
+// let opt = <[|MainButton|] />;
+// let opt = <[|MainButton|] children="chidlren" />;
+// let opt = <[|MainButton|] onClick={()=>{}} />;
+// let opt = <[|MainButton|] onClick={()=>{}} ignore-prop />;
+// let opt = <[|MainButton|] goTo="goTo" />;
+// let opt = <[|MainButton|] wrong />;
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/file.tsx",
+      "kind": "function",
+      "name": "function MainButton(buttonProps: ButtonProps): JSX.Element (+2 overloads)",
+      "textSpan": {
+        "start": 411,
+        "length": 10
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "MainButton",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "buttonProps",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "ButtonProps",
+          "kind": "interfaceName"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "JSX",
+          "kind": "moduleName"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "Element",
+          "kind": "text"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "+",
+          "kind": "operator"
+        },
+        {
+          "text": "2",
+          "kind": "numericLiteral"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "overloads",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        }
+      ],
+      "contextSpan": {
+        "start": 394,
+        "length": 67
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 411,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 394,
+          "length": 67
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 479,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 462,
+          "length": 63
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 543,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 526,
+          "length": 73
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 611,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 610,
+          "length": 14
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 637,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 636,
+          "length": 34
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 683,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 682,
+          "length": 31
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 726,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 725,
+          "length": 43
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 781,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 780,
+          "length": 26
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 819,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 818,
+          "length": 20
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/file.tsx ===
+// declare module JSX {
+//     interface Element { }
+//     interface IntrinsicElements {
+//     }
+//     interface ElementAttributesProperty { props; }
+// }
+// interface ClickableProps {
+//     children?: string;
+//     className?: string;
+// }
+// interface ButtonProps extends ClickableProps {
+//     onClick(event?: React.MouseEvent<HTMLButtonElement>): void;
+// }
+// interface LinkProps extends ClickableProps {
+//     goTo: string;
+// }
+// declare function /*FIND ALL REFS*/[|MainButton|](buttonProps: ButtonProps): JSX.Element;
+// declare function [|MainButton|](linkProps: LinkProps): JSX.Element;
+// declare function [|MainButton|](props: ButtonProps | LinkProps): JSX.Element;
+// let opt = <[|MainButton|] />;
+// let opt = <[|MainButton|] children="chidlren" />;
+// let opt = <[|MainButton|] onClick={()=>{}} />;
+// let opt = <[|MainButton|] onClick={()=>{}} ignore-prop />;
+// let opt = <[|MainButton|] goTo="goTo" />;
+// let opt = <[|MainButton|] wrong />;
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/file.tsx",
+      "kind": "function",
+      "name": "function MainButton(buttonProps: ButtonProps): JSX.Element (+2 overloads)",
+      "textSpan": {
+        "start": 411,
+        "length": 10
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "MainButton",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "buttonProps",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "ButtonProps",
+          "kind": "interfaceName"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "JSX",
+          "kind": "moduleName"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "Element",
+          "kind": "text"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "+",
+          "kind": "operator"
+        },
+        {
+          "text": "2",
+          "kind": "numericLiteral"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "overloads",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        }
+      ],
+      "contextSpan": {
+        "start": 394,
+        "length": 67
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 411,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 394,
+          "length": 67
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 479,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 462,
+          "length": 63
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 543,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 526,
+          "length": 73
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 611,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 610,
+          "length": 14
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 637,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 636,
+          "length": 34
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 683,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 682,
+          "length": 31
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 726,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 725,
+          "length": 43
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 781,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 780,
+          "length": 26
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 819,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 818,
+          "length": 20
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/file.tsx ===
+// declare module JSX {
+//     interface Element { }
+//     interface IntrinsicElements {
+//     }
+//     interface ElementAttributesProperty { props; }
+// }
+// interface ClickableProps {
+//     children?: string;
+//     className?: string;
+// }
+// interface ButtonProps extends ClickableProps {
+//     onClick(event?: React.MouseEvent<HTMLButtonElement>): void;
+// }
+// interface LinkProps extends ClickableProps {
+//     goTo: string;
+// }
+// declare function [|MainButton|](buttonProps: ButtonProps): JSX.Element;
+// /*FIND ALL REFS*/declare function [|MainButton|](linkProps: LinkProps): JSX.Element;
+// declare function [|MainButton|](props: ButtonProps | LinkProps): JSX.Element;
+// let opt = <[|MainButton|] />;
+// let opt = <[|MainButton|] children="chidlren" />;
+// let opt = <[|MainButton|] onClick={()=>{}} />;
+// let opt = <[|MainButton|] onClick={()=>{}} ignore-prop />;
+// let opt = <[|MainButton|] goTo="goTo" />;
+// let opt = <[|MainButton|] wrong />;
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/file.tsx",
+      "kind": "function",
+      "name": "function MainButton(buttonProps: ButtonProps): JSX.Element (+2 overloads)",
+      "textSpan": {
+        "start": 411,
+        "length": 10
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "MainButton",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "buttonProps",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "ButtonProps",
+          "kind": "interfaceName"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "JSX",
+          "kind": "moduleName"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "Element",
+          "kind": "text"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "+",
+          "kind": "operator"
+        },
+        {
+          "text": "2",
+          "kind": "numericLiteral"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "overloads",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        }
+      ],
+      "contextSpan": {
+        "start": 394,
+        "length": 67
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 411,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 394,
+          "length": 67
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 479,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 462,
+          "length": 63
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 543,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 526,
+          "length": 73
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 611,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 610,
+          "length": 14
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 637,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 636,
+          "length": 34
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 683,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 682,
+          "length": 31
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 726,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 725,
+          "length": 43
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 781,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 780,
+          "length": 26
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 819,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 818,
+          "length": 20
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/file.tsx ===
+// declare module JSX {
+//     interface Element { }
+//     interface IntrinsicElements {
+//     }
+//     interface ElementAttributesProperty { props; }
+// }
+// interface ClickableProps {
+//     children?: string;
+//     className?: string;
+// }
+// interface ButtonProps extends ClickableProps {
+//     onClick(event?: React.MouseEvent<HTMLButtonElement>): void;
+// }
+// interface LinkProps extends ClickableProps {
+//     goTo: string;
+// }
+// declare function [|MainButton|](buttonProps: ButtonProps): JSX.Element;
+// declare function /*FIND ALL REFS*/[|MainButton|](linkProps: LinkProps): JSX.Element;
+// declare function [|MainButton|](props: ButtonProps | LinkProps): JSX.Element;
+// let opt = <[|MainButton|] />;
+// let opt = <[|MainButton|] children="chidlren" />;
+// let opt = <[|MainButton|] onClick={()=>{}} />;
+// let opt = <[|MainButton|] onClick={()=>{}} ignore-prop />;
+// let opt = <[|MainButton|] goTo="goTo" />;
+// let opt = <[|MainButton|] wrong />;
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/file.tsx",
+      "kind": "function",
+      "name": "function MainButton(buttonProps: ButtonProps): JSX.Element (+2 overloads)",
+      "textSpan": {
+        "start": 411,
+        "length": 10
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "MainButton",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "buttonProps",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "ButtonProps",
+          "kind": "interfaceName"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "JSX",
+          "kind": "moduleName"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "Element",
+          "kind": "text"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "+",
+          "kind": "operator"
+        },
+        {
+          "text": "2",
+          "kind": "numericLiteral"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "overloads",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        }
+      ],
+      "contextSpan": {
+        "start": 394,
+        "length": 67
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 411,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 394,
+          "length": 67
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 479,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 462,
+          "length": 63
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 543,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 526,
+          "length": 73
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 611,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 610,
+          "length": 14
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 637,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 636,
+          "length": 34
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 683,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 682,
+          "length": 31
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 726,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 725,
+          "length": 43
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 781,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 780,
+          "length": 26
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 819,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 818,
+          "length": 20
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/file.tsx ===
+// declare module JSX {
+//     interface Element { }
+//     interface IntrinsicElements {
+//     }
+//     interface ElementAttributesProperty { props; }
+// }
+// interface ClickableProps {
+//     children?: string;
+//     className?: string;
+// }
+// interface ButtonProps extends ClickableProps {
+//     onClick(event?: React.MouseEvent<HTMLButtonElement>): void;
+// }
+// interface LinkProps extends ClickableProps {
+//     goTo: string;
+// }
+// declare function [|MainButton|](buttonProps: ButtonProps): JSX.Element;
+// declare function [|MainButton|](linkProps: LinkProps): JSX.Element;
+// /*FIND ALL REFS*/declare function [|MainButton|](props: ButtonProps | LinkProps): JSX.Element;
+// let opt = <[|MainButton|] />;
+// let opt = <[|MainButton|] children="chidlren" />;
+// let opt = <[|MainButton|] onClick={()=>{}} />;
+// let opt = <[|MainButton|] onClick={()=>{}} ignore-prop />;
+// let opt = <[|MainButton|] goTo="goTo" />;
+// let opt = <[|MainButton|] wrong />;
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/file.tsx",
+      "kind": "function",
+      "name": "function MainButton(buttonProps: ButtonProps): JSX.Element (+2 overloads)",
+      "textSpan": {
+        "start": 411,
+        "length": 10
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "MainButton",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "buttonProps",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "ButtonProps",
+          "kind": "interfaceName"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "JSX",
+          "kind": "moduleName"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "Element",
+          "kind": "text"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "+",
+          "kind": "operator"
+        },
+        {
+          "text": "2",
+          "kind": "numericLiteral"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "overloads",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        }
+      ],
+      "contextSpan": {
+        "start": 394,
+        "length": 67
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 411,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 394,
+          "length": 67
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 479,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 462,
+          "length": 63
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 543,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 526,
+          "length": 73
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 611,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 610,
+          "length": 14
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 637,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 636,
+          "length": 34
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 683,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 682,
+          "length": 31
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 726,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 725,
+          "length": 43
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 781,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 780,
+          "length": 26
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 819,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 818,
+          "length": 20
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/file.tsx ===
+// declare module JSX {
+//     interface Element { }
+//     interface IntrinsicElements {
+//     }
+//     interface ElementAttributesProperty { props; }
+// }
+// interface ClickableProps {
+//     children?: string;
+//     className?: string;
+// }
+// interface ButtonProps extends ClickableProps {
+//     onClick(event?: React.MouseEvent<HTMLButtonElement>): void;
+// }
+// interface LinkProps extends ClickableProps {
+//     goTo: string;
+// }
+// declare function [|MainButton|](buttonProps: ButtonProps): JSX.Element;
+// declare function [|MainButton|](linkProps: LinkProps): JSX.Element;
+// declare function /*FIND ALL REFS*/[|MainButton|](props: ButtonProps | LinkProps): JSX.Element;
+// let opt = <[|MainButton|] />;
+// let opt = <[|MainButton|] children="chidlren" />;
+// let opt = <[|MainButton|] onClick={()=>{}} />;
+// let opt = <[|MainButton|] onClick={()=>{}} ignore-prop />;
+// let opt = <[|MainButton|] goTo="goTo" />;
+// let opt = <[|MainButton|] wrong />;
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/file.tsx",
+      "kind": "function",
+      "name": "function MainButton(buttonProps: ButtonProps): JSX.Element (+2 overloads)",
+      "textSpan": {
+        "start": 411,
+        "length": 10
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "MainButton",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "buttonProps",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "ButtonProps",
+          "kind": "interfaceName"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "JSX",
+          "kind": "moduleName"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "Element",
+          "kind": "text"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "+",
+          "kind": "operator"
+        },
+        {
+          "text": "2",
+          "kind": "numericLiteral"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "overloads",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        }
+      ],
+      "contextSpan": {
+        "start": 394,
+        "length": 67
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 411,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 394,
+          "length": 67
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 479,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 462,
+          "length": 63
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 543,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 526,
+          "length": 73
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 611,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 610,
+          "length": 14
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 637,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 636,
+          "length": 34
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 683,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 682,
+          "length": 31
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 726,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 725,
+          "length": 43
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 781,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 780,
+          "length": 26
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 819,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 818,
+          "length": 20
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+undefined
+
+// === /tests/cases/fourslash/file.tsx ===
+// declare module JSX {
+//     interface Element { }
+//     interface IntrinsicElements {
+//     }
+//     interface ElementAttributesProperty { props; }
+// }
+// interface ClickableProps {
+//     children?: string;
+//     className?: string;
+// }
+// interface ButtonProps extends ClickableProps {
+//     onClick(event?: React.MouseEvent<HTMLButtonElement>): void;
+// }
+// interface LinkProps extends ClickableProps {
+//     goTo: string;
+// }
+// declare function [|MainButton|](buttonProps: ButtonProps): JSX.Element;
+// declare function [|MainButton|](linkProps: LinkProps): JSX.Element;
+// declare function [|MainButton|](props: ButtonProps | LinkProps): JSX.Element;
+// let opt = </*FIND ALL REFS*/[|MainButton|] />;
+// let opt = <[|MainButton|] children="chidlren" />;
+// let opt = <[|MainButton|] onClick={()=>{}} />;
+// let opt = <[|MainButton|] onClick={()=>{}} ignore-prop />;
+// let opt = <[|MainButton|] goTo="goTo" />;
+// let opt = <[|MainButton|] wrong />;
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/file.tsx",
+      "kind": "function",
+      "name": "function MainButton(buttonProps: ButtonProps): JSX.Element (+2 overloads)",
+      "textSpan": {
+        "start": 411,
+        "length": 10
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "MainButton",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "buttonProps",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "ButtonProps",
+          "kind": "interfaceName"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "JSX",
+          "kind": "moduleName"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "Element",
+          "kind": "text"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "+",
+          "kind": "operator"
+        },
+        {
+          "text": "2",
+          "kind": "numericLiteral"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "overloads",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        }
+      ],
+      "contextSpan": {
+        "start": 394,
+        "length": 67
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 411,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 394,
+          "length": 67
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 479,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 462,
+          "length": 63
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 543,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 526,
+          "length": 73
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 611,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 610,
+          "length": 14
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 637,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 636,
+          "length": 34
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 683,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 682,
+          "length": 31
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 726,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 725,
+          "length": 43
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 781,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 780,
+          "length": 26
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 819,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 818,
+          "length": 20
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+undefined
+
+// === /tests/cases/fourslash/file.tsx ===
+// declare module JSX {
+//     interface Element { }
+//     interface IntrinsicElements {
+//     }
+//     interface ElementAttributesProperty { props; }
+// }
+// interface ClickableProps {
+//     children?: string;
+//     className?: string;
+// }
+// interface ButtonProps extends ClickableProps {
+//     onClick(event?: React.MouseEvent<HTMLButtonElement>): void;
+// }
+// interface LinkProps extends ClickableProps {
+//     goTo: string;
+// }
+// declare function [|MainButton|](buttonProps: ButtonProps): JSX.Element;
+// declare function [|MainButton|](linkProps: LinkProps): JSX.Element;
+// declare function [|MainButton|](props: ButtonProps | LinkProps): JSX.Element;
+// let opt = <[|MainButton|] />;
+// let opt = </*FIND ALL REFS*/[|MainButton|] children="chidlren" />;
+// let opt = <[|MainButton|] onClick={()=>{}} />;
+// let opt = <[|MainButton|] onClick={()=>{}} ignore-prop />;
+// let opt = <[|MainButton|] goTo="goTo" />;
+// let opt = <[|MainButton|] wrong />;
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/file.tsx",
+      "kind": "function",
+      "name": "function MainButton(buttonProps: ButtonProps): JSX.Element (+2 overloads)",
+      "textSpan": {
+        "start": 411,
+        "length": 10
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "MainButton",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "buttonProps",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "ButtonProps",
+          "kind": "interfaceName"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "JSX",
+          "kind": "moduleName"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "Element",
+          "kind": "text"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "+",
+          "kind": "operator"
+        },
+        {
+          "text": "2",
+          "kind": "numericLiteral"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "overloads",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        }
+      ],
+      "contextSpan": {
+        "start": 394,
+        "length": 67
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 411,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 394,
+          "length": 67
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 479,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 462,
+          "length": 63
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 543,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 526,
+          "length": 73
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 611,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 610,
+          "length": 14
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 637,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 636,
+          "length": 34
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 683,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 682,
+          "length": 31
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 726,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 725,
+          "length": 43
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 781,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 780,
+          "length": 26
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 819,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 818,
+          "length": 20
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+undefined
+
+// === /tests/cases/fourslash/file.tsx ===
+// declare module JSX {
+//     interface Element { }
+//     interface IntrinsicElements {
+//     }
+//     interface ElementAttributesProperty { props; }
+// }
+// interface ClickableProps {
+//     children?: string;
+//     className?: string;
+// }
+// interface ButtonProps extends ClickableProps {
+//     onClick(event?: React.MouseEvent<HTMLButtonElement>): void;
+// }
+// interface LinkProps extends ClickableProps {
+//     goTo: string;
+// }
+// declare function [|MainButton|](buttonProps: ButtonProps): JSX.Element;
+// declare function [|MainButton|](linkProps: LinkProps): JSX.Element;
+// declare function [|MainButton|](props: ButtonProps | LinkProps): JSX.Element;
+// let opt = <[|MainButton|] />;
+// let opt = <[|MainButton|] children="chidlren" />;
+// let opt = </*FIND ALL REFS*/[|MainButton|] onClick={()=>{}} />;
+// let opt = <[|MainButton|] onClick={()=>{}} ignore-prop />;
+// let opt = <[|MainButton|] goTo="goTo" />;
+// let opt = <[|MainButton|] wrong />;
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/file.tsx",
+      "kind": "function",
+      "name": "function MainButton(buttonProps: ButtonProps): JSX.Element (+2 overloads)",
+      "textSpan": {
+        "start": 411,
+        "length": 10
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "MainButton",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "buttonProps",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "ButtonProps",
+          "kind": "interfaceName"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "JSX",
+          "kind": "moduleName"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "Element",
+          "kind": "text"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "+",
+          "kind": "operator"
+        },
+        {
+          "text": "2",
+          "kind": "numericLiteral"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "overloads",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        }
+      ],
+      "contextSpan": {
+        "start": 394,
+        "length": 67
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 411,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 394,
+          "length": 67
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 479,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 462,
+          "length": 63
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 543,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 526,
+          "length": 73
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 611,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 610,
+          "length": 14
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 637,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 636,
+          "length": 34
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 683,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 682,
+          "length": 31
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 726,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 725,
+          "length": 43
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 781,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 780,
+          "length": 26
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 819,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 818,
+          "length": 20
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+undefined
+
+// === /tests/cases/fourslash/file.tsx ===
+// declare module JSX {
+//     interface Element { }
+//     interface IntrinsicElements {
+//     }
+//     interface ElementAttributesProperty { props; }
+// }
+// interface ClickableProps {
+//     children?: string;
+//     className?: string;
+// }
+// interface ButtonProps extends ClickableProps {
+//     onClick(event?: React.MouseEvent<HTMLButtonElement>): void;
+// }
+// interface LinkProps extends ClickableProps {
+//     goTo: string;
+// }
+// declare function [|MainButton|](buttonProps: ButtonProps): JSX.Element;
+// declare function [|MainButton|](linkProps: LinkProps): JSX.Element;
+// declare function [|MainButton|](props: ButtonProps | LinkProps): JSX.Element;
+// let opt = <[|MainButton|] />;
+// let opt = <[|MainButton|] children="chidlren" />;
+// let opt = <[|MainButton|] onClick={()=>{}} />;
+// let opt = </*FIND ALL REFS*/[|MainButton|] onClick={()=>{}} ignore-prop />;
+// let opt = <[|MainButton|] goTo="goTo" />;
+// let opt = <[|MainButton|] wrong />;
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/file.tsx",
+      "kind": "function",
+      "name": "function MainButton(buttonProps: ButtonProps): JSX.Element (+2 overloads)",
+      "textSpan": {
+        "start": 411,
+        "length": 10
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "MainButton",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "buttonProps",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "ButtonProps",
+          "kind": "interfaceName"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "JSX",
+          "kind": "moduleName"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "Element",
+          "kind": "text"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "+",
+          "kind": "operator"
+        },
+        {
+          "text": "2",
+          "kind": "numericLiteral"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "overloads",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        }
+      ],
+      "contextSpan": {
+        "start": 394,
+        "length": 67
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 411,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 394,
+          "length": 67
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 479,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 462,
+          "length": 63
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 543,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 526,
+          "length": 73
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 611,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 610,
+          "length": 14
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 637,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 636,
+          "length": 34
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 683,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 682,
+          "length": 31
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 726,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 725,
+          "length": 43
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 781,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 780,
+          "length": 26
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 819,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 818,
+          "length": 20
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+undefined
+
+// === /tests/cases/fourslash/file.tsx ===
+// declare module JSX {
+//     interface Element { }
+//     interface IntrinsicElements {
+//     }
+//     interface ElementAttributesProperty { props; }
+// }
+// interface ClickableProps {
+//     children?: string;
+//     className?: string;
+// }
+// interface ButtonProps extends ClickableProps {
+//     onClick(event?: React.MouseEvent<HTMLButtonElement>): void;
+// }
+// interface LinkProps extends ClickableProps {
+//     goTo: string;
+// }
+// declare function [|MainButton|](buttonProps: ButtonProps): JSX.Element;
+// declare function [|MainButton|](linkProps: LinkProps): JSX.Element;
+// declare function [|MainButton|](props: ButtonProps | LinkProps): JSX.Element;
+// let opt = <[|MainButton|] />;
+// let opt = <[|MainButton|] children="chidlren" />;
+// let opt = <[|MainButton|] onClick={()=>{}} />;
+// let opt = <[|MainButton|] onClick={()=>{}} ignore-prop />;
+// let opt = </*FIND ALL REFS*/[|MainButton|] goTo="goTo" />;
+// let opt = <[|MainButton|] wrong />;
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/file.tsx",
+      "kind": "function",
+      "name": "function MainButton(buttonProps: ButtonProps): JSX.Element (+2 overloads)",
+      "textSpan": {
+        "start": 411,
+        "length": 10
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "MainButton",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "buttonProps",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "ButtonProps",
+          "kind": "interfaceName"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "JSX",
+          "kind": "moduleName"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "Element",
+          "kind": "text"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "+",
+          "kind": "operator"
+        },
+        {
+          "text": "2",
+          "kind": "numericLiteral"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "overloads",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        }
+      ],
+      "contextSpan": {
+        "start": 394,
+        "length": 67
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 411,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 394,
+          "length": 67
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 479,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 462,
+          "length": 63
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 543,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 526,
+          "length": 73
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 611,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 610,
+          "length": 14
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 637,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 636,
+          "length": 34
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 683,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 682,
+          "length": 31
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 726,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 725,
+          "length": 43
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 781,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 780,
+          "length": 26
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 819,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 818,
+          "length": 20
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+undefined
+
+// === /tests/cases/fourslash/file.tsx ===
+// declare module JSX {
+//     interface Element { }
+//     interface IntrinsicElements {
+//     }
+//     interface ElementAttributesProperty { props; }
+// }
+// interface ClickableProps {
+//     children?: string;
+//     className?: string;
+// }
+// interface ButtonProps extends ClickableProps {
+//     onClick(event?: React.MouseEvent<HTMLButtonElement>): void;
+// }
+// interface LinkProps extends ClickableProps {
+//     goTo: string;
+// }
+// declare function [|MainButton|](buttonProps: ButtonProps): JSX.Element;
+// declare function [|MainButton|](linkProps: LinkProps): JSX.Element;
+// declare function [|MainButton|](props: ButtonProps | LinkProps): JSX.Element;
+// let opt = <[|MainButton|] />;
+// let opt = <[|MainButton|] children="chidlren" />;
+// let opt = <[|MainButton|] onClick={()=>{}} />;
+// let opt = <[|MainButton|] onClick={()=>{}} ignore-prop />;
+// let opt = <[|MainButton|] goTo="goTo" />;
+// let opt = </*FIND ALL REFS*/[|MainButton|] wrong />;
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/file.tsx",
+      "kind": "function",
+      "name": "function MainButton(buttonProps: ButtonProps): JSX.Element (+2 overloads)",
+      "textSpan": {
+        "start": 411,
+        "length": 10
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "MainButton",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "buttonProps",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "ButtonProps",
+          "kind": "interfaceName"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "JSX",
+          "kind": "moduleName"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "Element",
+          "kind": "text"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "+",
+          "kind": "operator"
+        },
+        {
+          "text": "2",
+          "kind": "numericLiteral"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "overloads",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        }
+      ],
+      "contextSpan": {
+        "start": 394,
+        "length": 67
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 411,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 394,
+          "length": 67
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 479,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 462,
+          "length": 63
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 543,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 526,
+          "length": 73
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 611,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 610,
+          "length": 14
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 637,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 636,
+          "length": 34
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 683,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 682,
+          "length": 31
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 726,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 725,
+          "length": 43
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 781,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 780,
+          "length": 26
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 819,
+          "length": 10
+        },
+        "fileName": "/tests/cases/fourslash/file.tsx",
+        "contextSpan": {
+          "start": 818,
+          "length": 20
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]

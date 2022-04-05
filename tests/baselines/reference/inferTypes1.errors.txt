@@ -8,9 +8,9 @@ tests/cases/conformance/types/conditional/inferTypes1.ts(55,25): error TS2344: T
 tests/cases/conformance/types/conditional/inferTypes1.ts(56,25): error TS2344: Type 'Function' does not satisfy the constraint '(x: any) => any'.
   Type 'Function' provides no match for the signature '(x: any): any'.
 tests/cases/conformance/types/conditional/inferTypes1.ts(82,12): error TS1338: 'infer' declarations are only permitted in the 'extends' clause of a conditional type.
-tests/cases/conformance/types/conditional/inferTypes1.ts(83,15): error TS1338: 'infer' declarations are only permitted in the 'extends' clause of a conditional type.
-tests/cases/conformance/types/conditional/inferTypes1.ts(83,41): error TS1338: 'infer' declarations are only permitted in the 'extends' clause of a conditional type.
-tests/cases/conformance/types/conditional/inferTypes1.ts(83,51): error TS1338: 'infer' declarations are only permitted in the 'extends' clause of a conditional type.
+tests/cases/conformance/types/conditional/inferTypes1.ts(83,16): error TS1338: 'infer' declarations are only permitted in the 'extends' clause of a conditional type.
+tests/cases/conformance/types/conditional/inferTypes1.ts(83,43): error TS1338: 'infer' declarations are only permitted in the 'extends' clause of a conditional type.
+tests/cases/conformance/types/conditional/inferTypes1.ts(83,53): error TS1338: 'infer' declarations are only permitted in the 'extends' clause of a conditional type.
 tests/cases/conformance/types/conditional/inferTypes1.ts(84,15): error TS2304: Cannot find name 'U'.
 tests/cases/conformance/types/conditional/inferTypes1.ts(84,15): error TS4081: Exported type alias 'T62' has or is using private name 'U'.
 tests/cases/conformance/types/conditional/inferTypes1.ts(84,43): error TS2304: Cannot find name 'U'.
@@ -120,12 +120,12 @@ tests/cases/conformance/types/conditional/inferTypes1.ts(153,40): error TS2322: 
     type T60 = infer U;  // Error
                ~~~~~~~
 !!! error TS1338: 'infer' declarations are only permitted in the 'extends' clause of a conditional type.
-    type T61<T> = infer A extends infer B ? infer C : infer D;  // Error
-                  ~~~~~~~
+    type T61<T> = (infer A) extends infer B ? infer C : infer D;  // Error
+                   ~~~~~~~
 !!! error TS1338: 'infer' declarations are only permitted in the 'extends' clause of a conditional type.
-                                            ~~~~~~~
+                                              ~~~~~~~
 !!! error TS1338: 'infer' declarations are only permitted in the 'extends' clause of a conditional type.
-                                                      ~~~~~~~
+                                                        ~~~~~~~
 !!! error TS1338: 'infer' declarations are only permitted in the 'extends' clause of a conditional type.
     type T62<T> = U extends (infer U)[] ? U : U;  // Error
                   ~
@@ -136,7 +136,7 @@ tests/cases/conformance/types/conditional/inferTypes1.ts(153,40): error TS2322: 
 !!! error TS2304: Cannot find name 'U'.
                                               ~
 !!! error TS4081: Exported type alias 'T62' has or is using private name 'U'.
-    type T63<T> = T extends (infer A extends infer B ? infer C : infer D) ? string : number;
+    type T63<T> = T extends ((infer A) extends infer B ? infer C : infer D) ? string : number;
     
     type T70<T extends string> = { x: T };
     type T71<T> = T extends T70<infer U> ? T70<U> : never;

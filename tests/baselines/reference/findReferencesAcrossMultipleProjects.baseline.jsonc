@@ -1,0 +1,359 @@
+// === /tests/cases/fourslash/a.ts ===
+// /*FIND ALL REFS*/var [|x|]: number;
+
+// === /tests/cases/fourslash/b.ts ===
+// /// <reference path="a.ts" />
+// [|x|]++;
+
+// === /tests/cases/fourslash/c.ts ===
+// /// <reference path="a.ts" />
+// [|x|]++;
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/a.ts",
+      "kind": "var",
+      "name": "var x: number",
+      "textSpan": {
+        "start": 4,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "x",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 14
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 4,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/a.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 14
+        },
+        "isWriteAccess": false,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 30,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/b.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 30,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/c.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/a.ts ===
+// var /*FIND ALL REFS*/[|x|]: number;
+
+// === /tests/cases/fourslash/b.ts ===
+// /// <reference path="a.ts" />
+// [|x|]++;
+
+// === /tests/cases/fourslash/c.ts ===
+// /// <reference path="a.ts" />
+// [|x|]++;
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/a.ts",
+      "kind": "var",
+      "name": "var x: number",
+      "textSpan": {
+        "start": 4,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "x",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 14
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 4,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/a.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 14
+        },
+        "isWriteAccess": false,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 30,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/b.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 30,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/c.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/a.ts ===
+// var [|x|]: number;
+
+// === /tests/cases/fourslash/b.ts ===
+// /// <reference path="a.ts" />
+// /*FIND ALL REFS*/[|x|]++;
+
+// === /tests/cases/fourslash/c.ts ===
+// /// <reference path="a.ts" />
+// [|x|]++;
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/a.ts",
+      "kind": "var",
+      "name": "var x: number",
+      "textSpan": {
+        "start": 4,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "x",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 14
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 4,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/a.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 14
+        },
+        "isWriteAccess": false,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 30,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/b.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 30,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/c.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/a.ts ===
+// var [|x|]: number;
+
+// === /tests/cases/fourslash/b.ts ===
+// /// <reference path="a.ts" />
+// [|x|]++;
+
+// === /tests/cases/fourslash/c.ts ===
+// /// <reference path="a.ts" />
+// /*FIND ALL REFS*/[|x|]++;
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/a.ts",
+      "kind": "var",
+      "name": "var x: number",
+      "textSpan": {
+        "start": 4,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "x",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 14
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 4,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/a.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 14
+        },
+        "isWriteAccess": false,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 30,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/b.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 30,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/c.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  }
+]
