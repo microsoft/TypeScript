@@ -425,8 +425,7 @@
           "start": 13,
           "length": 10
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -434,8 +433,7 @@
           "length": 6
         },
         "fileName": "/tests/cases/fourslash/referencesForEnums.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -443,8 +441,7 @@
           "length": 6
         },
         "fileName": "/tests/cases/fourslash/referencesForEnums.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -642,8 +639,7 @@
           "start": 13,
           "length": 10
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -651,8 +647,7 @@
           "length": 6
         },
         "fileName": "/tests/cases/fourslash/referencesForEnums.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -660,8 +655,7 @@
           "length": 6
         },
         "fileName": "/tests/cases/fourslash/referencesForEnums.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -757,8 +751,7 @@
           "start": 29,
           "length": 17
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -766,8 +759,7 @@
           "length": 6
         },
         "fileName": "/tests/cases/fourslash/referencesForEnums.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -775,8 +767,7 @@
           "length": 6
         },
         "fileName": "/tests/cases/fourslash/referencesForEnums.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -872,8 +863,7 @@
           "start": 29,
           "length": 17
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -881,8 +871,7 @@
           "length": 6
         },
         "fileName": "/tests/cases/fourslash/referencesForEnums.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -890,8 +879,7 @@
           "length": 6
         },
         "fileName": "/tests/cases/fourslash/referencesForEnums.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -987,8 +975,7 @@
           "start": 52,
           "length": 8
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -996,8 +983,7 @@
           "length": 3
         },
         "fileName": "/tests/cases/fourslash/referencesForEnums.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }

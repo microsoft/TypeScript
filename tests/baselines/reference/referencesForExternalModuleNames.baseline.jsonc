@@ -300,8 +300,7 @@
           "start": 0,
           "length": 43
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -313,8 +312,7 @@
           "start": 0,
           "length": 26
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }

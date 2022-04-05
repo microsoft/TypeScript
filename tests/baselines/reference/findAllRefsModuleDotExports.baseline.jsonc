@@ -94,8 +94,7 @@
           "start": 0,
           "length": 25
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -107,8 +106,7 @@
           "start": 0,
           "length": 19
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -158,8 +156,7 @@
           "start": 0,
           "length": 25
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -171,8 +168,7 @@
           "start": 0,
           "length": 19
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }

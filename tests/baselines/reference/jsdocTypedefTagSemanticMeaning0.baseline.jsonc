@@ -296,8 +296,7 @@ undefined
           "start": 4,
           "length": 19
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -305,8 +304,7 @@ undefined
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/a.js",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -372,8 +370,7 @@ undefined
           "start": 27,
           "length": 12
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -381,8 +378,7 @@ undefined
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/a.js",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }

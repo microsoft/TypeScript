@@ -168,8 +168,7 @@
           "start": 0,
           "length": 39
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -177,8 +176,7 @@
           "length": 8
         },
         "fileName": "/foo.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }

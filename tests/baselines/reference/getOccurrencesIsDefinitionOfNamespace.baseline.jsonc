@@ -174,8 +174,7 @@
           "start": 0,
           "length": 44
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -183,8 +182,7 @@
           "length": 7
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfNamespace.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }

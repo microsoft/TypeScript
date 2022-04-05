@@ -315,8 +315,7 @@
           "start": 29,
           "length": 14
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -324,8 +323,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/referencesForClassLocal.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -333,8 +331,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/referencesForClassLocal.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       }
     ]
   }
@@ -429,8 +426,7 @@
           "start": 29,
           "length": 14
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -438,8 +434,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/referencesForClassLocal.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -447,8 +442,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/referencesForClassLocal.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       }
     ]
   }

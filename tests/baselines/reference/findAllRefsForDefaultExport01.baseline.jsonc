@@ -198,8 +198,7 @@
           "start": 0,
           "length": 45
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -207,8 +206,7 @@
           "length": 20
         },
         "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport01.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -216,8 +214,7 @@
           "length": 20
         },
         "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport01.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -273,8 +270,7 @@
           "start": 0,
           "length": 45
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -282,8 +278,7 @@
           "length": 20
         },
         "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport01.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -291,8 +286,7 @@
           "length": 20
         },
         "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport01.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }

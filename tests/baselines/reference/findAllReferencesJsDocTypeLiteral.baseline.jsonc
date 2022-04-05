@@ -152,8 +152,7 @@
           "length": 5
         },
         "fileName": "/tests/cases/fourslash/foo.js",
-        "isWriteAccess": false,
-        "isDefinition": true
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -161,8 +160,7 @@
           "length": 5
         },
         "fileName": "/tests/cases/fourslash/foo.js",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }

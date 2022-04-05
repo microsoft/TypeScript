@@ -534,8 +534,7 @@
           "start": 0,
           "length": 24
         },
-        "isWriteAccess": false,
-        "isDefinition": true
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -547,8 +546,7 @@
           "start": 25,
           "length": 55
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -556,8 +554,7 @@
           "length": 3
         },
         "fileName": "/tests/cases/fourslash/referencesForFunctionOverloads.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }

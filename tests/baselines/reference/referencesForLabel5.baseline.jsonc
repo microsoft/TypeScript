@@ -39,8 +39,7 @@
           "start": 0,
           "length": 241
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -52,8 +51,7 @@
           "start": 46,
           "length": 12
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -65,8 +63,7 @@
           "start": 219,
           "length": 12
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -115,8 +112,7 @@ undefined
           "start": 0,
           "length": 241
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -128,8 +124,7 @@ undefined
           "start": 46,
           "length": 12
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -141,8 +136,7 @@ undefined
           "start": 219,
           "length": 12
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -189,8 +183,7 @@ undefined
           "start": 89,
           "length": 92
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -202,8 +195,7 @@ undefined
           "start": 151,
           "length": 12
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -252,8 +244,7 @@ undefined
           "start": 89,
           "length": 92
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -265,8 +256,7 @@ undefined
           "start": 151,
           "length": 12
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -315,8 +305,7 @@ undefined
           "start": 0,
           "length": 241
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -328,8 +317,7 @@ undefined
           "start": 46,
           "length": 12
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -341,8 +329,7 @@ undefined
           "start": 219,
           "length": 12
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }

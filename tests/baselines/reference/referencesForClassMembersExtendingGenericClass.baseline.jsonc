@@ -466,8 +466,7 @@
           "start": 20,
           "length": 8
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   },
@@ -540,8 +539,7 @@
           "start": 108,
           "length": 2
         },
-        "isWriteAccess": false,
-        "isDefinition": true
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -549,8 +547,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/referencesForClassMembersExtendingGenericClass.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -1244,8 +1241,7 @@
           "start": 33,
           "length": 31
         },
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       }
     ]
   },
@@ -1326,8 +1322,7 @@
           "start": 115,
           "length": 12
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -1335,8 +1330,7 @@
           "length": 6
         },
         "fileName": "/tests/cases/fourslash/referencesForClassMembersExtendingGenericClass.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }

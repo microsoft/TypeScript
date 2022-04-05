@@ -282,8 +282,7 @@
           "start": 51,
           "length": 14
         },
-        "isWriteAccess": false,
-        "isDefinition": true
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -291,8 +290,7 @@
           "length": 6
         },
         "fileName": "/tests/cases/fourslash/findAllRefsWithLeadingUnderscoreNames5.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }

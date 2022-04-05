@@ -222,8 +222,7 @@
           "start": 0,
           "length": 11
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -231,8 +230,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/findAllRefsInsideTemplates1.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -240,8 +238,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/findAllRefsInsideTemplates1.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -305,8 +302,7 @@
           "start": 0,
           "length": 11
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -314,8 +310,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/findAllRefsInsideTemplates1.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -323,8 +318,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/findAllRefsInsideTemplates1.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }

@@ -189,8 +189,7 @@
           "start": 18,
           "length": 124
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -198,8 +197,7 @@
           "length": 3
         },
         "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations6.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }

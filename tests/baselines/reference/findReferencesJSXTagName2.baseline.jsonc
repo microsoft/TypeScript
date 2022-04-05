@@ -372,8 +372,7 @@
           "start": 0,
           "length": 38
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -381,8 +380,7 @@
           "length": 3
         },
         "fileName": "/tests/cases/fourslash/index.tsx",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }

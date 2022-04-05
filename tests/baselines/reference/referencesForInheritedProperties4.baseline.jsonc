@@ -286,8 +286,7 @@
           "start": 33,
           "length": 13
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -295,8 +294,7 @@
           "length": 7
         },
         "fileName": "/tests/cases/fourslash/referencesForInheritedProperties4.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -382,8 +380,7 @@
           "start": 50,
           "length": 17
         },
-        "isWriteAccess": false,
-        "isDefinition": true
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -391,8 +388,7 @@
           "length": 8
         },
         "fileName": "/tests/cases/fourslash/referencesForInheritedProperties4.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }

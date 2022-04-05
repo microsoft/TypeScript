@@ -118,8 +118,7 @@
           "length": 3
         },
         "fileName": "/tests/cases/fourslash/findAllRefsCatchClause.ts",
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -127,8 +126,7 @@
           "length": 3
         },
         "fileName": "/tests/cases/fourslash/findAllRefsCatchClause.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }

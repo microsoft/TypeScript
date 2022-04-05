@@ -222,8 +222,7 @@
           "start": 25,
           "length": 26
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -231,8 +230,7 @@
           "length": 5
         },
         "fileName": "/tests/cases/fourslash/findAllRefsOnDefinition2.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }

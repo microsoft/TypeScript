@@ -171,8 +171,7 @@ undefined
           "start": 15,
           "length": 24
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -180,8 +179,7 @@ undefined
           "length": 8
         },
         "fileName": "/tests/cases/fourslash/referencesForExportedValues.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -189,8 +187,7 @@ undefined
           "length": 8
         },
         "fileName": "/tests/cases/fourslash/referencesForExportedValues.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -269,8 +266,7 @@ undefined
           "start": 15,
           "length": 24
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -278,8 +274,7 @@ undefined
           "length": 8
         },
         "fileName": "/tests/cases/fourslash/referencesForExportedValues.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -287,8 +282,7 @@ undefined
           "length": 8
         },
         "fileName": "/tests/cases/fourslash/referencesForExportedValues.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }

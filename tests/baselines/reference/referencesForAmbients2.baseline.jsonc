@@ -273,8 +273,7 @@
           "start": 25,
           "length": 23
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -282,8 +281,7 @@
           "length": 1
         },
         "fileName": "/defB.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -291,8 +289,7 @@
           "length": 1
         },
         "fileName": "/defC.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -373,8 +370,7 @@
           "start": 25,
           "length": 23
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -382,8 +378,7 @@
           "length": 1
         },
         "fileName": "/defB.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -391,8 +386,7 @@
           "length": 1
         },
         "fileName": "/defC.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }

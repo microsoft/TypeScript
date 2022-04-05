@@ -92,8 +92,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/findAllRefsJsDocTemplateTag_function.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -101,8 +100,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/findAllRefsJsDocTemplateTag_function.ts",
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       }
     ]
   }

@@ -180,8 +180,7 @@
           "start": 18,
           "length": 12
         },
-        "isWriteAccess": false,
-        "isDefinition": true
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -189,8 +188,7 @@
           "length": 3
         },
         "fileName": "/tests/cases/fourslash/b.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }

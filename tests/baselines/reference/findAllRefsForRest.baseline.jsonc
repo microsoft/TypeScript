@@ -174,8 +174,7 @@
           "start": 34,
           "length": 12
         },
-        "isWriteAccess": false,
-        "isDefinition": true
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -183,8 +182,7 @@
           "length": 6
         },
         "fileName": "/tests/cases/fourslash/findAllRefsForRest.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
