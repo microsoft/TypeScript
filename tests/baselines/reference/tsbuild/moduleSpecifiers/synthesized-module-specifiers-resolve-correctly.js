@@ -137,6 +137,38 @@ Output::
 
 exitCode:: ExitStatus.Success
 
+getModifiedTime:: {
+ "/src/solution/common/nominal.ts": 1,
+ "/src/solution/sub-project/index.ts": 1,
+ "/src/solution/sub-project-2/index.ts": 1
+}
+
+setModifiedTime:: {}
+
+fileExists:: {
+ "/src/tsconfig.base.json": 3,
+ "/src/solution/common/nominal.ts": 1,
+ "/src/lib/solution/common/nominal.js": 1,
+ "/src/lib/solution/common/nominal.d.ts": 1,
+ "/src/solution/sub-project/index.ts": 1,
+ "/src/lib/solution/sub-project/index.js": 1,
+ "/src/lib/solution/sub-project/index.d.ts": 1,
+ "/src/solution/sub-project-2/index.ts": 1,
+ "/src/lib/solution/sub-project-2/index.js": 1,
+ "/src/lib/solution/sub-project-2/index.d.ts": 1
+}
+
+directoryExists:: {
+ "/src/solution/common/node_modules/@types": 1,
+ "/src/solution/node_modules/@types": 3,
+ "/src/node_modules/@types": 3,
+ "/node_modules/@types": 3,
+ "/src/solution/common": 2,
+ "/src/solution/sub-project/node_modules/@types": 1,
+ "/src/solution/sub-project": 2,
+ "/src/solution/sub-project-2/node_modules/@types": 1
+}
+
 
 //// [/src/lib/solution/common/nominal.d.ts]
 export declare type Nominal<T, Name extends string> = T & {

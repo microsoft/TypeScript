@@ -161,4 +161,14 @@ You can learn about all of the compiler options at https://aka.ms/tsc
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
+getModifiedTime:: {}
+
+setModifiedTime:: {}
+
+fileExists:: {
+ "/tsconfig.json": 1
+}
+
+directoryExists:: {}
+
 

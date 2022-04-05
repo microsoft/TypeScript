@@ -25,6 +25,14 @@ function foo() { return 10; }
 function bar() { return foo() + 1 };
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 /a/lib/tsc.js -b -w sample1/logic
 Output::
 >> Screen clear
@@ -234,6 +242,32 @@ declare function bar(): number;
 ======================================================================
 
 
+fileExists:: {
+ "/user/username/projects/sample1/core/index.ts": 1,
+ "/user/username/projects/sample1/core/index.js": 3,
+ "/user/username/projects/sample1/core/index.d.ts": 2,
+ "/user/username/projects/sample1/logic/index.ts": 1,
+ "/user/username/projects/sample1/logic/index.js": 2,
+ "/user/username/projects/sample1/logic/index.d.ts": 2
+} 
+
+directoryExists:: {
+ "/user/username/projects/sample1/core/node_modules/@types": 1,
+ "/user/username/projects/sample1/node_modules/@types": 2,
+ "/user/username/projects/node_modules/@types": 2,
+ "/user/username/node_modules/@types": 2,
+ "/user/node_modules/@types": 2,
+ "/node_modules/@types": 2,
+ "/user/username/projects/sample1/logic/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {
+ "/user/username/projects/sample1/core/index.ts": 1,
+ "/user/username/projects/sample1/logic/index.ts": 1
+} 
+
+setModifiedTimes:: {} 
+
 Change:: Make non local change and build core
 
 Input::
@@ -241,6 +275,14 @@ Input::
 function foo() { return 10; }
 function myFunc() { return 10; }
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -341,9 +383,39 @@ declare function myFunc(): number;
 ======================================================================
 
 
+fileExists:: {
+ "/user/username/projects/sample1/core/index.ts": 1,
+ "/user/username/projects/sample1/core/index.js": 2,
+ "/user/username/projects/sample1/core/index.d.ts": 2
+} 
+
+directoryExists:: {
+ "/user/username/projects/sample1/core/node_modules/@types": 1,
+ "/user/username/projects/sample1/node_modules/@types": 1,
+ "/user/username/projects/node_modules/@types": 1,
+ "/user/username/node_modules/@types": 1,
+ "/user/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {
+ "/user/username/projects/sample1/core/index.ts": 1,
+ "/user/username/projects/sample1/core/index.js": 1
+} 
+
+setModifiedTimes:: {} 
+
 Change:: Build logic
 
 Input::
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 [[90m12:01:25 AM[0m] Found 0 errors. Watching for file changes.
@@ -486,6 +558,25 @@ declare function bar(): number;
 ======================================================================
 
 
+fileExists:: {
+ "/user/username/projects/sample1/core/index.js": 1,
+ "/user/username/projects/sample1/logic/index.d.ts": 2,
+ "/user/username/projects/sample1/logic/index.js": 1
+} 
+
+directoryExists:: {
+ "/user/username/projects/sample1/logic/node_modules/@types": 1,
+ "/user/username/projects/sample1/node_modules/@types": 1,
+ "/user/username/projects/node_modules/@types": 1,
+ "/user/username/node_modules/@types": 1,
+ "/user/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 Change:: Make local change and build core
 
 Input::
@@ -493,6 +584,14 @@ Input::
 function foo() { return 10; }
 function myFunc() { return 100; }
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -589,9 +688,40 @@ declare function myFunc(): number;
 ======================================================================
 
 
+fileExists:: {
+ "/user/username/projects/sample1/core/index.ts": 1,
+ "/user/username/projects/sample1/core/index.js": 2,
+ "/user/username/projects/sample1/core/index.d.ts": 2
+} 
+
+directoryExists:: {
+ "/user/username/projects/sample1/core/node_modules/@types": 1,
+ "/user/username/projects/sample1/node_modules/@types": 1,
+ "/user/username/projects/node_modules/@types": 1,
+ "/user/username/node_modules/@types": 1,
+ "/user/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {
+ "/user/username/projects/sample1/core/index.ts": 1,
+ "/user/username/projects/sample1/core/index.js": 1,
+ "/user/username/projects/sample1/core/index.d.ts": 1
+} 
+
+setModifiedTimes:: {} 
+
 Change:: Build logic
 
 Input::
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 [[90m12:01:58 AM[0m] Found 0 errors. Watching for file changes.
@@ -716,3 +846,18 @@ declare function bar(): number;
 
 ======================================================================
 
+
+fileExists:: {
+ "/user/username/projects/sample1/logic/index.js": 1,
+ "/user/username/projects/sample1/logic/index.d.ts": 1
+} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {
+ "/user/username/projects/sample1/logic/index.d.ts": 1
+} 
+
+setModifiedTimes:: {
+ "/user/username/projects/sample1/logic/index.d.ts": 1
+} 

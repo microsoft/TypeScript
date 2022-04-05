@@ -83,6 +83,39 @@ Output::
 
 exitCode:: ExitStatus.Success
 
+getModifiedTime:: {
+ "/src/lib/file0.ts": 1,
+ "/src/lib/file1.ts": 1,
+ "/src/lib/file2.ts": 1,
+ "/src/lib/global.ts": 1,
+ "/src/app/file3.ts": 1,
+ "/src/app/file4.ts": 1
+}
+
+setModifiedTime:: {}
+
+fileExists:: {
+ "/src/lib/file0.ts": 1,
+ "/src/lib/file1.ts": 1,
+ "/src/lib/file2.ts": 1,
+ "/src/lib/global.ts": 1,
+ "/src/module.js": 3,
+ "/src/module.d.ts": 2,
+ "/src/app/file3.ts": 1,
+ "/src/app/file4.ts": 1,
+ "/src/app/module.js": 2,
+ "/src/app/module.d.ts": 2
+}
+
+directoryExists:: {
+ "/src/lib/node_modules/@types": 1,
+ "/src/node_modules/@types": 2,
+ "/node_modules/@types": 2,
+ "/src/app/lib": 1,
+ "/src/lib": 1,
+ "/src/app/node_modules/@types": 1
+}
+
 
 //// [/src/app/module.d.ts]
 declare const myGlob = 20;

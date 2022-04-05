@@ -27,6 +27,14 @@ import classNames from "classnames"; classNames().foo;
 {"compilerOptions":{"module":"commonjs","incremental":true}}
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 /a/lib/tsc.js -i
 Output::
 
@@ -140,12 +148,47 @@ var classnames_1 = require("classnames");
 }
 
 
+fileExists:: {
+ "/users/username/projects/project/tsconfig.json": 1,
+ "/users/username/projects/project/node_modules/classnames/package.json": 1,
+ "/users/username/projects/project/node_modules/classnames.ts": 1,
+ "/users/username/projects/project/node_modules/classnames.tsx": 1,
+ "/users/username/projects/project/node_modules/classnames.d.ts": 1,
+ "/users/username/projects/project/node_modules/classnames/index.ts": 1,
+ "/users/username/projects/project/node_modules/classnames/index.tsx": 1,
+ "/users/username/projects/project/node_modules/classnames/index.d.ts": 1
+} 
+
+directoryExists:: {
+ "/users/username/projects/project/src/node_modules": 1,
+ "/users/username/projects/project/node_modules": 1,
+ "/users/username/projects/project/node_modules/classnames": 1,
+ "/users/username/projects/project/src/types/node_modules": 1,
+ "/users/username/projects/project/node_modules/@types": 1,
+ "/users/username/projects/node_modules/@types": 1,
+ "/users/username/node_modules/@types": 1,
+ "/users/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 Change::
 
 Input::
 //// [/users/username/projects/project/src/types/classnames.d.ts]
 export {}; declare module "classnames" { interface Result {} }
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 [96msrc/index.ts[0m:[93m1[0m:[93m51[0m - [91merror[0m[90m TS2339: [0mProperty 'foo' does not exist on type 'Result'.
@@ -264,3 +307,30 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
   "size": 1237
 }
 
+
+fileExists:: {
+ "/users/username/projects/project/tsconfig.json": 1,
+ "/users/username/projects/project/node_modules/classnames/package.json": 1,
+ "/users/username/projects/project/node_modules/classnames.ts": 1,
+ "/users/username/projects/project/node_modules/classnames.tsx": 1,
+ "/users/username/projects/project/node_modules/classnames.d.ts": 1,
+ "/users/username/projects/project/node_modules/classnames/index.ts": 1,
+ "/users/username/projects/project/node_modules/classnames/index.tsx": 1,
+ "/users/username/projects/project/node_modules/classnames/index.d.ts": 1
+} 
+
+directoryExists:: {
+ "/users/username/projects/project/src/node_modules": 1,
+ "/users/username/projects/project/node_modules": 1,
+ "/users/username/projects/project/node_modules/classnames": 1,
+ "/users/username/projects/project/src/types/node_modules": 1,
+ "/users/username/projects/project/node_modules/@types": 1,
+ "/users/username/projects/node_modules/@types": 1,
+ "/users/username/node_modules/@types": 1,
+ "/users/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 

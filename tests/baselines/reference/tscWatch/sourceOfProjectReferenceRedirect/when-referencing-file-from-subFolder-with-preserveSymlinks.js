@@ -36,6 +36,14 @@ export function bar() { }
 
 //// [/user/username/projects/myproject/node_modules/b] symlink(/user/username/projects/myproject/packages/B)
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 /a/lib/tsc.js --w --p /user/username/projects/myproject/packages/A/tsconfig.json
 Output::
 >> Screen clear
@@ -182,3 +190,39 @@ export {};
   "size": 962
 }
 
+
+fileExists:: {
+ "/user/username/projects/myproject/node_modules/b/package.json": 1,
+ "/user/username/projects/myproject/node_modules/b/lib/foo.ts": 1,
+ "/user/username/projects/myproject/node_modules/b/lib/foo.tsx": 1,
+ "/user/username/projects/myproject/node_modules/b/lib/foo.d.ts": 1,
+ "/user/username/projects/myproject/node_modules/b/lib/bar/foo/package.json": 1,
+ "/user/username/projects/myproject/node_modules/b/lib/bar/foo.ts": 1,
+ "/user/username/projects/myproject/node_modules/b/lib/bar/foo.tsx": 1,
+ "/user/username/projects/myproject/node_modules/b/lib/bar/foo.d.ts": 1
+} 
+
+directoryExists:: {
+ "/user/username/projects/myproject/packages/a/src/node_modules": 2,
+ "/user/username/projects/myproject/packages/a/node_modules": 2,
+ "/user/username/projects/myproject/packages/node_modules": 2,
+ "/user/username/projects/myproject/node_modules": 2,
+ "/user/username/projects/myproject/node_modules/b/lib/foo": 1,
+ "/user/username/projects/myproject/node_modules/b": 1,
+ "/user/username/projects/myproject/node_modules/b/lib": 1,
+ "/user/username/projects/myproject/node_modules/b/lib/bar/foo": 1,
+ "/user/username/projects/myproject/node_modules/b/lib/bar": 1,
+ "/user/username/projects/myproject/packages/a/node_modules/@types": 1,
+ "/user/username/projects/myproject/packages/node_modules/@types": 1,
+ "/user/username/projects/myproject/node_modules/@types": 1,
+ "/user/username/projects/node_modules/@types": 1,
+ "/user/username/node_modules/@types": 1,
+ "/user/node_modules/@types": 1,
+ "/node_modules/@types": 1,
+ "/user/username/projects/myproject/packages/a/lib": 1,
+ "/user/username/projects/myproject/packages/a": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 

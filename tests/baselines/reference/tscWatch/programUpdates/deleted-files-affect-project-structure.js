@@ -22,6 +22,14 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 /a/lib/tsc.js -w /a/b/f1.ts --noImplicitAny
 Output::
 >> Screen clear
@@ -116,10 +124,33 @@ __exportStar(require("./f2"), exports);
 
 
 
+fileExists:: {
+ "/a/b/f2.ts": 1,
+ "/a/c/f3.ts": 1
+} 
+
+directoryExists:: {
+ "/a/b": 2,
+ "/a/c": 2,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 Change:: Delete f2
 
 Input::
 //// [/a/b/f2.ts] deleted
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -162,3 +193,19 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 //// [/a/b/f1.js] file written with same contents
+
+fileExists:: {
+ "/a/b/f2.tsx": 1,
+ "/a/b/f2.d.ts": 1,
+ "/a/b/f2.js": 1
+} 
+
+directoryExists:: {
+ "/a/b": 4,
+ "/a/b/f2": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 

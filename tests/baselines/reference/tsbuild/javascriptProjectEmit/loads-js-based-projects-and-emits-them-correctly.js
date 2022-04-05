@@ -117,6 +117,45 @@ Output::
 /lib/tsc -b /src
 exitCode:: ExitStatus.Success
 
+getModifiedTime:: {
+ "/src/common/nominal.js": 1,
+ "/src/sub-project/index.js": 1,
+ "/src/sub-project-2/index.js": 1
+}
+
+setModifiedTime:: {}
+
+fileExists:: {
+ "/src/tsconfig.base.json": 3,
+ "/src/common/nominal.js": 1,
+ "/lib/common/nominal.js": 1,
+ "/lib/common/nominal.d.ts": 1,
+ "/src/sub-project/index.js": 1,
+ "/lib/sub-project/index.js": 1,
+ "/src/common/nominal.ts": 1,
+ "/src/common/nominal.tsx": 1,
+ "/src/common/nominal.d.ts": 1,
+ "/lib/sub-project/index.d.ts": 1,
+ "/src/sub-project-2/index.js": 1,
+ "/lib/sub-project-2/index.js": 1,
+ "/src/sub-project/index.ts": 1,
+ "/src/sub-project/index.tsx": 1,
+ "/src/sub-project/index.d.ts": 1,
+ "/lib/sub-project-2/index.d.ts": 1
+}
+
+directoryExists:: {
+ "/src/common/node_modules/@types": 1,
+ "/src/node_modules/@types": 3,
+ "/node_modules/@types": 3,
+ "/src/common": 4,
+ "/src/common/nominal": 1,
+ "/src/sub-project/node_modules/@types": 1,
+ "/src/sub-project": 4,
+ "/src/sub-project/index": 1,
+ "/src/sub-project-2/node_modules/@types": 1
+}
+
 
 //// [/lib/common/nominal.d.ts]
 export type Nominal<T, Name> = T & {

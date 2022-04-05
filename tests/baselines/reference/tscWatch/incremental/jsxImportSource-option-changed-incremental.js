@@ -55,6 +55,14 @@ export const App = () => <div propA={true}></div>;
 {"compilerOptions":{"module":"commonjs","jsx":"react-jsx","incremental":true,"jsxImportSource":"react"}}
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 /a/lib/tsc.js -i --explainFiles
 Output::
 ../../../../a/lib/lib.d.ts
@@ -157,12 +165,47 @@ exports.App = App;
 }
 
 
+fileExists:: {
+ "/users/username/projects/project/tsconfig.json": 1,
+ "/users/username/projects/project/node_modules/react/jsx-runtime/package.json": 1,
+ "/users/username/projects/project/node_modules/react/package.json": 1,
+ "/users/username/projects/project/node_modules/react/jsx-runtime.ts": 1,
+ "/users/username/projects/project/node_modules/react/jsx-runtime.tsx": 1,
+ "/users/username/projects/project/node_modules/react/jsx-runtime.d.ts": 1,
+ "/users/username/projects/project/node_modules/react/jsx-runtime/index.ts": 1,
+ "/users/username/projects/project/node_modules/react/jsx-runtime/index.tsx": 1,
+ "/users/username/projects/project/node_modules/react/jsx-runtime/index.d.ts": 1
+} 
+
+directoryExists:: {
+ "/users/username/projects/project/node_modules": 1,
+ "/users/username/projects/project/node_modules/react/jsx-runtime": 1,
+ "/users/username/projects/project/node_modules/react": 1,
+ "/users/username/projects/project/node_modules/@types": 1,
+ "/users/username/projects/node_modules/@types": 1,
+ "/users/username/node_modules/@types": 1,
+ "/users/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 Change::
 
 Input::
 //// [/users/username/projects/project/tsconfig.json]
 {"compilerOptions":{"module":"commonjs","jsx":"react-jsx","incremental":true,"jsxImportSource":"preact"}}
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 [96mindex.tsx[0m:[93m1[0m:[93m31[0m - [91merror[0m[90m TS2322: [0mType '{ propA: boolean; }' is not assignable to type '{ propB?: boolean; }'.
@@ -295,3 +338,30 @@ exports.App = App;
   "size": 1629
 }
 
+
+fileExists:: {
+ "/users/username/projects/project/tsconfig.json": 1,
+ "/users/username/projects/project/node_modules/preact/jsx-runtime/package.json": 1,
+ "/users/username/projects/project/node_modules/preact/package.json": 1,
+ "/users/username/projects/project/node_modules/preact/jsx-runtime.ts": 1,
+ "/users/username/projects/project/node_modules/preact/jsx-runtime.tsx": 1,
+ "/users/username/projects/project/node_modules/preact/jsx-runtime.d.ts": 1,
+ "/users/username/projects/project/node_modules/preact/jsx-runtime/index.ts": 1,
+ "/users/username/projects/project/node_modules/preact/jsx-runtime/index.tsx": 1,
+ "/users/username/projects/project/node_modules/preact/jsx-runtime/index.d.ts": 1
+} 
+
+directoryExists:: {
+ "/users/username/projects/project/node_modules": 1,
+ "/users/username/projects/project/node_modules/preact/jsx-runtime": 1,
+ "/users/username/projects/project/node_modules/preact": 1,
+ "/users/username/projects/project/node_modules/@types": 1,
+ "/users/username/projects/node_modules/@types": 1,
+ "/users/username/node_modules/@types": 1,
+ "/users/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 

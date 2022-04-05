@@ -19,6 +19,14 @@ interface Array<T> { length: number; [n: number]: T; }
 {}
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 /a/lib/tsc.js -w -p /a/b/tsconfig.json
 Output::
 >> Screen clear
@@ -66,12 +74,35 @@ var x = 1;
 
 
 
+fileExists:: {
+ "/a/b/tsconfig.json": 1
+} 
+
+directoryExists:: {
+ "/a/b/tsconfig.json": 1,
+ "/a/b/node_modules/@types": 1,
+ "/a/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 Change:: Create commonFile2
 
 Input::
 //// [/a/b/commonFile2.ts]
 let y = 1
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -123,3 +154,18 @@ exitCode:: ExitStatus.undefined
 var y = 1;
 
 
+
+fileExists:: {
+ "/a/b/commonfile2.js": 1
+} 
+
+directoryExists:: {
+ "/a/b/node_modules/@types": 1,
+ "/a/node_modules/@types": 1,
+ "/node_modules/@types": 1,
+ "/a/b/commonfile2.js": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 

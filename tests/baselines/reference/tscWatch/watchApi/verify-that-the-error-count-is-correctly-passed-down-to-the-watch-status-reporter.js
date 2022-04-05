@@ -19,6 +19,14 @@ let compiler = new Compiler(); for (let i = 0; j < 5; i++) {}
 {"compilerOptions":{"module":"commonjs"},"files":["index.ts"]}
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 /a/lib/tsc.js --w --p /user/username/projects/myproject/tsconfig.json
 Output::
 >> Screen clear
@@ -79,3 +87,17 @@ var compiler = new Compiler();
 for (var i = 0; j < 5; i++) { }
 
 
+
+fileExists:: {} 
+
+directoryExists:: {
+ "/user/username/projects/myproject/node_modules/@types": 1,
+ "/user/username/projects/node_modules/@types": 1,
+ "/user/username/node_modules/@types": 1,
+ "/user/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 

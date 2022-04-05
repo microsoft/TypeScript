@@ -102,6 +102,14 @@ export function run() {
 
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 /a/lib/tsc.js -b -w sample1/tests
 Output::
 >> Screen clear
@@ -467,12 +475,55 @@ export declare const m: typeof mod;
 }
 
 
+fileExists:: {
+ "/user/username/projects/sample1/core/anothermodule.ts": 1,
+ "/user/username/projects/sample1/core/index.ts": 1,
+ "/user/username/projects/sample1/core/anothermodule.js": 1,
+ "/user/username/projects/sample1/core/anothermodule.d.ts": 1,
+ "/user/username/projects/sample1/logic/index.ts": 1,
+ "/user/username/projects/sample1/logic/index.js": 1,
+ "/user/username/projects/sample1/logic/index.d.ts": 1,
+ "/user/username/projects/sample1/tests/index.ts": 1,
+ "/user/username/projects/sample1/tests/index.js": 1,
+ "/user/username/projects/sample1/tests/index.d.ts": 1
+} 
+
+directoryExists:: {
+ "/user/username/projects/sample1/core/node_modules/@types": 1,
+ "/user/username/projects/sample1/node_modules/@types": 3,
+ "/user/username/projects/node_modules/@types": 3,
+ "/user/username/node_modules/@types": 3,
+ "/user/node_modules/@types": 3,
+ "/node_modules/@types": 3,
+ "/user/username/projects/sample1/core": 8,
+ "/user/username/projects/sample1/logic/node_modules/@types": 1,
+ "/user/username/projects/sample1/logic": 2,
+ "/user/username/projects/sample1/tests/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {
+ "/user/username/projects/sample1/core/anothermodule.ts": 1,
+ "/user/username/projects/sample1/core/index.ts": 1,
+ "/user/username/projects/sample1/logic/index.ts": 1,
+ "/user/username/projects/sample1/tests/index.ts": 1
+} 
+
+setModifiedTimes:: {} 
+
 Change:: Change to new File and build core
 
 Input::
 //// [/user/username/projects/sample1/core/newfile.ts]
 export const newFileConst = 30;
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -594,9 +645,52 @@ export declare const newFileConst = 30;
 //# sourceMappingURL=newfile.d.ts.map
 
 
+fileExists:: {
+ "/user/username/projects/sample1/core/anothermodule.ts": 1,
+ "/user/username/projects/sample1/core/index.ts": 1,
+ "/user/username/projects/sample1/core/newfile.ts": 1,
+ "/user/username/projects/sample1/core/anothermodule.js": 1,
+ "/user/username/projects/sample1/core/newfile.d.ts": 1
+} 
+
+directoryExists:: {
+ "/user/username/projects/sample1/core/node_modules/@types": 1,
+ "/user/username/projects/sample1/node_modules/@types": 1,
+ "/user/username/projects/node_modules/@types": 1,
+ "/user/username/node_modules/@types": 1,
+ "/user/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {
+ "/user/username/projects/sample1/core/anothermodule.ts": 1,
+ "/user/username/projects/sample1/core/index.ts": 1,
+ "/user/username/projects/sample1/core/newfile.ts": 1,
+ "/user/username/projects/sample1/core/anothermodule.js": 1,
+ "/user/username/projects/sample1/core/anothermodule.d.ts": 1,
+ "/user/username/projects/sample1/core/index.d.ts": 1
+} 
+
+setModifiedTimes:: {
+ "/user/username/projects/sample1/core/anothermodule.js": 1,
+ "/user/username/projects/sample1/core/anothermodule.d.ts": 1,
+ "/user/username/projects/sample1/core/anothermodule.d.ts.map": 1,
+ "/user/username/projects/sample1/core/index.js": 1,
+ "/user/username/projects/sample1/core/index.d.ts": 1,
+ "/user/username/projects/sample1/core/index.d.ts.map": 1
+} 
+
 Change:: Build logic or update time stamps
 
 Input::
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 
@@ -646,9 +740,40 @@ exitCode:: ExitStatus.undefined
 //// [/user/username/projects/sample1/logic/index.d.ts] file changed its modified time
 //// [/user/username/projects/sample1/logic/tsconfig.tsbuildinfo] file changed its modified time
 
+fileExists:: {} 
+
+directoryExists:: {
+ "/user/username/projects/sample1/core": 4,
+ "/user/username/projects/sample1/logic/node_modules/@types": 1,
+ "/user/username/projects/sample1/node_modules/@types": 1,
+ "/user/username/projects/node_modules/@types": 1,
+ "/user/username/node_modules/@types": 1,
+ "/user/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {
+ "/user/username/projects/sample1/logic/index.d.ts": 1
+} 
+
+setModifiedTimes:: {
+ "/user/username/projects/sample1/logic/index.js": 1,
+ "/user/username/projects/sample1/logic/index.js.map": 1,
+ "/user/username/projects/sample1/logic/index.d.ts": 1,
+ "/user/username/projects/sample1/logic/tsconfig.tsbuildinfo": 1
+} 
+
 Change:: Build Tests
 
 Input::
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 [[90m12:01:39 AM[0m] Found 0 errors. Watching for file changes.
@@ -701,6 +826,31 @@ exitCode:: ExitStatus.undefined
 //// [/user/username/projects/sample1/tests/index.d.ts] file changed its modified time
 //// [/user/username/projects/sample1/tests/tsconfig.tsbuildinfo] file changed its modified time
 
+fileExists:: {
+ "/user/username/projects/sample1/logic/index.ts": 1
+} 
+
+directoryExists:: {
+ "/user/username/projects/sample1/core": 4,
+ "/user/username/projects/sample1/logic": 2,
+ "/user/username/projects/sample1/tests/node_modules/@types": 1,
+ "/user/username/projects/sample1/node_modules/@types": 1,
+ "/user/username/projects/node_modules/@types": 1,
+ "/user/username/node_modules/@types": 1,
+ "/user/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {
+ "/user/username/projects/sample1/tests/index.d.ts": 1
+} 
+
+setModifiedTimes:: {
+ "/user/username/projects/sample1/tests/index.js": 1,
+ "/user/username/projects/sample1/tests/index.d.ts": 1,
+ "/user/username/projects/sample1/tests/tsconfig.tsbuildinfo": 1
+} 
+
 Change:: Change to new File and build core
 
 Input::
@@ -708,6 +858,14 @@ Input::
 export const newFileConst = 30;
 export class someClass2 { }
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -837,9 +995,52 @@ export declare class someClass2 {
 //# sourceMappingURL=newfile.d.ts.map
 
 
+fileExists:: {
+ "/user/username/projects/sample1/core/anothermodule.ts": 1,
+ "/user/username/projects/sample1/core/index.ts": 1,
+ "/user/username/projects/sample1/core/newfile.ts": 1,
+ "/user/username/projects/sample1/core/anothermodule.js": 1,
+ "/user/username/projects/sample1/core/newfile.d.ts": 1
+} 
+
+directoryExists:: {
+ "/user/username/projects/sample1/core/node_modules/@types": 1,
+ "/user/username/projects/sample1/node_modules/@types": 1,
+ "/user/username/projects/node_modules/@types": 1,
+ "/user/username/node_modules/@types": 1,
+ "/user/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {
+ "/user/username/projects/sample1/core/anothermodule.ts": 1,
+ "/user/username/projects/sample1/core/index.ts": 1,
+ "/user/username/projects/sample1/core/newfile.ts": 1,
+ "/user/username/projects/sample1/core/anothermodule.js": 1,
+ "/user/username/projects/sample1/core/anothermodule.d.ts": 1,
+ "/user/username/projects/sample1/core/index.d.ts": 1
+} 
+
+setModifiedTimes:: {
+ "/user/username/projects/sample1/core/anothermodule.js": 1,
+ "/user/username/projects/sample1/core/anothermodule.d.ts": 1,
+ "/user/username/projects/sample1/core/anothermodule.d.ts.map": 1,
+ "/user/username/projects/sample1/core/index.js": 1,
+ "/user/username/projects/sample1/core/index.d.ts": 1,
+ "/user/username/projects/sample1/core/index.d.ts.map": 1
+} 
+
 Change:: Build logic or update time stamps
 
 Input::
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 
@@ -889,9 +1090,40 @@ exitCode:: ExitStatus.undefined
 //// [/user/username/projects/sample1/logic/index.d.ts] file changed its modified time
 //// [/user/username/projects/sample1/logic/tsconfig.tsbuildinfo] file changed its modified time
 
+fileExists:: {} 
+
+directoryExists:: {
+ "/user/username/projects/sample1/core": 4,
+ "/user/username/projects/sample1/logic/node_modules/@types": 1,
+ "/user/username/projects/sample1/node_modules/@types": 1,
+ "/user/username/projects/node_modules/@types": 1,
+ "/user/username/node_modules/@types": 1,
+ "/user/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {
+ "/user/username/projects/sample1/logic/index.d.ts": 1
+} 
+
+setModifiedTimes:: {
+ "/user/username/projects/sample1/logic/index.js": 1,
+ "/user/username/projects/sample1/logic/index.js.map": 1,
+ "/user/username/projects/sample1/logic/index.d.ts": 1,
+ "/user/username/projects/sample1/logic/tsconfig.tsbuildinfo": 1
+} 
+
 Change:: Build Tests
 
 Input::
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 [[90m12:02:02 AM[0m] Found 0 errors. Watching for file changes.
@@ -943,3 +1175,28 @@ exitCode:: ExitStatus.undefined
 //// [/user/username/projects/sample1/tests/index.js] file changed its modified time
 //// [/user/username/projects/sample1/tests/index.d.ts] file changed its modified time
 //// [/user/username/projects/sample1/tests/tsconfig.tsbuildinfo] file changed its modified time
+
+fileExists:: {
+ "/user/username/projects/sample1/logic/index.ts": 1
+} 
+
+directoryExists:: {
+ "/user/username/projects/sample1/core": 4,
+ "/user/username/projects/sample1/logic": 2,
+ "/user/username/projects/sample1/tests/node_modules/@types": 1,
+ "/user/username/projects/sample1/node_modules/@types": 1,
+ "/user/username/projects/node_modules/@types": 1,
+ "/user/username/node_modules/@types": 1,
+ "/user/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {
+ "/user/username/projects/sample1/tests/index.d.ts": 1
+} 
+
+setModifiedTimes:: {
+ "/user/username/projects/sample1/tests/index.js": 1,
+ "/user/username/projects/sample1/tests/index.d.ts": 1,
+ "/user/username/projects/sample1/tests/tsconfig.tsbuildinfo": 1
+} 

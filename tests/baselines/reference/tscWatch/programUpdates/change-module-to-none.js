@@ -20,6 +20,14 @@ interface Array<T> { length: number; [n: number]: T; }
 {}
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 /a/lib/tsc.js -w -p /a/b/tsconfig.json
 Output::
 >> Screen clear
@@ -68,12 +76,35 @@ exports.__esModule = true;
 
 
 
+fileExists:: {
+ "/a/b/tsconfig.json": 1
+} 
+
+directoryExists:: {
+ "/a/b/tsconfig.json": 1,
+ "/a/b/node_modules/@types": 1,
+ "/a/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 Change:: change `module` to 'none'
 
 Input::
 //// [/a/b/tsconfig.json]
 {"compilerOptions":{"module":"none"}}
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -122,3 +153,15 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 //// [/a/b/f1.js] file written with same contents
+
+fileExists:: {} 
+
+directoryExists:: {
+ "/a/b/node_modules/@types": 1,
+ "/a/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 

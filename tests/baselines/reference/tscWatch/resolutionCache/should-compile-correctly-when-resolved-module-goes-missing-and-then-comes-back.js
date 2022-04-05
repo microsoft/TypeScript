@@ -19,6 +19,14 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 /a/lib/tsc.js --w /a/foo.ts
 Output::
 >> Screen clear
@@ -70,10 +78,33 @@ define(["require", "exports"], function (require, exports) {
 
 
 
+fileExists:: {
+ "/a/bar.ts": 1,
+ "/a/bar.tsx": 1,
+ "/a/bar.d.ts": 1
+} 
+
+directoryExists:: {
+ "/a": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 Change:: Delete imported file
 
 Input::
 //// [/a/bar.d.ts] deleted
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -121,12 +152,44 @@ exitCode:: ExitStatus.undefined
 
 //// [/a/foo.js] file written with same contents
 
+fileExists:: {
+ "/a/bar.ts": 1,
+ "/a/bar.tsx": 1,
+ "/bar.ts": 1,
+ "/bar.tsx": 1,
+ "/bar.d.ts": 1,
+ "/a/bar.js": 1,
+ "/a/bar.jsx": 1,
+ "/bar.js": 1,
+ "/bar.jsx": 1
+} 
+
+directoryExists:: {
+ "/a": 2,
+ "/": 2,
+ "/a/node_modules": 1,
+ "/node_modules": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 Change:: Create imported file
 
 Input::
 //// [/a/bar.d.ts]
 export const y = 1;export const x = 10;
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -169,3 +232,18 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 //// [/a/foo.js] file written with same contents
+
+fileExists:: {
+ "/a/bar.ts": 1,
+ "/a/bar.tsx": 1,
+ "/a/bar.d.ts": 1
+} 
+
+directoryExists:: {
+ "/a": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 

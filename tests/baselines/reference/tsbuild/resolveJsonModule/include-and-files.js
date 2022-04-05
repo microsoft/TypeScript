@@ -115,6 +115,32 @@ src/src/index.ts
   Matched by include pattern 'src/**/*' in 'src/tsconfig_withIncludeAndFiles.json'
 exitCode:: ExitStatus.Success
 
+getModifiedTime:: {
+ "/src/src/hello.json": 1,
+ "/src/src/index.ts": 1
+}
+
+setModifiedTime:: {}
+
+fileExists:: {
+ "/src/src/hello.json": 1,
+ "/src/src/index.ts": 1,
+ "/src/dist/src/hello.json": 1,
+ "/src/src/hello.json.ts": 1,
+ "/src/src/hello.json.tsx": 1,
+ "/src/src/hello.json.d.ts": 1,
+ "/src/src/hello.json.js": 1,
+ "/src/src/hello.json.jsx": 1,
+ "/src/dist/src/index.d.ts": 1
+}
+
+directoryExists:: {
+ "/src/src": 6,
+ "/src/src/hello.json": 1,
+ "/src/node_modules/@types": 1,
+ "/node_modules/@types": 1
+}
+
 
 //// [/src/dist/src/hello.json]
 {

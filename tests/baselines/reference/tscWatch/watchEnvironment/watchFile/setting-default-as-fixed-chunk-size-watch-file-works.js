@@ -22,6 +22,14 @@ let y = 1
 {}
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 /a/lib/tsc.js -w -p /a/b/tsconfig.json
 Output::
 >> Screen clear
@@ -70,12 +78,40 @@ var y = 1;
 
 
 
+fileExists:: {
+ "/a/b/tsconfig.json": 1
+} 
+
+directoryExists:: {
+ "/a/b/tsconfig.json": 1,
+ "/a/b/node_modules/@types": 1,
+ "/a/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {
+ "/a/b/tsconfig.json": 1,
+ "/a/b/commonfile1.ts": 1,
+ "/a/b/commonfile2.ts": 1,
+ "/a/lib/lib.d.ts": 1
+} 
+
+setModifiedTimes:: {} 
+
 Change:: Make change to file but should detect as changed and schedule program update
 
 Input::
 //// [/a/b/commonFile1.ts]
 var zz30 = 100;
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 
@@ -92,9 +128,30 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {
+ "/a/b/tsconfig.json": 1,
+ "/a/b/commonfile1.ts": 1,
+ "/a/b/commonfile2.ts": 1,
+ "/a/lib/lib.d.ts": 1
+} 
+
+setModifiedTimes:: {} 
+
 Change:: Callbacks: queue and scheduled program update
 
 Input::
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -138,3 +195,16 @@ var zz30 = 100;
 
 
 //// [/a/b/commonFile2.js] file written with same contents
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {
+ "/a/b/tsconfig.json": 1,
+ "/a/b/commonfile1.ts": 1,
+ "/a/b/commonfile2.ts": 1,
+ "/a/lib/lib.d.ts": 1
+} 
+
+setModifiedTimes:: {} 

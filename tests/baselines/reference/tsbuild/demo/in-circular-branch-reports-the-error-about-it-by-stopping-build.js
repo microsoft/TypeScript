@@ -166,4 +166,14 @@ Found 1 error.
 
 exitCode:: ExitStatus.ProjectReferenceCycle_OutputsSkupped
 
+getModifiedTime:: {}
+
+setModifiedTime:: {}
+
+fileExists:: {
+ "/src/tsconfig-base.json": 3
+}
+
+directoryExists:: {}
+
 

@@ -22,6 +22,14 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 /a/lib/tsc.js --w --p /user/username/projects/myproject/tsconfig.json
 Output::
 >> Screen clear
@@ -89,12 +97,39 @@ new logger_1.logger();
 
 
 
+fileExists:: {
+ "/user/username/projects/myproject/tsconfig.json": 1,
+ "/user/username/projects/myproject/logger.ts": 1
+} 
+
+directoryExists:: {
+ "/user/username/projects/myproject/tsconfig.json": 1,
+ "/user/username/projects/myproject": 2,
+ "/user/username/projects/myproject/node_modules/@types": 1,
+ "/user/username/projects/node_modules/@types": 1,
+ "/user/username/node_modules/@types": 1,
+ "/user/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 Change:: Change module name from logger to Logger
 
 Input::
 //// [/user/username/projects/myproject/another.ts]
 import { logger } from "./Logger"; new logger();
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -153,3 +188,20 @@ var Logger_1 = require("./Logger");
 new Logger_1.logger();
 
 
+
+fileExists:: {
+ "/user/username/projects/myproject/logger.ts": 1
+} 
+
+directoryExists:: {
+ "/user/username/projects/myproject": 2,
+ "/user/username/projects/myproject/node_modules/@types": 1,
+ "/user/username/projects/node_modules/@types": 1,
+ "/user/username/node_modules/@types": 1,
+ "/user/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 

@@ -23,6 +23,14 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 /a/lib/tsc.js -w -p . --extendedDiagnostics
 Output::
 [[90m12:00:31 AM[0m] Starting compilation in watch mode...
@@ -104,12 +112,38 @@ exports.__esModule = true;
 
 
 
+fileExists:: {
+ "/user/username/projects/myproject/tsconfig.json": 1,
+ "/user/username/projects/myproject/client/folder1/module1.ts": 1
+} 
+
+directoryExists:: {
+ "/user/username/projects/myproject/client/folder1": 3,
+ "/user/username/projects/myproject/node_modules/@types": 1,
+ "/user/username/projects/node_modules/@types": 1,
+ "/user/username/node_modules/@types": 1,
+ "/user/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 Change:: Add module3 to folder2
 
 Input::
 //// [/user/username/projects/myproject/folder2/module3.ts]
 import * as M from "folder1/module1";
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/folder2/module3.ts :: WatchInfo: /user/username/projects/myproject/folder2 1 undefined Wild card directory
@@ -174,3 +208,18 @@ exitCode:: ExitStatus.undefined
 exports.__esModule = true;
 
 
+
+fileExists:: {} 
+
+directoryExists:: {
+ "/user/username/projects/myproject/client/linktofolder2": 1,
+ "/user/username/projects/myproject/node_modules/@types": 1,
+ "/user/username/projects/node_modules/@types": 1,
+ "/user/username/node_modules/@types": 1,
+ "/user/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 

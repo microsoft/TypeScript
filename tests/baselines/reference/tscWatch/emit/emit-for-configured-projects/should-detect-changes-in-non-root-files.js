@@ -31,6 +31,14 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 /a/lib/tsc.js --w -p /a/b/tsconfig.json
 Output::
 >> Screen clear
@@ -93,12 +101,37 @@ exports.y = 10;
 
 
 
+fileExists:: {
+ "/a/b/tsconfig.json": 1,
+ "/a/b/modulefile1.ts": 1
+} 
+
+directoryExists:: {
+ "/a/b/tsconfig.json": 1,
+ "/a/b": 2,
+ "/a/b/node_modules/@types": 1,
+ "/a/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 Change:: Change the content of moduleFile1 to `export var T: number;export function Foo() { };`
 
 Input::
 //// [/a/b/moduleFile1.ts]
 export var T: number;export function Foo() { };
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -153,12 +186,28 @@ exports.Foo = Foo;
 
 //// [/a/b/file1Consumer1.js] file written with same contents
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 Change:: change file1 internal, and verify only file1 is affected
 
 Input::
 //// [/a/b/moduleFile1.ts]
 export var T: number;export function Foo() { };var T1: number;
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -210,3 +259,11 @@ exports.Foo = Foo;
 var T1;
 
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 

@@ -19,6 +19,14 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 /a/lib/tsc.js -w /a/b/file1.ts
 Output::
 >> Screen clear
@@ -77,6 +85,19 @@ T.bar();
 
 
 
+fileExists:: {
+ "/a/b/modulefile.ts": 1
+} 
+
+directoryExists:: {
+ "/a/b": 2,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 Change:: Rename moduleFile to moduleFile1
 
 Input::
@@ -85,6 +106,14 @@ export function bar() { };
 
 //// [/a/b/moduleFile.ts] deleted
 //// [/a/b/moduleFile.js] deleted
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -128,6 +157,23 @@ exitCode:: ExitStatus.undefined
 
 //// [/a/b/file1.js] file written with same contents
 
+fileExists:: {
+ "/a/b/modulefile.tsx": 1,
+ "/a/b/modulefile.d.ts": 1,
+ "/a/b/modulefile.js": 1,
+ "/a/b/modulefile.jsx": 1
+} 
+
+directoryExists:: {
+ "/a/b": 4,
+ "/a/b/modulefile": 2,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 Change:: Rename moduleFile1 back to moduleFile
 
 Input::
@@ -135,6 +181,14 @@ Input::
 export function bar() { };
 
 //// [/a/b/moduleFile1.ts] deleted
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -184,3 +238,16 @@ exports.bar = bar;
 ;
 
 
+
+fileExists:: {
+ "/a/b/modulefile.ts": 1
+} 
+
+directoryExists:: {
+ "/a/b": 2,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 

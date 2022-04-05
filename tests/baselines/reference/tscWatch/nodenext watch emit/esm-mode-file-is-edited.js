@@ -27,6 +27,14 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 /a/lib/tsc.js --w --p /project/tsconfig.json
 Output::
 >> Screen clear
@@ -90,6 +98,34 @@ Thing.fn();
 
 
 
+fileExists:: {
+ "/project/tsconfig.json": 1,
+ "/project/src/package.json": 3,
+ "/project/package.json": 3,
+ "/a/lib/package.json": 2,
+ "/a/package.json": 2,
+ "/package.json": 2
+} 
+
+directoryExists:: {
+ "/project/tsconfig.json": 1,
+ "/project/src": 3,
+ "/project": 3,
+ "/project/src/node_modules": 2,
+ "/project/node_modules": 2,
+ "/node_modules": 2,
+ "/project/node_modules/@types": 1,
+ "/node_modules/@types": 1,
+ "/a/lib": 2,
+ "/a": 2,
+ "/": 2,
+ "/dist": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 Change:: Modify typescript file
 
 Input::
@@ -97,6 +133,14 @@ Input::
 import * as Thing from "thing";
 Thing.fn();
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -145,3 +189,23 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 //// [/dist/index.js] file written with same contents
+
+fileExists:: {
+ "/a/lib/package.json": 1,
+ "/a/package.json": 1,
+ "/package.json": 1,
+ "/project/src/package.json": 3,
+ "/project/package.json": 3
+} 
+
+directoryExists:: {
+ "/a/lib": 1,
+ "/a": 1,
+ "/": 1,
+ "/project/src": 3,
+ "/project": 3
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 

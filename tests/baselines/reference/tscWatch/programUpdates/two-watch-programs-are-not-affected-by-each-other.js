@@ -24,6 +24,14 @@ export let x = 1;
 export let y = 1;
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 /a/lib/tsc.js --w /a/c/f2.ts /a/d/f3.ts
 Output::
 >> Screen clear
@@ -79,6 +87,16 @@ exports.y = void 0;
 exports.y = 1;
 
 
+
+fileExists:: {} 
+
+directoryExists:: {
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 createing separate watcher
 Output::
@@ -152,6 +170,21 @@ __exportStar(require("../c/f2"), exports);
 __exportStar(require("../d/f3"), exports);
 
 
+
+fileExists:: {
+ "/a/c/f2.ts": 1,
+ "/a/d/f3.ts": 1
+} 
+
+directoryExists:: {
+ "/a/c": 2,
+ "/a/d": 2,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 First program is not updated:: true
 Second program is not updated:: true

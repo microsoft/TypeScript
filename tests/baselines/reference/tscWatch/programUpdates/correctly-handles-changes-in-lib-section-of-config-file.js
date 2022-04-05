@@ -23,6 +23,14 @@ var x: Promise<string>;
 {"compilerOptions":{"module":"commonjs","target":"es5","noImplicitAny":true,"sourceMap":false,"lib":["es5"]}}
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 /compiler/tsc.js -w -p /src/tsconfig.json
 Output::
 >> Screen clear
@@ -75,12 +83,35 @@ var x;
 
 
 
+fileExists:: {
+ "/src/tsconfig.json": 1
+} 
+
+directoryExists:: {
+ "/src/tsconfig.json": 1,
+ "/src/node_modules/@types": 1,
+ "/node_modules/@types": 1,
+ "/node_modules": 2
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 Change:: Change the lib in config
 
 Input::
 //// [/src/tsconfig.json]
 {"compilerOptions":{"module":"commonjs","target":"es5","noImplicitAny":true,"sourceMap":false,"lib":["es5","es2015.promise"]}}
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -128,3 +159,15 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 //// [/src/app.js] file written with same contents
+
+fileExists:: {} 
+
+directoryExists:: {
+ "/src/node_modules/@types": 1,
+ "/node_modules/@types": 1,
+ "/node_modules": 4
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 

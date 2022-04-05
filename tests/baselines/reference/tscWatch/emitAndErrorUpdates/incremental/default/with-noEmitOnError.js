@@ -39,6 +39,14 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 /a/lib/tsc.js --w --i
 Output::
 >> Screen clear
@@ -172,10 +180,38 @@ exitCode:: ExitStatus.undefined
 }
 
 
+fileExists:: {
+ "/user/username/projects/noemitonerror/tsconfig.json": 1,
+ "/user/username/projects/noemitonerror/shared/types/db.ts": 1
+} 
+
+directoryExists:: {
+ "/user/username/projects/noemitonerror/shared/types": 2,
+ "/user/username/projects/noemitonerror/node_modules/@types": 1,
+ "/user/username/projects/node_modules/@types": 1,
+ "/user/username/node_modules/@types": 1,
+ "/user/node_modules/@types": 1,
+ "/node_modules/@types": 1,
+ "/user/username/projects/noemitonerror/dev-build": 1,
+ "/user/username/projects/noemitonerror": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 Change:: No change
 
 Input::
 //// [/user/username/projects/noEmitOnError/src/main.ts] file written with same contents
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -226,6 +262,14 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 Change:: Fix Syntax error
 
 Input::
@@ -235,6 +279,14 @@ const a = {
     lastName: 'sdsd'
 };
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -358,6 +410,19 @@ console.log("hi");
 
 
 
+fileExists:: {} 
+
+directoryExists:: {
+ "/user/username/projects/noemitonerror/dev-build/shared/types": 1,
+ "/user/username/projects/noemitonerror/dev-build/shared": 1,
+ "/user/username/projects/noemitonerror/dev-build": 2,
+ "/user/username/projects/noemitonerror/dev-build/src": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 Change:: Semantic Error
 
 Input::
@@ -365,6 +430,14 @@ Input::
 import { A } from "../shared/types/db";
 const a: string = 10;
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -492,10 +565,26 @@ exitCode:: ExitStatus.undefined
 }
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 Change:: No change
 
 Input::
 //// [/user/username/projects/noEmitOnError/src/main.ts] file written with same contents
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -546,6 +635,14 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 Change:: Fix Semantic Error
 
 Input::
@@ -553,6 +650,14 @@ Input::
 import { A } from "../shared/types/db";
 const a: string = "hello";
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -663,10 +768,26 @@ var a = "hello";
 
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 Change:: No change
 
 Input::
 //// [/user/username/projects/noEmitOnError/src/main.ts] file written with same contents
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -711,3 +832,11 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 

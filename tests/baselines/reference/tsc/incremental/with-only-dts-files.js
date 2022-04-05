@@ -29,6 +29,21 @@ Output::
 /lib/tsc --incremental --p src/project
 exitCode:: ExitStatus.Success
 
+getModifiedTime:: {}
+
+setModifiedTime:: {}
+
+fileExists:: {
+ "src/project/tsconfig.json": 1
+}
+
+directoryExists:: {
+ "src/project": 1,
+ "/src/project/node_modules/@types": 1,
+ "/src/node_modules/@types": 1,
+ "/node_modules/@types": 1
+}
+
 
 //// [/src/project/tsconfig.tsbuildinfo]
 {"program":{"fileNames":["../../lib/lib.d.ts","./src/another.d.ts","./src/main.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-13729955264-export const y = 10;","-10726455937-export const x = 10;"],"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3]},"version":"FakeTSVersion"}
@@ -78,6 +93,21 @@ Output::
 /lib/tsc --incremental --p src/project
 exitCode:: ExitStatus.Success
 
+getModifiedTime:: {}
+
+setModifiedTime:: {}
+
+fileExists:: {
+ "src/project/tsconfig.json": 1
+}
+
+directoryExists:: {
+ "src/project": 1,
+ "/src/project/node_modules/@types": 1,
+ "/src/node_modules/@types": 1,
+ "/node_modules/@types": 1
+}
+
 
 
 
@@ -91,6 +121,21 @@ export const x = 10;export const xy = 100;
 Output::
 /lib/tsc --incremental --p src/project
 exitCode:: ExitStatus.Success
+
+getModifiedTime:: {}
+
+setModifiedTime:: {}
+
+fileExists:: {
+ "src/project/tsconfig.json": 1
+}
+
+directoryExists:: {
+ "src/project": 1,
+ "/src/project/node_modules/@types": 1,
+ "/src/node_modules/@types": 1,
+ "/node_modules/@types": 1
+}
 
 
 //// [/src/project/tsconfig.tsbuildinfo]

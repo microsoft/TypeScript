@@ -143,6 +143,14 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 /a/lib/tsc.js -b -w -verbose
 Output::
 >> Screen clear
@@ -413,6 +421,46 @@ exitCode:: ExitStatus.undefined
 }
 
 
+fileExists:: {
+ "/user/username/projects/demo/tsconfig-base.json": 3,
+ "/user/username/projects/demo/core/utilities.ts": 1,
+ "/user/username/projects/demo/lib/core/utilities.js": 1,
+ "/user/username/projects/demo/animals.ts": 1,
+ "/user/username/projects/demo/animals.tsx": 1,
+ "/user/username/projects/demo/animals.d.ts": 1,
+ "/user/username/projects/demo/animals/package.json": 1,
+ "/user/username/projects/demo/animals/index.ts": 1,
+ "/user/username/projects/demo/animals/animal.ts": 1,
+ "/user/username/projects/demo/animals/dog.ts": 1,
+ "/user/username/projects/demo/lib/animals/animal.js": 1,
+ "/user/username/projects/demo/zoo/zoo.ts": 1,
+ "/user/username/projects/demo/lib/zoo/zoo.js": 1
+} 
+
+directoryExists:: {
+ "/user/username/projects/demo": 3,
+ "/user/username/projects/demo/animals": 11,
+ "/user/username/projects/demo/core": 2,
+ "/user/username/projects/demo/core/node_modules/@types": 1,
+ "/user/username/projects/demo/node_modules/@types": 1,
+ "/user/username/projects/node_modules/@types": 1,
+ "/user/username/node_modules/@types": 1,
+ "/user/node_modules/@types": 1,
+ "/node_modules/@types": 1,
+ "/user/username/projects/demo/lib/core": 1,
+ "/user/username/projects/demo/lib": 1
+} 
+
+getModifiedTimes:: {
+ "/user/username/projects/demo/core/utilities.ts": 1,
+ "/user/username/projects/demo/animals/animal.ts": 1,
+ "/user/username/projects/demo/animals/dog.ts": 1,
+ "/user/username/projects/demo/animals/index.ts": 1,
+ "/user/username/projects/demo/zoo/zoo.ts": 1
+} 
+
+setModifiedTimes:: {} 
+
 Change:: Prepend a line
 
 Input::
@@ -431,6 +479,14 @@ export function lastElementOf<T>(arr: T[]): T | undefined {
 
 
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -678,3 +734,33 @@ exitCode:: ExitStatus.undefined
   "size": 2802
 }
 
+
+fileExists:: {
+ "/user/username/projects/demo/core/utilities.ts": 1,
+ "/user/username/projects/demo/lib/core/utilities.js": 1,
+ "/user/username/projects/demo/animals.ts": 1,
+ "/user/username/projects/demo/animals.tsx": 1,
+ "/user/username/projects/demo/animals.d.ts": 1,
+ "/user/username/projects/demo/animals/package.json": 1,
+ "/user/username/projects/demo/animals/index.ts": 1,
+ "/user/username/projects/demo/animals/animal.ts": 1,
+ "/user/username/projects/demo/animals/dog.ts": 1
+} 
+
+directoryExists:: {
+ "/user/username/projects/demo": 2,
+ "/user/username/projects/demo/animals": 11,
+ "/user/username/projects/demo/core": 2,
+ "/user/username/projects/demo/core/node_modules/@types": 1,
+ "/user/username/projects/demo/node_modules/@types": 1,
+ "/user/username/projects/node_modules/@types": 1,
+ "/user/username/node_modules/@types": 1,
+ "/user/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {
+ "/user/username/projects/demo/core/utilities.ts": 1
+} 
+
+setModifiedTimes:: {} 

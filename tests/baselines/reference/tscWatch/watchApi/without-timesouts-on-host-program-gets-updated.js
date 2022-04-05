@@ -19,6 +19,14 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 /a/lib/tsc.js --w --p /user/username/projects/myproject/tsconfig.json
 Output::
 >> Screen clear
@@ -66,12 +74,38 @@ var x = 10;
 
 
 
+fileExists:: {} 
+
+directoryExists:: {
+ "/user/username/projects/myproject/node_modules/@types": 1,
+ "/user/username/projects/node_modules/@types": 1,
+ "/user/username/node_modules/@types": 1,
+ "/user/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 Change:: Write a file
 
 Input::
 //// [/user/username/projects/myproject/bar.ts]
 const y =10;
 
+
+fileExists:: {
+ "/user/username/projects/myproject/bar.ts": 1
+} 
+
+directoryExists:: {
+ "/user/username/projects/myproject/bar.ts": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 [[90m12:00:32 AM[0m] Found 0 errors. Watching for file changes.
@@ -120,3 +154,20 @@ exitCode:: ExitStatus.undefined
 var y = 10;
 
 
+
+fileExists:: {
+ "/user/username/projects/myproject/bar.js": 1
+} 
+
+directoryExists:: {
+ "/user/username/projects/myproject/node_modules/@types": 1,
+ "/user/username/projects/node_modules/@types": 1,
+ "/user/username/node_modules/@types": 1,
+ "/user/node_modules/@types": 1,
+ "/node_modules/@types": 1,
+ "/user/username/projects/myproject/bar.js": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 

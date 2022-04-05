@@ -22,6 +22,14 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 /a/lib/tsc.js -w
 Output::
 >> Screen clear
@@ -85,12 +93,34 @@ exports.__esModule = true;
 
 
 
+fileExists:: {
+ "/tsconfig.json": 1,
+ "/a.ts": 2
+} 
+
+directoryExists:: {
+ "/": 4,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 Change:: Enable forceConsistentCasingInFileNames
 
 Input::
 //// [/tsconfig.json]
 {"compilerOptions":{"forceConsistentCasingInFileNames":true}}
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -144,3 +174,13 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+
+fileExists:: {} 
+
+directoryExists:: {
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 

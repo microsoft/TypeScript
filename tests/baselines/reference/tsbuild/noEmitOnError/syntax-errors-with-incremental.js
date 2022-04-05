@@ -64,6 +64,27 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
+getModifiedTime:: {
+ "/src/shared/types/db.ts": 1,
+ "/src/src/main.ts": 1,
+ "/src/src/other.ts": 1
+}
+
+setModifiedTime:: {}
+
+fileExists:: {
+ "/src/shared/types/db.ts": 1,
+ "/src/src/main.ts": 1,
+ "/src/src/other.ts": 1,
+ "/src/dev-build/shared/types/db.js": 1
+}
+
+directoryExists:: {
+ "/src/shared/types": 2,
+ "/src/node_modules/@types": 1,
+ "/node_modules/@types": 1
+}
+
 
 
 
@@ -94,6 +115,27 @@ Program files::
 No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
+
+getModifiedTime:: {
+ "/src/shared/types/db.ts": 1,
+ "/src/src/main.ts": 1,
+ "/src/src/other.ts": 1
+}
+
+setModifiedTime:: {}
+
+fileExists:: {
+ "/src/shared/types/db.ts": 1,
+ "/src/src/main.ts": 1,
+ "/src/src/other.ts": 1,
+ "/src/dev-build/shared/types/db.js": 1
+}
+
+directoryExists:: {
+ "/src/shared/types": 2,
+ "/src/node_modules/@types": 1,
+ "/node_modules/@types": 1
+}
 
 
 
@@ -131,6 +173,27 @@ Shape signatures in builder refreshed for::
 /src/shared/types/db.ts (used version)
 /src/src/main.ts (used version)
 /src/src/other.ts (used version)
+
+getModifiedTime:: {
+ "/src/shared/types/db.ts": 1,
+ "/src/src/main.ts": 1,
+ "/src/src/other.ts": 1
+}
+
+setModifiedTime:: {}
+
+fileExists:: {
+ "/src/shared/types/db.ts": 1,
+ "/src/src/main.ts": 1,
+ "/src/src/other.ts": 1,
+ "/src/dev-build/shared/types/db.js": 1
+}
+
+directoryExists:: {
+ "/src/shared/types": 2,
+ "/src/node_modules/@types": 1,
+ "/node_modules/@types": 1
+}
 
 
 //// [/src/dev-build/shared/types/db.js]
@@ -222,5 +285,30 @@ Input::
 Output::
 /lib/tsc --b /src/tsconfig.json --incremental
 exitCode:: ExitStatus.Success
+
+getModifiedTime:: {
+ "/src/shared/types/db.ts": 1,
+ "/src/src/main.ts": 1,
+ "/src/src/other.ts": 1,
+ "/src/dev-build/shared/types/db.js": 1,
+ "/src/dev-build/src/main.js": 1,
+ "/src/dev-build/src/other.js": 1,
+ "/src/dev-build/tsconfig.tsbuildinfo": 1,
+ "/src/tsconfig.json": 1
+}
+
+setModifiedTime:: {}
+
+fileExists:: {
+ "/src/shared/types/db.ts": 1,
+ "/src/src/main.ts": 1,
+ "/src/src/other.ts": 1,
+ "/src/dev-build/shared/types/db.js": 1,
+ "/src/dev-build/src/main.js": 1,
+ "/src/dev-build/src/other.js": 1,
+ "/src/dev-build/tsconfig.tsbuildinfo": 1
+}
+
+directoryExists:: {}
 
 

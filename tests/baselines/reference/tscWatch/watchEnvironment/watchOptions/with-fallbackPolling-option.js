@@ -22,6 +22,14 @@ let y = 1
 {"watchOptions":{"fallbackPolling":"PriorityInterval"}}
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 /a/lib/tsc.js -w -p /a/b/tsconfig.json
 Output::
 >> Screen clear
@@ -77,3 +85,19 @@ var x = 1;
 var y = 1;
 
 
+
+fileExists:: {
+ "/a/b/tsconfig.json": 1
+} 
+
+directoryExists:: {
+ "/a/b/tsconfig.json": 1,
+ "/a/b/node_modules/@types": 2,
+ "/a/node_modules/@types": 1,
+ "/node_modules/@types": 1,
+ "/a/b": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 

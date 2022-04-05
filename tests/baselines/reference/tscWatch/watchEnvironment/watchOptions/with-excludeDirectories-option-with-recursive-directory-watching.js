@@ -31,6 +31,14 @@ export function temp(): string;
 {"exclude":["node_modules"],"watchOptions":{"excludeDirectories":["**/temp"]}}
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 /a/lib/tsc.js -w
 Output::
 >> Screen clear
@@ -99,9 +107,48 @@ var bar_1 = require("bar");
 
 
 
+fileExists:: {
+ "/user/username/projects/myproject/tsconfig.json": 1,
+ "/user/username/projects/myproject/node_modules/bar/package.json": 1,
+ "/user/username/projects/myproject/node_modules/bar.ts": 1,
+ "/user/username/projects/myproject/node_modules/bar.tsx": 1,
+ "/user/username/projects/myproject/node_modules/bar.d.ts": 1,
+ "/user/username/projects/myproject/node_modules/bar/index.ts": 1,
+ "/user/username/projects/myproject/node_modules/bar/index.tsx": 1,
+ "/user/username/projects/myproject/node_modules/bar/index.d.ts": 2,
+ "/user/username/projects/myproject/node_modules/bar/foo.ts": 1,
+ "/user/username/projects/myproject/node_modules/bar/foo.tsx": 1,
+ "/user/username/projects/myproject/node_modules/bar/foo.d.ts": 1
+} 
+
+directoryExists:: {
+ "/user/username/projects/myproject/src/node_modules": 1,
+ "/user/username/projects/myproject/node_modules": 3,
+ "/user/username/projects/myproject/node_modules/bar": 6,
+ "/user/username/projects/myproject/node_modules/@types": 2,
+ "/user/username/projects/node_modules/@types": 1,
+ "/user/username/node_modules/@types": 1,
+ "/user/node_modules/@types": 1,
+ "/node_modules/@types": 1,
+ "/user/username/projects/myproject/src": 2,
+ "/user/username/projects/myproject": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 Change:: Directory watch updates because of main.js creation
 
 Input::
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 
@@ -135,6 +182,16 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+
+fileExists:: {} 
+
+directoryExists:: {
+ "/user/username/projects/myproject/src": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Change:: add new folder to temp
 
@@ -143,6 +200,14 @@ Input::
 export function temp(): string;
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 Output::
 
 WatchedFiles::
@@ -175,3 +240,11 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 

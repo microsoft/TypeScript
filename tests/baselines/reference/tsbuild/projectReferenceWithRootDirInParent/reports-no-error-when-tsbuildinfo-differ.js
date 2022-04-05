@@ -64,6 +64,33 @@ Output::
 
 exitCode:: ExitStatus.Success
 
+getModifiedTime:: {
+ "/src/src/other/other.ts": 1,
+ "/src/src/main/a.ts": 1,
+ "/src/src/main/b.ts": 1
+}
+
+setModifiedTime:: {}
+
+fileExists:: {
+ "/src/src/other/other.ts": 1,
+ "/src/dist/other.js": 1,
+ "/src/dist/other.d.ts": 1,
+ "/src/src/main/a.ts": 1,
+ "/src/src/main/b.ts": 1,
+ "/src/dist/a.js": 1,
+ "/src/dist/b.d.ts": 1
+}
+
+directoryExists:: {
+ "/src/src/other/node_modules/@types": 1,
+ "/src/src/node_modules/@types": 2,
+ "/src/node_modules/@types": 2,
+ "/node_modules/@types": 2,
+ "/src/src/main": 2,
+ "/src/src/main/node_modules/@types": 1
+}
+
 
 //// [/src/dist/a.d.ts]
 export {};

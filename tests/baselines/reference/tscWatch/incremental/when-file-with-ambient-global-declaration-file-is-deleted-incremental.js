@@ -24,6 +24,14 @@ console.log(Config.value);
 {"compilerOptions":{"incremental":true}}
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 /a/lib/tsc.js -i
 Output::
 
@@ -99,10 +107,34 @@ console.log(Config.value);
 }
 
 
+fileExists:: {
+ "/users/username/projects/project/tsconfig.json": 1
+} 
+
+directoryExists:: {
+ "/users/username/projects/project/node_modules/@types": 1,
+ "/users/username/projects/node_modules/@types": 1,
+ "/users/username/node_modules/@types": 1,
+ "/users/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 Change::
 
 Input::
 //// [/users/username/projects/project/globals.d.ts] deleted
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 [96mindex.ts[0m:[93m1[0m:[93m13[0m - [91merror[0m[90m TS2304: [0mCannot find name 'Config'.
@@ -183,3 +215,19 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
   "size": 880
 }
 
+
+fileExists:: {
+ "/users/username/projects/project/tsconfig.json": 1
+} 
+
+directoryExists:: {
+ "/users/username/projects/project/node_modules/@types": 1,
+ "/users/username/projects/node_modules/@types": 1,
+ "/users/username/node_modules/@types": 1,
+ "/users/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 

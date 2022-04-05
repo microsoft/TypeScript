@@ -147,6 +147,14 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 /a/lib/tsc.js -b -w -verbose
 Output::
 >> Screen clear
@@ -202,6 +210,16 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 
+fileExists:: {
+ "/user/username/projects/demo/tsconfig-base.json": 3
+} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 Change:: Fix error
 
 Input::
@@ -214,6 +232,14 @@ Input::
   }
 }
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -656,3 +682,47 @@ export declare function createZoo(): Array<Dog>;
   "size": 1783
 }
 
+
+fileExists:: {
+ "/user/username/projects/demo/tsconfig-base.json": 1,
+ "/user/username/projects/demo/core/utilities.ts": 1,
+ "/user/username/projects/demo/lib/core/utilities.js": 1,
+ "/user/username/projects/demo/lib/core/utilities.d.ts": 1,
+ "/user/username/projects/demo/animals/animal.ts": 1,
+ "/user/username/projects/demo/animals/dog.ts": 1,
+ "/user/username/projects/demo/animals/index.ts": 1,
+ "/user/username/projects/demo/lib/animals/animal.js": 1,
+ "/user/username/projects/demo/animals/package.json": 1,
+ "/user/username/projects/demo/lib/animals/animal.d.ts": 1,
+ "/user/username/projects/demo/zoo/zoo.ts": 1,
+ "/user/username/projects/demo/lib/zoo/zoo.js": 1,
+ "/user/username/projects/demo/lib/zoo/zoo.d.ts": 1
+} 
+
+directoryExists:: {
+ "/user/username/projects/demo/core/node_modules/@types": 1,
+ "/user/username/projects/demo/node_modules/@types": 3,
+ "/user/username/projects/node_modules/@types": 3,
+ "/user/username/node_modules/@types": 3,
+ "/user/node_modules/@types": 3,
+ "/node_modules/@types": 3,
+ "/user/username/projects/demo/lib/core": 1,
+ "/user/username/projects/demo/lib": 2,
+ "/user/username/projects/demo": 1,
+ "/user/username/projects/demo/animals": 10,
+ "/user/username/projects/demo/core": 2,
+ "/user/username/projects/demo/animals/node_modules/@types": 1,
+ "/user/username/projects/demo/lib/animals": 1,
+ "/user/username/projects/demo/zoo/node_modules/@types": 1,
+ "/user/username/projects/demo/lib/zoo": 1
+} 
+
+getModifiedTimes:: {
+ "/user/username/projects/demo/core/utilities.ts": 1,
+ "/user/username/projects/demo/animals/animal.ts": 1,
+ "/user/username/projects/demo/animals/dog.ts": 1,
+ "/user/username/projects/demo/animals/index.ts": 1,
+ "/user/username/projects/demo/zoo/zoo.ts": 1
+} 
+
+setModifiedTimes:: {} 

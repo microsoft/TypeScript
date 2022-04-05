@@ -118,6 +118,27 @@ Output::
 
 exitCode:: ExitStatus.Success
 
+getModifiedTime:: {
+ "/src/core/anotherModule.ts": 1,
+ "/src/core/index.ts": 1,
+ "/src/core/some_decl.d.ts": 1
+}
+
+setModifiedTime:: {}
+
+fileExists:: {
+ "/src/core/anotherModule.ts": 1,
+ "/src/core/index.ts": 1,
+ "/src/core/some_decl.d.ts": 1,
+ "/src/core/anotherModule.js": 1
+}
+
+directoryExists:: {
+ "/src/core/node_modules/@types": 1,
+ "/src/node_modules/@types": 1,
+ "/node_modules/@types": 1
+}
+
 
 //// [/src/core/anotherModule.js]
 "use strict";
@@ -209,6 +230,33 @@ Output::
 [[90m12:00:17 AM[0m] Building project '/src/core/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
+
+getModifiedTime:: {
+ "/src/core/anotherModule.ts": 1,
+ "/src/core/index.ts": 1,
+ "/src/core/some_decl.d.ts": 1,
+ "/src/core/anotherModule.js": 1,
+ "/src/core/index.js": 1,
+ "/src/core/tsconfig.tsbuildinfo": 1,
+ "/src/core/tsconfig.json": 1
+}
+
+setModifiedTime:: {}
+
+fileExists:: {
+ "/src/core/anotherModule.ts": 1,
+ "/src/core/index.ts": 1,
+ "/src/core/some_decl.d.ts": 1,
+ "/src/core/anotherModule.js": 1,
+ "/src/core/index.js": 1,
+ "/src/core/tsconfig.tsbuildinfo": 1
+}
+
+directoryExists:: {
+ "/src/core/node_modules/@types": 1,
+ "/src/node_modules/@types": 1,
+ "/node_modules/@types": 1
+}
 
 
 //// [/src/core/anotherModule.js]

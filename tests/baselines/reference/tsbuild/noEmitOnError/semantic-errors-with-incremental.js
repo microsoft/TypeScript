@@ -70,6 +70,27 @@ Shape signatures in builder refreshed for::
 /src/src/main.ts (used version)
 /src/src/other.ts (used version)
 
+getModifiedTime:: {
+ "/src/shared/types/db.ts": 1,
+ "/src/src/main.ts": 1,
+ "/src/src/other.ts": 1
+}
+
+setModifiedTime:: {}
+
+fileExists:: {
+ "/src/shared/types/db.ts": 1,
+ "/src/src/main.ts": 1,
+ "/src/src/other.ts": 1,
+ "/src/dev-build/shared/types/db.js": 1
+}
+
+directoryExists:: {
+ "/src/shared/types": 2,
+ "/src/node_modules/@types": 1,
+ "/node_modules/@types": 1
+}
+
 
 //// [/src/dev-build/tsconfig.tsbuildinfo]
 {"program":{"fileNames":["../../lib/lib.d.ts","../shared/types/db.ts","../src/main.ts","../src/other.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-9621097780-export interface A {\r\n    name: string;\r\n}","-11111345725-import { A } from \"../shared/types/db\";\nconst a: string = 10;","11373096570-console.log(\"hi\");\r\nexport { }"],"options":{"noEmitOnError":true,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,[3,[{"file":"../src/main.ts","start":46,"length":1,"code":2322,"category":1,"messageText":"Type 'number' is not assignable to type 'string'."}]],4],"affectedFilesPendingEmit":[[2,1],[3,1],[4,1]]},"version":"FakeTSVersion"}
@@ -188,6 +209,27 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
+getModifiedTime:: {
+ "/src/shared/types/db.ts": 1,
+ "/src/src/main.ts": 1,
+ "/src/src/other.ts": 1
+}
+
+setModifiedTime:: {}
+
+fileExists:: {
+ "/src/shared/types/db.ts": 1,
+ "/src/src/main.ts": 1,
+ "/src/src/other.ts": 1,
+ "/src/dev-build/shared/types/db.js": 1
+}
+
+directoryExists:: {
+ "/src/shared/types": 2,
+ "/src/node_modules/@types": 1,
+ "/node_modules/@types": 1
+}
+
 
 
 
@@ -216,6 +258,27 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /src/src/main.ts (computed .d.ts)
+
+getModifiedTime:: {
+ "/src/shared/types/db.ts": 1,
+ "/src/src/main.ts": 1,
+ "/src/src/other.ts": 1
+}
+
+setModifiedTime:: {}
+
+fileExists:: {
+ "/src/shared/types/db.ts": 1,
+ "/src/src/main.ts": 1,
+ "/src/src/other.ts": 1,
+ "/src/dev-build/shared/types/db.js": 1
+}
+
+directoryExists:: {
+ "/src/shared/types": 2,
+ "/src/node_modules/@types": 1,
+ "/node_modules/@types": 1
+}
 
 
 //// [/src/dev-build/shared/types/db.js]
@@ -301,5 +364,30 @@ Input::
 Output::
 /lib/tsc --b /src/tsconfig.json --incremental
 exitCode:: ExitStatus.Success
+
+getModifiedTime:: {
+ "/src/shared/types/db.ts": 1,
+ "/src/src/main.ts": 1,
+ "/src/src/other.ts": 1,
+ "/src/dev-build/shared/types/db.js": 1,
+ "/src/dev-build/src/main.js": 1,
+ "/src/dev-build/src/other.js": 1,
+ "/src/dev-build/tsconfig.tsbuildinfo": 1,
+ "/src/tsconfig.json": 1
+}
+
+setModifiedTime:: {}
+
+fileExists:: {
+ "/src/shared/types/db.ts": 1,
+ "/src/src/main.ts": 1,
+ "/src/src/other.ts": 1,
+ "/src/dev-build/shared/types/db.js": 1,
+ "/src/dev-build/src/main.js": 1,
+ "/src/dev-build/src/other.js": 1,
+ "/src/dev-build/tsconfig.tsbuildinfo": 1
+}
+
+directoryExists:: {}
 
 

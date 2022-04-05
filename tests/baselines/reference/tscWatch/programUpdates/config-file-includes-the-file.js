@@ -25,6 +25,14 @@ interface Array<T> { length: number; [n: number]: T; }
 {"compilerOptions":{},"files":["f2.ts","f3.ts"]}
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 /a/lib/tsc.js -w -p /a/c/tsconfig.json
 Output::
 >> Screen clear
@@ -94,3 +102,20 @@ exports.y = void 0;
 exports.y = 1;
 
 
+
+fileExists:: {
+ "/a/c/tsconfig.json": 1,
+ "/a/b/f1.ts": 1
+} 
+
+directoryExists:: {
+ "/a/c/tsconfig.json": 1,
+ "/a/b": 2,
+ "/a/c/node_modules/@types": 1,
+ "/a/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 

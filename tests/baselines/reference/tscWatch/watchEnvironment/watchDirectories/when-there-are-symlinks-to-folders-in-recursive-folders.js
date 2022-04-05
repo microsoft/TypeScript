@@ -29,6 +29,14 @@ export {}
 //// [/home/user/projects/myproject/node_modules/reala/node_modules/b] symlink(/home/user/projects/myproject/node_modules/b)
 //// [/home/user/projects/myproject/node_modules/realb/node_modules/a] symlink(/home/user/projects/myproject/node_modules/a)
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 /a/lib/tsc.js --w
 Output::
 [[90m12:00:45 AM[0m] Starting compilation in watch mode...
@@ -125,3 +133,36 @@ exitCode:: ExitStatus.undefined
 exports.__esModule = true;
 
 
+
+fileExists:: {
+ "/home/user/projects/myproject/tsconfig.json": 1,
+ "/home/user/projects/myproject/node_modules/a/package.json": 1,
+ "/home/user/projects/myproject/node_modules/a.ts": 1,
+ "/home/user/projects/myproject/node_modules/a.tsx": 1,
+ "/home/user/projects/myproject/node_modules/a.d.ts": 1,
+ "/home/user/projects/myproject/node_modules/a/index.ts": 1,
+ "/home/user/projects/myproject/node_modules/a/index.tsx": 1,
+ "/home/user/projects/myproject/node_modules/a/index.d.ts": 1,
+ "/home/user/projects/myproject/node_modules/reala/index.d.ts": 1
+} 
+
+directoryExists:: {
+ "/home/user/projects/myproject/src/node_modules": 1,
+ "/home/user/projects/myproject/node_modules": 3,
+ "/home/user/projects/myproject/node_modules/a": 3,
+ "/home/user/projects/myproject/node_modules/@types": 2,
+ "/home/user/projects/node_modules/@types": 1,
+ "/home/user/node_modules/@types": 1,
+ "/home/node_modules/@types": 1,
+ "/node_modules/@types": 1,
+ "/home/user/projects/myproject/src": 2,
+ "/home/user/projects/myproject/node_modules/reala": 1,
+ "/home/user/projects/myproject/node_modules/reala/node_modules": 1,
+ "/home/user/projects/myproject/node_modules/realb": 1,
+ "/home/user/projects/myproject/node_modules/realb/node_modules": 1,
+ "/home/user/projects/myproject": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 

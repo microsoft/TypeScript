@@ -31,6 +31,14 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 /a/lib/tsc.js --w -p /a/b/tsconfig.json
 Output::
 >> Screen clear
@@ -131,12 +139,37 @@ exports.Foo4 = 10;
 
 
 
+fileExists:: {
+ "/a/b/tsconfig.json": 1,
+ "/a/b/modulefile1.ts": 1
+} 
+
+directoryExists:: {
+ "/a/b/tsconfig.json": 1,
+ "/a/b": 2,
+ "/a/b/node_modules/@types": 1,
+ "/a/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 Change:: Change the content of moduleFile1 to `export var T: number;export function Foo() { };`
 
 Input::
 //// [/a/b/moduleFile1.ts]
 export var T: number;export function Foo() { };
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -207,3 +240,11 @@ exports.Foo = Foo;
 ;
 
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 

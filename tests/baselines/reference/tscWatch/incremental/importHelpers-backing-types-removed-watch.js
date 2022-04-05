@@ -27,6 +27,14 @@ export const x = {...{}};
 {"compilerOptions":{"importHelpers":true}}
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 /a/lib/tsc.js -w
 Output::
 >> Screen clear
@@ -87,11 +95,44 @@ exports.x = tslib_1.__assign({});
 
 
 
+fileExists:: {
+ "/users/username/projects/project/tsconfig.json": 1,
+ "/users/username/projects/project/node_modules/tslib/package.json": 1,
+ "/users/username/projects/project/node_modules/tslib.ts": 1,
+ "/users/username/projects/project/node_modules/tslib.tsx": 1,
+ "/users/username/projects/project/node_modules/tslib.d.ts": 1,
+ "/users/username/projects/project/node_modules/tslib/index.ts": 1,
+ "/users/username/projects/project/node_modules/tslib/index.tsx": 1,
+ "/users/username/projects/project/node_modules/tslib/index.d.ts": 2
+} 
+
+directoryExists:: {
+ "/users/username/projects/project/node_modules": 2,
+ "/users/username/projects/project/node_modules/tslib": 3,
+ "/users/username/projects/project/node_modules/@types": 1,
+ "/users/username/projects/node_modules/@types": 1,
+ "/users/username/node_modules/@types": 1,
+ "/users/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 Change::
 
 Input::
 //// [/users/username/projects/project/node_modules/tslib/index.d.ts] deleted
 //// [/users/username/projects/project/node_modules/tslib/package.json] deleted
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -144,3 +185,36 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 //// [/users/username/projects/project/index.js] file written with same contents
+
+fileExists:: {
+ "/users/username/projects/project/tsconfig.json": 1,
+ "/users/username/projects/project/node_modules/tslib/package.json": 1,
+ "/users/username/projects/project/node_modules/tslib.ts": 1,
+ "/users/username/projects/project/node_modules/tslib.tsx": 1,
+ "/users/username/projects/project/node_modules/tslib.d.ts": 1,
+ "/users/username/projects/project/node_modules/tslib/index.ts": 1,
+ "/users/username/projects/project/node_modules/tslib/index.tsx": 1,
+ "/users/username/projects/project/node_modules/tslib/index.d.ts": 1,
+ "/users/username/projects/project/node_modules/tslib.js": 1,
+ "/users/username/projects/project/node_modules/tslib.jsx": 1,
+ "/users/username/projects/project/node_modules/tslib/index.js": 1,
+ "/users/username/projects/project/node_modules/tslib/index.jsx": 1
+} 
+
+directoryExists:: {
+ "/users/username/projects/project/node_modules": 4,
+ "/users/username/projects/project/node_modules/tslib": 5,
+ "/users/username/projects/project/node_modules/@types": 2,
+ "/users/username/projects/node_modules": 2,
+ "/users/username/node_modules": 2,
+ "/users/node_modules": 2,
+ "/node_modules": 2,
+ "/users/username/projects/node_modules/@types": 1,
+ "/users/username/node_modules/@types": 1,
+ "/users/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 

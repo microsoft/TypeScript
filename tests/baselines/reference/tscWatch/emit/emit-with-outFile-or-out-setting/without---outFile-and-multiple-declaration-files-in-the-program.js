@@ -28,6 +28,14 @@ interface Array<T> { length: number; [n: number]: T; }
 {"compilerOptions":{"outDir":"../output","target":"es5"},"files":["/a/b/output/AnotherDependency/file1.d.ts","/a/b/dependencies/file2.d.ts","/a/b/project/src/main.ts","/a/b/project/src/main2.ts"]}
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 /a/lib/tsc.js --w -p /a/b/project/tsconfig.json
 Output::
 >> Screen clear
@@ -107,3 +115,19 @@ var main;
 })(main || (main = {}));
 
 
+
+fileExists:: {
+ "/a/b/project/tsconfig.json": 1
+} 
+
+directoryExists:: {
+ "/a/b/project/tsconfig.json": 1,
+ "/a/b/project/node_modules/@types": 1,
+ "/a/b/node_modules/@types": 1,
+ "/a/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 

@@ -79,6 +79,39 @@ Output::
 
 exitCode:: ExitStatus.Success
 
+getModifiedTime:: {
+ "/src/solution/src/common/nominal.ts": 1,
+ "/src/solution/src/subProject/index.ts": 1,
+ "/src/solution/src/subProject2/index.ts": 1
+}
+
+setModifiedTime:: {}
+
+fileExists:: {
+ "/src/solution/tsconfig.base.json": 3,
+ "/src/solution/src/common/nominal.ts": 1,
+ "/src/solution/lib/src/common/nominal.js": 1,
+ "/src/solution/lib/src/common/nominal.d.ts": 1,
+ "/src/solution/src/subProject/index.ts": 1,
+ "/src/solution/lib/src/subProject/index.js": 1,
+ "/src/solution/lib/src/subProject/index.d.ts": 1,
+ "/src/solution/src/subProject2/index.ts": 1,
+ "/src/solution/lib/src/subProject2/index.js": 1,
+ "/src/solution/lib/src/subProject2/index.d.ts": 1
+}
+
+directoryExists:: {
+ "/src/solution/src/common/node_modules/@types": 1,
+ "/src/solution/src/node_modules/@types": 3,
+ "/src/solution/node_modules/@types": 3,
+ "/src/node_modules/@types": 3,
+ "/node_modules/@types": 3,
+ "/src/solution/src/common": 2,
+ "/src/solution/src/subProject/node_modules/@types": 1,
+ "/src/solution/src/subProject": 2,
+ "/src/solution/src/subProject2/node_modules/@types": 1
+}
+
 
 //// [/src/solution/lib/src/common/nominal.d.ts]
 /// <reference path="../../../src/common/types.d.ts" />

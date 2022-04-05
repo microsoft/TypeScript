@@ -71,6 +71,31 @@ Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
+getModifiedTime:: {
+ "/src/a.ts": 1,
+ "/src/b.ts": 1,
+ "/src/c.ts": 1
+}
+
+setModifiedTime:: {}
+
+fileExists:: {
+ "/src/a.ts": 1,
+ "/src/a.js": 1,
+ "/src/a.d.ts": 1,
+ "/src/b.ts": 1,
+ "/src/b.js": 1,
+ "/src/c.ts": 1,
+ "/src/c.js": 1
+}
+
+directoryExists:: {
+ "/src/node_modules/@types": 2,
+ "/node_modules/@types": 2,
+ "/src/node_modules": 2,
+ "/node_modules": 2
+}
+
 
 //// [/src/a.d.ts]
 export declare class A {

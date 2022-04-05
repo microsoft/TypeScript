@@ -36,6 +36,14 @@ export enum e2 { }
 export function f22() { } // trailing
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 /a/lib/tsc.js --b --w
 Output::
 [[90m12:00:31 AM[0m] Projects in this build: 
@@ -244,6 +252,32 @@ export declare function f22(): void;
 }
 
 
+fileExists:: {
+ "/user/username/projects/myproject/shared/index.ts": 1,
+ "/user/username/projects/myproject/shared/index.js": 1,
+ "/user/username/projects/myproject/shared/index.d.ts": 1,
+ "/user/username/projects/myproject/webpack/index.ts": 1,
+ "/user/username/projects/myproject/webpack/index.js": 1,
+ "/user/username/projects/myproject/webpack/index.d.ts": 1
+} 
+
+directoryExists:: {
+ "/user/username/projects/myproject/shared/node_modules/@types": 1,
+ "/user/username/projects/myproject/node_modules/@types": 2,
+ "/user/username/projects/node_modules/@types": 2,
+ "/user/username/node_modules/@types": 2,
+ "/user/node_modules/@types": 2,
+ "/node_modules/@types": 2,
+ "/user/username/projects/myproject/webpack/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {
+ "/user/username/projects/myproject/shared/index.ts": 1,
+ "/user/username/projects/myproject/webpack/index.ts": 1
+} 
+
+setModifiedTimes:: {} 
+
 Change:: change to shared
 
 Input::
@@ -254,6 +288,14 @@ export enum e { }
 // leading
 export function f2() { } // trailing
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -394,3 +436,31 @@ export declare function f2(): void;
 //// [/user/username/projects/myproject/webpack/index.js] file changed its modified time
 //// [/user/username/projects/myproject/webpack/index.d.ts] file changed its modified time
 //// [/user/username/projects/myproject/webpack/tsconfig.tsbuildinfo] file changed its modified time
+
+fileExists:: {
+ "/user/username/projects/myproject/shared/index.ts": 1,
+ "/user/username/projects/myproject/shared/index.js": 1,
+ "/user/username/projects/myproject/shared/index.d.ts": 1
+} 
+
+directoryExists:: {
+ "/user/username/projects/myproject/shared/node_modules/@types": 1,
+ "/user/username/projects/myproject/node_modules/@types": 2,
+ "/user/username/projects/node_modules/@types": 2,
+ "/user/username/node_modules/@types": 2,
+ "/user/node_modules/@types": 2,
+ "/node_modules/@types": 2,
+ "/user/username/projects/myproject/webpack/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {
+ "/user/username/projects/myproject/shared/index.ts": 1,
+ "/user/username/projects/myproject/shared/index.js": 1,
+ "/user/username/projects/myproject/webpack/index.d.ts": 1
+} 
+
+setModifiedTimes:: {
+ "/user/username/projects/myproject/webpack/index.js": 1,
+ "/user/username/projects/myproject/webpack/index.d.ts": 1,
+ "/user/username/projects/myproject/webpack/tsconfig.tsbuildinfo": 1
+} 

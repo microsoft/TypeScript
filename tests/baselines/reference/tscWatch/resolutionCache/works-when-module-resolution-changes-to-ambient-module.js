@@ -16,6 +16,14 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 /a/lib/tsc.js -w /a/b/foo.ts
 Output::
 >> Screen clear
@@ -67,6 +75,21 @@ exports.__esModule = true;
 
 
 
+fileExists:: {} 
+
+directoryExists:: {
+ "/a/b/node_modules": 2,
+ "/a/node_modules": 2,
+ "/node_modules": 2,
+ "/a/b/node_modules/@types": 1,
+ "/a/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 Change:: npm install node types
 
 Input::
@@ -85,6 +108,14 @@ declare module "fs" {
     }
 }
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -133,3 +164,30 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 //// [/a/b/foo.js] file written with same contents
+
+fileExists:: {
+ "/a/b/node_modules/fs.ts": 1,
+ "/a/b/node_modules/fs.tsx": 1,
+ "/a/b/node_modules/fs.d.ts": 1,
+ "/a/b/node_modules/@types/fs.d.ts": 1,
+ "/a/b/node_modules/fs.js": 1,
+ "/a/b/node_modules/fs.jsx": 1,
+ "/a/b/node_modules/@types/node/package.json": 2,
+ "/a/b/node_modules/@types/node/index.d.ts": 2
+} 
+
+directoryExists:: {
+ "/a/b/node_modules": 4,
+ "/a/b/node_modules/fs": 3,
+ "/a/b/node_modules/@types": 6,
+ "/a/b/node_modules/@types/fs": 2,
+ "/a/node_modules": 2,
+ "/node_modules": 2,
+ "/a/node_modules/@types": 2,
+ "/node_modules/@types": 2,
+ "/a/b/node_modules/@types/node": 3
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 

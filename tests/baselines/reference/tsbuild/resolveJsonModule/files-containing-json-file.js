@@ -115,6 +115,32 @@ src/src/index.ts
   Part of 'files' list in tsconfig.json
 exitCode:: ExitStatus.Success
 
+getModifiedTime:: {
+ "/src/src/index.ts": 1,
+ "/src/src/hello.json": 1
+}
+
+setModifiedTime:: {}
+
+fileExists:: {
+ "/src/src/index.ts": 1,
+ "/src/src/hello.json": 1,
+ "/src/dist/src/index.js": 1,
+ "/src/src/hello.json.ts": 1,
+ "/src/src/hello.json.tsx": 1,
+ "/src/src/hello.json.d.ts": 1,
+ "/src/src/hello.json.js": 1,
+ "/src/src/hello.json.jsx": 1,
+ "/src/dist/src/index.d.ts": 1
+}
+
+directoryExists:: {
+ "/src/src": 6,
+ "/src/src/hello.json": 1,
+ "/src/node_modules/@types": 1,
+ "/node_modules/@types": 1
+}
+
 
 //// [/src/dist/src/hello.json]
 {

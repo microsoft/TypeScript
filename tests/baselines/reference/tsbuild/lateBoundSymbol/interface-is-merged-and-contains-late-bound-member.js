@@ -57,6 +57,27 @@ Output::
 
 exitCode:: ExitStatus.Success
 
+getModifiedTime:: {
+ "/src/src/globals.d.ts": 1,
+ "/src/src/hkt.ts": 1,
+ "/src/src/main.ts": 1
+}
+
+setModifiedTime:: {}
+
+fileExists:: {
+ "/src/src/globals.d.ts": 1,
+ "/src/src/hkt.ts": 1,
+ "/src/src/main.ts": 1,
+ "/src/src/hkt.js": 1
+}
+
+directoryExists:: {
+ "/src/src": 2,
+ "/src/node_modules/@types": 1,
+ "/node_modules/@types": 1
+}
+
 
 //// [/src/src/hkt.js]
 "use strict";
@@ -166,6 +187,30 @@ Output::
 
 exitCode:: ExitStatus.Success
 
+getModifiedTime:: {
+ "/src/src/globals.d.ts": 1,
+ "/src/src/hkt.ts": 1,
+ "/src/src/main.ts": 1,
+ "/src/src/hkt.js": 1
+}
+
+setModifiedTime:: {
+ "/src/src/hkt.js": 1
+}
+
+fileExists:: {
+ "/src/src/globals.d.ts": 1,
+ "/src/src/hkt.ts": 1,
+ "/src/src/main.ts": 1,
+ "/src/src/hkt.js": 1
+}
+
+directoryExists:: {
+ "/src/src": 2,
+ "/src/node_modules/@types": 1,
+ "/node_modules/@types": 1
+}
+
 
 //// [/src/src/main.js]
 "use strict";
@@ -268,6 +313,30 @@ Output::
 [[90m12:00:30 AM[0m] Updating unchanged output timestamps of project '/src/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
+
+getModifiedTime:: {
+ "/src/src/globals.d.ts": 1,
+ "/src/src/hkt.ts": 1,
+ "/src/src/main.ts": 1,
+ "/src/src/hkt.js": 1
+}
+
+setModifiedTime:: {
+ "/src/src/hkt.js": 1
+}
+
+fileExists:: {
+ "/src/src/globals.d.ts": 1,
+ "/src/src/hkt.ts": 1,
+ "/src/src/main.ts": 1,
+ "/src/src/hkt.js": 1
+}
+
+directoryExists:: {
+ "/src/src": 2,
+ "/src/node_modules/@types": 1,
+ "/node_modules/@types": 1
+}
 
 
 //// [/src/src/main.js]

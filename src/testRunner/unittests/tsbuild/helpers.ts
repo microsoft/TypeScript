@@ -268,10 +268,11 @@ interface Symbol {
         options: CompilerOptions,
         sys: TscCompileSystem | tscWatch.WatchedSystem,
         originalReadCall?: System["readFile"],
+        originalFileExists?: System["fileExists"],
     ) {
         const buildInfoPath = getTsBuildInfoEmitOutputFilePath(options);
         if (!buildInfoPath || !sys.writtenFiles!.has(toPathWithSystem(sys, buildInfoPath))) return;
-        if (!sys.fileExists(buildInfoPath)) return;
+        if (!(originalFileExists || sys.fileExists).call(sys, buildInfoPath)) return;
 
         const buildInfo = getBuildInfo((originalReadCall || sys.readFile).call(sys, buildInfoPath, "utf8")!);
         generateBuildInfoProgramBaseline(sys, buildInfoPath, buildInfo);

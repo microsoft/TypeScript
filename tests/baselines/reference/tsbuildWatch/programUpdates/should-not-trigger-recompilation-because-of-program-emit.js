@@ -33,6 +33,14 @@ export const World = "hello";
 
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 /a/lib/tsc.js -b -w sample1/core -verbose
 Output::
 >> Screen clear
@@ -162,9 +170,40 @@ export declare function multiply(a: number, b: number): number;
 }
 
 
+fileExists:: {
+ "/user/username/projects/sample1/core/anothermodule.ts": 1,
+ "/user/username/projects/sample1/core/index.ts": 1,
+ "/user/username/projects/sample1/core/anothermodule.js": 1,
+ "/user/username/projects/sample1/core/anothermodule.d.ts": 1
+} 
+
+directoryExists:: {
+ "/user/username/projects/sample1/core/node_modules/@types": 1,
+ "/user/username/projects/sample1/node_modules/@types": 1,
+ "/user/username/projects/node_modules/@types": 1,
+ "/user/username/node_modules/@types": 1,
+ "/user/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {
+ "/user/username/projects/sample1/core/anothermodule.ts": 1,
+ "/user/username/projects/sample1/core/index.ts": 1
+} 
+
+setModifiedTimes:: {} 
+
 Change:: No change
 
 Input::
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 
@@ -185,12 +224,28 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 Change:: Add new file
 
 Input::
 //// [/user/username/projects/sample1/core/file3.ts]
 export const y = 10;
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -310,9 +365,52 @@ export declare const y = 10;
 //# sourceMappingURL=file3.d.ts.map
 
 
+fileExists:: {
+ "/user/username/projects/sample1/core/anothermodule.ts": 1,
+ "/user/username/projects/sample1/core/file3.ts": 1,
+ "/user/username/projects/sample1/core/index.ts": 1,
+ "/user/username/projects/sample1/core/anothermodule.js": 1,
+ "/user/username/projects/sample1/core/file3.d.ts": 1
+} 
+
+directoryExists:: {
+ "/user/username/projects/sample1/core/node_modules/@types": 1,
+ "/user/username/projects/sample1/node_modules/@types": 1,
+ "/user/username/projects/node_modules/@types": 1,
+ "/user/username/node_modules/@types": 1,
+ "/user/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {
+ "/user/username/projects/sample1/core/anothermodule.ts": 1,
+ "/user/username/projects/sample1/core/file3.ts": 1,
+ "/user/username/projects/sample1/core/index.ts": 1,
+ "/user/username/projects/sample1/core/anothermodule.js": 1,
+ "/user/username/projects/sample1/core/anothermodule.d.ts": 1,
+ "/user/username/projects/sample1/core/index.d.ts": 1
+} 
+
+setModifiedTimes:: {
+ "/user/username/projects/sample1/core/anothermodule.js": 1,
+ "/user/username/projects/sample1/core/anothermodule.d.ts": 1,
+ "/user/username/projects/sample1/core/anothermodule.d.ts.map": 1,
+ "/user/username/projects/sample1/core/index.js": 1,
+ "/user/username/projects/sample1/core/index.d.ts": 1,
+ "/user/username/projects/sample1/core/index.d.ts.map": 1
+} 
+
 Change:: No change
 
 Input::
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 
@@ -334,3 +432,11 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 

@@ -25,6 +25,14 @@ export class myClass { }
 {"compilerOptions":{"composite":true}}
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 /a/lib/tsc.js -b -w app
 Output::
 >> Screen clear
@@ -74,6 +82,28 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 
+fileExists:: {
+ "/user/username/projects/solution/app/filewitherror.ts": 1,
+ "/user/username/projects/solution/app/filewithouterror.ts": 1,
+ "/user/username/projects/solution/app/filewitherror.js": 1
+} 
+
+directoryExists:: {
+ "/user/username/projects/solution/app/node_modules/@types": 1,
+ "/user/username/projects/solution/node_modules/@types": 1,
+ "/user/username/projects/node_modules/@types": 1,
+ "/user/username/node_modules/@types": 1,
+ "/user/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {
+ "/user/username/projects/solution/app/filewitherror.ts": 1,
+ "/user/username/projects/solution/app/filewithouterror.ts": 1
+} 
+
+setModifiedTimes:: {} 
+
 Change:: Fix error in fileWithError
 
 Input::
@@ -83,6 +113,14 @@ export var myClassWithError = class {
         
     };
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -200,3 +238,26 @@ export declare class myClass {
   "size": 984
 }
 
+
+fileExists:: {
+ "/user/username/projects/solution/app/filewitherror.ts": 1,
+ "/user/username/projects/solution/app/filewithouterror.ts": 1,
+ "/user/username/projects/solution/app/filewitherror.js": 1,
+ "/user/username/projects/solution/app/filewitherror.d.ts": 1
+} 
+
+directoryExists:: {
+ "/user/username/projects/solution/app/node_modules/@types": 1,
+ "/user/username/projects/solution/node_modules/@types": 1,
+ "/user/username/projects/node_modules/@types": 1,
+ "/user/username/node_modules/@types": 1,
+ "/user/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {
+ "/user/username/projects/solution/app/filewitherror.ts": 1,
+ "/user/username/projects/solution/app/filewithouterror.ts": 1
+} 
+
+setModifiedTimes:: {} 

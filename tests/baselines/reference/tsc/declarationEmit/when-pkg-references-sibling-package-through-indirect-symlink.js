@@ -55,6 +55,14 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 /a/lib/tsc.js -p pkg3 --explainFiles
 Output::
 [96mpkg3/src/keys.ts[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS2742: [0mThe inferred type of 'ADMIN' cannot be named without a reference to '../../pkg2/node_modules/@raymondfeng/pkg1/dist'. This is likely not portable. A type annotation is necessary.
@@ -134,3 +142,55 @@ __exportStar(require("./keys"), exports);
 export * from './keys';
 
 
+
+fileExists:: {
+ "/user/username/projects/myproject/pkg3/tsconfig.json": 1,
+ "/user/username/projects/myproject/pkg3/src/keys.ts": 1,
+ "/user/username/projects/myproject/pkg3/node_modules/@raymondfeng/pkg2/package.json": 1,
+ "/user/username/projects/myproject/pkg3/node_modules/@raymondfeng/pkg2.ts": 1,
+ "/user/username/projects/myproject/pkg3/node_modules/@raymondfeng/pkg2.tsx": 1,
+ "/user/username/projects/myproject/pkg3/node_modules/@raymondfeng/pkg2.d.ts": 1,
+ "/user/username/projects/myproject/pkg3/node_modules/@raymondfeng/pkg2/dist/index.d.ts": 1,
+ "/user/username/projects/myproject/pkg2/dist/index.d.ts": 1,
+ "/user/username/projects/myproject/pkg2/dist/types.ts": 1,
+ "/user/username/projects/myproject/pkg2/dist/types.tsx": 1,
+ "/user/username/projects/myproject/pkg2/dist/types.d.ts": 1,
+ "/user/username/projects/myproject/pkg2/node_modules/@raymondfeng/pkg1/package.json": 1,
+ "/user/username/projects/myproject/pkg2/node_modules/@raymondfeng/pkg1.ts": 1,
+ "/user/username/projects/myproject/pkg2/node_modules/@raymondfeng/pkg1.tsx": 1,
+ "/user/username/projects/myproject/pkg2/node_modules/@raymondfeng/pkg1.d.ts": 1,
+ "/user/username/projects/myproject/pkg2/node_modules/@raymondfeng/pkg1/dist/index.d.ts": 1,
+ "/user/username/projects/myproject/pkg1/dist/index.d.ts": 1,
+ "/user/username/projects/myproject/pkg1/dist/types.ts": 1,
+ "/user/username/projects/myproject/pkg1/dist/types.tsx": 1,
+ "/user/username/projects/myproject/pkg1/dist/types.d.ts": 1,
+ "/user/username/projects/myproject/pkg2/node_modules/@raymondfeng/pkg1/dist/package.json": 1
+} 
+
+directoryExists:: {
+ "/user/username/projects/myproject/pkg3": 2,
+ "/user/username/projects/myproject/pkg3/src": 1,
+ "/user/username/projects/myproject/pkg3/src/node_modules": 1,
+ "/user/username/projects/myproject/pkg3/node_modules": 1,
+ "/user/username/projects/myproject/pkg3/node_modules/@raymondfeng/pkg2": 1,
+ "/user/username/projects/myproject/pkg3/node_modules/@raymondfeng": 1,
+ "/user/username/projects/myproject/pkg3/node_modules/@raymondfeng/pkg2/dist": 1,
+ "/user/username/projects/myproject/pkg2/dist": 1,
+ "/user/username/projects/myproject/pkg2/dist/node_modules": 1,
+ "/user/username/projects/myproject/pkg2/node_modules": 1,
+ "/user/username/projects/myproject/pkg2/node_modules/@raymondfeng/pkg1": 1,
+ "/user/username/projects/myproject/pkg2/node_modules/@raymondfeng": 1,
+ "/user/username/projects/myproject/pkg2/node_modules/@raymondfeng/pkg1/dist": 1,
+ "/user/username/projects/myproject/pkg1/dist": 1,
+ "/user/username/projects/myproject/pkg3/node_modules/@types": 1,
+ "/user/username/projects/myproject/node_modules/@types": 1,
+ "/user/username/projects/node_modules/@types": 1,
+ "/user/username/node_modules/@types": 1,
+ "/user/node_modules/@types": 1,
+ "/node_modules/@types": 1,
+ "/user/username/projects/myproject/pkg3/dist": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 

@@ -22,6 +22,14 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 /a/lib/tsc.js -w /a/b/f1.ts --explainFiles
 Output::
 >> Screen clear
@@ -97,12 +105,33 @@ __exportStar(require("./f2"), exports);
 
 
 
+fileExists:: {
+ "/a/b/f2.ts": 1
+} 
+
+directoryExists:: {
+ "/a/b": 2,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 Change:: Modify f2 to include f3
 
 Input::
 //// [/a/b/f2.ts]
 export * from "../c/f3"
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -183,3 +212,16 @@ exports.y = void 0;
 exports.y = 1;
 
 
+
+fileExists:: {
+ "/a/c/f3.ts": 1
+} 
+
+directoryExists:: {
+ "/a/c": 2,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 

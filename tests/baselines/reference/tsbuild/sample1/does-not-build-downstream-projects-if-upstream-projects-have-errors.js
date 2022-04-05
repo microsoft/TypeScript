@@ -138,6 +138,36 @@ Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
+getModifiedTime:: {
+ "/src/core/anotherModule.ts": 1,
+ "/src/core/index.ts": 1,
+ "/src/core/some_decl.d.ts": 1,
+ "/src/logic/index.ts": 1,
+ "/src/tests/index.ts": 1
+}
+
+setModifiedTime:: {}
+
+fileExists:: {
+ "/src/core/anotherModule.ts": 1,
+ "/src/core/index.ts": 1,
+ "/src/core/some_decl.d.ts": 1,
+ "/src/core/anotherModule.js": 1,
+ "/src/core/anotherModule.d.ts": 1,
+ "/src/logic/index.ts": 1,
+ "/src/logic/index.js": 1,
+ "/src/tests/index.ts": 1,
+ "/src/tests/index.js": 1
+}
+
+directoryExists:: {
+ "/src/core/node_modules/@types": 1,
+ "/src/node_modules/@types": 2,
+ "/node_modules/@types": 2,
+ "/src/core": 4,
+ "/src/logic/node_modules/@types": 1
+}
+
 
 //// [/src/core/anotherModule.d.ts]
 export declare const World = "hello";

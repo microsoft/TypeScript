@@ -33,6 +33,23 @@ Output::
 /lib/tsc -p src/project
 exitCode:: ExitStatus.Success
 
+getModifiedTime:: {}
+
+setModifiedTime:: {}
+
+fileExists:: {
+ "src/project/tsconfig.json": 1,
+ "/src/project/constants.ts": 1
+}
+
+directoryExists:: {
+ "src/project": 1,
+ "/src/project": 1,
+ "/src/project/node_modules/@types": 1,
+ "/src/node_modules/@types": 1,
+ "/node_modules/@types": 1
+}
+
 
 //// [/src/project/class1.d.ts]
 declare const a = 1;
@@ -136,6 +153,23 @@ Output::
 Found 1 error in src/project/class1.ts[90m:1[0m
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
+getModifiedTime:: {}
+
+setModifiedTime:: {}
+
+fileExists:: {
+ "src/project/tsconfig.json": 1,
+ "/src/project/constants.ts": 1
+}
+
+directoryExists:: {
+ "src/project": 1,
+ "/src/project": 1,
+ "/src/project/node_modules/@types": 1,
+ "/src/node_modules/@types": 1,
+ "/node_modules/@types": 1
+}
 
 
 //// [/src/project/class1.d.ts]

@@ -535,6 +535,30 @@ Output::
 /lib/tsc --b /src/third --clean
 exitCode:: ExitStatus.Success
 
+getModifiedTime:: {}
+
+setModifiedTime:: {}
+
+fileExists:: {
+ "/src/first/bin/first-output.js": 1,
+ "/src/first/bin/first-output.js.map": 1,
+ "/src/first/bin/first-output.d.ts": 1,
+ "/src/first/bin/first-output.d.ts.map": 1,
+ "/src/first/bin/first-output.tsbuildinfo": 1,
+ "/src/2/second-output.js": 1,
+ "/src/2/second-output.js.map": 1,
+ "/src/2/second-output.d.ts": 1,
+ "/src/2/second-output.d.ts.map": 1,
+ "/src/2/second-output.tsbuildinfo": 1,
+ "/src/third/thirdjs/output/third-output.js": 1,
+ "/src/third/thirdjs/output/third-output.js.map": 1,
+ "/src/third/thirdjs/output/third-output.d.ts": 1,
+ "/src/third/thirdjs/output/third-output.d.ts.map": 1,
+ "/src/third/thirdjs/output/third-output.tsbuildinfo": 1
+}
+
+directoryExists:: {}
+
 
 //// [/src/2/second-output.d.ts] unlink
 //// [/src/2/second-output.d.ts.map] unlink
@@ -560,5 +584,29 @@ Input::
 Output::
 /lib/tsc --b /src/third --clean
 exitCode:: ExitStatus.Success
+
+getModifiedTime:: {}
+
+setModifiedTime:: {}
+
+fileExists:: {
+ "/src/first/bin/first-output.js": 1,
+ "/src/first/bin/first-output.js.map": 1,
+ "/src/first/bin/first-output.d.ts": 1,
+ "/src/first/bin/first-output.d.ts.map": 1,
+ "/src/first/bin/first-output.tsbuildinfo": 1,
+ "/src/2/second-output.js": 1,
+ "/src/2/second-output.js.map": 1,
+ "/src/2/second-output.d.ts": 1,
+ "/src/2/second-output.d.ts.map": 1,
+ "/src/2/second-output.tsbuildinfo": 1,
+ "/src/third/thirdjs/output/third-output.js": 1,
+ "/src/third/thirdjs/output/third-output.js.map": 1,
+ "/src/third/thirdjs/output/third-output.d.ts": 1,
+ "/src/third/thirdjs/output/third-output.d.ts.map": 1,
+ "/src/third/thirdjs/output/third-output.tsbuildinfo": 1
+}
+
+directoryExists:: {}
 
 

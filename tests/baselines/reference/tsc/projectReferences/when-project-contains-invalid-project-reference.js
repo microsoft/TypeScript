@@ -34,6 +34,21 @@ Found 1 error in src/project/tsconfig.json[90m:1[0m
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
+getModifiedTime:: {}
+
+setModifiedTime:: {}
+
+fileExists:: {
+ "src/project/tsconfig.json": 1
+}
+
+directoryExists:: {
+ "src/project": 1,
+ "/src/project/node_modules/@types": 1,
+ "/src/node_modules/@types": 1,
+ "/node_modules/@types": 1
+}
+
 
 //// [/src/project/theApp.js]
 define("main", ["require", "exports"], function (require, exports) {

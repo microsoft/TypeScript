@@ -22,6 +22,14 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 tsc --w
 Output::
 >> Screen clear
@@ -139,6 +147,20 @@ exitCode:: ExitStatus.undefined
 }
 
 
+fileExists:: {} 
+
+directoryExists:: {
+ "/user/username/projects/myproject/node_modules/@types": 1,
+ "/user/username/projects/node_modules/@types": 1,
+ "/user/username/node_modules/@types": 1,
+ "/user/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 Checking if output is same as EmitAndSemanticDiagnosticsBuilderProgram::
 Output file text for /user/username/projects/myproject/main.js is same:: true
 Output file text for /user/username/projects/myproject/main.d.ts is same:: true
@@ -153,6 +175,14 @@ Input::
 export const x: string = 10;
 // SomeComment
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 tsc --w
 Output::
@@ -267,6 +297,20 @@ exitCode:: ExitStatus.undefined
 }
 
 
+fileExists:: {} 
+
+directoryExists:: {
+ "/user/username/projects/myproject/node_modules/@types": 1,
+ "/user/username/projects/node_modules/@types": 1,
+ "/user/username/node_modules/@types": 1,
+ "/user/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 Checking if output is same as EmitAndSemanticDiagnosticsBuilderProgram::
 Output file text for /user/username/projects/myproject/main.js is same:: true
 Output file text for /user/username/projects/myproject/main.d.ts is same:: true
@@ -280,6 +324,14 @@ Input::
 //// [/user/username/projects/myproject/main.ts]
 export const x = 10;
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 tsc --w
 Output::
@@ -388,6 +440,20 @@ exports.y = 10;
 export declare const y = 10;
 
 
+
+fileExists:: {} 
+
+directoryExists:: {
+ "/user/username/projects/myproject/node_modules/@types": 1,
+ "/user/username/projects/node_modules/@types": 1,
+ "/user/username/node_modules/@types": 1,
+ "/user/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Checking if output is same as EmitAndSemanticDiagnosticsBuilderProgram::
 Output file text for /user/username/projects/myproject/main.js is same:: true

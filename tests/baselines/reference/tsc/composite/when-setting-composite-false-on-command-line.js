@@ -35,6 +35,21 @@ Output::
 /lib/tsc --composite false --p src/project
 exitCode:: ExitStatus.Success
 
+getModifiedTime:: {}
+
+setModifiedTime:: {}
+
+fileExists:: {
+ "src/project/tsconfig.json": 1
+}
+
+directoryExists:: {
+ "src/project": 1,
+ "/src/project/node_modules/@types": 1,
+ "/src/node_modules/@types": 1,
+ "/node_modules/@types": 1
+}
+
 
 //// [/src/project/src/main.js]
 "use strict";

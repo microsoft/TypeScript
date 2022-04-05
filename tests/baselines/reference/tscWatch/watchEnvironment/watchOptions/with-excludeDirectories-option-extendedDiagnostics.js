@@ -31,6 +31,14 @@ export function temp(): string;
 {"exclude":["node_modules"],"watchOptions":{"excludeDirectories":["node_modules"]}}
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 /a/lib/tsc.js -w -extendedDiagnostics
 Output::
 [[90m12:00:37 AM[0m] Starting compilation in watch mode...
@@ -111,10 +119,47 @@ var bar_1 = require("bar");
 
 
 
+fileExists:: {
+ "/user/username/projects/myproject/tsconfig.json": 1,
+ "/user/username/projects/myproject/node_modules/bar/package.json": 1,
+ "/user/username/projects/myproject/node_modules/bar.ts": 1,
+ "/user/username/projects/myproject/node_modules/bar.tsx": 1,
+ "/user/username/projects/myproject/node_modules/bar.d.ts": 1,
+ "/user/username/projects/myproject/node_modules/bar/index.ts": 1,
+ "/user/username/projects/myproject/node_modules/bar/index.tsx": 1,
+ "/user/username/projects/myproject/node_modules/bar/index.d.ts": 2,
+ "/user/username/projects/myproject/node_modules/bar/foo.ts": 1,
+ "/user/username/projects/myproject/node_modules/bar/foo.tsx": 1,
+ "/user/username/projects/myproject/node_modules/bar/foo.d.ts": 1
+} 
+
+directoryExists:: {
+ "/user/username/projects/myproject/src/node_modules": 1,
+ "/user/username/projects/myproject/node_modules": 2,
+ "/user/username/projects/myproject/node_modules/bar": 5,
+ "/user/username/projects/myproject/node_modules/@types": 1,
+ "/user/username/projects/node_modules/@types": 1,
+ "/user/username/node_modules/@types": 1,
+ "/user/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 Change:: delete fooBar
 
 Input::
 //// [/user/username/projects/myproject/node_modules/bar/fooBar.d.ts] deleted
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 
@@ -142,3 +187,11 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 

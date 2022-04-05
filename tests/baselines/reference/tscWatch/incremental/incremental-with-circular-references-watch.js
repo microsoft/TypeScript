@@ -43,6 +43,14 @@ export { C } from "./c";
 {"compilerOptions":{"incremental":true,"target":"es5","module":"commonjs","declaration":true,"emitDeclarationOnly":true}}
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 /a/lib/tsc.js -w
 Output::
 >> Screen clear
@@ -230,6 +238,26 @@ export { C } from "./c";
 }
 
 
+fileExists:: {
+ "/users/username/projects/project/tsconfig.json": 1,
+ "/users/username/projects/project/b.ts": 1,
+ "/users/username/projects/project/c.ts": 1,
+ "/users/username/projects/project/a.ts": 1
+} 
+
+directoryExists:: {
+ "/users/username/projects/project": 6,
+ "/users/username/projects/project/node_modules/@types": 1,
+ "/users/username/projects/node_modules/@types": 1,
+ "/users/username/node_modules/@types": 1,
+ "/users/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 Change::
 
 Input::
@@ -241,6 +269,14 @@ export interface A {
 }
 
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -409,3 +445,23 @@ export interface A {
   "size": 1130
 }
 
+
+fileExists:: {
+ "/users/username/projects/project/tsconfig.json": 1,
+ "/users/username/projects/project/b.ts": 1,
+ "/users/username/projects/project/c.ts": 1,
+ "/users/username/projects/project/a.ts": 1
+} 
+
+directoryExists:: {
+ "/users/username/projects/project": 6,
+ "/users/username/projects/project/node_modules/@types": 1,
+ "/users/username/projects/node_modules/@types": 1,
+ "/users/username/node_modules/@types": 1,
+ "/users/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 

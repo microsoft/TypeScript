@@ -22,6 +22,14 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 /a/lib/tsc.js -w
 Output::
 >> Screen clear
@@ -79,12 +87,43 @@ exports.__esModule = true;
 
 
 
+fileExists:: {
+ "/user/username/projects/myproject/tsconfig.json": 1,
+ "/user/username/projects/myproject/data.json.ts": 1,
+ "/user/username/projects/myproject/data.json.tsx": 1,
+ "/user/username/projects/myproject/data.json.d.ts": 1,
+ "/user/username/projects/myproject/data.json.js": 1,
+ "/user/username/projects/myproject/data.json.jsx": 1
+} 
+
+directoryExists:: {
+ "/user/username/projects/myproject": 4,
+ "/user/username/projects/myproject/data.json": 2,
+ "/user/username/projects/myproject/node_modules/@types": 1,
+ "/user/username/projects/node_modules/@types": 1,
+ "/user/username/node_modules/@types": 1,
+ "/user/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 Change:: Enable resolveJsonModule
 
 Input::
 //// [/user/username/projects/myproject/tsconfig.json]
 {"compilerOptions":{"moduleResolution":"node","resolveJsonModule":true}}
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -135,3 +174,24 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/a.js] file written with same contents
+
+fileExists:: {
+ "/user/username/projects/myproject/data.json.ts": 1,
+ "/user/username/projects/myproject/data.json.tsx": 1,
+ "/user/username/projects/myproject/data.json.d.ts": 2,
+ "/user/username/projects/myproject/data.json.js": 1,
+ "/user/username/projects/myproject/data.json.jsx": 1
+} 
+
+directoryExists:: {
+ "/user/username/projects/myproject/data.json": 1,
+ "/user/username/projects/myproject/node_modules/@types": 1,
+ "/user/username/projects/node_modules/@types": 1,
+ "/user/username/node_modules/@types": 1,
+ "/user/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 

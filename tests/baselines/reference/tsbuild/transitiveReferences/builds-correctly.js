@@ -81,6 +81,35 @@ Output::
 /src/c.ts
 exitCode:: ExitStatus.Success
 
+getModifiedTime:: {
+ "/src/a.ts": 1,
+ "/src/b.ts": 1,
+ "/src/c.ts": 1
+}
+
+setModifiedTime:: {}
+
+fileExists:: {
+ "/src/a.ts": 1,
+ "/src/a.js": 1,
+ "/src/a.d.ts": 1,
+ "/src/b.ts": 1,
+ "/src/b.js": 1,
+ "/src/b.d.ts": 1,
+ "/src/c.ts": 1,
+ "/src/c.js": 1,
+ "/src/refs/a.ts": 1,
+ "/src/refs/a.tsx": 1,
+ "/src/refs/a.d.ts": 1
+}
+
+directoryExists:: {
+ "/src/node_modules/@types": 3,
+ "/node_modules/@types": 3,
+ "/src": 5,
+ "/src/refs": 3
+}
+
 
 //// [/src/a.d.ts]
 export declare class A {

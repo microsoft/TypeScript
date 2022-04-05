@@ -85,6 +85,14 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 /a/lib/tsc.js -p plugin-one --explainFiles
 Output::
 ======== Resolving module 'typescript-fsa' from '/user/username/projects/myproject/plugin-one/action.ts'. ========
@@ -192,3 +200,48 @@ Object.defineProperty(exports, "__esModule", { value: true });
 export {};
 
 
+
+fileExists:: {
+ "/user/username/projects/myproject/plugin-one/tsconfig.json": 1,
+ "/user/username/projects/myproject/plugin-one/node_modules/typescript-fsa/package.json": 1,
+ "/user/username/projects/myproject/plugin-one/node_modules/typescript-fsa.ts": 1,
+ "/user/username/projects/myproject/plugin-one/node_modules/typescript-fsa.tsx": 1,
+ "/user/username/projects/myproject/plugin-one/node_modules/typescript-fsa.d.ts": 1,
+ "/user/username/projects/myproject/plugin-one/node_modules/typescript-fsa/index.ts": 1,
+ "/user/username/projects/myproject/plugin-one/node_modules/typescript-fsa/index.tsx": 1,
+ "/user/username/projects/myproject/plugin-one/node_modules/typescript-fsa/index.d.ts": 1,
+ "/user/username/projects/myproject/plugin-one/node_modules/plugin-two/package.json": 1,
+ "/user/username/projects/myproject/plugin-one/node_modules/plugin-two.ts": 1,
+ "/user/username/projects/myproject/plugin-one/node_modules/plugin-two.tsx": 1,
+ "/user/username/projects/myproject/plugin-one/node_modules/plugin-two.d.ts": 1,
+ "/user/username/projects/myproject/plugin-one/node_modules/plugin-two/index.ts": 1,
+ "/user/username/projects/myproject/plugin-one/node_modules/plugin-two/index.tsx": 1,
+ "/user/username/projects/myproject/plugin-one/node_modules/plugin-two/index.d.ts": 1,
+ "/user/username/projects/myproject/plugin-two/index.d.ts": 1,
+ "/user/username/projects/myproject/plugin-two/node_modules/typescript-fsa/package.json": 1,
+ "/user/username/projects/myproject/plugin-two/node_modules/typescript-fsa.ts": 1,
+ "/user/username/projects/myproject/plugin-two/node_modules/typescript-fsa.tsx": 1,
+ "/user/username/projects/myproject/plugin-two/node_modules/typescript-fsa.d.ts": 1,
+ "/user/username/projects/myproject/plugin-two/node_modules/typescript-fsa/index.ts": 1,
+ "/user/username/projects/myproject/plugin-two/node_modules/typescript-fsa/index.tsx": 1,
+ "/user/username/projects/myproject/plugin-two/node_modules/typescript-fsa/index.d.ts": 1
+} 
+
+directoryExists:: {
+ "/user/username/projects/myproject/plugin-one": 1,
+ "/user/username/projects/myproject/plugin-one/node_modules": 1,
+ "/user/username/projects/myproject/plugin-one/node_modules/typescript-fsa": 1,
+ "/user/username/projects/myproject/plugin-one/node_modules/plugin-two": 1,
+ "/user/username/projects/myproject/plugin-two/node_modules": 1,
+ "/user/username/projects/myproject/plugin-two/node_modules/typescript-fsa": 1,
+ "/user/username/projects/myproject/plugin-one/node_modules/@types": 1,
+ "/user/username/projects/myproject/node_modules/@types": 1,
+ "/user/username/projects/node_modules/@types": 1,
+ "/user/username/node_modules/@types": 1,
+ "/user/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 

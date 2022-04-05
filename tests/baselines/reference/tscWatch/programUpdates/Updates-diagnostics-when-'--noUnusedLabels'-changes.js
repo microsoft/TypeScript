@@ -19,6 +19,14 @@ label: while (1) {}
 {"compilerOptions":{"allowUnusedLabels":true}}
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 /a/lib/tsc.js -w -p /tsconfig.json
 Output::
 >> Screen clear
@@ -64,12 +72,33 @@ label: while (1) { }
 
 
 
+fileExists:: {
+ "/tsconfig.json": 1
+} 
+
+directoryExists:: {
+ "/tsconfig.json": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 Change:: Disable  allowUnsusedLabels
 
 Input::
 //// [/tsconfig.json]
 {"compilerOptions":{"allowUnusedLabels":false}}
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -114,12 +143,28 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 Change:: Enable  allowUnsusedLabels
 
 Input::
 //// [/tsconfig.json]
 {"compilerOptions":{"allowUnusedLabels":true}}
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -158,3 +203,11 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 

@@ -17,6 +17,14 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 /a/lib/tsc.js --w /a/app.ts
 Output::
 >> Screen clear
@@ -59,6 +67,16 @@ var y = 2;
 
 
 
+fileExists:: {} 
+
+directoryExists:: {
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 Change:: Append a line
 
 Input::
@@ -67,6 +85,14 @@ var x = 1;
 var y = 2;
 var z = 3;
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -108,3 +134,11 @@ var y = 2;
 var z = 3;
 
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 

@@ -857,17 +857,25 @@ interface Array<T> { length: number; [n: number]: T; }`
 
         fileExists(s: string) {
             const path = this.toFullPath(s);
+            this.fileExistsCalls[path] = (getProperty(this.fileExistsCalls, path) || 0) + 1;
+            return !!this.getRealFile(path);
+        }
+
+        fileExistsWithoutTracking(s: string) {
+            const path = this.toFullPath(s);
             return !!this.getRealFile(path);
         }
 
         getModifiedTime(s: string) {
             const path = this.toFullPath(s);
+            this.getModifiedCalls[path] = (getProperty(this.getModifiedCalls, path) || 0) + 1;
             const fsEntry = this.fs.get(path);
             return (fsEntry && fsEntry.modifiedTime)!; // TODO: GH#18217
         }
 
         setModifiedTime(s: string, date: Date) {
             const path = this.toFullPath(s);
+            this.setModifiedCalls[path] = (getProperty(this.setModifiedCalls, path) || 0) + 1;
             const fsEntry = this.fs.get(path);
             if (fsEntry) {
                 fsEntry.modifiedTime = date;
@@ -891,6 +899,7 @@ interface Array<T> { length: number; [n: number]: T; }`
 
         directoryExists(s: string) {
             const path = this.toFullPath(s);
+            this.directoryExistsCalls[path] = (getProperty(this.directoryExistsCalls, path) || 0) + 1;
             return !!this.getRealFolder(path);
         }
 
@@ -1064,11 +1073,14 @@ interface Array<T> { length: number; [n: number]: T; }`
                 }
                 result.set(key, cloneValue);
             });
-
             return result;
         }
 
         writtenFiles?: ESMap<Path, number>;
+        getModifiedCalls: MapLike<number> = {};
+        fileExistsCalls: MapLike<number> = {};
+        directoryExistsCalls: MapLike<number> = {};
+        setModifiedCalls: MapLike<number> = {};
         diff(baseline: string[], base: ESMap<string, FSEntry> = new Map()) {
             this.fs.forEach(newFsEntry => {
                 diffFsEntry(baseline, base.get(newFsEntry.path), newFsEntry, this.writtenFiles);
@@ -1080,6 +1092,18 @@ interface Array<T> { length: number; [n: number]: T; }`
                 }
             });
             baseline.push("");
+            baseline.push(`fileExists:: ${JSON.stringify(this.fileExistsCalls, /*replacer*/ undefined, " ")} `);
+            baseline.push("");
+            baseline.push(`directoryExists:: ${JSON.stringify(this.directoryExistsCalls, /*replacer*/ undefined, " ")} `);
+            baseline.push("");
+            baseline.push(`getModifiedTimes:: ${JSON.stringify(this.getModifiedCalls, /*replacer*/ undefined, " ")} `);
+            baseline.push("");
+            baseline.push(`setModifiedTimes:: ${JSON.stringify(this.setModifiedCalls, /*replacer*/ undefined, " ")} `);
+            baseline.push("");
+            this.fileExistsCalls = {};
+            this.directoryExistsCalls = {};
+            this.getModifiedCalls = {};
+            this.setModifiedCalls = {};
         }
 
         serializeWatches(baseline: string[]) {
@@ -1224,7 +1248,13 @@ interface Array<T> { length: number; [n: number]: T; }`
         if (baselinedOutput) baseline.push(baselinedOutput.join(""));
     }
 
-    export type TestServerHostTrackingWrittenFiles = TestServerHost & { writtenFiles: ESMap<Path, number>; };
+    export type TestServerHostTrackingWrittenFiles = TestServerHost & {
+        writtenFiles: ESMap<Path, number>;
+        getModifiedCalls: MapLike<number>;
+        fileExistsCalls: MapLike<number>;
+        directoryExistsCalls: MapLike<number>;
+        setModifiedCalls: MapLike<number>;
+    };
 
     export function changeToHostTrackingWrittenFiles(inputHost: TestServerHost) {
         const host = inputHost as TestServerHostTrackingWrittenFiles;
@@ -1235,6 +1265,7 @@ interface Array<T> { length: number; [n: number]: T; }`
             const path = host.toFullPath(fileName);
             host.writtenFiles.set(path, (host.writtenFiles.get(path) || 0) + 1);
         };
+
         return host;
     }
     export const tsbuildProjectsLocation = "/user/username/projects";

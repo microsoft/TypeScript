@@ -43,6 +43,24 @@ Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
+getModifiedTime:: {
+ "/src/src/index.ts": 1,
+ "/src/types/type.ts": 1
+}
+
+setModifiedTime:: {}
+
+fileExists:: {
+ "/src/src/index.ts": 1,
+ "/src/types/type.ts": 1,
+ "/src/dist/index.js": 1
+}
+
+directoryExists:: {
+ "/src/node_modules/@types": 1,
+ "/node_modules/@types": 1
+}
+
 
 
 
@@ -68,6 +86,24 @@ Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
+getModifiedTime:: {
+ "/src/src/index.ts": 1,
+ "/src/types/type.ts": 1
+}
+
+setModifiedTime:: {}
+
+fileExists:: {
+ "/src/src/index.ts": 1,
+ "/src/types/type.ts": 1,
+ "/src/dist/index.js": 1
+}
+
+directoryExists:: {
+ "/src/node_modules/@types": 1,
+ "/node_modules/@types": 1
+}
+
 
 
 
@@ -85,6 +121,20 @@ Output::
 Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
+getModifiedTime:: {}
+
+setModifiedTime:: {}
+
+fileExists:: {
+ "/src/tsconfig.json": 1
+}
+
+directoryExists:: {
+ "/src/tsconfig.json": 1,
+ "/src/node_modules/@types": 1,
+ "/node_modules/@types": 1
+}
 
 
 //// [/src/dist/index.js]

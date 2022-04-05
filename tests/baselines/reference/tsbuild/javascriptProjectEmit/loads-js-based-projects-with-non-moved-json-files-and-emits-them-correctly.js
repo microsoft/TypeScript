@@ -117,6 +117,54 @@ Output::
 /lib/tsc -b /src
 exitCode:: ExitStatus.Success
 
+getModifiedTime:: {
+ "/src/common/index.ts": 1,
+ "/src/common/obj.json": 1,
+ "/src/sub-project/index.js": 1,
+ "/src/sub-project-2/index.js": 1
+}
+
+setModifiedTime:: {}
+
+fileExists:: {
+ "/src/tsconfig.base.json": 3,
+ "/src/common/index.ts": 1,
+ "/src/common/obj.json": 1,
+ "/src/common/index.js": 1,
+ "/src/common/obj.json.ts": 1,
+ "/src/common/obj.json.tsx": 1,
+ "/src/common/obj.json.d.ts": 1,
+ "/src/common/obj.json.js": 1,
+ "/src/common/obj.json.jsx": 1,
+ "/src/common/index.d.ts": 1,
+ "/src/sub-project/index.js": 1,
+ "/out/sub-project/index.js": 1,
+ "/src/common.ts": 1,
+ "/src/common.tsx": 1,
+ "/src/common.d.ts": 1,
+ "/src/common/package.json": 1,
+ "/out/sub-project/index.d.ts": 1,
+ "/src/sub-project-2/index.js": 1,
+ "/out/sub-project-2/index.js": 1,
+ "/src/sub-project/index.ts": 1,
+ "/src/sub-project/index.tsx": 1,
+ "/src/sub-project/index.d.ts": 1,
+ "/out/sub-project-2/index.d.ts": 1
+}
+
+directoryExists:: {
+ "/src/common": 10,
+ "/src/common/obj.json": 1,
+ "/src/common/node_modules/@types": 1,
+ "/src/node_modules/@types": 3,
+ "/node_modules/@types": 3,
+ "/src": 2,
+ "/src/sub-project/node_modules/@types": 1,
+ "/src/sub-project": 4,
+ "/src/sub-project/index": 1,
+ "/src/sub-project-2/node_modules/@types": 1
+}
+
 
 //// [/out/sub-project/index.d.ts]
 export const m: {

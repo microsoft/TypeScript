@@ -30,6 +30,14 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 /a/lib/tsc.js --b -w
 Output::
 >> Screen clear
@@ -71,6 +79,27 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 
+fileExists:: {
+ "/user/username/projects/myproject/a.ts": 1,
+ "/user/username/projects/myproject/b.ts": 1,
+ "/user/username/projects/myproject/a.js": 1
+} 
+
+directoryExists:: {
+ "/user/username/projects/myproject/node_modules/@types": 1,
+ "/user/username/projects/node_modules/@types": 1,
+ "/user/username/node_modules/@types": 1,
+ "/user/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {
+ "/user/username/projects/myproject/a.ts": 1,
+ "/user/username/projects/myproject/b.ts": 1
+} 
+
+setModifiedTimes:: {} 
+
 Change:: reports syntax errors after change to config file
 
 Input::
@@ -86,6 +115,14 @@ Input::
     ]
 }
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -127,12 +164,41 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 
+fileExists:: {
+ "/user/username/projects/myproject/a.ts": 1,
+ "/user/username/projects/myproject/b.ts": 1,
+ "/user/username/projects/myproject/a.js": 1
+} 
+
+directoryExists:: {
+ "/user/username/projects/myproject/node_modules/@types": 1,
+ "/user/username/projects/node_modules/@types": 1,
+ "/user/username/node_modules/@types": 1,
+ "/user/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {
+ "/user/username/projects/myproject/a.ts": 1,
+ "/user/username/projects/myproject/b.ts": 1
+} 
+
+setModifiedTimes:: {} 
+
 Change:: reports syntax errors after change to ts file
 
 Input::
 //// [/user/username/projects/myproject/a.ts]
 export function fooBar() { }
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -174,10 +240,39 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 
+fileExists:: {
+ "/user/username/projects/myproject/a.ts": 1,
+ "/user/username/projects/myproject/b.ts": 1,
+ "/user/username/projects/myproject/a.js": 1
+} 
+
+directoryExists:: {
+ "/user/username/projects/myproject/node_modules/@types": 1,
+ "/user/username/projects/node_modules/@types": 1,
+ "/user/username/node_modules/@types": 1,
+ "/user/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {
+ "/user/username/projects/myproject/a.ts": 1,
+ "/user/username/projects/myproject/b.ts": 1
+} 
+
+setModifiedTimes:: {} 
+
 Change:: reports error when there is no change to tsconfig file
 
 Input::
 //// [/user/username/projects/myproject/tsconfig.json] file written with same contents
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -219,12 +314,41 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 
+fileExists:: {
+ "/user/username/projects/myproject/a.ts": 1,
+ "/user/username/projects/myproject/b.ts": 1,
+ "/user/username/projects/myproject/a.js": 1
+} 
+
+directoryExists:: {
+ "/user/username/projects/myproject/node_modules/@types": 1,
+ "/user/username/projects/node_modules/@types": 1,
+ "/user/username/node_modules/@types": 1,
+ "/user/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {
+ "/user/username/projects/myproject/a.ts": 1,
+ "/user/username/projects/myproject/b.ts": 1
+} 
+
+setModifiedTimes:: {} 
+
 Change:: builds after fixing config file errors
 
 Input::
 //// [/user/username/projects/myproject/tsconfig.json]
 {"compilerOptions":{"composite":true,"declaration":true},"files":["a.ts","b.ts"]}
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -332,3 +456,25 @@ export declare function bar(): void;
   "size": 880
 }
 
+
+fileExists:: {
+ "/user/username/projects/myproject/a.ts": 1,
+ "/user/username/projects/myproject/b.ts": 1,
+ "/user/username/projects/myproject/a.js": 1,
+ "/user/username/projects/myproject/a.d.ts": 1
+} 
+
+directoryExists:: {
+ "/user/username/projects/myproject/node_modules/@types": 1,
+ "/user/username/projects/node_modules/@types": 1,
+ "/user/username/node_modules/@types": 1,
+ "/user/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {
+ "/user/username/projects/myproject/a.ts": 1,
+ "/user/username/projects/myproject/b.ts": 1
+} 
+
+setModifiedTimes:: {} 

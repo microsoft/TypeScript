@@ -22,6 +22,14 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 /a/lib/tsc.js -w /a/b/c/app.ts
 Output::
 >> Screen clear
@@ -82,3 +90,18 @@ var module_1 = require("./module");
 console.log(module_1.f);
 
 
+
+fileExists:: {
+ "/a/b/c/module.ts": 1,
+ "/a/b/c/module.tsx": 1,
+ "/a/b/c/module.d.ts": 1
+} 
+
+directoryExists:: {
+ "/a/b/c": 2,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 

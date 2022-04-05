@@ -43,6 +43,14 @@ export const pkg3 = 3;
 {"files":[],"include":[],"references":[{"path":"./pkg0"},{"path":"./pkg1"},{"path":"./pkg2"},{"path":"./pkg3"}]}
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 /a/lib/tsc.js --b --w
 Output::
 >> Screen clear
@@ -212,12 +220,54 @@ exports.pkg3 = 3;
 
 
 
+fileExists:: {
+ "/user/username/projects/myproject/pkg0/index.ts": 1,
+ "/user/username/projects/myproject/typings/xterm.d.ts": 1,
+ "/user/username/projects/myproject/pkg0/index.js": 1,
+ "/user/username/projects/myproject/pkg1/index.ts": 1,
+ "/user/username/projects/myproject/pkg1/index.js": 1,
+ "/user/username/projects/myproject/pkg2/index.ts": 1,
+ "/user/username/projects/myproject/pkg2/index.js": 1,
+ "/user/username/projects/myproject/pkg3/index.ts": 1,
+ "/user/username/projects/myproject/pkg3/index.js": 1
+} 
+
+directoryExists:: {
+ "/user/username/projects/myproject/pkg0/node_modules/@types": 1,
+ "/user/username/projects/myproject/node_modules/@types": 4,
+ "/user/username/projects/node_modules/@types": 4,
+ "/user/username/node_modules/@types": 4,
+ "/user/node_modules/@types": 4,
+ "/node_modules/@types": 4,
+ "/user/username/projects/myproject/pkg1/node_modules/@types": 1,
+ "/user/username/projects/myproject/pkg2/node_modules/@types": 1,
+ "/user/username/projects/myproject/pkg3/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {
+ "/user/username/projects/myproject/pkg0/index.ts": 1,
+ "/user/username/projects/myproject/typings/xterm.d.ts": 4,
+ "/user/username/projects/myproject/pkg1/index.ts": 1,
+ "/user/username/projects/myproject/pkg2/index.ts": 1,
+ "/user/username/projects/myproject/pkg3/index.ts": 1
+} 
+
+setModifiedTimes:: {} 
+
 Change:: modify typing file
 
 Input::
 //// [/user/username/projects/myproject/typings/xterm.d.ts]
 export const typing = 10;export const typing1 = 10;
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -348,12 +398,63 @@ exitCode:: ExitStatus.undefined
 //// [/user/username/projects/myproject/pkg2/index.js] file changed its modified time
 //// [/user/username/projects/myproject/pkg3/index.js] file changed its modified time
 
+fileExists:: {
+ "/user/username/projects/myproject/pkg0/index.ts": 1,
+ "/user/username/projects/myproject/typings/xterm.d.ts": 1,
+ "/user/username/projects/myproject/pkg0/index.js": 1,
+ "/user/username/projects/myproject/pkg1/index.ts": 1,
+ "/user/username/projects/myproject/pkg1/index.js": 1,
+ "/user/username/projects/myproject/pkg2/index.ts": 1,
+ "/user/username/projects/myproject/pkg2/index.js": 1,
+ "/user/username/projects/myproject/pkg3/index.ts": 1,
+ "/user/username/projects/myproject/pkg3/index.js": 1
+} 
+
+directoryExists:: {
+ "/user/username/projects/myproject/pkg0/node_modules/@types": 1,
+ "/user/username/projects/myproject/node_modules/@types": 4,
+ "/user/username/projects/node_modules/@types": 4,
+ "/user/username/node_modules/@types": 4,
+ "/user/node_modules/@types": 4,
+ "/node_modules/@types": 4,
+ "/user/username/projects/myproject/pkg1/node_modules/@types": 1,
+ "/user/username/projects/myproject/pkg2/node_modules/@types": 1,
+ "/user/username/projects/myproject/pkg3/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {
+ "/user/username/projects/myproject/pkg0/index.ts": 1,
+ "/user/username/projects/myproject/typings/xterm.d.ts": 4,
+ "/user/username/projects/myproject/pkg0/index.js": 1,
+ "/user/username/projects/myproject/pkg1/index.ts": 1,
+ "/user/username/projects/myproject/pkg1/index.js": 1,
+ "/user/username/projects/myproject/pkg2/index.ts": 1,
+ "/user/username/projects/myproject/pkg2/index.js": 1,
+ "/user/username/projects/myproject/pkg3/index.ts": 1,
+ "/user/username/projects/myproject/pkg3/index.js": 1
+} 
+
+setModifiedTimes:: {
+ "/user/username/projects/myproject/pkg0/index.js": 1,
+ "/user/username/projects/myproject/pkg1/index.js": 1,
+ "/user/username/projects/myproject/pkg2/index.js": 1,
+ "/user/username/projects/myproject/pkg3/index.js": 1
+} 
+
 Change:: change pkg references
 
 Input::
 //// [/user/username/projects/myproject/tsconfig.json]
 {"files":[],"include":[],"references":[{"path":"./pkg0"},{"path":"./pkg1"},{"path":"./pkg2"}]}
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -394,12 +495,28 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 Change:: modify typing file
 
 Input::
 //// [/user/username/projects/myproject/typings/xterm.d.ts]
 export const typing = 10;
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -503,12 +620,57 @@ exitCode:: ExitStatus.undefined
 //// [/user/username/projects/myproject/pkg1/index.js] file changed its modified time
 //// [/user/username/projects/myproject/pkg2/index.js] file changed its modified time
 
+fileExists:: {
+ "/user/username/projects/myproject/pkg0/index.ts": 1,
+ "/user/username/projects/myproject/typings/xterm.d.ts": 1,
+ "/user/username/projects/myproject/pkg0/index.js": 1,
+ "/user/username/projects/myproject/pkg1/index.ts": 1,
+ "/user/username/projects/myproject/pkg1/index.js": 1,
+ "/user/username/projects/myproject/pkg2/index.ts": 1,
+ "/user/username/projects/myproject/pkg2/index.js": 1
+} 
+
+directoryExists:: {
+ "/user/username/projects/myproject/pkg0/node_modules/@types": 1,
+ "/user/username/projects/myproject/node_modules/@types": 3,
+ "/user/username/projects/node_modules/@types": 3,
+ "/user/username/node_modules/@types": 3,
+ "/user/node_modules/@types": 3,
+ "/node_modules/@types": 3,
+ "/user/username/projects/myproject/pkg1/node_modules/@types": 1,
+ "/user/username/projects/myproject/pkg2/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {
+ "/user/username/projects/myproject/pkg0/index.ts": 1,
+ "/user/username/projects/myproject/typings/xterm.d.ts": 3,
+ "/user/username/projects/myproject/pkg0/index.js": 1,
+ "/user/username/projects/myproject/pkg1/index.ts": 1,
+ "/user/username/projects/myproject/pkg1/index.js": 1,
+ "/user/username/projects/myproject/pkg2/index.ts": 1,
+ "/user/username/projects/myproject/pkg2/index.js": 1
+} 
+
+setModifiedTimes:: {
+ "/user/username/projects/myproject/pkg0/index.js": 1,
+ "/user/username/projects/myproject/pkg1/index.js": 1,
+ "/user/username/projects/myproject/pkg2/index.js": 1
+} 
+
 Change:: change pkg references to remove all watches
 
 Input::
 //// [/user/username/projects/myproject/tsconfig.json]
 {"files":[],"include":[],"references":[]}
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -534,12 +696,28 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 Change:: modify typing file
 
 Input::
 //// [/user/username/projects/myproject/typings/xterm.d.ts]
 export const typing = 10;export const typing1 = 10;
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 
@@ -553,3 +731,11 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 

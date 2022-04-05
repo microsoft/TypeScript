@@ -20,6 +20,14 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 /a/lib/tsc.js -w
 Output::
 >> Screen clear
@@ -78,12 +86,32 @@ class D extends C {
 
 
 
+fileExists:: {
+ "/tsconfig.json": 1
+} 
+
+directoryExists:: {
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 Change:: Enable useDefineForClassFields
 
 Input::
 //// [/tsconfig.json]
 {"compilerOptions":{"target":"es6","useDefineForClassFields":true}}
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -144,3 +172,11 @@ class D extends C {
 }
 
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 

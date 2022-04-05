@@ -57,6 +57,22 @@ Output::
 /lib/tsc --p src/project --rootDir src/project/src
 exitCode:: ExitStatus.Success
 
+getModifiedTime:: {}
+
+setModifiedTime:: {}
+
+fileExists:: {
+ "src/project/tsconfig.json": 1
+}
+
+directoryExists:: {
+ "src/project": 1,
+ "/node_modules": 1,
+ "/src/project/node_modules/@types": 1,
+ "/src/node_modules/@types": 1,
+ "/node_modules/@types": 1
+}
+
 
 //// [/src/project/dist/main.js]
 /// <reference no-default-lib="true"/>

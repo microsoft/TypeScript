@@ -35,6 +35,14 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 /a/lib/tsc.js --w --i
 Output::
 >> Screen clear
@@ -164,6 +172,29 @@ console.log(b.c.d);
 }
 
 
+fileExists:: {
+ "/user/username/projects/myproject/tsconfig.json": 1,
+ "/user/username/projects/myproject/b.ts": 1,
+ "/user/username/projects/myproject/b.tsx": 1,
+ "/user/username/projects/myproject/b.d.ts": 1,
+ "/user/username/projects/myproject/c.ts": 1,
+ "/user/username/projects/myproject/c.tsx": 1,
+ "/user/username/projects/myproject/c.d.ts": 1
+} 
+
+directoryExists:: {
+ "/user/username/projects/myproject": 4,
+ "/user/username/projects/myproject/node_modules/@types": 1,
+ "/user/username/projects/node_modules/@types": 1,
+ "/user/username/node_modules/@types": 1,
+ "/user/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 Change:: Rename property d to d2 of class C to initialize signatures
 
 Input::
@@ -173,6 +204,14 @@ export class C
     d2: number;
 }
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -309,6 +348,14 @@ exitCode:: ExitStatus.undefined
 }
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 Change:: Rename property d2 to d of class C to revert back to original text
 
 Input::
@@ -318,6 +365,14 @@ export class C
     d: number;
 }
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -437,6 +492,14 @@ exitCode:: ExitStatus.undefined
 }
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 Change:: Rename property d to d2 of class C
 
 Input::
@@ -446,6 +509,14 @@ export class C
     d2: number;
 }
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -581,3 +652,11 @@ exitCode:: ExitStatus.undefined
   "size": 1005
 }
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 

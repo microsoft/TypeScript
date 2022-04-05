@@ -102,6 +102,14 @@ export function run() {
 
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 /a/lib/tsc.js -b -w sample1/tests
 Output::
 >> Screen clear
@@ -467,6 +475,41 @@ export declare const m: typeof mod;
 }
 
 
+fileExists:: {
+ "/user/username/projects/sample1/core/anothermodule.ts": 1,
+ "/user/username/projects/sample1/core/index.ts": 1,
+ "/user/username/projects/sample1/core/anothermodule.js": 1,
+ "/user/username/projects/sample1/core/anothermodule.d.ts": 1,
+ "/user/username/projects/sample1/logic/index.ts": 1,
+ "/user/username/projects/sample1/logic/index.js": 1,
+ "/user/username/projects/sample1/logic/index.d.ts": 1,
+ "/user/username/projects/sample1/tests/index.ts": 1,
+ "/user/username/projects/sample1/tests/index.js": 1,
+ "/user/username/projects/sample1/tests/index.d.ts": 1
+} 
+
+directoryExists:: {
+ "/user/username/projects/sample1/core/node_modules/@types": 1,
+ "/user/username/projects/sample1/node_modules/@types": 3,
+ "/user/username/projects/node_modules/@types": 3,
+ "/user/username/node_modules/@types": 3,
+ "/user/node_modules/@types": 3,
+ "/node_modules/@types": 3,
+ "/user/username/projects/sample1/core": 8,
+ "/user/username/projects/sample1/logic/node_modules/@types": 1,
+ "/user/username/projects/sample1/logic": 2,
+ "/user/username/projects/sample1/tests/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {
+ "/user/username/projects/sample1/core/anothermodule.ts": 1,
+ "/user/username/projects/sample1/core/index.ts": 1,
+ "/user/username/projects/sample1/logic/index.ts": 1,
+ "/user/username/projects/sample1/tests/index.ts": 1
+} 
+
+setModifiedTimes:: {} 
+
 Change:: Make change to core
 
 Input::
@@ -477,6 +520,14 @@ export function multiply(a: number, b: number) { return a * b; }
 
 export class someClass { }
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -600,9 +651,46 @@ export declare class someClass {
 }
 
 
+fileExists:: {
+ "/user/username/projects/sample1/core/anothermodule.ts": 1,
+ "/user/username/projects/sample1/core/index.ts": 1,
+ "/user/username/projects/sample1/core/anothermodule.js": 1,
+ "/user/username/projects/sample1/core/index.d.ts": 1
+} 
+
+directoryExists:: {
+ "/user/username/projects/sample1/core/node_modules/@types": 1,
+ "/user/username/projects/sample1/node_modules/@types": 1,
+ "/user/username/projects/node_modules/@types": 1,
+ "/user/username/node_modules/@types": 1,
+ "/user/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {
+ "/user/username/projects/sample1/core/anothermodule.ts": 1,
+ "/user/username/projects/sample1/core/index.ts": 1,
+ "/user/username/projects/sample1/core/anothermodule.js": 1,
+ "/user/username/projects/sample1/core/anothermodule.d.ts": 1
+} 
+
+setModifiedTimes:: {
+ "/user/username/projects/sample1/core/anothermodule.js": 1,
+ "/user/username/projects/sample1/core/anothermodule.d.ts": 1,
+ "/user/username/projects/sample1/core/anothermodule.d.ts.map": 1
+} 
+
 Change:: Build logic or update time stamps
 
 Input::
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 
@@ -721,9 +809,37 @@ exitCode:: ExitStatus.undefined
 }
 
 
+fileExists:: {
+ "/user/username/projects/sample1/logic/index.d.ts": 1
+} 
+
+directoryExists:: {
+ "/user/username/projects/sample1/core": 4,
+ "/user/username/projects/sample1/logic/node_modules/@types": 1,
+ "/user/username/projects/sample1/node_modules/@types": 1,
+ "/user/username/projects/node_modules/@types": 1,
+ "/user/username/node_modules/@types": 1,
+ "/user/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {
+ "/user/username/projects/sample1/logic/index.d.ts": 1
+} 
+
+setModifiedTimes:: {} 
+
 Change:: Build Tests
 
 Input::
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 [[90m12:02:08 AM[0m] Found 0 errors. Watching for file changes.
@@ -858,6 +974,28 @@ exitCode:: ExitStatus.undefined
 }
 
 
+fileExists:: {
+ "/user/username/projects/sample1/logic/index.ts": 1,
+ "/user/username/projects/sample1/tests/index.d.ts": 1
+} 
+
+directoryExists:: {
+ "/user/username/projects/sample1/core": 4,
+ "/user/username/projects/sample1/logic": 2,
+ "/user/username/projects/sample1/tests/node_modules/@types": 1,
+ "/user/username/projects/sample1/node_modules/@types": 1,
+ "/user/username/projects/node_modules/@types": 1,
+ "/user/username/node_modules/@types": 1,
+ "/user/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {
+ "/user/username/projects/sample1/tests/index.d.ts": 1
+} 
+
+setModifiedTimes:: {} 
+
 Change:: Revert core file
 
 Input::
@@ -867,6 +1005,14 @@ export function leftPad(s: string, n: number) { return s + n; }
 export function multiply(a: number, b: number) { return a * b; }
 
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -982,9 +1128,46 @@ export declare function multiply(a: number, b: number): number;
 }
 
 
+fileExists:: {
+ "/user/username/projects/sample1/core/anothermodule.ts": 1,
+ "/user/username/projects/sample1/core/index.ts": 1,
+ "/user/username/projects/sample1/core/anothermodule.js": 1,
+ "/user/username/projects/sample1/core/index.d.ts": 1
+} 
+
+directoryExists:: {
+ "/user/username/projects/sample1/core/node_modules/@types": 1,
+ "/user/username/projects/sample1/node_modules/@types": 1,
+ "/user/username/projects/node_modules/@types": 1,
+ "/user/username/node_modules/@types": 1,
+ "/user/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {
+ "/user/username/projects/sample1/core/anothermodule.ts": 1,
+ "/user/username/projects/sample1/core/index.ts": 1,
+ "/user/username/projects/sample1/core/anothermodule.js": 1,
+ "/user/username/projects/sample1/core/anothermodule.d.ts": 1
+} 
+
+setModifiedTimes:: {
+ "/user/username/projects/sample1/core/anothermodule.js": 1,
+ "/user/username/projects/sample1/core/anothermodule.d.ts": 1,
+ "/user/username/projects/sample1/core/anothermodule.d.ts.map": 1
+} 
+
 Change:: Build logic or update time stamps
 
 Input::
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 
@@ -1103,9 +1286,37 @@ exitCode:: ExitStatus.undefined
 }
 
 
+fileExists:: {
+ "/user/username/projects/sample1/logic/index.d.ts": 1
+} 
+
+directoryExists:: {
+ "/user/username/projects/sample1/core": 4,
+ "/user/username/projects/sample1/logic/node_modules/@types": 1,
+ "/user/username/projects/sample1/node_modules/@types": 1,
+ "/user/username/projects/node_modules/@types": 1,
+ "/user/username/node_modules/@types": 1,
+ "/user/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {
+ "/user/username/projects/sample1/logic/index.d.ts": 1
+} 
+
+setModifiedTimes:: {} 
+
 Change:: Build Tests
 
 Input::
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 [[90m12:02:56 AM[0m] Found 0 errors. Watching for file changes.
@@ -1240,6 +1451,28 @@ exitCode:: ExitStatus.undefined
 }
 
 
+fileExists:: {
+ "/user/username/projects/sample1/logic/index.ts": 1,
+ "/user/username/projects/sample1/tests/index.d.ts": 1
+} 
+
+directoryExists:: {
+ "/user/username/projects/sample1/core": 4,
+ "/user/username/projects/sample1/logic": 2,
+ "/user/username/projects/sample1/tests/node_modules/@types": 1,
+ "/user/username/projects/sample1/node_modules/@types": 1,
+ "/user/username/projects/node_modules/@types": 1,
+ "/user/username/node_modules/@types": 1,
+ "/user/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {
+ "/user/username/projects/sample1/tests/index.d.ts": 1
+} 
+
+setModifiedTimes:: {} 
+
 Change:: Make two changes
 
 Input::
@@ -1251,6 +1484,14 @@ export function multiply(a: number, b: number) { return a * b; }
 export class someClass { }
 export class someClass2 { }
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -1382,9 +1623,46 @@ export declare class someClass2 {
 }
 
 
+fileExists:: {
+ "/user/username/projects/sample1/core/anothermodule.ts": 1,
+ "/user/username/projects/sample1/core/index.ts": 1,
+ "/user/username/projects/sample1/core/anothermodule.js": 1,
+ "/user/username/projects/sample1/core/index.d.ts": 1
+} 
+
+directoryExists:: {
+ "/user/username/projects/sample1/core/node_modules/@types": 1,
+ "/user/username/projects/sample1/node_modules/@types": 1,
+ "/user/username/projects/node_modules/@types": 1,
+ "/user/username/node_modules/@types": 1,
+ "/user/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {
+ "/user/username/projects/sample1/core/anothermodule.ts": 1,
+ "/user/username/projects/sample1/core/index.ts": 1,
+ "/user/username/projects/sample1/core/anothermodule.js": 1,
+ "/user/username/projects/sample1/core/anothermodule.d.ts": 1
+} 
+
+setModifiedTimes:: {
+ "/user/username/projects/sample1/core/anothermodule.js": 1,
+ "/user/username/projects/sample1/core/anothermodule.d.ts": 1,
+ "/user/username/projects/sample1/core/anothermodule.d.ts.map": 1
+} 
+
 Change:: Build logic or update time stamps
 
 Input::
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 
@@ -1503,9 +1781,37 @@ exitCode:: ExitStatus.undefined
 }
 
 
+fileExists:: {
+ "/user/username/projects/sample1/logic/index.d.ts": 1
+} 
+
+directoryExists:: {
+ "/user/username/projects/sample1/core": 4,
+ "/user/username/projects/sample1/logic/node_modules/@types": 1,
+ "/user/username/projects/sample1/node_modules/@types": 1,
+ "/user/username/projects/node_modules/@types": 1,
+ "/user/username/node_modules/@types": 1,
+ "/user/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {
+ "/user/username/projects/sample1/logic/index.d.ts": 1
+} 
+
+setModifiedTimes:: {} 
+
 Change:: Build Tests
 
 Input::
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 [[90m12:03:47 AM[0m] Found 0 errors. Watching for file changes.
@@ -1639,3 +1945,25 @@ exitCode:: ExitStatus.undefined
   "size": 1692
 }
 
+
+fileExists:: {
+ "/user/username/projects/sample1/logic/index.ts": 1,
+ "/user/username/projects/sample1/tests/index.d.ts": 1
+} 
+
+directoryExists:: {
+ "/user/username/projects/sample1/core": 4,
+ "/user/username/projects/sample1/logic": 2,
+ "/user/username/projects/sample1/tests/node_modules/@types": 1,
+ "/user/username/projects/sample1/node_modules/@types": 1,
+ "/user/username/projects/node_modules/@types": 1,
+ "/user/username/node_modules/@types": 1,
+ "/user/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {
+ "/user/username/projects/sample1/tests/index.d.ts": 1
+} 
+
+setModifiedTimes:: {} 

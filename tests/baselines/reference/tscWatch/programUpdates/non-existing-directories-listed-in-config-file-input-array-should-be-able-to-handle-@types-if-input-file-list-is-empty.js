@@ -25,6 +25,14 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 /a/lib/tsc.js -w -p /a/tsconfig.json
 Output::
 >> Screen clear
@@ -60,3 +68,15 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+
+fileExists:: {
+ "/a/tsconfig.json": 1
+} 
+
+directoryExists:: {
+ "/a/tsconfig.json": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 

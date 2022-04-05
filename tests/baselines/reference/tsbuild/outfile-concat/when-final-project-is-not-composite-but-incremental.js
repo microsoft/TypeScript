@@ -150,6 +150,40 @@ Output::
 
 exitCode:: ExitStatus.Success
 
+getModifiedTime:: {
+ "/src/first/first_PART1.ts": 1,
+ "/src/first/first_part2.ts": 1,
+ "/src/first/first_part3.ts": 1,
+ "/src/second/second_part1.ts": 1,
+ "/src/second/second_part2.ts": 1,
+ "/src/third/third_part1.ts": 1
+}
+
+setModifiedTime:: {}
+
+fileExists:: {
+ "/src/first/first_PART1.ts": 1,
+ "/src/first/first_part2.ts": 1,
+ "/src/first/first_part3.ts": 1,
+ "/src/first/bin/first-output.js": 3,
+ "/src/first/bin/first-output.d.ts": 2,
+ "/src/second/second_part1.ts": 1,
+ "/src/second/second_part2.ts": 1,
+ "/src/2/second-output.js": 3,
+ "/src/2/second-output.d.ts": 2,
+ "/src/third/third_part1.ts": 1,
+ "/src/third/thirdjs/output/third-output.js": 2,
+ "/src/third/thirdjs/output/third-output.d.ts": 2
+}
+
+directoryExists:: {
+ "/src/first/node_modules/@types": 1,
+ "/src/node_modules/@types": 3,
+ "/node_modules/@types": 3,
+ "/src/second/node_modules/@types": 1,
+ "/src/third/node_modules/@types": 1
+}
+
 
 //// [/src/2/second-output.d.ts]
 declare namespace N {

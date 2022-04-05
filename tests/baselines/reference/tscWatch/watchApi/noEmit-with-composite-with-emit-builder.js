@@ -22,6 +22,14 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 tsc --w --noEmit
 Output::
 >> Screen clear
@@ -120,6 +128,20 @@ exitCode:: ExitStatus.undefined
   "size": 742
 }
 
+
+fileExists:: {} 
+
+directoryExists:: {
+ "/user/username/projects/myproject/node_modules/@types": 1,
+ "/user/username/projects/node_modules/@types": 1,
+ "/user/username/node_modules/@types": 1,
+ "/user/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 tsc --w
 Output::
@@ -226,6 +248,20 @@ export declare const y = 10;
 
 
 
+fileExists:: {} 
+
+directoryExists:: {
+ "/user/username/projects/myproject/node_modules/@types": 1,
+ "/user/username/projects/node_modules/@types": 1,
+ "/user/username/node_modules/@types": 1,
+ "/user/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 Change:: Add comment
 
 Input::
@@ -233,6 +269,14 @@ Input::
 export const x = 10;
 // SomeComment
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 tsc --w --noEmit
 Output::
@@ -324,6 +368,20 @@ exitCode:: ExitStatus.undefined
   "size": 890
 }
 
+
+fileExists:: {} 
+
+directoryExists:: {
+ "/user/username/projects/myproject/node_modules/@types": 1,
+ "/user/username/projects/node_modules/@types": 1,
+ "/user/username/node_modules/@types": 1,
+ "/user/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 tsc --w
 Output::
@@ -417,6 +475,20 @@ exports.x = 10;
 
 //// [/user/username/projects/myproject/main.d.ts] file written with same contents
 
+fileExists:: {} 
+
+directoryExists:: {
+ "/user/username/projects/myproject/node_modules/@types": 1,
+ "/user/username/projects/node_modules/@types": 1,
+ "/user/username/node_modules/@types": 1,
+ "/user/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 Change:: Add comment
 
 Input::
@@ -425,6 +497,14 @@ export const x = 10;
 // SomeComment
 // SomeComment
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 tsc --w
 Output::
@@ -520,3 +600,17 @@ exports.x = 10;
 
 
 //// [/user/username/projects/myproject/main.d.ts] file written with same contents
+
+fileExists:: {} 
+
+directoryExists:: {
+ "/user/username/projects/myproject/node_modules/@types": 1,
+ "/user/username/projects/node_modules/@types": 1,
+ "/user/username/node_modules/@types": 1,
+ "/user/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 

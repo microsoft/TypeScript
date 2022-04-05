@@ -93,6 +93,29 @@ Output::
 
 exitCode:: ExitStatus.Success
 
+getModifiedTime:: {
+ "/src/first/first_PART1.ts": 1,
+ "/src/third/third_part1.ts": 1
+}
+
+setModifiedTime:: {}
+
+fileExists:: {
+ "/src/first/first_PART1.ts": 1,
+ "/src/first/bin/first-output.js": 3,
+ "/src/first/bin/first-output.d.ts": 2,
+ "/src/third/third_part1.ts": 1,
+ "/src/third/thirdjs/output/third-output.js": 2,
+ "/src/third/thirdjs/output/third-output.d.ts": 2
+}
+
+directoryExists:: {
+ "/src/first/node_modules/@types": 1,
+ "/src/node_modules/@types": 2,
+ "/node_modules/@types": 2,
+ "/src/third/node_modules/@types": 1
+}
+
 
 //// [/src/first/bin/first-output.d.ts]
 declare const A = 1;

@@ -19,6 +19,14 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 /a/lib/tsc.js --w -p /user/username/projects/myproject/tsconfig.json
 Output::
 >> Screen clear
@@ -73,6 +81,28 @@ myapp.component("hello");
 
 
 
+fileExists:: {
+ "/user/username/projects/myproject/tsconfig.json": 1
+} 
+
+directoryExists:: {
+ "/user/username/projects/myproject/tsconfig.json": 1,
+ "/user/username/projects/myproject/node_modules/@types": 1,
+ "/user/username/projects/node_modules/@types": 1,
+ "/user/username/node_modules/@types": 1,
+ "/user/node_modules/@types": 1,
+ "/node_modules/@types": 1,
+ "/user/username/projects/myproject/node_modules": 1,
+ "/user/username/projects/node_modules": 1,
+ "/user/username/node_modules": 1,
+ "/user/node_modules": 1,
+ "/node_modules": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 Change:: npm install ts-types
 
 Input::
@@ -85,6 +115,14 @@ declare namespace myapp {
     function component(str: string): number;
 }
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -135,9 +173,39 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/lib/app.js] file written with same contents
 
+fileExists:: {
+ "/user/username/projects/myproject/node_modules/@myapp/ts-types/package.json": 1,
+ "/user/username/projects/myproject/node_modules/@myapp/ts-types.d.ts": 1,
+ "/user/username/projects/myproject/node_modules/@myapp/ts-types/types/somefile.define.d.ts": 2
+} 
+
+directoryExists:: {
+ "/user/username/projects/myproject/node_modules/@types": 1,
+ "/user/username/projects/node_modules/@types": 1,
+ "/user/username/node_modules/@types": 1,
+ "/user/node_modules/@types": 1,
+ "/node_modules/@types": 1,
+ "/user/username/projects/myproject/node_modules": 1,
+ "/user/username/projects/myproject/node_modules/@myapp/ts-types": 2,
+ "/user/username/projects/myproject/node_modules/@myapp": 1,
+ "/user/username/projects/myproject/node_modules/@myapp/ts-types/types": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 Change:: No change, just check program
 
 Input::
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 
@@ -163,3 +231,11 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 

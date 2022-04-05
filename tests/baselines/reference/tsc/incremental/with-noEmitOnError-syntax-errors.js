@@ -72,6 +72,22 @@ Shape signatures in builder refreshed for::
 /src/src/main.ts (used version)
 /src/src/other.ts (used version)
 
+getModifiedTime:: {}
+
+setModifiedTime:: {}
+
+fileExists:: {
+ "src/tsconfig.json": 1,
+ "/src/shared/types/db.ts": 1
+}
+
+directoryExists:: {
+ "src": 1,
+ "/src/shared/types": 1,
+ "/src/node_modules/@types": 1,
+ "/node_modules/@types": 1
+}
+
 
 //// [/src/dev-build/tsconfig.tsbuildinfo]
 {"program":{"fileNames":["../../lib/lib.d.ts","../shared/types/db.ts","../src/main.ts","../src/other.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-9621097780-export interface A {\r\n    name: string;\r\n}","2626879346-import { A } from \"../shared/types/db\";\r\nconst a = {\r\n    lastName: 'sdsd'\r\n;","11373096570-console.log(\"hi\");\r\nexport { }"],"options":{"noEmitOnError":true,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3,4],"affectedFilesPendingEmit":[[2,1],[3,1],[4,1]]},"version":"FakeTSVersion"}
@@ -178,6 +194,22 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
+getModifiedTime:: {}
+
+setModifiedTime:: {}
+
+fileExists:: {
+ "src/tsconfig.json": 1,
+ "/src/shared/types/db.ts": 1
+}
+
+directoryExists:: {
+ "src": 1,
+ "/src/shared/types": 1,
+ "/src/node_modules/@types": 1,
+ "/node_modules/@types": 1
+}
+
 
 
 
@@ -208,6 +240,22 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /src/src/main.ts (computed .d.ts)
+
+getModifiedTime:: {}
+
+setModifiedTime:: {}
+
+fileExists:: {
+ "src/tsconfig.json": 1,
+ "/src/shared/types/db.ts": 1
+}
+
+directoryExists:: {
+ "src": 1,
+ "/src/shared/types": 1,
+ "/src/node_modules/@types": 1,
+ "/node_modules/@types": 1
+}
 
 
 //// [/src/dev-build/shared/types/db.js]
@@ -307,5 +355,21 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
+
+getModifiedTime:: {}
+
+setModifiedTime:: {}
+
+fileExists:: {
+ "src/tsconfig.json": 1,
+ "/src/shared/types/db.ts": 1
+}
+
+directoryExists:: {
+ "src": 1,
+ "/src/shared/types": 1,
+ "/src/node_modules/@types": 1,
+ "/node_modules/@types": 1
+}
 
 

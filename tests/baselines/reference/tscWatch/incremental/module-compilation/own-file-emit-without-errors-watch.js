@@ -22,6 +22,14 @@ export const y = 20;
 {"compilerOptions":{"incremental":true,"module":"amd"}}
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 /a/lib/tsc.js -w
 Output::
 >> Screen clear
@@ -129,12 +137,36 @@ define(["require", "exports"], function (require, exports) {
 }
 
 
+fileExists:: {
+ "/users/username/projects/project/tsconfig.json": 1
+} 
+
+directoryExists:: {
+ "/users/username/projects/project/node_modules/@types": 1,
+ "/users/username/projects/node_modules/@types": 1,
+ "/users/username/node_modules/@types": 1,
+ "/users/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 Change::
 
 Input::
 //// [/users/username/projects/project/file2.ts]
 export const z = 10;
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -228,3 +260,19 @@ define(["require", "exports"], function (require, exports) {
   "size": 765
 }
 
+
+fileExists:: {
+ "/users/username/projects/project/tsconfig.json": 1
+} 
+
+directoryExists:: {
+ "/users/username/projects/project/node_modules/@types": 1,
+ "/users/username/projects/node_modules/@types": 1,
+ "/users/username/node_modules/@types": 1,
+ "/users/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 

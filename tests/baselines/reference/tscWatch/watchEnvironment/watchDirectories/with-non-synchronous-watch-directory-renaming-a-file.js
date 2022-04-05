@@ -22,6 +22,14 @@ export const x = 10;
 {"compilerOptions":{"outDir":"dist"}}
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 /a/lib/tsc.js --w -p /user/username/projects/myproject/tsconfig.json
 Output::
 >> Screen clear
@@ -86,9 +94,38 @@ exports.__esModule = true;
 
 
 
+fileExists:: {
+ "/user/username/projects/myproject/tsconfig.json": 1,
+ "/user/username/projects/myproject/src/file2.ts": 1
+} 
+
+directoryExists:: {
+ "/user/username/projects/myproject/tsconfig.json": 1,
+ "/user/username/projects/myproject/src": 3,
+ "/user/username/projects/myproject/node_modules/@types": 2,
+ "/user/username/projects/node_modules/@types": 1,
+ "/user/username/node_modules/@types": 1,
+ "/user/node_modules/@types": 1,
+ "/node_modules/@types": 1,
+ "/user/username/projects/myproject/dist": 2,
+ "/user/username/projects/myproject": 2
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 Change:: No change
 
 Input::
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 
@@ -117,6 +154,14 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 Change:: rename the file
 
 Input::
@@ -124,6 +169,16 @@ Input::
 export const x = 10;
 
 //// [/user/username/projects/myproject/src/file2.ts] deleted
+
+fileExists:: {} 
+
+directoryExists:: {
+ "/user/username/projects/myproject/src": 2
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -176,9 +231,38 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/dist/file1.js] file written with same contents
 
+fileExists:: {
+ "/user/username/projects/myproject/src/file2.tsx": 1,
+ "/user/username/projects/myproject/src/file2.d.ts": 1,
+ "/user/username/projects/myproject/src/file2.js": 1,
+ "/user/username/projects/myproject/src/file2.jsx": 1
+} 
+
+directoryExists:: {
+ "/user/username/projects/myproject/src": 4,
+ "/user/username/projects/myproject/src/file2": 2,
+ "/user/username/projects/myproject/node_modules/@types": 1,
+ "/user/username/projects/node_modules/@types": 1,
+ "/user/username/node_modules/@types": 1,
+ "/user/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 Change:: Pending directory watchers and program update
 
 Input::
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -239,3 +323,28 @@ exports.x = void 0;
 exports.x = 10;
 
 
+
+fileExists:: {
+ "/user/username/projects/myproject/src/file2.ts": 1,
+ "/user/username/projects/myproject/src/file2.tsx": 1,
+ "/user/username/projects/myproject/src/file2.d.ts": 1,
+ "/user/username/projects/myproject/src/file2.js": 1,
+ "/user/username/projects/myproject/src/file2.jsx": 1,
+ "/user/username/projects/myproject/dist/renamed.js": 1
+} 
+
+directoryExists:: {
+ "/user/username/projects/myproject/src": 1,
+ "/user/username/projects/myproject/src/file2": 2,
+ "/user/username/projects/myproject/node_modules/@types": 1,
+ "/user/username/projects/node_modules/@types": 1,
+ "/user/username/node_modules/@types": 1,
+ "/user/node_modules/@types": 1,
+ "/node_modules/@types": 1,
+ "/user/username/projects/myproject/dist": 2,
+ "/user/username/projects/myproject/dist/renamed.js": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 

@@ -36,6 +36,14 @@ export function bar() { }
 
 //// [/user/username/projects/myproject/node_modules/b] symlink(/user/username/projects/myproject/packages/B)
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 /a/lib/tsc.js --w --p /user/username/projects/myproject/packages/A/tsconfig.json
 Output::
 >> Screen clear
@@ -180,3 +188,38 @@ export {};
   "size": 948
 }
 
+
+fileExists:: {
+ "/user/username/projects/myproject/node_modules/b/package.json": 1,
+ "/user/username/projects/myproject/node_modules/b.ts": 1,
+ "/user/username/projects/myproject/node_modules/b.tsx": 1,
+ "/user/username/projects/myproject/node_modules/b.d.ts": 1,
+ "/user/username/projects/myproject/node_modules/b/lib/index.d.ts": 1,
+ "/user/username/projects/myproject/node_modules/b/lib/bar/package.json": 1,
+ "/user/username/projects/myproject/node_modules/b/lib/bar.ts": 1,
+ "/user/username/projects/myproject/node_modules/b/lib/bar.tsx": 1,
+ "/user/username/projects/myproject/node_modules/b/lib/bar.d.ts": 1
+} 
+
+directoryExists:: {
+ "/user/username/projects/myproject/packages/a/src/node_modules": 2,
+ "/user/username/projects/myproject/packages/a/node_modules": 2,
+ "/user/username/projects/myproject/packages/node_modules": 2,
+ "/user/username/projects/myproject/node_modules": 3,
+ "/user/username/projects/myproject/node_modules/b": 2,
+ "/user/username/projects/myproject/node_modules/b/lib": 2,
+ "/user/username/projects/myproject/node_modules/b/lib/bar": 1,
+ "/user/username/projects/myproject/packages/a/node_modules/@types": 1,
+ "/user/username/projects/myproject/packages/node_modules/@types": 1,
+ "/user/username/projects/myproject/node_modules/@types": 1,
+ "/user/username/projects/node_modules/@types": 1,
+ "/user/username/node_modules/@types": 1,
+ "/user/node_modules/@types": 1,
+ "/node_modules/@types": 1,
+ "/user/username/projects/myproject/packages/a/lib": 1,
+ "/user/username/projects/myproject/packages/a": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 

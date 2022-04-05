@@ -62,6 +62,33 @@ Resolving real path for '/src/packages/typeroot2/sometype/index.d.ts', result '/
 ======== Type reference directive 'sometype' was successfully resolved to '/src/packages/typeroot2/sometype/index.d.ts', primary: true. ========
 exitCode:: ExitStatus.Success
 
+getModifiedTime:: {
+ "/src/packages/pkg1_index.ts": 1,
+ "/src/packages/pkg2_index.ts": 1
+}
+
+setModifiedTime:: {}
+
+fileExists:: {
+ "/src/packages/pkg1_index.ts": 1,
+ "/src/packages/pkg1_index.js": 1,
+ "/src/packages/typeroot1/sometype/package.json": 1,
+ "/src/packages/typeroot1/sometype/index.d.ts": 1,
+ "/src/packages/pkg1_index.d.ts": 1,
+ "/src/packages/pkg2_index.ts": 1,
+ "/src/packages/pkg2_index.js": 1,
+ "/src/packages/typeroot2/sometype/package.json": 1,
+ "/src/packages/typeroot2/sometype/index.d.ts": 1,
+ "/src/packages/pkg2_index.d.ts": 1
+}
+
+directoryExists:: {
+ "/src/packages/typeroot1": 2,
+ "/src/packages/typeroot1/sometype": 3,
+ "/src/packages/typeroot2": 2,
+ "/src/packages/typeroot2/sometype": 3
+}
+
 
 //// [/src/packages/pkg1.tsconfig.tsbuildinfo]
 {"program":{"fileNames":["../../lib/lib.d.ts","./pkg1_index.ts","./typeroot1/sometype/index.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-9601687719-export const theNum: TheNum = \"type1\";","signature":"-5685633868-/// <reference types=\"sometype\" />\r\nexport declare const theNum: TheNum;\r\n"},{"version":"-4557394441-declare type TheNum = \"type1\";","affectsGlobalScope":true}],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3]},"version":"FakeTSVersion"}

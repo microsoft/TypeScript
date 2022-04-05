@@ -119,6 +119,35 @@ Output::
 /lib/tsc -b /src
 exitCode:: ExitStatus.Success
 
+getModifiedTime:: {
+ "/src/common/nominal.js": 1,
+ "/src/sub-project/index.js": 1,
+ "/src/sub-project-2/index.js": 1
+}
+
+setModifiedTime:: {}
+
+fileExists:: {
+ "/src/tsconfig.base.json": 3,
+ "/src/common/nominal.js": 1,
+ "/src/common/common.js": 3,
+ "/src/common/common.d.ts": 2,
+ "/src/sub-project/index.js": 1,
+ "/src/sub-project/sub-project.js": 3,
+ "/src/sub-project/sub-project.d.ts": 2,
+ "/src/sub-project-2/index.js": 1,
+ "/src/sub-project-2/sub-project-2.js": 2,
+ "/src/sub-project-2/sub-project-2.d.ts": 2
+}
+
+directoryExists:: {
+ "/src/common/node_modules/@types": 1,
+ "/src/node_modules/@types": 3,
+ "/node_modules/@types": 3,
+ "/src/sub-project/node_modules/@types": 1,
+ "/src/sub-project-2/node_modules/@types": 1
+}
+
 
 //// [/src/common/common.d.ts]
 type Nominal<T, Name> = T & {
@@ -477,6 +506,48 @@ const c = /** @type {*} */(undefined);
 Output::
 /lib/tsc -b /src
 exitCode:: ExitStatus.Success
+
+getModifiedTime:: {
+ "/src/common/nominal.js": 1,
+ "/src/common/common.js": 1,
+ "/src/common/common.d.ts": 2,
+ "/src/common/common.tsbuildinfo": 1,
+ "/src/common/tsconfig.json": 1,
+ "/src/tsconfig.base.json": 2,
+ "/src/sub-project/index.js": 1,
+ "/src/sub-project/sub-project.js": 1,
+ "/src/sub-project/sub-project.d.ts": 1,
+ "/src/sub-project-2/index.js": 1,
+ "/src/sub-project-2/sub-project-2.js": 1,
+ "/src/sub-project-2/sub-project-2.d.ts": 3,
+ "/src/sub-project-2/sub-project-2.tsbuildinfo": 1,
+ "/src/sub-project-2/tsconfig.json": 1
+}
+
+setModifiedTime:: {
+ "/src/sub-project-2/sub-project-2.d.ts": 1
+}
+
+fileExists:: {
+ "/src/tsconfig.base.json": 3,
+ "/src/common/nominal.js": 1,
+ "/src/common/common.js": 1,
+ "/src/common/common.d.ts": 1,
+ "/src/common/common.tsbuildinfo": 1,
+ "/src/sub-project/index.js": 1,
+ "/src/sub-project/sub-project.js": 2,
+ "/src/sub-project/sub-project.d.ts": 2,
+ "/src/sub-project-2/index.js": 1,
+ "/src/sub-project-2/sub-project-2.js": 2,
+ "/src/sub-project-2/sub-project-2.d.ts": 2,
+ "/src/sub-project-2/sub-project-2.tsbuildinfo": 1
+}
+
+directoryExists:: {
+ "/src/sub-project/node_modules/@types": 1,
+ "/src/node_modules/@types": 1,
+ "/node_modules/@types": 1
+}
 
 
 //// [/src/sub-project/sub-project.d.ts] file written with same contents

@@ -34,6 +34,14 @@ interface Array<T> { length: number; [n: number]: T; }
 import {y} from "./file1Consumer1";
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 /a/lib/tsc.js --w -p /a/b/tsconfig.json
 Output::
 >> Screen clear
@@ -139,12 +147,38 @@ exports.Foo4 = 10;
 
 
 
+fileExists:: {
+ "/a/b/tsconfig.json": 1,
+ "/a/b/modulefile1.ts": 1,
+ "/a/b/file1consumer1.ts": 1
+} 
+
+directoryExists:: {
+ "/a/b/tsconfig.json": 1,
+ "/a/b": 4,
+ "/a/b/node_modules/@types": 1,
+ "/a/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 Change:: change file1Consumer1
 
 Input::
 //// [/a/b/file1Consumer1.ts]
 import {Foo} from "./moduleFile1"; export var y = 10;export var T: number;
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -211,12 +245,28 @@ exports.y = 10;
 
 //// [/a/b/file1Consumer1Consumer1.js] file written with same contents
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 Change:: Change the content of moduleFile1 to `export var T: number;export function Foo() { };`
 
 Input::
 //// [/a/b/moduleFile1.ts]
 export var T: number;export function Foo() { };
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -288,6 +338,14 @@ exports.Foo = Foo;
 //// [/a/b/file1Consumer1.js] file written with same contents
 //// [/a/b/file1Consumer2.js] file written with same contents
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 Change:: change file1Consumer1 and moduleFile1
 
 Input::
@@ -297,6 +355,14 @@ export var T2: number;export function Foo() { };
 //// [/a/b/file1Consumer1.ts]
 import {Foo} from "./moduleFile1"; export var y = 10;export var T: number;export var T2: number;
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -376,3 +442,11 @@ exports.y = 10;
 
 //// [/a/b/file1Consumer1Consumer1.js] file written with same contents
 //// [/a/b/file1Consumer2.js] file written with same contents
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 

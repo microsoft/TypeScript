@@ -36,6 +36,14 @@ export const App = () => <div propA={true}></div>;
 {"compilerOptions":{"jsx":"react-jsx","jsxImportSource":"react","forceConsistentCasingInFileNames":true},"files":["node_modules/react/jsx-Runtime/index.d.ts","index.tsx"]}
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 /a/lib/tsc.js --w --p . --explainFiles
 Output::
 >> Screen clear
@@ -110,3 +118,30 @@ var App = function () { return (0, jsx_runtime_1.jsx)("div", { propA: true }); }
 exports.App = App;
 
 
+
+fileExists:: {
+ "/user/username/projects/myproject/tsconfig.json": 1,
+ "/user/username/projects/myproject/node_modules/react/jsx-runtime/package.json": 1,
+ "/user/username/projects/myproject/node_modules/react/package.json": 1,
+ "/user/username/projects/myproject/node_modules/react/jsx-runtime.ts": 1,
+ "/user/username/projects/myproject/node_modules/react/jsx-runtime.tsx": 1,
+ "/user/username/projects/myproject/node_modules/react/jsx-runtime.d.ts": 1,
+ "/user/username/projects/myproject/node_modules/react/jsx-runtime/index.ts": 1,
+ "/user/username/projects/myproject/node_modules/react/jsx-runtime/index.tsx": 1,
+ "/user/username/projects/myproject/node_modules/react/jsx-runtime/index.d.ts": 2
+} 
+
+directoryExists:: {
+ "/user/username/projects/myproject/node_modules": 1,
+ "/user/username/projects/myproject/node_modules/react/jsx-runtime": 3,
+ "/user/username/projects/myproject/node_modules/react": 2,
+ "/user/username/projects/myproject/node_modules/@types": 1,
+ "/user/username/projects/node_modules/@types": 1,
+ "/user/username/node_modules/@types": 1,
+ "/user/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 

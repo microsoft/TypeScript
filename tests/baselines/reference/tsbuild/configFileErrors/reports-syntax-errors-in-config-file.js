@@ -45,6 +45,24 @@ Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
+getModifiedTime:: {
+ "/src/a.ts": 1,
+ "/src/b.ts": 1
+}
+
+setModifiedTime:: {}
+
+fileExists:: {
+ "/src/a.ts": 1,
+ "/src/b.ts": 1,
+ "/src/a.js": 1
+}
+
+directoryExists:: {
+ "/src/node_modules/@types": 1,
+ "/node_modules/@types": 1
+}
+
 
 
 
@@ -76,6 +94,24 @@ Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
+getModifiedTime:: {
+ "/src/a.ts": 1,
+ "/src/b.ts": 1
+}
+
+setModifiedTime:: {}
+
+fileExists:: {
+ "/src/a.ts": 1,
+ "/src/b.ts": 1,
+ "/src/a.js": 1
+}
+
+directoryExists:: {
+ "/src/node_modules/@types": 1,
+ "/node_modules/@types": 1
+}
+
 
 
 
@@ -98,6 +134,24 @@ Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
+getModifiedTime:: {
+ "/src/a.ts": 1,
+ "/src/b.ts": 1
+}
+
+setModifiedTime:: {}
+
+fileExists:: {
+ "/src/a.ts": 1,
+ "/src/b.ts": 1,
+ "/src/a.js": 1
+}
+
+directoryExists:: {
+ "/src/node_modules/@types": 1,
+ "/node_modules/@types": 1
+}
+
 
 
 
@@ -117,6 +171,24 @@ Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
+getModifiedTime:: {
+ "/src/a.ts": 1,
+ "/src/b.ts": 1
+}
+
+setModifiedTime:: {}
+
+fileExists:: {
+ "/src/a.ts": 1,
+ "/src/b.ts": 1,
+ "/src/a.js": 1
+}
+
+directoryExists:: {
+ "/src/node_modules/@types": 1,
+ "/node_modules/@types": 1
+}
+
 
 
 
@@ -130,6 +202,25 @@ Input::
 Output::
 /lib/tsc --b /src/tsconfig.json
 exitCode:: ExitStatus.Success
+
+getModifiedTime:: {
+ "/src/a.ts": 1,
+ "/src/b.ts": 1
+}
+
+setModifiedTime:: {}
+
+fileExists:: {
+ "/src/a.ts": 1,
+ "/src/b.ts": 1,
+ "/src/a.js": 1,
+ "/src/a.d.ts": 1
+}
+
+directoryExists:: {
+ "/src/node_modules/@types": 1,
+ "/node_modules/@types": 1
+}
 
 
 //// [/src/a.d.ts]

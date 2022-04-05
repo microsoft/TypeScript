@@ -25,4 +25,12 @@ Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
+getModifiedTime:: {}
+
+setModifiedTime:: {}
+
+fileExists:: {}
+
+directoryExists:: {}
+
 

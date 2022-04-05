@@ -146,6 +146,40 @@ readFiles:: {
  "/src/tests/index.ts": 1,
  "/src/logic/index.d.ts": 1
 } 
+getModifiedTime:: {
+ "/src/core/anotherModule.ts": 1,
+ "/src/core/index.ts": 1,
+ "/src/core/some_decl.d.ts": 1,
+ "/src/logic/index.ts": 1,
+ "/src/tests/index.ts": 1
+}
+
+setModifiedTime:: {}
+
+fileExists:: {
+ "/src/core/anotherModule.ts": 1,
+ "/src/core/index.ts": 1,
+ "/src/core/some_decl.d.ts": 1,
+ "/src/core/anotherModule.js": 1,
+ "/src/core/anotherModule.d.ts": 1,
+ "/src/logic/index.ts": 1,
+ "/src/logic/index.js": 1,
+ "/src/logic/index.d.ts": 1,
+ "/src/tests/index.ts": 1,
+ "/src/tests/index.js": 1,
+ "/src/tests/index.d.ts": 1
+}
+
+directoryExists:: {
+ "/src/core/node_modules/@types": 1,
+ "/src/node_modules/@types": 3,
+ "/node_modules/@types": 3,
+ "/src/core": 8,
+ "/src/logic/node_modules/@types": 1,
+ "/src/logic": 2,
+ "/src/tests/node_modules/@types": 1
+}
+
 
 //// [/src/core/anotherModule.d.ts]
 export declare const World = "hello";

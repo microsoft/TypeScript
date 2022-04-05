@@ -83,6 +83,32 @@ Output::
 
 exitCode:: ExitStatus.Success
 
+getModifiedTime:: {
+ "/src/bar.ts": 1,
+ "/src/bundling.ts": 1,
+ "/src/global.d.ts": 1,
+ "/src/index.ts": 1,
+ "/src/lazyIndex.ts": 1
+}
+
+setModifiedTime:: {}
+
+fileExists:: {
+ "/src/bar.ts": 1,
+ "/src/bundling.ts": 1,
+ "/src/global.d.ts": 1,
+ "/src/index.ts": 1,
+ "/src/lazyIndex.ts": 1,
+ "/src/obj/bar.js": 1,
+ "/src/obj/bar.d.ts": 1
+}
+
+directoryExists:: {
+ "/src": 6,
+ "/src/node_modules/@types": 1,
+ "/node_modules/@types": 1
+}
+
 
 //// [/src/obj/bar.d.ts]
 declare const _default: (param: string) => void;
@@ -278,6 +304,32 @@ Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
+getModifiedTime:: {
+ "/src/bar.ts": 1,
+ "/src/bundling.ts": 1,
+ "/src/global.d.ts": 1,
+ "/src/index.ts": 1,
+ "/src/lazyIndex.ts": 1,
+ "/src/obj/bar.js": 1
+}
+
+setModifiedTime:: {}
+
+fileExists:: {
+ "/src/bar.ts": 1,
+ "/src/bundling.ts": 1,
+ "/src/global.d.ts": 1,
+ "/src/index.ts": 1,
+ "/src/lazyIndex.ts": 1,
+ "/src/obj/bar.js": 1
+}
+
+directoryExists:: {
+ "/src": 6,
+ "/src/node_modules/@types": 1,
+ "/node_modules/@types": 1
+}
+
 
 //// [/src/obj/tsconfig.tsbuildinfo]
 {"program":{"fileNames":["../../lib/lib.d.ts","../bar.ts","../bundling.ts","../global.d.ts","../lazyindex.ts","../index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"747071916-interface RawAction {\r\n    (...args: any[]): Promise<any> | void;\r\n}\r\ninterface ActionFactory {\r\n    <T extends RawAction>(target: T): T;\r\n}\r\ndeclare function foo<U extends any[] = any[]>(): ActionFactory;\r\nexport default foo()(function foobar(): void {\r\n});","signature":"-9232740537-declare const _default: () => void;\r\nexport default _default;\r\n"},{"version":"-21659820217-export class LazyModule<TModule> {\r\n    constructor(private importCallback: () => Promise<TModule>) {}\r\n}\r\n\r\nexport class LazyAction<\r\n    TAction extends (...args: any[]) => any,\r\n    TModule\r\n>  {\r\n    constructor(_lazyModule: LazyModule<TModule>, _getter: (module: TModule) => TAction) {\r\n    }\r\n}\r\n","signature":"-40032907372-export declare class LazyModule<TModule> {\r\n    private importCallback;\r\n    constructor(importCallback: () => Promise<TModule>);\r\n}\r\nexport declare class LazyAction<TAction extends (...args: any[]) => any, TModule> {\r\n    constructor(_lazyModule: LazyModule<TModule>, _getter: (module: TModule) => TAction);\r\n}\r\n"},{"version":"-9780226215-interface PromiseConstructor {\r\n    new <T>(): Promise<T>;\r\n}\r\ndeclare var Promise: PromiseConstructor;\r\ninterface Promise<T> {\r\n}","affectsGlobalScope":true},"3017320451-export { default as bar } from './bar';\n\nimport { default as bar } from './bar';\nbar(\"hello\");","-11602502901-import { LazyAction, LazyModule } from './bundling';\r\nconst lazyModule = new LazyModule(() =>\r\n    import('./lazyIndex')\r\n);\r\nexport const lazyBar = new LazyAction(lazyModule, m => m.bar);"],"options":{"declaration":true,"outDir":"./","target":1},"fileIdsList":[[3,5],[2]],"referencedMap":[[6,1],[5,2]],"exportedModulesMap":[[6,1],[5,2]],"semanticDiagnosticsPerFile":[1,2,3,4,6,[5,[{"file":"../lazyindex.ts","start":85,"length":7,"messageText":"Expected 0 arguments, but got 1.","category":1,"code":2554}]]],"affectedFilesPendingEmit":[[2,1],[6,0],[5,0]]},"version":"FakeTSVersion"}
@@ -422,6 +474,44 @@ Output::
 
 exitCode:: ExitStatus.Success
 
+getModifiedTime:: {
+ "/src/bar.ts": 1,
+ "/src/bundling.ts": 1,
+ "/src/global.d.ts": 1,
+ "/src/index.ts": 1,
+ "/src/lazyIndex.ts": 1,
+ "/src/obj/bar.js": 1,
+ "/src/obj/bar.d.ts": 1,
+ "/src/obj/index.d.ts": 1,
+ "/src/obj/lazyIndex.d.ts": 1,
+ "/src/obj/bundling.d.ts": 1
+}
+
+setModifiedTime:: {
+ "/src/obj/bundling.js": 1,
+ "/src/obj/bundling.d.ts": 1,
+ "/src/obj/index.js": 1,
+ "/src/obj/lazyIndex.js": 1
+}
+
+fileExists:: {
+ "/src/bar.ts": 1,
+ "/src/bundling.ts": 1,
+ "/src/global.d.ts": 1,
+ "/src/index.ts": 1,
+ "/src/lazyIndex.ts": 1,
+ "/src/obj/bar.js": 1,
+ "/src/obj/bar.d.ts": 1,
+ "/src/obj/index.d.ts": 1,
+ "/src/obj/lazyIndex.d.ts": 1
+}
+
+directoryExists:: {
+ "/src": 6,
+ "/src/node_modules/@types": 1,
+ "/node_modules/@types": 1
+}
+
 
 //// [/src/obj/bar.d.ts] file written with same contents
 //// [/src/obj/bar.js] file written with same contents
@@ -549,6 +639,32 @@ Output::
 Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+
+getModifiedTime:: {
+ "/src/bar.ts": 1,
+ "/src/bundling.ts": 1,
+ "/src/global.d.ts": 1,
+ "/src/index.ts": 1,
+ "/src/lazyIndex.ts": 1,
+ "/src/obj/bar.js": 1
+}
+
+setModifiedTime:: {}
+
+fileExists:: {
+ "/src/bar.ts": 1,
+ "/src/bundling.ts": 1,
+ "/src/global.d.ts": 1,
+ "/src/index.ts": 1,
+ "/src/lazyIndex.ts": 1,
+ "/src/obj/bar.js": 1
+}
+
+directoryExists:: {
+ "/src": 6,
+ "/src/node_modules/@types": 1,
+ "/node_modules/@types": 1
+}
 
 
 //// [/src/obj/tsconfig.tsbuildinfo]
@@ -688,6 +804,38 @@ Output::
 [[90m12:01:01 AM[0m] Updating unchanged output timestamps of project '/src/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
+
+getModifiedTime:: {
+ "/src/bar.ts": 1,
+ "/src/bundling.ts": 1,
+ "/src/global.d.ts": 1,
+ "/src/index.ts": 1,
+ "/src/lazyIndex.ts": 1,
+ "/src/obj/bar.js": 1,
+ "/src/obj/bundling.d.ts": 1
+}
+
+setModifiedTime:: {
+ "/src/obj/bundling.js": 1,
+ "/src/obj/bundling.d.ts": 1,
+ "/src/obj/index.js": 1
+}
+
+fileExists:: {
+ "/src/bar.ts": 1,
+ "/src/bundling.ts": 1,
+ "/src/global.d.ts": 1,
+ "/src/index.ts": 1,
+ "/src/lazyIndex.ts": 1,
+ "/src/obj/bar.js": 1,
+ "/src/obj/bar.d.ts": 1
+}
+
+directoryExists:: {
+ "/src": 6,
+ "/src/node_modules/@types": 1,
+ "/node_modules/@types": 1
+}
 
 
 //// [/src/obj/bar.d.ts]

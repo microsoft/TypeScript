@@ -29,6 +29,14 @@ export * from './other';
 export declare const Foo = "BAR";
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 /a/lib/tsc.js -w
 Output::
 >> Screen clear
@@ -94,3 +102,35 @@ exitCode:: ExitStatus.undefined
 exports.__esModule = true;
 
 
+
+fileExists:: {
+ "/user/username/projects/myproject/main/tsconfig.json": 1,
+ "/user/username/projects/myproject/main/node_modules/@scoped/linked-package/package.json": 1,
+ "/user/username/projects/myproject/main/node_modules/@scoped/linked-package.ts": 1,
+ "/user/username/projects/myproject/main/node_modules/@scoped/linked-package.tsx": 1,
+ "/user/username/projects/myproject/main/node_modules/@scoped/linked-package.d.ts": 1,
+ "/user/username/projects/myproject/main/node_modules/@scoped/linked-package/dist/index.d.ts": 1,
+ "/user/username/projects/myproject/linked-package/dist/index.d.ts": 1,
+ "/user/username/projects/myproject/linked-package/dist/other.ts": 1,
+ "/user/username/projects/myproject/linked-package/dist/other.tsx": 1,
+ "/user/username/projects/myproject/linked-package/dist/other.d.ts": 1
+} 
+
+directoryExists:: {
+ "/user/username/projects/myproject/main/@scoped": 1,
+ "/user/username/projects/myproject/main/node_modules": 1,
+ "/user/username/projects/myproject/main/node_modules/@scoped/linked-package": 2,
+ "/user/username/projects/myproject/main/node_modules/@scoped": 1,
+ "/user/username/projects/myproject/main/node_modules/@scoped/linked-package/dist": 1,
+ "/user/username/projects/myproject/linked-package/dist": 2,
+ "/user/username/projects/myproject/main/node_modules/@types": 1,
+ "/user/username/projects/myproject/node_modules/@types": 1,
+ "/user/username/projects/node_modules/@types": 1,
+ "/user/username/node_modules/@types": 1,
+ "/user/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 

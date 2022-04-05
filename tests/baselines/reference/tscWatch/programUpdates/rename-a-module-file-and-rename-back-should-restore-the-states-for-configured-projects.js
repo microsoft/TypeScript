@@ -22,6 +22,14 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 /a/lib/tsc.js -w -p /a/b/tsconfig.json
 Output::
 >> Screen clear
@@ -86,6 +94,23 @@ T.bar();
 
 
 
+fileExists:: {
+ "/a/b/tsconfig.json": 1,
+ "/a/b/modulefile.ts": 1
+} 
+
+directoryExists:: {
+ "/a/b/tsconfig.json": 1,
+ "/a/b": 2,
+ "/a/b/node_modules/@types": 1,
+ "/a/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 Change:: Rename moduleFile to moduleFile1
 
 Input::
@@ -94,6 +119,14 @@ export function bar() { };
 
 //// [/a/b/moduleFile.ts] deleted
 //// [/a/b/moduleFile.js] deleted
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -159,6 +192,27 @@ exports.bar = bar;
 
 
 
+fileExists:: {
+ "/a/b/modulefile.ts": 1,
+ "/a/b/modulefile.tsx": 1,
+ "/a/b/modulefile.d.ts": 1,
+ "/a/b/modulefile.js": 1,
+ "/a/b/modulefile.jsx": 1,
+ "/a/b/modulefile1.js": 2
+} 
+
+directoryExists:: {
+ "/a/b/modulefile": 2,
+ "/a/b/node_modules/@types": 1,
+ "/a/node_modules/@types": 1,
+ "/node_modules/@types": 1,
+ "/a/b/modulefile1.js": 2
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 Change:: Rename moduleFile1 back to moduleFile
 
 Input::
@@ -166,6 +220,20 @@ Input::
 export function bar() { };
 
 //// [/a/b/moduleFile1.ts] deleted
+
+fileExists:: {
+ "/a/b/modulefile1.ts": 2,
+ "/a/b/modulefile.ts": 2
+} 
+
+directoryExists:: {
+ "/a/b/modulefile1.ts": 2,
+ "/a/b/modulefile.ts": 2
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -221,3 +289,18 @@ exports.bar = bar;
 ;
 
 
+
+fileExists:: {
+ "/a/b/modulefile.js": 1
+} 
+
+directoryExists:: {
+ "/a/b/node_modules/@types": 1,
+ "/a/node_modules/@types": 1,
+ "/node_modules/@types": 1,
+ "/a/b/modulefile.js": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 

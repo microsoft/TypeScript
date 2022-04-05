@@ -76,6 +76,14 @@ export const m = mod;
 
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 /a/lib/tsc.js -b -w sample1/tests
 Output::
 >> Screen clear
@@ -433,6 +441,41 @@ export declare const m: typeof mod;
 }
 
 
+fileExists:: {
+ "/user/username/projects/sample1/core/anothermodule.ts": 1,
+ "/user/username/projects/sample1/core/index.ts": 1,
+ "/user/username/projects/sample1/core/anothermodule.js": 1,
+ "/user/username/projects/sample1/tests/index.ts": 1,
+ "/user/username/projects/sample1/tests/index.js": 1,
+ "/user/username/projects/sample1/logic/index.ts": 1,
+ "/user/username/projects/sample1/logic/index.js": 1,
+ "/user/username/projects/sample1/core/anothermodule.d.ts": 1,
+ "/user/username/projects/sample1/logic/index.d.ts": 1,
+ "/user/username/projects/sample1/tests/index.d.ts": 1
+} 
+
+directoryExists:: {
+ "/user/username/projects/sample1/core/node_modules/@types": 1,
+ "/user/username/projects/sample1/node_modules/@types": 3,
+ "/user/username/projects/node_modules/@types": 3,
+ "/user/username/node_modules/@types": 3,
+ "/user/node_modules/@types": 3,
+ "/node_modules/@types": 3,
+ "/user/username/projects/sample1/core": 8,
+ "/user/username/projects/sample1/logic/node_modules/@types": 1,
+ "/user/username/projects/sample1/logic": 2,
+ "/user/username/projects/sample1/tests/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {
+ "/user/username/projects/sample1/core/anothermodule.ts": 1,
+ "/user/username/projects/sample1/core/index.ts": 1,
+ "/user/username/projects/sample1/tests/index.ts": 1,
+ "/user/username/projects/sample1/logic/index.ts": 1
+} 
+
+setModifiedTimes:: {} 
+
 Change:: Make local change to core
 
 Input::
@@ -443,6 +486,14 @@ export function multiply(a: number, b: number) { return a * b; }
 
 function foo() { }
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -548,9 +599,46 @@ function foo() { }
 }
 
 
+fileExists:: {
+ "/user/username/projects/sample1/core/anothermodule.ts": 1,
+ "/user/username/projects/sample1/core/index.ts": 1,
+ "/user/username/projects/sample1/core/anothermodule.js": 1,
+ "/user/username/projects/sample1/core/index.d.ts": 1
+} 
+
+directoryExists:: {
+ "/user/username/projects/sample1/core/node_modules/@types": 1,
+ "/user/username/projects/sample1/node_modules/@types": 1,
+ "/user/username/projects/node_modules/@types": 1,
+ "/user/username/node_modules/@types": 1,
+ "/user/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {
+ "/user/username/projects/sample1/core/anothermodule.ts": 1,
+ "/user/username/projects/sample1/core/index.ts": 1,
+ "/user/username/projects/sample1/core/anothermodule.js": 1,
+ "/user/username/projects/sample1/core/index.d.ts": 1,
+ "/user/username/projects/sample1/core/anothermodule.d.ts": 1
+} 
+
+setModifiedTimes:: {
+ "/user/username/projects/sample1/core/anothermodule.js": 1,
+ "/user/username/projects/sample1/core/anothermodule.d.ts": 1
+} 
+
 Change:: Build logic or update time stamps
 
 Input::
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 
@@ -585,9 +673,32 @@ exitCode:: ExitStatus.undefined
 //// [/user/username/projects/sample1/logic/index.d.ts] file changed its modified time
 //// [/user/username/projects/sample1/logic/tsconfig.tsbuildinfo] file changed its modified time
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {
+ "/user/username/projects/sample1/logic/index.d.ts": 1
+} 
+
+setModifiedTimes:: {
+ "/user/username/projects/sample1/logic/index.js": 1,
+ "/user/username/projects/sample1/logic/index.js.map": 1,
+ "/user/username/projects/sample1/logic/index.d.ts": 1,
+ "/user/username/projects/sample1/logic/tsconfig.tsbuildinfo": 1
+} 
+
 Change:: Build Tests
 
 Input::
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 [[90m12:01:30 AM[0m] Found 0 errors. Watching for file changes.
@@ -623,3 +734,17 @@ exitCode:: ExitStatus.undefined
 //// [/user/username/projects/sample1/tests/index.js] file changed its modified time
 //// [/user/username/projects/sample1/tests/index.d.ts] file changed its modified time
 //// [/user/username/projects/sample1/tests/tsconfig.tsbuildinfo] file changed its modified time
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {
+ "/user/username/projects/sample1/tests/index.d.ts": 1
+} 
+
+setModifiedTimes:: {
+ "/user/username/projects/sample1/tests/index.js": 1,
+ "/user/username/projects/sample1/tests/index.d.ts": 1,
+ "/user/username/projects/sample1/tests/tsconfig.tsbuildinfo": 1
+} 

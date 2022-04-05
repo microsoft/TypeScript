@@ -23,6 +23,14 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 /a/lib/tsc.js -w
 Output::
 >> Screen clear
@@ -91,12 +99,38 @@ exports.f = f;
 
 
 
+fileExists:: {
+ "/user/username/projects/myproject/tsconfig.json": 1,
+ "/user/username/projects/myproject/a.ts": 1
+} 
+
+directoryExists:: {
+ "/user/username/projects/myproject": 2,
+ "/user/username/projects/myproject/node_modules/@types": 1,
+ "/user/username/projects/node_modules/@types": 1,
+ "/user/username/node_modules/@types": 1,
+ "/user/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 Change:: Set to "remove"
 
 Input::
 //// [/user/username/projects/myproject/tsconfig.json]
 {"compilerOptions":{"importsNotUsedAsValues":"remove"}}
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -144,12 +178,28 @@ exitCode:: ExitStatus.undefined
 //// [/user/username/projects/myproject/a.js] file written with same contents
 //// [/user/username/projects/myproject/b.js] file written with same contents
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 Change:: Set to "error"
 
 Input::
 //// [/user/username/projects/myproject/tsconfig.json]
 {"compilerOptions":{"importsNotUsedAsValues":"error"}}
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -210,12 +260,28 @@ exports.f = f;
 
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 Change:: Set to "preserve"
 
 Input::
 //// [/user/username/projects/myproject/tsconfig.json]
 {"compilerOptions":{"importsNotUsedAsValues":"preserve"}}
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -262,3 +328,11 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/a.js] file written with same contents
 //// [/user/username/projects/myproject/b.js] file written with same contents
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 

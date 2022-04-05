@@ -360,6 +360,46 @@ export declare const m: typeof mod;
 }
 
 
+fileExists:: {
+ "/user/username/projects/sample1/core/anothermodule.ts": 1,
+ "/user/username/projects/sample1/core/index.ts": 1,
+ "/user/username/projects/sample1/core/some_decl.d.ts": 1,
+ "/user/username/projects/sample1/core/anothermodule.js": 1,
+ "/user/username/projects/sample1/core/anothermodule.d.ts": 1,
+ "/user/username/projects/sample1/core/tsconfig.tsbuildinfo": 1,
+ "/user/username/projects/sample1/logic/index.ts": 1,
+ "/user/username/projects/sample1/logic/index.js": 1,
+ "/user/username/projects/sample1/logic/index.d.ts": 1,
+ "/user/username/projects/sample1/logic/tsconfig.tsbuildinfo": 1,
+ "/user/username/projects/sample1/tests/index.ts": 1,
+ "/user/username/projects/sample1/tests/index.js": 1,
+ "/user/username/projects/sample1/tests/index.d.ts": 1,
+ "/user/username/projects/sample1/tests/tsconfig.tsbuildinfo": 1
+} 
+
+directoryExists:: {
+ "/user/username/projects/sample1/core/node_modules/@types": 1,
+ "/user/username/projects/sample1/node_modules/@types": 3,
+ "/user/username/projects/node_modules/@types": 3,
+ "/user/username/node_modules/@types": 3,
+ "/user/node_modules/@types": 3,
+ "/node_modules/@types": 3,
+ "/user/username/projects/sample1/core": 8,
+ "/user/username/projects/sample1/logic/node_modules/@types": 1,
+ "/user/username/projects/sample1/logic": 2,
+ "/user/username/projects/sample1/tests/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {
+ "/user/username/projects/sample1/core/anothermodule.ts": 1,
+ "/user/username/projects/sample1/core/index.ts": 1,
+ "/user/username/projects/sample1/core/some_decl.d.ts": 1,
+ "/user/username/projects/sample1/logic/index.ts": 1,
+ "/user/username/projects/sample1/tests/index.ts": 1
+} 
+
+setModifiedTimes:: {} 
+
 /a/lib/tsc.js -w -p tests
 Output::
 >> Screen clear
@@ -435,6 +475,24 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+
+fileExists:: {
+ "/user/username/projects/sample1/tests/tsconfig.json": 1
+} 
+
+directoryExists:: {
+ "/user/username/projects/sample1/tests": 1,
+ "/user/username/projects/sample1/tests/node_modules/@types": 1,
+ "/user/username/projects/sample1/node_modules/@types": 1,
+ "/user/username/projects/node_modules/@types": 1,
+ "/user/username/node_modules/@types": 1,
+ "/user/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Change:: local edit in logic ts, and build logic
 
@@ -535,6 +593,52 @@ function foo() { }
 }
 
 
+fileExists:: {
+ "/user/username/projects/sample1/core/anothermodule.ts": 1,
+ "/user/username/projects/sample1/core/index.ts": 1,
+ "/user/username/projects/sample1/core/some_decl.d.ts": 1,
+ "/user/username/projects/sample1/core/anothermodule.js": 1,
+ "/user/username/projects/sample1/core/anothermodule.d.ts": 1,
+ "/user/username/projects/sample1/core/anothermodule.d.ts.map": 1,
+ "/user/username/projects/sample1/core/index.js": 1,
+ "/user/username/projects/sample1/core/index.d.ts": 1,
+ "/user/username/projects/sample1/core/index.d.ts.map": 1,
+ "/user/username/projects/sample1/core/tsconfig.tsbuildinfo": 1,
+ "/user/username/projects/sample1/logic/index.ts": 1,
+ "/user/username/projects/sample1/logic/index.js": 1,
+ "/user/username/projects/sample1/logic/index.d.ts": 1,
+ "/user/username/projects/sample1/logic/tsconfig.tsbuildinfo": 1
+} 
+
+directoryExists:: {
+ "/user/username/projects/sample1/core": 4,
+ "/user/username/projects/sample1/logic/node_modules/@types": 1,
+ "/user/username/projects/sample1/node_modules/@types": 1,
+ "/user/username/projects/node_modules/@types": 1,
+ "/user/username/node_modules/@types": 1,
+ "/user/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {
+ "/user/username/projects/sample1/core/anothermodule.ts": 1,
+ "/user/username/projects/sample1/core/index.ts": 1,
+ "/user/username/projects/sample1/core/some_decl.d.ts": 1,
+ "/user/username/projects/sample1/core/anothermodule.js": 1,
+ "/user/username/projects/sample1/core/anothermodule.d.ts": 2,
+ "/user/username/projects/sample1/core/anothermodule.d.ts.map": 1,
+ "/user/username/projects/sample1/core/index.js": 1,
+ "/user/username/projects/sample1/core/index.d.ts": 2,
+ "/user/username/projects/sample1/core/index.d.ts.map": 1,
+ "/user/username/projects/sample1/core/tsconfig.tsbuildinfo": 1,
+ "/user/username/projects/sample1/core/tsconfig.json": 1,
+ "/user/username/projects/sample1/logic/index.ts": 1,
+ "/user/username/projects/sample1/logic/index.js": 1,
+ "/user/username/projects/sample1/logic/index.d.ts": 1
+} 
+
+setModifiedTimes:: {} 
+
 Output::
 >> Screen clear
 [[90m12:01:32 AM[0m] File change detected. Starting incremental compilation...
@@ -609,6 +713,14 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Change:: non local edit in logic ts, and build logic
 
@@ -716,6 +828,51 @@ export declare function gfoo(): void;
   "size": 1555
 }
 
+
+fileExists:: {
+ "/user/username/projects/sample1/core/anothermodule.ts": 1,
+ "/user/username/projects/sample1/core/index.ts": 1,
+ "/user/username/projects/sample1/core/some_decl.d.ts": 1,
+ "/user/username/projects/sample1/core/anothermodule.js": 1,
+ "/user/username/projects/sample1/core/anothermodule.d.ts": 1,
+ "/user/username/projects/sample1/core/anothermodule.d.ts.map": 1,
+ "/user/username/projects/sample1/core/index.js": 1,
+ "/user/username/projects/sample1/core/index.d.ts": 1,
+ "/user/username/projects/sample1/core/index.d.ts.map": 1,
+ "/user/username/projects/sample1/core/tsconfig.tsbuildinfo": 1,
+ "/user/username/projects/sample1/logic/index.ts": 1,
+ "/user/username/projects/sample1/logic/index.js": 1,
+ "/user/username/projects/sample1/logic/index.d.ts": 1,
+ "/user/username/projects/sample1/logic/tsconfig.tsbuildinfo": 1
+} 
+
+directoryExists:: {
+ "/user/username/projects/sample1/core": 4,
+ "/user/username/projects/sample1/logic/node_modules/@types": 1,
+ "/user/username/projects/sample1/node_modules/@types": 1,
+ "/user/username/projects/node_modules/@types": 1,
+ "/user/username/node_modules/@types": 1,
+ "/user/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {
+ "/user/username/projects/sample1/core/anothermodule.ts": 1,
+ "/user/username/projects/sample1/core/index.ts": 1,
+ "/user/username/projects/sample1/core/some_decl.d.ts": 1,
+ "/user/username/projects/sample1/core/anothermodule.js": 1,
+ "/user/username/projects/sample1/core/anothermodule.d.ts": 2,
+ "/user/username/projects/sample1/core/anothermodule.d.ts.map": 1,
+ "/user/username/projects/sample1/core/index.js": 1,
+ "/user/username/projects/sample1/core/index.d.ts": 2,
+ "/user/username/projects/sample1/core/index.d.ts.map": 1,
+ "/user/username/projects/sample1/core/tsconfig.tsbuildinfo": 1,
+ "/user/username/projects/sample1/core/tsconfig.json": 1,
+ "/user/username/projects/sample1/logic/index.ts": 1,
+ "/user/username/projects/sample1/logic/index.js": 1
+} 
+
+setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -879,6 +1036,14 @@ exitCode:: ExitStatus.undefined
 }
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 Change:: change in project reference config file builds correctly
 
 Input::
@@ -975,6 +1140,54 @@ export declare const m: typeof mod;
 export declare function gfoo(): void;
 
 
+
+fileExists:: {
+ "/user/username/projects/sample1/core/anothermodule.ts": 1,
+ "/user/username/projects/sample1/core/index.ts": 1,
+ "/user/username/projects/sample1/core/some_decl.d.ts": 1,
+ "/user/username/projects/sample1/core/anothermodule.js": 1,
+ "/user/username/projects/sample1/core/anothermodule.d.ts": 1,
+ "/user/username/projects/sample1/core/anothermodule.d.ts.map": 1,
+ "/user/username/projects/sample1/core/index.js": 1,
+ "/user/username/projects/sample1/core/index.d.ts": 1,
+ "/user/username/projects/sample1/core/index.d.ts.map": 1,
+ "/user/username/projects/sample1/core/tsconfig.tsbuildinfo": 1,
+ "/user/username/projects/sample1/logic/index.ts": 1,
+ "/user/username/projects/sample1/logic/index.js": 1,
+ "/user/username/projects/sample1/logic/decls/index.d.ts": 1,
+ "/user/username/projects/sample1/logic/decls": 1,
+ "/user/username/projects/sample1/logic/tsconfig.tsbuildinfo": 1
+} 
+
+directoryExists:: {
+ "/user/username/projects/sample1/core": 4,
+ "/user/username/projects/sample1/logic/node_modules/@types": 1,
+ "/user/username/projects/sample1/node_modules/@types": 1,
+ "/user/username/projects/node_modules/@types": 1,
+ "/user/username/node_modules/@types": 1,
+ "/user/node_modules/@types": 1,
+ "/node_modules/@types": 1,
+ "/user/username/projects/sample1/logic/decls": 2,
+ "/user/username/projects/sample1/logic": 1
+} 
+
+getModifiedTimes:: {
+ "/user/username/projects/sample1/core/anothermodule.ts": 1,
+ "/user/username/projects/sample1/core/index.ts": 1,
+ "/user/username/projects/sample1/core/some_decl.d.ts": 1,
+ "/user/username/projects/sample1/core/anothermodule.js": 1,
+ "/user/username/projects/sample1/core/anothermodule.d.ts": 2,
+ "/user/username/projects/sample1/core/anothermodule.d.ts.map": 1,
+ "/user/username/projects/sample1/core/index.js": 1,
+ "/user/username/projects/sample1/core/index.d.ts": 2,
+ "/user/username/projects/sample1/core/index.d.ts.map": 1,
+ "/user/username/projects/sample1/core/tsconfig.tsbuildinfo": 1,
+ "/user/username/projects/sample1/core/tsconfig.json": 1,
+ "/user/username/projects/sample1/logic/index.ts": 1,
+ "/user/username/projects/sample1/logic/index.js": 1
+} 
+
+setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -1137,3 +1350,21 @@ exitCode:: ExitStatus.undefined
   "size": 1663
 }
 
+
+fileExists:: {
+ "/user/username/projects/sample1/core/anothermodule.ts": 1
+} 
+
+directoryExists:: {
+ "/user/username/projects/sample1/core": 2,
+ "/user/username/projects/sample1/tests/node_modules/@types": 1,
+ "/user/username/projects/sample1/node_modules/@types": 1,
+ "/user/username/projects/node_modules/@types": 1,
+ "/user/username/node_modules/@types": 1,
+ "/user/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 

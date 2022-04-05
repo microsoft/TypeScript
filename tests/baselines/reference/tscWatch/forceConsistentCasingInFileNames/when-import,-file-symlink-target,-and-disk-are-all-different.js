@@ -31,6 +31,14 @@ interface Array<T> { length: number; [n: number]: T; }
 {"compilerOptions":{"forceConsistentCasingInFileNames":true}}
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 /a/lib/tsc.js --w --p . --explainFiles
 Output::
 >> Screen clear
@@ -127,6 +135,30 @@ link_1.b;
 
 
 
+fileExists:: {
+ "/user/username/projects/myproject/tsconfig.json": 1,
+ "/user/username/projects/myproject/yx.ts": 1,
+ "/user/username/projects/myproject/yx.tsx": 1,
+ "/user/username/projects/myproject/yx.d.ts": 1,
+ "/user/username/projects/myproject/yx.js": 1,
+ "/user/username/projects/myproject/yx.jsx": 1,
+ "/user/username/projects/myproject/link.ts": 1
+} 
+
+directoryExists:: {
+ "/user/username/projects/myproject": 6,
+ "/user/username/projects/myproject/yx": 2,
+ "/user/username/projects/myproject/node_modules/@types": 1,
+ "/user/username/projects/node_modules/@types": 1,
+ "/user/username/node_modules/@types": 1,
+ "/user/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 Change:: Prepend a line to moduleA
 
 Input::
@@ -137,6 +169,14 @@ export const a = 1;
 export const b = 2;
 
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -210,3 +250,11 @@ exports.a = 1;
 exports.b = 2;
 
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 

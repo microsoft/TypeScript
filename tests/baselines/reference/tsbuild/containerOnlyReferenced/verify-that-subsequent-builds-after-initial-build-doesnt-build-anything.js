@@ -99,6 +99,35 @@ Output::
 
 exitCode:: ExitStatus.Success
 
+getModifiedTime:: {
+ "/src/src/folder/index.ts": 1,
+ "/src/src/folder2/index.ts": 1,
+ "/src/tests/index.ts": 1
+}
+
+setModifiedTime:: {}
+
+fileExists:: {
+ "/src/src/folder/index.ts": 1,
+ "/src/src/folder/index.js": 1,
+ "/src/src/folder/index.d.ts": 1,
+ "/src/src/folder2/index.ts": 1,
+ "/src/src/folder2/index.js": 1,
+ "/src/src/folder2/index.d.ts": 1,
+ "/src/tests/index.ts": 1,
+ "/src/tests/index.js": 1,
+ "/src/tests/index.d.ts": 1
+}
+
+directoryExists:: {
+ "/src/src/folder/node_modules/@types": 1,
+ "/src/src/node_modules/@types": 2,
+ "/src/node_modules/@types": 3,
+ "/node_modules/@types": 3,
+ "/src/src/folder2/node_modules/@types": 1,
+ "/src/tests/node_modules/@types": 1
+}
+
 
 //// [/src/src/folder/index.d.ts]
 export declare const x = 10;
@@ -260,5 +289,42 @@ Output::
 [[90m12:00:28 AM[0m] Project 'src/tests/tsconfig.json' is up to date because newest input 'src/tests/index.ts' is older than oldest output 'src/tests/index.js'
 
 exitCode:: ExitStatus.Success
+
+getModifiedTime:: {
+ "/src/src/folder/index.ts": 1,
+ "/src/src/folder/index.js": 1,
+ "/src/src/folder/index.d.ts": 2,
+ "/src/src/folder/tsconfig.tsbuildinfo": 1,
+ "/src/src/folder/tsconfig.json": 1,
+ "/src/src/folder2/index.ts": 1,
+ "/src/src/folder2/index.js": 1,
+ "/src/src/folder2/index.d.ts": 2,
+ "/src/src/folder2/tsconfig.tsbuildinfo": 1,
+ "/src/src/folder2/tsconfig.json": 1,
+ "/src/tests/index.ts": 1,
+ "/src/tests/index.js": 1,
+ "/src/tests/index.d.ts": 2,
+ "/src/tests/tsconfig.tsbuildinfo": 1,
+ "/src/tests/tsconfig.json": 1
+}
+
+setModifiedTime:: {}
+
+fileExists:: {
+ "/src/src/folder/index.ts": 1,
+ "/src/src/folder/index.js": 1,
+ "/src/src/folder/index.d.ts": 1,
+ "/src/src/folder/tsconfig.tsbuildinfo": 1,
+ "/src/src/folder2/index.ts": 1,
+ "/src/src/folder2/index.js": 1,
+ "/src/src/folder2/index.d.ts": 1,
+ "/src/src/folder2/tsconfig.tsbuildinfo": 1,
+ "/src/tests/index.ts": 1,
+ "/src/tests/index.js": 1,
+ "/src/tests/index.d.ts": 1,
+ "/src/tests/tsconfig.tsbuildinfo": 1
+}
+
+directoryExists:: {}
 
 

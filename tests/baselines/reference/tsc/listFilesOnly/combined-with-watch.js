@@ -24,4 +24,12 @@ Output::
 error TS6370: Options 'watch' and 'listFilesOnly' cannot be combined.
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
+getModifiedTime:: {}
+
+setModifiedTime:: {}
+
+fileExists:: {}
+
+directoryExists:: {}
+
 

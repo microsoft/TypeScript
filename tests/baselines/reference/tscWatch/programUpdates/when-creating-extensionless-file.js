@@ -19,6 +19,14 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 /a/lib/tsc.js -w -p . --extendedDiagnostics
 Output::
 [[90m12:00:21 AM[0m] Starting compilation in watch mode...
@@ -76,12 +84,36 @@ exitCode:: ExitStatus.undefined
 
 
 
+fileExists:: {
+ "/user/username/projects/myproject/tsconfig.json": 1
+} 
+
+directoryExists:: {
+ "/user/username/projects/myproject/node_modules/@types": 1,
+ "/user/username/projects/node_modules/@types": 1,
+ "/user/username/node_modules/@types": 1,
+ "/user/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 Change:: Create foo in project root
 
 Input::
 //// [/user/username/projects/myproject/foo]
 
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/foo :: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
@@ -109,3 +141,11 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 

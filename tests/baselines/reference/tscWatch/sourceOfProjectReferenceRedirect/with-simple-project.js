@@ -101,6 +101,14 @@ export { createDog, Dog };
 
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 /a/lib/tsc.js --w --p /user/username/projects/demo/animals/tsconfig.json
 Output::
 >> Screen clear
@@ -316,3 +324,24 @@ export declare function createDog(): Dog;
   "size": 2536
 }
 
+
+fileExists:: {
+ "/user/username/projects/demo/tsconfig-base.json": 2,
+ "/user/username/projects/demo/animals/package.json": 1
+} 
+
+directoryExists:: {
+ "/user/username/projects/demo/animals/node_modules/@types": 1,
+ "/user/username/projects/demo/node_modules/@types": 1,
+ "/user/username/projects/node_modules/@types": 1,
+ "/user/username/node_modules/@types": 1,
+ "/user/node_modules/@types": 1,
+ "/node_modules/@types": 1,
+ "/user/username/projects/demo/lib/animals": 1,
+ "/user/username/projects/demo/lib": 1,
+ "/user/username/projects/demo": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 

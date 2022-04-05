@@ -392,4 +392,55 @@ Output::
 
 exitCode:: ExitStatus.Success
 
+getModifiedTime:: {
+ "/src/core/anotherModule.ts": 1,
+ "/src/core/index.ts": 1,
+ "/src/core/some_decl.d.ts": 1,
+ "/src/core/anotherModule.js": 1,
+ "/src/core/anotherModule.d.ts": 2,
+ "/src/core/anotherModule.d.ts.map": 1,
+ "/src/core/index.js": 1,
+ "/src/core/index.d.ts": 2,
+ "/src/core/index.d.ts.map": 1,
+ "/src/core/tsconfig.tsbuildinfo": 1,
+ "/src/core/tsconfig.json": 1,
+ "/src/logic/index.ts": 1,
+ "/src/logic/index.js": 1,
+ "/src/logic/index.js.map": 1,
+ "/src/logic/index.d.ts": 2,
+ "/src/logic/tsconfig.tsbuildinfo": 1,
+ "/src/logic/tsconfig.json": 1,
+ "/src/tests/index.ts": 1,
+ "/src/tests/index.js": 1,
+ "/src/tests/index.d.ts": 2,
+ "/src/tests/tsconfig.tsbuildinfo": 1,
+ "/src/tests/tsconfig.json": 1
+}
+
+setModifiedTime:: {}
+
+fileExists:: {
+ "/src/core/anotherModule.ts": 1,
+ "/src/core/index.ts": 1,
+ "/src/core/some_decl.d.ts": 1,
+ "/src/core/anotherModule.js": 1,
+ "/src/core/anotherModule.d.ts": 1,
+ "/src/core/anotherModule.d.ts.map": 1,
+ "/src/core/index.js": 1,
+ "/src/core/index.d.ts": 1,
+ "/src/core/index.d.ts.map": 1,
+ "/src/core/tsconfig.tsbuildinfo": 1,
+ "/src/logic/index.ts": 1,
+ "/src/logic/index.js": 1,
+ "/src/logic/index.js.map": 1,
+ "/src/logic/index.d.ts": 1,
+ "/src/logic/tsconfig.tsbuildinfo": 1,
+ "/src/tests/index.ts": 1,
+ "/src/tests/index.js": 1,
+ "/src/tests/index.d.ts": 1,
+ "/src/tests/tsconfig.tsbuildinfo": 1
+}
+
+directoryExists:: {}
+
 

@@ -19,6 +19,14 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 /a/lib/tsc.js -w
 Output::
 >> Screen clear
@@ -66,6 +74,21 @@ var a = 10;
 
 
 
+fileExists:: {
+ "/home/username/project/tsconfig.json": 1
+} 
+
+directoryExists:: {
+ "/home/username/project/node_modules/@types": 1,
+ "/home/username/node_modules/@types": 1,
+ "/home/node_modules/@types": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 Change:: file is deleted and then created to modify content
 
 Input::
@@ -73,6 +96,14 @@ Input::
 var a = 10;
 var b = 10;
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -119,3 +150,11 @@ var a = 10;
 var b = 10;
 
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 

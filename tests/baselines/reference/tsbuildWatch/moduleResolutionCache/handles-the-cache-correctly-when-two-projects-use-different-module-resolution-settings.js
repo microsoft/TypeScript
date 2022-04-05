@@ -40,6 +40,14 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 /a/lib/tsc.js --b -w -v
 Output::
 >> Screen clear
@@ -271,12 +279,65 @@ export {};
 }
 
 
+fileExists:: {
+ "/user/username/projects/myproject/project1/index.ts": 1,
+ "/user/username/projects/myproject/project1/index.js": 1,
+ "/user/username/projects/myproject/project1/node_modules/file/package.json": 1,
+ "/user/username/projects/myproject/project1/node_modules/file.ts": 1,
+ "/user/username/projects/myproject/project1/node_modules/file.tsx": 1,
+ "/user/username/projects/myproject/project1/node_modules/file.d.ts": 1,
+ "/user/username/projects/myproject/project1/node_modules/file/index.ts": 1,
+ "/user/username/projects/myproject/project1/node_modules/file/index.tsx": 1,
+ "/user/username/projects/myproject/project1/node_modules/file/index.d.ts": 1,
+ "/user/username/projects/myproject/node_modules/@types/foo/package.json": 1,
+ "/user/username/projects/myproject/node_modules/@types/foo/index.d.ts": 1,
+ "/user/username/projects/myproject/node_modules/@types/bar/package.json": 1,
+ "/user/username/projects/myproject/node_modules/@types/bar/index.d.ts": 1,
+ "/user/username/projects/myproject/project1/index.d.ts": 1,
+ "/user/username/projects/myproject/project2/index.ts": 1,
+ "/user/username/projects/myproject/project2/index.js": 1,
+ "/user/username/projects/myproject/project2/file.ts": 1,
+ "/user/username/projects/myproject/project2/file.tsx": 1,
+ "/user/username/projects/myproject/project2/file.d.ts": 1,
+ "/user/username/projects/myproject/project2/index.d.ts": 1
+} 
+
+directoryExists:: {
+ "/user/username/projects/myproject/project1/node_modules": 2,
+ "/user/username/projects/myproject/project1/node_modules/file": 3,
+ "/user/username/projects/myproject/project1/node_modules/@types": 2,
+ "/user/username/projects/myproject/node_modules/@types": 6,
+ "/user/username/projects/node_modules/@types": 3,
+ "/user/username/node_modules/@types": 3,
+ "/user/node_modules/@types": 3,
+ "/node_modules/@types": 3,
+ "/user/username/projects/myproject/node_modules/@types/foo": 5,
+ "/user/username/projects/myproject/node_modules/@types/bar": 3,
+ "/user/username/projects/myproject/project2": 1,
+ "/user/username/projects/myproject/project2/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {
+ "/user/username/projects/myproject/project1/index.ts": 1,
+ "/user/username/projects/myproject/project2/index.ts": 1
+} 
+
+setModifiedTimes:: {} 
+
 Change:: Append text
 
 Input::
 //// [/user/username/projects/myproject/project1/index.ts]
 import { foo } from "file";const bar = 10;
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -402,3 +463,41 @@ var bar = 10;
   "size": 986
 }
 
+
+fileExists:: {
+ "/user/username/projects/myproject/project1/index.ts": 1,
+ "/user/username/projects/myproject/project1/index.js": 1,
+ "/user/username/projects/myproject/project1/node_modules/file/package.json": 1,
+ "/user/username/projects/myproject/project1/node_modules/file.ts": 1,
+ "/user/username/projects/myproject/project1/node_modules/file.tsx": 1,
+ "/user/username/projects/myproject/project1/node_modules/file.d.ts": 1,
+ "/user/username/projects/myproject/project1/node_modules/file/index.ts": 1,
+ "/user/username/projects/myproject/project1/node_modules/file/index.tsx": 1,
+ "/user/username/projects/myproject/project1/node_modules/file/index.d.ts": 1,
+ "/user/username/projects/myproject/node_modules/@types/foo/package.json": 1,
+ "/user/username/projects/myproject/node_modules/@types/foo/index.d.ts": 1,
+ "/user/username/projects/myproject/node_modules/@types/bar/package.json": 1,
+ "/user/username/projects/myproject/node_modules/@types/bar/index.d.ts": 1,
+ "/user/username/projects/myproject/project1/index.d.ts": 1
+} 
+
+directoryExists:: {
+ "/user/username/projects/myproject/project1/node_modules": 2,
+ "/user/username/projects/myproject/project1/node_modules/file": 3,
+ "/user/username/projects/myproject/project1/node_modules/@types": 2,
+ "/user/username/projects/myproject/node_modules/@types": 4,
+ "/user/username/projects/node_modules/@types": 2,
+ "/user/username/node_modules/@types": 2,
+ "/user/node_modules/@types": 2,
+ "/node_modules/@types": 2,
+ "/user/username/projects/myproject/node_modules/@types/foo": 3,
+ "/user/username/projects/myproject/node_modules/@types/bar": 3
+} 
+
+getModifiedTimes:: {
+ "/user/username/projects/myproject/project1/index.ts": 1,
+ "/user/username/projects/myproject/project1/index.js": 1,
+ "/user/username/projects/myproject/project1/index.d.ts": 1
+} 
+
+setModifiedTimes:: {} 

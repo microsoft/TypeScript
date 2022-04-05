@@ -19,6 +19,14 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 /a/lib/tsc.js --w /a/d/f0.ts
 Output::
 >> Screen clear
@@ -84,6 +92,23 @@ define(["require", "exports"], function (require, exports) {
 
 
 
+fileExists:: {
+ "/a/d/f1.ts": 1,
+ "/a/d/f1.tsx": 1,
+ "/a/d/f1.d.ts": 1,
+ "/a/f1.ts": 1
+} 
+
+directoryExists:: {
+ "/a/d": 1,
+ "/a": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 Change:: Adding text doesnt re-resole the imports
 
 Input::
@@ -91,6 +116,14 @@ Input::
 import {x} from "f1"
                             var x: string = 1;
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -154,12 +187,28 @@ define(["require", "exports"], function (require, exports) {
 
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 Change:: Resolves f2
 
 Input::
 //// [/a/d/f0.ts]
 import {x} from "f2"
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -213,12 +262,52 @@ define(["require", "exports"], function (require, exports) {
 
 
 
+fileExists:: {
+ "/a/d/f2.ts": 1,
+ "/a/d/f2.tsx": 1,
+ "/a/d/f2.d.ts": 1,
+ "/a/f2.ts": 1,
+ "/a/f2.tsx": 1,
+ "/a/f2.d.ts": 1,
+ "/f2.ts": 1,
+ "/f2.tsx": 1,
+ "/f2.d.ts": 1,
+ "/a/d/f2.js": 1,
+ "/a/d/f2.jsx": 1,
+ "/a/f2.js": 1,
+ "/a/f2.jsx": 1,
+ "/f2.js": 1,
+ "/f2.jsx": 1
+} 
+
+directoryExists:: {
+ "/a/d": 2,
+ "/a": 2,
+ "/": 2,
+ "/a/d/node_modules": 1,
+ "/a/node_modules": 1,
+ "/node_modules": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 Change:: Resolve f1
 
 Input::
 //// [/a/d/f0.ts]
 import {x} from "f1"
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -273,3 +362,20 @@ exitCode:: ExitStatus.undefined
 
 //// [/a/f1.js] file written with same contents
 //// [/a/d/f0.js] file written with same contents
+
+fileExists:: {
+ "/a/d/f1.ts": 1,
+ "/a/d/f1.tsx": 1,
+ "/a/d/f1.d.ts": 1,
+ "/a/f1.ts": 1
+} 
+
+directoryExists:: {
+ "/a/d": 1,
+ "/a": 1,
+ "/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 

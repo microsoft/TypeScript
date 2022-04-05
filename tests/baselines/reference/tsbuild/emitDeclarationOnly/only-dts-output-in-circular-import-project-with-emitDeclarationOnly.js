@@ -79,6 +79,30 @@ Output::
 
 exitCode:: ExitStatus.Success
 
+getModifiedTime:: {
+ "/src/src/a.ts": 1,
+ "/src/src/b.ts": 1,
+ "/src/src/c.ts": 1,
+ "/src/src/index.ts": 1
+}
+
+setModifiedTime:: {}
+
+fileExists:: {
+ "/src/src/a.ts": 1,
+ "/src/src/b.ts": 1,
+ "/src/src/c.ts": 1,
+ "/src/src/index.ts": 1,
+ "/src/lib/a.d.ts": 1,
+ "/src/lib/c.d.ts": 1
+}
+
+directoryExists:: {
+ "/src/src": 6,
+ "/src/node_modules/@types": 1,
+ "/node_modules/@types": 1
+}
+
 
 //// [/src/lib/a.d.ts]
 import { B } from "./b";
@@ -239,6 +263,36 @@ Output::
 [[90m12:00:20 AM[0m] Building project '/src/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
+
+getModifiedTime:: {
+ "/src/src/a.ts": 1,
+ "/src/src/b.ts": 1,
+ "/src/src/c.ts": 1,
+ "/src/src/index.ts": 1,
+ "/src/lib/a.d.ts": 1,
+ "/src/lib/b.d.ts": 1,
+ "/src/lib/c.d.ts": 1,
+ "/src/lib/index.d.ts": 1
+}
+
+setModifiedTime:: {}
+
+fileExists:: {
+ "/src/src/a.ts": 1,
+ "/src/src/b.ts": 1,
+ "/src/src/c.ts": 1,
+ "/src/src/index.ts": 1,
+ "/src/lib/a.d.ts": 1,
+ "/src/lib/b.d.ts": 1,
+ "/src/lib/c.d.ts": 1,
+ "/src/lib/index.d.ts": 1
+}
+
+directoryExists:: {
+ "/src/src": 6,
+ "/src/node_modules/@types": 1,
+ "/node_modules/@types": 1
+}
 
 
 //// [/src/lib/a.d.ts]

@@ -30,6 +30,14 @@ interface Array<T> { length: number; [n: number]: T; }
 {"compilerOptions":{"forceConsistentCasingInFileNames":true}}
 
 
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 c:/a/lib/tsc.js --w --p c://project --explainFiles
 Output::
 >> Screen clear
@@ -103,6 +111,21 @@ a_2.b;
 
 
 
+fileExists:: {
+ "c:/project/tsconfig.json": 1,
+ "c:/project/a.ts": 2
+} 
+
+directoryExists:: {
+ "c:/project": 5,
+ "c:/project/node_modules/@types": 1,
+ "c:/node_modules/@types": 1
+} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
+
 Change:: Prepend a line to moduleA
 
 Input::
@@ -113,6 +136,14 @@ export const a = 1;
 export const b = 2;
 
 
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -176,3 +207,11 @@ exports.b = 2;
 
 
 //// [c:/project/b.js] file written with same contents
+
+fileExists:: {} 
+
+directoryExists:: {} 
+
+getModifiedTimes:: {} 
+
+setModifiedTimes:: {} 
