@@ -17,8 +17,13 @@ describe("unittests:: Public APIs", () => {
             const fs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ false);
             fs.linkSync(`${vfs.builtFolder}/${fileName}`, `${vfs.srcFolder}/${fileName}`);
             const sys = new fakes.System(fs);
-            const host = new fakes.CompilerHost(sys);
-            const result = compiler.compileFiles(host, [`${vfs.srcFolder}/${fileName}`], {});
+            const options: ts.CompilerOptions = {
+                ...ts.getDefaultCompilerOptions(),
+                strict: true,
+                exactOptionalPropertyTypes: true,
+            };
+            const host = new fakes.CompilerHost(sys, options);
+            const result = compiler.compileFiles(host, [`${vfs.srcFolder}/${fileName}`], options);
             assert(!result.diagnostics || !result.diagnostics.length, Harness.Compiler.minimalDiagnosticsToString(result.diagnostics, /*pretty*/ true));
         });
     }
