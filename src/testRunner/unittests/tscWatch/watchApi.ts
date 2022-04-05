@@ -208,7 +208,7 @@ namespace ts.tscWatch {
             createProgram: CreateProgram<T>,
             optionsToExtend?: CompilerOptions,
         ) {
-            const { cb, getPrograms } = commandLineCallbacks(sys, /*originalReadCall*/ undefined, sys.fileExistsWithoutTracking);
+            const { cb, getPrograms } = commandLineCallbacks(sys);
             baseline.push(`tsc --w${optionsToExtend?.noEmit ? " --noEmit" : ""}`);
             const oldSnap = sys.snap();
             const host = createWatchCompilerHostOfConfigFileForBaseline<T>({
@@ -384,7 +384,7 @@ namespace ts.tscWatch {
             // Fix error and emit
             applyChange(sys, baseline, sys => sys.writeFile(mainFile.path, "export const x = 10;"), "Fix error");
 
-            const { cb, getPrograms } = commandLineCallbacks(sys, /*originalReadCall*/ undefined, sys.fileExistsWithoutTracking);
+            const { cb, getPrograms } = commandLineCallbacks(sys);
             const oldSnap = sys.snap();
             const reportDiagnostic = createDiagnosticReporter(sys, /*pretty*/ true);
             const reportWatchStatus = createWatchStatusReporter(sys, /*pretty*/ true);

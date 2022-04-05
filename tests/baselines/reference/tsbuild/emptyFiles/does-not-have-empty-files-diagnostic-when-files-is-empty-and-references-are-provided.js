@@ -63,20 +63,6 @@ Output::
 /lib/tsc --b /src/with-references
 exitCode:: ExitStatus.Success
 
-getModifiedTime:: {
- "/src/core/tsconfig.tsbuildinfo": 1
-}
-
-setModifiedTime:: {}
-
-fileExists:: {}
-
-directoryExists:: {
- "/src/core/node_modules/@types": 1,
- "/src/node_modules/@types": 1,
- "/node_modules/@types": 1
-}
-
 
 //// [/src/core/index.d.ts]
 export declare function multiply(a: number, b: number): number;

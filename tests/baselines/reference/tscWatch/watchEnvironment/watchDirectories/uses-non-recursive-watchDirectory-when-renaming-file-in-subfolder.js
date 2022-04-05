@@ -19,14 +19,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 /a/lib/tsc.js --w -p /a/username/project/tsconfig.json
 Output::
 >> Screen clear
@@ -75,24 +67,6 @@ exitCode:: ExitStatus.undefined
 
 
 
-fileExists:: {
- "/a/username/project/tsconfig.json": 1
-} 
-
-directoryExists:: {
- "/a/username/project/tsconfig.json": 1,
- "/a/username/project/node_modules/@types": 2,
- "/a/username/node_modules/@types": 1,
- "/a/node_modules/@types": 1,
- "/node_modules/@types": 1,
- "/a/username/project": 1,
- "/a/username/project/src": 1
-} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 Change:: Rename file1 to file2
 
 Input::
@@ -100,16 +74,6 @@ Input::
 
 
 //// [/a/username/project/src/file1.ts] deleted
-
-fileExists:: {} 
-
-directoryExists:: {
- "/a/username/project/src": 2
-} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -155,20 +119,3 @@ exitCode:: ExitStatus.undefined
 //// [/a/username/project/src/file2.js]
 
 
-
-fileExists:: {
- "/a/username/project/src/file2.js": 1
-} 
-
-directoryExists:: {
- "/a/username/project/node_modules/@types": 1,
- "/a/username/node_modules/@types": 1,
- "/a/node_modules/@types": 1,
- "/node_modules/@types": 1,
- "/a/username/project/src/file2.js": 1,
- "/a/username/project/src": 1
-} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 

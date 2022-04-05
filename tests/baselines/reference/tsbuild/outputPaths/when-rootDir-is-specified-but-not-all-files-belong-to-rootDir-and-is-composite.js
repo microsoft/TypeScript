@@ -43,19 +43,6 @@ Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-getModifiedTime:: {
- "/src/tsconfig.tsbuildinfo": 1
-}
-
-setModifiedTime:: {}
-
-fileExists:: {}
-
-directoryExists:: {
- "/src/node_modules/@types": 1,
- "/node_modules/@types": 1
-}
-
 
 //// [/src/tsconfig.tsbuildinfo]
 {"program":{"fileNames":["../lib/lib.d.ts","./src/index.ts","./types/type.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","signature":false,"affectsGlobalScope":true},{"version":"-10726455937-export const x = 10;","signature":false},{"version":"-4885977236-export type t = string;","signature":false}],"options":{"composite":true,"outDir":"./dist","rootDir":"./src"},"referencedMap":[],"exportedModulesMap":[],"changeFileSet":[1,2,3]},"version":"FakeTSVersion"}
@@ -121,19 +108,6 @@ Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-getModifiedTime:: {
- "/src/tsconfig.tsbuildinfo": 1
-}
-
-setModifiedTime:: {}
-
-fileExists:: {}
-
-directoryExists:: {
- "/src/node_modules/@types": 1,
- "/node_modules/@types": 1
-}
-
 
 
 
@@ -151,20 +125,6 @@ Output::
 Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-
-getModifiedTime:: {}
-
-setModifiedTime:: {}
-
-fileExists:: {
- "/src/tsconfig.json": 1
-}
-
-directoryExists:: {
- "/src/tsconfig.json": 1,
- "/src/node_modules/@types": 1,
- "/node_modules/@types": 1
-}
 
 
 //// [/src/dist/index.d.ts]

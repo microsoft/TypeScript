@@ -28,14 +28,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 /a/lib/tsc.js --w /a/b/foo.ts /a/b/bar.d.ts
 Output::
 >> Screen clear
@@ -92,21 +84,6 @@ exports.__esModule = true;
 
 
 
-fileExists:: {} 
-
-directoryExists:: {
- "/a/b/node_modules": 4,
- "/a/node_modules": 4,
- "/node_modules": 4,
- "/a/b/node_modules/@types": 1,
- "/a/node_modules/@types": 1,
- "/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 Change:: Add fs definition
 
 Input::
@@ -125,14 +102,6 @@ declare module "fs" {
 }
 
 
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -177,11 +146,3 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 //// [/a/b/foo.js] file written with same contents
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 

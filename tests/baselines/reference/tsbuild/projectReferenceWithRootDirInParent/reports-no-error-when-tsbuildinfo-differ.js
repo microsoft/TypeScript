@@ -64,26 +64,6 @@ Output::
 
 exitCode:: ExitStatus.Success
 
-getModifiedTime:: {
- "/src/dist/tsconfig.other.tsbuildinfo": 1,
- "/src/dist/tsconfig.main.tsbuildinfo": 1
-}
-
-setModifiedTime:: {}
-
-fileExists:: {
- "/src/src/main/b.ts": 1
-}
-
-directoryExists:: {
- "/src/src/other/node_modules/@types": 1,
- "/src/src/node_modules/@types": 2,
- "/src/node_modules/@types": 2,
- "/node_modules/@types": 2,
- "/src/src/main": 2,
- "/src/src/main/node_modules/@types": 1
-}
-
 
 //// [/src/dist/a.d.ts]
 export {};

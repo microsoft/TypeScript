@@ -113,26 +113,6 @@ Output::
 /lib/tsc --b /src/tests --force
 exitCode:: ExitStatus.Success
 
-getModifiedTime:: {}
-
-setModifiedTime:: {}
-
-fileExists:: {
- "/src/core/index.ts": 1,
- "/src/core/anotherModule.ts": 1,
- "/src/logic/index.ts": 1
-}
-
-directoryExists:: {
- "/src/core/node_modules/@types": 1,
- "/src/node_modules/@types": 3,
- "/node_modules/@types": 3,
- "/src/core": 8,
- "/src/logic/node_modules/@types": 1,
- "/src/logic": 2,
- "/src/tests/node_modules/@types": 1
-}
-
 
 //// [/src/core/anotherModule.d.ts]
 export declare const World = "hello";
@@ -419,26 +399,6 @@ Input::
 Output::
 /lib/tsc --b /src/tests --force
 exitCode:: ExitStatus.Success
-
-getModifiedTime:: {}
-
-setModifiedTime:: {}
-
-fileExists:: {
- "/src/core/index.ts": 1,
- "/src/core/anotherModule.ts": 1,
- "/src/logic/index.ts": 1
-}
-
-directoryExists:: {
- "/src/core/node_modules/@types": 1,
- "/src/node_modules/@types": 3,
- "/node_modules/@types": 3,
- "/src/core": 8,
- "/src/logic/node_modules/@types": 1,
- "/src/logic": 2,
- "/src/tests/node_modules/@types": 1
-}
 
 
 //// [/src/core/anotherModule.d.ts] file written with same contents

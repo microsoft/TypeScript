@@ -22,14 +22,6 @@ interface Array<T> { length: number; [n: number]: T; }
 {}
 
 
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 /a/lib/tsc.js -w -p /a/b/tsconfig.json
 Output::
 >> Screen clear
@@ -86,33 +78,10 @@ var y = 2;
 
 
 
-fileExists:: {
- "/a/b/tsconfig.json": 1
-} 
-
-directoryExists:: {
- "/a/b/tsconfig.json": 1,
- "/a/b/node_modules/@types": 1,
- "/a/node_modules/@types": 1,
- "/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 Change:: Delete config file
 
 Input::
 //// [/a/b/tsconfig.json] deleted
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
 
 Output::
 [91merror[0m[90m TS5083: [0mCannot read file '/a/b/tsconfig.json'.
@@ -139,11 +108,3 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 

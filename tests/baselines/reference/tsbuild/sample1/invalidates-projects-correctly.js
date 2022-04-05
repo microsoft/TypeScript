@@ -365,35 +365,6 @@ export declare const m: typeof mod;
 }
 
 
-fileExists:: {
- "/user/username/projects/core/tsconfig.tsbuildinfo": 1,
- "/user/username/projects/core/index.ts": 1,
- "/user/username/projects/core/anothermodule.ts": 1,
- "/user/username/projects/logic/tsconfig.tsbuildinfo": 1,
- "/user/username/projects/logic/index.ts": 1,
- "/user/username/projects/tests/tsconfig.tsbuildinfo": 1
-} 
-
-directoryExists:: {
- "/user/username/projects/core/node_modules/@types": 1,
- "/user/username/projects/node_modules/@types": 3,
- "/user/username/node_modules/@types": 3,
- "/user/node_modules/@types": 3,
- "/node_modules/@types": 3,
- "/user/username/projects/core": 8,
- "/user/username/projects/logic/node_modules/@types": 1,
- "/user/username/projects/logic": 2,
- "/user/username/projects/tests/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {
- "/user/username/projects/core/tsconfig.tsbuildinfo": 1,
- "/user/username/projects/logic/tsconfig.tsbuildinfo": 1,
- "/user/username/projects/tests/tsconfig.tsbuildinfo": 1
-} 
-
-setModifiedTimes:: {} 
-
 Project should still be upto date: UpToDate
 non Dts change to logic:: After rebuilding logicConfig
 Output::
@@ -495,41 +466,10 @@ function foo() { }
 }
 
 
-fileExists:: {
- "/user/username/projects/core/index.ts": 1,
- "/user/username/projects/core/anothermodule.ts": 1,
- "/user/username/projects/logic/tsconfig.tsbuildinfo": 1
-} 
-
-directoryExists:: {
- "/user/username/projects/core": 4,
- "/user/username/projects/logic/node_modules/@types": 1,
- "/user/username/projects/node_modules/@types": 1,
- "/user/username/node_modules/@types": 1,
- "/user/node_modules/@types": 1,
- "/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {
- "/user/username/projects/logic/index.ts": 1
-} 
-
-setModifiedTimes:: {} 
-
 non Dts change to logic:: After building next project
 Output::
 
 //// [/user/username/projects/tests/tsconfig.tsbuildinfo] file changed its modified time
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {
- "/user/username/projects/tests/tsconfig.tsbuildinfo": 1
-} 
 
 Dts change to Logic:: After rebuilding logicConfig
 Output::
@@ -644,27 +584,6 @@ export declare class cNew {
 }
 
 
-fileExists:: {
- "/user/username/projects/core/index.ts": 1,
- "/user/username/projects/core/anothermodule.ts": 1,
- "/user/username/projects/logic/tsconfig.tsbuildinfo": 1
-} 
-
-directoryExists:: {
- "/user/username/projects/core": 4,
- "/user/username/projects/logic/node_modules/@types": 1,
- "/user/username/projects/node_modules/@types": 1,
- "/user/username/node_modules/@types": 1,
- "/user/node_modules/@types": 1,
- "/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {
- "/user/username/projects/logic/index.ts": 1
-} 
-
-setModifiedTimes:: {} 
-
 Dts change to Logic:: After building next project
 Output::
 
@@ -752,22 +671,3 @@ Output::
   "size": 1669
 }
 
-
-fileExists:: {
- "/user/username/projects/logic/index.ts": 1,
- "/user/username/projects/tests/tsconfig.tsbuildinfo": 1
-} 
-
-directoryExists:: {
- "/user/username/projects/core": 4,
- "/user/username/projects/logic": 2,
- "/user/username/projects/tests/node_modules/@types": 1,
- "/user/username/projects/node_modules/@types": 1,
- "/user/username/node_modules/@types": 1,
- "/user/node_modules/@types": 1,
- "/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 

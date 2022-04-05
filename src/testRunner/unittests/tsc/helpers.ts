@@ -39,21 +39,20 @@ namespace ts {
     export function commandLineCallbacks(
         sys: TscCompileSystem | tscWatch.WatchedSystem,
         originalReadCall?: System["readFile"],
-        originalFileExists?: System["fileExists"],
     ): CommandLineCallbacks {
         let programs: CommandLineProgram[] | undefined;
 
         return {
             cb: program => {
                 if (isAnyProgram(program)) {
-                    baselineBuildInfo(program.getCompilerOptions(), sys, originalReadCall, originalFileExists);
+                    baselineBuildInfo(program.getCompilerOptions(), sys, originalReadCall);
                     (programs || (programs = [])).push(isBuilderProgram(program) ?
                         [program.getProgram(), program] :
                         [program]
                     );
                 }
                 else {
-                    baselineBuildInfo(program.options, sys, originalReadCall, originalFileExists);
+                    baselineBuildInfo(program.options, sys, originalReadCall);
                 }
             },
             getPrograms: () => {
@@ -162,10 +161,6 @@ ${patch ? vfs.formatPatch(patch) : ""}`
     export function testTscCompile(input: TestTscCompile) {
         let actualReadFileMap: MapLike<number> | undefined;
         let getPrograms: CommandLineCallbacks["getPrograms"] | undefined;
-        let getModifiedCalls: MapLike<number> | undefined;
-        let setModifiedCalls: MapLike<number> | undefined;
-        let fileExistsCalls: MapLike<number> | undefined;
-        let directoryExistsCalls: MapLike<number> | undefined;
         return testTscCompileLike({
             ...input,
             compile: commandLineCompile,
@@ -183,43 +178,8 @@ ${patch ? vfs.formatPatch(patch) : ""}`
                 }
                 return originalReadFile.call(sys, path);
             };
-            getModifiedCalls = {};
-            setModifiedCalls = {};
-            fileExistsCalls = {};
-            directoryExistsCalls = {};
-            const originalGetModifiedTime = sys.getModifiedTime;
-            sys.getModifiedTime = path => {
-                // Dont record libs
-                if (getModifiedCalls) {
-                    getModifiedCalls[path] = (getProperty(getModifiedCalls, path) || 0) + 1;
-                }
-                return originalGetModifiedTime.call(sys, path);
-            };
-            const originalSetModifiedTime = sys.setModifiedTime;
-            sys.setModifiedTime = (path, time) => {
-                // Dont record libs
-                if (setModifiedCalls) {
-                    setModifiedCalls[path] = (getProperty(setModifiedCalls, path) || 0) + 1;
-                }
-                return originalSetModifiedTime.call(sys, path, time);
-            };
-            const originalFileExists = sys.fileExists;
-            sys.fileExists = path => {
-                // Dont record libs
-                if (fileExistsCalls) {
-                    fileExistsCalls[path] = (getProperty(fileExistsCalls, path) || 0) + 1;
-                }
-                return originalFileExists.call(sys, path);
-            };
-            const originalDirectoryExists = sys.directoryExists;
-            sys.directoryExists = path => {
-                // Dont record libs
-                if (directoryExistsCalls) {
-                    directoryExistsCalls[path] = (getProperty(directoryExistsCalls, path) || 0) + 1;
-                }
-                return originalDirectoryExists.call(sys, path);
-            };
-            const result = commandLineCallbacks(sys, originalReadFile, originalFileExists);
+
+            const result = commandLineCallbacks(sys, originalReadFile);
             executeCommandLine(
                 sys,
                 result.cb,
@@ -239,16 +199,8 @@ ${patch ? vfs.formatPatch(patch) : ""}`
             if (baselineReadFileCalls) {
                 sys.write(`readFiles:: ${JSON.stringify(actualReadFileMap, /*replacer*/ undefined, " ")} `);
             }
-            sys.write(`\ngetModifiedTime:: ${JSON.stringify(getModifiedCalls, /*replacer*/ undefined, " ")}\n`);
-            sys.write(`\nsetModifiedTime:: ${JSON.stringify(setModifiedCalls, /*replacer*/ undefined, " ")}\n`);
-            sys.write(`\nfileExists:: ${JSON.stringify(fileExistsCalls, /*replacer*/ undefined, " ")}\n`);
-            sys.write(`\ndirectoryExists:: ${JSON.stringify(directoryExistsCalls, /*replacer*/ undefined, " ")}\n`);
             if (baselineSourceMap) generateSourceMapBaselineFiles(sys);
             actualReadFileMap = undefined;
-            getModifiedCalls = undefined;
-            setModifiedCalls = undefined;
-            fileExistsCalls = undefined;
-            directoryExistsCalls = undefined;
             getPrograms = undefined;
         }
     }

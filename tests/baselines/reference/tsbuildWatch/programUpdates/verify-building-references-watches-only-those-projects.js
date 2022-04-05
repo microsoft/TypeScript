@@ -102,14 +102,6 @@ export function run() {
 
 
 
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 /a/lib/tsc.js --b --w
 Output::
 >> Screen clear
@@ -350,26 +342,3 @@ export declare const m: typeof mod;
   "size": 1494
 }
 
-
-fileExists:: {
- "/user/username/projects/sample1/core/index.ts": 1,
- "/user/username/projects/sample1/core/anothermodule.ts": 1
-} 
-
-directoryExists:: {
- "/user/username/projects/sample1/core/node_modules/@types": 1,
- "/user/username/projects/sample1/node_modules/@types": 2,
- "/user/username/projects/node_modules/@types": 2,
- "/user/username/node_modules/@types": 2,
- "/user/node_modules/@types": 2,
- "/node_modules/@types": 2,
- "/user/username/projects/sample1/core": 4,
- "/user/username/projects/sample1/logic/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {
- "/user/username/projects/sample1/core/tsconfig.tsbuildinfo": 1,
- "/user/username/projects/sample1/logic/tsconfig.tsbuildinfo": 1
-} 
-
-setModifiedTimes:: {} 

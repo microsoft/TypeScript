@@ -136,21 +136,6 @@ TSFILE: /src/core/tsconfig.tsbuildinfo
 /src/core/some_decl.d.ts
 exitCode:: ExitStatus.Success
 
-getModifiedTime:: {
- "/src/core/tsconfig.tsbuildinfo": 1
-}
-
-setModifiedTime:: {}
-
-fileExists:: {}
-
-directoryExists:: {
- "/src/core/node_modules/@types": 1,
- "/src/node_modules/@types": 1,
- "/node_modules/@types": 1,
- "/node_modules": 2
-}
-
 
 //// [/src/core/anotherModule.js]
 export const World = "hello";
@@ -250,25 +235,6 @@ TSFILE: /src/core/tsconfig.tsbuildinfo
 /src/core/index.ts
 /src/core/some_decl.d.ts
 exitCode:: ExitStatus.Success
-
-getModifiedTime:: {
- "/src/core/tsconfig.tsbuildinfo": 1,
- "/src/core/anotherModule.ts": 1,
- "/src/core/index.ts": 1,
- "/src/core/some_decl.d.ts": 1,
- "/src/core/tsconfig.json": 1
-}
-
-setModifiedTime:: {}
-
-fileExists:: {}
-
-directoryExists:: {
- "/src/core/node_modules/@types": 1,
- "/src/node_modules/@types": 1,
- "/node_modules/@types": 1,
- "/node_modules": 2
-}
 
 
 //// [/src/core/anotherModule.js]

@@ -138,26 +138,6 @@ Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
-getModifiedTime:: {
- "/src/core/tsconfig.tsbuildinfo": 1,
- "/src/logic/tsconfig.tsbuildinfo": 1
-}
-
-setModifiedTime:: {}
-
-fileExists:: {
- "/src/core/index.ts": 1,
- "/src/core/anotherModule.ts": 1
-}
-
-directoryExists:: {
- "/src/core/node_modules/@types": 1,
- "/src/node_modules/@types": 2,
- "/node_modules/@types": 2,
- "/src/core": 4,
- "/src/logic/node_modules/@types": 1
-}
-
 
 //// [/src/core/anotherModule.d.ts]
 export declare const World = "hello";
@@ -372,28 +352,5 @@ Output::
 Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
-
-getModifiedTime:: {
- "/src/core/tsconfig.tsbuildinfo": 1,
- "/src/core/anotherModule.ts": 1,
- "/src/core/index.ts": 1,
- "/src/core/some_decl.d.ts": 1,
- "/src/core/tsconfig.json": 1,
- "/src/logic/tsconfig.tsbuildinfo": 1
-}
-
-setModifiedTime:: {}
-
-fileExists:: {
- "/src/core/index.ts": 1,
- "/src/core/anotherModule.ts": 1
-}
-
-directoryExists:: {
- "/src/core": 4,
- "/src/logic/node_modules/@types": 1,
- "/src/node_modules/@types": 1,
- "/node_modules/@types": 1
-}
 
 

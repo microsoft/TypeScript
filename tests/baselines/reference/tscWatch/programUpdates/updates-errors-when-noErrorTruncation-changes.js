@@ -28,14 +28,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 /a/lib/tsc.js -w
 Output::
 >> Screen clear
@@ -88,36 +80,12 @@ v === 'foo';
 
 
 
-fileExists:: {
- "/user/username/projects/myproject/tsconfig.json": 1
-} 
-
-directoryExists:: {
- "/user/username/projects/myproject/node_modules/@types": 1,
- "/user/username/projects/node_modules/@types": 1,
- "/user/username/node_modules/@types": 1,
- "/user/node_modules/@types": 1,
- "/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 Change:: Enable noErrorTruncation
 
 Input::
 //// [/user/username/projects/myproject/tsconfig.json]
 {"compilerOptions":{"noErrorTruncation":true}}
 
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -163,11 +131,3 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 

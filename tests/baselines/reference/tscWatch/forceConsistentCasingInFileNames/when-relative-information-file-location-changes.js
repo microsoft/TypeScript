@@ -25,14 +25,6 @@ interface Array<T> { length: number; [n: number]: T; }
 {"compilerOptions":{"forceConsistentCasingInFileNames":true}}
 
 
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 /a/lib/tsc.js --w --p . --explainFiles
 Output::
 >> Screen clear
@@ -141,24 +133,6 @@ exports.__esModule = true;
 
 
 
-fileExists:: {
- "/user/username/projects/myproject/tsconfig.json": 1,
- "/user/username/projects/myproject/modulec.ts": 2
-} 
-
-directoryExists:: {
- "/user/username/projects/myproject": 4,
- "/user/username/projects/myproject/node_modules/@types": 1,
- "/user/username/projects/node_modules/@types": 1,
- "/user/username/node_modules/@types": 1,
- "/user/node_modules/@types": 1,
- "/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 Change:: Prepend a line to moduleA
 
 Input::
@@ -166,14 +140,6 @@ Input::
 // some comment
                     import a = require("./ModuleC")
 
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -259,11 +225,3 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/moduleA.js] file written with same contents
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 

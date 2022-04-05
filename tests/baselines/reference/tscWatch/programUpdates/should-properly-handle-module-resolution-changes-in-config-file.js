@@ -30,14 +30,6 @@ export interface T {}
                 }
 
 
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 /a/lib/tsc.js -w -p /a/b/tsconfig.json
 Output::
 >> Screen clear
@@ -93,24 +85,6 @@ exports.__esModule = true;
 
 
 
-fileExists:: {
- "/a/b/tsconfig.json": 1,
- "/a/b/node_modules/module1.ts": 2
-} 
-
-directoryExists:: {
- "/a/b/tsconfig.json": 1,
- "/a/b/node_modules": 2,
- "/a/b/node_modules/module1": 1,
- "/a/b/node_modules/@types": 1,
- "/a/node_modules/@types": 1,
- "/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 Change:: Change module resolution to classic
 
 Input::
@@ -122,14 +96,6 @@ Input::
                         "files": ["/a/b/file1.ts"]
                     }
 
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -181,22 +147,3 @@ exitCode:: ExitStatus.undefined
 exports.__esModule = true;
 
 
-
-fileExists:: {
- "/a/b/module1.ts": 1,
- "/a/b/module1.tsx": 1,
- "/a/b/module1.d.ts": 1,
- "/a/module1.ts": 1
-} 
-
-directoryExists:: {
- "/a/b": 1,
- "/a": 1,
- "/a/b/node_modules/@types": 1,
- "/a/node_modules/@types": 1,
- "/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 

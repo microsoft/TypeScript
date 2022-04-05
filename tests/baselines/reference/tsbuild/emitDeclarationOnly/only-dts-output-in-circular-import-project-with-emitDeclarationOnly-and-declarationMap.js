@@ -79,24 +79,6 @@ Output::
 
 exitCode:: ExitStatus.Success
 
-getModifiedTime:: {
- "/src/tsconfig.tsbuildinfo": 1
-}
-
-setModifiedTime:: {}
-
-fileExists:: {
- "/src/src/b.ts": 1,
- "/src/src/c.ts": 1,
- "/src/src/a.ts": 1
-}
-
-directoryExists:: {
- "/src/src": 6,
- "/src/node_modules/@types": 1,
- "/node_modules/@types": 1
-}
-
 
 //// [/src/lib/a.d.ts]
 import { B } from "./b";
@@ -271,25 +253,6 @@ Output::
 [[90m12:00:25 AM[0m] Building project '/src/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
-
-getModifiedTime:: {
- "/src/tsconfig.tsbuildinfo": 1,
- "/src/src/a.ts": 1
-}
-
-setModifiedTime:: {}
-
-fileExists:: {
- "/src/src/b.ts": 1,
- "/src/src/c.ts": 1,
- "/src/src/a.ts": 1
-}
-
-directoryExists:: {
- "/src/src": 6,
- "/src/node_modules/@types": 1,
- "/node_modules/@types": 1
-}
 
 
 //// [/src/lib/a.d.ts]

@@ -23,14 +23,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 /a/lib/tsc.js -w
 Output::
 >> Screen clear
@@ -93,38 +85,12 @@ var b = a_1.a;
 
 
 
-fileExists:: {
- "/user/username/projects/myproject/tsconfig.json": 1,
- "/user/username/projects/myproject/a.ts": 1
-} 
-
-directoryExists:: {
- "/user/username/projects/myproject": 2,
- "/user/username/projects/myproject/node_modules/@types": 1,
- "/user/username/projects/node_modules/@types": 1,
- "/user/username/node_modules/@types": 1,
- "/user/node_modules/@types": 1,
- "/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 Change:: Change shape of a
 
 Input::
 //// [/user/username/projects/myproject/a.ts]
 export const a: number = 1
 
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -182,11 +148,3 @@ exports.a = void 0;
 exports.a = 1;
 
 
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 

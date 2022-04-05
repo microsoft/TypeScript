@@ -25,14 +25,6 @@ export class myClass { }
 {"compilerOptions":{"composite":true}}
 
 
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 /a/lib/tsc.js -b -w app
 Output::
 >> Screen clear
@@ -82,23 +74,6 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 
-fileExists:: {} 
-
-directoryExists:: {
- "/user/username/projects/solution/app/node_modules/@types": 1,
- "/user/username/projects/solution/node_modules/@types": 1,
- "/user/username/projects/node_modules/@types": 1,
- "/user/username/node_modules/@types": 1,
- "/user/node_modules/@types": 1,
- "/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {
- "/user/username/projects/solution/app/tsconfig.tsbuildinfo": 1
-} 
-
-setModifiedTimes:: {} 
-
 Change:: Fix error in fileWithError
 
 Input::
@@ -108,14 +83,6 @@ export var myClassWithError = class {
         
     };
 
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -234,18 +201,3 @@ export declare class myClass {
   "size": 1006
 }
 
-
-fileExists:: {} 
-
-directoryExists:: {
- "/user/username/projects/solution/app/node_modules/@types": 1,
- "/user/username/projects/solution/node_modules/@types": 1,
- "/user/username/projects/node_modules/@types": 1,
- "/user/username/node_modules/@types": 1,
- "/user/node_modules/@types": 1,
- "/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 

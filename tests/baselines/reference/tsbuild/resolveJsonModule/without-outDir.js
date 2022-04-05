@@ -108,28 +108,6 @@ Output::
 
 exitCode:: ExitStatus.Success
 
-getModifiedTime:: {
- "/src/tsconfig_withFiles.tsbuildinfo": 1
-}
-
-setModifiedTime:: {}
-
-fileExists:: {
- "/src/src/hello.json.ts": 1,
- "/src/src/hello.json.tsx": 1,
- "/src/src/hello.json.d.ts": 1,
- "/src/src/hello.json.js": 1,
- "/src/src/hello.json.jsx": 1,
- "/src/src/hello.json": 1
-}
-
-directoryExists:: {
- "/src/src": 6,
- "/src/src/hello.json": 1,
- "/src/node_modules/@types": 1,
- "/node_modules/@types": 1
-}
-
 
 //// [/src/src/index.d.ts]
 declare const _default: string;
@@ -215,18 +193,5 @@ Output::
 [[90m12:00:17 AM[0m] Project 'src/tsconfig_withFiles.json' is up to date because newest input 'src/src/index.ts' is older than oldest output 'src/tsconfig_withFiles.tsbuildinfo'
 
 exitCode:: ExitStatus.Success
-
-getModifiedTime:: {
- "/src/tsconfig_withFiles.tsbuildinfo": 1,
- "/src/src/index.ts": 1,
- "/src/src/hello.json": 1,
- "/src/tsconfig_withFiles.json": 1
-}
-
-setModifiedTime:: {}
-
-fileExists:: {}
-
-directoryExists:: {}
 
 

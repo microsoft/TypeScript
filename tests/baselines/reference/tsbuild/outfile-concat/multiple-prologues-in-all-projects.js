@@ -175,31 +175,6 @@ readFiles:: {
  "/src/first/bin/first-output.d.ts.map": 1,
  "/src/2/second-output.d.ts.map": 1
 } 
-getModifiedTime:: {
- "/src/first/bin/first-output.tsbuildinfo": 1,
- "/src/2/second-output.tsbuildinfo": 1,
- "/src/third/thirdjs/output/third-output.tsbuildinfo": 1
-}
-
-setModifiedTime:: {}
-
-fileExists:: {
- "/src/first/bin/first-output.js": 2,
- "/src/first/bin/first-output.d.ts": 1,
- "/src/2/second-output.js": 2,
- "/src/2/second-output.d.ts": 1,
- "/src/third/thirdjs/output/third-output.js": 1,
- "/src/third/thirdjs/output/third-output.d.ts": 1
-}
-
-directoryExists:: {
- "/src/first/node_modules/@types": 1,
- "/src/node_modules/@types": 3,
- "/node_modules/@types": 3,
- "/src/second/node_modules/@types": 1,
- "/src/third/node_modules/@types": 1
-}
-
 
 //// [/src/2/second-output.d.ts]
 declare namespace N {
@@ -2315,34 +2290,6 @@ readFiles:: {
  "/src/first/bin/first-output.d.ts.map": 1,
  "/src/2/second-output.d.ts.map": 1
 } 
-getModifiedTime:: {
- "/src/first/bin/first-output.tsbuildinfo": 1,
- "/src/first/first_PART1.ts": 1,
- "/src/2/second-output.tsbuildinfo": 1,
- "/src/second/second_part1.ts": 1,
- "/src/second/second_part2.ts": 1,
- "/src/second/tsconfig.json": 1,
- "/src/third/thirdjs/output/third-output.tsbuildinfo": 1,
- "/src/third/third_part1.ts": 1
-}
-
-setModifiedTime:: {}
-
-fileExists:: {
- "/src/first/bin/first-output.js": 2,
- "/src/first/bin/first-output.d.ts": 1,
- "/src/2/second-output.js": 1,
- "/src/third/thirdjs/output/third-output.js": 1,
- "/src/third/thirdjs/output/third-output.d.ts": 1
-}
-
-directoryExists:: {
- "/src/first/node_modules/@types": 1,
- "/src/node_modules/@types": 2,
- "/node_modules/@types": 2,
- "/src/third/node_modules/@types": 1
-}
-
 
 //// [/src/first/bin/first-output.d.ts]
 interface TheFirst {
@@ -3885,33 +3832,6 @@ readFiles:: {
  "/src/first/bin/first-output.d.ts.map": 1,
  "/src/2/second-output.d.ts.map": 1
 } 
-getModifiedTime:: {
- "/src/first/bin/first-output.tsbuildinfo": 1,
- "/src/first/first_PART1.ts": 1,
- "/src/2/second-output.tsbuildinfo": 1,
- "/src/second/second_part1.ts": 1,
- "/src/second/second_part2.ts": 1,
- "/src/second/tsconfig.json": 1,
- "/src/third/thirdjs/output/third-output.tsbuildinfo": 1,
- "/src/third/third_part1.ts": 1,
- "/src/third/tsconfig.json": 1
-}
-
-setModifiedTime:: {}
-
-fileExists:: {
- "/src/first/bin/first-output.js": 1,
- "/src/first/bin/first-output.d.ts": 1,
- "/src/third/thirdjs/output/third-output.js": 1,
- "/src/third/thirdjs/output/third-output.d.ts": 1
-}
-
-directoryExists:: {
- "/src/first/node_modules/@types": 1,
- "/src/node_modules/@types": 1,
- "/node_modules/@types": 1
-}
-
 
 //// [/src/first/bin/first-output.d.ts] file written with same contents
 //// [/src/first/bin/first-output.d.ts.map] file written with same contents
@@ -5104,33 +5024,6 @@ readFiles:: {
  "/src/first/bin/first-output.d.ts.map": 1,
  "/src/2/second-output.d.ts.map": 1
 } 
-getModifiedTime:: {
- "/src/first/bin/first-output.tsbuildinfo": 1,
- "/src/first/first_PART1.ts": 1,
- "/src/2/second-output.tsbuildinfo": 1,
- "/src/second/second_part1.ts": 1,
- "/src/second/second_part2.ts": 1,
- "/src/second/tsconfig.json": 1,
- "/src/third/thirdjs/output/third-output.tsbuildinfo": 1,
- "/src/third/third_part1.ts": 1,
- "/src/third/tsconfig.json": 1
-}
-
-setModifiedTime:: {}
-
-fileExists:: {
- "/src/first/bin/first-output.js": 1,
- "/src/first/bin/first-output.d.ts": 1,
- "/src/third/thirdjs/output/third-output.js": 1,
- "/src/third/thirdjs/output/third-output.d.ts": 1
-}
-
-directoryExists:: {
- "/src/first/node_modules/@types": 1,
- "/src/node_modules/@types": 1,
- "/node_modules/@types": 1
-}
-
 
 //// [/src/first/bin/first-output.d.ts] file written with same contents
 //// [/src/first/bin/first-output.d.ts.map]

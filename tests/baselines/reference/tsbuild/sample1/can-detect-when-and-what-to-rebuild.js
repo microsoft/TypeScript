@@ -400,26 +400,6 @@ Output::
 
 exitCode:: ExitStatus.Success
 
-getModifiedTime:: {
- "/src/core/tsconfig.tsbuildinfo": 1,
- "/src/core/anotherModule.ts": 1,
- "/src/core/index.ts": 1,
- "/src/core/some_decl.d.ts": 1,
- "/src/core/tsconfig.json": 1,
- "/src/logic/tsconfig.tsbuildinfo": 1,
- "/src/logic/index.ts": 1,
- "/src/logic/tsconfig.json": 1,
- "/src/tests/tsconfig.tsbuildinfo": 1,
- "/src/tests/index.ts": 1,
- "/src/tests/tsconfig.json": 1
-}
-
-setModifiedTime:: {}
-
-fileExists:: {}
-
-directoryExists:: {}
-
 
 
 
@@ -446,29 +426,6 @@ Output::
 [[90m12:00:38 AM[0m] Building project '/src/tests/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
-
-getModifiedTime:: {
- "/src/core/tsconfig.tsbuildinfo": 1,
- "/src/core/anotherModule.ts": 1,
- "/src/core/index.ts": 1,
- "/src/core/some_decl.d.ts": 1,
- "/src/core/tsconfig.json": 1,
- "/src/logic/tsconfig.tsbuildinfo": 1,
- "/src/logic/index.ts": 1,
- "/src/logic/tsconfig.json": 1,
- "/src/tests/tsconfig.tsbuildinfo": 1,
- "/src/tests/index.ts": 1
-}
-
-setModifiedTime:: {}
-
-fileExists:: {}
-
-directoryExists:: {
- "/src/tests/node_modules/@types": 1,
- "/src/node_modules/@types": 1,
- "/node_modules/@types": 1
-}
 
 
 //// [/src/tests/index.d.ts]
@@ -550,31 +507,6 @@ Output::
 [[90m12:01:00 AM[0m] Updating output timestamps of project '/src/tests/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
-
-getModifiedTime:: {
- "/src/core/tsconfig.tsbuildinfo": 1,
- "/src/core/anotherModule.ts": 1,
- "/src/core/index.ts": 1,
- "/src/logic/tsconfig.tsbuildinfo": 1,
- "/src/logic/index.ts": 1,
- "/src/logic/tsconfig.json": 1,
- "/src/tests/tsconfig.tsbuildinfo": 1,
- "/src/tests/index.ts": 1,
- "/src/tests/tsconfig.json": 1
-}
-
-setModifiedTime:: {
- "/src/logic/tsconfig.tsbuildinfo": 1,
- "/src/tests/tsconfig.tsbuildinfo": 1
-}
-
-fileExists:: {}
-
-directoryExists:: {
- "/src/core/node_modules/@types": 1,
- "/src/node_modules/@types": 1,
- "/node_modules/@types": 1
-}
 
 
 //// [/src/core/index.d.ts] file written with same contents
@@ -683,30 +615,6 @@ Output::
 [[90m12:01:08 AM[0m] Building project '/src/tests/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
-
-getModifiedTime:: {
- "/src/core/tsconfig.tsbuildinfo": 1,
- "/src/core/anotherModule.ts": 1,
- "/src/core/index.ts": 1,
- "/src/core/some_decl.d.ts": 1,
- "/src/core/tsconfig.json": 1,
- "/src/logic/tsconfig.tsbuildinfo": 1,
- "/src/logic/index.ts": 1,
- "/src/logic/tsconfig.json": 1,
- "/src/tests/tsconfig.tsbuildinfo": 1,
- "/src/tests/index.ts": 1,
- "/src/tests/tsconfig.json": 1
-}
-
-setModifiedTime:: {}
-
-fileExists:: {}
-
-directoryExists:: {
- "/src/tests/node_modules/@types": 1,
- "/src/node_modules/@types": 1,
- "/node_modules/@types": 1
-}
 
 
 //// [/src/tests/index.d.ts] file written with same contents

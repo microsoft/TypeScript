@@ -24,14 +24,6 @@ declare const console: { log(msg: any): void; };
 {"compilerOptions":{"allowJs":true,"noEmit":true}}
 
 
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 /a/lib/tsc.js -b -w -verbose
 Output::
 >> Screen clear
@@ -83,35 +75,10 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 
-fileExists:: {} 
-
-directoryExists:: {
- "/user/username/projects/myproject/node_modules/@types": 1,
- "/user/username/projects/node_modules/@types": 1,
- "/user/username/node_modules/@types": 1,
- "/user/node_modules/@types": 1,
- "/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {
- "/user/username/projects/myproject/a.js": 2,
- "/user/username/projects/myproject/b.ts": 1
-} 
-
-setModifiedTimes:: {} 
-
 Change:: No change
 
 Input::
 //// [/user/username/projects/myproject/a.js] file written with same contents
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -154,34 +121,12 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 
-fileExists:: {} 
-
-directoryExists:: {
- "/user/username/projects/myproject/node_modules/@types": 1,
- "/user/username/projects/node_modules/@types": 1,
- "/user/username/node_modules/@types": 1,
- "/user/node_modules/@types": 1,
- "/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 Change:: change
 
 Input::
 //// [/user/username/projects/myproject/a.js]
 const x = 10;
 
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -228,17 +173,3 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
-
-fileExists:: {} 
-
-directoryExists:: {
- "/user/username/projects/myproject/node_modules/@types": 1,
- "/user/username/projects/node_modules/@types": 1,
- "/user/username/node_modules/@types": 1,
- "/user/node_modules/@types": 1,
- "/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 

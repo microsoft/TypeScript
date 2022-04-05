@@ -31,14 +31,6 @@ interface Array<T> { length: number; [n: number]: T; }
 {"compilerOptions":{"forceConsistentCasingInFileNames":true,"outFile":"out.js","module":"system"}}
 
 
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 /a/lib/tsc.js --w --p . --explainFiles
 Output::
 >> Screen clear
@@ -145,25 +137,6 @@ System.register("XY/a", [], function (exports_3, context_3) {
 
 
 
-fileExists:: {
- "/user/username/projects/myproject/tsconfig.json": 1,
- "/user/username/projects/myproject/link/a.ts": 1
-} 
-
-directoryExists:: {
- "/user/username/projects/myproject/yx": 2,
- "/user/username/projects/myproject/link": 1,
- "/user/username/projects/myproject/node_modules/@types": 1,
- "/user/username/projects/node_modules/@types": 1,
- "/user/username/node_modules/@types": 1,
- "/user/node_modules/@types": 1,
- "/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 Change:: Prepend a line to moduleA
 
 Input::
@@ -174,14 +147,6 @@ export const a = 1;
 export const b = 2;
 
 
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -288,11 +253,3 @@ System.register("XY/a", [], function (exports_3, context_3) {
 });
 
 
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 

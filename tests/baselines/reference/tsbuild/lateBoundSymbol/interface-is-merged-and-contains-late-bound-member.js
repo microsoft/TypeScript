@@ -57,22 +57,6 @@ Output::
 
 exitCode:: ExitStatus.Success
 
-getModifiedTime:: {
- "/src/tsconfig.tsbuildinfo": 1
-}
-
-setModifiedTime:: {}
-
-fileExists:: {
- "/src/src/hkt.ts": 1
-}
-
-directoryExists:: {
- "/src/src": 2,
- "/src/node_modules/@types": 1,
- "/node_modules/@types": 1
-}
-
 
 //// [/src/src/hkt.js]
 "use strict";
@@ -180,25 +164,6 @@ Output::
 
 exitCode:: ExitStatus.Success
 
-getModifiedTime:: {
- "/src/tsconfig.tsbuildinfo": 1,
- "/src/src/globals.d.ts": 1,
- "/src/src/hkt.ts": 1,
- "/src/src/main.ts": 1
-}
-
-setModifiedTime:: {}
-
-fileExists:: {
- "/src/src/hkt.ts": 1
-}
-
-directoryExists:: {
- "/src/src": 2,
- "/src/node_modules/@types": 1,
- "/node_modules/@types": 1
-}
-
 
 //// [/src/src/main.js]
 "use strict";
@@ -299,25 +264,6 @@ Output::
 [[90m12:00:25 AM[0m] Building project '/src/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
-
-getModifiedTime:: {
- "/src/tsconfig.tsbuildinfo": 1,
- "/src/src/globals.d.ts": 1,
- "/src/src/hkt.ts": 1,
- "/src/src/main.ts": 1
-}
-
-setModifiedTime:: {}
-
-fileExists:: {
- "/src/src/hkt.ts": 1
-}
-
-directoryExists:: {
- "/src/src": 2,
- "/src/node_modules/@types": 1,
- "/node_modules/@types": 1
-}
 
 
 //// [/src/src/main.js]

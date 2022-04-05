@@ -16,14 +16,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 /a/lib/tsc.js --w /f.ts --preserveWatchOutput
 Output::
 [[90m12:00:11 AM[0m] Starting compilation in watch mode...
@@ -63,30 +55,12 @@ exitCode:: ExitStatus.undefined
 
 
 
-fileExists:: {} 
-
-directoryExists:: {
- "/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 Change:: Comment added to file f
 
 Input::
 //// [/f.ts]
 //
 
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
 
 Output::
 [[90m12:00:17 AM[0m] File change detected. Starting incremental compilation...
@@ -124,11 +98,3 @@ exitCode:: ExitStatus.undefined
 //
 
 
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 

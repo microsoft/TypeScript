@@ -22,14 +22,6 @@ export const x = 10;
 {"compilerOptions":{"outDir":"dist","declaration":true}}
 
 
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 /a/lib/tsc.js --w -p /user/username/projects/myproject/tsconfig.json
 Output::
 >> Screen clear
@@ -97,47 +89,9 @@ export {};
 
 
 
-fileExists:: {
- "/user/username/projects/myproject/tsconfig.json": 1,
- "/user/username/projects/myproject/node_modules/file2/package.json": 1,
- "/user/username/projects/myproject/node_modules/file2.ts": 1,
- "/user/username/projects/myproject/node_modules/file2.tsx": 1,
- "/user/username/projects/myproject/node_modules/file2.d.ts": 1,
- "/user/username/projects/myproject/node_modules/file2/index.ts": 1,
- "/user/username/projects/myproject/node_modules/file2/index.tsx": 1,
- "/user/username/projects/myproject/node_modules/file2/index.d.ts": 2
-} 
-
-directoryExists:: {
- "/user/username/projects/myproject/tsconfig.json": 1,
- "/user/username/projects/myproject/src/node_modules": 1,
- "/user/username/projects/myproject/node_modules": 3,
- "/user/username/projects/myproject/node_modules/file2": 4,
- "/user/username/projects/myproject/node_modules/@types": 2,
- "/user/username/projects/node_modules/@types": 1,
- "/user/username/node_modules/@types": 1,
- "/user/node_modules/@types": 1,
- "/node_modules/@types": 1,
- "/user/username/projects/myproject/src": 1,
- "/user/username/projects/myproject/dist": 2,
- "/user/username/projects/myproject": 2
-} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 Change:: No change
 
 Input::
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
 
 Output::
 
@@ -171,14 +125,6 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
 
 Change:: Add new file, should schedule and run timeout to update directory watcher
 
@@ -187,16 +133,6 @@ Input::
 export const y = 10;
 
 
-fileExists:: {} 
-
-directoryExists:: {
- "/user/username/projects/myproject/src": 1
-} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 Output::
 
 WatchedFiles::
@@ -230,27 +166,9 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 
-fileExists:: {} 
-
-directoryExists:: {
- "/user/username/projects/myproject/src": 1
-} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 Change:: Actual program update to include new file
 
 Input::
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -317,32 +235,9 @@ export declare const y = 10;
 
 
 
-fileExists:: {} 
-
-directoryExists:: {
- "/user/username/projects/myproject/node_modules/@types": 1,
- "/user/username/projects/node_modules/@types": 1,
- "/user/username/node_modules/@types": 1,
- "/user/node_modules/@types": 1,
- "/node_modules/@types": 1,
- "/user/username/projects/myproject/dist": 2
-} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 Change:: After program emit with new file, should schedule and run timeout to update directory watcher
 
 Input::
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
 
 Output::
 
@@ -376,34 +271,11 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
-
-fileExists:: {
- "/user/username/projects/myproject/dist/file3.js": 1,
- "/user/username/projects/myproject/dist/file3.d.ts": 1
-} 
-
-directoryExists:: {
- "/user/username/projects/myproject/dist": 1,
- "/user/username/projects/myproject/dist/file3.js": 1,
- "/user/username/projects/myproject/dist/file3.d.ts": 1
-} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
 
 Change:: No change
 
 Input::
 
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 Output::
 
 WatchedFiles::
@@ -436,11 +308,3 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 

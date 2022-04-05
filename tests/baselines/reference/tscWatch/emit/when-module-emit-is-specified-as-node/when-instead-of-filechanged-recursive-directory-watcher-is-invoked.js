@@ -22,14 +22,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 /a/lib/tsc.js --w --p /a/rootFolder/project/tsconfig.json
 Output::
 >> Screen clear
@@ -86,39 +78,12 @@ var z = 10;
 
 
 
-fileExists:: {
- "/a/rootfolder/project/tsconfig.json": 1
-} 
-
-directoryExists:: {
- "/a/rootfolder/project/tsconfig.json": 1,
- "/a/rootfolder/project/node_modules/@types": 1,
- "/a/rootfolder/node_modules/@types": 1,
- "/a/node_modules/@types": 1,
- "/node_modules/@types": 1,
- "/a/rootfolder/project/static/scripts": 1,
- "/a/rootfolder/project/static": 1,
- "/a/rootfolder/project": 1
-} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 Change:: Modify typescript file
 
 Input::
 //// [/a/rootFolder/project/Scripts/TypeScript.ts]
 var zz30 = 100;
 
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -170,11 +135,3 @@ exitCode:: ExitStatus.undefined
 var zz30 = 100;
 
 
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 

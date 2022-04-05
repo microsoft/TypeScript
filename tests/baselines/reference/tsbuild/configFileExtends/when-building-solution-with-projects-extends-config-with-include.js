@@ -60,24 +60,6 @@ Output::
 /src/shared/typings-base/globals.d.ts
 exitCode:: ExitStatus.Success
 
-getModifiedTime:: {
- "/src/target-tsc-build/shared/tsconfig.tsbuildinfo": 1,
- "/src/target-tsc-build/webpack/tsconfig.tsbuildinfo": 1
-}
-
-setModifiedTime:: {}
-
-fileExists:: {
- "/src/shared/tsconfig-base.json": 2
-}
-
-directoryExists:: {
- "/src/shared/node_modules/@types": 1,
- "/src/node_modules/@types": 2,
- "/node_modules/@types": 2,
- "/src/webpack/node_modules/@types": 1
-}
-
 
 //// [/src/target-tsc-build/shared/index.d.ts]
 export declare const a: Unrestricted;

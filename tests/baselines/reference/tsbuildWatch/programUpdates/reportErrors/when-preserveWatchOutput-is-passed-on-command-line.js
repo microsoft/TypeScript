@@ -102,14 +102,6 @@ export function run() {
 
 
 
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 /a/lib/tsc.js -b -w sample1/tests --preserveWatchOutput
 Output::
 [[90m12:00:45 AM[0m] Starting compilation in watch mode...
@@ -477,33 +469,6 @@ export declare const m: typeof mod;
 }
 
 
-fileExists:: {
- "/user/username/projects/sample1/core/index.ts": 1,
- "/user/username/projects/sample1/core/anothermodule.ts": 1,
- "/user/username/projects/sample1/logic/index.ts": 1
-} 
-
-directoryExists:: {
- "/user/username/projects/sample1/core/node_modules/@types": 1,
- "/user/username/projects/sample1/node_modules/@types": 3,
- "/user/username/projects/node_modules/@types": 3,
- "/user/username/node_modules/@types": 3,
- "/user/node_modules/@types": 3,
- "/node_modules/@types": 3,
- "/user/username/projects/sample1/core": 8,
- "/user/username/projects/sample1/logic/node_modules/@types": 1,
- "/user/username/projects/sample1/logic": 2,
- "/user/username/projects/sample1/tests/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {
- "/user/username/projects/sample1/core/tsconfig.tsbuildinfo": 1,
- "/user/username/projects/sample1/logic/tsconfig.tsbuildinfo": 1,
- "/user/username/projects/sample1/tests/tsconfig.tsbuildinfo": 1
-} 
-
-setModifiedTimes:: {} 
-
 Change:: change logic
 
 Input::
@@ -517,14 +482,6 @@ export const m = mod;
 
 let y: string = 10;
 
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
 
 Output::
 [[90m12:01:30 AM[0m] File change detected. Starting incremental compilation...
@@ -667,25 +624,6 @@ exitCode:: ExitStatus.undefined
 }
 
 
-fileExists:: {
- "/user/username/projects/sample1/core/index.ts": 1,
- "/user/username/projects/sample1/core/anothermodule.ts": 1
-} 
-
-directoryExists:: {
- "/user/username/projects/sample1/core": 4,
- "/user/username/projects/sample1/logic/node_modules/@types": 1,
- "/user/username/projects/sample1/node_modules/@types": 1,
- "/user/username/projects/node_modules/@types": 1,
- "/user/username/node_modules/@types": 1,
- "/user/node_modules/@types": 1,
- "/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 Change:: change core
 
 Input::
@@ -696,14 +634,6 @@ export function multiply(a: number, b: number) { return a * b; }
 
 let x: string = 10;
 
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
 
 Output::
 [[90m12:01:42 AM[0m] File change detected. Starting incremental compilation...
@@ -825,20 +755,3 @@ exitCode:: ExitStatus.undefined
   "size": 1472
 }
 
-
-fileExists:: {} 
-
-directoryExists:: {
- "/user/username/projects/sample1/core/node_modules/@types": 1,
- "/user/username/projects/sample1/node_modules/@types": 1,
- "/user/username/projects/node_modules/@types": 1,
- "/user/username/node_modules/@types": 1,
- "/user/node_modules/@types": 1,
- "/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {
- "/user/username/projects/sample1/core/anothermodule.ts": 1
-} 
-
-setModifiedTimes:: {} 

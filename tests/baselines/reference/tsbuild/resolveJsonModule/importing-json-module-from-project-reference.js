@@ -96,32 +96,6 @@ src/main/index.ts
   Matched by include pattern './**/*.ts' in 'src/main/tsconfig.json'
 exitCode:: ExitStatus.Success
 
-getModifiedTime:: {
- "/src/strings/tsconfig.tsbuildinfo": 1,
- "/src/main/tsconfig.tsbuildinfo": 1
-}
-
-setModifiedTime:: {}
-
-fileExists:: {
- "/src/tsconfig.json": 2,
- "/src/strings/foo.json.ts": 1,
- "/src/strings/foo.json.tsx": 1,
- "/src/strings/foo.json.d.ts": 1,
- "/src/strings/foo.json.js": 1,
- "/src/strings/foo.json.jsx": 1,
- "/src/strings/foo.json": 1
-}
-
-directoryExists:: {
- "/src/strings/node_modules/@types": 1,
- "/src/node_modules/@types": 2,
- "/node_modules/@types": 2,
- "/src/strings": 6,
- "/src/strings/foo.json": 1,
- "/src/main/node_modules/@types": 1
-}
-
 
 //// [/src/main/index.d.ts]
 export {};
@@ -248,23 +222,5 @@ Output::
 [[90m12:00:22 AM[0m] Project 'src/main/tsconfig.json' is up to date because newest input 'src/main/index.ts' is older than oldest output 'src/main/tsconfig.tsbuildinfo'
 
 exitCode:: ExitStatus.Success
-
-getModifiedTime:: {
- "/src/strings/tsconfig.tsbuildinfo": 1,
- "/src/strings/foo.json": 1,
- "/src/strings/tsconfig.json": 1,
- "/src/tsconfig.json": 2,
- "/src/main/tsconfig.tsbuildinfo": 1,
- "/src/main/index.ts": 1,
- "/src/main/tsconfig.json": 1
-}
-
-setModifiedTime:: {}
-
-fileExists:: {
- "/src/tsconfig.json": 2
-}
-
-directoryExists:: {}
 
 

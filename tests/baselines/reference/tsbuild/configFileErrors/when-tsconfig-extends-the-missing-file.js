@@ -58,17 +58,4 @@ Found 4 errors.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-getModifiedTime:: {
- "/src/tsconfig.first.tsbuildinfo": 1,
- "/src/tsconfig.second.tsbuildinfo": 1
-}
-
-setModifiedTime:: {}
-
-fileExists:: {
- "/src/foobar.json": 2
-}
-
-directoryExists:: {}
-
 

@@ -19,14 +19,6 @@ interface Array<T> { length: number; [n: number]: T; }
 {"include":[".","./**/*.json"]}
 
 
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 /a/lib/tsc.js -w -p .
 Output::
 >> Screen clear
@@ -79,37 +71,12 @@ exports.x = 10;
 
 
 
-fileExists:: {
- "/user/username/projects/myproject/project/tsconfig.json": 1
-} 
-
-directoryExists:: {
- "/user/username/projects/myproject/project/node_modules/@types": 1,
- "/user/username/projects/myproject/node_modules/@types": 1,
- "/user/username/projects/node_modules/@types": 1,
- "/user/username/node_modules/@types": 1,
- "/user/node_modules/@types": 1,
- "/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 Change:: Write file2
 
 Input::
 //// [/user/username/projects/myproject/Project/file2.ts]
 export const y = 10;
 
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -162,21 +129,3 @@ exports.y = void 0;
 exports.y = 10;
 
 
-
-fileExists:: {
- "/user/username/projects/myproject/project/file2.js": 1
-} 
-
-directoryExists:: {
- "/user/username/projects/myproject/project/node_modules/@types": 1,
- "/user/username/projects/myproject/node_modules/@types": 1,
- "/user/username/projects/node_modules/@types": 1,
- "/user/username/node_modules/@types": 1,
- "/user/node_modules/@types": 1,
- "/node_modules/@types": 1,
- "/user/username/projects/myproject/project/file2.js": 1
-} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 

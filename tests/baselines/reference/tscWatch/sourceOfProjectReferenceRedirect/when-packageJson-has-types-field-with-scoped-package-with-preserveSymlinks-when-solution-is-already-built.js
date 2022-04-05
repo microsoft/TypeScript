@@ -178,49 +178,6 @@ export {};
 }
 
 
-fileExists:: {
- "/user/username/projects/myproject/packages/b/tsconfig.tsbuildinfo": 1,
- "/user/username/projects/myproject/node_modules/@issue/b/package.json": 1,
- "/user/username/projects/myproject/node_modules/@issue/b.ts": 1,
- "/user/username/projects/myproject/node_modules/@issue/b.tsx": 1,
- "/user/username/projects/myproject/node_modules/@issue/b.d.ts": 1,
- "/user/username/projects/myproject/node_modules/@issue/b/lib/index.d.ts": 1,
- "/user/username/projects/myproject/node_modules/@issue/b/lib/bar.ts": 1,
- "/user/username/projects/myproject/node_modules/@issue/b/lib/bar.tsx": 1,
- "/user/username/projects/myproject/node_modules/@issue/b/lib/bar.d.ts": 1,
- "/user/username/projects/myproject/packages/a/tsconfig.tsbuildinfo": 1
-} 
-
-directoryExists:: {
- "/user/username/projects/myproject/packages/b/node_modules/@types": 1,
- "/user/username/projects/myproject/packages/node_modules/@types": 2,
- "/user/username/projects/myproject/node_modules/@types": 2,
- "/user/username/projects/node_modules/@types": 2,
- "/user/username/node_modules/@types": 2,
- "/user/node_modules/@types": 2,
- "/node_modules/@types": 2,
- "/user/username/projects/myproject/packages/b/lib": 1,
- "/user/username/projects/myproject/packages/b": 1,
- "/user/username/projects/myproject/packages/a/src/node_modules": 2,
- "/user/username/projects/myproject/packages/a/node_modules": 2,
- "/user/username/projects/myproject/packages/node_modules": 2,
- "/user/username/projects/myproject/node_modules": 2,
- "/user/username/projects/myproject/node_modules/@issue/b": 2,
- "/user/username/projects/myproject/node_modules/@issue": 1,
- "/user/username/projects/myproject/node_modules/@issue/b/lib": 2,
- "/user/username/projects/myproject/node_modules/@issue/b/lib/bar": 1,
- "/user/username/projects/myproject/packages/a/node_modules/@types": 1,
- "/user/username/projects/myproject/packages/a/lib": 1,
- "/user/username/projects/myproject/packages/a": 1
-} 
-
-getModifiedTimes:: {
- "/user/username/projects/myproject/packages/b/tsconfig.tsbuildinfo": 1,
- "/user/username/projects/myproject/packages/a/tsconfig.tsbuildinfo": 1
-} 
-
-setModifiedTimes:: {} 
-
 /a/lib/tsc.js --w --p /user/username/projects/myproject/packages/A/tsconfig.json
 Output::
 >> Screen clear
@@ -353,37 +310,3 @@ exitCode:: ExitStatus.undefined
   "size": 984
 }
 
-
-fileExists:: {
- "/user/username/projects/myproject/node_modules/@issue/b/package.json": 1,
- "/user/username/projects/myproject/node_modules/@issue/b.ts": 1,
- "/user/username/projects/myproject/node_modules/@issue/b.tsx": 1,
- "/user/username/projects/myproject/node_modules/@issue/b.d.ts": 1,
- "/user/username/projects/myproject/node_modules/@issue/b/lib/index.d.ts": 1,
- "/user/username/projects/myproject/node_modules/@issue/b/lib/bar/package.json": 1,
- "/user/username/projects/myproject/node_modules/@issue/b/lib/bar.ts": 1,
- "/user/username/projects/myproject/node_modules/@issue/b/lib/bar.tsx": 1,
- "/user/username/projects/myproject/node_modules/@issue/b/lib/bar.d.ts": 1
-} 
-
-directoryExists:: {
- "/user/username/projects/myproject/packages/a/src/node_modules": 2,
- "/user/username/projects/myproject/packages/a/node_modules": 2,
- "/user/username/projects/myproject/packages/node_modules": 2,
- "/user/username/projects/myproject/node_modules": 2,
- "/user/username/projects/myproject/node_modules/@issue/b": 2,
- "/user/username/projects/myproject/node_modules/@issue": 1,
- "/user/username/projects/myproject/node_modules/@issue/b/lib": 2,
- "/user/username/projects/myproject/node_modules/@issue/b/lib/bar": 1,
- "/user/username/projects/myproject/packages/a/node_modules/@types": 1,
- "/user/username/projects/myproject/packages/node_modules/@types": 1,
- "/user/username/projects/myproject/node_modules/@types": 1,
- "/user/username/projects/node_modules/@types": 1,
- "/user/username/node_modules/@types": 1,
- "/user/node_modules/@types": 1,
- "/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 

@@ -71,22 +71,6 @@ Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
-getModifiedTime:: {
- "/src/tsconfig.a.tsbuildinfo": 1,
- "/src/tsconfig.b.tsbuildinfo": 1
-}
-
-setModifiedTime:: {}
-
-fileExists:: {}
-
-directoryExists:: {
- "/src/node_modules/@types": 2,
- "/node_modules/@types": 2,
- "/src/node_modules": 2,
- "/node_modules": 2
-}
-
 
 //// [/src/a.d.ts]
 export declare class A {

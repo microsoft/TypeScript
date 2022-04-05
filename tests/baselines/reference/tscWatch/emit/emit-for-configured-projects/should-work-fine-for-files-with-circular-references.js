@@ -24,14 +24,6 @@ export var t2 = 10;
 {}
 
 
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 /a/lib/tsc.js --w -p /a/b/tsconfig.json
 Output::
 >> Screen clear
@@ -96,21 +88,6 @@ exports.t1 = 10;
 
 
 
-fileExists:: {
- "/a/b/tsconfig.json": 1
-} 
-
-directoryExists:: {
- "/a/b/tsconfig.json": 1,
- "/a/b/node_modules/@types": 1,
- "/a/node_modules/@types": 1,
- "/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 Change:: change file1
 
 Input::
@@ -118,14 +95,6 @@ Input::
 /// <reference path="./file2.ts" />
 export var t1 = 10;export var t3 = 10;
 
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -181,11 +150,3 @@ exports.t1 = 10;
 exports.t3 = 10;
 
 
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 

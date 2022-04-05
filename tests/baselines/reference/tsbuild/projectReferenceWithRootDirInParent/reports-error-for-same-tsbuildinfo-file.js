@@ -72,27 +72,6 @@ Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
-getModifiedTime:: {
- "/src/dist/tsconfig.tsbuildinfo": 2,
- "/src/src/main/a.ts": 1,
- "/src/src/main/b.ts": 1
-}
-
-setModifiedTime:: {}
-
-fileExists:: {
- "/src/src/main/b.ts": 1
-}
-
-directoryExists:: {
- "/src/src/other/node_modules/@types": 1,
- "/src/src/node_modules/@types": 2,
- "/src/node_modules/@types": 2,
- "/node_modules/@types": 2,
- "/src/src/main": 2,
- "/src/src/main/node_modules/@types": 1
-}
-
 
 //// [/src/dist/other.d.ts]
 export declare const Other = 0;

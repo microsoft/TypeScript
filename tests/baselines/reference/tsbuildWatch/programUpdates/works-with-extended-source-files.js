@@ -34,14 +34,6 @@ let y = 1
 let z = 0;
 
 
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 /a/lib/tsc.js -b -w -v project1.tsconfig.json project2.tsconfig.json
 Output::
 >> Screen clear
@@ -224,38 +216,12 @@ declare let z: number;
 }
 
 
-fileExists:: {
- "/a/b/alpha.tsconfig.json": 2,
- "/a/b/bravo.tsconfig.json": 1
-} 
-
-directoryExists:: {
- "/a/b/node_modules/@types": 2,
- "/a/node_modules/@types": 2,
- "/node_modules/@types": 2
-} 
-
-getModifiedTimes:: {
- "/a/b/project1.tsconfig.tsbuildinfo": 1,
- "/a/b/project2.tsconfig.tsbuildinfo": 1
-} 
-
-setModifiedTimes:: {} 
-
 Change:: Modify alpha config
 
 Input::
 //// [/a/b/alpha.tsconfig.json]
 {"compilerOptions":{"strict":true}}
 
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -308,38 +274,9 @@ exitCode:: ExitStatus.undefined
 
 //// [/a/b/project1.tsconfig.tsbuildinfo] file changed its modified time
 
-fileExists:: {
- "/a/b/alpha.tsconfig.json": 1,
- "/a/b/bravo.tsconfig.json": 1
-} 
-
-directoryExists:: {
- "/a/b/node_modules/@types": 1,
- "/a/node_modules/@types": 1,
- "/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {
- "/a/b/commonfile1.ts": 1,
- "/a/b/commonfile2.ts": 1,
- "/a/b/project1.tsconfig.json": 1
-} 
-
-setModifiedTimes:: {
- "/a/b/project1.tsconfig.tsbuildinfo": 1
-} 
-
 Change:: Build project 2
 
 Input::
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
 
 Output::
 [[90m12:01:04 AM[0m] Project 'project2.tsconfig.json' is out of date because oldest output 'project2.tsconfig.tsbuildinfo' is older than newest input 'alpha.tsconfig.json'
@@ -389,38 +326,12 @@ exitCode:: ExitStatus.undefined
 
 //// [/a/b/project2.tsconfig.tsbuildinfo] file changed its modified time
 
-fileExists:: {} 
-
-directoryExists:: {
- "/a/b/node_modules/@types": 1,
- "/a/node_modules/@types": 1,
- "/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {
- "/a/b/other.ts": 1,
- "/a/b/project2.tsconfig.json": 1,
- "/a/b/bravo.tsconfig.json": 1
-} 
-
-setModifiedTimes:: {
- "/a/b/project2.tsconfig.tsbuildinfo": 1
-} 
-
 Change:: change bravo config
 
 Input::
 //// [/a/b/bravo.tsconfig.json]
 {"extends":"./alpha.tsconfig.json","compilerOptions":{"strict":false}}
 
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -473,37 +384,12 @@ exitCode:: ExitStatus.undefined
 
 //// [/a/b/project2.tsconfig.tsbuildinfo] file changed its modified time
 
-fileExists:: {
- "/a/b/bravo.tsconfig.json": 1,
- "/a/b/alpha.tsconfig.json": 1
-} 
-
-directoryExists:: {
- "/a/b/node_modules/@types": 1,
- "/a/node_modules/@types": 1,
- "/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {
- "/a/b/project2.tsconfig.tsbuildinfo": 1
-} 
-
 Change:: project 2 extends alpha
 
 Input::
 //// [/a/b/project2.tsconfig.json]
 {"extends":"./alpha.tsconfig.json"}
 
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -575,38 +461,12 @@ var z = 0;
 
 
 
-fileExists:: {
- "/a/b/alpha.tsconfig.json": 1
-} 
-
-directoryExists:: {
- "/a/b/node_modules/@types": 1,
- "/a/node_modules/@types": 1,
- "/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {
- "/a/b/commonfile1.js": 1,
- "/a/b/commonfile2.js": 1,
- "/a/b/other.js": 1
-} 
-
-setModifiedTimes:: {} 
-
 Change:: update aplha config
 
 Input::
 //// [/a/b/alpha.tsconfig.json]
 {}
 
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -659,33 +519,9 @@ exitCode:: ExitStatus.undefined
 
 //// [/a/b/project1.tsconfig.tsbuildinfo] file changed its modified time
 
-fileExists:: {
- "/a/b/alpha.tsconfig.json": 1
-} 
-
-directoryExists:: {
- "/a/b/node_modules/@types": 1,
- "/a/node_modules/@types": 1,
- "/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {
- "/a/b/project1.tsconfig.tsbuildinfo": 1
-} 
-
 Change:: Build project 2
 
 Input::
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
 
 Output::
 [[90m12:01:43 AM[0m] Project 'project2.tsconfig.json' is out of date because oldest output 'commonFile1.js' is older than newest input 'alpha.tsconfig.json'
@@ -740,19 +576,3 @@ exitCode:: ExitStatus.undefined
 //// [/a/b/commonFile1.js] file changed its modified time
 //// [/a/b/commonFile2.js] file changed its modified time
 //// [/a/b/other.js] file changed its modified time
-
-fileExists:: {} 
-
-directoryExists:: {
- "/a/b/node_modules/@types": 1,
- "/a/node_modules/@types": 1,
- "/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {
- "/a/b/commonfile1.js": 1,
- "/a/b/commonfile2.js": 1,
- "/a/b/other.js": 1
-} 

@@ -33,20 +33,6 @@ Output::
 
 exitCode:: ExitStatus.Success
 
-getModifiedTime:: {
- "/src/src/index.ts": 1,
- "/src/dist/index.js": 1
-}
-
-setModifiedTime:: {}
-
-fileExists:: {}
-
-directoryExists:: {
- "/src/node_modules/@types": 1,
- "/node_modules/@types": 1
-}
-
 
 //// [/src/dist/index.js]
 "use strict";
@@ -70,18 +56,6 @@ Output::
 
 exitCode:: ExitStatus.Success
 
-getModifiedTime:: {
- "/src/src/index.ts": 1,
- "/src/dist/index.js": 1,
- "/src/tsconfig.json": 1
-}
-
-setModifiedTime:: {}
-
-fileExists:: {}
-
-directoryExists:: {}
-
 
 
 
@@ -92,20 +66,6 @@ Input::
 Output::
 /lib/tsc -p /src/tsconfig.json
 exitCode:: ExitStatus.Success
-
-getModifiedTime:: {}
-
-setModifiedTime:: {}
-
-fileExists:: {
- "/src/tsconfig.json": 1
-}
-
-directoryExists:: {
- "/src/tsconfig.json": 1,
- "/src/node_modules/@types": 1,
- "/node_modules/@types": 1
-}
 
 
 //// [/src/dist/index.js] file written with same contents

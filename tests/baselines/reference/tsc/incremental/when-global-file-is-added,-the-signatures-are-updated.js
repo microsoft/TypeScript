@@ -74,21 +74,6 @@ Shape signatures in builder refreshed for::
 /src/project/src/anotherfilewithsamereferenes.ts (computed .d.ts during emit)
 /src/project/src/main.ts (computed .d.ts during emit)
 
-getModifiedTime:: {}
-
-setModifiedTime:: {}
-
-fileExists:: {
- "src/project/tsconfig.json": 1
-}
-
-directoryExists:: {
- "src/project": 1,
- "/src/project/node_modules/@types": 1,
- "/src/node_modules/@types": 1,
- "/node_modules/@types": 1
-}
-
 
 //// [/src/project/src/anotherFileWithSameReferenes.d.ts]
 /// <reference path="filePresent.d.ts" />
@@ -225,21 +210,6 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-getModifiedTime:: {}
-
-setModifiedTime:: {}
-
-fileExists:: {
- "src/project/tsconfig.json": 1
-}
-
-directoryExists:: {
- "src/project": 1,
- "/src/project/node_modules/@types": 1,
- "/src/node_modules/@types": 1,
- "/node_modules/@types": 1
-}
-
 
 
 
@@ -286,21 +256,6 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /src/project/src/main.ts (computed .d.ts)
-
-getModifiedTime:: {}
-
-setModifiedTime:: {}
-
-fileExists:: {
- "src/project/tsconfig.json": 1
-}
-
-directoryExists:: {
- "src/project": 1,
- "/src/project/node_modules/@types": 1,
- "/src/node_modules/@types": 1,
- "/node_modules/@types": 1
-}
 
 
 //// [/src/project/src/main.d.ts] file written with same contents
@@ -423,21 +378,6 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /src/project/src/main.ts (computed .d.ts)
-
-getModifiedTime:: {}
-
-setModifiedTime:: {}
-
-fileExists:: {
- "src/project/tsconfig.json": 1
-}
-
-directoryExists:: {
- "src/project": 1,
- "/src/project/node_modules/@types": 1,
- "/src/node_modules/@types": 1,
- "/node_modules/@types": 1
-}
 
 
 //// [/src/project/src/main.d.ts] file written with same contents
@@ -573,21 +513,6 @@ Shape signatures in builder refreshed for::
 /src/project/src/filepresent.ts (computed .d.ts)
 /src/project/src/anotherfilewithsamereferenes.ts (computed .d.ts)
 /src/project/src/main.ts (computed .d.ts)
-
-getModifiedTime:: {}
-
-setModifiedTime:: {}
-
-fileExists:: {
- "src/project/tsconfig.json": 1
-}
-
-directoryExists:: {
- "src/project": 1,
- "/src/project/node_modules/@types": 1,
- "/src/node_modules/@types": 1,
- "/node_modules/@types": 1
-}
 
 
 //// [/src/project/src/anotherFileWithSameReferenes.d.ts] file written with same contents
@@ -736,21 +661,6 @@ Shape signatures in builder refreshed for::
 /src/project/src/newfile.ts (computed .d.ts)
 /src/project/src/main.ts (computed .d.ts)
 
-getModifiedTime:: {}
-
-setModifiedTime:: {}
-
-fileExists:: {
- "src/project/tsconfig.json": 1
-}
-
-directoryExists:: {
- "src/project": 1,
- "/src/project/node_modules/@types": 1,
- "/src/node_modules/@types": 1,
- "/node_modules/@types": 1
-}
-
 
 //// [/src/project/src/anotherFileWithSameReferenes.d.ts]
 /// <reference path="filePresent.d.ts" />
@@ -897,21 +807,6 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /src/project/src/main.ts (computed .d.ts)
-
-getModifiedTime:: {}
-
-setModifiedTime:: {}
-
-fileExists:: {
- "src/project/tsconfig.json": 1
-}
-
-directoryExists:: {
- "src/project": 1,
- "/src/project/node_modules/@types": 1,
- "/src/node_modules/@types": 1,
- "/node_modules/@types": 1
-}
 
 
 //// [/src/project/src/main.d.ts] file written with same contents

@@ -73,23 +73,6 @@ Output::
 
 exitCode:: ExitStatus.Success
 
-getModifiedTime:: {
- "/src/tsconfig.tsbuildinfo": 1
-}
-
-setModifiedTime:: {}
-
-fileExists:: {
- "/src/src/c.ts": 1,
- "/src/src/a.ts": 1
-}
-
-directoryExists:: {
- "/src/src": 4,
- "/src/node_modules/@types": 1,
- "/node_modules/@types": 1
-}
-
 
 //// [/src/lib/a.d.ts]
 export declare class B {
@@ -229,24 +212,6 @@ Output::
 
 exitCode:: ExitStatus.Success
 
-getModifiedTime:: {
- "/src/tsconfig.tsbuildinfo": 1,
- "/src/src/a.ts": 1
-}
-
-setModifiedTime:: {}
-
-fileExists:: {
- "/src/src/c.ts": 1,
- "/src/src/a.ts": 1
-}
-
-directoryExists:: {
- "/src/src": 4,
- "/src/node_modules/@types": 1,
- "/node_modules/@types": 1
-}
-
 
 //// [/src/lib/a.d.ts] file written with same contents
 //// [/src/lib/a.d.ts.map]
@@ -357,24 +322,6 @@ Output::
 [[90m12:00:34 AM[0m] Building project '/src/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
-
-getModifiedTime:: {
- "/src/tsconfig.tsbuildinfo": 1,
- "/src/src/a.ts": 1
-}
-
-setModifiedTime:: {}
-
-fileExists:: {
- "/src/src/c.ts": 1,
- "/src/src/a.ts": 1
-}
-
-directoryExists:: {
- "/src/src": 4,
- "/src/node_modules/@types": 1,
- "/node_modules/@types": 1
-}
 
 
 //// [/src/lib/a.d.ts]

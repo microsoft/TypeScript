@@ -21,14 +21,6 @@ export const App = () => <div propA={true}></div>;
 {"compilerOptions":{"module":"commonjs","jsx":"react-jsx","incremental":true,"jsxImportSource":"react"}}
 
 
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 /a/lib/tsc.js -w
 Output::
 >> Screen clear
@@ -137,27 +129,6 @@ exports.App = App;
 }
 
 
-fileExists:: {
- "/users/username/projects/project/tsconfig.json": 1
-} 
-
-directoryExists:: {
- "/users/username/projects/project/node_modules": 2,
- "/users/username/projects/node_modules": 2,
- "/users/username/node_modules": 2,
- "/users/node_modules": 2,
- "/node_modules": 2,
- "/users/username/projects/project/node_modules/@types": 1,
- "/users/username/projects/node_modules/@types": 1,
- "/users/username/node_modules/@types": 1,
- "/users/node_modules/@types": 1,
- "/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 Change::
 
 Input::
@@ -178,14 +149,6 @@ export const Fragment: unique symbol;
 //// [/users/username/projects/project/node_modules/react/package.json]
 {"name":"react","version":"0.0.1"}
 
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -294,30 +257,3 @@ exitCode:: ExitStatus.undefined
   "size": 1281
 }
 
-
-fileExists:: {
- "/users/username/projects/project/tsconfig.json": 1,
- "/users/username/projects/project/node_modules/react/jsx-runtime/package.json": 1,
- "/users/username/projects/project/node_modules/react/package.json": 1,
- "/users/username/projects/project/node_modules/react/jsx-runtime.ts": 1,
- "/users/username/projects/project/node_modules/react/jsx-runtime.tsx": 1,
- "/users/username/projects/project/node_modules/react/jsx-runtime.d.ts": 1,
- "/users/username/projects/project/node_modules/react/jsx-runtime/index.ts": 1,
- "/users/username/projects/project/node_modules/react/jsx-runtime/index.tsx": 1,
- "/users/username/projects/project/node_modules/react/jsx-runtime/index.d.ts": 2
-} 
-
-directoryExists:: {
- "/users/username/projects/project/node_modules": 1,
- "/users/username/projects/project/node_modules/react/jsx-runtime": 3,
- "/users/username/projects/project/node_modules/react": 2,
- "/users/username/projects/project/node_modules/@types": 1,
- "/users/username/projects/node_modules/@types": 1,
- "/users/username/node_modules/@types": 1,
- "/users/node_modules/@types": 1,
- "/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 

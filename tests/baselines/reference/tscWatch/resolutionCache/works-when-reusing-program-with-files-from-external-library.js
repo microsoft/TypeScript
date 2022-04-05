@@ -27,14 +27,6 @@ interface Array<T> { length: number; [n: number]: T; }
 {"compilerOptions":{"allowJs":true,"rootDir":".","outDir":"../dist","moduleResolution":"node","maxNodeModuleJsDepth":1}}
 
 
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 /a/lib/tsc.js --w -p /a/b/projects/myProject/src
 Output::
 >> Screen clear
@@ -110,43 +102,6 @@ module11("hello");
 
 
 
-fileExists:: {
- "/a/b/projects/myproject/src/tsconfig.json": 1,
- "/a/b/projects/myproject/node_modules/module1/package.json": 1,
- "/a/b/projects/myproject/node_modules/module1.ts": 1,
- "/a/b/projects/myproject/node_modules/module1.tsx": 1,
- "/a/b/projects/myproject/node_modules/module1.d.ts": 1,
- "/a/b/projects/myproject/node_modules/module1/index.ts": 1,
- "/a/b/projects/myproject/node_modules/module1/index.tsx": 1,
- "/a/b/projects/myproject/node_modules/module1/index.d.ts": 1,
- "/a/b/projects/myproject/node_modules/module1.js": 1,
- "/a/b/projects/myproject/node_modules/module1.jsx": 1,
- "/a/b/projects/myproject/node_modules/module1/index.js": 2
-} 
-
-directoryExists:: {
- "/a/b/projects/myproject/src": 1,
- "/a/b/projects/myproject/src/node_modules": 2,
- "/a/b/projects/myproject/node_modules": 4,
- "/a/b/projects/myproject/node_modules/module1": 5,
- "/a/b/projects/myproject/node_modules/@types": 2,
- "/a/b/projects/node_modules": 1,
- "/a/b/node_modules": 1,
- "/a/node_modules": 1,
- "/node_modules": 1,
- "/a/b/projects/myproject/src/node_modules/@types": 1,
- "/a/b/projects/node_modules/@types": 1,
- "/a/b/node_modules/@types": 1,
- "/a/node_modules/@types": 1,
- "/node_modules/@types": 1,
- "/a/b/projects/myproject/dist": 1,
- "/a/b/projects/myproject": 1
-} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 Change:: Add new line to file1
 
 Input::
@@ -155,14 +110,6 @@ import module1 = require("module1");
 module1("hello");
 ;
 
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -223,11 +170,3 @@ module1("hello");
 ;
 
 
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 

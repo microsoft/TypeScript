@@ -31,14 +31,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 /a/lib/tsc.js --w -p /a/b/tsconfig.json
 Output::
 >> Screen clear
@@ -134,23 +126,6 @@ exports.Foo4 = 10;
 
 
 
-fileExists:: {
- "/a/b/tsconfig.json": 1,
- "/a/b/modulefile1.ts": 1
-} 
-
-directoryExists:: {
- "/a/b/tsconfig.json": 1,
- "/a/b": 2,
- "/a/b/node_modules/@types": 1,
- "/a/node_modules/@types": 1,
- "/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 Change:: change moduleFile1 shape and create file1Consumer3
 
 Input::
@@ -160,14 +135,6 @@ export var T: number;export function Foo() { };
 //// [/a/b/file1Consumer3.ts]
 import {Foo} from "./moduleFile1"; let y = Foo();
 
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -247,18 +214,3 @@ var moduleFile1_1 = require("./moduleFile1");
 var y = (0, moduleFile1_1.Foo)();
 
 
-
-fileExists:: {
- "/a/b/file1consumer3.js": 1
-} 
-
-directoryExists:: {
- "/a/b/node_modules/@types": 1,
- "/a/node_modules/@types": 1,
- "/node_modules/@types": 1,
- "/a/b/file1consumer3.js": 1
-} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 

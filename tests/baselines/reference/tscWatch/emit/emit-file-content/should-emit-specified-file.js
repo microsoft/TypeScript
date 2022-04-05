@@ -25,14 +25,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 /a/lib/tsc.js -w -p /a/b/tsconfig.json
 Output::
 >> Screen clear
@@ -109,38 +101,12 @@ var x = f2_1.y;
 
 
 
-fileExists:: {
- "/a/b/tsconfig.json": 1,
- "/a/b/f1.ts": 1,
- "/a/b/f2.ts": 1
-} 
-
-directoryExists:: {
- "/a/b/tsconfig.json": 1,
- "/a/b": 4,
- "/a/b/node_modules/@types": 1,
- "/a/node_modules/@types": 1,
- "/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 Change:: Append content to f1
 
 Input::
 //// [/a/b/f1.ts]
 export function Foo() { return 10; }export function foo2() { return 2; }
 
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -204,28 +170,12 @@ exports.foo2 = foo2;
 //// [/a/b/f2.js] file written with same contents
 //// [/a/b/f3.js] file written with same contents
 
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 Change:: Again Append content to f1
 
 Input::
 //// [/a/b/f1.ts]
 export function Foo() { return 10; }export function foo2() { return 2; }export function fooN() { return 2; }
 
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -287,11 +237,3 @@ exports.fooN = fooN;
 
 
 //// [/a/b/f2.js] file written with same contents
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 

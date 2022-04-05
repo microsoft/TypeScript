@@ -16,14 +16,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 /a/lib/tsc.js --w /f.ts
 Output::
 >> Screen clear
@@ -64,30 +56,12 @@ exitCode:: ExitStatus.undefined
 
 
 
-fileExists:: {} 
-
-directoryExists:: {
- "/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 Change:: Comment added to file f
 
 Input::
 //// [/f.ts]
 //
 
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -126,11 +100,3 @@ exitCode:: ExitStatus.undefined
 //
 
 
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 

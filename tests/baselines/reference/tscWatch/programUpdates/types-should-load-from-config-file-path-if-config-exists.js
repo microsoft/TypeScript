@@ -22,14 +22,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 /a/lib/tsc.js -w -p /a/b/tsconfig.json
 Output::
 >> Screen clear
@@ -85,23 +77,3 @@ exitCode:: ExitStatus.undefined
 var x = 1;
 
 
-
-fileExists:: {
- "/a/b/tsconfig.json": 1,
- "/a/b/node_modules/node.d.ts": 1,
- "/a/b/node_modules/@types/node/package.json": 1,
- "/a/b/node_modules/@types/node.d.ts": 1,
- "/a/b/node_modules/@types/node/index.d.ts": 2
-} 
-
-directoryExists:: {
- "/a/b/tsconfig.json": 1,
- "/a/b/node_modules": 2,
- "/a/b/node_modules/node": 2,
- "/a/b/node_modules/@types": 2,
- "/a/b/node_modules/@types/node": 3
-} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 

@@ -86,48 +86,6 @@ Output::
 
 exitCode:: ExitStatus.Success
 
-getModifiedTime:: {
- "/src/lib/module.tsbuildinfo": 1,
- "/src/app/module.tsbuildinfo": 1
-}
-
-setModifiedTime:: {}
-
-fileExists:: {
- "/src/lib/module.js": 2,
- "/src/lib/module.d.ts": 1,
- "/src/app/file1.ts": 1,
- "/src/app/file1.tsx": 1,
- "/src/app/file1.d.ts": 1,
- "/src/file1.ts": 1,
- "/src/file1.tsx": 1,
- "/src/file1.d.ts": 1,
- "/file1.ts": 1,
- "/file1.tsx": 1,
- "/file1.d.ts": 1,
- "/src/app/file1.js": 1,
- "/src/app/file1.jsx": 1,
- "/src/file1.js": 1,
- "/src/file1.jsx": 1,
- "/file1.js": 1,
- "/file1.jsx": 1,
- "/src/app/module.js": 1,
- "/src/app/module.d.ts": 1
-}
-
-directoryExists:: {
- "/src/lib/node_modules/@types": 1,
- "/src/node_modules/@types": 2,
- "/node_modules/@types": 2,
- "/src/app": 2,
- "/src": 2,
- "/": 2,
- "/src/app/node_modules": 1,
- "/src/node_modules": 1,
- "/node_modules": 1,
- "/src/app/node_modules/@types": 1
-}
-
 
 //// [/src/app/module.d.ts]
 #!someshebang lib file0
@@ -1037,31 +995,6 @@ Output::
 [[90m12:00:49 AM[0m] Updating output of project '/src/app/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
-
-getModifiedTime:: {
- "/src/lib/module.tsbuildinfo": 1,
- "/src/lib/file0.ts": 1,
- "/src/lib/file1.ts": 1,
- "/src/app/module.tsbuildinfo": 1,
- "/src/app/file3.ts": 1,
- "/src/app/file4.ts": 1,
- "/src/app/tsconfig.json": 1
-}
-
-setModifiedTime:: {}
-
-fileExists:: {
- "/src/lib/module.js": 1,
- "/src/lib/module.d.ts": 1,
- "/src/app/module.js": 1,
- "/src/app/module.d.ts": 1
-}
-
-directoryExists:: {
- "/src/lib/node_modules/@types": 1,
- "/src/node_modules/@types": 1,
- "/node_modules/@types": 1
-}
 
 
 //// [/src/app/module.js]

@@ -37,14 +37,6 @@ createSomeObject().message;
 {"references":[{"path":"../Library"}]}
 
 
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 /a/lib/tsc.js -b -w App
 Output::
 >> Screen clear
@@ -171,29 +163,6 @@ var library_1 = require("../Library/library");
 
 
 
-fileExists:: {
- "/user/username/projects/sample1/library/library.ts": 1
-} 
-
-directoryExists:: {
- "/user/username/projects/sample1/library/node_modules/@types": 1,
- "/user/username/projects/sample1/node_modules/@types": 2,
- "/user/username/projects/node_modules/@types": 2,
- "/user/username/node_modules/@types": 2,
- "/user/node_modules/@types": 2,
- "/node_modules/@types": 2,
- "/user/username/projects/sample1/library": 2,
- "/user/username/projects/sample1/app/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {
- "/user/username/projects/sample1/library/tsconfig.tsbuildinfo": 1,
- "/user/username/projects/sample1/app/app.ts": 1,
- "/user/username/projects/sample1/app/app.js": 1
-} 
-
-setModifiedTimes:: {} 
-
 Change:: Introduce error
 
 Input::
@@ -211,14 +180,6 @@ export function createSomeObject(): SomeObject
     };
 }
 
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -344,25 +305,6 @@ export {};
 }
 
 
-fileExists:: {
- "/user/username/projects/sample1/library/library.ts": 1
-} 
-
-directoryExists:: {
- "/user/username/projects/sample1/library/node_modules/@types": 1,
- "/user/username/projects/sample1/node_modules/@types": 2,
- "/user/username/projects/node_modules/@types": 2,
- "/user/username/node_modules/@types": 2,
- "/user/node_modules/@types": 2,
- "/node_modules/@types": 2,
- "/user/username/projects/sample1/library": 2,
- "/user/username/projects/sample1/app/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 Change:: Fix error
 
 Input::
@@ -380,14 +322,6 @@ export function createSomeObject(): SomeObject
     };
 }
 
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -503,22 +437,3 @@ export {};
 }
 
 //// [/user/username/projects/sample1/App/app.js] file written with same contents
-
-fileExists:: {
- "/user/username/projects/sample1/library/library.ts": 1
-} 
-
-directoryExists:: {
- "/user/username/projects/sample1/library/node_modules/@types": 1,
- "/user/username/projects/sample1/node_modules/@types": 2,
- "/user/username/projects/node_modules/@types": 2,
- "/user/username/node_modules/@types": 2,
- "/user/node_modules/@types": 2,
- "/node_modules/@types": 2,
- "/user/username/projects/sample1/library": 2,
- "/user/username/projects/sample1/app/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 

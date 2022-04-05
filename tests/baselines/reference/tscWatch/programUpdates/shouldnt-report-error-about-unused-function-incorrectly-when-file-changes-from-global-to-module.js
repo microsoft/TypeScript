@@ -21,14 +21,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 /a/lib/tsc.js -w /a/b/file.ts --noUnusedLocals
 Output::
 >> Screen clear
@@ -75,16 +67,6 @@ function two() {
 
 
 
-fileExists:: {} 
-
-directoryExists:: {
- "/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 Change:: Change file to module
 
 Input::
@@ -96,14 +78,6 @@ export function two() {
     }
 }
 
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -151,11 +125,3 @@ function two() {
 exports.two = two;
 
 
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 

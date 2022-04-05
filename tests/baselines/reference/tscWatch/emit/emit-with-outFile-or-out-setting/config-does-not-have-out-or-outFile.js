@@ -22,14 +22,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 /a/lib/tsc.js --w -p /a/tsconfig.json
 Output::
 >> Screen clear
@@ -86,34 +78,12 @@ var y = 1;
 
 
 
-fileExists:: {
- "/a/tsconfig.json": 1
-} 
-
-directoryExists:: {
- "/a/tsconfig.json": 1,
- "/a/node_modules/@types": 1,
- "/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 Change:: Make change in the file
 
 Input::
 //// [/a/a.ts]
 let x = 11
 
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -166,28 +136,12 @@ var x = 11;
 
 //// [/a/b.js] file written with same contents
 
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 Change:: Make change in the file again
 
 Input::
 //// [/a/a.ts]
 let xy = 11
 
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -239,11 +193,3 @@ var xy = 11;
 
 
 //// [/a/b.js] file written with same contents
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 

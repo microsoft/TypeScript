@@ -22,14 +22,6 @@ interface Array<T> { length: number; [n: number]: T; }
 {"compilerOptions":{},"files":["f1.ts","f2.ts"]}
 
 
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 /a/lib/tsc.js -w -p /a/b/tsconfig.json
 Output::
 >> Screen clear
@@ -84,35 +76,12 @@ var y = 1;
 
 
 
-fileExists:: {
- "/a/b/tsconfig.json": 1
-} 
-
-directoryExists:: {
- "/a/b/tsconfig.json": 1,
- "/a/b/node_modules/@types": 1,
- "/a/node_modules/@types": 1,
- "/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 Change:: Modify config to set outFile option
 
 Input::
 //// [/a/b/tsconfig.json]
 {"compilerOptions":{"outFile":"out.js"},"files":["f1.ts","f2.ts"]}
 
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -157,11 +126,3 @@ var x = 1;
 var y = 1;
 
 
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 

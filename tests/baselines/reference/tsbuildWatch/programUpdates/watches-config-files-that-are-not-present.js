@@ -68,14 +68,6 @@ export const m = mod;
 
 
 
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 /a/lib/tsc.js -b -w sample1/tests
 Output::
 >> Screen clear
@@ -207,23 +199,6 @@ export declare function multiply(a: number, b: number): number;
 }
 
 
-fileExists:: {} 
-
-directoryExists:: {
- "/user/username/projects/sample1/core/node_modules/@types": 1,
- "/user/username/projects/sample1/node_modules/@types": 1,
- "/user/username/projects/node_modules/@types": 1,
- "/user/username/node_modules/@types": 1,
- "/user/node_modules/@types": 1,
- "/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {
- "/user/username/projects/sample1/core/tsconfig.tsbuildinfo": 1
-} 
-
-setModifiedTimes:: {} 
-
 Change:: Write logic tsconfig and build logic
 
 Input::
@@ -242,14 +217,6 @@ Input::
 }
 
 
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -396,38 +363,9 @@ export declare const m: typeof mod;
 }
 
 
-fileExists:: {
- "/user/username/projects/sample1/core/index.ts": 1,
- "/user/username/projects/sample1/core/anothermodule.ts": 1
-} 
-
-directoryExists:: {
- "/user/username/projects/sample1/core": 4,
- "/user/username/projects/sample1/logic/node_modules/@types": 1,
- "/user/username/projects/sample1/node_modules/@types": 1,
- "/user/username/projects/node_modules/@types": 1,
- "/user/username/node_modules/@types": 1,
- "/user/node_modules/@types": 1,
- "/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {
- "/user/username/projects/sample1/logic/tsconfig.tsbuildinfo": 1
-} 
-
-setModifiedTimes:: {} 
-
 Change:: Build Tests
 
 Input::
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
 
 Output::
 [[90m12:01:22 AM[0m] Found 0 errors. Watching for file changes.
@@ -583,24 +521,3 @@ export declare const m: typeof mod;
   "size": 1639
 }
 
-
-fileExists:: {
- "/user/username/projects/sample1/logic/index.ts": 1
-} 
-
-directoryExists:: {
- "/user/username/projects/sample1/core": 4,
- "/user/username/projects/sample1/logic": 2,
- "/user/username/projects/sample1/tests/node_modules/@types": 1,
- "/user/username/projects/sample1/node_modules/@types": 1,
- "/user/username/projects/node_modules/@types": 1,
- "/user/username/node_modules/@types": 1,
- "/user/node_modules/@types": 1,
- "/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {
- "/user/username/projects/sample1/tests/tsconfig.tsbuildinfo": 1
-} 
-
-setModifiedTimes:: {} 

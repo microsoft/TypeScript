@@ -194,35 +194,6 @@ a_1.X;
 
 
 
-fileExists:: {
- "/user/username/projects/transitivereferences/tsconfig.a.tsbuildinfo": 1,
- "/user/username/projects/transitivereferences/a.ts": 1,
- "/user/username/projects/transitivereferences/tsconfig.b.tsbuildinfo": 1,
- "/user/username/projects/transitivereferences/b.ts": 1,
- "/user/username/projects/transitivereferences/refs/a.ts": 1,
- "/user/username/projects/transitivereferences/refs/a.tsx": 1,
- "/user/username/projects/transitivereferences/refs/a.d.ts": 1
-} 
-
-directoryExists:: {
- "/user/username/projects/transitivereferences/node_modules/@types": 3,
- "/user/username/projects/node_modules/@types": 3,
- "/user/username/node_modules/@types": 3,
- "/user/node_modules/@types": 3,
- "/node_modules/@types": 3,
- "/user/username/projects/transitivereferences": 5,
- "/user/username/projects/transitivereferences/refs": 3
-} 
-
-getModifiedTimes:: {
- "/user/username/projects/transitivereferences/tsconfig.a.tsbuildinfo": 1,
- "/user/username/projects/transitivereferences/tsconfig.b.tsbuildinfo": 1,
- "/user/username/projects/transitivereferences/c.ts": 1,
- "/user/username/projects/transitivereferences/c.js": 1
-} 
-
-setModifiedTimes:: {} 
-
 /a/lib/tsc.js -w -p tsconfig.c.json
 Output::
 >> Screen clear
@@ -306,30 +277,6 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/transitiveReferences/c.js] file written with same contents
 
-fileExists:: {
- "/user/username/projects/transitivereferences/tsconfig.c.json": 1,
- "/user/username/projects/transitivereferences/b.ts": 1,
- "/user/username/projects/transitivereferences/refs/a.ts": 1,
- "/user/username/projects/transitivereferences/refs/a.tsx": 1,
- "/user/username/projects/transitivereferences/refs/a.d.ts": 1,
- "/user/username/projects/transitivereferences/a.ts": 1
-} 
-
-directoryExists:: {
- "/user/username/projects/transitivereferences/tsconfig.c.json": 1,
- "/user/username/projects/transitivereferences": 5,
- "/user/username/projects/transitivereferences/refs": 3,
- "/user/username/projects/transitivereferences/node_modules/@types": 1,
- "/user/username/projects/node_modules/@types": 1,
- "/user/username/node_modules/@types": 1,
- "/user/node_modules/@types": 1,
- "/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 Change:: non local edit b ts, and build b
 
 Input::
@@ -410,30 +357,6 @@ export declare function gfoo(): void;
 }
 
 
-fileExists:: {
- "/user/username/projects/transitivereferences/a.ts": 1,
- "/user/username/projects/transitivereferences/tsconfig.b.tsbuildinfo": 1
-} 
-
-directoryExists:: {
- "/user/username/projects/transitivereferences": 3,
- "/user/username/projects/transitivereferences/node_modules/@types": 1,
- "/user/username/projects/node_modules/@types": 1,
- "/user/username/node_modules/@types": 1,
- "/user/node_modules/@types": 1,
- "/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {
- "/user/username/projects/transitivereferences/tsconfig.a.tsbuildinfo": 1,
- "/user/username/projects/transitivereferences/a.ts": 1,
- "/user/username/projects/transitivereferences/tsconfig.a.json": 1,
- "/user/username/projects/transitivereferences/tsconfig.b.tsbuildinfo": 1,
- "/user/username/projects/transitivereferences/b.ts": 1
-} 
-
-setModifiedTimes:: {} 
-
 Output::
 >> Screen clear
 [[90m12:01:17 AM[0m] File change detected. Starting incremental compilation...
@@ -510,14 +433,6 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/transitiveReferences/c.js] file written with same contents
 
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 Change:: edit on config file
 
 Input::
@@ -529,14 +444,6 @@ export class X {}
 export class A {}
 
 
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -614,42 +521,12 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/transitiveReferences/c.js] file written with same contents
 
-fileExists:: {
- "/user/username/projects/transitivereferences/b.ts": 1,
- "/user/username/projects/transitivereferences/nrefs/a.ts": 1,
- "/user/username/projects/transitivereferences/nrefs/a.tsx": 1,
- "/user/username/projects/transitivereferences/nrefs/a.d.ts": 1,
- "/user/username/projects/transitivereferences/a.ts": 1
-} 
-
-directoryExists:: {
- "/user/username/projects/transitivereferences": 5,
- "/user/username/projects/transitivereferences/nrefs": 3,
- "/user/username/projects/transitivereferences/node_modules/@types": 1,
- "/user/username/projects/node_modules/@types": 1,
- "/user/username/node_modules/@types": 1,
- "/user/node_modules/@types": 1,
- "/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 Change:: Revert config file edit
 
 Input::
 //// [/user/username/projects/transitiveReferences/tsconfig.c.json]
 {"files":["c.ts"],"compilerOptions":{"baseUrl":"./","paths":{"@ref/*":["./refs/*"]}},"references":[{"path":"tsconfig.b.json"}]}
 
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -727,42 +604,12 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/transitiveReferences/c.js] file written with same contents
 
-fileExists:: {
- "/user/username/projects/transitivereferences/b.ts": 1,
- "/user/username/projects/transitivereferences/refs/a.ts": 1,
- "/user/username/projects/transitivereferences/refs/a.tsx": 1,
- "/user/username/projects/transitivereferences/refs/a.d.ts": 1,
- "/user/username/projects/transitivereferences/a.ts": 1
-} 
-
-directoryExists:: {
- "/user/username/projects/transitivereferences": 5,
- "/user/username/projects/transitivereferences/refs": 3,
- "/user/username/projects/transitivereferences/node_modules/@types": 1,
- "/user/username/projects/node_modules/@types": 1,
- "/user/username/node_modules/@types": 1,
- "/user/node_modules/@types": 1,
- "/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 Change:: edit in referenced config file
 
 Input::
 //// [/user/username/projects/transitiveReferences/tsconfig.b.json]
 {"compilerOptions":{"composite":true,"baseUrl":"./","paths":{"@ref/*":["./nrefs/*"]}},"files":["b.ts"],"references":[{"path":"tsconfig.a.json"}]}
 
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -841,39 +688,12 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 
-fileExists:: {
- "/user/username/projects/transitivereferences/nrefs/a.ts": 1,
- "/user/username/projects/transitivereferences/nrefs/a.tsx": 1,
- "/user/username/projects/transitivereferences/nrefs/a.d.ts": 1
-} 
-
-directoryExists:: {
- "/user/username/projects/transitivereferences/nrefs": 3,
- "/user/username/projects/transitivereferences/node_modules/@types": 1,
- "/user/username/projects/node_modules/@types": 1,
- "/user/username/node_modules/@types": 1,
- "/user/node_modules/@types": 1,
- "/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 Change:: Revert referenced config file edit
 
 Input::
 //// [/user/username/projects/transitiveReferences/tsconfig.b.json]
 {"compilerOptions":{"composite":true,"baseUrl":"./","paths":{"@ref/*":["./refs/*"]}},"files":["b.ts"],"references":[{"path":"tsconfig.a.json"}]}
 
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -941,37 +761,10 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 
-fileExists:: {
- "/user/username/projects/transitivereferences/refs/a.ts": 1,
- "/user/username/projects/transitivereferences/refs/a.tsx": 1,
- "/user/username/projects/transitivereferences/refs/a.d.ts": 1
-} 
-
-directoryExists:: {
- "/user/username/projects/transitivereferences/refs": 3,
- "/user/username/projects/transitivereferences/node_modules/@types": 1,
- "/user/username/projects/node_modules/@types": 1,
- "/user/username/node_modules/@types": 1,
- "/user/node_modules/@types": 1,
- "/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 Change:: deleting referenced config file
 
 Input::
 //// [/user/username/projects/transitiveReferences/tsconfig.b.json] deleted
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -1046,25 +839,6 @@ exitCode:: ExitStatus.undefined
 //// [/user/username/projects/transitiveReferences/b.js] file written with same contents
 //// [/user/username/projects/transitiveReferences/c.js] file written with same contents
 
-fileExists:: {
- "/user/username/projects/transitivereferences/refs/a.ts": 1,
- "/user/username/projects/transitivereferences/refs/a.tsx": 1,
- "/user/username/projects/transitivereferences/refs/a.d.ts": 1
-} 
-
-directoryExists:: {
- "/user/username/projects/transitivereferences/refs": 3,
- "/user/username/projects/transitivereferences/node_modules/@types": 1,
- "/user/username/projects/node_modules/@types": 1,
- "/user/username/node_modules/@types": 1,
- "/user/node_modules/@types": 1,
- "/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 Change:: Revert deleting referenced config file
 
 Input::
@@ -1082,14 +856,6 @@ Input::
 }
 
 
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -1169,35 +935,10 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/transitiveReferences/c.js] file written with same contents
 
-fileExists:: {
- "/user/username/projects/transitivereferences/a.ts": 1
-} 
-
-directoryExists:: {
- "/user/username/projects/transitivereferences": 3,
- "/user/username/projects/transitivereferences/node_modules/@types": 1,
- "/user/username/projects/node_modules/@types": 1,
- "/user/username/node_modules/@types": 1,
- "/user/node_modules/@types": 1,
- "/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 Change:: deleting transitively referenced config file
 
 Input::
 //// [/user/username/projects/transitiveReferences/tsconfig.a.json] deleted
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -1280,20 +1021,6 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/transitiveReferences/a.js] file written with same contents
 
-fileExists:: {} 
-
-directoryExists:: {
- "/user/username/projects/transitivereferences/node_modules/@types": 1,
- "/user/username/projects/node_modules/@types": 1,
- "/user/username/node_modules/@types": 1,
- "/user/node_modules/@types": 1,
- "/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 Change:: Revert deleting transitively referenced config file
 
 Input::
@@ -1301,14 +1028,6 @@ Input::
 {"compilerOptions": {"composite": true}, "files": ["a.ts"]}
 
 
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -1386,17 +1105,3 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
-
-fileExists:: {} 
-
-directoryExists:: {
- "/user/username/projects/transitivereferences/node_modules/@types": 1,
- "/user/username/projects/node_modules/@types": 1,
- "/user/username/node_modules/@types": 1,
- "/user/node_modules/@types": 1,
- "/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 

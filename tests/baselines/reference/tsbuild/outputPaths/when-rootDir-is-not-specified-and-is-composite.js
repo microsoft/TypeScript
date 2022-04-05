@@ -33,19 +33,6 @@ Output::
 
 exitCode:: ExitStatus.Success
 
-getModifiedTime:: {
- "/src/dist/tsconfig.tsbuildinfo": 1
-}
-
-setModifiedTime:: {}
-
-fileExists:: {}
-
-directoryExists:: {
- "/src/node_modules/@types": 1,
- "/node_modules/@types": 1
-}
-
 
 //// [/src/dist/src/index.d.ts]
 export declare const x = 10;
@@ -110,18 +97,6 @@ Output::
 
 exitCode:: ExitStatus.Success
 
-getModifiedTime:: {
- "/src/dist/tsconfig.tsbuildinfo": 1,
- "/src/src/index.ts": 1,
- "/src/tsconfig.json": 1
-}
-
-setModifiedTime:: {}
-
-fileExists:: {}
-
-directoryExists:: {}
-
 
 
 
@@ -132,19 +107,5 @@ Input::
 Output::
 /lib/tsc -p /src/tsconfig.json
 exitCode:: ExitStatus.Success
-
-getModifiedTime:: {}
-
-setModifiedTime:: {}
-
-fileExists:: {
- "/src/tsconfig.json": 1
-}
-
-directoryExists:: {
- "/src/tsconfig.json": 1,
- "/src/node_modules/@types": 1,
- "/node_modules/@types": 1
-}
 
 

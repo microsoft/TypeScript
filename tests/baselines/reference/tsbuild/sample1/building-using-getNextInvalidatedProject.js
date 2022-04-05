@@ -89,14 +89,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 Project Result:: {"project":"/user/username/projects/core/tsconfig.json","result":0}
 Output::
 
@@ -186,24 +178,6 @@ export declare function multiply(a: number, b: number): number;
   "size": 1374
 }
 
-
-fileExists:: {
- "/user/username/projects/core/tsconfig.tsbuildinfo": 1
-} 
-
-directoryExists:: {
- "/user/username/projects/core/node_modules/@types": 1,
- "/user/username/projects/node_modules/@types": 1,
- "/user/username/node_modules/@types": 1,
- "/user/node_modules/@types": 1,
- "/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {
- "/user/username/projects/core/tsconfig.tsbuildinfo": 1
-} 
-
-setModifiedTimes:: {} 
 
 Project Result:: {"project":"/user/username/projects/logic/tsconfig.json","result":0}
 Output::
@@ -299,27 +273,6 @@ export declare const m: typeof mod;
   "size": 1491
 }
 
-
-fileExists:: {
- "/user/username/projects/core/index.ts": 1,
- "/user/username/projects/core/anothermodule.ts": 1,
- "/user/username/projects/logic/tsconfig.tsbuildinfo": 1
-} 
-
-directoryExists:: {
- "/user/username/projects/core": 4,
- "/user/username/projects/logic/node_modules/@types": 1,
- "/user/username/projects/node_modules/@types": 1,
- "/user/username/node_modules/@types": 1,
- "/user/node_modules/@types": 1,
- "/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {
- "/user/username/projects/logic/tsconfig.tsbuildinfo": 1
-} 
-
-setModifiedTimes:: {} 
 
 Project Result:: {"project":"/user/username/projects/tests/tsconfig.json","result":0}
 Output::
@@ -424,35 +377,6 @@ export declare const m: typeof mod;
 }
 
 
-fileExists:: {
- "/user/username/projects/logic/index.ts": 1,
- "/user/username/projects/tests/tsconfig.tsbuildinfo": 1
-} 
-
-directoryExists:: {
- "/user/username/projects/core": 4,
- "/user/username/projects/logic": 2,
- "/user/username/projects/tests/node_modules/@types": 1,
- "/user/username/projects/node_modules/@types": 1,
- "/user/username/node_modules/@types": 1,
- "/user/node_modules/@types": 1,
- "/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {
- "/user/username/projects/tests/tsconfig.tsbuildinfo": 1
-} 
-
-setModifiedTimes:: {} 
-
 Project Result:: {}
 Output::
 
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 

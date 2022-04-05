@@ -24,14 +24,6 @@ console.log(Config.value);
 {"compilerOptions":{"incremental":true}}
 
 
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 /a/lib/tsc.js -w
 Output::
 >> Screen clear
@@ -124,34 +116,10 @@ console.log(Config.value);
 }
 
 
-fileExists:: {
- "/users/username/projects/project/tsconfig.json": 1
-} 
-
-directoryExists:: {
- "/users/username/projects/project/node_modules/@types": 1,
- "/users/username/projects/node_modules/@types": 1,
- "/users/username/node_modules/@types": 1,
- "/users/node_modules/@types": 1,
- "/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 Change::
 
 Input::
 //// [/users/username/projects/project/globals.d.ts] deleted
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -244,19 +212,3 @@ exitCode:: ExitStatus.undefined
   "size": 880
 }
 
-
-fileExists:: {
- "/users/username/projects/project/tsconfig.json": 1
-} 
-
-directoryExists:: {
- "/users/username/projects/project/node_modules/@types": 1,
- "/users/username/projects/node_modules/@types": 1,
- "/users/username/node_modules/@types": 1,
- "/users/node_modules/@types": 1,
- "/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 

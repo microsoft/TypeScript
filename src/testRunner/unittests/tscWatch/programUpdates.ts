@@ -544,7 +544,7 @@ export class A {
                 oldSnap,
             });
 
-            const {cb: cb2, getPrograms: getPrograms2 } = commandLineCallbacks(sys, /*originalReadCall*/ undefined, sys.fileExistsWithoutTracking);
+            const {cb: cb2, getPrograms: getPrograms2 } = commandLineCallbacks(sys);
             const oldSnap2 = sys.snap();
             baseline.push("createing separate watcher");
             createWatchProgram(createWatchCompilerHostOfFilesAndCompilerOptionsForBaseline({

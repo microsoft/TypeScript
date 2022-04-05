@@ -22,14 +22,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 /a/lib/tsc.js -w /user/someone/projects/myproject/file3.ts
 Output::
 >> Screen clear
@@ -93,34 +85,12 @@ var v = 1 /* E2.V */;
 
 
 
-fileExists:: {
- "/user/someone/projects/myproject/file2.ts": 1,
- "/user/someone/projects/myproject/file1.ts": 1
-} 
-
-directoryExists:: {
- "/user/someone/projects/myproject": 4,
- "/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 Change:: Append content to file3
 
 Input::
 //// [/user/someone/projects/myproject/file3.ts]
 import { E2 } from "./file2"; const v: E2 = E2.V;function foo2() { return 2; }
 
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -168,11 +138,3 @@ var v = 1 /* E2.V */;
 function foo2() { return 2; }
 
 
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 

@@ -16,14 +16,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 /a/lib/tsc.js --w /a/username/project/typescript.ts
 Output::
 >> Screen clear
@@ -61,30 +53,9 @@ var z = 10;
 
 
 
-fileExists:: {} 
-
-directoryExists:: {
- "/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {
- "/a/username/project/typescript.ts": 1,
- "/a/lib/lib.d.ts": 1
-} 
-
-setModifiedTimes:: {} 
-
 Change:: Time spent to Transition libFile and file1 to low priority queue
 
 Input::
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
 
 Output::
 
@@ -96,17 +67,6 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {
- "/a/username/project/typescript.ts": 64,
- "/a/lib/lib.d.ts": 64
-} 
-
-setModifiedTimes:: {} 
 
 Change:: Make change to file
 
@@ -115,14 +75,6 @@ Input::
 var zz30 = 100;
 
 
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 Output::
 
 WatchedFiles::
@@ -134,28 +86,9 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {
- "/a/username/project/typescript.ts": 1,
- "/a/lib/lib.d.ts": 1
-} 
-
-setModifiedTimes:: {} 
-
 Change:: Callbacks: medium priority + high priority queue and scheduled program update
 
 Input::
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -192,28 +125,9 @@ var zz30 = 100;
 
 
 
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {
- "/a/username/project/typescript.ts": 1,
- "/a/lib/lib.d.ts": 1
-} 
-
-setModifiedTimes:: {} 
-
 Change:: Polling queues polled and everything is in the high polling queue
 
 Input::
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
 
 Output::
 
@@ -225,14 +139,3 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {
- "/a/username/project/typescript.ts": 98,
- "/a/lib/lib.d.ts": 96
-} 
-
-setModifiedTimes:: {} 

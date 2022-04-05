@@ -16,14 +16,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 /a/lib/tsc.js -w /a/b/file1.ts
 Output::
 >> Screen clear
@@ -75,38 +67,12 @@ T.bar();
 
 
 
-fileExists:: {
- "/a/b/modulefile.ts": 1,
- "/a/b/modulefile.tsx": 1,
- "/a/b/modulefile.d.ts": 1,
- "/a/b/modulefile.js": 1,
- "/a/b/modulefile.jsx": 1
-} 
-
-directoryExists:: {
- "/a/b": 4,
- "/a/b/modulefile": 2,
- "/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 Change:: Create module file
 
 Input::
 //// [/a/b/moduleFile.ts]
 export function bar() { }
 
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -155,16 +121,3 @@ function bar() { }
 exports.bar = bar;
 
 
-
-fileExists:: {
- "/a/b/modulefile.ts": 1
-} 
-
-directoryExists:: {
- "/a/b": 2,
- "/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 

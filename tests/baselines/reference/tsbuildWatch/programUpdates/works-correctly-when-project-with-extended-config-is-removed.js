@@ -37,14 +37,6 @@ let y = 1
 let z = 0;
 
 
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 /a/lib/tsc.js -b -w -v
 Output::
 >> Screen clear
@@ -235,38 +227,12 @@ declare let z: number;
 }
 
 
-fileExists:: {
- "/a/b/alpha.tsconfig.json": 1,
- "/a/b/bravo.tsconfig.json": 1
-} 
-
-directoryExists:: {
- "/a/b/node_modules/@types": 2,
- "/a/node_modules/@types": 2,
- "/node_modules/@types": 2
-} 
-
-getModifiedTimes:: {
- "/a/b/project1.tsconfig.tsbuildinfo": 1,
- "/a/b/project2.tsconfig.tsbuildinfo": 1
-} 
-
-setModifiedTimes:: {} 
-
 Change:: Remove project2 from base config
 
 Input::
 //// [/a/b/tsconfig.json]
 {"references":[{"path":"./project1.tsconfig.json"}],"files":[]}
 
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -294,11 +260,3 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 

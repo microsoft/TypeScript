@@ -29,14 +29,4 @@ Output::
 /lib/tsc --b /src/tsconfig.json -clean
 exitCode:: ExitStatus.Success
 
-getModifiedTime:: {}
-
-setModifiedTime:: {}
-
-fileExists:: {
- "/src/bar.js": 1
-}
-
-directoryExists:: {}
-
 

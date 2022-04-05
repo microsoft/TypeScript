@@ -102,14 +102,6 @@ export function run() {
 
 
 
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 /a/lib/tsc.js -b -w sample1/tests -verbose
 Output::
 >> Screen clear
@@ -495,33 +487,6 @@ export declare const m: typeof mod;
 }
 
 
-fileExists:: {
- "/user/username/projects/sample1/core/index.ts": 1,
- "/user/username/projects/sample1/core/anothermodule.ts": 1,
- "/user/username/projects/sample1/logic/index.ts": 1
-} 
-
-directoryExists:: {
- "/user/username/projects/sample1/core/node_modules/@types": 1,
- "/user/username/projects/sample1/node_modules/@types": 3,
- "/user/username/projects/node_modules/@types": 3,
- "/user/username/node_modules/@types": 3,
- "/user/node_modules/@types": 3,
- "/node_modules/@types": 3,
- "/user/username/projects/sample1/core": 8,
- "/user/username/projects/sample1/logic/node_modules/@types": 1,
- "/user/username/projects/sample1/logic": 2,
- "/user/username/projects/sample1/tests/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {
- "/user/username/projects/sample1/core/tsconfig.tsbuildinfo": 1,
- "/user/username/projects/sample1/logic/tsconfig.tsbuildinfo": 1,
- "/user/username/projects/sample1/tests/tsconfig.tsbuildinfo": 1
-} 
-
-setModifiedTimes:: {} 
-
 Change:: Make non dts change
 
 Input::
@@ -535,14 +500,6 @@ export const m = mod;
 
 function someFn() { }
 
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -690,27 +647,6 @@ function someFn() { }
 
 //// [/user/username/projects/sample1/tests/tsconfig.tsbuildinfo] file changed its modified time
 
-fileExists:: {
- "/user/username/projects/sample1/core/index.ts": 1,
- "/user/username/projects/sample1/core/anothermodule.ts": 1
-} 
-
-directoryExists:: {
- "/user/username/projects/sample1/core": 4,
- "/user/username/projects/sample1/logic/node_modules/@types": 1,
- "/user/username/projects/sample1/node_modules/@types": 1,
- "/user/username/projects/node_modules/@types": 1,
- "/user/username/node_modules/@types": 1,
- "/user/node_modules/@types": 1,
- "/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {
- "/user/username/projects/sample1/tests/tsconfig.tsbuildinfo": 1
-} 
-
 Change:: Make dts change
 
 Input::
@@ -724,14 +660,6 @@ export const m = mod;
 
 export function someFn() { }
 
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -986,25 +914,3 @@ export declare function someFn(): void;
   "size": 1680
 }
 
-
-fileExists:: {
- "/user/username/projects/sample1/core/index.ts": 1,
- "/user/username/projects/sample1/core/anothermodule.ts": 1,
- "/user/username/projects/sample1/logic/index.ts": 1
-} 
-
-directoryExists:: {
- "/user/username/projects/sample1/core": 8,
- "/user/username/projects/sample1/logic/node_modules/@types": 1,
- "/user/username/projects/sample1/node_modules/@types": 2,
- "/user/username/projects/node_modules/@types": 2,
- "/user/username/node_modules/@types": 2,
- "/user/node_modules/@types": 2,
- "/node_modules/@types": 2,
- "/user/username/projects/sample1/logic": 2,
- "/user/username/projects/sample1/tests/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 

@@ -64,22 +64,6 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-getModifiedTime:: {
- "/src/dev-build/tsconfig.tsbuildinfo": 1
-}
-
-setModifiedTime:: {}
-
-fileExists:: {
- "/src/shared/types/db.ts": 1
-}
-
-directoryExists:: {
- "/src/shared/types": 2,
- "/src/node_modules/@types": 1,
- "/node_modules/@types": 1
-}
-
 
 //// [/src/dev-build/tsconfig.tsbuildinfo]
 {"program":{"fileNames":["../../lib/lib.d.ts","../shared/types/db.ts","../src/main.ts","../src/other.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","signature":false,"affectsGlobalScope":true},{"version":"-9621097780-export interface A {\r\n    name: string;\r\n}","signature":false},{"version":"2626879346-import { A } from \"../shared/types/db\";\r\nconst a = {\r\n    lastName: 'sdsd'\r\n;","signature":false},{"version":"11373096570-console.log(\"hi\");\r\nexport { }","signature":false}],"options":{"noEmitOnError":true,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[],"changeFileSet":[1,2,3,4]},"version":"FakeTSVersion"}
@@ -164,22 +148,6 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-getModifiedTime:: {
- "/src/dev-build/tsconfig.tsbuildinfo": 1
-}
-
-setModifiedTime:: {}
-
-fileExists:: {
- "/src/shared/types/db.ts": 1
-}
-
-directoryExists:: {
- "/src/shared/types": 2,
- "/src/node_modules/@types": 1,
- "/node_modules/@types": 1
-}
-
 
 
 
@@ -216,22 +184,6 @@ Shape signatures in builder refreshed for::
 /src/shared/types/db.ts (computed .d.ts)
 /src/src/main.ts (computed .d.ts)
 /src/src/other.ts (computed .d.ts)
-
-getModifiedTime:: {
- "/src/dev-build/tsconfig.tsbuildinfo": 1
-}
-
-setModifiedTime:: {}
-
-fileExists:: {
- "/src/shared/types/db.ts": 1
-}
-
-directoryExists:: {
- "/src/shared/types": 2,
- "/src/node_modules/@types": 1,
- "/node_modules/@types": 1
-}
 
 
 //// [/src/dev-build/shared/types/db.js]
@@ -319,19 +271,5 @@ Input::
 Output::
 /lib/tsc --b /src/tsconfig.json --incremental
 exitCode:: ExitStatus.Success
-
-getModifiedTime:: {
- "/src/dev-build/tsconfig.tsbuildinfo": 1,
- "/src/shared/types/db.ts": 1,
- "/src/src/main.ts": 1,
- "/src/src/other.ts": 1,
- "/src/tsconfig.json": 1
-}
-
-setModifiedTime:: {}
-
-fileExists:: {}
-
-directoryExists:: {}
 
 

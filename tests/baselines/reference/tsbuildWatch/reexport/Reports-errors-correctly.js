@@ -64,14 +64,6 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 /a/lib/tsc.js -b -w -verbose src
 Output::
 >> Screen clear
@@ -261,40 +253,6 @@ exports.session = {
 
 
 
-fileExists:: {
- "/user/username/projects/reexport/src/pure/session.ts": 1,
- "/user/username/projects/reexport/src/pure.ts": 1,
- "/user/username/projects/reexport/src/pure.tsx": 1,
- "/user/username/projects/reexport/src/pure.d.ts": 1,
- "/user/username/projects/reexport/src/pure/package.json": 1,
- "/user/username/projects/reexport/src/pure/index.ts": 1
-} 
-
-directoryExists:: {
- "/user/username/projects/reexport/src/pure": 6,
- "/user/username/projects/reexport/src/pure/node_modules/@types": 1,
- "/user/username/projects/reexport/src/node_modules/@types": 2,
- "/user/username/projects/reexport/node_modules/@types": 2,
- "/user/username/projects/node_modules/@types": 2,
- "/user/username/node_modules/@types": 2,
- "/user/node_modules/@types": 2,
- "/node_modules/@types": 2,
- "/user/username/projects/reexport/out/pure": 1,
- "/user/username/projects/reexport/out": 2,
- "/user/username/projects/reexport": 1,
- "/user/username/projects/reexport/src": 2,
- "/user/username/projects/reexport/src/main/node_modules/@types": 1,
- "/user/username/projects/reexport/out/main": 1
-} 
-
-getModifiedTimes:: {
- "/user/username/projects/reexport/out/pure/tsconfig.tsbuildinfo": 1,
- "/user/username/projects/reexport/src/main/index.ts": 1,
- "/user/username/projects/reexport/out/main/index.js": 1
-} 
-
-setModifiedTimes:: {} 
-
 Change:: Introduce error
 
 Input::
@@ -305,14 +263,6 @@ export interface Session {
 }
 
 
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -469,34 +419,6 @@ export interface Session {
 }
 
 
-fileExists:: {
- "/user/username/projects/reexport/src/pure/session.ts": 1,
- "/user/username/projects/reexport/src/pure.ts": 1,
- "/user/username/projects/reexport/src/pure.tsx": 1,
- "/user/username/projects/reexport/src/pure.d.ts": 1,
- "/user/username/projects/reexport/src/pure/package.json": 1,
- "/user/username/projects/reexport/src/pure/index.ts": 1
-} 
-
-directoryExists:: {
- "/user/username/projects/reexport/src/pure": 6,
- "/user/username/projects/reexport/src/pure/node_modules/@types": 1,
- "/user/username/projects/reexport/src/node_modules/@types": 2,
- "/user/username/projects/reexport/node_modules/@types": 2,
- "/user/username/projects/node_modules/@types": 2,
- "/user/username/node_modules/@types": 2,
- "/user/node_modules/@types": 2,
- "/node_modules/@types": 2,
- "/user/username/projects/reexport/src": 2,
- "/user/username/projects/reexport/src/main/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {
- "/user/username/projects/reexport/src/pure/index.ts": 1
-} 
-
-setModifiedTimes:: {} 
-
 Change:: Fix error
 
 Input::
@@ -507,14 +429,6 @@ export interface Session {
 }
 
 
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -662,31 +576,3 @@ export interface Session {
 }
 
 //// [/user/username/projects/reexport/out/main/index.js] file changed its modified time
-
-fileExists:: {
- "/user/username/projects/reexport/src/pure/session.ts": 1,
- "/user/username/projects/reexport/src/pure.ts": 1,
- "/user/username/projects/reexport/src/pure.tsx": 1,
- "/user/username/projects/reexport/src/pure.d.ts": 1,
- "/user/username/projects/reexport/src/pure/package.json": 1,
- "/user/username/projects/reexport/src/pure/index.ts": 1
-} 
-
-directoryExists:: {
- "/user/username/projects/reexport/src/pure": 6,
- "/user/username/projects/reexport/src/pure/node_modules/@types": 1,
- "/user/username/projects/reexport/src/node_modules/@types": 2,
- "/user/username/projects/reexport/node_modules/@types": 2,
- "/user/username/projects/node_modules/@types": 2,
- "/user/username/node_modules/@types": 2,
- "/user/node_modules/@types": 2,
- "/node_modules/@types": 2,
- "/user/username/projects/reexport/src": 2,
- "/user/username/projects/reexport/src/main/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {
- "/user/username/projects/reexport/out/main/index.js": 1
-} 

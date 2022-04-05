@@ -140,7 +140,7 @@ namespace ts.tscWatch {
             } = input;
 
             if (!isWatch(commandLineArgs)) sys.exit = exitCode => sys.exitCode = exitCode;
-            const { cb, getPrograms } = commandLineCallbacks(sys, /*originalReadCall*/ undefined, sys.fileExistsWithoutTracking);
+            const { cb, getPrograms } = commandLineCallbacks(sys);
             const watchOrSolution = executeCommandLine(
                 sys,
                 cb,
@@ -179,7 +179,7 @@ namespace ts.tscWatch {
         const baseline: string[] = [];
         baseline.push("Input::");
         sys.diff(baseline);
-        const { cb, getPrograms } = commandLineCallbacks(sys, /*originalReadCall*/ undefined, sys.fileExistsWithoutTracking);
+        const { cb, getPrograms } = commandLineCallbacks(sys);
         return { sys, baseline, oldSnap: sys.snap(), cb, getPrograms };
     }
 

@@ -81,24 +81,6 @@ Output::
 
 exitCode:: ExitStatus.Success
 
-getModifiedTime:: {
- "/src/obj/tsconfig.tsbuildinfo": 1
-}
-
-setModifiedTime:: {}
-
-fileExists:: {
- "/src/bundling.ts": 1,
- "/src/lazyIndex.ts": 1,
- "/src/bar.ts": 1
-}
-
-directoryExists:: {
- "/src": 6,
- "/src/node_modules/@types": 1,
- "/node_modules/@types": 1
-}
-
 
 //// [/src/obj/bar.d.ts]
 declare const _default: (param: string) => void;
@@ -284,25 +266,6 @@ Output::
 
 exitCode:: ExitStatus.Success
 
-getModifiedTime:: {
- "/src/obj/tsconfig.tsbuildinfo": 1,
- "/src/bar.ts": 1
-}
-
-setModifiedTime:: {}
-
-fileExists:: {
- "/src/bundling.ts": 1,
- "/src/lazyIndex.ts": 1,
- "/src/bar.ts": 1
-}
-
-directoryExists:: {
- "/src": 6,
- "/src/node_modules/@types": 1,
- "/node_modules/@types": 1
-}
-
 
 //// [/src/obj/bar.d.ts]
 declare const _default: () => void;
@@ -436,25 +399,6 @@ Output::
 [[90m12:00:36 AM[0m] Building project '/src/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
-
-getModifiedTime:: {
- "/src/obj/tsconfig.tsbuildinfo": 1,
- "/src/bar.ts": 1
-}
-
-setModifiedTime:: {}
-
-fileExists:: {
- "/src/bundling.ts": 1,
- "/src/lazyIndex.ts": 1,
- "/src/bar.ts": 1
-}
-
-directoryExists:: {
- "/src": 6,
- "/src/node_modules/@types": 1,
- "/node_modules/@types": 1
-}
 
 
 //// [/src/obj/bar.d.ts]

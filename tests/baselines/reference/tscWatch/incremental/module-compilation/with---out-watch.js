@@ -22,14 +22,6 @@ export const y = 20;
 {"compilerOptions":{"incremental":true,"module":"amd","outFile":"out.js"}}
 
 
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 /a/lib/tsc.js -w
 Output::
 >> Screen clear
@@ -132,20 +124,3 @@ define("file2", ["require", "exports"], function (require, exports) {
 
 ======================================================================
 
-
-fileExists:: {
- "/users/username/projects/project/tsconfig.json": 1,
- "/users/username/projects/project/out.js": 1
-} 
-
-directoryExists:: {
- "/users/username/projects/project/node_modules/@types": 1,
- "/users/username/projects/node_modules/@types": 1,
- "/users/username/node_modules/@types": 1,
- "/users/node_modules/@types": 1,
- "/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 

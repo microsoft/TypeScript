@@ -20,14 +20,6 @@ export var x = Foo();
 {}
 
 
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 /a/lib/tsc.js --w -p /a/b/tsconfig.json
 Output::
 >> Screen clear
@@ -91,21 +83,6 @@ exports.x = Foo();
 
 
 
-fileExists:: {
- "/a/b/tsconfig.json": 1
-} 
-
-directoryExists:: {
- "/a/b/tsconfig.json": 1,
- "/a/b/node_modules/@types": 1,
- "/a/node_modules/@types": 1,
- "/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 Change:: edit refereceFile1
 
 Input::
@@ -113,14 +90,6 @@ Input::
 /// <reference path="./moduleFile2.ts" />
 export var x = Foo();export var yy = Foo();
 
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -188,28 +157,12 @@ exports.yy = Foo();
 
 
 
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 Change:: create moduleFile2
 
 Input::
 //// [/a/b/moduleFile2.ts]
 export var Foo4 = 10;
 
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -273,18 +226,3 @@ exports.Foo4 = void 0;
 exports.Foo4 = 10;
 
 
-
-fileExists:: {
- "/a/b/modulefile2.js": 1
-} 
-
-directoryExists:: {
- "/a/b/node_modules/@types": 1,
- "/a/node_modules/@types": 1,
- "/node_modules/@types": 1,
- "/a/b/modulefile2.js": 1
-} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 

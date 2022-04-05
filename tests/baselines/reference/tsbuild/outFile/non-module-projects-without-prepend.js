@@ -150,24 +150,6 @@ Output::
 
 exitCode:: ExitStatus.Success
 
-getModifiedTime:: {
- "/src/first/tsconfig.tsbuildinfo": 1,
- "/src/second/tsconfig.tsbuildinfo": 1,
- "/src/third/tsconfig.tsbuildinfo": 1
-}
-
-setModifiedTime:: {}
-
-fileExists:: {}
-
-directoryExists:: {
- "/src/first/node_modules/@types": 1,
- "/src/node_modules/@types": 3,
- "/node_modules/@types": 3,
- "/src/second/node_modules/@types": 1,
- "/src/third/node_modules/@types": 1
-}
-
 
 //// [/src/first/first_PART1.d.ts]
 interface TheFirst {

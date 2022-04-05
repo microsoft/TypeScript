@@ -31,14 +31,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 /a/lib/tsc.js --w -p /a/b/tsconfig.json
 Output::
 >> Screen clear
@@ -134,37 +126,12 @@ exports.Foo4 = 10;
 
 
 
-fileExists:: {
- "/a/b/tsconfig.json": 1,
- "/a/b/modulefile1.ts": 1
-} 
-
-directoryExists:: {
- "/a/b/tsconfig.json": 1,
- "/a/b": 2,
- "/a/b/node_modules/@types": 1,
- "/a/node_modules/@types": 1,
- "/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 Change:: Change file1Consumer1 content to `export let y = Foo();`
 
 Input::
 //// [/a/b/file1Consumer1.ts]
 export let y = Foo();
 
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -230,32 +197,12 @@ exports.y = Foo();
 
 
 
-fileExists:: {} 
-
-directoryExists:: {
- "/a/b/node_modules/@types": 1,
- "/a/node_modules/@types": 1,
- "/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 Change:: Change the content of moduleFile1 to `export var T: number;export function Foo() { };`
 
 Input::
 //// [/a/b/moduleFile1.ts]
 export var T: number;export function Foo() { };
 
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -326,28 +273,12 @@ exports.Foo = Foo;
 
 //// [/a/b/file1Consumer2.js] file written with same contents
 
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 Change:: Add the import statements back to file1Consumer1
 
 Input::
 //// [/a/b/file1Consumer1.ts]
 import {Foo} from "./moduleFile1";let y = Foo();
 
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -408,32 +339,12 @@ var y = (0, moduleFile1_1.Foo)();
 
 
 
-fileExists:: {} 
-
-directoryExists:: {
- "/a/b/node_modules/@types": 1,
- "/a/node_modules/@types": 1,
- "/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 Change:: Change the content of moduleFile1 to `export var T: number;export var T2: string;export function Foo() { };`
 
 Input::
 //// [/a/b/moduleFile1.ts]
 export let y = Foo();
 
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -515,14 +426,6 @@ exports.y = Foo();
 //// [/a/b/file1Consumer1.js] file written with same contents
 //// [/a/b/file1Consumer2.js] file written with same contents
 
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 Change:: Multiple file edits in one go
 
 Input::
@@ -530,14 +433,6 @@ Input::
 export var T: number;export function Foo() { };
 
 //// [/a/b/file1Consumer1.ts] file written with same contents
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -605,11 +500,3 @@ exports.Foo = Foo;
 
 //// [/a/b/file1Consumer1.js] file written with same contents
 //// [/a/b/file1Consumer2.js] file written with same contents
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 

@@ -17,14 +17,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 /a/lib/tsc.js -w /a/b/commonFile1.ts
 Output::
 >> Screen clear
@@ -79,30 +71,12 @@ var x = y;
 
 
 
-fileExists:: {} 
-
-directoryExists:: {
- "/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 Change:: create file2
 
 Input::
 //// [/a/b/commonFile2.ts]
 let y = 1
 
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -148,15 +122,3 @@ exitCode:: ExitStatus.undefined
 var y = 1;
 
 
-
-fileExists:: {
- "/a/b/commonfile2.ts": 2
-} 
-
-directoryExists:: {
- "/node_modules/@types": 1
-} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 

@@ -99,25 +99,6 @@ Output::
 
 exitCode:: ExitStatus.Success
 
-getModifiedTime:: {
- "/src/src/folder/tsconfig.tsbuildinfo": 1,
- "/src/src/folder2/tsconfig.tsbuildinfo": 1,
- "/src/tests/tsconfig.tsbuildinfo": 1
-}
-
-setModifiedTime:: {}
-
-fileExists:: {}
-
-directoryExists:: {
- "/src/src/folder/node_modules/@types": 1,
- "/src/src/node_modules/@types": 2,
- "/src/node_modules/@types": 3,
- "/node_modules/@types": 3,
- "/src/src/folder2/node_modules/@types": 1,
- "/src/tests/node_modules/@types": 1
-}
-
 
 //// [/src/src/folder/index.d.ts]
 export declare const x = 10;
@@ -282,23 +263,5 @@ Output::
 [[90m12:00:34 AM[0m] Project 'src/tests/tsconfig.json' is up to date because newest input 'src/tests/index.ts' is older than oldest output 'src/tests/tsconfig.tsbuildinfo'
 
 exitCode:: ExitStatus.Success
-
-getModifiedTime:: {
- "/src/src/folder/tsconfig.tsbuildinfo": 1,
- "/src/src/folder/index.ts": 1,
- "/src/src/folder/tsconfig.json": 1,
- "/src/src/folder2/tsconfig.tsbuildinfo": 1,
- "/src/src/folder2/index.ts": 1,
- "/src/src/folder2/tsconfig.json": 1,
- "/src/tests/tsconfig.tsbuildinfo": 1,
- "/src/tests/index.ts": 1,
- "/src/tests/tsconfig.json": 1
-}
-
-setModifiedTime:: {}
-
-fileExists:: {}
-
-directoryExists:: {}
 
 

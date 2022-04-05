@@ -36,14 +36,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 /a/lib/tsc.js -b packages/pkg1 -w --verbose --traceResolution
 Output::
 >> Screen clear
@@ -266,69 +258,12 @@ export const theNum = 42;
 
 
 
-fileExists:: {
- "/user/username/projects/myproject/packages/pkg2/package.json": 1,
- "/user/username/projects/myproject/packages/pkg2/const.cts": 1,
- "/a/lib/package.json": 1,
- "/a/package.json": 1,
- "/package.json": 1,
- "/user/username/projects/myproject/packages/pkg1/package.json": 1,
- "/user/username/projects/myproject/node_modules/pkg2/package.json": 1,
- "/user/username/projects/myproject/node_modules/pkg2/build/index.js": 1,
- "/user/username/projects/myproject/node_modules/pkg2/build/index.ts": 1,
- "/user/username/projects/myproject/node_modules/pkg2/build/index.tsx": 1,
- "/user/username/projects/myproject/node_modules/pkg2/build/index.d.ts": 1,
- "/user/username/projects/myproject/packages/pkg2/build/index.d.ts": 1,
- "/user/username/projects/myproject/packages/pkg2/build/package.json": 1,
- "/user/username/projects/myproject/packages/pkg2/build/const.cts": 1,
- "/user/username/projects/myproject/packages/pkg2/build/const.d.cts": 1
-} 
-
-directoryExists:: {
- "/user/username/projects/myproject/packages/pkg2": 4,
- "/user/username/projects/myproject/packages/pkg2/node_modules/@types": 1,
- "/user/username/projects/myproject/packages/node_modules/@types": 2,
- "/user/username/projects/myproject/node_modules/@types": 2,
- "/user/username/projects/node_modules/@types": 2,
- "/user/username/node_modules/@types": 2,
- "/user/node_modules/@types": 2,
- "/node_modules/@types": 2,
- "/a/lib": 1,
- "/a": 1,
- "/": 1,
- "/user/username/projects/myproject/packages/pkg2/build": 4,
- "/user/username/projects/myproject/packages/pkg1": 2,
- "/user/username/projects/myproject/packages/pkg1/node_modules": 1,
- "/user/username/projects/myproject/packages/node_modules": 1,
- "/user/username/projects/myproject/node_modules": 1,
- "/user/username/projects/myproject/node_modules/pkg2": 2,
- "/user/username/projects/myproject/node_modules/pkg2/build": 3,
- "/user/username/projects/myproject/packages/pkg1/node_modules/@types": 1,
- "/user/username/projects/myproject/packages/pkg1/build": 1
-} 
-
-getModifiedTimes:: {
- "/user/username/projects/myproject/packages/pkg2/build/tsconfig.tsbuildinfo": 1,
- "/user/username/projects/myproject/packages/pkg1/index.ts": 1,
- "/user/username/projects/myproject/packages/pkg1/build/index.js": 1
-} 
-
-setModifiedTimes:: {} 
-
 Change:: reports import errors after change to package file
 
 Input::
 //// [/user/username/projects/myproject/packages/pkg1/package.json]
 {"name":"pkg1","version":"1.0.0","main":"build/index.js","type":"commonjs"}
 
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -439,74 +374,12 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 
-fileExists:: {
- "/user/username/projects/myproject/packages/pkg1/package.json": 1,
- "/user/username/projects/myproject/node_modules/pkg2/package.json": 1,
- "/user/username/projects/myproject/node_modules/pkg2.ts": 1,
- "/user/username/projects/myproject/node_modules/pkg2.tsx": 1,
- "/user/username/projects/myproject/node_modules/pkg2.d.ts": 1,
- "/user/username/projects/myproject/node_modules/pkg2/build/index.js": 1,
- "/user/username/projects/myproject/node_modules/pkg2/build/index.js.ts": 1,
- "/user/username/projects/myproject/node_modules/pkg2/build/index.js.tsx": 1,
- "/user/username/projects/myproject/node_modules/pkg2/build/index.js.d.ts": 1,
- "/user/username/projects/myproject/node_modules/pkg2/build/index.ts": 1,
- "/user/username/projects/myproject/node_modules/pkg2/build/index.tsx": 1,
- "/user/username/projects/myproject/node_modules/pkg2/build/index.d.ts": 1,
- "/user/username/projects/myproject/packages/pkg2/build/index.d.ts": 1,
- "/user/username/projects/myproject/packages/pkg2/build/package.json": 1,
- "/user/username/projects/myproject/packages/pkg2/package.json": 1,
- "/user/username/projects/myproject/packages/pkg2/build/const.cts": 1,
- "/user/username/projects/myproject/packages/pkg2/build/const.d.cts": 1,
- "/a/lib/package.json": 1,
- "/a/package.json": 1,
- "/package.json": 1
-} 
-
-directoryExists:: {
- "/user/username/projects/myproject/packages/pkg1": 1,
- "/user/username/projects/myproject/packages/pkg1/node_modules": 1,
- "/user/username/projects/myproject/packages/node_modules": 1,
- "/user/username/projects/myproject/node_modules": 2,
- "/user/username/projects/myproject/node_modules/pkg2": 2,
- "/user/username/projects/myproject/node_modules/pkg2/build": 4,
- "/user/username/projects/myproject/packages/pkg2/build": 3,
- "/user/username/projects/myproject/packages/pkg2": 1,
- "/user/username/projects/myproject/packages/pkg1/node_modules/@types": 1,
- "/user/username/projects/myproject/packages/node_modules/@types": 1,
- "/user/username/projects/myproject/node_modules/@types": 1,
- "/user/username/projects/node_modules/@types": 1,
- "/user/username/node_modules/@types": 1,
- "/user/node_modules/@types": 1,
- "/node_modules/@types": 1,
- "/a/lib": 1,
- "/a": 1,
- "/": 1
-} 
-
-getModifiedTimes:: {
- "/user/username/projects/myproject/packages/pkg1/tsconfig.json": 1,
- "/user/username/projects/myproject/packages/pkg2/package.json": 1,
- "/a/lib/package.json": 1,
- "/a/package.json": 1,
- "/package.json": 1
-} 
-
-setModifiedTimes:: {} 
-
 Change:: removes those errors when a package file is changed back
 
 Input::
 //// [/user/username/projects/myproject/packages/pkg1/package.json]
 {"name":"pkg1","version":"1.0.0","main":"build/index.js","type":"module"}
 
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -607,62 +480,12 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/packages/pkg1/build/index.js] file written with same contents
 
-fileExists:: {
- "/user/username/projects/myproject/packages/pkg1/package.json": 1,
- "/user/username/projects/myproject/node_modules/pkg2/package.json": 1,
- "/user/username/projects/myproject/node_modules/pkg2/build/index.js": 1,
- "/user/username/projects/myproject/node_modules/pkg2/build/index.ts": 1,
- "/user/username/projects/myproject/node_modules/pkg2/build/index.tsx": 1,
- "/user/username/projects/myproject/node_modules/pkg2/build/index.d.ts": 1,
- "/user/username/projects/myproject/packages/pkg2/build/index.d.ts": 1,
- "/user/username/projects/myproject/packages/pkg2/build/package.json": 1,
- "/user/username/projects/myproject/packages/pkg2/package.json": 1,
- "/user/username/projects/myproject/packages/pkg2/build/const.cts": 1,
- "/user/username/projects/myproject/packages/pkg2/build/const.d.cts": 1,
- "/a/lib/package.json": 1,
- "/a/package.json": 1,
- "/package.json": 1
-} 
-
-directoryExists:: {
- "/user/username/projects/myproject/packages/pkg1": 1,
- "/user/username/projects/myproject/packages/pkg1/node_modules": 1,
- "/user/username/projects/myproject/packages/node_modules": 1,
- "/user/username/projects/myproject/node_modules": 1,
- "/user/username/projects/myproject/node_modules/pkg2": 2,
- "/user/username/projects/myproject/node_modules/pkg2/build": 3,
- "/user/username/projects/myproject/packages/pkg2/build": 3,
- "/user/username/projects/myproject/packages/pkg2": 1,
- "/user/username/projects/myproject/packages/pkg1/node_modules/@types": 1,
- "/user/username/projects/myproject/packages/node_modules/@types": 1,
- "/user/username/projects/myproject/node_modules/@types": 1,
- "/user/username/projects/node_modules/@types": 1,
- "/user/username/node_modules/@types": 1,
- "/user/node_modules/@types": 1,
- "/node_modules/@types": 1,
- "/a/lib": 1,
- "/a": 1,
- "/": 1
-} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 Change:: reports import errors after change to package file
 
 Input::
 //// [/user/username/projects/myproject/packages/pkg1/package.json]
 {"name":"pkg1","version":"1.0.0","main":"build/index.js","type":"commonjs"}
 
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -773,54 +596,6 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 
-fileExists:: {
- "/user/username/projects/myproject/packages/pkg1/package.json": 1,
- "/user/username/projects/myproject/node_modules/pkg2/package.json": 1,
- "/user/username/projects/myproject/node_modules/pkg2.ts": 1,
- "/user/username/projects/myproject/node_modules/pkg2.tsx": 1,
- "/user/username/projects/myproject/node_modules/pkg2.d.ts": 1,
- "/user/username/projects/myproject/node_modules/pkg2/build/index.js": 1,
- "/user/username/projects/myproject/node_modules/pkg2/build/index.js.ts": 1,
- "/user/username/projects/myproject/node_modules/pkg2/build/index.js.tsx": 1,
- "/user/username/projects/myproject/node_modules/pkg2/build/index.js.d.ts": 1,
- "/user/username/projects/myproject/node_modules/pkg2/build/index.ts": 1,
- "/user/username/projects/myproject/node_modules/pkg2/build/index.tsx": 1,
- "/user/username/projects/myproject/node_modules/pkg2/build/index.d.ts": 1,
- "/user/username/projects/myproject/packages/pkg2/build/index.d.ts": 1,
- "/user/username/projects/myproject/packages/pkg2/build/package.json": 1,
- "/user/username/projects/myproject/packages/pkg2/package.json": 1,
- "/user/username/projects/myproject/packages/pkg2/build/const.cts": 1,
- "/user/username/projects/myproject/packages/pkg2/build/const.d.cts": 1,
- "/a/lib/package.json": 1,
- "/a/package.json": 1,
- "/package.json": 1
-} 
-
-directoryExists:: {
- "/user/username/projects/myproject/packages/pkg1": 1,
- "/user/username/projects/myproject/packages/pkg1/node_modules": 1,
- "/user/username/projects/myproject/packages/node_modules": 1,
- "/user/username/projects/myproject/node_modules": 2,
- "/user/username/projects/myproject/node_modules/pkg2": 2,
- "/user/username/projects/myproject/node_modules/pkg2/build": 4,
- "/user/username/projects/myproject/packages/pkg2/build": 3,
- "/user/username/projects/myproject/packages/pkg2": 1,
- "/user/username/projects/myproject/packages/pkg1/node_modules/@types": 1,
- "/user/username/projects/myproject/packages/node_modules/@types": 1,
- "/user/username/projects/myproject/node_modules/@types": 1,
- "/user/username/projects/node_modules/@types": 1,
- "/user/username/node_modules/@types": 1,
- "/user/node_modules/@types": 1,
- "/node_modules/@types": 1,
- "/a/lib": 1,
- "/a": 1,
- "/": 1
-} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
-
 Change:: removes those errors when a package file is changed to cjs extensions
 
 Input::
@@ -831,14 +606,6 @@ Input::
 export type { TheNum } from './const.cjs';
 
 //// [/user/username/projects/myproject/packages/pkg2/index.ts] deleted
-
-fileExists:: {} 
-
-directoryExists:: {} 
-
-getModifiedTimes:: {} 
-
-setModifiedTimes:: {} 
 
 Output::
 >> Screen clear
@@ -979,34 +746,3 @@ Object.defineProperty(exports, "__esModule", { value: true });
 export type { TheNum } from './const.cjs';
 
 
-
-fileExists:: {
- "/user/username/projects/myproject/packages/pkg2/const.cjs.ts": 1,
- "/user/username/projects/myproject/packages/pkg2/const.cjs.tsx": 1,
- "/user/username/projects/myproject/packages/pkg2/const.cjs.d.ts": 1,
- "/user/username/projects/myproject/packages/pkg2/const.cts": 1,
- "/a/lib/package.json": 1,
- "/a/package.json": 1,
- "/package.json": 1
-} 
-
-directoryExists:: {
- "/user/username/projects/myproject/packages/pkg2": 3,
- "/user/username/projects/myproject/packages/pkg2/node_modules/@types": 1,
- "/user/username/projects/myproject/packages/node_modules/@types": 1,
- "/user/username/projects/myproject/node_modules/@types": 1,
- "/user/username/projects/node_modules/@types": 1,
- "/user/username/node_modules/@types": 1,
- "/user/node_modules/@types": 1,
- "/node_modules/@types": 1,
- "/a/lib": 1,
- "/a": 1,
- "/": 1
-} 
-
-getModifiedTimes:: {
- "/user/username/projects/myproject/packages/pkg2/const.cts": 1,
- "/user/username/projects/myproject/packages/pkg2/index.cts": 1
-} 
-
-setModifiedTimes:: {} 

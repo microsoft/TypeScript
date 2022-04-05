@@ -165,34 +165,6 @@ Output::
 
 exitCode:: ExitStatus.Success
 
-getModifiedTime:: {
- "/src/lib/core/tsconfig.tsbuildinfo": 1,
- "/src/lib/animals/tsconfig.tsbuildinfo": 1,
- "/src/lib/zoo/tsconfig.tsbuildinfo": 1
-}
-
-setModifiedTime:: {}
-
-fileExists:: {
- "/src/tsconfig-base.json": 3,
- "/src/animals/package.json": 1,
- "/src/animals/index.ts": 1,
- "/src/core/utilities.ts": 1,
- "/src/animals/animal.ts": 1,
- "/src/animals/dog.ts": 1
-}
-
-directoryExists:: {
- "/src/core/node_modules/@types": 1,
- "/src/node_modules/@types": 3,
- "/node_modules/@types": 3,
- "/src/animals/": 3,
- "/src/animals": 7,
- "/src/core": 2,
- "/src/animals/node_modules/@types": 1,
- "/src/zoo/node_modules/@types": 1
-}
-
 
 //// [/src/lib/animals/animal.d.ts]
 export declare type Size = "small" | "medium" | "large";
