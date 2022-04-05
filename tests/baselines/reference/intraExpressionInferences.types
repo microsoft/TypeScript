@@ -1,0 +1,590 @@
+=== tests/cases/conformance/types/typeRelationships/typeInference/intraExpressionInferences.ts ===
+// Repros from #47599
+
+declare function callIt<T>(obj: {
+>callIt : <T>(obj: { produce: (n: number) => T; consume: (x: T) => void; }) => void
+>obj : { produce: (n: number) => T; consume: (x: T) => void; }
+
+    produce: (n: number) => T,
+>produce : (n: number) => T
+>n : number
+
+    consume: (x: T) => void
+>consume : (x: T) => void
+>x : T
+
+}): void;
+
+callIt({
+>callIt({    produce: () => 0,    consume: n => n.toFixed()}) : void
+>callIt : <T>(obj: { produce: (n: number) => T; consume: (x: T) => void; }) => void
+>{    produce: () => 0,    consume: n => n.toFixed()} : { produce: () => number; consume: (n: number) => string; }
+
+    produce: () => 0,
+>produce : () => number
+>() => 0 : () => number
+>0 : 0
+
+    consume: n => n.toFixed()
+>consume : (n: number) => string
+>n => n.toFixed() : (n: number) => string
+>n : number
+>n.toFixed() : string
+>n.toFixed : (fractionDigits?: number | undefined) => string
+>n : number
+>toFixed : (fractionDigits?: number | undefined) => string
+
+});
+
+callIt({
+>callIt({    produce: _a => 0,    consume: n => n.toFixed(),}) : void
+>callIt : <T>(obj: { produce: (n: number) => T; consume: (x: T) => void; }) => void
+>{    produce: _a => 0,    consume: n => n.toFixed(),} : { produce: (_a: number) => number; consume: (n: number) => string; }
+
+    produce: _a => 0,
+>produce : (_a: number) => number
+>_a => 0 : (_a: number) => number
+>_a : number
+>0 : 0
+
+    consume: n => n.toFixed(),
+>consume : (n: number) => string
+>n => n.toFixed() : (n: number) => string
+>n : number
+>n.toFixed() : string
+>n.toFixed : (fractionDigits?: number | undefined) => string
+>n : number
+>toFixed : (fractionDigits?: number | undefined) => string
+
+});
+
+callIt({
+>callIt({    produce() {        return 0;    },    consume: n => n.toFixed()}) : void
+>callIt : <T>(obj: { produce: (n: number) => T; consume: (x: T) => void; }) => void
+>{    produce() {        return 0;    },    consume: n => n.toFixed()} : { produce(): number; consume: (n: number) => string; }
+
+    produce() {
+>produce : () => number
+
+        return 0;
+>0 : 0
+
+    },
+    consume: n => n.toFixed()
+>consume : (n: number) => string
+>n => n.toFixed() : (n: number) => string
+>n : number
+>n.toFixed() : string
+>n.toFixed : (fractionDigits?: number | undefined) => string
+>n : number
+>toFixed : (fractionDigits?: number | undefined) => string
+
+});
+
+declare function callItT<T>(obj: [(n: number) => T, (x: T) => void]): void;
+>callItT : <T>(obj: [(n: number) => T, (x: T) => void]) => void
+>obj : [(n: number) => T, (x: T) => void]
+>n : number
+>x : T
+
+callItT([() => 0, n => n.toFixed()]);
+>callItT([() => 0, n => n.toFixed()]) : void
+>callItT : <T>(obj: [(n: number) => T, (x: T) => void]) => void
+>[() => 0, n => n.toFixed()] : [() => number, (n: number) => string]
+>() => 0 : () => number
+>0 : 0
+>n => n.toFixed() : (n: number) => string
+>n : number
+>n.toFixed() : string
+>n.toFixed : (fractionDigits?: number | undefined) => string
+>n : number
+>toFixed : (fractionDigits?: number | undefined) => string
+
+callItT([_a => 0, n => n.toFixed()]);
+>callItT([_a => 0, n => n.toFixed()]) : void
+>callItT : <T>(obj: [(n: number) => T, (x: T) => void]) => void
+>[_a => 0, n => n.toFixed()] : [(_a: number) => number, (n: number) => string]
+>_a => 0 : (_a: number) => number
+>_a : number
+>0 : 0
+>n => n.toFixed() : (n: number) => string
+>n : number
+>n.toFixed() : string
+>n.toFixed : (fractionDigits?: number | undefined) => string
+>n : number
+>toFixed : (fractionDigits?: number | undefined) => string
+
+// Repro from #25092
+
+interface MyInterface<T> {
+    retrieveGeneric: (parameter: string) => T,
+>retrieveGeneric : (parameter: string) => T
+>parameter : string
+
+    operateWithGeneric: (generic: T) => string
+>operateWithGeneric : (generic: T) => string
+>generic : T
+}
+
+const inferTypeFn = <T>(generic: MyInterface<T>) => generic;
+>inferTypeFn : <T>(generic: MyInterface<T>) => MyInterface<T>
+><T>(generic: MyInterface<T>) => generic : <T>(generic: MyInterface<T>) => MyInterface<T>
+>generic : MyInterface<T>
+>generic : MyInterface<T>
+
+const myGeneric = inferTypeFn({
+>myGeneric : MyInterface<number>
+>inferTypeFn({    retrieveGeneric: parameter => 5,    operateWithGeneric: generic => generic.toFixed()}) : MyInterface<number>
+>inferTypeFn : <T>(generic: MyInterface<T>) => MyInterface<T>
+>{    retrieveGeneric: parameter => 5,    operateWithGeneric: generic => generic.toFixed()} : { retrieveGeneric: (parameter: string) => number; operateWithGeneric: (generic: number) => string; }
+
+    retrieveGeneric: parameter => 5,
+>retrieveGeneric : (parameter: string) => number
+>parameter => 5 : (parameter: string) => number
+>parameter : string
+>5 : 5
+
+    operateWithGeneric: generic => generic.toFixed()
+>operateWithGeneric : (generic: number) => string
+>generic => generic.toFixed() : (generic: number) => string
+>generic : number
+>generic.toFixed() : string
+>generic.toFixed : (fractionDigits?: number | undefined) => string
+>generic : number
+>toFixed : (fractionDigits?: number | undefined) => string
+
+});
+
+// Repro #38623
+
+function make<M>(o: { mutations: M,  action: (m: M) => void }) { }
+>make : <M>(o: { mutations: M; action: (m: M) => void; }) => void
+>o : { mutations: M; action: (m: M) => void; }
+>mutations : M
+>action : (m: M) => void
+>m : M
+
+make({
+>make({   mutations: {       foo() { }   },   action: (a) => { a.foo() }}) : void
+>make : <M>(o: { mutations: M; action: (m: M) => void; }) => void
+>{   mutations: {       foo() { }   },   action: (a) => { a.foo() }} : { mutations: { foo(): void; }; action: (a: { foo(): void; }) => void; }
+
+   mutations: {
+>mutations : { foo(): void; }
+>{       foo() { }   } : { foo(): void; }
+
+       foo() { }
+>foo : () => void
+
+   },
+   action: (a) => { a.foo() }
+>action : (a: { foo(): void; }) => void
+>(a) => { a.foo() } : (a: { foo(): void; }) => void
+>a : { foo(): void; }
+>a.foo() : void
+>a.foo : () => void
+>a : { foo(): void; }
+>foo : () => void
+
+});
+
+// Repro from #38845
+
+declare function foo<A>(options: { a: A, b: (a: A) => void }): void;
+>foo : <A>(options: { a: A; b: (a: A) => void; }) => void
+>options : { a: A; b: (a: A) => void; }
+>a : A
+>b : (a: A) => void
+>a : A
+
+foo({
+>foo({    a: () => { return 42 },    b(a) {},}) : void
+>foo : <A>(options: { a: A; b: (a: A) => void; }) => void
+>{    a: () => { return 42 },    b(a) {},} : { a: () => 42; b(a: () => 42): void; }
+
+    a: () => { return 42 },
+>a : () => 42
+>() => { return 42 } : () => 42
+>42 : 42
+
+    b(a) {},
+>b : (a: () => 42) => void
+>a : () => 42
+
+});
+
+foo({
+>foo({    a: function () { return 42 },    b(a) {},}) : void
+>foo : <A>(options: { a: A; b: (a: A) => void; }) => void
+>{    a: function () { return 42 },    b(a) {},} : { a: () => 42; b(a: () => 42): void; }
+
+    a: function () { return 42 },
+>a : () => 42
+>function () { return 42 } : () => 42
+>42 : 42
+
+    b(a) {},
+>b : (a: () => 42) => void
+>a : () => 42
+
+});
+
+foo({
+>foo({    a() { return 42 },    b(a) {},}) : void
+>foo : <A>(options: { a: A; b: (a: A) => void; }) => void
+>{    a() { return 42 },    b(a) {},} : { a(): 42; b(a: () => 42): void; }
+
+    a() { return 42 },
+>a : () => 42
+>42 : 42
+
+    b(a) {},
+>b : (a: () => 42) => void
+>a : () => 42
+
+});
+
+// Repro from #38872
+
+type Chain<R1, R2> = {
+>Chain : Chain<R1, R2>
+
+    a(): R1,
+>a : () => R1
+
+    b(a: R1): R2;
+>b : (a: R1) => R2
+>a : R1
+
+    c(b: R2): void;
+>c : (b: R2) => void
+>b : R2
+
+};
+
+function test<R1, R2>(foo: Chain<R1, R2>) {}
+>test : <R1, R2>(foo: Chain<R1, R2>) => void
+>foo : Chain<R1, R2>
+
+test({
+>test({    a: () => 0,    b: (a) => 'a',    c: (b) => {        const x: string = b;    }}) : void
+>test : <R1, R2>(foo: Chain<R1, R2>) => void
+>{    a: () => 0,    b: (a) => 'a',    c: (b) => {        const x: string = b;    }} : { a: () => number; b: (a: number) => string; c: (b: string) => void; }
+
+    a: () => 0,
+>a : () => number
+>() => 0 : () => number
+>0 : 0
+
+    b: (a) => 'a',
+>b : (a: number) => string
+>(a) => 'a' : (a: number) => string
+>a : number
+>'a' : "a"
+
+    c: (b) => {
+>c : (b: string) => void
+>(b) => {        const x: string = b;    } : (b: string) => void
+>b : string
+
+        const x: string = b;
+>x : string
+>b : string
+    }
+});
+
+// Repro from #41712
+
+class Wrapper<T = any> {
+>Wrapper : Wrapper<T>
+
+    public value?: T;
+>value : T | undefined
+}
+
+type WrappedMap = Record<string, Wrapper>;
+>WrappedMap : WrappedMap
+
+type Unwrap<D extends WrappedMap> = {
+>Unwrap : Unwrap<D>
+
+    [K in keyof D]: D[K] extends Wrapper<infer T> ? T : never;
+};
+
+type MappingComponent<I extends WrappedMap, O extends WrappedMap> = {
+>MappingComponent : MappingComponent<I, O>
+
+    setup(): { inputs: I; outputs: O };
+>setup : () => {    inputs: I;    outputs: O;}
+>inputs : I
+>outputs : O
+
+    map?: (inputs: Unwrap<I>) => Unwrap<O>;
+>map : ((inputs: Unwrap<I>) => Unwrap<O>) | undefined
+>inputs : Unwrap<I>
+
+};
+
+declare function createMappingComponent<I extends WrappedMap, O extends WrappedMap>(def: MappingComponent<I, O>): void;
+>createMappingComponent : <I extends WrappedMap, O extends WrappedMap>(def: MappingComponent<I, O>) => void
+>def : MappingComponent<I, O>
+
+createMappingComponent({
+>createMappingComponent({    setup() {        return {            inputs: {                num: new Wrapper<number>(),                str: new Wrapper<string>()            },            outputs: {                bool: new Wrapper<boolean>(),                str: new Wrapper<string>()            }        };    },    map(inputs) {        return {            bool: inputs.nonexistent,            str: inputs.num,  // Causes error        }    }}) : void
+>createMappingComponent : <I extends WrappedMap, O extends WrappedMap>(def: MappingComponent<I, O>) => void
+>{    setup() {        return {            inputs: {                num: new Wrapper<number>(),                str: new Wrapper<string>()            },            outputs: {                bool: new Wrapper<boolean>(),                str: new Wrapper<string>()            }        };    },    map(inputs) {        return {            bool: inputs.nonexistent,            str: inputs.num,  // Causes error        }    }} : { setup(): { inputs: { num: Wrapper<number>; str: Wrapper<string>; }; outputs: { bool: Wrapper<boolean>; str: Wrapper<string>; }; }; map(inputs: Unwrap<{ num: Wrapper<number>; str: Wrapper<string>; }>): { bool: any; str: number; }; }
+
+    setup() {
+>setup : () => { inputs: { num: Wrapper<number>; str: Wrapper<string>; }; outputs: { bool: Wrapper<boolean>; str: Wrapper<string>; }; }
+
+        return {
+>{            inputs: {                num: new Wrapper<number>(),                str: new Wrapper<string>()            },            outputs: {                bool: new Wrapper<boolean>(),                str: new Wrapper<string>()            }        } : { inputs: { num: Wrapper<number>; str: Wrapper<string>; }; outputs: { bool: Wrapper<boolean>; str: Wrapper<string>; }; }
+
+            inputs: {
+>inputs : { num: Wrapper<number>; str: Wrapper<string>; }
+>{                num: new Wrapper<number>(),                str: new Wrapper<string>()            } : { num: Wrapper<number>; str: Wrapper<string>; }
+
+                num: new Wrapper<number>(),
+>num : Wrapper<number>
+>new Wrapper<number>() : Wrapper<number>
+>Wrapper : typeof Wrapper
+
+                str: new Wrapper<string>()
+>str : Wrapper<string>
+>new Wrapper<string>() : Wrapper<string>
+>Wrapper : typeof Wrapper
+
+            },
+            outputs: {
+>outputs : { bool: Wrapper<boolean>; str: Wrapper<string>; }
+>{                bool: new Wrapper<boolean>(),                str: new Wrapper<string>()            } : { bool: Wrapper<boolean>; str: Wrapper<string>; }
+
+                bool: new Wrapper<boolean>(),
+>bool : Wrapper<boolean>
+>new Wrapper<boolean>() : Wrapper<boolean>
+>Wrapper : typeof Wrapper
+
+                str: new Wrapper<string>()
+>str : Wrapper<string>
+>new Wrapper<string>() : Wrapper<string>
+>Wrapper : typeof Wrapper
+            }
+        };
+    },
+    map(inputs) {
+>map : (inputs: Unwrap<{ num: Wrapper<number>; str: Wrapper<string>; }>) => { bool: any; str: number; }
+>inputs : Unwrap<{ num: Wrapper<number>; str: Wrapper<string>; }>
+
+        return {
+>{            bool: inputs.nonexistent,            str: inputs.num,  // Causes error        } : { bool: any; str: number; }
+
+            bool: inputs.nonexistent,
+>bool : any
+>inputs.nonexistent : any
+>inputs : Unwrap<{ num: Wrapper<number>; str: Wrapper<string>; }>
+>nonexistent : any
+
+            str: inputs.num,  // Causes error
+>str : number
+>inputs.num : number
+>inputs : Unwrap<{ num: Wrapper<number>; str: Wrapper<string>; }>
+>num : number
+        }
+    }
+});
+
+// Repro from #48279
+
+function simplified<T>(props: { generator: () => T, receiver: (t: T) => any }) {}
+>simplified : <T>(props: { generator: () => T; receiver: (t: T) => any; }) => void
+>props : { generator: () => T; receiver: (t: T) => any; }
+>generator : () => T
+>receiver : (t: T) => any
+>t : T
+
+function whatIWant<T>(props: { generator: (bob: any) => T, receiver: (t: T) => any }) {}
+>whatIWant : <T>(props: { generator: (bob: any) => T; receiver: (t: T) => any; }) => void
+>props : { generator: (bob: any) => T; receiver: (t: T) => any; }
+>generator : (bob: any) => T
+>bob : any
+>receiver : (t: T) => any
+>t : T
+
+function nonObject<T>(generator: (bob: any) => T, receiver: (t: T) => any) {}
+>nonObject : <T>(generator: (bob: any) => T, receiver: (t: T) => any) => void
+>generator : (bob: any) => T
+>bob : any
+>receiver : (t: T) => any
+>t : T
+
+simplified({ generator: () => 123, receiver: (t) => console.log(t + 2) })
+>simplified({ generator: () => 123, receiver: (t) => console.log(t + 2) }) : void
+>simplified : <T>(props: { generator: () => T; receiver: (t: T) => any; }) => void
+>{ generator: () => 123, receiver: (t) => console.log(t + 2) } : { generator: () => number; receiver: (t: number) => void; }
+>generator : () => number
+>() => 123 : () => number
+>123 : 123
+>receiver : (t: number) => void
+>(t) => console.log(t + 2) : (t: number) => void
+>t : number
+>console.log(t + 2) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>t + 2 : number
+>t : number
+>2 : 2
+
+whatIWant({ generator: (bob) => bob ? 1 : 2, receiver: (t) => console.log(t + 2) })
+>whatIWant({ generator: (bob) => bob ? 1 : 2, receiver: (t) => console.log(t + 2) }) : void
+>whatIWant : <T>(props: { generator: (bob: any) => T; receiver: (t: T) => any; }) => void
+>{ generator: (bob) => bob ? 1 : 2, receiver: (t) => console.log(t + 2) } : { generator: (bob: any) => 2 | 1; receiver: (t: 2 | 1) => void; }
+>generator : (bob: any) => 2 | 1
+>(bob) => bob ? 1 : 2 : (bob: any) => 2 | 1
+>bob : any
+>bob ? 1 : 2 : 2 | 1
+>bob : any
+>1 : 1
+>2 : 2
+>receiver : (t: 2 | 1) => void
+>(t) => console.log(t + 2) : (t: 2 | 1) => void
+>t : 2 | 1
+>console.log(t + 2) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>t + 2 : number
+>t : 2 | 1
+>2 : 2
+
+nonObject((bob) => bob ? 1 : 2, (t) => console.log(t + 2))
+>nonObject((bob) => bob ? 1 : 2, (t) => console.log(t + 2)) : void
+>nonObject : <T>(generator: (bob: any) => T, receiver: (t: T) => any) => void
+>(bob) => bob ? 1 : 2 : (bob: any) => 2 | 1
+>bob : any
+>bob ? 1 : 2 : 2 | 1
+>bob : any
+>1 : 1
+>2 : 2
+>(t) => console.log(t + 2) : (t: 2 | 1) => void
+>t : 2 | 1
+>console.log(t + 2) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>t + 2 : number
+>t : 2 | 1
+>2 : 2
+
+// Repro from #48466
+
+interface Opts<TParams, TDone, TMapped> {
+    fetch: (params: TParams, foo: number) => TDone,
+>fetch : (params: TParams, foo: number) => TDone
+>params : TParams
+>foo : number
+
+    map: (data: TDone) => TMapped
+>map : (data: TDone) => TMapped
+>data : TDone
+}
+
+function example<TParams, TDone, TMapped>(options: Opts<TParams, TDone, TMapped>) {
+>example : <TParams, TDone, TMapped>(options: Opts<TParams, TDone, TMapped>) => (params: TParams) => TMapped
+>options : Opts<TParams, TDone, TMapped>
+
+    return (params: TParams) => {
+>(params: TParams) => {        const data = options.fetch(params, 123)        return options.map(data)    } : (params: TParams) => TMapped
+>params : TParams
+
+        const data = options.fetch(params, 123)
+>data : TDone
+>options.fetch(params, 123) : TDone
+>options.fetch : (params: TParams, foo: number) => TDone
+>options : Opts<TParams, TDone, TMapped>
+>fetch : (params: TParams, foo: number) => TDone
+>params : TParams
+>123 : 123
+
+        return options.map(data)
+>options.map(data) : TMapped
+>options.map : (data: TDone) => TMapped
+>options : Opts<TParams, TDone, TMapped>
+>map : (data: TDone) => TMapped
+>data : TDone
+    }
+}
+
+interface Params {
+    one: number
+>one : number
+
+    two: string
+>two : string
+}
+
+example({
+>example({    fetch: (params: Params) => 123,    map: (number) => String(number)}) : (params: Params) => string
+>example : <TParams, TDone, TMapped>(options: Opts<TParams, TDone, TMapped>) => (params: TParams) => TMapped
+>{    fetch: (params: Params) => 123,    map: (number) => String(number)} : { fetch: (params: Params) => number; map: (number: number) => string; }
+
+    fetch: (params: Params) => 123,
+>fetch : (params: Params) => number
+>(params: Params) => 123 : (params: Params) => number
+>params : Params
+>123 : 123
+
+    map: (number) => String(number)
+>map : (number: number) => string
+>(number) => String(number) : (number: number) => string
+>number : number
+>String(number) : string
+>String : StringConstructor
+>number : number
+
+});
+
+example({
+>example({    fetch: (params: Params, foo: number) => 123,    map: (number) => String(number)}) : (params: Params) => string
+>example : <TParams, TDone, TMapped>(options: Opts<TParams, TDone, TMapped>) => (params: TParams) => TMapped
+>{    fetch: (params: Params, foo: number) => 123,    map: (number) => String(number)} : { fetch: (params: Params, foo: number) => number; map: (number: number) => string; }
+
+    fetch: (params: Params, foo: number) => 123,
+>fetch : (params: Params, foo: number) => number
+>(params: Params, foo: number) => 123 : (params: Params, foo: number) => number
+>params : Params
+>foo : number
+>123 : 123
+
+    map: (number) => String(number)
+>map : (number: number) => string
+>(number) => String(number) : (number: number) => string
+>number : number
+>String(number) : string
+>String : StringConstructor
+>number : number
+
+});
+
+example({
+>example({    fetch: (params: Params, foo) => 123,    map: (number) => String(number)}) : (params: Params) => string
+>example : <TParams, TDone, TMapped>(options: Opts<TParams, TDone, TMapped>) => (params: TParams) => TMapped
+>{    fetch: (params: Params, foo) => 123,    map: (number) => String(number)} : { fetch: (params: Params, foo: number) => number; map: (number: number) => string; }
+
+    fetch: (params: Params, foo) => 123,
+>fetch : (params: Params, foo: number) => number
+>(params: Params, foo) => 123 : (params: Params, foo: number) => number
+>params : Params
+>foo : number
+>123 : 123
+
+    map: (number) => String(number)
+>map : (number: number) => string
+>(number) => String(number) : (number: number) => string
+>number : number
+>String(number) : string
+>String : StringConstructor
+>number : number
+
+});
+

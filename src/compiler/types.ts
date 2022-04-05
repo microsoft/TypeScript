@@ -5915,6 +5915,13 @@ namespace ts {
         nonFixingMapper: TypeMapper;                  // Mapper that doesn't fix inferences
         returnMapper?: TypeMapper;                    // Type mapper for inferences from return types (if any)
         inferredTypeParameters?: readonly TypeParameter[]; // Inferred type parameters for function result
+        intraExpressionInferenceSites?: IntraExpressionInferenceSite[];
+    }
+
+    /* @internal */
+    export interface IntraExpressionInferenceSite {
+        node: Expression | MethodDeclaration;
+        type: Type;
     }
 
     /* @internal */
