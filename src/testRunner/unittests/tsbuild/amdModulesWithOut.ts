@@ -19,20 +19,20 @@ namespace ts {
             modifyFs,
             modifyAgainFs
         }: VerifyOutFileScenarioInput) {
-            verifyTscSerializedIncrementalEdits({
+            verifyTscWithEdits({
                 scenario: "amdModulesWithOut",
                 subScenario,
                 fs: () => outFileFs,
                 commandLineArgs: ["--b", "/src/app", "--verbose"],
                 baselineSourceMap: true,
                 modifyFs,
-                incrementalScenarios: [
+                edits: [
                     {
-                        buildKind: BuildKind.IncrementalDtsUnchanged,
+                        subScenario: "incremental-declaration-doesnt-change",
                         modifyFs: fs => appendText(fs, "/src/lib/file1.ts", "console.log(x);")
                     },
                     ...(modifyAgainFs ? [{
-                        buildKind: BuildKind.IncrementalHeadersChange,
+                        subScenario: "incremental-headers-change-without-dts-changes",
                         modifyFs: modifyAgainFs
                     }] : emptyArray),
                 ]

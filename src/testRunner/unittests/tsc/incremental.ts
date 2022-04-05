@@ -1,6 +1,6 @@
 namespace ts {
     describe("unittests:: tsc:: incremental::", () => {
-        verifyTscSerializedIncrementalEdits({
+        verifyTscWithEdits({
             scenario: "incremental",
             subScenario: "when passing filename for buildinfo on commandline",
             fs: () => loadProjectFromFiles({
@@ -17,10 +17,10 @@ namespace ts {
                     }`,
             }),
             commandLineArgs: ["--incremental", "--p", "src/project", "--tsBuildInfoFile", "src/project/.tsbuildinfo", "--explainFiles"],
-            incrementalScenarios: noChangeOnlyRuns
+            edits: noChangeOnlyRuns
         });
 
-        verifyTscSerializedIncrementalEdits({
+        verifyTscWithEdits({
             scenario: "incremental",
             subScenario: "when passing rootDir from commandline",
             fs: () => loadProjectFromFiles({
@@ -34,10 +34,10 @@ namespace ts {
                     }`,
             }),
             commandLineArgs: ["--p", "src/project", "--rootDir", "src/project/src"],
-            incrementalScenarios: noChangeOnlyRuns
+            edits: noChangeOnlyRuns
         });
 
-        verifyTscSerializedIncrementalEdits({
+        verifyTscWithEdits({
             scenario: "incremental",
             subScenario: "with only dts files",
             fs: () => loadProjectFromFiles({
@@ -46,16 +46,16 @@ namespace ts {
                 "/src/project/tsconfig.json": "{}",
             }),
             commandLineArgs: ["--incremental", "--p", "src/project"],
-            incrementalScenarios: [
+            edits: [
                 noChangeRun,
                 {
-                    buildKind: BuildKind.IncrementalDtsUnchanged,
+                    subScenario: "incremental-declaration-doesnt-change",
                     modifyFs: fs => appendText(fs, "/src/project/src/main.d.ts", "export const xy = 100;")
                 }
             ]
         });
 
-        verifyTscSerializedIncrementalEdits({
+        verifyTscWithEdits({
             scenario: "incremental",
             subScenario: "when passing rootDir is in the tsconfig",
             fs: () => loadProjectFromFiles({
@@ -70,7 +70,7 @@ namespace ts {
                     }`,
             }),
             commandLineArgs: ["--p", "src/project"],
-            incrementalScenarios: noChangeOnlyRuns
+            edits: noChangeOnlyRuns
         });
 
         describe("with noEmitOnError", () => {
@@ -82,17 +82,17 @@ namespace ts {
                 projFs = undefined!;
             });
 
-            function verifyNoEmitOnError(subScenario: string, fixModifyFs: TscIncremental["modifyFs"], modifyFs?: TscIncremental["modifyFs"]) {
-                verifyTscSerializedIncrementalEdits({
+            function verifyNoEmitOnError(subScenario: string, fixModifyFs: TestTscEdit["modifyFs"], modifyFs?: TestTscEdit["modifyFs"]) {
+                verifyTscWithEdits({
                     scenario: "incremental",
                     subScenario,
                     fs: () => projFs,
                     commandLineArgs: ["--incremental", "-p", "src"],
                     modifyFs,
-                    incrementalScenarios: [
+                    edits: [
                         noChangeRun,
                         {
-                            buildKind: BuildKind.IncrementalDtsUnchanged,
+                            subScenario: "incremental-declaration-doesnt-change",
                             modifyFs: fixModifyFs
                         },
                         noChangeRun,
@@ -123,15 +123,15 @@ const a: string = 10;`, "utf-8"),
             verifyNoEmitChanges({ composite: true });
 
             function verifyNoEmitChanges(compilerOptions: CompilerOptions) {
-                const noChangeRunWithNoEmit: TscIncremental = {
+                const noChangeRunWithNoEmit: TestTscEdit = {
+                    ...noChangeRun,
                     subScenario: "No Change run with noEmit",
                     commandLineArgs: ["--p", "src/project", "--noEmit"],
-                    ...noChangeRun,
                 };
-                const noChangeRunWithEmit: TscIncremental = {
+                const noChangeRunWithEmit: TestTscEdit = {
+                    ...noChangeRun,
                     subScenario: "No Change run with emit",
                     commandLineArgs: ["--p", "src/project"],
-                    ...noChangeRun,
                 };
                 let optionsString = "";
                 for (const key in compilerOptions) {
@@ -140,24 +140,22 @@ const a: string = 10;`, "utf-8"),
                     }
                 }
 
-                verifyTscSerializedIncrementalEdits({
+                verifyTscWithEdits({
                     scenario: "incremental",
                     subScenario: `noEmit changes${optionsString}`,
                     commandLineArgs: ["--p", "src/project"],
                     fs,
-                    incrementalScenarios: [
+                    edits: [
                         noChangeRunWithNoEmit,
                         noChangeRunWithNoEmit,
                         {
                             subScenario: "Introduce error but still noEmit",
                             commandLineArgs: ["--p", "src/project", "--noEmit"],
                             modifyFs: fs => replaceText(fs, "/src/project/src/class.ts", "prop", "prop1"),
-                            buildKind: BuildKind.IncrementalDtsChange
                         },
                         {
                             subScenario: "Fix error and emit",
                             modifyFs: fs => replaceText(fs, "/src/project/src/class.ts", "prop1", "prop"),
-                            buildKind: BuildKind.IncrementalDtsChange
                         },
                         noChangeRunWithEmit,
                         noChangeRunWithNoEmit,
@@ -166,7 +164,6 @@ const a: string = 10;`, "utf-8"),
                         {
                             subScenario: "Introduce error and emit",
                             modifyFs: fs => replaceText(fs, "/src/project/src/class.ts", "prop", "prop1"),
-                            buildKind: BuildKind.IncrementalDtsChange
                         },
                         noChangeRunWithEmit,
                         noChangeRunWithNoEmit,
@@ -176,7 +173,6 @@ const a: string = 10;`, "utf-8"),
                             subScenario: "Fix error and no emit",
                             commandLineArgs: ["--p", "src/project", "--noEmit"],
                             modifyFs: fs => replaceText(fs, "/src/project/src/class.ts", "prop1", "prop"),
-                            buildKind: BuildKind.IncrementalDtsChange
                         },
                         noChangeRunWithEmit,
                         noChangeRunWithNoEmit,
@@ -185,23 +181,21 @@ const a: string = 10;`, "utf-8"),
                     ],
                 });
 
-                verifyTscSerializedIncrementalEdits({
+                verifyTscWithEdits({
                     scenario: "incremental",
                     subScenario: `noEmit changes with initial noEmit${optionsString}`,
                     commandLineArgs: ["--p", "src/project", "--noEmit"],
                     fs,
-                    incrementalScenarios: [
+                    edits: [
                         noChangeRunWithEmit,
                         {
                             subScenario: "Introduce error with emit",
                             commandLineArgs: ["--p", "src/project"],
                             modifyFs: fs => replaceText(fs, "/src/project/src/class.ts", "prop", "prop1"),
-                            buildKind: BuildKind.IncrementalDtsChange
                         },
                         {
                             subScenario: "Fix error and no emit",
                             modifyFs: fs => replaceText(fs, "/src/project/src/class.ts", "prop1", "prop"),
-                            buildKind: BuildKind.IncrementalDtsChange
                         },
                         noChangeRunWithEmit,
                     ],
@@ -236,7 +230,7 @@ const a: string = 10;`, "utf-8"),
             }
         });
 
-        verifyTscSerializedIncrementalEdits({
+        verifyTscWithEdits({
             scenario: "incremental",
             subScenario: `when global file is added, the signatures are updated`,
             fs: () => loadProjectFromFiles({
@@ -257,21 +251,18 @@ const a: string = 10;`, "utf-8"),
                 }),
             }),
             commandLineArgs: ["--p", "src/project"],
-            incrementalScenarios: [
+            edits: [
                 noChangeRun,
                 {
                     subScenario: "Modify main file",
-                    buildKind: BuildKind.IncrementalDtsChange,
                     modifyFs: fs => appendText(fs, `/src/project/src/main.ts`, `something();`),
                 },
                 {
                     subScenario: "Modify main file again",
-                    buildKind: BuildKind.IncrementalDtsChange,
                     modifyFs: fs => appendText(fs, `/src/project/src/main.ts`, `something();`),
                 },
                 {
                     subScenario: "Add new file and update main file",
-                    buildKind: BuildKind.IncrementalDtsChange,
                     modifyFs: fs => {
                         fs.writeFileSync(`/src/project/src/newFile.ts`, "function foo() { return 20; }");
                         prependText(fs, `/src/project/src/main.ts`, `/// <reference path="./newFile.ts"/>
@@ -281,12 +272,10 @@ const a: string = 10;`, "utf-8"),
                 },
                 {
                     subScenario: "Write file that could not be resolved",
-                    buildKind: BuildKind.IncrementalDtsChange,
                     modifyFs: fs => fs.writeFileSync(`/src/project/src/fileNotFound.ts`, "function something2() { return 20; }"),
                 },
                 {
                     subScenario: "Modify main file",
-                    buildKind: BuildKind.IncrementalDtsChange,
                     modifyFs: fs => appendText(fs, `/src/project/src/main.ts`, `something();`),
                 },
             ],
@@ -334,7 +323,7 @@ declare global {
             });
         });
 
-        verifyTscSerializedIncrementalEdits({
+        verifyTscWithEdits({
             scenario: "incremental",
             subScenario: "when new file is added to the referenced project",
             commandLineArgs: ["-i", "-p", `src/projects/project2`],
@@ -359,10 +348,9 @@ declare global {
                 }),
                 "/src/projects/project2/class2.ts": `class class2 {}`,
             }),
-            incrementalScenarios: [
+            edits: [
                 {
                     subScenario: "Add class3 to project1 and build it",
-                    buildKind: BuildKind.IncrementalDtsChange,
                     modifyFs: fs => fs.writeFileSync("/src/projects/project1/class3.ts", `class class3 {}`, "utf-8"),
                     cleanBuildDiscrepancies: () => new Map<string, CleanBuildDescrepancy>([
                         // Ts buildinfo will not be updated in incremental build so it will have semantic diagnostics cached from previous build
@@ -372,12 +360,10 @@ declare global {
                 },
                 {
                     subScenario: "Add output of class3",
-                    buildKind: BuildKind.IncrementalDtsChange,
                     modifyFs: fs => fs.writeFileSync("/src/projects/project1/class3.d.ts", `declare class class3 {}`, "utf-8"),
                 },
                 {
                     subScenario: "Add excluded file to project1",
-                    buildKind: BuildKind.IncrementalDtsUnchanged,
                     modifyFs: fs => {
                         fs.mkdirSync("/src/projects/project1/temp");
                         fs.writeFileSync("/src/projects/project1/temp/file.d.ts", `declare class file {}`, "utf-8");
@@ -385,7 +371,6 @@ declare global {
                 },
                 {
                     subScenario: "Delete output for class3",
-                    buildKind: BuildKind.IncrementalDtsUnchanged,
                     modifyFs: fs => fs.unlinkSync("/src/projects/project1/class3.d.ts"),
                     cleanBuildDiscrepancies: () => new Map<string, CleanBuildDescrepancy>([
                         // Ts buildinfo willbe updated but will retain lib file errors from previous build and not others because they are emitted because of change which results in clearing their semantic diagnostics cache
@@ -395,14 +380,13 @@ declare global {
                 },
                 {
                     subScenario: "Create output for class3",
-                    buildKind: BuildKind.IncrementalDtsUnchanged,
                     modifyFs: fs => fs.writeFileSync("/src/projects/project1/class3.d.ts", `declare class class3 {}`, "utf-8"),
                 },
             ]
         });
 
 
-        verifyTscSerializedIncrementalEdits({
+        verifyTscWithEdits({
             scenario: "incremental",
             subScenario: "when project has strict true",
             commandLineArgs: ["-noEmit", "-p", `src/project`],
@@ -415,11 +399,11 @@ declare global {
                 }),
                 "/src/project/class1.ts": `export class class1 {}`,
             }),
-            incrementalScenarios: noChangeOnlyRuns,
+            edits: noChangeOnlyRuns,
             baselinePrograms: true
         });
 
-        verifyTscSerializedIncrementalEdits({
+        verifyTscWithEdits({
             scenario: "incremental",
             subScenario: "serializing error chains",
             commandLineArgs: ["-p", `src/project`],
@@ -447,7 +431,7 @@ declare global {
                         <div />
                     </Component>)`
             }, `\ninterface ReadonlyArray<T> { readonly length: number }`),
-            incrementalScenarios: noChangeOnlyRuns,
+            edits: noChangeOnlyRuns,
         });
 
         verifyTsc({

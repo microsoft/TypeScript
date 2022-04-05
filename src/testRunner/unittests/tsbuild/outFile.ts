@@ -33,26 +33,26 @@ namespace ts {
             baselineOnly,
             additionalCommandLineArgs,
         }: VerifyOutFileScenarioInput) {
-            const incrementalScenarios: TscIncremental[] = [];
+            const edits: TestTscEdit[] = [];
             if (!ignoreDtsChanged) {
-                incrementalScenarios.push({
-                    buildKind: BuildKind.IncrementalDtsChange,
+                edits.push({
+                    subScenario: "incremental-declaration-changes",
                     modifyFs: fs => replaceText(fs, "/src/first/first_PART1.ts", "Hello", "Hola"),
                 });
             }
             if (!ignoreDtsUnchanged) {
-                incrementalScenarios.push({
-                    buildKind: BuildKind.IncrementalDtsUnchanged,
+                edits.push({
+                    subScenario: "incremental-declaration-doesnt-change",
                     modifyFs: fs => appendText(fs, "/src/first/first_PART1.ts", "console.log(s);"),
                 });
             }
             if (modifyAgainFs) {
-                incrementalScenarios.push({
-                    buildKind: BuildKind.IncrementalHeadersChange,
+                edits.push({
+                    subScenario: "incremental-headers-change-without-dts-changes",
                     modifyFs: modifyAgainFs
                 });
             }
-            const input: VerifyTsBuildInput = {
+            const input: VerifyTscWithEditsInput = {
                 subScenario,
                 fs: () => outFileFs,
                 scenario: "outfile-concat",
@@ -60,10 +60,10 @@ namespace ts {
                 baselineSourceMap: true,
                 modifyFs,
                 baselineReadFileCalls: !baselineOnly,
-                incrementalScenarios,
+                edits,
             };
-            return incrementalScenarios.length ?
-                verifyTscSerializedIncrementalEdits(input) :
+            return edits.length ?
+                verifyTscWithEdits(input) :
                 verifyTsc(input);
         }
 
@@ -115,12 +115,12 @@ namespace ts {
             return outFileWithBuildFs = fs;
         }
 
-        verifyTscSerializedIncrementalEdits({
+        verifyTscWithEdits({
             scenario: "outFile",
             subScenario: "clean projects",
             fs: getOutFileFsAfterBuild,
             commandLineArgs: ["--b", "/src/third", "--clean"],
-            incrementalScenarios: noChangeOnlyRuns
+            edits: noChangeOnlyRuns
         });
 
         verifyTsc({
@@ -153,7 +153,7 @@ namespace ts {
             }
         });
 
-        verifyTscSerializedIncrementalEdits({
+        verifyTscWithEdits({
             scenario: "outFile",
             subScenario: "rebuilds completely when command line incremental flag changes between non dts changes",
             fs: () => outFileFs,
@@ -161,16 +161,14 @@ namespace ts {
             modifyFs: fs => replaceText(fs, "/src/third/tsconfig.json", `"composite": true,`, ""),
             // Build with command line incremental
             commandLineArgs: ["--b", "/src/third", "--i", "--verbose"],
-            incrementalScenarios: [
+            edits: [
                 {
                     subScenario: "Make non incremental build with change in file that doesnt affect dts",
-                    buildKind: BuildKind.IncrementalDtsUnchanged,
                     modifyFs: fs => appendText(fs, "/src/first/first_PART1.ts", "console.log(s);"),
                     commandLineArgs: ["--b", "/src/third", "--verbose"],
                 },
                 {
                     subScenario: "Make incremental build with change in file that doesnt affect dts",
-                    buildKind: BuildKind.IncrementalDtsUnchanged,
                     modifyFs: fs => appendText(fs, "/src/first/first_PART1.ts", "console.log(s);"),
                     commandLineArgs: ["--b", "/src/third", "--verbose", "--incremental"],
                 }

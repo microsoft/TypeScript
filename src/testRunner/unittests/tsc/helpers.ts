@@ -5,16 +5,8 @@ namespace ts {
         disableUseFileVersionAsSignature?: boolean;
     };
 
-    export enum BuildKind {
-        Initial = "initial-build",
-        IncrementalDtsChange = "incremental-declaration-changes",
-        IncrementalDtsUnchanged = "incremental-declaration-doesnt-change",
-        IncrementalHeadersChange = "incremental-headers-change-without-dts-changes",
-        NoChangeRun = "no-change-run"
-    }
-
-    export const noChangeRun: TscIncremental = {
-        buildKind: BuildKind.NoChangeRun,
+    export const noChangeRun: TestTscEdit = {
+        subScenario: "no-change-run",
         modifyFs: noop
     };
     export const noChangeOnlyRuns = [noChangeRun];
@@ -63,8 +55,7 @@ namespace ts {
         };
     }
     export interface TestTscCompileLikeBase extends VerifyTscCompileLike {
-        buildKind?: BuildKind; // Should be defined for tsc --b
-
+        diffWithInitial?: boolean;
         modifyFs?: (fs: vfs.FileSystem) => void;
         disableUseFileVersionAsSignature?: boolean;
         environmentVariables?: Record<string, string>;
@@ -81,7 +72,7 @@ namespace ts {
         const initialFs = input.fs();
         const inputFs = initialFs.shadow();
         const {
-            scenario, subScenario, buildKind,
+            scenario, subScenario, diffWithInitial,
             commandLineArgs, modifyFs,
             environmentVariables,
             compile: worker, additionalBaseline,
@@ -100,12 +91,12 @@ namespace ts {
         additionalBaseline?.(sys);
         fs.makeReadonly();
         sys.baseLine = () => {
-            const baseFsPatch = !buildKind || buildKind === BuildKind.Initial ?
-                inputFs.diff(/*base*/ undefined, { baseIsNotShadowRoot: true }) :
-                inputFs.diff(initialFs, { includeChangedFileWithSameContent: true });
+            const baseFsPatch = diffWithInitial ?
+                inputFs.diff(initialFs, { includeChangedFileWithSameContent: true }) :
+                inputFs.diff(/*base*/ undefined, { baseIsNotShadowRoot: true });
             const patch = fs.diff(inputFs, { includeChangedFileWithSameContent: true });
             return {
-                file: `${isBuild(commandLineArgs) ? "tsbuild" : "tsc"}/${scenario}/${buildKind || BuildKind.Initial}/${subScenario.split(" ").join("-")}.js`,
+                file: `${isBuild(commandLineArgs) ? "tsbuild" : "tsc"}/${scenario}/${subScenario.split(" ").join("-")}.js`,
                 text: `Input::
 ${baseFsPatch ? vfs.formatPatch(baseFsPatch) : ""}
 
