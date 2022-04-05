@@ -55,9 +55,7 @@ namespace ts.OrganizeImports {
             // on the first import because it is probably the header comment for the file.
             // Consider: we could do a more careful check that this trivia is actually a header,
             // but the consequences of being wrong are very minor.
-
-            // We only want to remove leading comment of this node not its descendant
-            addEmitFlags(oldImportDecls[0], EmitFlags.NoLeadingComments);
+            suppressLeadingTrivia(oldImportDecls[0]);
 
             const oldImportGroups = group(oldImportDecls, importDecl => getExternalModuleName(importDecl.moduleSpecifier!)!);
             const sortedImportGroups = stableSort(oldImportGroups, (group1, group2) => compareModuleSpecifiers(group1[0].moduleSpecifier, group2[0].moduleSpecifier));

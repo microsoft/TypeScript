@@ -229,7 +229,7 @@ namespace ts.refactor {
     function doTypedefChange(changes: textChanges.ChangeTracker, file: SourceFile, name: string, info: ExtractInfo) {
         const { firstStatement, selection, typeParameters } = info;
 
-        removeCommentsFromTypeNode(selection);
+        setEmitFlags(selection, EmitFlags.NoComments | EmitFlags.NoNestedComments);
 
         const node = factory.createJSDocTypedefTag(
             factory.createIdentifier("typedef"),
@@ -250,33 +250,5 @@ namespace ts.refactor {
 
         changes.insertNodeBefore(file, firstStatement, factory.createJSDocComment(/* comment */ undefined, factory.createNodeArray(concatenate<JSDocTag>(templates, [node]))), /* blankLineBetween */ true);
         changes.replaceNode(file, selection, factory.createTypeReferenceNode(name, typeParameters.map(id => factory.createTypeReferenceNode(id.name, /* typeArguments */ undefined))));
-    }
-
-    function removeCommentsFromTypeNode(node: Node) {
-        let members = factory.createNodeArray<Node>();
-
-        switch (node.kind) {
-            case SyntaxKind.UnionType:
-                members = (node as UnionTypeNode).types;
-                break;
-
-            case SyntaxKind.TypeLiteral:
-                members = (node as TypeLiteralNode).members;
-                break;
-
-            case SyntaxKind.IntersectionType:
-                members = (node as IntersectionTypeNode).types;
-                break;
-
-            case SyntaxKind.TupleType:
-                members = (node as TupleTypeNode).elements;
-                break;
-
-        }
-
-        for (const member of members) {
-            removeCommentsFromTypeNode(member);
-        }
-        removeAllComments(node);
     }
 }
