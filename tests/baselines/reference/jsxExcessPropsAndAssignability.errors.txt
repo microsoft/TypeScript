@@ -1,8 +1,10 @@
+tests/cases/compiler/jsxExcessPropsAndAssignability.tsx(14,27): error TS2698: Spread types may only be created from object types.
 tests/cases/compiler/jsxExcessPropsAndAssignability.tsx(16,6): error TS2322: Type 'ComposedComponentProps & { myProp: number; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<Component<WrapperComponentProps, any, any>> & Readonly<{ children?: ReactNode; }> & Readonly<WrapperComponentProps>'.
   Type 'ComposedComponentProps & { myProp: number; }' is not assignable to type 'Readonly<WrapperComponentProps>'.
+tests/cases/compiler/jsxExcessPropsAndAssignability.tsx(16,27): error TS2698: Spread types may only be created from object types.
 
 
-==== tests/cases/compiler/jsxExcessPropsAndAssignability.tsx (1 errors) ====
+==== tests/cases/compiler/jsxExcessPropsAndAssignability.tsx (3 errors) ====
     /// <reference path="/.lib/react16.d.ts" />
     
     import * as React from 'react';
@@ -17,10 +19,14 @@ tests/cases/compiler/jsxExcessPropsAndAssignability.tsx(16,6): error TS2322: Typ
     
         // Expected no error, got none - good
         <WrapperComponent {...props} myProp={'1000000'} />;
+                              ~~~~~
+!!! error TS2698: Spread types may only be created from object types.
         // Expected error, but got none - bad!
         <WrapperComponent {...props} myProp={1000000} />;
          ~~~~~~~~~~~~~~~~
 !!! error TS2322: Type 'ComposedComponentProps & { myProp: number; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<Component<WrapperComponentProps, any, any>> & Readonly<{ children?: ReactNode; }> & Readonly<WrapperComponentProps>'.
 !!! error TS2322:   Type 'ComposedComponentProps & { myProp: number; }' is not assignable to type 'Readonly<WrapperComponentProps>'.
+                              ~~~~~
+!!! error TS2698: Spread types may only be created from object types.
     };
     
