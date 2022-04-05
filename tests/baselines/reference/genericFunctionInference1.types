@@ -808,7 +808,7 @@ const fn20 = pipe((_a?: {}) => 1);
 // #29904.3
 
 type Fn = (n: number) => number;
->Fn : Fn
+>Fn : (n: number) => number
 >n : number
 
 const fn30: Fn = pipe(

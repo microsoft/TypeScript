@@ -4,7 +4,7 @@ export class A {}
 >A : A
 
 export type B = {};
->B : B
+>B : {}
 
 export const enum C { One, Two }
 >C : C

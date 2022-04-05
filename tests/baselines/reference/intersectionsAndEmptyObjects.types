@@ -3,15 +3,15 @@
 // that contain other object types
 
 type A = { a: number };
->A : A
+>A : { a: number; }
 >a : number
 
 type B = { b: string };
->B : B
+>B : { b: string; }
 >b : string
 
 type C = {};
->C : C
+>C : {}
 
 let x01: A & B;
 >x01 : A & B
@@ -61,7 +61,7 @@ let x14: A & B & C & D & E;
 // Repro from #20225
 
 type Dictionary = { [name: string]: string };
->Dictionary : Dictionary
+>Dictionary : { [name: string]: string; }
 >name : string
 
 const intersectDictionaries = <F1 extends Dictionary, F2 extends Dictionary>(
@@ -177,7 +177,7 @@ type choices<IChoiceList extends {
 };
 
 type IMyChoiceList = {
->IMyChoiceList : IMyChoiceList
+>IMyChoiceList : { car: true; }
 
     car: true
 >car : true
@@ -186,7 +186,7 @@ type IMyChoiceList = {
 };
 
 type IUnknownChoiceList = {};
->IUnknownChoiceList : IUnknownChoiceList
+>IUnknownChoiceList : {}
 
 var defaultChoices: choices<{}>;
 >defaultChoices : { shoes: boolean; food: boolean; }
@@ -209,12 +209,12 @@ var unknownChoicesAndEmpty: choices<IUnknownChoiceList & {}>;
 // Repro from #38672
 
 type Foo1 = { x: string } & { [x: number]: Foo1 };
->Foo1 : Foo1
+>Foo1 : { x: string; } & { [x: number]: Foo1; }
 >x : string
 >x : number
 
 type Foo2 = { x: string } & { [K in number]: Foo2 };
->Foo2 : Foo2
+>Foo2 : { x: string; } & { [x: number]: Foo2; }
 >x : string
 
 // Repro from #40239

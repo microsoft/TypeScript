@@ -2,7 +2,7 @@
 // Various repros from #30581
 
 type RecordMap = { n: number, s: string, b: boolean };
->RecordMap : RecordMap
+>RecordMap : { n: number; s: string; b: boolean; }
 >n : number
 >s : string
 >b : boolean
@@ -71,16 +71,16 @@ processRecord({ kind: 'n', v: 42, f: v => v.toExponential() });
 // --------
 
 type TextFieldData = { value: string }
->TextFieldData : TextFieldData
+>TextFieldData : { value: string; }
 >value : string
 
 type SelectFieldData = { options: string[], selectedValue: string }
->SelectFieldData : SelectFieldData
+>SelectFieldData : { options: string[]; selectedValue: string; }
 >options : string[]
 >selectedValue : string
 
 type FieldMap = {
->FieldMap : FieldMap
+>FieldMap : { text: TextFieldData; select: SelectFieldData; }
 
     text: TextFieldData;
 >text : TextFieldData
@@ -99,7 +99,7 @@ type RenderFunc<K extends keyof FieldMap> = (props: FieldMap[K]) => void;
 >props : FieldMap[K]
 
 type RenderFuncMap = { [K in keyof FieldMap]: RenderFunc<K> };
->RenderFuncMap : RenderFuncMap
+>RenderFuncMap : { text: RenderFunc<"text">; select: RenderFunc<"select">; }
 
 function renderTextField(props: TextFieldData) {}
 >renderTextField : (props: TextFieldData) => void
@@ -146,7 +146,7 @@ function renderField<K extends keyof FieldMap>(field: FormField<K>) {
 // --------
 
 type TypeMap = {
->TypeMap : TypeMap
+>TypeMap : { foo: string; bar: number; }
 
     foo: string,
 >foo : string
@@ -160,7 +160,7 @@ type Keys = keyof TypeMap;
 >Keys : keyof TypeMap
 
 type HandlerMap = { [P in Keys]: (x: TypeMap[P]) => void };
->HandlerMap : HandlerMap
+>HandlerMap : { foo: (x: string) => void; bar: (x: number) => void; }
 >x : TypeMap[P]
 
 const handlers: HandlerMap = {
@@ -276,7 +276,7 @@ process([{ type: 'foo', data: 'abc' }]);
 // --------
 
 type LetterMap = { A: string, B: number }
->LetterMap : LetterMap
+>LetterMap : { A: string; B: number; }
 >A : string
 >B : number
 
@@ -298,19 +298,19 @@ function call<K extends keyof LetterMap>({ letter, caller }: LetterCaller<K>): v
 }
 
 type A = { A: string };
->A : A
+>A : { A: string; }
 >A : string
 
 type B = { B: number };
->B : B
+>B : { B: number; }
 >B : number
 
 type ACaller = (a: A) => void;
->ACaller : ACaller
+>ACaller : (a: A) => void
 >a : A
 
 type BCaller = (b: B) => void;
->BCaller : BCaller
+>BCaller : (b: B) => void
 >b : B
 
 declare const xx: { letter: A, caller: ACaller } | { letter: B, caller: BCaller };
@@ -552,7 +552,7 @@ function ff1() {
 // Repro from #47368
 
 type ArgMap = { a: number, b: string };
->ArgMap : ArgMap
+>ArgMap : { a: number; b: string; }
 >a : number
 >b : string
 
@@ -561,7 +561,7 @@ type Func<K extends keyof ArgMap> = (x: ArgMap[K]) => void;
 >x : ArgMap[K]
 
 type Funcs = { [K in keyof ArgMap]: Func<K> };
->Funcs : Funcs
+>Funcs : { a: Func<"a">; b: Func<"b">; }
 
 function f1<K extends keyof ArgMap>(funcs: Funcs, key: K, arg: ArgMap[K]) {
 >f1 : <K extends keyof ArgMap>(funcs: Funcs, key: K, arg: ArgMap[K]) => void
@@ -751,5 +751,5 @@ type BarLookup = typeof BAR_LOOKUP;
 >BAR_LOOKUP : { a: { readonly name: "a"; }; b: { readonly name: "b"; }; }
 
 type Baz = { [K in keyof BarLookup]: BarLookup[K]['name'] };
->Baz : Baz
+>Baz : { a: "a"; b: "b"; }
 

@@ -29,37 +29,37 @@ interface Point {
 // Constraint checking
 
 type T00 = { [P in P]: string };  // Error
->T00 : T00
+>T00 : { [x: string]: string; }
 
 type T01 = { [P in number]: string };  // Error
->T01 : T01
+>T01 : { [x: number]: string; }
 
 type T02 = { [P in Date]: number };  // Error
->T02 : T02
+>T02 : {}
 
 type T03 = Record<Date, number>;  // Error
->T03 : T03
+>T03 : {}
 
 type T10 = Pick<Shape, "name">;
->T10 : T10
+>T10 : { name: string; }
 
 type T11 = Pick<Shape, "foo">;  // Error
->T11 : T11
+>T11 : { foo: unknown; }
 
 type T12 = Pick<Shape, "name" | "foo">;  // Error
->T12 : T12
+>T12 : { name: string; foo: unknown; }
 
 type T13 = Pick<Shape, keyof Named>;
->T13 : T13
+>T13 : { name: string; }
 
 type T14 = Pick<Shape, keyof Point>;  // Error
->T14 : T14
+>T14 : { x: unknown; y: unknown; }
 
 type T15 = Pick<Shape, never>;
->T15 : T15
+>T15 : {}
 
 type T16 = Pick<Shape, undefined>;  // Error
->T16 : T16
+>T16 : {}
 
 function f1<T>(x: T) {
 >f1 : <T>(x: T) => void
@@ -434,7 +434,7 @@ c.setState({ c: true });  // Error
 >true : true
 
 type T2 = { a?: number, [key: string]: any };
->T2 : T2
+>T2 : { [key: string]: any; a?: number | undefined; }
 >a : number | undefined
 >key : string
 
@@ -469,7 +469,7 @@ type Foo2<T, F extends keyof T> = {
 
 };
 type O = {x: number, y: boolean};
->O : O
+>O : { x: number; y: boolean; }
 >x : number
 >y : boolean
 

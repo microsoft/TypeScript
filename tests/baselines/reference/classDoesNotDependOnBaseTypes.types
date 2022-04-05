@@ -1,6 +1,6 @@
 === tests/cases/conformance/types/typeAliases/classDoesNotDependOnBaseTypes.ts ===
 type StringTree = string | StringTreeCollection;
->StringTree : StringTree
+>StringTree : string | StringTreeCollection
 
 class StringTreeCollectionBase {
 >StringTreeCollectionBase : StringTreeCollectionBase

@@ -49,15 +49,15 @@ function boxify<T>(obj: T): Boxified<T> {
 }
 
 type A = { a: string };
->A : A
+>A : { a: string; }
 >a : string
 
 type B = { b: string };
->B : B
+>B : { b: string; }
 >b : string
 
 type C = { c: string };
->C : C
+>C : { c: string; }
 >c : string
 
 function f1(x: A | B | C | undefined) {
@@ -71,25 +71,25 @@ function f1(x: A | B | C | undefined) {
 }
 
 type T00 = Partial<A | B | C>;
->T00 : T00
+>T00 : Partial<A> | Partial<B> | Partial<C>
 
 type T01 = Readonly<A | B | C | null | undefined>;
->T01 : T01
+>T01 : Readonly<A> | Readonly<B> | Readonly<C> | null | undefined
 >null : null
 
 type T02 = Boxified<A | B[] | C | string>
->T02 : T02
+>T02 : string | Boxified<A> | Boxified<C> | Box<B>[]
 
 type T03 = Readonly<string | number | boolean | null | undefined | void>;
->T03 : T03
+>T03 : string | number | boolean | void | null | undefined
 >null : null
 
 type T04 = Boxified<string | number | boolean | null | undefined | void>;
->T04 : T04
+>T04 : string | number | boolean | void | null | undefined
 >null : null
 
 type T05 = Partial<"hello" | "world" | 42>;
->T05 : T05
+>T05 : "hello" | "world" | 42
 
 type BoxifiedWithSentinel<T, U> = {
 >BoxifiedWithSentinel : BoxifiedWithSentinel<T, U>
@@ -98,11 +98,11 @@ type BoxifiedWithSentinel<T, U> = {
 }
 
 type T10 = BoxifiedWithSentinel<A | B | C, null>;
->T10 : T10
+>T10 : BoxifiedWithSentinel<A, null> | BoxifiedWithSentinel<B, null> | BoxifiedWithSentinel<C, null>
 >null : null
 
 type T11 = BoxifiedWithSentinel<A | B | C, undefined>;
->T11 : T11
+>T11 : BoxifiedWithSentinel<A, undefined> | BoxifiedWithSentinel<B, undefined> | BoxifiedWithSentinel<C, undefined>
 
 type T12 = BoxifiedWithSentinel<string, undefined>;
 >T12 : string
@@ -114,7 +114,7 @@ type DeepReadonly<T> = {
 };
 
 type Foo = {
->Foo : Foo
+>Foo : { x: number; y: {    a: string;    b: number;}; z: boolean; }
 
     x: number;
 >x : number
@@ -130,7 +130,7 @@ type Foo = {
 };
 
 type DeepReadonlyFoo = {
->DeepReadonlyFoo : DeepReadonlyFoo
+>DeepReadonlyFoo : { readonly x: number; readonly y: {    readonly a: string;    readonly b: number;}; readonly z: boolean; }
 
     readonly x: number;
 >x : number
@@ -154,7 +154,7 @@ var x1: DeepReadonlyFoo;
 // Repro from #13232
 
 type Z = { a: number };
->Z : Z
+>Z : { a: number; }
 >a : number
 
 type Clone<T> = {
