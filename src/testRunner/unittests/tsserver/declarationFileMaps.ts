@@ -13,15 +13,20 @@ namespace ts.projectSystem {
     }
 
     interface MakeReferenceEntry extends DocumentSpanFromSubstring {
-        isDefinition: boolean;
+        isDefinition?: boolean;
+        isWriteAccess?: boolean;
     }
-    function makeReferenceEntry({ isDefinition, ...rest }: MakeReferenceEntry): ReferenceEntry {
-        return {
+    function makeReferencedSymbolEntry({ isDefinition, isWriteAccess, ...rest }: MakeReferenceEntry): ReferencedSymbolEntry {
+        const result = {
             ...documentSpanFromSubstring(rest),
             isDefinition,
-            isWriteAccess: isDefinition,
+            isWriteAccess: !!isWriteAccess,
             isInString: undefined,
         };
+        if (isDefinition === undefined) {
+            delete result.isDefinition;
+        }
+        return result;
     }
 
     function checkDeclarationFiles(file: File, session: TestSession, expectedFiles: readonly File[]): void {
@@ -373,17 +378,18 @@ namespace ts.projectSystem {
             ]);
         });
 
-        const referenceATs = (aTs: File): protocol.ReferencesResponseItem => makeReferenceItem({
+        const referenceATs = (aTs: File, isDefinition: true | undefined): protocol.ReferencesResponseItem => makeReferenceItem({
             file: aTs,
-            isDefinition: true,
+            isDefinition,
+            isWriteAccess: true,
             text: "fnA",
             contextText: "export function fnA() {}",
             lineText: "export function fnA() {}"
         });
-        const referencesUserTs = (userTs: File): readonly protocol.ReferencesResponseItem[] => [
+        const referencesUserTs = (userTs: File, isDefinition: false | undefined): readonly protocol.ReferencesResponseItem[] => [
             makeReferenceItem({
                 file: userTs,
-                isDefinition: false,
+                isDefinition,
                 text: "fnA",
                 lineText: "export function fnUser() { a.fnA(); b.fnB(); a.instanceA; }"
             }),
@@ -394,7 +400,7 @@ namespace ts.projectSystem {
 
             const response = executeSessionRequest<protocol.ReferencesRequest, protocol.ReferencesResponse>(session, protocol.CommandTypes.References, protocolFileLocationFromSubstring(userTs, "fnA()"));
             assert.deepEqual<protocol.ReferencesResponseBody | undefined>(response, {
-                refs: [...referencesUserTs(userTs), referenceATs(aTs)],
+                refs: [...referencesUserTs(userTs, /*isDefinition*/ undefined), referenceATs(aTs, /*isDefinition*/ true)], // Presently inconsistent across projects
                 symbolName: "fnA",
                 symbolStartOffset: protocolLocationFromSubstring(userTs.content, "fnA()").offset,
                 symbolDisplayString: "function fnA(): void",
@@ -408,7 +414,7 @@ namespace ts.projectSystem {
             openFilesForSession([aTs], session); // If it's not opened, the reference isn't found.
             const response = executeSessionRequest<protocol.ReferencesRequest, protocol.ReferencesResponse>(session, protocol.CommandTypes.References, protocolFileLocationFromSubstring(aTs, "fnA"));
             assert.deepEqual<protocol.ReferencesResponseBody | undefined>(response, {
-                refs: [referenceATs(aTs), ...referencesUserTs(userTs)],
+                refs: [referenceATs(aTs, /*isDefinition*/ true), ...referencesUserTs(userTs, /*isDefinition*/ false)],
                 symbolName: "fnA",
                 symbolStartOffset: protocolLocationFromSubstring(aTs.content, "fnA").offset,
                 symbolDisplayString: "function fnA(): void",
@@ -448,8 +454,8 @@ namespace ts.projectSystem {
                         ],
                     },
                     references: [
-                        makeReferenceEntry({ file: userTs, /*isDefinition*/ isDefinition: false, text: "fnA" }),
-                        makeReferenceEntry({ file: aTs, /*isDefinition*/ isDefinition: true, text: "fnA", contextText: "export function fnA() {}" }),
+                        makeReferencedSymbolEntry({ file: userTs, text: "fnA" }),
+                        makeReferencedSymbolEntry({ file: aTs, text: "fnA", isDefinition: true, isWriteAccess: true, contextText: "export function fnA() {}" }),
                     ],
                 },
             ]);
@@ -502,16 +508,15 @@ namespace ts.projectSystem {
                         name: "function f(): void",
                     },
                     references: [
-                        makeReferenceEntry({
+                        makeReferencedSymbolEntry({
                             file: aTs,
                             text: "f",
                             options: { index: 1 },
                             contextText: "function f() {}",
-                            isDefinition: true
+                            isWriteAccess: true,
                         }),
                         {
                             fileName: bTs.path,
-                            isDefinition: false,
                             isInString: undefined,
                             isWriteAccess: false,
                             textSpan: { start: 0, length: 1 },
@@ -529,14 +534,13 @@ namespace ts.projectSystem {
                 refs: [
                     makeReferenceItem({
                         file: bDts,
-                        isDefinition: true,
+                        isWriteAccess: true,
                         text: "fnB",
                         contextText: "export declare function fnB(): void;",
                         lineText: "export declare function fnB(): void;"
                     }),
                     makeReferenceItem({
                         file: userTs,
-                        isDefinition: false,
                         text: "fnB",
                         lineText: "export function fnUser() { a.fnA(); b.fnB(); a.instanceA; }"
                     }),

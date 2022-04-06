@@ -817,8 +817,7 @@
           "start": 0,
           "length": 43
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -830,8 +829,7 @@
           "start": 72,
           "length": 35
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -954,8 +952,7 @@
           "start": 72,
           "length": 35
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -963,8 +960,7 @@
           "length": 3
         },
         "fileName": "/tests/cases/fourslash/referencesForAmbients.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -972,8 +968,7 @@
           "length": 3
         },
         "fileName": "/tests/cases/fourslash/referencesForAmbients.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -1048,8 +1043,7 @@
           "start": 27,
           "length": 14
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -1057,8 +1051,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/referencesForAmbients.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -1254,8 +1247,7 @@
           "start": 45,
           "length": 90
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -1267,8 +1259,7 @@
           "start": 164,
           "length": 28
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -1391,8 +1382,7 @@
           "start": 72,
           "length": 35
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -1400,8 +1390,7 @@
           "length": 3
         },
         "fileName": "/tests/cases/fourslash/referencesForAmbients.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -1409,8 +1398,7 @@
           "length": 3
         },
         "fileName": "/tests/cases/fourslash/referencesForAmbients.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }

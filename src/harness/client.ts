@@ -603,7 +603,6 @@ namespace ts.server {
                 fileName: entry.file,
                 textSpan: this.decodeSpan(entry),
                 isWriteAccess: entry.isWriteAccess,
-                isDefinition: false
             }));
         }
 

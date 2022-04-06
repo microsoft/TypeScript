@@ -243,8 +243,7 @@
           "start": 0,
           "length": 20
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -252,8 +251,7 @@
           "length": 11
         },
         "fileName": "/tests/cases/fourslash/referencesForGlobalsInExternalModule.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -468,8 +466,7 @@
           "start": 54,
           "length": 23
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -477,8 +474,7 @@
           "length": 13
         },
         "fileName": "/tests/cases/fourslash/referencesForGlobalsInExternalModule.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -693,8 +689,7 @@
           "start": 108,
           "length": 31
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -702,8 +697,7 @@
           "length": 17
         },
         "fileName": "/tests/cases/fourslash/referencesForGlobalsInExternalModule.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -918,8 +912,7 @@
           "start": 167,
           "length": 43
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -927,8 +920,7 @@
           "length": 14
         },
         "fileName": "/tests/cases/fourslash/referencesForGlobalsInExternalModule.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }

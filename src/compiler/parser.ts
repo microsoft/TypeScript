@@ -1391,6 +1391,14 @@ namespace ts {
             return doInsideOfContext(NodeFlags.DisallowInContext, func);
         }
 
+        function allowConditionalTypesAnd<T>(func: () => T): T {
+            return doOutsideOfContext(NodeFlags.DisallowConditionalTypesContext, func);
+        }
+
+        function disallowConditionalTypesAnd<T>(func: () => T): T {
+            return doInsideOfContext(NodeFlags.DisallowConditionalTypesContext, func);
+        }
+
         function doInYieldContext<T>(func: () => T): T {
             return doInsideOfContext(NodeFlags.YieldContext, func);
         }
@@ -1425,6 +1433,10 @@ namespace ts {
 
         function inDisallowInContext() {
             return inContext(NodeFlags.DisallowInContext);
+        }
+
+        function inDisallowConditionalTypesContext() {
+            return inContext(NodeFlags.DisallowConditionalTypesContext);
         }
 
         function inDecoratorContext() {
@@ -2374,7 +2386,7 @@ namespace ts {
             return createNodeArray(list, listPos);
         }
 
-        function parseListElement<T extends Node>(parsingContext: ParsingContext, parseElement: () => T): T {
+        function parseListElement<T extends Node | undefined>(parsingContext: ParsingContext, parseElement: () => T): T {
             const node = currentNode(parsingContext);
             if (node) {
                 return consumeNode(node) as T;
@@ -2719,7 +2731,9 @@ namespace ts {
         }
 
         // Parses a comma-delimited list of elements
-        function parseDelimitedList<T extends Node>(kind: ParsingContext, parseElement: () => T, considerSemicolonAsDelimiter?: boolean): NodeArray<T> {
+        function parseDelimitedList<T extends Node>(kind: ParsingContext, parseElement: () => T, considerSemicolonAsDelimiter?: boolean): NodeArray<T>;
+        function parseDelimitedList<T extends Node | undefined>(kind: ParsingContext, parseElement: () => T, considerSemicolonAsDelimiter?: boolean): NodeArray<NonNullable<T>> | undefined;
+        function parseDelimitedList<T extends Node | undefined>(kind: ParsingContext, parseElement: () => T, considerSemicolonAsDelimiter?: boolean): NodeArray<NonNullable<T>> | undefined {
             const saveParsingContext = parsingContext;
             parsingContext |= 1 << kind;
             const list = [];
@@ -2729,7 +2743,11 @@ namespace ts {
             while (true) {
                 if (isListElement(kind, /*inErrorRecovery*/ false)) {
                     const startPos = scanner.getStartPos();
-                    list.push(parseListElement(kind, parseElement));
+                    const result = parseListElement(kind, parseElement);
+                    if (!result) {
+                        return undefined;
+                    }
+                    list.push(result as NonNullable<T>);
                     commaStart = scanner.getTokenPos();
 
                     if (parseOptional(SyntaxKind.CommaToken)) {
@@ -3067,7 +3085,7 @@ namespace ts {
         function parseJSDocNonNullableType(): TypeNode {
             const pos = getNodePos();
             nextToken();
-            return finishNode(factory.createJSDocNonNullableType(parseNonArrayType()), pos);
+            return finishNode(factory.createJSDocNonNullableType(parseNonArrayType(), /*postfix*/ false), pos);
         }
 
         function parseJSDocUnknownOrNullableType(): JSDocUnknownType | JSDocNullableType {
@@ -3094,7 +3112,7 @@ namespace ts {
                 return finishNode(factory.createJSDocUnknownType(), pos);
             }
             else {
-                return finishNode(factory.createJSDocNullableType(parseType()), pos);
+                return finishNode(factory.createJSDocNullableType(parseType(), /*postfix*/ false), pos);
             }
         }
 
@@ -3239,15 +3257,24 @@ namespace ts {
             return name;
         }
 
-        function parseParameterInOuterAwaitContext() {
-            return parseParameterWorker(/*inOuterAwaitContext*/ true);
+        function isParameterNameStart() {
+            // Be permissive about await and yield by calling isBindingIdentifier instead of isIdentifier; disallowing
+            // them during a speculative parse leads to many more follow-on errors than allowing the function to parse then later
+            // complaining about the use of the keywords.
+            return isBindingIdentifier() || token() === SyntaxKind.OpenBracketToken || token() === SyntaxKind.OpenBraceToken;
         }
 
-        function parseParameter(): ParameterDeclaration {
-            return parseParameterWorker(/*inOuterAwaitContext*/ false);
+        function parseParameter(inOuterAwaitContext: boolean): ParameterDeclaration {
+            return parseParameterWorker(inOuterAwaitContext);
         }
 
-        function parseParameterWorker(inOuterAwaitContext: boolean): ParameterDeclaration {
+        function parseParameterForSpeculation(inOuterAwaitContext: boolean): ParameterDeclaration | undefined {
+            return parseParameterWorker(inOuterAwaitContext, /*allowAmbiguity*/ false);
+        }
+
+        function parseParameterWorker(inOuterAwaitContext: boolean): ParameterDeclaration;
+        function parseParameterWorker(inOuterAwaitContext: boolean, allowAmbiguity: false): ParameterDeclaration | undefined;
+        function parseParameterWorker(inOuterAwaitContext: boolean, allowAmbiguity = true): ParameterDeclaration | undefined {
             const pos = getNodePos();
             const hasJSDoc = hasPrecedingJSDocComment();
 
@@ -3277,13 +3304,20 @@ namespace ts {
 
             const savedTopLevel = topLevel;
             topLevel = false;
+
             const modifiers = parseModifiers();
+            const dotDotDotToken = parseOptionalToken(SyntaxKind.DotDotDotToken);
+
+            if (!allowAmbiguity && !isParameterNameStart()) {
+                return undefined;
+            }
+
             const node = withJSDoc(
                 finishNode(
                     factory.createParameterDeclaration(
                         decorators,
                         modifiers,
-                        parseOptionalToken(SyntaxKind.DotDotDotToken),
+                        dotDotDotToken,
                         parseNameOfParameter(modifiers),
                         parseOptionalToken(SyntaxKind.QuestionToken),
                         parseTypeAnnotation(),
@@ -3301,7 +3335,7 @@ namespace ts {
         function parseReturnType(returnToken: SyntaxKind.ColonToken | SyntaxKind.EqualsGreaterThanToken, isType: boolean): TypeNode | undefined;
         function parseReturnType(returnToken: SyntaxKind.ColonToken | SyntaxKind.EqualsGreaterThanToken, isType: boolean) {
             if (shouldParseReturnType(returnToken, isType)) {
-                return parseTypeOrTypePredicate();
+                return allowConditionalTypesAnd(parseTypeOrTypePredicate);
             }
         }
 
@@ -3322,7 +3356,9 @@ namespace ts {
             return false;
         }
 
-        function parseParametersWorker(flags: SignatureFlags) {
+        function parseParametersWorker(flags: SignatureFlags, allowAmbiguity: true): NodeArray<ParameterDeclaration>;
+        function parseParametersWorker(flags: SignatureFlags, allowAmbiguity: false): NodeArray<ParameterDeclaration> | undefined;
+        function parseParametersWorker(flags: SignatureFlags, allowAmbiguity: boolean): NodeArray<ParameterDeclaration> | undefined {
             // FormalParameters [Yield,Await]: (modified)
             //      [empty]
             //      FormalParameterList[?Yield,Await]
@@ -3344,7 +3380,7 @@ namespace ts {
 
             const parameters = flags & SignatureFlags.JSDoc ?
                 parseDelimitedList(ParsingContext.JSDocParameters, parseJSDocParameter) :
-                parseDelimitedList(ParsingContext.Parameters, savedAwaitContext ? parseParameterInOuterAwaitContext : parseParameter);
+                parseDelimitedList(ParsingContext.Parameters, () => allowAmbiguity ? parseParameter(savedAwaitContext) : parseParameterForSpeculation(savedAwaitContext));
 
             setYieldContext(savedYieldContext);
             setAwaitContext(savedAwaitContext);
@@ -3370,7 +3406,7 @@ namespace ts {
                 return createMissingList<ParameterDeclaration>();
             }
 
-            const parameters = parseParametersWorker(flags);
+            const parameters = parseParametersWorker(flags, /*allowAmbiguity*/ true);
             parseExpected(SyntaxKind.CloseParenToken);
             return parameters;
         }
@@ -3463,7 +3499,7 @@ namespace ts {
         }
 
         function parseIndexSignatureDeclaration(pos: number, hasJSDoc: boolean, decorators: NodeArray<Decorator> | undefined, modifiers: NodeArray<Modifier> | undefined): IndexSignatureDeclaration {
-            const parameters = parseBracketedList(ParsingContext.Parameters, parseParameter, SyntaxKind.OpenBracketToken, SyntaxKind.CloseBracketToken);
+            const parameters = parseBracketedList<ParameterDeclaration>(ParsingContext.Parameters, () => parseParameter(/*inOuterAwaitContext*/ false), SyntaxKind.OpenBracketToken, SyntaxKind.CloseBracketToken);
             const type = parseTypeAnnotation();
             parseTypeMemberSemicolon();
             const node = factory.createIndexSignature(decorators, modifiers, parameters, type);
@@ -3924,7 +3960,7 @@ namespace ts {
                 switch (token()) {
                     case SyntaxKind.ExclamationToken:
                         nextToken();
-                        type = finishNode(factory.createJSDocNonNullableType(type), pos);
+                        type = finishNode(factory.createJSDocNonNullableType(type, /*postfix*/ true), pos);
                         break;
                     case SyntaxKind.QuestionToken:
                         // If next token is start of a type we have a conditional type
@@ -3932,7 +3968,7 @@ namespace ts {
                             return type;
                         }
                         nextToken();
-                        type = finishNode(factory.createJSDocNullableType(type), pos);
+                        type = finishNode(factory.createJSDocNullableType(type, /*postfix*/ true), pos);
                         break;
                     case SyntaxKind.OpenBracketToken:
                         parseExpected(SyntaxKind.OpenBracketToken);
@@ -3959,17 +3995,21 @@ namespace ts {
             return finishNode(factory.createTypeOperatorNode(operator, parseTypeOperatorOrHigher()), pos);
         }
 
-        function parseTypeParameterOfInferType() {
+        function tryParseConstraintOfInferType() {
+            if (parseOptional(SyntaxKind.ExtendsKeyword)) {
+                const constraint = disallowConditionalTypesAnd(parseType);
+                if (inDisallowConditionalTypesContext() || token() !== SyntaxKind.QuestionToken) {
+                    return constraint;
+                }
+            }
+        }
+
+        function parseTypeParameterOfInferType(): TypeParameterDeclaration {
             const pos = getNodePos();
-            return finishNode(
-                factory.createTypeParameterDeclaration(
-                    /*modifiers*/ undefined,
-                    parseIdentifier(),
-                    /*constraint*/ undefined,
-                    /*defaultType*/ undefined
-                ),
-                pos
-            );
+            const name = parseIdentifier();
+            const constraint = tryParse(tryParseConstraintOfInferType);
+            const node = factory.createTypeParameterDeclaration(/*modifiers*/ undefined, name, constraint);
+            return finishNode(node, pos);
         }
 
         function parseInferType(): InferTypeNode {
@@ -3988,7 +4028,7 @@ namespace ts {
                 case SyntaxKind.InferKeyword:
                     return parseInferType();
             }
-            return parsePostfixTypeOrHigher();
+            return allowConditionalTypesAnd(parsePostfixTypeOrHigher);
         }
 
         function parseFunctionOrConstructorTypeToError(
@@ -4137,24 +4177,22 @@ namespace ts {
         }
 
         function parseType(): TypeNode {
-            // The rules about 'yield' only apply to actual code/expression contexts.  They don't
-            // apply to 'type' contexts.  So we disable these parameters here before moving on.
-            return doOutsideOfContext(NodeFlags.TypeExcludesFlags, parseTypeWorker);
-        }
+            if (contextFlags & NodeFlags.TypeExcludesFlags) {
+                return doOutsideOfContext(NodeFlags.TypeExcludesFlags, parseType);
+            }
 
-        function parseTypeWorker(noConditionalTypes?: boolean): TypeNode {
             if (isStartOfFunctionTypeOrConstructorType()) {
                 return parseFunctionOrConstructorType();
             }
             const pos = getNodePos();
             const type = parseUnionTypeOrHigher();
-            if (!noConditionalTypes && !scanner.hasPrecedingLineBreak() && parseOptional(SyntaxKind.ExtendsKeyword)) {
+            if (!inDisallowConditionalTypesContext() && !scanner.hasPrecedingLineBreak() && parseOptional(SyntaxKind.ExtendsKeyword)) {
                 // The type following 'extends' is not permitted to be another conditional type
-                const extendsType = parseTypeWorker(/*noConditionalTypes*/ true);
+                const extendsType = disallowConditionalTypesAnd(parseType);
                 parseExpected(SyntaxKind.QuestionToken);
-                const trueType = parseTypeWorker();
+                const trueType = allowConditionalTypesAnd(parseType);
                 parseExpected(SyntaxKind.ColonToken);
-                const falseType = parseTypeWorker();
+                const falseType = allowConditionalTypesAnd(parseType);
                 return finishNode(factory.createConditionalTypeNode(type, extendsType, trueType, falseType), pos);
             }
             return type;
@@ -4641,7 +4679,16 @@ namespace ts {
                 parameters = createMissingList<ParameterDeclaration>();
             }
             else {
-                parameters = parseParametersWorker(isAsync);
+                if (!allowAmbiguity) {
+                    const maybeParameters = parseParametersWorker(isAsync, allowAmbiguity);
+                    if (!maybeParameters) {
+                        return undefined;
+                    }
+                    parameters = maybeParameters;
+                }
+                else {
+                    parameters = parseParametersWorker(isAsync, allowAmbiguity);
+                }
                 if (!parseExpected(SyntaxKind.CloseParenToken) && !allowAmbiguity) {
                     return undefined;
                 }

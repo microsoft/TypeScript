@@ -511,7 +511,7 @@ export class A {
             }]
         });
 
-        it("correctly migrate files between projects", () => {
+        it("two watch programs are not affected by each other", () => {
             const file1 = {
                 path: "/a/b/f1.ts",
                 content: `
@@ -526,16 +526,46 @@ export class A {
                 path: "/a/d/f3.ts",
                 content: "export let y = 1;"
             };
-            const host = createWatchedSystem([file1, file2, file3]);
-            const watch = createWatchOfFilesAndCompilerOptions([file2.path, file3.path], host);
-            checkProgramActualFiles(watch.getCurrentProgram().getProgram(), [file2.path, file3.path]);
+            const { sys, baseline, oldSnap, cb, getPrograms } = createBaseline(createWatchedSystem([libFile, file1, file2, file3]));
+            const host = createWatchCompilerHostOfFilesAndCompilerOptionsForBaseline({
+                rootFiles: [file2.path, file3.path],
+                system: sys,
+                options: { allowNonTsExtensions: true },
+                cb,
+                watchOptions: undefined
+            });
+            createWatchProgram(host);
+            baseline.push(`${sys.getExecutingFilePath()} --w ${file2.path} ${file3.path}`);
+            watchBaseline({
+                baseline,
+                getPrograms,
+                oldPrograms: emptyArray,
+                sys,
+                oldSnap,
+            });
 
-            const watch2 = createWatchOfFilesAndCompilerOptions([file1.path], host);
-            checkProgramActualFiles(watch2.getCurrentProgram().getProgram(), [file1.path, file2.path, file3.path]);
+            const {cb: cb2, getPrograms: getPrograms2 } = commandLineCallbacks(sys);
+            const oldSnap2 = sys.snap();
+            baseline.push("createing separate watcher");
+            createWatchProgram(createWatchCompilerHostOfFilesAndCompilerOptionsForBaseline({
+                rootFiles:[file1.path],
+                system: sys,
+                options: { allowNonTsExtensions: true },
+                cb: cb2,
+                watchOptions: undefined
+            }));
+            watchBaseline({
+                baseline,
+                getPrograms: getPrograms2,
+                oldPrograms: emptyArray,
+                sys,
+                oldSnap: oldSnap2,
+            });
 
-            // Previous program shouldnt be updated
-            checkProgramActualFiles(watch.getCurrentProgram().getProgram(), [file2.path, file3.path]);
-            host.checkTimeoutQueueLength(0);
+            sys.checkTimeoutQueueLength(0);
+            baseline.push(`First program is not updated:: ${getPrograms() === emptyArray}`);
+            baseline.push(`Second program is not updated:: ${getPrograms2() === emptyArray}`);
+            Harness.Baseline.runBaseline(`tscWatch/${scenario}/two-watch-programs-are-not-affected-by-each-other.js`, baseline.join("\r\n"));
         });
 
         verifyTscWatch({
@@ -1025,9 +1055,25 @@ declare const eval: any`
                 path: "/a/compile",
                 content: "let x = 1"
             };
-            const host = createWatchedSystem([f, libFile]);
-            const watch = createWatchOfFilesAndCompilerOptions([f.path], host, { allowNonTsExtensions: true });
-            checkProgramActualFiles(watch.getCurrentProgram().getProgram(), [f.path, libFile.path]);
+            const { sys, baseline, oldSnap, cb, getPrograms } = createBaseline(createWatchedSystem([f, libFile]));
+            const watch = createWatchProgram(createWatchCompilerHostOfFilesAndCompilerOptionsForBaseline({
+                rootFiles: [f.path],
+                system: sys,
+                options: { allowNonTsExtensions: true },
+                cb,
+                watchOptions: undefined
+            }));
+            runWatchBaseline({
+                scenario,
+                subScenario: "should support files without extensions",
+                commandLineArgs: ["--w", f.path],
+                sys,
+                baseline,
+                oldSnap,
+                getPrograms,
+                changes: emptyArray,
+                watchOrSolution: watch
+            });
         });
 
         verifyTscWatch({

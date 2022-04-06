@@ -159,8 +159,7 @@ undefined
           "start": 10,
           "length": 11
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -168,8 +167,7 @@ undefined
           "length": 3
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfComputedProperty.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -177,8 +175,7 @@ undefined
           "length": 3
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfComputedProperty.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -251,8 +248,7 @@ undefined
           "start": 10,
           "length": 11
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -260,8 +256,7 @@ undefined
           "length": 3
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfComputedProperty.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -269,8 +264,7 @@ undefined
           "length": 3
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfComputedProperty.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }

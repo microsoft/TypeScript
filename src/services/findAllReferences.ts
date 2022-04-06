@@ -209,13 +209,22 @@ namespace ts.FindAllReferences {
         const options = { use: FindReferencesUse.References };
         const referencedSymbols = Core.getReferencedSymbolsForNode(position, node, program, sourceFiles, cancellationToken, options);
         const checker = program.getTypeChecker();
-        const symbol = checker.getSymbolAtLocation(getAdjustedReferenceLocation(Core.getAdjustedNode(node, options)));
+        // Unless the starting node is a declaration (vs e.g. JSDoc), don't attempt to compute isDefinition
+        const adjustedNode = Core.getAdjustedNode(node, options);
+        const symbol = isDefinitionForReference(adjustedNode) ? checker.getSymbolAtLocation(adjustedNode) : undefined;
         return !referencedSymbols || !referencedSymbols.length ? undefined : mapDefined<SymbolAndEntries, ReferencedSymbol>(referencedSymbols, ({ definition, references }) =>
             // Only include referenced symbols that have a valid definition.
             definition && {
                 definition: checker.runWithCancellationToken(cancellationToken, checker => definitionToReferencedSymbolDefinitionInfo(definition, checker, node)),
-                references: references.map(r => toReferenceEntry(r, symbol))
+                references: references.map(r => toReferencedSymbolEntry(r, symbol))
             });
+    }
+
+    function isDefinitionForReference(node: Node): boolean {
+        return node.kind === SyntaxKind.DefaultKeyword
+            || !!getDeclarationFromName(node)
+            || isLiteralComputedPropertyDeclarationName(node)
+            || (node.kind === SyntaxKind.ConstructorKeyword && isConstructorDeclaration(node.parent));
     }
 
     export function getImplementationsAtPosition(program: Program, cancellationToken: CancellationToken, sourceFiles: readonly SourceFile[], sourceFile: SourceFile, position: number): ImplementationLocation[] | undefined {
@@ -389,16 +398,24 @@ namespace ts.FindAllReferences {
         return { ...entryToDocumentSpan(entry), ...(providePrefixAndSuffixText && getPrefixAndSuffixText(entry, originalNode, checker)) };
     }
 
-    export function toReferenceEntry(entry: Entry, symbol: Symbol | undefined): ReferenceEntry {
+    function toReferencedSymbolEntry(entry: Entry, symbol: Symbol | undefined): ReferencedSymbolEntry {
+        const referenceEntry = toReferenceEntry(entry);
+        if (!symbol) return referenceEntry;
+        return {
+            ...referenceEntry,
+            isDefinition: entry.kind !== EntryKind.Span && isDeclarationOfSymbol(entry.node, symbol)
+        };
+    }
+
+    export function toReferenceEntry(entry: Entry): ReferenceEntry {
         const documentSpan = entryToDocumentSpan(entry);
         if (entry.kind === EntryKind.Span) {
-            return { ...documentSpan, isWriteAccess: false, isDefinition: false };
+            return { ...documentSpan, isWriteAccess: false };
         }
         const { kind, node } = entry;
         return {
             ...documentSpan,
             isWriteAccess: isWriteAccessForReference(node),
-            isDefinition: isDeclarationOfSymbol(node, symbol),
             isInString: kind === EntryKind.StringLiteral ? true : undefined,
         };
     }
@@ -1193,9 +1210,14 @@ namespace ts.FindAllReferences {
             cb: (ref: Identifier) => void,
         ): void {
             const importTracker = createImportTracker(sourceFiles, new Set(sourceFiles.map(f => f.fileName)), checker, cancellationToken);
-            const { importSearches, indirectUsers } = importTracker(exportSymbol, { exportKind: isDefaultExport ? ExportKind.Default : ExportKind.Named, exportingModuleSymbol }, /*isForRename*/ false);
+            const { importSearches, indirectUsers, singleReferences } = importTracker(exportSymbol, { exportKind: isDefaultExport ? ExportKind.Default : ExportKind.Named, exportingModuleSymbol }, /*isForRename*/ false);
             for (const [importLocation] of importSearches) {
                 cb(importLocation);
+            }
+            for (const singleReference of singleReferences) {
+                if (isIdentifier(singleReference) && isImportTypeNode(singleReference.parent)) {
+                    cb(singleReference);
+                }
             }
             for (const indirectUser of indirectUsers) {
                 for (const node of getPossibleSymbolReferenceNodes(indirectUser, isDefaultExport ? "default" : exportName)) {

@@ -192,7 +192,12 @@ namespace ts.codefix {
         const program = context.program;
         const checker = program.getTypeChecker();
         const scriptTarget = getEmitScriptTarget(program.getCompilerOptions());
-        const flags = NodeBuilderFlags.NoTruncation | NodeBuilderFlags.NoUndefinedOptionalParameterType | NodeBuilderFlags.SuppressAnyReturnType | (quotePreference === QuotePreference.Single ? NodeBuilderFlags.UseSingleQuotesForStringLiteralType : 0);
+        const flags =
+            NodeBuilderFlags.NoTruncation
+            | NodeBuilderFlags.NoUndefinedOptionalParameterType
+            | NodeBuilderFlags.SuppressAnyReturnType
+            | NodeBuilderFlags.AllowEmptyTuple
+            | (quotePreference === QuotePreference.Single ? NodeBuilderFlags.UseSingleQuotesForStringLiteralType : NodeBuilderFlags.None);
         const signatureDeclaration = checker.signatureToSignatureDeclaration(signature, kind, enclosingDeclaration, flags, getNoopSymbolTrackerWithResolver(context)) as ArrowFunction | FunctionExpression | MethodDeclaration;
         if (!signatureDeclaration) {
             return undefined;

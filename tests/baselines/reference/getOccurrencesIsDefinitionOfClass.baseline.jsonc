@@ -183,8 +183,7 @@
           "start": 0,
           "length": 73
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -192,8 +191,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfClass.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }

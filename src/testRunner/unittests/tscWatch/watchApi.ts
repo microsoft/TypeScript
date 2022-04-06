@@ -18,15 +18,18 @@ namespace ts.tscWatch {
         };
 
         it("verify that module resolution with json extension works when returned without extension", () => {
-            const files = [libFile, mainFile, config, settingsJson];
-            const host = createWatchedSystem(files, { currentDirectory: projectRoot });
-            const compilerHost = createWatchCompilerHostOfConfigFile({
+            const { sys, baseline, oldSnap, cb, getPrograms } = createBaseline(createWatchedSystem(
+                [libFile, mainFile, config, settingsJson],
+                { currentDirectory: projectRoot }),
+            );
+            const host = createWatchCompilerHostOfConfigFileForBaseline({
                 configFileName: config.path,
-                system: host
+                system: sys,
+                cb,
             });
-            const parsedCommandResult = parseJsonConfigFileContent(configFileJson, host, config.path);
-            compilerHost.resolveModuleNames = (moduleNames, containingFile) => moduleNames.map(m => {
-                const result = resolveModuleName(m, containingFile, parsedCommandResult.options, compilerHost);
+            const parsedCommandResult = parseJsonConfigFileContent(configFileJson, sys, config.path);
+            host.resolveModuleNames = (moduleNames, containingFile) => moduleNames.map(m => {
+                const result = resolveModuleName(m, containingFile, parsedCommandResult.options, host);
                 const resolvedModule = result.resolvedModule!;
                 return {
                     resolvedFileName: resolvedModule.resolvedFileName,
@@ -34,40 +37,62 @@ namespace ts.tscWatch {
                     originalFileName: resolvedModule.originalPath,
                 };
             });
-            const watch = createWatchProgram(compilerHost);
-            const program = watch.getCurrentProgram().getProgram();
-            checkProgramActualFiles(program, [mainFile.path, libFile.path, settingsJson.path]);
+            const watch = createWatchProgram(host);
+            runWatchBaseline({
+                scenario: "watchApi",
+                subScenario: "verify that module resolution with json extension works when returned without extension",
+                commandLineArgs: ["--w", "--p", config.path],
+                sys,
+                baseline,
+                oldSnap,
+                getPrograms,
+                changes: emptyArray,
+                watchOrSolution: watch
+            });
         });
     });
 
     describe("unittests:: tsc-watch:: watchAPI:: tsc-watch expose error count to watch status reporter", () => {
-        const configFileJson: any = {
-            compilerOptions: { module: "commonjs" },
-            files: ["index.ts"]
-        };
-        const config: File = {
-            path: `${projectRoot}/tsconfig.json`,
-            content: JSON.stringify(configFileJson)
-        };
-        const mainFile: File = {
-            path: `${projectRoot}/index.ts`,
-            content: "let compiler = new Compiler(); for (let i = 0; j < 5; i++) {}"
-        };
-
         it("verify that the error count is correctly passed down to the watch status reporter", () => {
-            const files = [libFile, mainFile, config];
-            const host = createWatchedSystem(files, { currentDirectory: projectRoot });
+            const config: File = {
+                path: `${projectRoot}/tsconfig.json`,
+                content: JSON.stringify({
+                    compilerOptions: { module: "commonjs" },
+                    files: ["index.ts"]
+                })
+            };
+            const mainFile: File = {
+                path: `${projectRoot}/index.ts`,
+                content: "let compiler = new Compiler(); for (let i = 0; j < 5; i++) {}"
+            };
+            const { sys, baseline, oldSnap, cb, getPrograms } = createBaseline(createWatchedSystem(
+                [libFile, mainFile, config],
+                { currentDirectory: projectRoot }),
+            );
+            const host = createWatchCompilerHostOfConfigFileForBaseline({
+                configFileName: config.path,
+                system: sys,
+                cb,
+            });
+            const existing = host.onWatchStatusChange!;
             let watchedErrorCount;
-            const reportWatchStatus: WatchStatusReporter = (_, __, ___, errorCount) => {
+            host.onWatchStatusChange = (diagnostic, newLine, options, errorCount) => {
+                existing.call(host, diagnostic, newLine, options, errorCount);
                 watchedErrorCount = errorCount;
             };
-            const compilerHost = createWatchCompilerHostOfConfigFile({
-                configFileName: config.path,
-                system: host,
-                reportWatchStatus
-            });
-            createWatchProgram(compilerHost);
+            const watch = createWatchProgram(host);
             assert.equal(watchedErrorCount, 2, "The error count was expected to be 2 for the file change");
+            runWatchBaseline({
+                scenario: "watchApi",
+                subScenario: "verify that the error count is correctly passed down to the watch status reporter",
+                commandLineArgs: ["--w", "--p", config.path],
+                sys,
+                baseline,
+                oldSnap,
+                getPrograms,
+                changes: emptyArray,
+                watchOrSolution: watch
+            });
         });
     });
 
@@ -81,16 +106,33 @@ namespace ts.tscWatch {
                 path: `${projectRoot}/main.ts`,
                 content: "const x = 10;"
             };
-            const sys = createWatchedSystem([config, mainFile, libFile]);
-            const watchCompilerHost = createWatchCompilerHost(config.path, {}, sys);
-            watchCompilerHost.setTimeout = undefined;
-            watchCompilerHost.clearTimeout = undefined;
-            const watch = createWatchProgram(watchCompilerHost);
-            checkProgramActualFiles(watch.getProgram().getProgram(), [mainFile.path, libFile.path]);
-            // Write new file
-            const barPath = `${projectRoot}/bar.ts`;
-            sys.writeFile(barPath, "const y =10;");
-            checkProgramActualFiles(watch.getProgram().getProgram(), [mainFile.path, barPath, libFile.path]);
+            const { sys, baseline, oldSnap, cb, getPrograms } = createBaseline(createWatchedSystem([config, mainFile, libFile]));
+            const host = createWatchCompilerHostOfConfigFileForBaseline({
+                configFileName: config.path,
+                system: sys,
+                cb,
+            });
+            host.setTimeout = undefined;
+            host.clearTimeout = undefined;
+            const watch = createWatchProgram(host);
+            runWatchBaseline({
+                scenario: "watchApi",
+                subScenario: "without timesouts on host program gets updated",
+                commandLineArgs: ["--w", "--p", config.path],
+                sys,
+                baseline,
+                oldSnap,
+                getPrograms,
+                changes: [{
+                    caption: "Write a file",
+                    change: sys => sys.writeFile(`${projectRoot}/bar.ts`, "const y =10;"),
+                    timeouts: sys => {
+                        sys.checkTimeoutQueueLength(0);
+                        watch.getProgram();
+                    }
+                }],
+                watchOrSolution: watch
+            });
         });
     });
 
@@ -108,139 +150,230 @@ namespace ts.tscWatch {
                 path: `${projectRoot}/other.vue`,
                 content: ""
             };
-            const sys = createWatchedSystem([config, mainFile, otherFile, libFile]);
-            const watchCompilerHost = createWatchCompilerHost(
-                config.path,
-                { allowNonTsExtensions: true },
-                sys,
-                /*createProgram*/ undefined,
-                /*reportDiagnostics*/ undefined,
-                /*reportWatchStatus*/ undefined,
-                /*watchOptionsToExtend*/ undefined,
-                [{ extension: ".vue", isMixedContent: true, scriptKind: ScriptKind.Deferred }]
+            const { sys, baseline, oldSnap, cb, getPrograms } = createBaseline(
+                createWatchedSystem([config, mainFile, otherFile, libFile])
             );
-            const watch = createWatchProgram(watchCompilerHost);
-            checkProgramActualFiles(watch.getProgram().getProgram(), [mainFile.path, otherFile.path, libFile.path]);
-
-            const other2 = `${projectRoot}/other2.vue`;
-            sys.writeFile(other2, otherFile.content);
-            checkSingleTimeoutQueueLengthAndRun(sys);
-            checkProgramActualFiles(watch.getProgram().getProgram(), [mainFile.path, otherFile.path, libFile.path, other2]);
+            const host = createWatchCompilerHostOfConfigFileForBaseline({
+                configFileName: config.path,
+                optionsToExtend: { allowNonTsExtensions: true },
+                extraFileExtensions: [{ extension: ".vue", isMixedContent: true, scriptKind: ScriptKind.Deferred }],
+                system: sys,
+                cb,
+            });
+            const watch = createWatchProgram(host);
+            runWatchBaseline({
+                scenario: "watchApi",
+                subScenario: "extraFileExtensions are supported",
+                commandLineArgs: ["--w", "--p", config.path],
+                sys,
+                baseline,
+                oldSnap,
+                getPrograms,
+                changes: [{
+                    caption: "Write a file",
+                    change: sys => sys.writeFile(`${projectRoot}/other2.vue`, otherFile.content),
+                    timeouts: checkSingleTimeoutQueueLengthAndRun,
+                }],
+                watchOrSolution: watch
+            });
         });
     });
 
     describe("unittests:: tsc-watch:: watchAPI:: when watchHost uses createSemanticDiagnosticsBuilderProgram", () => {
-        function getWatch<T extends BuilderProgram>(config: File, optionsToExtend: CompilerOptions | undefined, sys: System, createProgram: CreateProgram<T>) {
-            const watchCompilerHost = createWatchCompilerHost(config.path, optionsToExtend, sys, createProgram);
-            return createWatchProgram(watchCompilerHost);
-        }
-
-        function setup<T extends BuilderProgram>(createProgram: CreateProgram<T>, configText: string) {
+        function createSystem(configText: string, mainText: string) {
             const config: File = {
                 path: `${projectRoot}/tsconfig.json`,
                 content: configText
             };
             const mainFile: File = {
                 path: `${projectRoot}/main.ts`,
-                content: "export const x = 10;"
+                content: mainText
             };
             const otherFile: File = {
                 path: `${projectRoot}/other.ts`,
                 content: "export const y = 10;"
             };
-            const sys = createWatchedSystem([config, mainFile, otherFile, libFile]);
-            const watch = getWatch(config, { noEmit: true }, sys, createProgram);
-            return { sys, watch, mainFile, otherFile, config };
+            return {
+                ...createBaseline(createWatchedSystem([config, mainFile, otherFile, libFile])),
+                config,
+                mainFile,
+                otherFile,
+            };
         }
 
-        function verifyOutputs(sys: System, emitSys: System) {
-            for (const output of [`${projectRoot}/main.js`, `${projectRoot}/main.d.ts`, `${projectRoot}/other.js`, `${projectRoot}/other.d.ts`, `${projectRoot}/tsconfig.tsbuildinfo`]) {
-                assert.strictEqual(sys.readFile(output), emitSys.readFile(output), `Output file text for ${output}`);
-            }
-        }
-
-        function verifyBuilder<T extends BuilderProgram, U extends BuilderProgram>(config: File, sys: System, emitSys: System, createProgram: CreateProgram<T>, createEmitProgram: CreateProgram<U>, optionsToExtend?: CompilerOptions) {
-            const watch = getWatch(config, /*optionsToExtend*/ optionsToExtend, sys, createProgram);
-            const emitWatch = getWatch(config, /*optionsToExtend*/ optionsToExtend, emitSys, createEmitProgram);
-            verifyOutputs(sys, emitSys);
+        function createWatch<T extends BuilderProgram>(
+            baseline: string[],
+            config: File,
+            optionsToExtend: CompilerOptions | undefined,
+            sys: TestFSWithWatch.TestServerHostTrackingWrittenFiles,
+            createProgram: CreateProgram<T>
+        ) {
+            const { cb, getPrograms } = commandLineCallbacks(sys);
+            baseline.push(`tsc --w${optionsToExtend?.noEmit ? " --noEmit" : ""}`);
+            const oldSnap = sys.snap();
+            const host = createWatchCompilerHostOfConfigFileForBaseline<T>({
+                configFileName: config.path,
+                optionsToExtend,
+                createProgram,
+                system: sys,
+                cb,
+            });
+            const watch = createWatchProgram(host);
+            watchBaseline({
+                baseline,
+                getPrograms,
+                oldPrograms: emptyArray,
+                sys,
+                oldSnap,
+            });
             watch.close();
-            emitWatch.close();
+        }
+
+        function verifyOutputs(baseline: string[], sys: System, emitSys: System) {
+            baseline.push("Checking if output is same as EmitAndSemanticDiagnosticsBuilderProgram::");
+            for (const output of [`${projectRoot}/main.js`, `${projectRoot}/main.d.ts`, `${projectRoot}/other.js`, `${projectRoot}/other.d.ts`, `${projectRoot}/tsconfig.tsbuildinfo`]) {
+                baseline.push(`Output file text for ${output} is same:: ${sys.readFile(output) === emitSys.readFile(output)}`);
+            }
+            baseline.push("");
+        }
+
+        function createSystemForBuilderTest(configText: string, mainText: string) {
+            const result = createSystem(configText, mainText);
+            const { sys: emitSys, baseline: emitBaseline } = createSystem(configText, mainText);
+            return { ...result, emitSys, emitBaseline };
+        }
+
+        function applyChangeForBuilderTest(
+            baseline: string[],
+            emitBaseline: string[],
+            sys: TestFSWithWatch.TestServerHostTrackingWrittenFiles,
+            emitSys: TestFSWithWatch.TestServerHostTrackingWrittenFiles,
+            change: (sys: TestFSWithWatch.TestServerHostTrackingWrittenFiles) => void,
+            caption: string
+        ) {
+             // Change file
+             applyChange(sys, baseline, change, caption);
+             applyChange(emitSys, emitBaseline, change, caption);
+        }
+
+        function verifyBuilder<T extends BuilderProgram>(
+            baseline: string[],
+            emitBaseline: string[],
+            config: File,
+            sys: TestFSWithWatch.TestServerHostTrackingWrittenFiles,
+            emitSys: TestFSWithWatch.TestServerHostTrackingWrittenFiles,
+            createProgram: CreateProgram<T>,
+            optionsToExtend?: CompilerOptions) {
+            createWatch(baseline, config, optionsToExtend, sys, createProgram);
+            createWatch(emitBaseline, config, optionsToExtend, emitSys, createEmitAndSemanticDiagnosticsBuilderProgram);
+            verifyOutputs(baseline, sys, emitSys);
         }
 
         it("verifies that noEmit is handled on createSemanticDiagnosticsBuilderProgram and typechecking happens only on affected files", () => {
-            const { sys, watch, mainFile, otherFile } = setup(createSemanticDiagnosticsBuilderProgram, "{}");
-            checkProgramActualFiles(watch.getProgram().getProgram(), [mainFile.path, otherFile.path, libFile.path]);
-            sys.appendFile(mainFile.path, "\n// SomeComment");
-            sys.runQueuedTimeoutCallbacks();
-            const program = watch.getProgram().getProgram();
-            assert.deepEqual(program.getCachedSemanticDiagnostics(program.getSourceFile(mainFile.path)), []);
-            // Should not retrieve diagnostics for other file thats not changed
-            assert.deepEqual(program.getCachedSemanticDiagnostics(program.getSourceFile(otherFile.path)), /*expected*/ undefined);
+            const { sys, baseline, oldSnap, cb, getPrograms, config, mainFile } = createSystem("{}", "export const x = 10;");
+            const host = createWatchCompilerHostOfConfigFileForBaseline({
+                configFileName: config.path,
+                optionsToExtend: { noEmit: true },
+                createProgram: createSemanticDiagnosticsBuilderProgram,
+                system: sys,
+                cb,
+            });
+            const watch = createWatchProgram(host);
+            runWatchBaseline({
+                scenario: "watchApi",
+                subScenario: "verifies that noEmit is handled on createSemanticDiagnosticsBuilderProgram",
+                commandLineArgs: ["--w", "--p", config.path],
+                sys,
+                baseline,
+                oldSnap,
+                getPrograms,
+                changes: [{
+                    caption: "Modify a file",
+                    change: sys => sys.appendFile(mainFile.path, "\n// SomeComment"),
+                    timeouts: runQueuedTimeoutCallbacks,
+                }],
+                watchOrSolution: watch
+            });
         });
 
-        it("noEmit with composite writes the tsbuildinfo with pending affected files correctly", () => {
-            const configText = JSON.stringify({ compilerOptions: { composite: true } });
-            const { sys, watch, config, mainFile } = setup(createSemanticDiagnosticsBuilderProgram, configText);
-            const { sys: emitSys, watch: emitWatch } = setup(createEmitAndSemanticDiagnosticsBuilderProgram, configText);
-            verifyOutputs(sys, emitSys);
+        describe("noEmit with composite writes the tsbuildinfo with pending affected files correctly", () => {
+            let baseline: string[];
+            let emitBaseline: string[];
+            before(() => {
+                const configText = JSON.stringify({ compilerOptions: { composite: true } });
+                const mainText = "export const x = 10;";
+                const result = createSystemForBuilderTest(configText, mainText);
+                baseline = result.baseline;
+                emitBaseline = result.emitBaseline;
+                const { sys, config, mainFile, emitSys } = result;
 
-            watch.close();
-            emitWatch.close();
+                // No Emit
+                verifyBuilder(baseline, emitBaseline, config, sys, emitSys, createEmitAndSemanticDiagnosticsBuilderProgram, { noEmit: true });
 
-            // Emit on both sys should result in same output
-            verifyBuilder(config, sys, emitSys, createEmitAndSemanticDiagnosticsBuilderProgram, createEmitAndSemanticDiagnosticsBuilderProgram);
+                // Emit on both sys should result in same output
+                verifyBuilder(baseline, emitBaseline, config, sys, emitSys, createEmitAndSemanticDiagnosticsBuilderProgram);
 
-            // Change file
-            sys.appendFile(mainFile.path, "\n// SomeComment");
-            emitSys.appendFile(mainFile.path, "\n// SomeComment");
+                // Change file
+                applyChangeForBuilderTest(baseline, emitBaseline, sys, emitSys, sys => sys.appendFile(mainFile.path, "\n// SomeComment"), "Add comment");
 
-            // Verify noEmit results in same output
-            verifyBuilder(config, sys, emitSys, createSemanticDiagnosticsBuilderProgram, createEmitAndSemanticDiagnosticsBuilderProgram, { noEmit: true });
+                // Verify noEmit results in same output
+                verifyBuilder(baseline, emitBaseline, config, sys, emitSys, createSemanticDiagnosticsBuilderProgram, { noEmit: true });
 
-            // Emit on both sys should result in same output
-            verifyBuilder(config, sys, emitSys, createEmitAndSemanticDiagnosticsBuilderProgram, createEmitAndSemanticDiagnosticsBuilderProgram);
+                // Emit on both sys should result in same output
+                verifyBuilder(baseline, emitBaseline, config, sys, emitSys, createEmitAndSemanticDiagnosticsBuilderProgram);
 
-            // Change file
-            sys.appendFile(mainFile.path, "\n// SomeComment");
-            emitSys.appendFile(mainFile.path, "\n// SomeComment");
+                // Change file
+                applyChangeForBuilderTest(baseline, emitBaseline, sys, emitSys, sys => sys.appendFile(mainFile.path, "\n// SomeComment"), "Add comment");
 
-            // Emit on both the builders should result in same files
-            verifyBuilder(config, sys, emitSys, createSemanticDiagnosticsBuilderProgram, createEmitAndSemanticDiagnosticsBuilderProgram);
+                // Emit on both the builders should result in same files
+                verifyBuilder(baseline, emitBaseline, config, sys, emitSys, createSemanticDiagnosticsBuilderProgram);
+            });
+            after(() => {
+                baseline = undefined!;
+                emitBaseline = undefined!;
+            });
+            it("noEmit with composite writes the tsbuildinfo with pending affected files correctly", () => {
+                Harness.Baseline.runBaseline(`tscWatch/watchApi/noEmit-with-composite-with-semantic-builder.js`, baseline.join("\r\n"));
+            });
+            it("baseline in createEmitAndSemanticDiagnosticsBuilderProgram:: noEmit with composite writes the tsbuildinfo with pending affected files correctly", () => {
+                Harness.Baseline.runBaseline(`tscWatch/watchApi/noEmit-with-composite-with-emit-builder.js`, emitBaseline.join("\r\n"));
+            });
         });
 
-        it("noEmitOnError with composite writes the tsbuildinfo with pending affected files correctly", () => {
-            const config: File = {
-                path: `${projectRoot}/tsconfig.json`,
-                content: JSON.stringify({ compilerOptions: { composite: true } })
-            };
-            const mainFile: File = {
-                path: `${projectRoot}/main.ts`,
-                content: "export const x: string = 10;"
-            };
-            const otherFile: File = {
-                path: `${projectRoot}/other.ts`,
-                content: "export const y = 10;"
-            };
-            const sys = createWatchedSystem([config, mainFile, otherFile, libFile]);
-            const emitSys = createWatchedSystem([config, mainFile, otherFile, libFile]);
+        describe("noEmitOnError with composite writes the tsbuildinfo with pending affected files correctly", () => {
+            let baseline: string[];
+            let emitBaseline: string[];
+            before(() => {
+                const configText = JSON.stringify({ compilerOptions: { composite: true, noEmitOnError: true } });
+                const mainText = "export const x: string = 10;";
+                const result = createSystemForBuilderTest(configText, mainText);
+                baseline = result.baseline;
+                emitBaseline = result.emitBaseline;
+                const { sys, config, mainFile, emitSys } = result;
 
-            // Verify noEmit results in same output
-            verifyBuilder(config, sys, emitSys, createSemanticDiagnosticsBuilderProgram, createEmitAndSemanticDiagnosticsBuilderProgram, { noEmitOnError: true });
+                // Verify noEmit results in same output
+                verifyBuilder(baseline, emitBaseline, config, sys, emitSys, createSemanticDiagnosticsBuilderProgram);
 
-            // Change file
-            sys.appendFile(mainFile.path, "\n// SomeComment");
-            emitSys.appendFile(mainFile.path, "\n// SomeComment");
+                // Change file
+                applyChangeForBuilderTest(baseline, emitBaseline, sys, emitSys, sys => sys.appendFile(mainFile.path, "\n// SomeComment"), "Add comment");
 
-            // Verify noEmit results in same output
-            verifyBuilder(config, sys, emitSys, createSemanticDiagnosticsBuilderProgram, createEmitAndSemanticDiagnosticsBuilderProgram, { noEmitOnError: true });
+                // Verify noEmit results in same output
+                verifyBuilder(baseline, emitBaseline, config, sys, emitSys, createSemanticDiagnosticsBuilderProgram);
 
-            // Fix error
-            const fixed = "export const x = 10;";
-            sys.appendFile(mainFile.path, fixed);
-            emitSys.appendFile(mainFile.path, fixed);
+                // Fix error
+                const fixed = "export const x = 10;";
+                applyChangeForBuilderTest(baseline, emitBaseline, sys, emitSys, sys => sys.writeFile(mainFile.path, fixed), "Fix error");
 
-            // Emit on both the builders should result in same files
-            verifyBuilder(config, sys, emitSys, createSemanticDiagnosticsBuilderProgram, createEmitAndSemanticDiagnosticsBuilderProgram, { noEmitOnError: true });
+                // Emit on both the builders should result in same files
+                verifyBuilder(baseline, emitBaseline, config, sys, emitSys, createSemanticDiagnosticsBuilderProgram);
+            });
+
+            it("noEmitOnError with composite writes the tsbuildinfo with pending affected files correctly", () => {
+                Harness.Baseline.runBaseline(`tscWatch/watchApi/noEmitOnError-with-composite-with-semantic-builder.js`, baseline.join("\r\n"));
+            });
+            it("baseline in createEmitAndSemanticDiagnosticsBuilderProgram:: noEmitOnError with composite writes the tsbuildinfo with pending affected files correctly", () => {
+                Harness.Baseline.runBaseline(`tscWatch/watchApi/noEmitOnError-with-composite-with-emit-builder.js`, emitBaseline.join("\r\n"));
+            });
         });
     });
 
@@ -282,9 +415,10 @@ namespace ts.tscWatch {
             };
             const system = createWatchedSystem([config1, class1, class1Dts, config2, class2, libFile]);
             const baseline = createBaseline(system);
-            const compilerHost = createWatchCompilerHostOfConfigFile({
-                configFileName: config2.path,
+            const compilerHost = createWatchCompilerHostOfConfigFileForBaseline({
+                cb: baseline.cb,
                 system,
+                configFileName: config2.path,
                 optionsToExtend: { extendedDiagnostics: true }
             });
             compilerHost.useSourceOfProjectReferenceRedirect = useSourceOfProjectReferenceRedirect;
@@ -312,7 +446,6 @@ namespace ts.tscWatch {
                 subScenario: "when new file is added to the referenced project with host implementing getParsedCommandLine",
                 commandLineArgs: ["--w", "-p", config2.path, "--extendedDiagnostics"],
                 ...baseline,
-                getPrograms: () => [[watch.getCurrentProgram().getProgram(), watch.getCurrentProgram()]],
                 changes: [
                     {
                         caption: "Add class3 to project1",
@@ -344,7 +477,6 @@ namespace ts.tscWatch {
                 subScenario: "when new file is added to the referenced project with host implementing getParsedCommandLine without implementing useSourceOfProjectReferenceRedirect",
                 commandLineArgs: ["--w", "-p", config2.path, "--extendedDiagnostics"],
                 ...baseline,
-                getPrograms: () => [[watch.getCurrentProgram().getProgram(), watch.getCurrentProgram()]],
                 changes: [
                     {
                         caption: "Add class3 to project1",

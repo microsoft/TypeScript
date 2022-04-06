@@ -270,8 +270,7 @@
           "start": 66,
           "length": 17
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -279,8 +278,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/findAllRefsOnPrivateParameterProperty1.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }

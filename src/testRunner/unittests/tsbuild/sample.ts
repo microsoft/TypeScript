@@ -1,26 +1,31 @@
 namespace ts {
     describe("unittests:: tsbuild:: on 'sample1' project", () => {
         let projFs: vfs.FileSystem;
-        const testsOutputs = ["/src/tests/index.js", "/src/tests/index.d.ts", "/src/tests/tsconfig.tsbuildinfo"];
-        const logicOutputs = ["/src/logic/index.js", "/src/logic/index.js.map", "/src/logic/index.d.ts", "/src/logic/tsconfig.tsbuildinfo"];
-        const coreOutputs = ["/src/core/index.js", "/src/core/index.d.ts", "/src/core/index.d.ts.map", "/src/core/tsconfig.tsbuildinfo"];
-        const allExpectedOutputs = [...testsOutputs, ...logicOutputs, ...coreOutputs];
-
+        let projFsWithBuild: vfs.FileSystem;
         before(() => {
             projFs = loadProjectFromDisk("tests/projects/sample1");
         });
 
         after(() => {
             projFs = undefined!; // Release the contents
+            projFsWithBuild = undefined!;
         });
 
+        function getTsBuildProjectFile(project: string, file: string): tscWatch.File {
+            return {
+                path: TestFSWithWatch.getTsBuildProjectFilePath(project, file),
+                content: projFs.readFileSync(`/src/${project}/${file}`, "utf8")!
+            };
+        }
+
         function getSampleFsAfterBuild() {
+            if (projFsWithBuild) return projFsWithBuild;
             const fs = projFs.shadow();
             const host = fakes.SolutionBuilderHost.create(fs);
             const builder = createSolutionBuilder(host, ["/src/tests"], {});
             builder.build();
             fs.makeReadonly();
-            return fs;
+            return projFsWithBuild = fs;
         }
 
         describe("sanity check of clean build of 'sample1' project", () => {
@@ -65,143 +70,123 @@ namespace ts {
         });
 
         describe("clean builds", () => {
-            verifyTscSerializedIncrementalEdits({
+            verifyTscWithEdits({
                 scenario: "sample1",
                 subScenario: "removes all files it built",
                 fs: getSampleFsAfterBuild,
                 commandLineArgs: ["--b", "/src/tests", "--clean"],
-                incrementalScenarios: noChangeOnlyRuns
+                edits: noChangeOnlyRuns
             });
 
-            it("cleans till project specified", () => {
-                const fs = projFs.shadow();
-                const host = fakes.SolutionBuilderHost.create(fs);
-                const builder = createSolutionBuilder(host, ["/src/tests"], {});
-                builder.build();
-                const result = builder.clean("/src/logic");
-                host.assertDiagnosticMessages(/*empty*/);
-                verifyOutputsPresent(fs, testsOutputs);
-                verifyOutputsAbsent(fs, [...logicOutputs, ...coreOutputs]);
-                assert.equal(result, ExitStatus.Success);
+            verifyTscCompileLike(testTscCompileLike, {
+                scenario: "sample1",
+                subScenario: "cleans till project specified",
+                fs: getSampleFsAfterBuild,
+                commandLineArgs: ["--b", "/src/logic", "--clean"],
+                compile: sys => {
+                    const buildHost = createSolutionBuilderHost(sys);
+                    const builder = createSolutionBuilder(buildHost, ["/src/third/tsconfig.json"], {});
+                    sys.exit(builder.clean("/src/logic"));
+                }
             });
 
-            it("cleaning project in not build order doesnt throw error", () => {
-                const fs = projFs.shadow();
-                const host = fakes.SolutionBuilderHost.create(fs);
-                const builder = createSolutionBuilder(host, ["/src/tests"], {});
-                builder.build();
-                const result = builder.clean("/src/logic2");
-                host.assertDiagnosticMessages(/*empty*/);
-                verifyOutputsPresent(fs, allExpectedOutputs);
-                assert.equal(result, ExitStatus.InvalidProject_OutputsSkipped);
+            verifyTscCompileLike(testTscCompileLike, {
+                scenario: "sample1",
+                subScenario: "cleaning project in not build order doesnt throw error",
+                fs: getSampleFsAfterBuild,
+                commandLineArgs: ["--b", "/src/logic2", "--clean"],
+                compile: sys => {
+                    const buildHost = createSolutionBuilderHost(sys);
+                    const builder = createSolutionBuilder(buildHost, ["/src/third/tsconfig.json"], {});
+                    sys.exit(builder.clean("/src/logic2"));
+                }
             });
         });
 
         describe("force builds", () => {
-            verifyTscSerializedIncrementalEdits({
+            verifyTscWithEdits({
                 scenario: "sample1",
                 subScenario: "always builds under with force option",
                 fs: () => projFs,
                 commandLineArgs: ["--b", "/src/tests", "--force"],
-                incrementalScenarios: noChangeOnlyRuns
+                edits: noChangeOnlyRuns
             });
         });
 
         describe("can detect when and what to rebuild", () => {
-            function initializeWithBuild(opts?: BuildOptions) {
-                const { fs, tick } = getFsWithTime(projFs);
-                const host = fakes.SolutionBuilderHost.create(fs);
-                let builder = createSolutionBuilder(host, ["/src/tests"], { verbose: true });
-                builder.build();
-                host.clearDiagnostics();
-                tick();
-                builder = createSolutionBuilder(host, ["/src/tests"], { ...(opts || {}), verbose: true });
-                return { fs, host, builder };
-            }
-
-            verifyTscIncrementalEdits({
+            verifyTscWithEdits({
                 scenario: "sample1",
                 subScenario: "can detect when and what to rebuild",
                 fs: getSampleFsAfterBuild,
                 commandLineArgs: ["--b", "/src/tests", "--verbose"],
-                incrementalScenarios: [
+                edits: [
                     // Update a file in the leaf node (tests), only it should rebuild the last one
                     {
                         subScenario: "Only builds the leaf node project",
-                        buildKind: BuildKind.IncrementalDtsUnchanged,
                         modifyFs: fs => fs.writeFileSync("/src/tests/index.ts", "const m = 10;"),
                     },
                     // Update a file in the parent (without affecting types), should get fast downstream builds
                     {
                         subScenario: "Detects type-only changes in upstream projects",
-                        buildKind: BuildKind.IncrementalDtsChange,
                         modifyFs: fs => replaceText(fs, "/src/core/index.ts", "HELLO WORLD", "WELCOME PLANET"),
                     },
                     {
-                        subScenario: "indicates that it would skip builds during a dry build",
-                        buildKind: BuildKind.IncrementalDtsUnchanged,
-                        modifyFs: noop,
-                        commandLineArgs: ["--b", "/src/tests", "--dry"],
-                    },
-                    {
-                        subScenario: "rebuilds from start if force option is set",
-                        buildKind: BuildKind.IncrementalDtsChange,
-                        modifyFs: noop,
-                        commandLineArgs: ["--b", "/src/tests", "--verbose", "--force"],
-                    },
-                    {
                         subScenario: "rebuilds when tsconfig changes",
-                        buildKind: BuildKind.IncrementalDtsChange,
                         modifyFs: fs => replaceText(fs, "/src/tests/tsconfig.json", `"composite": true`, `"composite": true, "target": "es3"`),
                     },
                 ]
             });
 
-            it("rebuilds completely when version in tsbuildinfo doesnt match ts version", () => {
-                const { host, builder } = initializeWithBuild();
-                changeCompilerVersion(host);
-                builder.build();
-                host.assertDiagnosticMessages(
-                    getExpectedDiagnosticForProjectsInBuild("src/core/tsconfig.json", "src/logic/tsconfig.json", "src/tests/tsconfig.json"),
-                    [Diagnostics.Project_0_is_out_of_date_because_output_for_it_was_generated_with_version_1_that_differs_with_current_version_2, "src/core/tsconfig.json", fakes.version, version],
-                    [Diagnostics.Building_project_0, "/src/core/tsconfig.json"],
-                    [Diagnostics.Project_0_is_out_of_date_because_output_for_it_was_generated_with_version_1_that_differs_with_current_version_2, "src/logic/tsconfig.json", fakes.version, version],
-                    [Diagnostics.Building_project_0, "/src/logic/tsconfig.json"],
-                    [Diagnostics.Project_0_is_out_of_date_because_output_for_it_was_generated_with_version_1_that_differs_with_current_version_2, "src/tests/tsconfig.json", fakes.version, version],
-                    [Diagnostics.Building_project_0, "/src/tests/tsconfig.json"],
-                );
+            verifyTsc({
+                scenario: "sample1",
+                subScenario: "indicates that it would skip builds during a dry build",
+                fs: getSampleFsAfterBuild,
+                commandLineArgs: ["--b", "/src/tests", "--dry"],
             });
 
-            it("does not rebuild if there is no program and bundle in the ts build info event if version doesnt match ts version", () => {
-                const { fs, tick } = getFsWithTime(projFs);
-                const host = fakes.SolutionBuilderHost.create(fs, /*options*/ undefined, /*setParentNodes*/ undefined, createAbstractBuilder);
-                let builder = createSolutionBuilder(host, ["/src/tests"], { verbose: true });
-                builder.build();
-                host.assertDiagnosticMessages(
-                    getExpectedDiagnosticForProjectsInBuild("src/core/tsconfig.json", "src/logic/tsconfig.json", "src/tests/tsconfig.json"),
-                    [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, "src/core/tsconfig.json", "src/core/anotherModule.js"],
-                    [Diagnostics.Building_project_0, "/src/core/tsconfig.json"],
-                    [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, "src/logic/tsconfig.json", "src/logic/index.js"],
-                    [Diagnostics.Building_project_0, "/src/logic/tsconfig.json"],
-                    [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, "src/tests/tsconfig.json", "src/tests/index.js"],
-                    [Diagnostics.Building_project_0, "/src/tests/tsconfig.json"]
-                );
-                verifyOutputsPresent(fs, allExpectedOutputs);
-
-                host.clearDiagnostics();
-                tick();
-                builder = createSolutionBuilder(host, ["/src/tests"], { verbose: true });
-                changeCompilerVersion(host);
-                builder.build();
-                host.assertDiagnosticMessages(
-                    getExpectedDiagnosticForProjectsInBuild("src/core/tsconfig.json", "src/logic/tsconfig.json", "src/tests/tsconfig.json"),
-                    [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, "src/core/tsconfig.json", "src/core/anotherModule.ts", "src/core/anotherModule.js"],
-                    [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, "src/logic/tsconfig.json", "src/logic/index.ts", "src/logic/index.js"],
-                    [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, "src/tests/tsconfig.json", "src/tests/index.ts", "src/tests/index.js"]
-                );
+            verifyTsc({
+                scenario: "sample1",
+                subScenario: "rebuilds from start if force option is set",
+                fs: getSampleFsAfterBuild,
+                commandLineArgs: ["--b", "/src/tests", "--verbose", "--force"],
             });
 
-            verifyTscSerializedIncrementalEdits({
+            verifyTscCompileLike(testTscCompileLike, {
+                scenario: "sample1",
+                subScenario: "rebuilds completely when version in tsbuildinfo doesnt match ts version",
+                fs: getSampleFsAfterBuild,
+                commandLineArgs: ["--b", "/src/tests", "--verbose"],
+                compile: sys => {
+                    // Buildinfo will have version which does not match with current ts version
+                    fakes.patchHostForBuildInfoWrite(sys, "FakeTSCurrentVersion");
+                    const buildHost = createSolutionBuilderHost(sys);
+                    const builder = createSolutionBuilder(buildHost, ["/src/tests"], { verbose: true });
+                    sys.exit(builder.build());
+                }
+            });
+
+            verifyTscCompileLike(testTscCompileLike, {
+                scenario: "sample1",
+                subScenario: "does not rebuild if there is no program and bundle in the ts build info event if version doesnt match ts version",
+                fs: () => {
+                    const fs = projFs.shadow();
+                    const host = fakes.SolutionBuilderHost.create(fs, /*options*/ undefined, /*setParentNodes*/ undefined, createAbstractBuilder);
+                    const builder = createSolutionBuilder(host, ["/src/tests"], { verbose: true });
+                    builder.build();
+                    fs.makeReadonly();
+                    return fs;
+                },
+                commandLineArgs: ["--b", "/src/tests", "--verbose"],
+                compile: sys => {
+                    // Buildinfo will have version which does not match with current ts version
+                    fakes.patchHostForBuildInfoWrite(sys, "FakeTSCurrentVersion");
+                    const buildHost = createSolutionBuilderHost(sys);
+                    const builder = createSolutionBuilder(buildHost, ["/src/tests"], { verbose: true });
+                    sys.exit(builder.build());
+                },
+            });
+
+            verifyTscWithEdits({
                 scenario: "sample1",
                 subScenario: "rebuilds when extended config file changes",
                 fs: () => projFs,
@@ -210,86 +195,93 @@ namespace ts {
                     fs.writeFileSync("/src/tests/tsconfig.base.json", JSON.stringify({ compilerOptions: { target: "es3" } }));
                     replaceText(fs, "/src/tests/tsconfig.json", `"references": [`, `"extends": "./tsconfig.base.json", "references": [`);
                 },
-                incrementalScenarios: [{
-                    buildKind: BuildKind.IncrementalDtsChange,
+                edits: [{
+                    subScenario: "incremental-declaration-changes",
                     modifyFs: fs => fs.writeFileSync("/src/tests/tsconfig.base.json", JSON.stringify({ compilerOptions: {} }))
                 }]
             });
 
-            it("builds till project specified", () => {
-                const fs = projFs.shadow();
-                const host = fakes.SolutionBuilderHost.create(fs);
-                const builder = createSolutionBuilder(host, ["/src/tests"], {});
-                const result = builder.build("/src/logic");
-                host.assertDiagnosticMessages(/*empty*/);
-                verifyOutputsAbsent(fs, testsOutputs);
-                verifyOutputsPresent(fs, [...logicOutputs, ...coreOutputs]);
-                assert.equal(result, ExitStatus.Success);
+            verifyTscCompileLike(testTscCompileLike, {
+                scenario: "sample1",
+                subScenario: "builds till project specified",
+                fs: () => projFs,
+                commandLineArgs: ["--build", "/src/logic/tsconfig.json"],
+                compile: sys => {
+                    const buildHost = createSolutionBuilderHost(sys);
+                    const builder = createSolutionBuilder(buildHost, ["/src/tests"], {});
+                    sys.exit(builder.build("/src/logic/tsconfig.json"));
+                }
             });
 
-            it("building project in not build order doesnt throw error", () => {
-                const fs = projFs.shadow();
-                const host = fakes.SolutionBuilderHost.create(fs);
-                const builder = createSolutionBuilder(host, ["/src/tests"], {});
-                const result = builder.build("/src/logic2");
-                host.assertDiagnosticMessages(/*empty*/);
-                verifyOutputsAbsent(fs, allExpectedOutputs);
-                assert.equal(result, ExitStatus.InvalidProject_OutputsSkipped);
+            verifyTscCompileLike(testTscCompileLike, {
+                scenario: "sample1",
+                subScenario: "building project in not build order doesnt throw error",
+                fs: () => projFs,
+                commandLineArgs: ["--build", "/src/logic2/tsconfig.json"],
+                compile: sys => {
+                    const buildHost = createSolutionBuilderHost(sys);
+                    const builder = createSolutionBuilder(buildHost, ["/src/tests"], {});
+                    sys.exit(builder.build("/src/logic2/tsconfig.json"));
+                }
             });
 
             it("building using getNextInvalidatedProject", () => {
-                interface SolutionBuilderResult<T> {
-                    project: ResolvedConfigFileName;
-                    result: T;
-                }
+                const coreConfig = getTsBuildProjectFile("core", "tsconfig.json");
+                const coreIndex = getTsBuildProjectFile("core", "index.ts");
+                const coreDecl = getTsBuildProjectFile("core", "some_decl.d.ts");
+                const coreAnotherModule = getTsBuildProjectFile("core", "anotherModule.ts");
+                const logicConfig = getTsBuildProjectFile("logic", "tsconfig.json");
+                const logicIndex = getTsBuildProjectFile("logic", "index.ts");
+                const testsConfig = getTsBuildProjectFile("tests", "tsconfig.json");
+                const testsIndex = getTsBuildProjectFile("tests", "index.ts");
+                const baseline: string[] = [];
+                let oldSnap: ReturnType<TestFSWithWatch.TestServerHost["snap"]> | undefined;
+                const system = TestFSWithWatch.changeToHostTrackingWrittenFiles(
+                    fakes.patchHostForBuildInfoReadWrite(
+                        tscWatch.createWatchedSystem([
+                            coreConfig, coreIndex, coreDecl, coreAnotherModule,
+                            logicConfig, logicIndex,
+                            testsConfig, testsIndex,
+                            tscWatch.libFile
+                        ])
+                    )
+                );
 
-                const fs = projFs.shadow();
-                const host = fakes.SolutionBuilderHost.create(fs);
-                const builder = createSolutionBuilder(host, ["/src/tests"], {});
-                verifyBuildNextResult({
-                    project: "/src/core/tsconfig.json" as ResolvedConfigFileName,
-                    result: ExitStatus.Success
-                }, coreOutputs, [...logicOutputs, ...testsOutputs]);
+                const host = createSolutionBuilderHost(system);
+                const builder = createSolutionBuilder(host, [testsConfig.path], {});
+                baseline.push("Input::");
+                baselineState();
+                verifyBuildNextResult(); // core
+                verifyBuildNextResult(); // logic
+                verifyBuildNextResult();// tests
+                verifyBuildNextResult(); // All Done
+                Harness.Baseline.runBaseline(`tsbuild/sample1/building-using-getNextInvalidatedProject.js`, baseline.join("\r\n"));
 
-                verifyBuildNextResult({
-                    project: "/src/logic/tsconfig.json" as ResolvedConfigFileName,
-                    result: ExitStatus.Success
-                }, [...coreOutputs, ...logicOutputs], testsOutputs);
-
-                verifyBuildNextResult({
-                    project: "/src/tests/tsconfig.json" as ResolvedConfigFileName,
-                    result: ExitStatus.Success
-                }, allExpectedOutputs, emptyArray);
-
-                verifyBuildNextResult(/*expected*/ undefined, allExpectedOutputs, emptyArray);
-
-                function verifyBuildNextResult(
-                    expected: SolutionBuilderResult<ExitStatus> | undefined,
-                    presentOutputs: readonly string[],
-                    absentOutputs: readonly string[]
-                ) {
+                function verifyBuildNextResult() {
                     const project = builder.getNextInvalidatedProject();
                     const result = project && project.done();
-                    assert.deepEqual(project && { project: project.project, result }, expected);
-                    verifyOutputsPresent(fs, presentOutputs);
-                    verifyOutputsAbsent(fs, absentOutputs);
+                    baseline.push(`Project Result:: ${JSON.stringify({ project: project?.project, result })}`);
+                    baselineState();
+                }
+
+                function baselineState() {
+                    system.serializeOutput(baseline);
+                    system.diff(baseline, oldSnap);
+                    system.writtenFiles.clear();
+                    oldSnap = system.snap();
                 }
             });
 
-            it("building using buildReferencedProject", () => {
-                const fs = projFs.shadow();
-                const host = fakes.SolutionBuilderHost.create(fs);
-                const builder = createSolutionBuilder(host, ["/src/tests"], { verbose: true });
-                builder.buildReferences("/src/tests");
-                host.assertDiagnosticMessages(
-                    getExpectedDiagnosticForProjectsInBuild("src/core/tsconfig.json", "src/logic/tsconfig.json"),
-                    [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, "src/core/tsconfig.json", "src/core/anotherModule.js"],
-                    [Diagnostics.Building_project_0, "/src/core/tsconfig.json"],
-                    [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, "src/logic/tsconfig.json", "src/logic/index.js"],
-                    [Diagnostics.Building_project_0, "/src/logic/tsconfig.json"],
-                );
-                verifyOutputsPresent(fs, [...coreOutputs, ...logicOutputs]);
-                verifyOutputsAbsent(fs, testsOutputs);
+            verifyTscCompileLike(testTscCompileLike, {
+                scenario: "sample1",
+                subScenario: "building using buildReferencedProject",
+                fs: () => projFs,
+                commandLineArgs: ["--build", "/src/logic2/tsconfig.json"],
+                compile: sys => {
+                    const buildHost = createSolutionBuilderHost(sys);
+                    const builder = createSolutionBuilder(buildHost, ["/src/tests"], { verbose: true });
+                    sys.exit(builder.buildReferences("/src/tests"));
+                }
             });
         });
 
@@ -305,109 +297,115 @@ namespace ts {
 
         describe("project invalidation", () => {
             it("invalidates projects correctly", () => {
-                const { fs, time, tick } = getFsWithTime(projFs);
-                const host = fakes.SolutionBuilderHost.create(fs);
-                const builder = createSolutionBuilder(host, ["/src/tests"], { dry: false, force: false, verbose: false });
+                const coreConfig = getTsBuildProjectFile("core", "tsconfig.json");
+                const coreIndex = getTsBuildProjectFile("core", "index.ts");
+                const coreDecl = getTsBuildProjectFile("core", "some_decl.d.ts");
+                const coreAnotherModule = getTsBuildProjectFile("core", "anotherModule.ts");
+                const logicConfig = getTsBuildProjectFile("logic", "tsconfig.json");
+                const logicIndex = getTsBuildProjectFile("logic", "index.ts");
+                const testsConfig = getTsBuildProjectFile("tests", "tsconfig.json");
+                const testsIndex = getTsBuildProjectFile("tests", "index.ts");
+                const baseline: string[] = [];
+                let oldSnap: ReturnType<TestFSWithWatch.TestServerHost["snap"]> | undefined;
+                const system = TestFSWithWatch.changeToHostTrackingWrittenFiles(
+                    fakes.patchHostForBuildInfoReadWrite(
+                        tscWatch.createWatchedSystem([
+                            coreConfig, coreIndex, coreDecl, coreAnotherModule,
+                            logicConfig, logicIndex,
+                            testsConfig, testsIndex,
+                            tscWatch.libFile
+                        ])
+                    )
+                );
 
+                const host = createSolutionBuilderHost(system);
+                const builder = createSolutionBuilder(host, [testsConfig.path], { dry: false, force: false, verbose: false });
                 builder.build();
-                host.assertDiagnosticMessages(/*empty*/);
+                baselineState("Build of project");
 
                 // Update a timestamp in the middle project
-                tick();
-                appendText(fs, "/src/logic/index.ts", "function foo() {}");
-                const originalWriteFile = fs.writeFileSync;
-                const writtenFiles = new Map<string, true>();
-                fs.writeFileSync = (path, data, encoding) => {
-                    writtenFiles.set(path, true);
-                    originalWriteFile.call(fs, path, data, encoding);
-                };
+                system.appendFile(logicIndex.path, "function foo() {}");
+
                 // Because we haven't reset the build context, the builder should assume there's nothing to do right now
-                const status = builder.getUpToDateStatusOfProject("/src/logic");
-                assert.equal(status.type, UpToDateStatusType.UpToDate, "Project should be assumed to be up-to-date");
-                verifyInvalidation(/*expectedToWriteTests*/ false);
+                const status = builder.getUpToDateStatusOfProject(logicConfig.path);
+                baseline.push(`Project should still be upto date: ${UpToDateStatusType[status.type]}`);
+                verifyInvalidation("non Dts change to logic");
 
                 // Rebuild this project
-                fs.writeFileSync("/src/logic/index.ts", `${fs.readFileSync("/src/logic/index.ts")}
-export class cNew {}`);
-                verifyInvalidation(/*expectedToWriteTests*/ true);
+                system.appendFile(logicIndex.path, `export class cNew {}`);
+                verifyInvalidation("Dts change to Logic");
+                Harness.Baseline.runBaseline(`tsbuild/sample1/invalidates-projects-correctly.js`, baseline.join("\r\n"));
 
-                function verifyInvalidation(expectedToWriteTests: boolean) {
+                function verifyInvalidation(heading: string) {
                     // Rebuild this project
-                    tick();
-                    builder.invalidateProject("/src/logic/tsconfig.json" as ResolvedConfigFilePath);
+                    builder.invalidateProject(logicConfig.path as ResolvedConfigFilePath);
                     builder.buildNextInvalidatedProject();
-                    // The file should be updated
-                    assert.isTrue(writtenFiles.has("/src/logic/index.js"), "JS file should have been rebuilt");
-                    assert.equal(fs.statSync("/src/logic/index.js").mtimeMs, time(), "JS file should have been rebuilt");
-                    assert.isFalse(writtenFiles.has("/src/tests/index.js"), "Downstream JS file should *not* have been rebuilt");
-                    assert.isBelow(fs.statSync("/src/tests/index.js").mtimeMs, time(), "Downstream JS file should *not* have been rebuilt");
-                    writtenFiles.clear();
+                    baselineState(`${heading}:: After rebuilding logicConfig`);
 
                     // Build downstream projects should update 'tests', but not 'core'
-                    tick();
                     builder.buildNextInvalidatedProject();
-                    if (expectedToWriteTests) {
-                        assert.isTrue(writtenFiles.has("/src/tests/index.js"), "Downstream JS file should have been rebuilt");
-                    }
-                    else {
-                        assert.equal(writtenFiles.size, 0, "Should not write any new files");
-                    }
-                    assert.equal(fs.statSync("/src/tests/index.js").mtimeMs, time(), "Downstream JS file should have new timestamp");
-                    assert.isBelow(fs.statSync("/src/core/index.js").mtimeMs, time(), "Upstream JS file should not have been rebuilt");
+                    baselineState(`${heading}:: After building next project`);
+                }
+
+                function baselineState(heading: string) {
+                    baseline.push(heading);
+                    system.serializeOutput(baseline);
+                    system.diff(baseline, oldSnap);
+                    system.writtenFiles.clear();
+                    oldSnap = system.snap();
                 }
             });
         });
 
-        const coreChanges: TscIncremental[] = [
+        const coreChanges: TestTscEdit[] = [
             {
-                buildKind: BuildKind.IncrementalDtsChange,
+                subScenario: "incremental-declaration-changes",
                 modifyFs: fs => appendText(fs, "/src/core/index.ts", `
 export class someClass { }`),
             },
             {
-                buildKind: BuildKind.IncrementalDtsUnchanged,
+                subScenario: "incremental-declaration-doesnt-change",
                 modifyFs: fs => appendText(fs, "/src/core/index.ts", `
 class someClass2 { }`),
             }
         ];
 
         describe("lists files", () => {
-            verifyTscSerializedIncrementalEdits({
+            verifyTscWithEdits({
                 scenario: "sample1",
                 subScenario: "listFiles",
                 fs: () => projFs,
                 commandLineArgs: ["--b", "/src/tests", "--listFiles"],
-                incrementalScenarios: coreChanges
+                edits: coreChanges
             });
-            verifyTscSerializedIncrementalEdits({
+            verifyTscWithEdits({
                 scenario: "sample1",
                 subScenario: "listEmittedFiles",
                 fs: () => projFs,
                 commandLineArgs: ["--b", "/src/tests", "--listEmittedFiles"],
-                incrementalScenarios: coreChanges
+                edits: coreChanges
             });
-            verifyTscSerializedIncrementalEdits({
+            verifyTscWithEdits({
                 scenario: "sample1",
                 subScenario: "explainFiles",
                 fs: () => projFs,
                 commandLineArgs: ["--b", "/src/tests", "--explainFiles", "--v"],
-                incrementalScenarios: coreChanges
+                edits: coreChanges
             });
         });
 
         describe("emit output", () => {
-            verifyTscSerializedIncrementalEdits({
+            verifyTscWithEdits({
                 subScenario: "sample",
                 fs: () => projFs,
                 scenario: "sample1",
                 commandLineArgs: ["--b", "/src/tests", "--verbose"],
                 baselineSourceMap: true,
                 baselineReadFileCalls: true,
-                incrementalScenarios: [
+                edits: [
                     ...coreChanges,
                     {
                         subScenario: "when logic config changes declaration dir",
-                        buildKind: BuildKind.IncrementalDtsChange,
                         modifyFs: fs => replaceText(fs, "/src/logic/tsconfig.json", `"declaration": true,`, `"declaration": true,
         "declarationDir": "decls",`),
                     },
@@ -426,7 +424,7 @@ class someClass2 { }`),
                 baselineReadFileCalls: true
             });
 
-            verifyTscSerializedIncrementalEdits({
+            verifyTscWithEdits({
                 subScenario: "when declaration option changes",
                 fs: () => projFs,
                 scenario: "sample1",
@@ -437,13 +435,13 @@ class someClass2 { }`),
         "skipDefaultLibCheck": true
     }
 }`),
-                incrementalScenarios: [{
-                    buildKind: BuildKind.IncrementalDtsChange,
+                edits: [{
+                    subScenario: "incremental-declaration-changes",
                     modifyFs: fs => replaceText(fs, "/src/core/tsconfig.json", `"incremental": true,`, `"incremental": true, "declaration": true,`),
                 }],
             });
 
-            verifyTscSerializedIncrementalEdits({
+            verifyTscWithEdits({
                 subScenario: "when target option changes",
                 fs: () => projFs,
                 scenario: "sample1",
@@ -463,13 +461,13 @@ class someClass2 { }`),
     }
 }`);
                 },
-                incrementalScenarios: [{
-                    buildKind: BuildKind.IncrementalDtsChange,
+                edits: [{
+                    subScenario: "incremental-declaration-changes",
                     modifyFs: fs => replaceText(fs, "/src/core/tsconfig.json", "esnext", "es5"),
                 }],
             });
 
-            verifyTscSerializedIncrementalEdits({
+            verifyTscWithEdits({
                 subScenario: "when module option changes",
                 fs: () => projFs,
                 scenario: "sample1",
@@ -480,13 +478,13 @@ class someClass2 { }`),
         "module": "commonjs"
     }
 }`),
-                incrementalScenarios: [{
-                    buildKind: BuildKind.IncrementalDtsChange,
+                edits: [{
+                    subScenario: "incremental-declaration-changes",
                     modifyFs: fs => replaceText(fs, "/src/core/tsconfig.json", `"module": "commonjs"`, `"module": "amd"`),
                 }],
             });
 
-            verifyTscSerializedIncrementalEdits({
+            verifyTscWithEdits({
                 subScenario: "when esModuleInterop option changes",
                 fs: () => projFs,
                 scenario: "sample1",
@@ -505,8 +503,8 @@ class someClass2 { }`),
         "esModuleInterop": false
     }
 }`),
-                incrementalScenarios: [{
-                    buildKind: BuildKind.IncrementalDtsChange,
+                edits: [{
+                    subScenario: "incremental-declaration-changes",
                     modifyFs: fs => replaceText(fs, "/src/tests/tsconfig.json", `"esModuleInterop": false`, `"esModuleInterop": true`),
                 }],
             });

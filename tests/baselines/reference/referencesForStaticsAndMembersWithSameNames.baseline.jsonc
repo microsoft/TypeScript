@@ -982,8 +982,7 @@
           "start": 108,
           "length": 25
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -991,8 +990,7 @@
           "length": 3
         },
         "fileName": "/tests/cases/fourslash/referencesForStaticsAndMembersWithSameNames.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -1102,8 +1100,7 @@
           "start": 74,
           "length": 9
         },
-        "isWriteAccess": false,
-        "isDefinition": true
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -1111,8 +1108,7 @@
           "length": 3
         },
         "fileName": "/tests/cases/fourslash/referencesForStaticsAndMembersWithSameNames.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -1230,8 +1226,7 @@
           "start": 137,
           "length": 32
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -1239,8 +1234,7 @@
           "length": 3
         },
         "fileName": "/tests/cases/fourslash/referencesForStaticsAndMembersWithSameNames.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -1350,8 +1344,7 @@
           "start": 87,
           "length": 16
         },
-        "isWriteAccess": false,
-        "isDefinition": true
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -1359,8 +1352,7 @@
           "length": 3
         },
         "fileName": "/tests/cases/fourslash/referencesForStaticsAndMembersWithSameNames.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }

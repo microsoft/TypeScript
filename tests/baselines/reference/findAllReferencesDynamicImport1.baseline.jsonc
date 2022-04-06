@@ -43,8 +43,7 @@ undefined
           "start": 40,
           "length": 15
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -56,8 +55,7 @@ undefined
           "start": 56,
           "length": 23
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -204,8 +202,7 @@ undefined
           "start": 40,
           "length": 15
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -217,8 +214,7 @@ undefined
           "start": 56,
           "length": 23
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
