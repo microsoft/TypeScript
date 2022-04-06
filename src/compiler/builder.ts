@@ -543,6 +543,18 @@ namespace ts {
         return newSignature !== oldSignature;
     }
 
+    function forEachKeyOfExportedModulesMap(state: BuilderProgramState, filePath: Path, fn: (exportedFromPath: Path) => void) {
+        // Go through exported modules from cache first
+        state.currentAffectedFilesExportedModulesMap!.getKeys(filePath)?.forEach(fn);
+        // If exported from path is not from cache and exported modules has path, all files referencing file exported from are affected
+        state.exportedModulesMap!.getKeys(filePath)?.forEach(exportedFromPath =>
+            // If the cache had an updated value, skip
+            !state.currentAffectedFilesExportedModulesMap!.hasKey(exportedFromPath) &&
+            !state.currentAffectedFilesExportedModulesMap!.deletedKeys()?.has(exportedFromPath) &&
+            fn(exportedFromPath)
+        );
+    }
+
     /**
      * Iterate on referencing modules that export entities from affected file and delete diagnostics and add pending emit
      */
@@ -581,58 +593,22 @@ namespace ts {
         const seenFileAndExportsOfFile = new Set<string>();
         // Go through exported modules from cache first
         // If exported modules has path, all files referencing file exported from are affected
-        state.currentAffectedFilesExportedModulesMap.getKeys(affectedFile.resolvedPath)?.forEach(exportedFromPath =>
-            handleDtsMayChangeOfFilesReferencingPath(
-                state,
-                exportedFromPath,
-                seenFileAndExportsOfFile,
-                cancellationToken,
-                computeHash,
-                host
-            )
-        );
-
-        // If exported from path is not from cache and exported modules has path, all files referencing file exported from are affected
-        state.exportedModulesMap.getKeys(affectedFile.resolvedPath)?.forEach(exportedFromPath =>
-            // If the cache had an updated value, skip
-            !state.currentAffectedFilesExportedModulesMap!.hasKey(exportedFromPath) &&
-            !state.currentAffectedFilesExportedModulesMap!.deletedKeys()?.has(exportedFromPath) &&
-            handleDtsMayChangeOfFilesReferencingPath(
-                state,
-                exportedFromPath,
-                seenFileAndExportsOfFile,
-                cancellationToken,
-                computeHash,
-                host
+        forEachKeyOfExportedModulesMap(state, affectedFile.resolvedPath, exportedFromPath =>
+            state.referencedMap!.getKeys(exportedFromPath)?.forEach(filePath =>
+                handleDtsMayChangeOfFileAndExportsOfFile(
+                    state,
+                    filePath,
+                    seenFileAndExportsOfFile,
+                    cancellationToken,
+                    computeHash,
+                    host,
+                )
             )
         );
     }
 
     /**
-     * Iterate on files referencing referencedPath and handle the dts emit and semantic diagnostics of the file
-     */
-    function handleDtsMayChangeOfFilesReferencingPath(
-        state: BuilderProgramState,
-        referencedPath: Path,
-        seenFileAndExportsOfFile: Set<string>,
-        cancellationToken: CancellationToken | undefined,
-        computeHash: BuilderState.ComputeHash,
-        host: BuilderProgramHost,
-    ): void {
-        state.referencedMap!.getKeys(referencedPath)?.forEach(filePath =>
-            handleDtsMayChangeOfFileAndExportsOfFile(
-                state,
-                filePath,
-                seenFileAndExportsOfFile,
-                cancellationToken,
-                computeHash,
-                host,
-            )
-        );
-    }
-
-    /**
-     * fn on file and iterate on anything that exports this file
+     * handle dts and semantic diagnostics on file and iterate on anything that exports this file
      */
     function handleDtsMayChangeOfFileAndExportsOfFile(
         state: BuilderProgramState,
@@ -646,24 +622,9 @@ namespace ts {
 
         handleDtsMayChangeOf(state, filePath, cancellationToken, computeHash, host);
         Debug.assert(!!state.currentAffectedFilesExportedModulesMap);
-        // Go through exported modules from cache first
-        // If exported modules has path, all files referencing file exported from are affected
-        state.currentAffectedFilesExportedModulesMap.getKeys(filePath)?.forEach(exportedFromPath =>
-            handleDtsMayChangeOfFileAndExportsOfFile(
-                state,
-                exportedFromPath,
-                seenFileAndExportsOfFile,
-                cancellationToken,
-                computeHash,
-                host,
-            )
-        );
 
-        // If exported from path is not from cache and exported modules has path, all files referencing file exported from are affected
-        state.exportedModulesMap!.getKeys(filePath)?.forEach(exportedFromPath =>
-            // If the cache had an updated value, skip
-            !state.currentAffectedFilesExportedModulesMap!.hasKey(exportedFromPath) &&
-            !state.currentAffectedFilesExportedModulesMap!.deletedKeys()?.has(exportedFromPath) &&
+        // If exported modules has path, all files referencing file exported from are affected
+        forEachKeyOfExportedModulesMap(state, filePath, exportedFromPath =>
             handleDtsMayChangeOfFileAndExportsOfFile(
                 state,
                 exportedFromPath,
@@ -686,7 +647,6 @@ namespace ts {
             )
         );
     }
-
 
     /**
      * This is called after completing operation on the next affected file.
