@@ -34795,14 +34795,19 @@ namespace ts {
             }
             if (node.parent.kind === SyntaxKind.InterfaceDeclaration || node.parent.kind === SyntaxKind.ClassDeclaration || node.parent.kind === SyntaxKind.TypeAliasDeclaration) {
                 const modifiers = getVarianceModifiers(typeParameter);
-                if (modifiers === ModifierFlags.In || modifiers === ModifierFlags.Out) {
+                if (modifiers) {
                     const symbol = getSymbolOfNode(node.parent);
-                    const source = createMarkerType(symbol, typeParameter, modifiers === ModifierFlags.Out ? markerSubType : markerSuperType);
-                    const target = createMarkerType(symbol, typeParameter, modifiers === ModifierFlags.Out ? markerSuperType : markerSubType);
-                    const saveVarianceTypeParameter = typeParameter;
-                    varianceTypeParameter = typeParameter;
-                    checkTypeAssignableTo(source, target, node, Diagnostics.Type_0_is_not_assignable_to_type_1_as_implied_by_variance_annotation);
-                    varianceTypeParameter = saveVarianceTypeParameter;
+                    if (node.parent.kind === SyntaxKind.TypeAliasDeclaration && !(getObjectFlags(getDeclaredTypeOfSymbol(symbol)) & (ObjectFlags.Anonymous | ObjectFlags.Mapped))) {
+                        error(node, Diagnostics.Variance_annotations_are_only_supported_in_type_aliases_for_object_function_constructor_and_mapped_types);
+                    }
+                    else if (modifiers === ModifierFlags.In || modifiers === ModifierFlags.Out) {
+                        const source = createMarkerType(symbol, typeParameter, modifiers === ModifierFlags.Out ? markerSubType : markerSuperType);
+                        const target = createMarkerType(symbol, typeParameter, modifiers === ModifierFlags.Out ? markerSuperType : markerSubType);
+                        const saveVarianceTypeParameter = typeParameter;
+                        varianceTypeParameter = typeParameter;
+                        checkTypeAssignableTo(source, target, node, Diagnostics.Type_0_is_not_assignable_to_type_1_as_implied_by_variance_annotation);
+                        varianceTypeParameter = saveVarianceTypeParameter;
+                    }
                 }
             }
             addLazyDiagnostic(() => checkTypeNameIsReserved(node.name, Diagnostics.Type_parameter_name_cannot_be_0));
