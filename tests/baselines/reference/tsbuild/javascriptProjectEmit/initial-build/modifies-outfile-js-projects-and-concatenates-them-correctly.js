@@ -590,6 +590,7 @@ type MyNominal = Nominal<string, 'MyNominal'>;
   "size": 425
 }
 
+//// [/src/sub-project-2/sub-project-2.d.ts] file changed its modified time
 //// [/src/sub-project-2/sub-project-2.js]
 /**
  * @template T, Name

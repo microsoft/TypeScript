@@ -809,7 +809,11 @@ namespace vfs {
             const baseBuffer = base._getBuffer(baseNode);
 
             // no difference if both buffers are the same reference
-            if (changedBuffer === baseBuffer) return false;
+            if (changedBuffer === baseBuffer) {
+                if (!options.includeChangedFileWithSameContent || changedNode.mtimeMs === baseNode.mtimeMs) return false;
+                container[basename] = new SameFileWithModifiedTime(changedBuffer);
+                return true;
+            }
 
             // no difference if both buffers are identical
             if (Buffer.compare(changedBuffer, baseBuffer) === 0) {
@@ -1391,6 +1395,12 @@ namespace vfs {
         }
     }
 
+    export class SameFileWithModifiedTime extends File {
+        constructor(data: Buffer | string, metaAndEncoding?: { encoding?: string, meta?: Record<string, any> }) {
+            super(data, metaAndEncoding);
+        }
+    }
+
     /** Extended options for a hard link in a `FileSet` */
     export class Link {
         public readonly path: string;
@@ -1578,6 +1588,9 @@ namespace vfs {
             }
             else if (entry instanceof Directory) {
                 text += formatPatchWorker(file, entry.files);
+            }
+            else if (entry instanceof SameFileWithModifiedTime) {
+                text += `//// [${file}] file changed its modified time\r\n`;
             }
             else if (entry instanceof SameFileContentFile) {
                 text += `//// [${file}] file written with same contents\r\n`;
