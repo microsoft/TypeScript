@@ -19512,7 +19512,7 @@ namespace ts {
                 }
                 else if (target.flags & TypeFlags.StringMapping) {
                     if (!(source.flags & TypeFlags.StringMapping)) {
-                        if (isUnchangedByStringMapping(target.symbol, source)) {
+                        if (isMemberOfStringMapping(source, target)) {
                             return Ternary.True;
                         }
                     }
@@ -22075,8 +22075,23 @@ namespace ts {
             return success && result === SyntaxKind.BigIntLiteral && scanner.getTextPos() === (s.length + 1) && !(flags & TokenFlags.ContainsSeparator);
         }
 
-        function isUnchangedByStringMapping(symbol: Symbol, value: Type) {
-            return value === getStringMappingType(symbol, value);
+        function isMemberOfStringMapping(source: Type, target: Type): boolean {
+            if (target.flags & (TypeFlags.String | TypeFlags.AnyOrUnknown)) {
+                return true;
+            }
+            if (target.flags & TypeFlags.TemplateLiteral) {
+                return isTypeAssignableTo(source, target);
+            }
+            if (target.flags & TypeFlags.StringMapping) {
+                let mappingStack = [];
+                while (target.flags & TypeFlags.StringMapping) {
+                    mappingStack.unshift(target.symbol);
+                    target = (target as StringMappingType).type;
+                }
+                const mappedSource = reduceLeft(mappingStack, (memo, value) => getStringMappingType(value, memo), source);
+                return mappedSource === source && isMemberOfStringMapping(source, target);
+            }
+            return false;
         }
 
         function isValidTypeForTemplateLiteralPlaceholder(source: Type, target: Type): boolean {
@@ -22088,7 +22103,7 @@ namespace ts {
                 return !!(target.flags & TypeFlags.Number && value !== "" && isFinite(+value) ||
                     target.flags & TypeFlags.BigInt && value !== "" && isValidBigIntString(value) ||
                     target.flags & (TypeFlags.BooleanLiteral | TypeFlags.Nullable) && value === (target as IntrinsicType).intrinsicName ||
-                    target.flags & TypeFlags.StringMapping && isUnchangedByStringMapping(target.symbol, getStringLiteralType(value)));
+                    target.flags & TypeFlags.StringMapping && isMemberOfStringMapping(getStringLiteralType(value), target));
             }
             if (source.flags & TypeFlags.TemplateLiteral) {
                 const texts = (source as TemplateLiteralType).texts;
