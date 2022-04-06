@@ -1164,15 +1164,7 @@ namespace ts {
 
         function transformTopLevelDeclaration(input: LateVisibilityPaintedStatement) {
             if (lateMarkedStatements) {
-                while (true) {
-                    const idx: number = lateMarkedStatements.indexOf(input);
-                    if (idx > -1) {
-                        // remove this statement from the late-marked list if it's still there, in case it's been added multiple times
-                        lateMarkedStatements.splice(idx, 1);
-                        continue;
-                    }
-                    break;
-                }
+                while (orderedRemoveItem(lateMarkedStatements, input)) { }
             }
             if (shouldStripInternal(input)) return;
             switch (input.kind) {
