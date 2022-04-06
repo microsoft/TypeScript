@@ -1,12 +1,14 @@
 namespace ts {
     describe("unittests:: tsbuild:: on 'sample1' project", () => {
         let projFs: vfs.FileSystem;
+        let projFsWithBuild: vfs.FileSystem;
         before(() => {
             projFs = loadProjectFromDisk("tests/projects/sample1");
         });
 
         after(() => {
             projFs = undefined!; // Release the contents
+            projFsWithBuild = undefined!;
         });
 
         function getTsBuildProjectFile(project: string, file: string): tscWatch.File {
@@ -17,12 +19,13 @@ namespace ts {
         }
 
         function getSampleFsAfterBuild() {
+            if (projFsWithBuild) return projFsWithBuild;
             const fs = projFs.shadow();
             const host = fakes.SolutionBuilderHost.create(fs);
             const builder = createSolutionBuilder(host, ["/src/tests"], {});
             builder.build();
             fs.makeReadonly();
-            return fs;
+            return projFsWithBuild = fs;
         }
 
         describe("sanity check of clean build of 'sample1' project", () => {
@@ -67,12 +70,12 @@ namespace ts {
         });
 
         describe("clean builds", () => {
-            verifyTscSerializedIncrementalEdits({
+            verifyTscWithEdits({
                 scenario: "sample1",
                 subScenario: "removes all files it built",
                 fs: getSampleFsAfterBuild,
                 commandLineArgs: ["--b", "/src/tests", "--clean"],
-                incrementalScenarios: noChangeOnlyRuns
+                edits: noChangeOnlyRuns
             });
 
             verifyTscCompileLike(testTscCompileLike, {
@@ -101,52 +104,51 @@ namespace ts {
         });
 
         describe("force builds", () => {
-            verifyTscSerializedIncrementalEdits({
+            verifyTscWithEdits({
                 scenario: "sample1",
                 subScenario: "always builds under with force option",
                 fs: () => projFs,
                 commandLineArgs: ["--b", "/src/tests", "--force"],
-                incrementalScenarios: noChangeOnlyRuns
+                edits: noChangeOnlyRuns
             });
         });
 
         describe("can detect when and what to rebuild", () => {
-            verifyTscIncrementalEdits({
+            verifyTscWithEdits({
                 scenario: "sample1",
                 subScenario: "can detect when and what to rebuild",
                 fs: getSampleFsAfterBuild,
                 commandLineArgs: ["--b", "/src/tests", "--verbose"],
-                incrementalScenarios: [
+                edits: [
                     // Update a file in the leaf node (tests), only it should rebuild the last one
                     {
                         subScenario: "Only builds the leaf node project",
-                        buildKind: BuildKind.IncrementalDtsUnchanged,
                         modifyFs: fs => fs.writeFileSync("/src/tests/index.ts", "const m = 10;"),
                     },
                     // Update a file in the parent (without affecting types), should get fast downstream builds
                     {
                         subScenario: "Detects type-only changes in upstream projects",
-                        buildKind: BuildKind.IncrementalDtsChange,
                         modifyFs: fs => replaceText(fs, "/src/core/index.ts", "HELLO WORLD", "WELCOME PLANET"),
                     },
                     {
-                        subScenario: "indicates that it would skip builds during a dry build",
-                        buildKind: BuildKind.IncrementalDtsUnchanged,
-                        modifyFs: noop,
-                        commandLineArgs: ["--b", "/src/tests", "--dry"],
-                    },
-                    {
-                        subScenario: "rebuilds from start if force option is set",
-                        buildKind: BuildKind.IncrementalDtsChange,
-                        modifyFs: noop,
-                        commandLineArgs: ["--b", "/src/tests", "--verbose", "--force"],
-                    },
-                    {
                         subScenario: "rebuilds when tsconfig changes",
-                        buildKind: BuildKind.IncrementalDtsChange,
                         modifyFs: fs => replaceText(fs, "/src/tests/tsconfig.json", `"composite": true`, `"composite": true, "target": "es3"`),
                     },
                 ]
+            });
+
+            verifyTsc({
+                scenario: "sample1",
+                subScenario: "indicates that it would skip builds during a dry build",
+                fs: getSampleFsAfterBuild,
+                commandLineArgs: ["--b", "/src/tests", "--dry"],
+            });
+
+            verifyTsc({
+                scenario: "sample1",
+                subScenario: "rebuilds from start if force option is set",
+                fs: getSampleFsAfterBuild,
+                commandLineArgs: ["--b", "/src/tests", "--verbose", "--force"],
             });
 
             verifyTscCompileLike(testTscCompileLike, {
@@ -184,7 +186,7 @@ namespace ts {
                 },
             });
 
-            verifyTscSerializedIncrementalEdits({
+            verifyTscWithEdits({
                 scenario: "sample1",
                 subScenario: "rebuilds when extended config file changes",
                 fs: () => projFs,
@@ -193,8 +195,8 @@ namespace ts {
                     fs.writeFileSync("/src/tests/tsconfig.base.json", JSON.stringify({ compilerOptions: { target: "es3" } }));
                     replaceText(fs, "/src/tests/tsconfig.json", `"references": [`, `"extends": "./tsconfig.base.json", "references": [`);
                 },
-                incrementalScenarios: [{
-                    buildKind: BuildKind.IncrementalDtsChange,
+                edits: [{
+                    subScenario: "incremental-declaration-changes",
                     modifyFs: fs => fs.writeFileSync("/src/tests/tsconfig.base.json", JSON.stringify({ compilerOptions: {} }))
                 }]
             });
@@ -355,56 +357,55 @@ namespace ts {
             });
         });
 
-        const coreChanges: TscIncremental[] = [
+        const coreChanges: TestTscEdit[] = [
             {
-                buildKind: BuildKind.IncrementalDtsChange,
+                subScenario: "incremental-declaration-changes",
                 modifyFs: fs => appendText(fs, "/src/core/index.ts", `
 export class someClass { }`),
             },
             {
-                buildKind: BuildKind.IncrementalDtsUnchanged,
+                subScenario: "incremental-declaration-doesnt-change",
                 modifyFs: fs => appendText(fs, "/src/core/index.ts", `
 class someClass2 { }`),
             }
         ];
 
         describe("lists files", () => {
-            verifyTscSerializedIncrementalEdits({
+            verifyTscWithEdits({
                 scenario: "sample1",
                 subScenario: "listFiles",
                 fs: () => projFs,
                 commandLineArgs: ["--b", "/src/tests", "--listFiles"],
-                incrementalScenarios: coreChanges
+                edits: coreChanges
             });
-            verifyTscSerializedIncrementalEdits({
+            verifyTscWithEdits({
                 scenario: "sample1",
                 subScenario: "listEmittedFiles",
                 fs: () => projFs,
                 commandLineArgs: ["--b", "/src/tests", "--listEmittedFiles"],
-                incrementalScenarios: coreChanges
+                edits: coreChanges
             });
-            verifyTscSerializedIncrementalEdits({
+            verifyTscWithEdits({
                 scenario: "sample1",
                 subScenario: "explainFiles",
                 fs: () => projFs,
                 commandLineArgs: ["--b", "/src/tests", "--explainFiles", "--v"],
-                incrementalScenarios: coreChanges
+                edits: coreChanges
             });
         });
 
         describe("emit output", () => {
-            verifyTscSerializedIncrementalEdits({
+            verifyTscWithEdits({
                 subScenario: "sample",
                 fs: () => projFs,
                 scenario: "sample1",
                 commandLineArgs: ["--b", "/src/tests", "--verbose"],
                 baselineSourceMap: true,
                 baselineReadFileCalls: true,
-                incrementalScenarios: [
+                edits: [
                     ...coreChanges,
                     {
                         subScenario: "when logic config changes declaration dir",
-                        buildKind: BuildKind.IncrementalDtsChange,
                         modifyFs: fs => replaceText(fs, "/src/logic/tsconfig.json", `"declaration": true,`, `"declaration": true,
         "declarationDir": "decls",`),
                     },
@@ -423,7 +424,7 @@ class someClass2 { }`),
                 baselineReadFileCalls: true
             });
 
-            verifyTscSerializedIncrementalEdits({
+            verifyTscWithEdits({
                 subScenario: "when declaration option changes",
                 fs: () => projFs,
                 scenario: "sample1",
@@ -434,13 +435,13 @@ class someClass2 { }`),
         "skipDefaultLibCheck": true
     }
 }`),
-                incrementalScenarios: [{
-                    buildKind: BuildKind.IncrementalDtsChange,
+                edits: [{
+                    subScenario: "incremental-declaration-changes",
                     modifyFs: fs => replaceText(fs, "/src/core/tsconfig.json", `"incremental": true,`, `"incremental": true, "declaration": true,`),
                 }],
             });
 
-            verifyTscSerializedIncrementalEdits({
+            verifyTscWithEdits({
                 subScenario: "when target option changes",
                 fs: () => projFs,
                 scenario: "sample1",
@@ -460,13 +461,13 @@ class someClass2 { }`),
     }
 }`);
                 },
-                incrementalScenarios: [{
-                    buildKind: BuildKind.IncrementalDtsChange,
+                edits: [{
+                    subScenario: "incremental-declaration-changes",
                     modifyFs: fs => replaceText(fs, "/src/core/tsconfig.json", "esnext", "es5"),
                 }],
             });
 
-            verifyTscSerializedIncrementalEdits({
+            verifyTscWithEdits({
                 subScenario: "when module option changes",
                 fs: () => projFs,
                 scenario: "sample1",
@@ -477,13 +478,13 @@ class someClass2 { }`),
         "module": "commonjs"
     }
 }`),
-                incrementalScenarios: [{
-                    buildKind: BuildKind.IncrementalDtsChange,
+                edits: [{
+                    subScenario: "incremental-declaration-changes",
                     modifyFs: fs => replaceText(fs, "/src/core/tsconfig.json", `"module": "commonjs"`, `"module": "amd"`),
                 }],
             });
 
-            verifyTscSerializedIncrementalEdits({
+            verifyTscWithEdits({
                 subScenario: "when esModuleInterop option changes",
                 fs: () => projFs,
                 scenario: "sample1",
@@ -502,8 +503,8 @@ class someClass2 { }`),
         "esModuleInterop": false
     }
 }`),
-                incrementalScenarios: [{
-                    buildKind: BuildKind.IncrementalDtsChange,
+                edits: [{
+                    subScenario: "incremental-declaration-changes",
                     modifyFs: fs => replaceText(fs, "/src/tests/tsconfig.json", `"esModuleInterop": false`, `"esModuleInterop": true`),
                 }],
             });

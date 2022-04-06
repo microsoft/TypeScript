@@ -280,9 +280,7 @@ namespace ts.tscWatch {
                 baselineDependencies,
             });
         }
-        Harness.Baseline.runBaseline(`${isBuild(commandLineArgs) ?
-            isWatch(commandLineArgs) ? "tsbuild/watchMode" : "tsbuild" :
-            isWatch(commandLineArgs) ? "tscWatch" : "tsc"}/${scenario}/${subScenario.split(" ").join("-")}.js`, baseline.join("\r\n"));
+        Harness.Baseline.runBaseline(`${isBuild(commandLineArgs) ? "tsbuild" : "tsc"}${isWatch(commandLineArgs) ? "Watch" : ""}/${scenario}/${subScenario.split(" ").join("-")}.js`, baseline.join("\r\n"));
     }
 
     function isWatch(commandLineArgs: readonly string[]) {
