@@ -22083,7 +22083,7 @@ namespace ts {
                 return isTypeAssignableTo(source, target);
             }
             if (target.flags & TypeFlags.StringMapping) {
-                let mappingStack = [];
+                const mappingStack = [];
                 while (target.flags & TypeFlags.StringMapping) {
                     mappingStack.unshift(target.symbol);
                     target = (target as StringMappingType).type;
