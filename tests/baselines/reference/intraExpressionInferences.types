@@ -293,6 +293,33 @@ test({
     }
 });
 
+test({
+>test({    a: () => 0,    b: (a) => a,    c: (b) => {        const x: number = b;    }}) : void
+>test : <R1, R2>(foo: Chain<R1, R2>) => void
+>{    a: () => 0,    b: (a) => a,    c: (b) => {        const x: number = b;    }} : { a: () => number; b: (a: number) => number; c: (b: number) => void; }
+
+    a: () => 0,
+>a : () => number
+>() => 0 : () => number
+>0 : 0
+
+    b: (a) => a,
+>b : (a: number) => number
+>(a) => a : (a: number) => number
+>a : number
+>a : number
+
+    c: (b) => {
+>c : (b: number) => void
+>(b) => {        const x: number = b;    } : (b: number) => void
+>b : number
+
+        const x: number = b;
+>x : number
+>b : number
+    }
+});
+
 // Repro from #41712
 
 class Wrapper<T = any> {
@@ -587,4 +614,48 @@ example({
 >number : number
 
 });
+
+// Repro from #45255
+
+declare const branch:
+>branch : <T, U extends T>(_: { test: T; if: (t: T) => t is U; then: (u: U) => void; }) => void
+
+  <T, U extends T>(_: { test: T, if: (t: T) => t is U, then: (u: U) => void }) => void
+>_ : { test: T; if: (t: T) => t is U; then: (u: U) => void; }
+>test : T
+>if : (t: T) => t is U
+>t : T
+>then : (u: U) => void
+>u : U
+
+declare const x: "a" | "b"
+>x : "a" | "b"
+
+branch({
+>branch({  test: x,  if: (t): t is "a" => t === "a",  then: u => {    let test1: "a" = u  }}) : void
+>branch : <T, U extends T>(_: { test: T; if: (t: T) => t is U; then: (u: U) => void; }) => void
+>{  test: x,  if: (t): t is "a" => t === "a",  then: u => {    let test1: "a" = u  }} : { test: "a" | "b"; if: (t: "a" | "b") => t is "a"; then: (u: "a") => void; }
+
+  test: x,
+>test : "a" | "b"
+>x : "a" | "b"
+
+  if: (t): t is "a" => t === "a",
+>if : (t: "a" | "b") => t is "a"
+>(t): t is "a" => t === "a" : (t: "a" | "b") => t is "a"
+>t : "a" | "b"
+>t === "a" : boolean
+>t : "a" | "b"
+>"a" : "a"
+
+  then: u => {
+>then : (u: "a") => void
+>u => {    let test1: "a" = u  } : (u: "a") => void
+>u : "a"
+
+    let test1: "a" = u
+>test1 : "a"
+>u : "a"
+  }
+})
 
