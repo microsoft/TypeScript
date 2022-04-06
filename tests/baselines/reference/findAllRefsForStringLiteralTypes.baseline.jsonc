@@ -29,7 +29,6 @@
         },
         "fileName": "/tests/cases/fourslash/findAllRefsForStringLiteralTypes.ts",
         "isWriteAccess": false,
-        "isDefinition": false,
         "isInString": true
       },
       {
@@ -39,7 +38,6 @@
         },
         "fileName": "/tests/cases/fourslash/findAllRefsForStringLiteralTypes.ts",
         "isWriteAccess": false,
-        "isDefinition": false,
         "isInString": true
       }
     ]
@@ -77,7 +75,6 @@
         },
         "fileName": "/tests/cases/fourslash/findAllRefsForStringLiteralTypes.ts",
         "isWriteAccess": false,
-        "isDefinition": false,
         "isInString": true
       },
       {
@@ -87,7 +84,6 @@
         },
         "fileName": "/tests/cases/fourslash/findAllRefsForStringLiteralTypes.ts",
         "isWriteAccess": false,
-        "isDefinition": false,
         "isInString": true
       }
     ]

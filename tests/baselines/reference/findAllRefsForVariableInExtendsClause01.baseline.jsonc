@@ -228,8 +228,7 @@
           "start": 0,
           "length": 21
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -237,8 +236,7 @@
           "length": 4
         },
         "fileName": "/tests/cases/fourslash/findAllRefsForVariableInExtendsClause01.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }

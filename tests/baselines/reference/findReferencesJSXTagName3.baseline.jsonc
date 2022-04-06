@@ -249,8 +249,7 @@
           "start": 98,
           "length": 9
         },
-        "isWriteAccess": false,
-        "isDefinition": true
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -262,8 +261,7 @@
           "start": 140,
           "length": 69
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -275,8 +273,7 @@
           "start": 175,
           "length": 23
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -288,8 +285,7 @@
           "start": 175,
           "length": 23
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -301,8 +297,7 @@
           "start": 140,
           "length": 69
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -404,8 +399,7 @@
           "start": 98,
           "length": 9
         },
-        "isWriteAccess": false,
-        "isDefinition": true
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -417,8 +411,7 @@
           "start": 140,
           "length": 69
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -430,8 +423,7 @@
           "start": 175,
           "length": 23
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -443,8 +435,7 @@
           "start": 175,
           "length": 23
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -456,8 +447,7 @@
           "start": 140,
           "length": 69
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -559,8 +549,7 @@
           "start": 98,
           "length": 9
         },
-        "isWriteAccess": false,
-        "isDefinition": true
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -572,8 +561,7 @@
           "start": 140,
           "length": 69
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -585,8 +573,7 @@
           "start": 175,
           "length": 23
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -598,8 +585,7 @@
           "start": 175,
           "length": 23
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -611,8 +597,7 @@
           "start": 140,
           "length": 69
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -714,8 +699,7 @@
           "start": 98,
           "length": 9
         },
-        "isWriteAccess": false,
-        "isDefinition": true
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -727,8 +711,7 @@
           "start": 140,
           "length": 69
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -740,8 +723,7 @@
           "start": 175,
           "length": 23
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -753,8 +735,7 @@
           "start": 175,
           "length": 23
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -766,8 +747,7 @@
           "start": 140,
           "length": 69
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -1006,8 +986,7 @@
           "start": 117,
           "length": 93
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -1019,8 +998,7 @@
           "start": 222,
           "length": 26
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -1032,8 +1010,7 @@
           "start": 222,
           "length": 26
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -1139,8 +1116,7 @@
           "start": 117,
           "length": 93
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -1152,8 +1128,7 @@
           "start": 222,
           "length": 26
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -1165,8 +1140,7 @@
           "start": 222,
           "length": 26
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }

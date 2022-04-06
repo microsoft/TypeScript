@@ -308,8 +308,7 @@ undefined
           "start": 0,
           "length": 18
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -317,8 +316,7 @@ undefined
           "length": 1
         },
         "fileName": "/b.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -386,8 +384,7 @@ undefined
           "start": 19,
           "length": 19
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -395,8 +392,7 @@ undefined
           "length": 1
         },
         "fileName": "/b.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }

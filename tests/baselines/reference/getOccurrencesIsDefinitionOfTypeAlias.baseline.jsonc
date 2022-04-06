@@ -216,8 +216,7 @@
           "start": 0,
           "length": 19
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -225,8 +224,7 @@
           "length": 5
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfTypeAlias.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }

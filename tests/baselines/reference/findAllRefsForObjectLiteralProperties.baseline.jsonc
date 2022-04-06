@@ -177,8 +177,7 @@
           "start": 14,
           "length": 12
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -186,8 +185,7 @@
           "length": 8
         },
         "fileName": "/tests/cases/fourslash/findAllRefsForObjectLiteralProperties.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -199,8 +197,7 @@
           "start": 44,
           "length": 25
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -283,8 +280,7 @@ undefined
           "start": 14,
           "length": 12
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -292,8 +288,7 @@ undefined
           "length": 8
         },
         "fileName": "/tests/cases/fourslash/findAllRefsForObjectLiteralProperties.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -305,8 +300,7 @@ undefined
           "start": 44,
           "length": 25
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }

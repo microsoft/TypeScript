@@ -179,8 +179,7 @@
           "start": 40,
           "length": 4
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -188,8 +187,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/findAllReferPropertyAccessExpressionHeritageClause.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -197,8 +195,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/findAllReferPropertyAccessExpressionHeritageClause.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -282,8 +279,7 @@
           "start": 40,
           "length": 4
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -291,8 +287,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/findAllReferPropertyAccessExpressionHeritageClause.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -300,8 +295,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/findAllReferPropertyAccessExpressionHeritageClause.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }

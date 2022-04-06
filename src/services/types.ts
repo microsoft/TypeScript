@@ -886,7 +886,6 @@ namespace ts {
 
     export interface ReferenceEntry extends DocumentSpan {
         isWriteAccess: boolean;
-        isDefinition: boolean;
         isInString?: true;
     }
 
@@ -1046,7 +1045,11 @@ namespace ts {
 
     export interface ReferencedSymbol {
         definition: ReferencedSymbolDefinitionInfo;
-        references: ReferenceEntry[];
+        references: ReferencedSymbolEntry[];
+    }
+
+    export interface ReferencedSymbolEntry extends ReferenceEntry {
+        isDefinition?: boolean;
     }
 
     export enum SymbolDisplayPartKind {

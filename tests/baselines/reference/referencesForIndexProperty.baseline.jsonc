@@ -278,8 +278,7 @@
           "start": 16,
           "length": 17
         },
-        "isWriteAccess": false,
-        "isDefinition": true
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -287,8 +286,7 @@
           "length": 8
         },
         "fileName": "/tests/cases/fourslash/referencesForIndexProperty.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -382,8 +380,7 @@
           "start": 38,
           "length": 18
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -391,8 +388,7 @@
           "length": 6
         },
         "fileName": "/tests/cases/fourslash/referencesForIndexProperty.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }

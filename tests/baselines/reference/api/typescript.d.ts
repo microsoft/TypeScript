@@ -6209,7 +6209,6 @@ declare namespace ts {
     }
     interface ReferenceEntry extends DocumentSpan {
         isWriteAccess: boolean;
-        isDefinition: boolean;
         isInString?: true;
     }
     interface ImplementationLocation extends DocumentSpan {
@@ -6323,7 +6322,10 @@ declare namespace ts {
     }
     interface ReferencedSymbol {
         definition: ReferencedSymbolDefinitionInfo;
-        references: ReferenceEntry[];
+        references: ReferencedSymbolEntry[];
+    }
+    interface ReferencedSymbolEntry extends ReferenceEntry {
+        isDefinition?: boolean;
     }
     enum SymbolDisplayPartKind {
         aliasName = 0,

@@ -29,7 +29,6 @@
         },
         "fileName": "/tests/cases/fourslash/referencesForIndexProperty2.ts",
         "isWriteAccess": false,
-        "isDefinition": false,
         "isInString": true
       }
     ]

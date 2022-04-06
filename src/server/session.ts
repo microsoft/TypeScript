@@ -354,6 +354,7 @@ namespace ts.server {
                 logger.info(`Finding references to ${location.fileName} position ${location.pos} in project ${project.getProjectName()}`);
                 const projectOutputs = project.getLanguageService().findReferences(location.fileName, location.pos);
                 if (projectOutputs) {
+                    const clearIsDefinition = projectOutputs[0].references[0].isDefinition === undefined;
                     for (const referencedSymbol of projectOutputs) {
                         const mappedDefinitionFile = getMappedLocation(project, documentSpanLocation(referencedSymbol.definition));
                         const definition: ReferencedSymbolDefinitionInfo = mappedDefinitionFile === undefined ?
@@ -374,6 +375,9 @@ namespace ts.server {
                         for (const ref of referencedSymbol.references) {
                             // If it's in a mapped file, that is added to the todo list by `getMappedLocation`.
                             if (!contains(symbolToAddTo.references, ref, documentSpansEqual) && !getMappedLocation(project, documentSpanLocation(ref))) {
+                                if (clearIsDefinition) {
+                                    delete ref.isDefinition;
+                                }
                                 symbolToAddTo.references.push(ref);
                             }
                         }
@@ -3260,7 +3264,7 @@ namespace ts.server {
         return text;
     }
 
-    function referenceEntryToReferencesResponseItem(projectService: ProjectService, { fileName, textSpan, contextSpan, isWriteAccess, isDefinition }: ReferenceEntry): protocol.ReferencesResponseItem {
+    function referenceEntryToReferencesResponseItem(projectService: ProjectService, { fileName, textSpan, contextSpan, isWriteAccess, isDefinition }: ReferencedSymbolEntry): protocol.ReferencesResponseItem {
         const scriptInfo = Debug.checkDefined(projectService.getScriptInfo(fileName));
         const span = toProtocolTextSpanWithContext(textSpan, contextSpan, scriptInfo);
         const lineSpan = scriptInfo.lineToTextSpan(span.start.line - 1);

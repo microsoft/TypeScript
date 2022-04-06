@@ -180,8 +180,7 @@
           "start": 0,
           "length": 44
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -189,8 +188,7 @@
           "length": 12
         },
         "fileName": "/tests/cases/fourslash/referencesForGlobals_2.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }

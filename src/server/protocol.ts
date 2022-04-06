@@ -1158,9 +1158,12 @@ namespace ts.server.protocol {
         isWriteAccess: boolean;
 
         /**
-         * True if reference is a definition, false otherwise.
+         * Present only if the search was triggered from a declaration.
+         * True indicates that the references refers to the same symbol
+         * (i.e. has the same meaning) as the declaration that began the
+         * search.
          */
-        isDefinition: boolean;
+        isDefinition?: boolean;
     }
 
     /**

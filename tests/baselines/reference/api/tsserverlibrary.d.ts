@@ -6209,7 +6209,6 @@ declare namespace ts {
     }
     interface ReferenceEntry extends DocumentSpan {
         isWriteAccess: boolean;
-        isDefinition: boolean;
         isInString?: true;
     }
     interface ImplementationLocation extends DocumentSpan {
@@ -6323,7 +6322,10 @@ declare namespace ts {
     }
     interface ReferencedSymbol {
         definition: ReferencedSymbolDefinitionInfo;
-        references: ReferenceEntry[];
+        references: ReferencedSymbolEntry[];
+    }
+    interface ReferencedSymbolEntry extends ReferenceEntry {
+        isDefinition?: boolean;
     }
     enum SymbolDisplayPartKind {
         aliasName = 0,
@@ -7855,9 +7857,12 @@ declare namespace ts.server.protocol {
          */
         isWriteAccess: boolean;
         /**
-         * True if reference is a definition, false otherwise.
+         * Present only if the search was triggered from a declaration.
+         * True indicates that the references refers to the same symbol
+         * (i.e. has the same meaning) as the declaration that began the
+         * search.
          */
-        isDefinition: boolean;
+        isDefinition?: boolean;
     }
     /**
      * The body of a "references" response message.

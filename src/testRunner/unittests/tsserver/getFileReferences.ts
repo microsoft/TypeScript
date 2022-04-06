@@ -44,10 +44,10 @@ namespace ts.projectSystem {
 
             const expectResponse: protocol.FileReferencesResponseBody = {
                 refs: [
-                    makeReferenceItem({ file: bTs, text: "./a", lineText: importA, contextText: importA, isDefinition: false, isWriteAccess: false }),
-                    makeReferenceItem({ file: cTs, text: "./a", lineText: importCurlyFromA, contextText: importCurlyFromA, isDefinition: false, isWriteAccess: false }),
-                    makeReferenceItem({ file: dTs, text: "/project/a", lineText: importAFromA, contextText: importAFromA, isDefinition: false, isWriteAccess: false }),
-                    makeReferenceItem({ file: dTs, text: "./a", lineText: typeofImportA, contextText: typeofImportA, isDefinition: false, isWriteAccess: false }),
+                    makeReferenceItem({ file: bTs, text: "./a", lineText: importA, contextText: importA, isWriteAccess: false }),
+                    makeReferenceItem({ file: cTs, text: "./a", lineText: importCurlyFromA, contextText: importCurlyFromA, isWriteAccess: false }),
+                    makeReferenceItem({ file: dTs, text: "/project/a", lineText: importAFromA, contextText: importAFromA, isWriteAccess: false }),
+                    makeReferenceItem({ file: dTs, text: "./a", lineText: typeofImportA, contextText: typeofImportA, isWriteAccess: false }),
                 ],
                 symbolName: `"${aTs.path}"`,
             };
