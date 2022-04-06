@@ -265,15 +265,15 @@ namespace ts {
 
     const enum TemplateTypePlaceholderPriority {
         Never, // lowest
-        Null,
-        Undefined,
-        BooleanLiterals,
+        KeywordLiterals, // true | false | null | undefined
         Boolean,
         BigIntLiterals,
         BigInt,
         NumberLiterals,
+        Enums,
         Number,
         StringLiterals,
+        TemplateLiterals,
         String, // highest
     }
 
@@ -22745,15 +22745,18 @@ namespace ts {
 
             function getTemplateTypePlaceholderPriority(type: Type) {
                 return type.flags & TypeFlags.String ? TemplateTypePlaceholderPriority.String :
+                    type.flags & TypeFlags.TemplateLiteral ? TemplateTypePlaceholderPriority.TemplateLiterals :
+                    type.flags & TypeFlags.StringMapping ? TemplateTypePlaceholderPriority.StringLiterals :
                     type.flags & TypeFlags.StringLiteral ? TemplateTypePlaceholderPriority.StringLiterals :
                     type.flags & TypeFlags.Number ? TemplateTypePlaceholderPriority.Number :
+                    type.flags & TypeFlags.Enum ? TemplateTypePlaceholderPriority.Enums :
                     type.flags & TypeFlags.NumberLiteral ? TemplateTypePlaceholderPriority.NumberLiterals :
                     type.flags & TypeFlags.BigInt ? TemplateTypePlaceholderPriority.BigInt :
                     type.flags & TypeFlags.BigIntLiteral ? TemplateTypePlaceholderPriority.BigIntLiterals :
                     type.flags & TypeFlags.Boolean ? TemplateTypePlaceholderPriority.Boolean :
-                    type.flags & TypeFlags.BooleanLiteral ? TemplateTypePlaceholderPriority.BooleanLiterals :
-                    type.flags & TypeFlags.Undefined ? TemplateTypePlaceholderPriority.Undefined :
-                    type.flags & TypeFlags.Null ? TemplateTypePlaceholderPriority.Null :
+                    type.flags & TypeFlags.BooleanLiteral ? TemplateTypePlaceholderPriority.KeywordLiterals :
+                    type.flags & TypeFlags.Undefined ? TemplateTypePlaceholderPriority.KeywordLiterals :
+                    type.flags & TypeFlags.Null ? TemplateTypePlaceholderPriority.KeywordLiterals :
                     TemplateTypePlaceholderPriority.Never;
             }
 
@@ -22797,7 +22800,9 @@ namespace ts {
                                     const matchingType = reduceType(constraint, (matchingType, t) =>
                                         !(t.flags & allTypeFlags) || getTemplateTypePlaceholderPriority(t) <= getTemplateTypePlaceholderPriority(matchingType) ? matchingType :
                                         t.flags & TypeFlags.String ? source :
-                                        t.flags & TypeFlags.Number ? getNumberLiteralType(+str) : // if `str` was not a valid number, TypeFlags.Number would have been excluded above.
+                                        t.flags & TypeFlags.TemplateLiteral && isTypeMatchedByTemplateLiteralType(source, t as TemplateLiteralType) ? source :
+                                        t.flags & TypeFlags.StringMapping && str === applyStringMapping(t.symbol, str) ? source :
+                                        t.flags & (TypeFlags.Number | TypeFlags.Enum) ? getNumberLiteralType(+str) : // if `str` was not a valid number, TypeFlags.Number and TypeFlags.Enum would have been excluded above.
                                         t.flags & TypeFlags.BigInt ? parseBigIntLiteralType(str) : // if `str` was not a valid bigint, TypeFlags.BigInt would have been excluded above.
                                         t.flags & TypeFlags.Boolean ? str === "true" ? trueType : falseType :
                                         t.flags & TypeFlags.StringLiteral && (t as StringLiteralType).value === str ? t :
