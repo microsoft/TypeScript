@@ -509,6 +509,34 @@ class someClass2 { }`),
                     modifyFs: fs => replaceText(fs, "/src/tests/tsconfig.json", `"esModuleInterop": false`, `"esModuleInterop": true`),
                 }],
             });
+
+            verifyTsc({
+                scenario: "sample1",
+                subScenario: "reports error if input file is missing",
+                fs: () => projFs,
+                commandLineArgs: ["--b", "/src/tests", "--v"],
+                modifyFs: fs => {
+                    fs.writeFileSync("/src/core/tsconfig.json", JSON.stringify({
+                        compilerOptions: { composite: true },
+                        files: ["anotherModule.ts", "index.ts", "some_decl.d.ts"]
+                    }));
+                    fs.unlinkSync("/src/core/anotherModule.ts");
+                }
+            });
+
+            verifyTsc({
+                scenario: "sample1",
+                subScenario: "reports error if input file is missing with force",
+                fs: () => projFs,
+                commandLineArgs: ["--b", "/src/tests", "--v", "--f"],
+                modifyFs: fs => {
+                    fs.writeFileSync("/src/core/tsconfig.json", JSON.stringify({
+                        compilerOptions: { composite: true },
+                        files: ["anotherModule.ts", "index.ts", "some_decl.d.ts"]
+                    }));
+                    fs.unlinkSync("/src/core/anotherModule.ts");
+                }
+            });
         });
     });
 }
