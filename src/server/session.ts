@@ -373,10 +373,9 @@ namespace ts.server {
             return perProjectResults;
         }
 
-        // We need to de-duplicate and aggregate the results by choosing an authoritative version
-        // of each definition and merging references from all the projects where they appear.
-
-        const results: ReferencedSymbol[] = [];
+        // `isDefinition` is only (definitely) correct in `defaultProject` because we might
+        // have started the other project searches from related symbols.  Propagate the
+        // correct results to all other projects.
 
         const defaultProjectResults = perProjectResults.get(defaultProject)!;
         if (defaultProjectResults[0].references[0].isDefinition === undefined) {
@@ -426,7 +425,10 @@ namespace ts.server {
             });
         }
 
-        // TODO (acasey): skip this aggregation when simplifying results?
+        // We need to de-duplicate and aggregate the results by choosing an authoritative version
+        // of each definition and merging references from all the projects where they appear.
+
+        const results: ReferencedSymbol[] = [];
 
         perProjectResults.forEach((projectResults, project) => {
             for (const referencedSymbol of projectResults) {
