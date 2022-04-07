@@ -84,7 +84,7 @@ namespace ts {
                 fs: getSampleFsAfterBuild,
                 commandLineArgs: ["--b", "/src/logic", "--clean"],
                 compile: sys => {
-                    const buildHost = createSolutionBuilderHost(sys);
+                    const buildHost = createSolutionBuilderHostForBaseline(sys);
                     const builder = createSolutionBuilder(buildHost, ["/src/third/tsconfig.json"], {});
                     sys.exit(builder.clean("/src/logic"));
                 }
@@ -96,7 +96,7 @@ namespace ts {
                 fs: getSampleFsAfterBuild,
                 commandLineArgs: ["--b", "/src/logic2", "--clean"],
                 compile: sys => {
-                    const buildHost = createSolutionBuilderHost(sys);
+                    const buildHost = createSolutionBuilderHostForBaseline(sys);
                     const builder = createSolutionBuilder(buildHost, ["/src/third/tsconfig.json"], {});
                     sys.exit(builder.clean("/src/logic2"));
                 }
@@ -158,8 +158,7 @@ namespace ts {
                 commandLineArgs: ["--b", "/src/tests", "--verbose"],
                 compile: sys => {
                     // Buildinfo will have version which does not match with current ts version
-                    fakes.patchHostForBuildInfoWrite(sys, "FakeTSCurrentVersion");
-                    const buildHost = createSolutionBuilderHost(sys);
+                    const buildHost = createSolutionBuilderHostForBaseline(sys, "FakeTSCurrentVersion");
                     const builder = createSolutionBuilder(buildHost, ["/src/tests"], { verbose: true });
                     sys.exit(builder.build());
                 }
@@ -179,8 +178,7 @@ namespace ts {
                 commandLineArgs: ["--b", "/src/tests", "--verbose"],
                 compile: sys => {
                     // Buildinfo will have version which does not match with current ts version
-                    fakes.patchHostForBuildInfoWrite(sys, "FakeTSCurrentVersion");
-                    const buildHost = createSolutionBuilderHost(sys);
+                    const buildHost = createSolutionBuilderHostForBaseline(sys, "FakeTSCurrentVersion");
                     const builder = createSolutionBuilder(buildHost, ["/src/tests"], { verbose: true });
                     sys.exit(builder.build());
                 },
@@ -207,7 +205,7 @@ namespace ts {
                 fs: () => projFs,
                 commandLineArgs: ["--build", "/src/logic/tsconfig.json"],
                 compile: sys => {
-                    const buildHost = createSolutionBuilderHost(sys);
+                    const buildHost = createSolutionBuilderHostForBaseline(sys);
                     const builder = createSolutionBuilder(buildHost, ["/src/tests"], {});
                     sys.exit(builder.build("/src/logic/tsconfig.json"));
                 }
@@ -219,7 +217,7 @@ namespace ts {
                 fs: () => projFs,
                 commandLineArgs: ["--build", "/src/logic2/tsconfig.json"],
                 compile: sys => {
-                    const buildHost = createSolutionBuilderHost(sys);
+                    const buildHost = createSolutionBuilderHostForBaseline(sys);
                     const builder = createSolutionBuilder(buildHost, ["/src/tests"], {});
                     sys.exit(builder.build("/src/logic2/tsconfig.json"));
                 }
@@ -278,7 +276,7 @@ namespace ts {
                 fs: () => projFs,
                 commandLineArgs: ["--build", "/src/logic2/tsconfig.json"],
                 compile: sys => {
-                    const buildHost = createSolutionBuilderHost(sys);
+                    const buildHost = createSolutionBuilderHostForBaseline(sys);
                     const builder = createSolutionBuilder(buildHost, ["/src/tests"], { verbose: true });
                     sys.exit(builder.buildReferences("/src/tests"));
                 }

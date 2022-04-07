@@ -146,8 +146,7 @@ namespace ts {
             commandLineArgs: ["--b", "/src/third", "--verbose"],
             compile: sys => {
                 // Buildinfo will have version which does not match with current ts version
-                fakes.patchHostForBuildInfoWrite(sys, "FakeTSCurrentVersion");
-                const buildHost = createSolutionBuilderHost(sys);
+                const buildHost = createSolutionBuilderHostForBaseline(sys, "FakeTSCurrentVersion");
                 const builder = ts.createSolutionBuilder(buildHost, ["/src/third"], { verbose: true });
                 sys.exit(builder.build());
             }
@@ -181,7 +180,7 @@ namespace ts {
             fs: () => outFileFs,
             commandLineArgs: ["--build", "/src/second/tsconfig.json"],
             compile: sys => {
-                const buildHost = createSolutionBuilderHost(sys);
+                const buildHost = createSolutionBuilderHostForBaseline(sys);
                 const builder = ts.createSolutionBuilder(buildHost, ["/src/third/tsconfig.json"], {});
                 sys.exit(builder.build("/src/second/tsconfig.json"));
             }
@@ -193,7 +192,7 @@ namespace ts {
             fs: getOutFileFsAfterBuild,
             commandLineArgs: ["--build", "--clean", "/src/second/tsconfig.json"],
             compile: sys => {
-                const buildHost = createSolutionBuilderHost(sys);
+                const buildHost = createSolutionBuilderHostForBaseline(sys);
                 const builder = ts.createSolutionBuilder(buildHost, ["/src/third/tsconfig.json"], { verbose: true });
                 sys.exit(builder.clean("/src/second/tsconfig.json"));
             }
