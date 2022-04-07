@@ -330,7 +330,7 @@ namespace ts.server {
         perProjectResults.forEach((projectResults, project) => {
             for (const result of projectResults) {
                 // If there's a mapped location, it'll appear in the results for another project
-                if (!seen.has(result) && !getMappedLocation(documentSpanLocation(result), project)) {
+                if (!seen.has(result) && !getMappedLocationForProject(documentSpanLocation(result), project)) {
                     results.push(result);
                     seen.add(result);
                 }
@@ -368,7 +368,7 @@ namespace ts.server {
             },
         );
 
-        // No re-mapping is required if there's exactly one project
+        // No re-mapping or isDefinition updatses are required if there's exactly one project
         if (isArray(perProjectResults)) {
             return perProjectResults;
         }
@@ -378,18 +378,66 @@ namespace ts.server {
 
         const results: ReferencedSymbol[] = [];
 
-        const clearIsDefinition = perProjectResults.get(defaultProject)![0].references[0].isDefinition === undefined;
+        const defaultProjectResults = perProjectResults.get(defaultProject)!;
+        if (defaultProjectResults[0].references[0].isDefinition === undefined) {
+            // Clear all isDefinition properties
+            perProjectResults.forEach(projectResults => {
+                for (const referencedSymbol of projectResults) {
+                    for (const ref of referencedSymbol.references) {
+                        delete ref.isDefinition;
+                    }
+                }
+            });
+        }
+        else {
+            // Correct isDefinition properties from projects other than defaultProject
+            const knownSymbolSpans = createDocumentSpanSet();
+            for (const referencedSymbol of defaultProjectResults) {
+                for (const ref of referencedSymbol.references) {
+                    if (ref.isDefinition) {
+                        knownSymbolSpans.add(ref);
+                        // One is enough - updateIsDefinitionOfReferencedSymbols will fill out the set based on symbols
+                        break;
+                    }
+                }
+            }
+
+            const updatedProjects = new Set<Project>();
+            while (true) {
+                let progress = false;
+                perProjectResults.forEach((referencedSymbols, project) => {
+                    if (updatedProjects.has(project)) return;
+                    const updated = project.getLanguageService().updateIsDefinitionOfReferencedSymbols(referencedSymbols, knownSymbolSpans);
+                    if (updated) {
+                        updatedProjects.add(project);
+                        progress = true;
+                    }
+                });
+                if (!progress) break;
+            }
+
+            perProjectResults.forEach((referencedSymbols, project) => {
+                if (updatedProjects.has(project)) return;
+                for (const referencedSymbol of referencedSymbols) {
+                    for (const ref of referencedSymbol.references) {
+                        ref.isDefinition = false;
+                    }
+                }
+            });
+        }
+
+        // TODO (acasey): skip this aggregation when simplifying results?
 
         perProjectResults.forEach((projectResults, project) => {
             for (const referencedSymbol of projectResults) {
-                const mappedDefinitionFile = getMappedLocation(documentSpanLocation(referencedSymbol.definition), project);
+                const mappedDefinitionFile = getMappedLocationForProject(documentSpanLocation(referencedSymbol.definition), project);
                 const definition: ReferencedSymbolDefinitionInfo = mappedDefinitionFile === undefined ?
                     referencedSymbol.definition :
                     {
                         ...referencedSymbol.definition,
                         textSpan: createTextSpan(mappedDefinitionFile.pos, referencedSymbol.definition.textSpan.length), // Why would the length be the same in the original?
                         fileName: mappedDefinitionFile.fileName,
-                        contextSpan: getMappedContextSpan(referencedSymbol.definition, project)
+                        contextSpan: getMappedContextSpanForProject(referencedSymbol.definition, project)
                     };
 
                 let symbolToAddTo = find(results, o => documentSpansEqual(o.definition, definition));
@@ -399,10 +447,7 @@ namespace ts.server {
                 }
 
                 for (const ref of referencedSymbol.references) {
-                    if (!contains(symbolToAddTo.references, ref, documentSpansEqual) && !getMappedLocation(documentSpanLocation(ref), project)) {
-                        if (clearIsDefinition) {
-                            delete ref.isDefinition;
-                        }
+                    if (!contains(symbolToAddTo.references, ref, documentSpansEqual) && !getMappedLocationForProject(documentSpanLocation(ref), project)) {
                         symbolToAddTo.references.push(ref);
                     }
                 }
@@ -603,39 +648,16 @@ namespace ts.server {
         return { fileName, pos: textSpan.start };
     }
 
-    function getMappedLocation(location: DocumentPosition, project: Project): DocumentPosition | undefined {
-        const mapsTo = project.getSourceMapper().tryGetSourcePosition(location);
-        return mapsTo && project.projectService.fileExists(toNormalizedPath(mapsTo.fileName)) ? mapsTo : undefined;
+    function getMappedLocationForProject(location: DocumentPosition, project: Project): DocumentPosition | undefined {
+        return getMappedLocation(location, project.getSourceMapper(), p => project.projectService.fileExists(p as NormalizedPath));
     }
 
-    function getMappedDocumentSpan(documentSpan: DocumentSpan, project: Project): DocumentSpan | undefined {
-        const newPosition = getMappedLocation(documentSpanLocation(documentSpan), project);
-        if (!newPosition) return undefined;
-        return {
-            fileName: newPosition.fileName,
-            textSpan: {
-                start: newPosition.pos,
-                length: documentSpan.textSpan.length
-            },
-            originalFileName: documentSpan.fileName,
-            originalTextSpan: documentSpan.textSpan,
-            contextSpan: getMappedContextSpan(documentSpan, project),
-            originalContextSpan: documentSpan.contextSpan
-        };
+    function getMappedDocumentSpanForProject(documentSpan: DocumentSpan, project: Project): DocumentSpan | undefined {
+        return getMappedDocumentSpan(documentSpan, project.getSourceMapper(), p => project.projectService.fileExists(p as NormalizedPath));
     }
 
-    function getMappedContextSpan(documentSpan: DocumentSpan, project: Project): TextSpan | undefined {
-        const contextSpanStart = documentSpan.contextSpan && getMappedLocation(
-            { fileName: documentSpan.fileName, pos: documentSpan.contextSpan.start },
-            project
-        );
-        const contextSpanEnd = documentSpan.contextSpan && getMappedLocation(
-            { fileName: documentSpan.fileName, pos: documentSpan.contextSpan.start + documentSpan.contextSpan.length },
-            project
-        );
-        return contextSpanStart && contextSpanEnd ?
-            { start: contextSpanStart.pos, length: contextSpanEnd.pos - contextSpanStart.pos } :
-            undefined;
+    function getMappedContextSpanForProject(documentSpan: DocumentSpan, project: Project): TextSpan | undefined {
+        return getMappedContextSpan(documentSpan, project.getSourceMapper(), p => project.projectService.fileExists(p as NormalizedPath));
     }
 
     const invalidPartialSemanticModeCommands: readonly CommandNames[] = [
@@ -1249,7 +1271,7 @@ namespace ts.server {
 
         private mapDefinitionInfoLocations(definitions: readonly DefinitionInfo[], project: Project): readonly DefinitionInfo[] {
             return definitions.map((info): DefinitionInfo => {
-                const newDocumentSpan = getMappedDocumentSpan(info, project);
+                const newDocumentSpan = getMappedDocumentSpanForProject(info, project);
                 return !newDocumentSpan ? info : {
                     ...newDocumentSpan,
                     containerKind: info.containerKind,
@@ -1544,7 +1566,7 @@ namespace ts.server {
 
         private mapImplementationLocations(implementations: readonly ImplementationLocation[], project: Project): readonly ImplementationLocation[] {
             return implementations.map((info): ImplementationLocation => {
-                const newDocumentSpan = getMappedDocumentSpan(info, project);
+                const newDocumentSpan = getMappedDocumentSpanForProject(info, project);
                 return !newDocumentSpan ? info : {
                     ...newDocumentSpan,
                     kind: info.kind,
@@ -1780,7 +1802,7 @@ namespace ts.server {
             const symbolStartOffset = nameSpan ? scriptInfo.positionToLineOffset(nameSpan.start).offset : 0;
             const symbolName = nameSpan ? scriptInfo.getSnapshot().getText(nameSpan.start, textSpanEnd(nameSpan)) : "";
             const refs: readonly protocol.ReferencesResponseItem[] = flatMap(references, referencedSymbol => {
-                return referencedSymbol.references.map(entry => referenceEntryToReferencesResponseItem(this.projectService, entry));
+                return referencedSymbol.references.map(entry => referenceEntryToReferencesResponseItem(this.projectService, entry)); // TODO (acasey): de-dup
             });
             return { refs, symbolName, symbolStartOffset, symbolDisplayString };
         }
@@ -2384,7 +2406,7 @@ namespace ts.server {
             // Mutates `outputs`
             function addItemsForProject(project: Project) {
                 const projectItems = project.getLanguageService().getNavigateToItems(searchValue, maxResultCount, /*filename*/ undefined, /*excludeDts*/ project.isNonTsProject());
-                const unseenItems = filter(projectItems, item => tryAddSeenItem(item) && !getMappedLocation(documentSpanLocation(item), project));
+                const unseenItems = filter(projectItems, item => tryAddSeenItem(item) && !getMappedLocationForProject(documentSpanLocation(item), project));
                 if (unseenItems.length) {
                     outputs.push({ project, navigateToItems: unseenItems });
                 }
