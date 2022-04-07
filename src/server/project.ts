@@ -1982,6 +1982,10 @@ namespace ts.server {
                 projectService.host,
                 /*currentDirectory*/ undefined);
         }
+
+        isOrphan(): boolean {
+            return true;
+        }
     }
 
     export class AutoImportProviderProject extends Project {
