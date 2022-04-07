@@ -1105,34 +1105,11 @@ namespace ts {
          * in that order would be used to write the files
          */
         function emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): EmitResult {
-            let restorePendingEmitOnHandlingNoEmitSuccess = false;
-            let savedAffectedFilesPendingEmit;
-            let savedAffectedFilesPendingEmitKind;
-            let savedAffectedFilesPendingEmitIndex;
-            // Backup and restore affected pendings emit state for non emit Builder if noEmitOnError is enabled and emitBuildInfo could be written in case there are errors
-            // This ensures pending files to emit is updated in tsbuildinfo
-            // Note that when there are no errors, emit proceeds as if everything is emitted as it is callers reponsibility to write the files to disk if at all (because its builder that doesnt track files to emit)
-            if (!targetSourceFile &&
-                !outFile(state.compilerOptions) &&
-                !state.compilerOptions.noEmit &&
-                state.compilerOptions.noEmitOnError) {
-                restorePendingEmitOnHandlingNoEmitSuccess = true;
-                savedAffectedFilesPendingEmit = state.affectedFilesPendingEmit && state.affectedFilesPendingEmit.slice();
-                savedAffectedFilesPendingEmitKind = state.affectedFilesPendingEmitKind && new Map(state.affectedFilesPendingEmitKind);
-                savedAffectedFilesPendingEmitIndex = state.affectedFilesPendingEmitIndex;
-            }
-
             if (kind === BuilderProgramKind.EmitAndSemanticDiagnosticsBuilderProgram) {
                 assertSourceFileOkWithoutNextAffectedCall(state, targetSourceFile);
             }
             const result = handleNoEmitOptions(builderProgram, targetSourceFile, writeFile, cancellationToken);
             if (result) return result;
-
-            if (restorePendingEmitOnHandlingNoEmitSuccess) {
-                state.affectedFilesPendingEmit = savedAffectedFilesPendingEmit;
-                state.affectedFilesPendingEmitKind = savedAffectedFilesPendingEmitKind;
-                state.affectedFilesPendingEmitIndex = savedAffectedFilesPendingEmitIndex;
-            }
 
             // Emit only affected files if using builder for emit
             if (!targetSourceFile) {
