@@ -1791,6 +1791,7 @@ namespace ts.server {
 
         /*@internal*/
         getNoDtsResolutionProject(rootFileNames: readonly string[]): Project {
+            Debug.assert(this.projectService.serverMode === LanguageServiceMode.Semantic);
             if (!this.noDtsResolutionProject) {
                 const options: CompilerOptions = {
                     ...this.getCompilerOptions(),

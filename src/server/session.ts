@@ -1244,7 +1244,9 @@ namespace ts.server {
             }
 
             let definitions = this.mapDefinitionInfoLocations(unmappedDefinitionAndBoundSpan.definitions, project).slice();
-            const needsJsResolution = !some(definitions, d => toNormalizedPath(d.fileName) !== file && !d.isAmbient) || some(definitions, d => !!d.failedAliasResolution);
+            const needsJsResolution = this.projectService.serverMode === LanguageServiceMode.Semantic && (
+                !some(definitions, d => toNormalizedPath(d.fileName) !== file && !d.isAmbient) ||
+                some(definitions, d => !!d.failedAliasResolution));
 
             if (needsJsResolution) {
                 const definitionSet = createSet<DefinitionInfo>(d => d.textSpan.start, documentSpansEqual);
