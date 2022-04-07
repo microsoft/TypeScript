@@ -704,7 +704,7 @@ type T09 = Parameters<Function>;
 >T09 : never
 
 type Record1 = {
->Record1 : Record1
+>Record1 : { move: [number, 'left' | 'right']; jump: [number, 'up' | 'down']; stop: string; done: []; }
 
   move: [number, 'left' | 'right'];
 >move : [number, "left" | "right"]

@@ -335,7 +335,7 @@ type Jsonified<T> =
     : "what is this";
 
 type Example = {
->Example : Example
+>Example : { str: "literalstring"; fn: () => void; date: Date; customClass: MyClass; obj: {    prop: "property";    clz: MyClass;    nested: {        attr: Date;    };}; }
 
     str: "literalstring",
 >str : "literalstring"

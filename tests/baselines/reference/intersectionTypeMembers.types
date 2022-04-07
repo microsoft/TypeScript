@@ -75,11 +75,11 @@ xyz.x.c = "hello";
 >"hello" : "hello"
 
 type F1 = (x: string) => string;
->F1 : F1
+>F1 : (x: string) => string
 >x : string
 
 type F2 = (x: number) => number;
->F2 : F2
+>F2 : (x: number) => number
 >x : number
 
 var f: F1 & F2;

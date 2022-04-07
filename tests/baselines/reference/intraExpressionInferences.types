@@ -330,7 +330,7 @@ class Wrapper<T = any> {
 }
 
 type WrappedMap = Record<string, Wrapper>;
->WrappedMap : WrappedMap
+>WrappedMap : { [x: string]: Wrapper<any>; }
 
 type Unwrap<D extends WrappedMap> = {
 >Unwrap : Unwrap<D>

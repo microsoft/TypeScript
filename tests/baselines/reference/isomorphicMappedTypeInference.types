@@ -378,7 +378,7 @@ declare function validateAndClone<T>(obj: { readonly [P in keyof T]?: T[P] }): T
 >obj : { readonly [P in keyof T]?: T[P] | undefined; }
 
 type Foo = {
->Foo : Foo
+>Foo : { a?: number | undefined; readonly b: string; }
 
     a?: number;
 >a : number | undefined

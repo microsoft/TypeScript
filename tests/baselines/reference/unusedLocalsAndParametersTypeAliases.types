@@ -1,7 +1,7 @@
 === tests/cases/compiler/unusedLocalsAndParametersTypeAliases.ts ===
 // used in a declaration
 type handler1 = () => void;
->handler1 : handler1
+>handler1 : () => void
 
 export interface I1 {
     getHandler: handler1;
@@ -10,11 +10,11 @@ export interface I1 {
 
 // exported
 export type handler2 = () => void;
->handler2 : handler2
+>handler2 : () => void
 
 // used in extends clause
 type handler3 = () => void;
->handler3 : handler3
+>handler3 : () => void
 
 export interface I3<T extends handler3> {
     getHandler: T;
@@ -23,10 +23,10 @@ export interface I3<T extends handler3> {
 
 // used in another type alias declaration
 type handler4 = () => void;
->handler4 : handler4
+>handler4 : () => void
 
 type handler5 = handler4 | (()=>number);
->handler5 : handler5
+>handler5 : handler4 | (() => number)
 
 var x: handler5;
 >x : handler5
@@ -37,7 +37,7 @@ x();
 
 // used as type argument
 type handler6 = () => void;
->handler6 : handler6
+>handler6 : () => void
 
 var y: Array<handler6>;
 >y : handler6[]

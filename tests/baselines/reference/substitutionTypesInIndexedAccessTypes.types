@@ -2,7 +2,7 @@
 // Repro from #31086
 
 type UserArgs = {
->UserArgs : UserArgs
+>UserArgs : { select?: boolean | undefined; }
 
   select?: boolean
 >select : boolean | undefined

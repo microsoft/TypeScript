@@ -115,31 +115,39 @@ namespace Harness {
                 // let type = this.checker.getTypeAtLocation(node);
                 let type = ts.isExpressionWithTypeArgumentsInClassExtendsClause(node.parent) ? this.checker.getTypeAtLocation(node.parent) : undefined;
                 if (!type || type.flags & ts.TypeFlags.Any) type = this.checker.getTypeAtLocation(node);
-                const typeString =
-                    // Distinguish `errorType`s from `any`s; but only if the file has no errors.
-                    // Additionally,
-                    // * the LHS of a qualified name
-                    // * a binding pattern name
-                    // * labels
-                    // * the "global" in "declare global"
-                    // * the "target" in "new.target"
-                    // * names in import statements
-                    // * type-only names in export statements
-                    // * and intrinsic jsx tag names
-                    // return `error`s via `getTypeAtLocation`
-                    // But this is generally expected, so we don't call those out, either
-                    (!this.hadErrorBaseline &&
-                        type.flags & ts.TypeFlags.Any &&
-                        !ts.isBindingElement(node.parent) &&
-                        !ts.isPropertyAccessOrQualifiedName(node.parent) &&
-                        !ts.isLabelName(node) &&
-                        !(ts.isModuleDeclaration(node.parent) && ts.isGlobalScopeAugmentation(node.parent)) &&
-                        !ts.isMetaProperty(node.parent) &&
-                        !this.isImportStatementName(node) &&
-                        !this.isExportStatementName(node) &&
-                        !this.isIntrinsicJsxTag(node)) ?
-                        (type as ts.IntrinsicType).intrinsicName :
-                        this.checker.typeToString(type, node.parent, ts.TypeFormatFlags.NoTruncation | ts.TypeFormatFlags.AllowUniqueESSymbolType);
+                // Distinguish `errorType`s from `any`s; but only if the file has no errors.
+                // Additionally,
+                // * the LHS of a qualified name
+                // * a binding pattern name
+                // * labels
+                // * the "global" in "declare global"
+                // * the "target" in "new.target"
+                // * names in import statements
+                // * type-only names in export statements
+                // * and intrinsic jsx tag names
+                // return `error`s via `getTypeAtLocation`
+                // But this is generally expected, so we don't call those out, either
+                let typeString: string;
+                if (!this.hadErrorBaseline &&
+                    type.flags & ts.TypeFlags.Any &&
+                    !ts.isBindingElement(node.parent) &&
+                    !ts.isPropertyAccessOrQualifiedName(node.parent) &&
+                    !ts.isLabelName(node) &&
+                    !(ts.isModuleDeclaration(node.parent) && ts.isGlobalScopeAugmentation(node.parent)) &&
+                    !ts.isMetaProperty(node.parent) &&
+                    !this.isImportStatementName(node) &&
+                    !this.isExportStatementName(node) &&
+                    !this.isIntrinsicJsxTag(node)) {
+                    typeString = (type as ts.IntrinsicType).intrinsicName;
+                }
+                else {
+                    typeString = this.checker.typeToString(type, node.parent, ts.TypeFormatFlags.NoTruncation | ts.TypeFormatFlags.AllowUniqueESSymbolType);
+                    if (ts.isIdentifier(node) && ts.isTypeAliasDeclaration(node.parent) && node.parent.name === node && typeString === ts.idText(node)) {
+                        // for a complex type alias `type T = ...`, showing "T : T" isn't very helpful for type tests. When the type produced is the same as
+                        // the name of the type alias, recreate the type string without reusing the alias name
+                        typeString = this.checker.typeToString(type, node.parent, ts.TypeFormatFlags.NoTruncation | ts.TypeFormatFlags.AllowUniqueESSymbolType | ts.TypeFormatFlags.InTypeAlias);
+                    }
+                }
                 return {
                     line: lineAndCharacter.line,
                     syntaxKind: node.kind,

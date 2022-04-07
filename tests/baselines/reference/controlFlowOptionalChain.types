@@ -635,7 +635,7 @@ function f01(x: unknown) {
 }
 
 type Thing = { foo: string | number, bar(): number, baz: object };
->Thing : Thing
+>Thing : { foo: string | number; bar(): number; baz: object; }
 >foo : string | number
 >bar : () => number
 >baz : object
@@ -1870,7 +1870,7 @@ function f41(o: Thing | undefined) {
 // Repros from #34570
 
 type Shape =
->Shape : Shape
+>Shape : { type: 'rectangle'; width: number; height: number; } | { type: 'circle'; radius: number; }
 
     | { type: 'rectangle', width: number, height: number }
 >type : "rectangle"
@@ -1923,7 +1923,7 @@ function getArea(shape?: Shape) {
 }
 
 type Feature = {
->Feature : Feature
+>Feature : { id: string; geometry?: { type: string; coordinates: number[]; } | undefined; }
 
   id: string;
 >id : string

@@ -414,7 +414,7 @@ function f6() {
 // Example from #13195
 
 type Props = {
->Props : Props
+>Props : { foo: string; bar: string; }
 
     foo: string;
 >foo : string
@@ -424,7 +424,7 @@ type Props = {
 }
 
 type InputProps = {
->InputProps : InputProps
+>InputProps : { foo?: string; bar: string; }
 
     foo?: string;
 >foo : string | undefined
@@ -793,7 +793,7 @@ interface PropsFromMaterialUI {
 }
 
 type TheTypeFromMaterialUI = PropsFromReact & PropsFromMaterialUI;
->TheTypeFromMaterialUI : TheTypeFromMaterialUI
+>TheTypeFromMaterialUI : PropsFromReact & PropsFromMaterialUI
 
 interface NavBottomListItem extends TheTypeFromMaterialUI {
     value: string;
