@@ -1800,7 +1800,7 @@ namespace ts.server {
             enumerateInsertsAndDeletes<NormalizedPath, NormalizedPath>(
                 rootFileNames.map(toNormalizedPath),
                 this.noDtsResolutionProject.getRootFiles(),
-                compareStringsCaseInsensitive,
+                getStringComparer(!this.useCaseSensitiveFileNames),
                 pathToAdd => {
                     const info = this.noDtsResolutionProject!.getScriptInfo(pathToAdd);
                     if (info) {
