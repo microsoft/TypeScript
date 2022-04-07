@@ -1989,7 +1989,8 @@ namespace ts.server {
         }
 
         scheduleInvalidateResolutionsOfFailedLookupLocations(): void {
-
+            // Invalidation will happen on-demand as part of updateGraph
+            return;
         }
     }
 
