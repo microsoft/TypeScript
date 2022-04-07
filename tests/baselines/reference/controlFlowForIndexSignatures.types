@@ -1,6 +1,6 @@
 === tests/cases/compiler/controlFlowForIndexSignatures.ts ===
 type Foo = { bar: string };
->Foo : Foo
+>Foo : { bar: string; }
 >bar : string
 
 const boo: Foo = { bar: 'bar' };
