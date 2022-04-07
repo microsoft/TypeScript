@@ -1986,6 +1986,10 @@ namespace ts.server {
         isOrphan(): boolean {
             return true;
         }
+
+        scheduleInvalidateResolutionsOfFailedLookupLocations(): void {
+
+        }
     }
 
     export class AutoImportProviderProject extends Project {

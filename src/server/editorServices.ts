@@ -991,13 +991,15 @@ namespace ts.server {
 
         private delayUpdateProjectGraph(project: Project) {
             project.markAsDirty();
-            const projectName = project.getProjectName();
-            this.pendingProjectUpdates.set(projectName, project);
-            this.throttledOperations.schedule(projectName, /*delay*/ 250, () => {
-                if (this.pendingProjectUpdates.delete(projectName)) {
-                    updateProjectIfDirty(project);
-                }
-            });
+            if (project.projectKind !== ProjectKind.AutoImportProvider && project.projectKind !== ProjectKind.Auxiliary) {
+                const projectName = project.getProjectName();
+                this.pendingProjectUpdates.set(projectName, project);
+                this.throttledOperations.schedule(projectName, /*delay*/ 250, () => {
+                    if (this.pendingProjectUpdates.delete(projectName)) {
+                        updateProjectIfDirty(project);
+                    }
+                });
+            }
         }
 
         /*@internal*/
