@@ -1,0 +1,91 @@
+=== tests/cases/compiler/mappedTypeTupleTypePropType.ts ===
+type Indices<T extends Array<any>> = {
+>Indices : Symbol(Indices, Decl(mappedTypeTupleTypePropType.ts, 0, 0))
+>T : Symbol(T, Decl(mappedTypeTupleTypePropType.ts, 0, 13))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+  [K in keyof T]: K
+>K : Symbol(K, Decl(mappedTypeTupleTypePropType.ts, 1, 3))
+>T : Symbol(T, Decl(mappedTypeTupleTypePropType.ts, 0, 13))
+>K : Symbol(K, Decl(mappedTypeTupleTypePropType.ts, 1, 3))
+
+};
+
+// should contain numbers
+type MyIndices = Indices<[string, number]>;
+>MyIndices : Symbol(MyIndices, Decl(mappedTypeTupleTypePropType.ts, 2, 2))
+>Indices : Symbol(Indices, Decl(mappedTypeTupleTypePropType.ts, 0, 0))
+
+// union of indices should be preserved
+type StillMyIndices = MyIndices[number] & number
+>StillMyIndices : Symbol(StillMyIndices, Decl(mappedTypeTupleTypePropType.ts, 5, 43))
+>MyIndices : Symbol(MyIndices, Decl(mappedTypeTupleTypePropType.ts, 2, 2))
+
+// simplified repro from https://twitter.com/oleg008/status/1508422774401949704
+
+type Container<V> = {
+>Container : Symbol(Container, Decl(mappedTypeTupleTypePropType.ts, 7, 48))
+>V : Symbol(V, Decl(mappedTypeTupleTypePropType.ts, 11, 15))
+
+  value: V;
+>value : Symbol(value, Decl(mappedTypeTupleTypePropType.ts, 11, 21))
+>V : Symbol(V, Decl(mappedTypeTupleTypePropType.ts, 11, 15))
+
+};
+
+type UnwrapContainers<T extends Container<unknown>[]> = {
+>UnwrapContainers : Symbol(UnwrapContainers, Decl(mappedTypeTupleTypePropType.ts, 13, 2))
+>T : Symbol(T, Decl(mappedTypeTupleTypePropType.ts, 15, 22))
+>Container : Symbol(Container, Decl(mappedTypeTupleTypePropType.ts, 7, 48))
+
+  [K in keyof T]: T[K & number]["value"];
+>K : Symbol(K, Decl(mappedTypeTupleTypePropType.ts, 16, 3))
+>T : Symbol(T, Decl(mappedTypeTupleTypePropType.ts, 15, 22))
+>T : Symbol(T, Decl(mappedTypeTupleTypePropType.ts, 15, 22))
+>K : Symbol(K, Decl(mappedTypeTupleTypePropType.ts, 16, 3))
+
+};
+
+declare function combine<T extends Container<unknown>[]>(
+>combine : Symbol(combine, Decl(mappedTypeTupleTypePropType.ts, 17, 2))
+>T : Symbol(T, Decl(mappedTypeTupleTypePropType.ts, 19, 25))
+>Container : Symbol(Container, Decl(mappedTypeTupleTypePropType.ts, 7, 48))
+
+  containers: [...T],
+>containers : Symbol(containers, Decl(mappedTypeTupleTypePropType.ts, 19, 57))
+>T : Symbol(T, Decl(mappedTypeTupleTypePropType.ts, 19, 25))
+
+  callback: (...values: UnwrapContainers<T>) => void
+>callback : Symbol(callback, Decl(mappedTypeTupleTypePropType.ts, 20, 21))
+>values : Symbol(values, Decl(mappedTypeTupleTypePropType.ts, 21, 13))
+>UnwrapContainers : Symbol(UnwrapContainers, Decl(mappedTypeTupleTypePropType.ts, 13, 2))
+>T : Symbol(T, Decl(mappedTypeTupleTypePropType.ts, 19, 25))
+
+): void;
+
+declare const container1: Container<string>;
+>container1 : Symbol(container1, Decl(mappedTypeTupleTypePropType.ts, 24, 13))
+>Container : Symbol(Container, Decl(mappedTypeTupleTypePropType.ts, 7, 48))
+
+declare const container2: Container<number>;
+>container2 : Symbol(container2, Decl(mappedTypeTupleTypePropType.ts, 25, 13))
+>Container : Symbol(Container, Decl(mappedTypeTupleTypePropType.ts, 7, 48))
+
+combine([container1, container2], (value1, value2) => {
+>combine : Symbol(combine, Decl(mappedTypeTupleTypePropType.ts, 17, 2))
+>container1 : Symbol(container1, Decl(mappedTypeTupleTypePropType.ts, 24, 13))
+>container2 : Symbol(container2, Decl(mappedTypeTupleTypePropType.ts, 25, 13))
+>value1 : Symbol(value1, Decl(mappedTypeTupleTypePropType.ts, 27, 35))
+>value2 : Symbol(value2, Decl(mappedTypeTupleTypePropType.ts, 27, 42))
+
+  const val1: string = value1;
+>val1 : Symbol(val1, Decl(mappedTypeTupleTypePropType.ts, 28, 7))
+>value1 : Symbol(value1, Decl(mappedTypeTupleTypePropType.ts, 27, 35))
+
+  const val2: number = value2;
+>val2 : Symbol(val2, Decl(mappedTypeTupleTypePropType.ts, 29, 7))
+>value2 : Symbol(value2, Decl(mappedTypeTupleTypePropType.ts, 27, 42))
+
+});
+
+
