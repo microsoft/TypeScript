@@ -331,24 +331,25 @@ interface Symbol {
         (originalWriteFile || sys.writeFile).call(sys, `${buildInfoPath}.baseline.txt`, text);
     }
 
-    interface VerifyIncrementalCorrectness {
-        scenario: TscCompile["scenario"];
-        commandLineArgs: TscCompile["commandLineArgs"];
-        modifyFs: TscCompile["modifyFs"];
-        incrementalModifyFs: TscIncremental["modifyFs"];
+    interface VerifyTscEditCorrectnessInput {
+        scenario: TestTscCompile["scenario"];
+        commandLineArgs: TestTscCompile["commandLineArgs"];
+        modifyFs: TestTscCompile["modifyFs"];
+        editFs: TestTscEdit["modifyFs"];
         tick: () => void;
         baseFs: vfs.FileSystem;
         newSys: TscCompileSystem;
-        cleanBuildDiscrepancies: TscIncremental["cleanBuildDiscrepancies"];
+        cleanBuildDiscrepancies: TestTscEdit["cleanBuildDiscrepancies"];
     }
-    function verifyIncrementalCorrectness(input: () => VerifyIncrementalCorrectness, index: number, subScenario: TscCompile["subScenario"]) {
-        it(`Verify emit output file text is same when built clean for incremental scenario at:: ${index} ${subScenario}`, () => {
+    /** Verify that emit is same as clean build vs building after edit */
+    function verifyTscEditCorrectness(input: () => VerifyTscEditCorrectnessInput, index: number, subScenario: TestTscCompile["subScenario"]) {
+        it(`Verify emit output file text is same when built clean for incremental edit scenario at:: ${index} ${subScenario}`, () => {
             const {
                 scenario, commandLineArgs, cleanBuildDiscrepancies,
-                modifyFs, incrementalModifyFs,
+                modifyFs, editFs,
                 tick, baseFs, newSys
             } = input();
-            const sys = tscCompile({
+            const sys = testTscCompile({
                 scenario,
                 subScenario,
                 fs: () => baseFs.makeReadonly(),
@@ -356,7 +357,7 @@ interface Symbol {
                 modifyFs: fs => {
                     tick();
                     if (modifyFs) modifyFs(fs);
-                    incrementalModifyFs(fs);
+                    editFs(fs);
                 },
                 disableUseFileVersionAsSignature: true,
             });
@@ -498,138 +499,47 @@ interface Symbol {
         CleanFilePresent,
     }
 
-    export interface TscIncremental {
-        buildKind: BuildKind;
+    export interface TestTscEdit {
         modifyFs: (fs: vfs.FileSystem) => void;
-        subScenario?: string;
+        subScenario: string;
         commandLineArgs?: readonly string[];
         cleanBuildDiscrepancies?: () => ESMap<string, CleanBuildDescrepancy>;
     }
 
-    export interface VerifyTsBuildInput extends VerifyTsBuildInputWorker {
+    export interface VerifyTscWithEditsInput extends VerifyTscWithEditsWorkerInput {
         baselineIncremental?: boolean;
     }
+    export interface VerifyTscWithEditsWorkerInput extends TestTscCompile {
+        edits: TestTscEdit[];
+    }
 
-    export function verifyTscIncrementalEdits(input: VerifyTsBuildInput) {
-        verifyTscIncrementalEditsWorker(input);
+    /**
+     * Verify non watch tsc invokcation after each edit
+     */
+    export function verifyTscWithEdits(input: VerifyTscWithEditsInput) {
+        verifyTscWithEditsWorker(input);
         if (input.baselineIncremental) {
-            verifyTscIncrementalEditsWorker({
+            verifyTscWithEditsWorker({
                 ...input,
                 subScenario: `${input.subScenario} with incremental`,
                 commandLineArgs: [...input.commandLineArgs, "--incremental"],
             });
         }
     }
-
-    export interface VerifyTsBuildInputWorker extends TscCompile {
-        incrementalScenarios: TscIncremental[];
-    }
-    function verifyTscIncrementalEditsWorker({
+    function verifyTscWithEditsWorker({
         subScenario, fs, scenario, commandLineArgs,
         baselineSourceMap, modifyFs, baselineReadFileCalls, baselinePrograms,
-        incrementalScenarios
-    }: VerifyTsBuildInputWorker) {
-        describe(`tsc ${commandLineArgs.join(" ")} ${scenario}:: ${subScenario}`, () => {
-            let tick: () => void;
-            let sys: TscCompileSystem;
-            let baseFs: vfs.FileSystem;
-            before(() => {
-                ({ fs: baseFs, tick } = getFsWithTime(fs()));
-                sys = tscCompile({
-                    scenario,
-                    subScenario,
-                    fs: () => baseFs.makeReadonly(),
-                    commandLineArgs,
-                    modifyFs: fs => {
-                        if (modifyFs) modifyFs(fs);
-                        tick();
-                    },
-                    baselineSourceMap,
-                    baselineReadFileCalls,
-                    baselinePrograms
-                });
-                Debug.assert(!!incrementalScenarios.length, `${scenario}/${subScenario}:: No incremental scenarios, you probably want to use verifyTsc instead.`);
-            });
-            after(() => {
-                baseFs = undefined!;
-                sys = undefined!;
-                tick = undefined!;
-            });
-            describe("initialBuild", () => {
-                verifyTscBaseline(() => sys);
-            });
-
-            incrementalScenarios.forEach(({
-                buildKind,
-                modifyFs: incrementalModifyFs,
-                subScenario: incrementalSubScenario,
-                commandLineArgs: incrementalCommandLineArgs,
-                cleanBuildDiscrepancies,
-            }, index) => {
-                describe(incrementalSubScenario || buildKind, () => {
-                    let newSys: TscCompileSystem;
-                    before(() => {
-                        Debug.assert(buildKind !== BuildKind.Initial, "Incremental edit cannot be initial compilation");
-                        tick();
-                        newSys = tscCompile({
-                            scenario,
-                            subScenario: incrementalSubScenario || subScenario,
-                            buildKind,
-                            fs: () => sys.vfs,
-                            commandLineArgs: incrementalCommandLineArgs || commandLineArgs,
-                            modifyFs: fs => {
-                                tick();
-                                incrementalModifyFs(fs);
-                                tick();
-                            },
-                            baselineSourceMap,
-                            baselineReadFileCalls,
-                            baselinePrograms
-                        });
-                    });
-                    after(() => {
-                        newSys = undefined!;
-                    });
-                    verifyTscBaseline(() => newSys);
-                    verifyIncrementalCorrectness(() => ({
-                        scenario,
-                        baseFs,
-                        newSys,
-                        commandLineArgs: incrementalCommandLineArgs || commandLineArgs,
-                        cleanBuildDiscrepancies,
-                        incrementalModifyFs,
-                        modifyFs,
-                        tick
-                    }), index, incrementalSubScenario || subScenario);
-                });
-            });
-        });
-    }
-
-    export function verifyTscSerializedIncrementalEdits(input: VerifyTsBuildInput) {
-        verifyTscSerializedIncrementalEditsWorker(input);
-        if (input.baselineIncremental) {
-            verifyTscSerializedIncrementalEditsWorker({
-                ...input,
-                subScenario: `${input.subScenario} with incremental`,
-                commandLineArgs: [...input.commandLineArgs, "--incremental"],
-            });
-        }
-    }
-    function verifyTscSerializedIncrementalEditsWorker({
-        subScenario, fs, scenario, commandLineArgs,
-        baselineSourceMap, modifyFs, baselineReadFileCalls, baselinePrograms,
-        incrementalScenarios
-    }: VerifyTsBuildInputWorker) {
+        edits
+    }: VerifyTscWithEditsWorkerInput) {
         describe(`tsc ${commandLineArgs.join(" ")} ${scenario}:: ${subScenario} serializedEdits`, () => {
-            Debug.assert(!!incrementalScenarios.length, `${scenario}/${subScenario}:: No incremental scenarios, you probably want to use verifyTsc instead.`);
             let tick: () => void;
             let sys: TscCompileSystem;
             let baseFs: vfs.FileSystem;
-            let incrementalSys: TscCompileSystem[];
+            let editsSys: TscCompileSystem[];
             before(() => {
+                Debug.assert(!!edits.length, `${scenario}/${subScenario}:: No incremental scenarios, you probably want to use verifyTsc instead.`);
                 ({ fs: baseFs, tick } = getFsWithTime(fs()));
-                sys = tscCompile({
+                sys = testTscCompile({
                     scenario,
                     subScenario,
                     fs: () => baseFs.makeReadonly(),
@@ -642,18 +552,17 @@ interface Symbol {
                     baselineReadFileCalls,
                     baselinePrograms
                 });
-                incrementalScenarios.forEach((
-                    { buildKind, modifyFs, subScenario: incrementalSubScenario, commandLineArgs: incrementalCommandLineArgs },
+                edits.forEach((
+                    { modifyFs, subScenario: editScenario, commandLineArgs: editCommandLineArgs },
                     index
                 ) => {
-                    Debug.assert(buildKind !== BuildKind.Initial, "Incremental edit cannot be initial compilation");
                     tick();
-                    (incrementalSys || (incrementalSys = [])).push(tscCompile({
+                    (editsSys || (editsSys = [])).push(testTscCompile({
                         scenario,
-                        subScenario: incrementalSubScenario || subScenario,
-                        buildKind,
-                        fs: () => index === 0 ? sys.vfs : incrementalSys[index - 1].vfs,
-                        commandLineArgs: incrementalCommandLineArgs || commandLineArgs,
+                        subScenario: editScenario || subScenario,
+                        diffWithInitial: true,
+                        fs: () => index === 0 ? sys.vfs : editsSys[index - 1].vfs,
+                        commandLineArgs: editCommandLineArgs || commandLineArgs,
                         modifyFs: fs => {
                             tick();
                             modifyFs(fs);
@@ -669,39 +578,38 @@ interface Symbol {
                 baseFs = undefined!;
                 sys = undefined!;
                 tick = undefined!;
-                incrementalSys = undefined!;
+                editsSys = undefined!;
             });
-            describe("serializedBuild", () => {
-
+            describe("tsc invocation after edit", () => {
                 verifyTscBaseline(() => ({
                     baseLine: () => {
                         const { file, text } = sys.baseLine();
                         const texts: string[] = [text];
-                        incrementalSys.forEach((sys, index) => {
-                            const incrementalScenario = incrementalScenarios[index];
+                        editsSys.forEach((sys, index) => {
+                            const incrementalScenario = edits[index];
                             texts.push("");
-                            texts.push(`Change:: ${incrementalScenario.subScenario || incrementalScenario.buildKind}`);
+                            texts.push(`Change:: ${incrementalScenario.subScenario}`);
                             texts.push(sys.baseLine().text);
                         });
                         return { file, text: texts.join("\r\n") };
                     }
                 }));
             });
-            describe("incremental correctness", () => {
-                incrementalScenarios.forEach(({ commandLineArgs: incrementalCommandLineArgs, subScenario, buildKind, cleanBuildDiscrepancies }, index) => verifyIncrementalCorrectness(() => ({
+            describe("tsc invocation after edit and clean build correctness", () => {
+                edits.forEach(({ commandLineArgs: editCommandLineArgs, subScenario, cleanBuildDiscrepancies }, index) => verifyTscEditCorrectness(() => ({
                     scenario,
                     baseFs,
-                    newSys: incrementalSys[index],
-                    commandLineArgs: incrementalCommandLineArgs || commandLineArgs,
+                    newSys: editsSys[index],
+                    commandLineArgs: editCommandLineArgs || commandLineArgs,
                     cleanBuildDiscrepancies,
-                    incrementalModifyFs: fs => {
+                    editFs: fs => {
                         for (let i = 0; i <= index; i++) {
-                            incrementalScenarios[i].modifyFs(fs);
+                            edits[i].modifyFs(fs);
                         }
                     },
                     modifyFs,
                     tick
-                }), index, subScenario || buildKind));
+                }), index, subScenario));
             });
         });
     }

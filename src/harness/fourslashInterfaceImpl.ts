@@ -215,8 +215,8 @@ namespace FourSlashInterface {
             this.state.verifyRefactorsAvailable(names);
         }
 
-        public refactorAvailable(name: string, actionName?: string) {
-            this.state.verifyRefactorAvailable(this.negative, "implicit", name, actionName);
+        public refactorAvailable(name: string, actionName?: string, actionDescription?: string) {
+            this.state.verifyRefactorAvailable(this.negative, "implicit", name, actionName, actionDescription);
         }
 
         public refactorAvailableForTriggerReason(triggerReason: ts.RefactorTriggerReason, name: string, actionName?: string) {
@@ -352,12 +352,12 @@ namespace FourSlashInterface {
             this.state.verifyBaselineFindAllReferences(...markerNames);
         }
 
-        public baselineGetFileReferences(fileName: string) {
-            this.state.verifyBaselineGetFileReferences(fileName);
+        public baselineFindAllReferencesMulti(seq: number, ...markerNames: string[]) {
+            this.state.verifyBaselineFindAllReferencesMulti(seq, ...markerNames);
         }
 
-        public singleReferenceGroup(definition: ReferenceGroupDefinition, ranges?: FourSlash.Range[] | string) {
-            this.state.verifySingleReferenceGroup(definition, ranges);
+        public baselineGetFileReferences(fileName: string) {
+            this.state.verifyBaselineGetFileReferences(fileName);
         }
 
         public findReferencesDefinitionDisplayPartsAtCaretAre(expected: ts.SymbolDisplayPart[]) {

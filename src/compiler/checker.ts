@@ -5009,7 +5009,20 @@ namespace ts {
                 if (type.flags & TypeFlags.TypeParameter || objectFlags & ObjectFlags.ClassOrInterface) {
                     if (type.flags & TypeFlags.TypeParameter && contains(context.inferTypeParameters, type)) {
                         context.approximateLength += (symbolName(type.symbol).length + 6);
-                        return factory.createInferTypeNode(typeParameterToDeclarationWithConstraint(type as TypeParameter, context, /*constraintNode*/ undefined));
+                        let constraintNode: TypeNode | undefined;
+                        const constraint = getConstraintOfTypeParameter(type as TypeParameter);
+                        if (constraint) {
+                            // If the infer type has a constraint that is not the same as the constraint
+                            // we would have normally inferred based on context, we emit the constraint
+                            // using `infer T extends ?`. We omit inferred constraints from type references
+                            // as they may be elided.
+                            const inferredConstraint = getInferredTypeParameterConstraint(type as TypeParameter, /*omitTypeReferences*/ true);
+                            if (!(inferredConstraint && isTypeIdenticalTo(constraint, inferredConstraint))) {
+                                context.approximateLength += 9;
+                                constraintNode = constraint && typeToTypeNodeHelper(constraint, context);
+                            }
+                        }
+                        return factory.createInferTypeNode(typeParameterToDeclarationWithConstraint(type as TypeParameter, context, constraintNode));
                     }
                     if (context.flags & NodeBuilderFlags.GenerateNamesForShadowedTypeParams &&
                         type.flags & TypeFlags.TypeParameter &&
@@ -5089,13 +5102,49 @@ namespace ts {
 
                 function conditionalTypeToTypeNode(type: ConditionalType) {
                     const checkTypeNode = typeToTypeNodeHelper(type.checkType, context);
+                    context.approximateLength += 15;
+                    if (context.flags & NodeBuilderFlags.GenerateNamesForShadowedTypeParams && type.root.isDistributive && !(type.checkType.flags & TypeFlags.TypeParameter)) {
+                        const newParam = createTypeParameter(createSymbol(SymbolFlags.TypeParameter, "T" as __String));
+                        const name = typeParameterToName(newParam, context);
+                        const newTypeVariable = factory.createTypeReferenceNode(name);
+                        context.approximateLength += 37; // 15 each for two added conditionals, 7 for an added infer type
+                        const newMapper = prependTypeMapping(type.root.checkType, newParam, type.combinedMapper || type.mapper);
+                        const saveInferTypeParameters = context.inferTypeParameters;
+                        context.inferTypeParameters = type.root.inferTypeParameters;
+                        const extendsTypeNode = typeToTypeNodeHelper(instantiateType(type.root.extendsType, newMapper), context);
+                        context.inferTypeParameters = saveInferTypeParameters;
+                        const trueTypeNode = typeToTypeNodeOrCircularityElision(instantiateType(getTypeFromTypeNode(type.root.node.trueType), newMapper));
+                        const falseTypeNode = typeToTypeNodeOrCircularityElision(instantiateType(getTypeFromTypeNode(type.root.node.falseType), newMapper));
+
+
+                        // outermost conditional makes `T` a type parameter, allowing the inner conditionals to be distributive
+                        // second conditional makes `T` have `T & checkType` substitution, so it is correctly usable as the checkType
+                        // inner conditional runs the check the user provided on the check type (distributively) and returns the result
+                        // checkType extends infer T ? T extends checkType ? T extends extendsType<T> ? trueType<T> : falseType<T> : never : never;
+                        // this is potentially simplifiable to
+                        // checkType extends infer T ? T extends checkType & extendsType<T> ? trueType<T> : falseType<T> : never;
+                        // but that may confuse users who read the output more.
+                        // On the other hand,
+                        // checkType extends infer T extends checkType ? T extends extendsType<T> ? trueType<T> : falseType<T> : never;
+                        // may also work with `infer ... extends ...` in, but would produce declarations only compatible with the latest TS.
+                        return factory.createConditionalTypeNode(
+                            checkTypeNode,
+                            factory.createInferTypeNode(factory.createTypeParameterDeclaration(/*modifiers*/ undefined, factory.cloneNode(newTypeVariable.typeName) as Identifier)),
+                            factory.createConditionalTypeNode(
+                                factory.createTypeReferenceNode(factory.cloneNode(name)),
+                                typeToTypeNodeHelper(type.checkType, context),
+                                factory.createConditionalTypeNode(newTypeVariable, extendsTypeNode, trueTypeNode, falseTypeNode),
+                                factory.createKeywordTypeNode(SyntaxKind.NeverKeyword)
+                            ),
+                            factory.createKeywordTypeNode(SyntaxKind.NeverKeyword)
+                        );
+                    }
                     const saveInferTypeParameters = context.inferTypeParameters;
                     context.inferTypeParameters = type.root.inferTypeParameters;
                     const extendsTypeNode = typeToTypeNodeHelper(type.extendsType, context);
                     context.inferTypeParameters = saveInferTypeParameters;
                     const trueTypeNode = typeToTypeNodeOrCircularityElision(getTrueTypeFromConditionalType(type));
                     const falseTypeNode = typeToTypeNodeOrCircularityElision(getFalseTypeFromConditionalType(type));
-                    context.approximateLength += 15;
                     return factory.createConditionalTypeNode(checkTypeNode, extendsTypeNode, trueTypeNode, falseTypeNode);
                 }
 
@@ -13257,7 +13306,7 @@ namespace ts {
             return mapDefined(filter(type.symbol && type.symbol.declarations, isTypeParameterDeclaration), getEffectiveConstraintOfTypeParameter)[0];
         }
 
-        function getInferredTypeParameterConstraint(typeParameter: TypeParameter) {
+        function getInferredTypeParameterConstraint(typeParameter: TypeParameter, omitTypeReferences?: boolean) {
             let inferences: Type[] | undefined;
             if (typeParameter.symbol?.declarations) {
                 for (const declaration of typeParameter.symbol.declarations) {
@@ -13267,7 +13316,7 @@ namespace ts {
                         // corresponding type parameter in 'Foo'. When multiple 'infer T' declarations are
                         // present, we form an intersection of the inferred constraint types.
                         const [childTypeParameter = declaration.parent, grandParent] = walkUpParenthesizedTypesAndGetParentAndChild(declaration.parent.parent);
-                        if (grandParent.kind === SyntaxKind.TypeReference) {
+                        if (grandParent.kind === SyntaxKind.TypeReference && !omitTypeReferences) {
                             const typeReference = grandParent as TypeReferenceNode;
                             const typeParameters = getTypeParametersForTypeReference(typeReference);
                             if (typeParameters) {
@@ -15860,7 +15909,11 @@ namespace ts {
         }
 
         function isSingletonTupleType(node: TypeNode) {
-            return isTupleTypeNode(node) && length(node.elements) === 1 && !isOptionalTypeNode(node.elements[0]) && !isRestTypeNode(node.elements[0]);
+            return isTupleTypeNode(node) &&
+                length(node.elements) === 1 &&
+                !isOptionalTypeNode(node.elements[0]) &&
+                !isRestTypeNode(node.elements[0]) &&
+                !(isNamedTupleMember(node.elements[0]) && (node.elements[0].questionToken || node.elements[0].dotDotDotToken));
         }
 
         /**
@@ -20640,6 +20693,9 @@ namespace ts {
         function createMarkerType(symbol: Symbol, source: TypeParameter, target: Type) {
             const mapper = makeUnaryTypeMapper(source, target);
             const type = getDeclaredTypeOfSymbol(symbol);
+            if (isErrorType(type)) {
+                return type;
+            }
             const result = symbol.flags & SymbolFlags.TypeAlias ?
                 getTypeAliasInstantiation(symbol, instantiateTypes(getSymbolLinks(symbol).typeParameters!, mapper)) :
                 createTypeReference(type as GenericType, instantiateTypes((type as GenericType).typeParameters, mapper));
@@ -21729,6 +21785,9 @@ namespace ts {
                 const inference = inferences[i];
                 if (t === inference.typeParameter) {
                     if (fix && !inference.isFixed) {
+                        // Before we commit to a particular inference (and thus lock out any further inferences),
+                        // we infer from any intra-expression inference sites we have collected.
+                        inferFromIntraExpressionSites(context);
                         clearCachedInferences(inferences);
                         inference.isFixed = true;
                     }
@@ -21743,6 +21802,37 @@ namespace ts {
                 if (!inference.isFixed) {
                     inference.inferredType = undefined;
                 }
+            }
+        }
+
+        function addIntraExpressionInferenceSite(context: InferenceContext, node: Expression | MethodDeclaration, type: Type) {
+            (context.intraExpressionInferenceSites ??= []).push({ node, type });
+        }
+
+        // We collect intra-expression inference sites within object and array literals to handle cases where
+        // inferred types flow between context sensitive element expressions. For example:
+        //
+        //   declare function foo<T>(arg: [(n: number) => T, (x: T) => void]): void;
+        //   foo([_a => 0, n => n.toFixed()]);
+        //
+        // Above, both arrow functions in the tuple argument are context sensitive, thus both are omitted from the
+        // pass that collects inferences from the non-context sensitive parts of the arguments. In the subsequent
+        // pass where nothing is omitted, we need to commit to an inference for T in order to contextually type the
+        // parameter in the second arrow function, but we want to first infer from the return type of the first
+        // arrow function. This happens automatically when the arrow functions are discrete arguments (because we
+        // infer from each argument before processing the next), but when the arrow functions are elements of an
+        // object or array literal, we need to perform intra-expression inferences early.
+        function inferFromIntraExpressionSites(context: InferenceContext) {
+            if (context.intraExpressionInferenceSites) {
+                for (const { node, type } of context.intraExpressionInferenceSites) {
+                    const contextualType = node.kind === SyntaxKind.MethodDeclaration ?
+                        getContextualTypeForObjectLiteralMethod(node as MethodDeclaration, ContextFlags.NoConstraints) :
+                        getContextualType(node, ContextFlags.NoConstraints);
+                    if (contextualType) {
+                        inferTypes(context.inferences, type, contextualType);
+                    }
+                }
+                context.intraExpressionInferenceSites = undefined;
             }
         }
 
@@ -25304,6 +25394,7 @@ namespace ts {
             // a generic type without a nullable constraint and x is a generic type. This is because when both obj
             // and x are of generic types T and K, we want the resulting type to be T[K].
             return parent.kind === SyntaxKind.PropertyAccessExpression ||
+                parent.kind === SyntaxKind.QualifiedName ||
                 parent.kind === SyntaxKind.CallExpression && (parent as CallExpression).expression === node ||
                 parent.kind === SyntaxKind.ElementAccessExpression && (parent as ElementAccessExpression).expression === node &&
                     !(someType(type, isGenericTypeWithoutNullableConstraint) && isGenericIndexType(getTypeOfExpression((parent as ElementAccessExpression).argumentExpression)));
@@ -27408,6 +27499,11 @@ namespace ts {
                     const type = checkExpressionForMutableLocation(e, checkMode, elementContextualType, forceTuple);
                     elementTypes.push(addOptionality(type, /*isProperty*/ true, hasOmittedExpression));
                     elementFlags.push(hasOmittedExpression ? ElementFlags.Optional : ElementFlags.Required);
+                    if (contextualType && someType(contextualType, isTupleLikeType) && checkMode && checkMode & CheckMode.Inferential && !(checkMode & CheckMode.SkipContextSensitive) && isContextSensitive(e)) {
+                        const inferenceContext = getInferenceContext(node);
+                        Debug.assert(inferenceContext);  // In CheckMode.Inferential we should always have an inference context
+                        addIntraExpressionInferenceSite(inferenceContext, e, type);
+                    }
                 }
             }
             if (inDestructuringPattern) {
@@ -27625,6 +27721,14 @@ namespace ts {
                     prop.target = member;
                     member = prop;
                     allPropertiesTable?.set(prop.escapedName, prop);
+
+                    if (contextualType && checkMode && checkMode & CheckMode.Inferential && !(checkMode & CheckMode.SkipContextSensitive) &&
+                        (memberDecl.kind === SyntaxKind.PropertyAssignment || memberDecl.kind === SyntaxKind.MethodDeclaration) && isContextSensitive(memberDecl)) {
+                        const inferenceContext = getInferenceContext(node);
+                        Debug.assert(inferenceContext);  // In CheckMode.Inferential we should always have an inference context
+                        const inferenceNode = memberDecl.kind === SyntaxKind.PropertyAssignment ? memberDecl.initializer : memberDecl;
+                        addIntraExpressionInferenceSite(inferenceContext, inferenceNode, type);
+                    }
                 }
                 else if (memberDecl.kind === SyntaxKind.SpreadAssignment) {
                     if (languageVersion < ScriptTarget.ES2015) {
@@ -29727,34 +29831,36 @@ namespace ts {
             if (node.kind !== SyntaxKind.Decorator) {
                 const contextualType = getContextualType(node, every(signature.typeParameters, p => !!getDefaultFromTypeParameter(p)) ? ContextFlags.SkipBindingPatterns : ContextFlags.None);
                 if (contextualType) {
-                    // We clone the inference context to avoid disturbing a resolution in progress for an
-                    // outer call expression. Effectively we just want a snapshot of whatever has been
-                    // inferred for any outer call expression so far.
-                    const outerContext = getInferenceContext(node);
-                    const outerMapper = getMapperFromContext(cloneInferenceContext(outerContext, InferenceFlags.NoDefault));
-                    const instantiatedType = instantiateType(contextualType, outerMapper);
-                    // If the contextual type is a generic function type with a single call signature, we
-                    // instantiate the type with its own type parameters and type arguments. This ensures that
-                    // the type parameters are not erased to type any during type inference such that they can
-                    // be inferred as actual types from the contextual type. For example:
-                    //   declare function arrayMap<T, U>(f: (x: T) => U): (a: T[]) => U[];
-                    //   const boxElements: <A>(a: A[]) => { value: A }[] = arrayMap(value => ({ value }));
-                    // Above, the type of the 'value' parameter is inferred to be 'A'.
-                    const contextualSignature = getSingleCallSignature(instantiatedType);
-                    const inferenceSourceType = contextualSignature && contextualSignature.typeParameters ?
-                        getOrCreateTypeFromSignature(getSignatureInstantiationWithoutFillingInTypeArguments(contextualSignature, contextualSignature.typeParameters)) :
-                        instantiatedType;
                     const inferenceTargetType = getReturnTypeOfSignature(signature);
-                    // Inferences made from return types have lower priority than all other inferences.
-                    inferTypes(context.inferences, inferenceSourceType, inferenceTargetType, InferencePriority.ReturnType);
-                    // Create a type mapper for instantiating generic contextual types using the inferences made
-                    // from the return type. We need a separate inference pass here because (a) instantiation of
-                    // the source type uses the outer context's return mapper (which excludes inferences made from
-                    // outer arguments), and (b) we don't want any further inferences going into this context.
-                    const returnContext = createInferenceContext(signature.typeParameters!, signature, context.flags);
-                    const returnSourceType = instantiateType(contextualType, outerContext && outerContext.returnMapper);
-                    inferTypes(returnContext.inferences, returnSourceType, inferenceTargetType);
-                    context.returnMapper = some(returnContext.inferences, hasInferenceCandidates) ? getMapperFromContext(cloneInferredPartOfContext(returnContext)) : undefined;
+                    if (couldContainTypeVariables(inferenceTargetType)) {
+                        // We clone the inference context to avoid disturbing a resolution in progress for an
+                        // outer call expression. Effectively we just want a snapshot of whatever has been
+                        // inferred for any outer call expression so far.
+                        const outerContext = getInferenceContext(node);
+                        const outerMapper = getMapperFromContext(cloneInferenceContext(outerContext, InferenceFlags.NoDefault));
+                        const instantiatedType = instantiateType(contextualType, outerMapper);
+                        // If the contextual type is a generic function type with a single call signature, we
+                        // instantiate the type with its own type parameters and type arguments. This ensures that
+                        // the type parameters are not erased to type any during type inference such that they can
+                        // be inferred as actual types from the contextual type. For example:
+                        //   declare function arrayMap<T, U>(f: (x: T) => U): (a: T[]) => U[];
+                        //   const boxElements: <A>(a: A[]) => { value: A }[] = arrayMap(value => ({ value }));
+                        // Above, the type of the 'value' parameter is inferred to be 'A'.
+                        const contextualSignature = getSingleCallSignature(instantiatedType);
+                        const inferenceSourceType = contextualSignature && contextualSignature.typeParameters ?
+                            getOrCreateTypeFromSignature(getSignatureInstantiationWithoutFillingInTypeArguments(contextualSignature, contextualSignature.typeParameters)) :
+                            instantiatedType;
+                        // Inferences made from return types have lower priority than all other inferences.
+                        inferTypes(context.inferences, inferenceSourceType, inferenceTargetType, InferencePriority.ReturnType);
+                        // Create a type mapper for instantiating generic contextual types using the inferences made
+                        // from the return type. We need a separate inference pass here because (a) instantiation of
+                        // the source type uses the outer context's return mapper (which excludes inferences made from
+                        // outer arguments), and (b) we don't want any further inferences going into this context.
+                        const returnContext = createInferenceContext(signature.typeParameters!, signature, context.flags);
+                        const returnSourceType = instantiateType(contextualType, outerContext && outerContext.returnMapper);
+                        inferTypes(returnContext.inferences, returnSourceType, inferenceTargetType);
+                        context.returnMapper = some(returnContext.inferences, hasInferenceCandidates) ? getMapperFromContext(cloneInferredPartOfContext(returnContext)) : undefined;
+                    }
                 }
             }
 
@@ -29768,7 +29874,7 @@ namespace ts {
             }
 
             const thisType = getThisTypeOfSignature(signature);
-            if (thisType) {
+            if (thisType && couldContainTypeVariables(thisType)) {
                 const thisArgumentNode = getThisArgumentOfCall(node);
                 inferTypes(context.inferences, getThisArgumentType(thisArgumentNode), thisType);
             }
@@ -29777,12 +29883,14 @@ namespace ts {
                 const arg = args[i];
                 if (arg.kind !== SyntaxKind.OmittedExpression && !(checkMode & CheckMode.IsForStringLiteralArgumentCompletions && hasSkipDirectInferenceFlag(arg))) {
                     const paramType = getTypeAtPosition(signature, i);
-                    const argType = checkExpressionWithContextualType(arg, paramType, context, checkMode);
-                    inferTypes(context.inferences, argType, paramType);
+                    if (couldContainTypeVariables(paramType)) {
+                        const argType = checkExpressionWithContextualType(arg, paramType, context, checkMode);
+                        inferTypes(context.inferences, argType, paramType);
+                    }
                 }
             }
 
-            if (restType) {
+            if (restType && couldContainTypeVariables(restType)) {
                 const spreadType = getSpreadArgumentType(args, argCount, args.length, restType, context, checkMode);
                 inferTypes(context.inferences, spreadType, restType);
             }
@@ -34141,6 +34249,11 @@ namespace ts {
                 context.contextualType = contextualType;
                 context.inferenceContext = inferenceContext;
                 const type = checkExpression(node, checkMode | CheckMode.Contextual | (inferenceContext ? CheckMode.Inferential : 0));
+                // In CheckMode.Inferential we collect intra-expression inference sites to process before fixing any type
+                // parameters. This information is no longer needed after the call to checkExpression.
+                if (inferenceContext && inferenceContext.intraExpressionInferenceSites) {
+                    inferenceContext.intraExpressionInferenceSites = undefined;
+                }
                 // We strip literal freshness when an appropriate contextual type is present such that contextually typed
                 // literals always preserve their literal types (otherwise they might widen during type inference). An alternative
                 // here would be to not mark contextually typed literals as fresh in the first place.
@@ -34718,14 +34831,19 @@ namespace ts {
             }
             if (node.parent.kind === SyntaxKind.InterfaceDeclaration || node.parent.kind === SyntaxKind.ClassDeclaration || node.parent.kind === SyntaxKind.TypeAliasDeclaration) {
                 const modifiers = getVarianceModifiers(typeParameter);
-                if (modifiers === ModifierFlags.In || modifiers === ModifierFlags.Out) {
+                if (modifiers) {
                     const symbol = getSymbolOfNode(node.parent);
-                    const source = createMarkerType(symbol, typeParameter, modifiers === ModifierFlags.Out ? markerSubType : markerSuperType);
-                    const target = createMarkerType(symbol, typeParameter, modifiers === ModifierFlags.Out ? markerSuperType : markerSubType);
-                    const saveVarianceTypeParameter = typeParameter;
-                    varianceTypeParameter = typeParameter;
-                    checkTypeAssignableTo(source, target, node, Diagnostics.Type_0_is_not_assignable_to_type_1_as_implied_by_variance_annotation);
-                    varianceTypeParameter = saveVarianceTypeParameter;
+                    if (node.parent.kind === SyntaxKind.TypeAliasDeclaration && !(getObjectFlags(getDeclaredTypeOfSymbol(symbol)) & (ObjectFlags.Anonymous | ObjectFlags.Mapped))) {
+                        error(node, Diagnostics.Variance_annotations_are_only_supported_in_type_aliases_for_object_function_constructor_and_mapped_types);
+                    }
+                    else if (modifiers === ModifierFlags.In || modifiers === ModifierFlags.Out) {
+                        const source = createMarkerType(symbol, typeParameter, modifiers === ModifierFlags.Out ? markerSubType : markerSuperType);
+                        const target = createMarkerType(symbol, typeParameter, modifiers === ModifierFlags.Out ? markerSuperType : markerSubType);
+                        const saveVarianceTypeParameter = typeParameter;
+                        varianceTypeParameter = typeParameter;
+                        checkTypeAssignableTo(source, target, node, Diagnostics.Type_0_is_not_assignable_to_type_1_as_implied_by_variance_annotation);
+                        varianceTypeParameter = saveVarianceTypeParameter;
+                    }
                 }
             }
             addLazyDiagnostic(() => checkTypeNameIsReserved(node.name, Diagnostics.Type_parameter_name_cannot_be_0));
@@ -35606,6 +35724,22 @@ namespace ts {
                 grammarErrorOnNode(node, Diagnostics.infer_declarations_are_only_permitted_in_the_extends_clause_of_a_conditional_type);
             }
             checkSourceElement(node.typeParameter);
+            const symbol = getSymbolOfNode(node.typeParameter);
+            if (symbol.declarations && symbol.declarations.length > 1) {
+                const links = getSymbolLinks(symbol);
+                if (!links.typeParametersChecked) {
+                    links.typeParametersChecked = true;
+                    const typeParameter = getDeclaredTypeOfTypeParameter(symbol);
+                    const declarations: TypeParameterDeclaration[] = getDeclarationsOfKind(symbol, SyntaxKind.TypeParameter);
+                    if (!areTypeParametersIdentical(declarations, [typeParameter], decl => [decl])) {
+                        // Report an error on every conflicting declaration.
+                        const name = symbolToString(symbol);
+                        for (const declaration of declarations) {
+                            error(declaration.name, Diagnostics.All_declarations_of_0_must_have_identical_constraints, name);
+                        }
+                    }
+                }
+            }
             registerForUnusedIdentifiersCheck(node);
         }
 
@@ -39116,7 +39250,7 @@ namespace ts {
                 }
 
                 const type = getDeclaredTypeOfSymbol(symbol) as InterfaceType;
-                if (!areTypeParametersIdentical(declarations, type.localTypeParameters!)) {
+                if (!areTypeParametersIdentical(declarations, type.localTypeParameters!, getEffectiveTypeParameterDeclarations)) {
                     // Report an error on every conflicting declaration.
                     const name = symbolToString(symbol);
                     for (const declaration of declarations) {
@@ -39126,13 +39260,13 @@ namespace ts {
             }
         }
 
-        function areTypeParametersIdentical(declarations: readonly (ClassDeclaration | InterfaceDeclaration)[], targetParameters: TypeParameter[]) {
+        function areTypeParametersIdentical<T extends DeclarationWithTypeParameters | TypeParameterDeclaration>(declarations: readonly T[], targetParameters: TypeParameter[], getTypeParameterDeclarations: (node: T) => readonly TypeParameterDeclaration[]) {
             const maxTypeArgumentCount = length(targetParameters);
             const minTypeArgumentCount = getMinTypeArgumentCount(targetParameters);
 
             for (const declaration of declarations) {
                 // If this declaration has too few or too many type parameters, we report an error
-                const sourceParameters = getEffectiveTypeParameterDeclarations(declaration);
+                const sourceParameters = getTypeParameterDeclarations(declaration);
                 const numTypeParameters = sourceParameters.length;
                 if (numTypeParameters < minTypeArgumentCount || numTypeParameters > maxTypeArgumentCount) {
                     return false;

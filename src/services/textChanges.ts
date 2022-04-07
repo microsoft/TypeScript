@@ -1119,8 +1119,17 @@ namespace ts.textChanges {
         return skipTrivia(s, 0) === s.length;
     }
 
+    // A transformation context that won't perform parenthesization, as some parenthesization rules
+    // are more aggressive than is strictly necessary.
+    const textChangesTransformationContext: TransformationContext = {
+        ...nullTransformationContext,
+        factory: createNodeFactory(
+            nullTransformationContext.factory.flags | NodeFactoryFlags.NoParenthesizerRules,
+            nullTransformationContext.factory.baseFactory),
+    };
+
     export function assignPositionsToNode(node: Node): Node {
-        const visited = visitEachChild(node, assignPositionsToNode, nullTransformationContext, assignPositionsToNodeArray, assignPositionsToNode);
+        const visited = visitEachChild(node, assignPositionsToNode, textChangesTransformationContext, assignPositionsToNodeArray, assignPositionsToNode);
         // create proxy node for non synthesized nodes
         const newNode = nodeIsSynthesized(visited) ? visited : Object.create(visited) as Node;
         setTextRangePosEnd(newNode, getPos(node), getEnd(node));

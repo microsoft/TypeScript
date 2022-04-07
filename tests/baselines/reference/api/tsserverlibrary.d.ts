@@ -523,16 +523,17 @@ declare namespace ts {
         YieldContext = 8192,
         DecoratorContext = 16384,
         AwaitContext = 32768,
-        ThisNodeHasError = 65536,
-        JavaScriptFile = 131072,
-        ThisNodeOrAnySubNodesHasError = 262144,
-        HasAggregatedChildData = 524288,
-        JSDoc = 4194304,
-        JsonFile = 33554432,
+        DisallowConditionalTypesContext = 65536,
+        ThisNodeHasError = 131072,
+        JavaScriptFile = 262144,
+        ThisNodeOrAnySubNodesHasError = 524288,
+        HasAggregatedChildData = 1048576,
+        JSDoc = 8388608,
+        JsonFile = 67108864,
         BlockScoped = 3,
         ReachabilityCheckFlags = 768,
         ReachabilityAndEmitFlags = 2816,
-        ContextFlags = 25358336,
+        ContextFlags = 50720768,
         TypeExcludesFlags = 40960,
     }
     export enum ModifierFlags {
@@ -1805,10 +1806,12 @@ declare namespace ts {
     export interface JSDocNonNullableType extends JSDocType {
         readonly kind: SyntaxKind.JSDocNonNullableType;
         readonly type: TypeNode;
+        readonly postfix: boolean;
     }
     export interface JSDocNullableType extends JSDocType {
         readonly kind: SyntaxKind.JSDocNullableType;
         readonly type: TypeNode;
+        readonly postfix: boolean;
     }
     export interface JSDocOptionalType extends JSDocType {
         readonly kind: SyntaxKind.JSDocOptionalType;
@@ -1983,7 +1986,7 @@ declare namespace ts {
         Label = 12,
         Condition = 96
     }
-    export type FlowNode = FlowStart | FlowLabel | FlowAssignment | FlowCall | FlowCondition | FlowSwitchClause | FlowArrayMutation | FlowCall | FlowReduceLabel;
+    export type FlowNode = FlowStart | FlowLabel | FlowAssignment | FlowCondition | FlowSwitchClause | FlowArrayMutation | FlowCall | FlowReduceLabel;
     export interface FlowNodeBase {
         flags: FlowFlags;
         id?: number;
@@ -3164,7 +3167,7 @@ declare namespace ts {
         realpath?(path: string): string;
         getCurrentDirectory?(): string;
         getDirectories?(path: string): string[];
-        useCaseSensitiveFileNames?: boolean | (() => boolean);
+        useCaseSensitiveFileNames?: boolean | (() => boolean) | undefined;
     }
     /**
      * Used by services to specify the minimum host area required to set up source files under any compilation settings
@@ -3654,9 +3657,9 @@ declare namespace ts {
         updateExternalModuleReference(node: ExternalModuleReference, expression: Expression): ExternalModuleReference;
         createJSDocAllType(): JSDocAllType;
         createJSDocUnknownType(): JSDocUnknownType;
-        createJSDocNonNullableType(type: TypeNode): JSDocNonNullableType;
+        createJSDocNonNullableType(type: TypeNode, postfix?: boolean): JSDocNonNullableType;
         updateJSDocNonNullableType(node: JSDocNonNullableType, type: TypeNode): JSDocNonNullableType;
-        createJSDocNullableType(type: TypeNode): JSDocNullableType;
+        createJSDocNullableType(type: TypeNode, postfix?: boolean): JSDocNullableType;
         updateJSDocNullableType(node: JSDocNullableType, type: TypeNode): JSDocNullableType;
         createJSDocOptionalType(type: TypeNode): JSDocOptionalType;
         updateJSDocOptionalType(node: JSDocOptionalType, type: TypeNode): JSDocOptionalType;
@@ -6206,7 +6209,6 @@ declare namespace ts {
     }
     interface ReferenceEntry extends DocumentSpan {
         isWriteAccess: boolean;
-        isDefinition: boolean;
         isInString?: true;
     }
     interface ImplementationLocation extends DocumentSpan {
@@ -6320,7 +6322,10 @@ declare namespace ts {
     }
     interface ReferencedSymbol {
         definition: ReferencedSymbolDefinitionInfo;
-        references: ReferenceEntry[];
+        references: ReferencedSymbolEntry[];
+    }
+    interface ReferencedSymbolEntry extends ReferenceEntry {
+        isDefinition?: boolean;
     }
     enum SymbolDisplayPartKind {
         aliasName = 0,
@@ -7853,9 +7858,12 @@ declare namespace ts.server.protocol {
          */
         isWriteAccess: boolean;
         /**
-         * True if reference is a definition, false otherwise.
+         * Present only if the search was triggered from a declaration.
+         * True indicates that the references refers to the same symbol
+         * (i.e. has the same meaning) as the declaration that began the
+         * search.
          */
-        isDefinition: boolean;
+        isDefinition?: boolean;
     }
     /**
      * The body of a "references" response message.

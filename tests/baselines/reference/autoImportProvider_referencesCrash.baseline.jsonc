@@ -40,8 +40,7 @@
           "length": 1
         },
         "fileName": "/b/b.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }

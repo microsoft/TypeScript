@@ -137,8 +137,7 @@
           "length": 4
         },
         "fileName": "/tests/cases/fourslash/findAllRefsClassWithStaticThisAccess.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -146,8 +145,7 @@
           "length": 4
         },
         "fileName": "/tests/cases/fourslash/findAllRefsClassWithStaticThisAccess.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -212,8 +210,7 @@
           "length": 4
         },
         "fileName": "/tests/cases/fourslash/findAllRefsClassWithStaticThisAccess.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -221,8 +218,7 @@
           "length": 4
         },
         "fileName": "/tests/cases/fourslash/findAllRefsClassWithStaticThisAccess.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }

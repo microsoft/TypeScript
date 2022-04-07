@@ -212,6 +212,10 @@ namespace ts.refactor {
                 }
                 break;
             }
+            case SyntaxKind.ImportType:
+                const importTypeNode = parent as ImportTypeNode;
+                changes.replaceNode(importingSourceFile, parent, factory.createImportTypeNode(importTypeNode.argument, factory.createIdentifier(exportName), importTypeNode.typeArguments, importTypeNode.isTypeOf));
+                break;
             default:
                 Debug.failBadSyntaxKind(parent);
         }

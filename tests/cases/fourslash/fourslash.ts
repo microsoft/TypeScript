@@ -271,7 +271,7 @@ declare namespace FourSlashInterface {
         codeFixDiagnosticsAvailableAtMarkers(markerNames: string[], diagnosticCode?: number): void;
         applicableRefactorAvailableForRange(): void;
 
-        refactorAvailable(name: string, actionName?: string): void;
+        refactorAvailable(name: string, actionName?: string, actionDescription?: string): void;
         refactorAvailableForTriggerReason(triggerReason: RefactorTriggerReason, name: string, action?: string): void;
         refactorKindAvailable(refactorKind: string, expected: string[], preferences?: {}): void;
     }
@@ -322,6 +322,7 @@ declare namespace FourSlashInterface {
         verifyGetEmitOutputForCurrentFile(expected: string): void;
         verifyGetEmitOutputContentsForCurrentFile(expected: ts.OutputFile[]): void;
         baselineFindAllReferences(...markerNames: string[]): void;
+        baselineFindAllReferencesMulti(seq: number, ...markerNames: string[]): void;
         baselineGetFileReferences(fileName: string): void;
         symbolAtLocation(startRange: Range, ...declarationRanges: Range[]): void;
         typeOfSymbolAtLocation(range: Range, symbol: any, expected: string): void;
