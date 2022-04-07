@@ -109,6 +109,37 @@ ${patch ? vfs.formatPatch(patch) : ""}`
         return sys;
     }
 
+    function makeSystemReadyForBaseline(sys: TscCompileSystem, versionToWrite?: string) {
+        if (versionToWrite) {
+            fakes.patchHostForBuildInfoWrite(sys, versionToWrite);
+        }
+        else {
+            fakes.patchHostForBuildInfoReadWrite(sys);
+        }
+        const writtenFiles = sys.writtenFiles = new Set();
+        const originalWriteFile = sys.writeFile;
+        sys.writeFile = (fileName, content, writeByteOrderMark) => {
+            const path = toPathWithSystem(sys, fileName);
+            assert.isFalse(writtenFiles.has(path));
+            writtenFiles.add(path);
+            return originalWriteFile.call(sys, fileName, content, writeByteOrderMark);
+        };
+        return originalWriteFile;
+    }
+
+    export function createSolutionBuilderHostForBaseline(sys: TscCompileSystem, versionToWrite?: string) {
+        makeSystemReadyForBaseline(sys, versionToWrite);
+        const { cb } = commandLineCallbacks(sys);
+        const host = createSolutionBuilderHost(sys,
+            /*createProgram*/ undefined,
+            createDiagnosticReporter(sys, /*pretty*/ true),
+            createBuilderStatusReporter(sys, /*pretty*/ true),
+        );
+        host.afterProgramEmitAndDiagnostics = cb;
+        host.afterEmitBundle = cb;
+        return host;
+    }
+
     /**
      * Initialize Fs, execute command line and save baseline
      */
@@ -122,15 +153,7 @@ ${patch ? vfs.formatPatch(patch) : ""}`
         });
 
         function commandLineCompile(sys: TscCompileSystem) {
-            fakes.patchHostForBuildInfoReadWrite(sys);
-            const writtenFiles = sys.writtenFiles = new Set();
-            const originalWriteFile = sys.writeFile;
-            sys.writeFile = (fileName, content, writeByteOrderMark) => {
-                const path = toPathWithSystem(sys, fileName);
-                assert.isFalse(writtenFiles.has(path));
-                writtenFiles.add(path);
-                return originalWriteFile.call(sys, fileName, content, writeByteOrderMark);
-            };
+            const originalWriteFile = makeSystemReadyForBaseline(sys);
             actualReadFileMap = {};
             const originalReadFile = sys.readFile;
             sys.readFile = path => {
