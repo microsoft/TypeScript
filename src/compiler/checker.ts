@@ -3116,27 +3116,27 @@ namespace ts {
         function resolveAlias(symbol: Symbol): Symbol {
             Debug.assert((symbol.flags & SymbolFlags.Alias) !== 0, "Should only get Alias here.");
             const links = getSymbolLinks(symbol);
-            if (!links.target) {
-                links.target = resolvingSymbol;
+            if (!links.aliasTarget) {
+                links.aliasTarget = resolvingSymbol;
                 const node = getDeclarationOfAliasSymbol(symbol);
                 if (!node) return Debug.fail();
                 const target = getTargetOfAliasDeclaration(node);
-                if (links.target === resolvingSymbol) {
-                    links.target = target || unknownSymbol;
+                if (links.aliasTarget === resolvingSymbol) {
+                    links.aliasTarget = target || unknownSymbol;
                 }
                 else {
                     error(node, Diagnostics.Circular_definition_of_import_alias_0, symbolToString(symbol));
                 }
             }
-            else if (links.target === resolvingSymbol) {
-                links.target = unknownSymbol;
+            else if (links.aliasTarget === resolvingSymbol) {
+                links.aliasTarget = unknownSymbol;
             }
-            return links.target;
+            return links.aliasTarget;
         }
 
         function tryResolveAlias(symbol: Symbol): Symbol | undefined {
             const links = getSymbolLinks(symbol);
-            if (links.target !== resolvingSymbol) {
+            if (links.aliasTarget !== resolvingSymbol) {
                 return resolveAlias(symbol);
             }
 
@@ -31748,7 +31748,7 @@ namespace ts {
             const newSymbol = createSymbol(SymbolFlags.Alias, InternalSymbolName.Default);
             newSymbol.parent = originalSymbol;
             newSymbol.nameType = getStringLiteralType("default");
-            newSymbol.target = resolveSymbol(symbol);
+            newSymbol.aliasTarget = resolveSymbol(symbol);
             memberTable.set(InternalSymbolName.Default, newSymbol);
             return createAnonymousType(anonymousSymbol, memberTable, emptyArray, emptyArray, emptyArray);
         }
@@ -42271,11 +42271,11 @@ namespace ts {
                 const { leftSpread, rightSpread, syntheticOrigin } = symbol as TransientSymbol;
                 return leftSpread ? [leftSpread, rightSpread!]
                     : syntheticOrigin ? [syntheticOrigin]
-                    : singleElementArray(tryGetAliasTarget(symbol));
+                    : singleElementArray(tryGetTarget(symbol));
             }
             return undefined;
         }
-        function tryGetAliasTarget(symbol: Symbol): Symbol | undefined {
+        function tryGetTarget(symbol: Symbol): Symbol | undefined {
             let target: Symbol | undefined;
             let next: Symbol | undefined = symbol;
             while (next = getSymbolLinks(next).target) {
@@ -42527,7 +42527,7 @@ namespace ts {
                 if (links?.referenced) {
                     return true;
                 }
-                const target = getSymbolLinks(symbol!).target; // TODO: GH#18217
+                const target = getSymbolLinks(symbol!).aliasTarget; // TODO: GH#18217
                 if (target && getEffectiveModifierFlags(node) & ModifierFlags.Export &&
                     target.flags & SymbolFlags.Value &&
                     (shouldPreserveConstEnums(compilerOptions) || !isConstEnumOrConstEnumOnlyModule(target))) {
