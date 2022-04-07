@@ -226,18 +226,9 @@ type ExtractPrimitives<T extends string> =
     | (T extends `${infer U extends boolean | null | undefined}` ? U : never)
     ;
 
-// .types tests here are worthless until #48578 is merged
-type Check<T, U extends T> = void;
-
 type TExtract0 = ExtractPrimitives<"100">; // "100" | 100 | 100n
 type TExtract1 = ExtractPrimitives<"1.1">; // "1.1" | 1.1
 type TExtract2 = ExtractPrimitives<"true">; // "true" | true
-
-type _ = [
-    Check<TExtract0, "100" | 100 | 100n>,
-    Check<TExtract1, "1.1" | 1.1>,
-    Check<TExtract2, "true" | true>,
-];
 
 
 
@@ -440,15 +431,9 @@ declare type TPrefix0 = "100" extends `${infer T extends number}${string}` ? T :
 declare type TPrefix1 = "trueabc" extends `${infer T extends boolean}${string}` ? T : never;
 declare type TPrefix2 = `100:${string}` extends `${infer T extends number}:${string}` ? T : never;
 declare type ExtractPrimitives<T extends string> = T | (T extends `${infer U extends number}` ? U : never) | (T extends `${infer U extends bigint}` ? U : never) | (T extends `${infer U extends boolean | null | undefined}` ? U : never);
-declare type Check<T, U extends T> = void;
 declare type TExtract0 = ExtractPrimitives<"100">;
 declare type TExtract1 = ExtractPrimitives<"1.1">;
 declare type TExtract2 = ExtractPrimitives<"true">;
-declare type _ = [
-    Check<TExtract0, "100" | 100 | 100n>,
-    Check<TExtract1, "1.1" | 1.1>,
-    Check<TExtract2, "true" | true>
-];
 declare type IndexFor<S extends string> = S extends `${infer N extends number}` ? N : never;
 declare type IndicesOf<T> = IndexFor<Extract<keyof T, string>>;
 interface FieldDefinition {

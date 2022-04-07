@@ -419,28 +419,14 @@ type ExtractPrimitives<T extends string> =
 
     ;
 
-// .types tests here are worthless until #48578 is merged
-type Check<T, U extends T> = void;
->Check : void
-
 type TExtract0 = ExtractPrimitives<"100">; // "100" | 100 | 100n
->TExtract0 : TExtract0
+>TExtract0 : "100" | 100 | 100n
 
 type TExtract1 = ExtractPrimitives<"1.1">; // "1.1" | 1.1
->TExtract1 : TExtract1
+>TExtract1 : "1.1" | 1.1
 
 type TExtract2 = ExtractPrimitives<"true">; // "true" | true
->TExtract2 : TExtract2
-
-type _ = [
->_ : _
-
-    Check<TExtract0, "100" | 100 | 100n>,
-    Check<TExtract1, "1.1" | 1.1>,
-    Check<TExtract2, "true" | true>,
->true : true
-
-];
+>TExtract2 : true | "true"
 
 
 
@@ -518,7 +504,7 @@ type TypedObject<TDef extends readonly FieldDefinition[]> =
 
 // NOTE: type would normally be created from something like `const Point = TypedObject([...])` from which we would infer the type
 type Point = TypedObject<[
->Point : Point
+>Point : TypedObjectMembers<[{ name: "x"; type: "f64"; }, { name: "y"; type: "f64"; }]> & TypedObjectNamedMembers<[{ name: "x"; type: "f64"; }, { name: "y"; type: "f64"; }]> & TypedObjectOrdinalMembers<[{ name: "x"; type: "f64"; }, { name: "y"; type: "f64"; }]>
 
     { name: "x", type: "f64" },
 >name : "x"

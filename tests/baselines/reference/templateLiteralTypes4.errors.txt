@@ -1,5 +1,5 @@
-tests/cases/conformance/types/literal/templateLiteralTypes4.ts(294,12): error TS2345: Argument of type '2' is not assignable to parameter of type '0 | 1'.
-tests/cases/conformance/types/literal/templateLiteralTypes4.ts(298,12): error TS2345: Argument of type '2' is not assignable to parameter of type '0 | 1'.
+tests/cases/conformance/types/literal/templateLiteralTypes4.ts(285,12): error TS2345: Argument of type '2' is not assignable to parameter of type '0 | 1'.
+tests/cases/conformance/types/literal/templateLiteralTypes4.ts(289,12): error TS2345: Argument of type '2' is not assignable to parameter of type '0 | 1'.
 
 
 ==== tests/cases/conformance/types/literal/templateLiteralTypes4.ts (2 errors) ====
@@ -230,18 +230,9 @@ tests/cases/conformance/types/literal/templateLiteralTypes4.ts(298,12): error TS
         | (T extends `${infer U extends boolean | null | undefined}` ? U : never)
         ;
     
-    // .types tests here are worthless until #48578 is merged
-    type Check<T, U extends T> = void;
-    
     type TExtract0 = ExtractPrimitives<"100">; // "100" | 100 | 100n
     type TExtract1 = ExtractPrimitives<"1.1">; // "1.1" | 1.1
     type TExtract2 = ExtractPrimitives<"true">; // "true" | true
-    
-    type _ = [
-        Check<TExtract0, "100" | 100 | 100n>,
-        Check<TExtract1, "1.1" | 1.1>,
-        Check<TExtract2, "true" | true>,
-    ];
     
     
     

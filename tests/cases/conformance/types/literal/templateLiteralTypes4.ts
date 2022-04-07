@@ -229,18 +229,9 @@ type ExtractPrimitives<T extends string> =
     | (T extends `${infer U extends boolean | null | undefined}` ? U : never)
     ;
 
-// .types tests here are worthless until #48578 is merged
-type Check<T, U extends T> = void;
-
 type TExtract0 = ExtractPrimitives<"100">; // "100" | 100 | 100n
 type TExtract1 = ExtractPrimitives<"1.1">; // "1.1" | 1.1
 type TExtract2 = ExtractPrimitives<"true">; // "true" | true
-
-type _ = [
-    Check<TExtract0, "100" | 100 | 100n>,
-    Check<TExtract1, "1.1" | 1.1>,
-    Check<TExtract2, "true" | true>,
-];
 
 
 
