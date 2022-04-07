@@ -123,7 +123,6 @@ Found 1 error.
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 getModifiedTime:: {
- "/src/src/index.ts": 1,
  "/src/dist/tsconfig_withInclude.tsbuildinfo": 1
 }
 

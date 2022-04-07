@@ -58,9 +58,6 @@ Output::
 exitCode:: ExitStatus.Success
 
 getModifiedTime:: {
- "/src/src/globals.d.ts": 1,
- "/src/src/hkt.ts": 1,
- "/src/src/main.ts": 1,
  "/src/tsconfig.tsbuildinfo": 1
 }
 
@@ -184,10 +181,10 @@ Output::
 exitCode:: ExitStatus.Success
 
 getModifiedTime:: {
+ "/src/tsconfig.tsbuildinfo": 1,
  "/src/src/globals.d.ts": 1,
  "/src/src/hkt.ts": 1,
- "/src/src/main.ts": 1,
- "/src/tsconfig.tsbuildinfo": 1
+ "/src/src/main.ts": 1
 }
 
 setModifiedTime:: {}
@@ -304,10 +301,10 @@ Output::
 exitCode:: ExitStatus.Success
 
 getModifiedTime:: {
+ "/src/tsconfig.tsbuildinfo": 1,
  "/src/src/globals.d.ts": 1,
  "/src/src/hkt.ts": 1,
- "/src/src/main.ts": 1,
- "/src/tsconfig.tsbuildinfo": 1
+ "/src/src/main.ts": 1
 }
 
 setModifiedTime:: {}

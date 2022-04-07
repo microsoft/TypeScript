@@ -119,9 +119,6 @@ Output::
 exitCode:: ExitStatus.Success
 
 getModifiedTime:: {
- "/src/core/anotherModule.ts": 1,
- "/src/core/index.ts": 1,
- "/src/core/some_decl.d.ts": 1,
  "/src/core/tsconfig.tsbuildinfo": 1
 }
 
@@ -228,10 +225,10 @@ Output::
 exitCode:: ExitStatus.Success
 
 getModifiedTime:: {
+ "/src/core/tsconfig.tsbuildinfo": 1,
  "/src/core/anotherModule.ts": 1,
  "/src/core/index.ts": 1,
  "/src/core/some_decl.d.ts": 1,
- "/src/core/tsconfig.tsbuildinfo": 1,
  "/src/core/tsconfig.json": 1
 }
 

@@ -120,9 +120,6 @@ Output::
 exitCode:: ExitStatus.Success
 
 getModifiedTime:: {
- "/src/core/anotherModule.ts": 1,
- "/src/core/index.ts": 1,
- "/src/core/some_decl.d.ts": 1,
  "/src/core/tsconfig.tsbuildinfo": 1
 }
 

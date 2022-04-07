@@ -34,7 +34,6 @@ Output::
 exitCode:: ExitStatus.Success
 
 getModifiedTime:: {
- "/src/src/index.ts": 1,
  "/src/dist/tsconfig.tsbuildinfo": 1
 }
 
@@ -111,8 +110,8 @@ Output::
 exitCode:: ExitStatus.Success
 
 getModifiedTime:: {
- "/src/src/index.ts": 1,
  "/src/dist/tsconfig.tsbuildinfo": 1,
+ "/src/src/index.ts": 1,
  "/src/tsconfig.json": 1
 }
 

@@ -169,9 +169,6 @@ directoryExists:: {
 } 
 
 getModifiedTimes:: {
- "/user/username/projects/noemitonerror/shared/types/db.ts": 1,
- "/user/username/projects/noemitonerror/src/main.ts": 1,
- "/user/username/projects/noemitonerror/src/other.ts": 1,
  "/user/username/projects/noemitonerror/dev-build/tsconfig.tsbuildinfo": 1
 } 
 
@@ -194,7 +191,7 @@ Output::
 >> Screen clear
 [[90m12:00:46 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:47 AM[0m] Project 'tsconfig.json' is out of date because oldest output 'dev-build/tsconfig.tsbuildinfo' is older than newest input 'src/main.ts'
+[[90m12:00:47 AM[0m] Project 'tsconfig.json' is out of date because buildinfo file 'dev-build/tsconfig.tsbuildinfo' indicates that some of the changes are not emitted
 
 [[90m12:00:48 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
@@ -280,7 +277,7 @@ Output::
 >> Screen clear
 [[90m12:00:53 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:54 AM[0m] Project 'tsconfig.json' is out of date because oldest output 'dev-build/tsconfig.tsbuildinfo' is older than newest input 'src/main.ts'
+[[90m12:00:54 AM[0m] Project 'tsconfig.json' is out of date because buildinfo file 'dev-build/tsconfig.tsbuildinfo' indicates that some of the changes are not emitted
 
 [[90m12:00:55 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
@@ -583,7 +580,8 @@ directoryExists:: {
 } 
 
 getModifiedTimes:: {
- "/user/username/projects/noemitonerror/dev-build/tsconfig.tsbuildinfo": 1
+ "/user/username/projects/noemitonerror/dev-build/tsconfig.tsbuildinfo": 1,
+ "/user/username/projects/noemitonerror/shared/types/db.ts": 1
 } 
 
 setModifiedTimes:: {} 
@@ -605,7 +603,7 @@ Output::
 >> Screen clear
 [[90m12:01:33 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:34 AM[0m] Project 'tsconfig.json' is out of date because oldest output 'dev-build/tsconfig.tsbuildinfo' is older than newest input 'src/main.ts'
+[[90m12:01:34 AM[0m] Project 'tsconfig.json' is out of date because buildinfo file 'dev-build/tsconfig.tsbuildinfo' indicates that some of the changes are not emitted
 
 [[90m12:01:35 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
@@ -689,7 +687,7 @@ Output::
 >> Screen clear
 [[90m12:01:40 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:41 AM[0m] Project 'tsconfig.json' is out of date because oldest output 'dev-build/tsconfig.tsbuildinfo' is older than newest input 'src/main.ts'
+[[90m12:01:41 AM[0m] Project 'tsconfig.json' is out of date because buildinfo file 'dev-build/tsconfig.tsbuildinfo' indicates that some of the changes are not emitted
 
 [[90m12:01:42 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 

@@ -198,14 +198,8 @@ readFiles:: {
  "/src/third/thirdjs/output/third-output.d.ts": 1
 } 
 getModifiedTime:: {
- "/src/first/first_PART1.ts": 1,
- "/src/first/first_part2.ts": 1,
- "/src/first/first_part3.ts": 1,
  "/src/first/bin/first-output.tsbuildinfo": 1,
- "/src/second/second_part1.ts": 1,
- "/src/second/second_part2.ts": 1,
  "/src/2/second-output.tsbuildinfo": 1,
- "/src/third/third_part1.ts": 1,
  "/src/third/thirdjs/output/third-output.tsbuildinfo": 1
 }
 
@@ -5492,16 +5486,14 @@ readFiles:: {
  "/src/third/thirdjs/output/third-output.d.ts": 1
 } 
 getModifiedTime:: {
- "/src/first/first_PART1.ts": 1,
- "/src/first/first_part2.ts": 1,
- "/src/first/first_part3.ts": 1,
  "/src/first/bin/first-output.tsbuildinfo": 1,
+ "/src/first/first_PART1.ts": 1,
+ "/src/2/second-output.tsbuildinfo": 1,
  "/src/second/second_part1.ts": 1,
  "/src/second/second_part2.ts": 1,
- "/src/2/second-output.tsbuildinfo": 1,
  "/src/second/tsconfig.json": 1,
- "/src/third/third_part1.ts": 1,
- "/src/third/thirdjs/output/third-output.tsbuildinfo": 1
+ "/src/third/thirdjs/output/third-output.tsbuildinfo": 1,
+ "/src/third/third_part1.ts": 1
 }
 
 setModifiedTime:: {}
@@ -8236,17 +8228,15 @@ readFiles:: {
  "/src/2/second-output.d.ts.map": 1
 } 
 getModifiedTime:: {
- "/src/first/first_PART1.ts": 1,
- "/src/first/first_part2.ts": 1,
- "/src/first/first_part3.ts": 1,
  "/src/first/bin/first-output.tsbuildinfo": 1,
+ "/src/first/first_PART1.ts": 1,
  "/src/first/bin/first-output.d.ts": 1,
+ "/src/2/second-output.tsbuildinfo": 1,
  "/src/second/second_part1.ts": 1,
  "/src/second/second_part2.ts": 1,
- "/src/2/second-output.tsbuildinfo": 1,
  "/src/second/tsconfig.json": 1,
- "/src/third/third_part1.ts": 1,
  "/src/third/thirdjs/output/third-output.tsbuildinfo": 1,
+ "/src/third/third_part1.ts": 1,
  "/src/third/tsconfig.json": 1,
  "/src/third/thirdjs/output/third-output.d.ts": 1
 }
@@ -10614,17 +10604,15 @@ readFiles:: {
  "/src/2/second-output.d.ts.map": 1
 } 
 getModifiedTime:: {
- "/src/first/first_PART1.ts": 1,
- "/src/first/first_part2.ts": 1,
- "/src/first/first_part3.ts": 1,
  "/src/first/bin/first-output.tsbuildinfo": 1,
+ "/src/first/first_PART1.ts": 1,
  "/src/first/bin/first-output.d.ts": 1,
+ "/src/2/second-output.tsbuildinfo": 1,
  "/src/second/second_part1.ts": 1,
  "/src/second/second_part2.ts": 1,
- "/src/2/second-output.tsbuildinfo": 1,
  "/src/second/tsconfig.json": 1,
- "/src/third/third_part1.ts": 1,
  "/src/third/thirdjs/output/third-output.tsbuildinfo": 1,
+ "/src/third/third_part1.ts": 1,
  "/src/third/tsconfig.json": 1
 }
 

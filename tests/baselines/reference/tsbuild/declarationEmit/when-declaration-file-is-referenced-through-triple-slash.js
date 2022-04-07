@@ -80,11 +80,8 @@ Output::
 exitCode:: ExitStatus.Success
 
 getModifiedTime:: {
- "/src/solution/src/common/nominal.ts": 1,
  "/src/solution/lib/src/common/tsconfig.tsbuildinfo": 1,
- "/src/solution/src/subProject/index.ts": 1,
  "/src/solution/lib/src/subProject/tsconfig.tsbuildinfo": 1,
- "/src/solution/src/subProject2/index.ts": 1,
  "/src/solution/lib/src/subProject2/tsconfig.tsbuildinfo": 1
 }
 

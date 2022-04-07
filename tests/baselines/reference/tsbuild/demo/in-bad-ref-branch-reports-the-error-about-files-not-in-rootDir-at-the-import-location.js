@@ -221,7 +221,6 @@ Found 7 errors.
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 getModifiedTime:: {
- "/src/core/utilities.ts": 1,
  "/src/lib/core/tsconfig.tsbuildinfo": 1
 }
 

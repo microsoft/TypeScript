@@ -97,9 +97,7 @@ src/main/index.ts
 exitCode:: ExitStatus.Success
 
 getModifiedTime:: {
- "/src/strings/foo.json": 1,
  "/src/strings/tsconfig.tsbuildinfo": 1,
- "/src/main/index.ts": 1,
  "/src/main/tsconfig.tsbuildinfo": 1
 }
 
@@ -251,12 +249,12 @@ Output::
 exitCode:: ExitStatus.Success
 
 getModifiedTime:: {
- "/src/strings/foo.json": 1,
  "/src/strings/tsconfig.tsbuildinfo": 1,
+ "/src/strings/foo.json": 1,
  "/src/strings/tsconfig.json": 1,
  "/src/tsconfig.json": 2,
- "/src/main/index.ts": 1,
  "/src/main/tsconfig.tsbuildinfo": 1,
+ "/src/main/index.ts": 1,
  "/src/main/tsconfig.json": 1
 }
 

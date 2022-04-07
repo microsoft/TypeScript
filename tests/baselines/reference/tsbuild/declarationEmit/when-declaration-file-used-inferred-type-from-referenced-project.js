@@ -57,9 +57,7 @@ Output::
 exitCode:: ExitStatus.Success
 
 getModifiedTime:: {
- "/src/packages/pkg1/src/index.ts": 1,
  "/src/packages/pkg1/lib/tsconfig.tsbuildinfo": 1,
- "/src/packages/pkg2/src/index.ts": 1,
  "/src/packages/pkg2/lib/tsconfig.tsbuildinfo": 1
 }
 

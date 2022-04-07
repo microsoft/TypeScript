@@ -94,15 +94,7 @@ Output::
 exitCode:: ExitStatus.Success
 
 getModifiedTime:: {
- "/src/lib/file0.ts": 1,
- "/src/lib/file1.ts": 1,
- "/src/lib/file2.ts": 1,
- "/src/lib/global.ts": 1,
- "/src/lib/tripleRef.d.ts": 1,
  "/src/lib/module.tsbuildinfo": 1,
- "/src/app/file3.ts": 1,
- "/src/app/file4.ts": 1,
- "/src/app/tripleRef.d.ts": 1,
  "/src/app/module.tsbuildinfo": 1
 }
 
@@ -1236,17 +1228,14 @@ Output::
 exitCode:: ExitStatus.Success
 
 getModifiedTime:: {
+ "/src/lib/module.tsbuildinfo": 1,
  "/src/lib/file0.ts": 1,
  "/src/lib/file1.ts": 1,
- "/src/lib/file2.ts": 1,
- "/src/lib/global.ts": 1,
- "/src/lib/tripleRef.d.ts": 1,
- "/src/lib/module.tsbuildinfo": 1,
  "/src/lib/module.d.ts": 1,
+ "/src/app/module.tsbuildinfo": 1,
  "/src/app/file3.ts": 1,
  "/src/app/file4.ts": 1,
  "/src/app/tripleRef.d.ts": 1,
- "/src/app/module.tsbuildinfo": 1,
  "/src/app/tsconfig.json": 1,
  "/src/app/module.d.ts": 1
 }

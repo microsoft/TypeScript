@@ -105,7 +105,7 @@ Output::
     * src/logic/tsconfig.json
     * src/tests/tsconfig.json
 
-[[90m12:00:09 AM[0m] Failed to parse file 'src/core/tsconfig.json': /src/core/anotherModule.ts does not exist.
+[[90m12:00:09 AM[0m] Project 'src/core/tsconfig.json' is being forcibly rebuilt
 
 [[90m12:00:10 AM[0m] Building project '/src/core/tsconfig.json'...
 
@@ -131,9 +131,7 @@ Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-getModifiedTime:: {
- "/src/core/anotherModule.ts": 1
-}
+getModifiedTime:: {}
 
 setModifiedTime:: {}
 

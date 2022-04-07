@@ -100,11 +100,8 @@ Output::
 exitCode:: ExitStatus.Success
 
 getModifiedTime:: {
- "/src/src/folder/index.ts": 1,
  "/src/src/folder/tsconfig.tsbuildinfo": 1,
- "/src/src/folder2/index.ts": 1,
  "/src/src/folder2/tsconfig.tsbuildinfo": 1,
- "/src/tests/index.ts": 1,
  "/src/tests/tsconfig.tsbuildinfo": 1
 }
 
@@ -284,14 +281,14 @@ Output::
 exitCode:: ExitStatus.Success
 
 getModifiedTime:: {
- "/src/src/folder/index.ts": 1,
  "/src/src/folder/tsconfig.tsbuildinfo": 1,
+ "/src/src/folder/index.ts": 1,
  "/src/src/folder/tsconfig.json": 1,
- "/src/src/folder2/index.ts": 1,
  "/src/src/folder2/tsconfig.tsbuildinfo": 1,
+ "/src/src/folder2/index.ts": 1,
  "/src/src/folder2/tsconfig.json": 1,
- "/src/tests/index.ts": 1,
  "/src/tests/tsconfig.tsbuildinfo": 1,
+ "/src/tests/index.ts": 1,
  "/src/tests/tsconfig.json": 1
 }
 

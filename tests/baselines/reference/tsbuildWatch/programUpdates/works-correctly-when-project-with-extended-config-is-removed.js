@@ -245,10 +245,7 @@ directoryExists:: {
 } 
 
 getModifiedTimes:: {
- "/a/b/commonfile1.ts": 1,
- "/a/b/commonfile2.ts": 1,
  "/a/b/project1.tsconfig.tsbuildinfo": 1,
- "/a/b/other.ts": 1,
  "/a/b/project2.tsconfig.tsbuildinfo": 1
 } 
 

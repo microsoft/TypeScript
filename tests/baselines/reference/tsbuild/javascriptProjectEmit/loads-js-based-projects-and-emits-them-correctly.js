@@ -118,11 +118,8 @@ Output::
 exitCode:: ExitStatus.Success
 
 getModifiedTime:: {
- "/src/common/nominal.js": 1,
  "/lib/common/tsconfig.tsbuildinfo": 1,
- "/src/sub-project/index.js": 1,
  "/lib/sub-project/tsconfig.tsbuildinfo": 1,
- "/src/sub-project-2/index.js": 1,
  "/lib/sub-project-2/tsconfig.tsbuildinfo": 1
 }
 

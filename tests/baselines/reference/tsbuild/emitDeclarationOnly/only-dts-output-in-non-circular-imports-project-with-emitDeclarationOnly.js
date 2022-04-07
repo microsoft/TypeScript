@@ -74,9 +74,6 @@ Output::
 exitCode:: ExitStatus.Success
 
 getModifiedTime:: {
- "/src/src/a.ts": 1,
- "/src/src/b.ts": 1,
- "/src/src/c.ts": 1,
  "/src/tsconfig.tsbuildinfo": 1
 }
 
@@ -232,10 +229,8 @@ Output::
 exitCode:: ExitStatus.Success
 
 getModifiedTime:: {
- "/src/src/a.ts": 1,
- "/src/src/b.ts": 1,
- "/src/src/c.ts": 1,
  "/src/tsconfig.tsbuildinfo": 1,
+ "/src/src/a.ts": 1,
  "/src/lib/a.d.ts": 1,
  "/src/lib/b.d.ts": 1,
  "/src/lib/c.d.ts": 1
@@ -365,10 +360,8 @@ Output::
 exitCode:: ExitStatus.Success
 
 getModifiedTime:: {
- "/src/src/a.ts": 1,
- "/src/src/b.ts": 1,
- "/src/src/c.ts": 1,
  "/src/tsconfig.tsbuildinfo": 1,
+ "/src/src/a.ts": 1,
  "/src/lib/b.d.ts": 1
 }
 

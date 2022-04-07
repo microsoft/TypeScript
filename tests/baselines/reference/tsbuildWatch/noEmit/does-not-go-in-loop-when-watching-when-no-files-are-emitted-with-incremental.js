@@ -145,8 +145,6 @@ directoryExists:: {
 } 
 
 getModifiedTimes:: {
- "/user/username/projects/myproject/a.js": 1,
- "/user/username/projects/myproject/b.ts": 1,
  "/user/username/projects/myproject/tsconfig.tsbuildinfo": 1
 } 
 

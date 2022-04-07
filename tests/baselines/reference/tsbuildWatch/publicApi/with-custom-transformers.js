@@ -265,9 +265,7 @@ directoryExists:: {
 } 
 
 getModifiedTimes:: {
- "/user/username/projects/myproject/shared/index.ts": 1,
  "/user/username/projects/myproject/shared/tsconfig.tsbuildinfo": 1,
- "/user/username/projects/myproject/webpack/index.ts": 1,
  "/user/username/projects/myproject/webpack/tsconfig.tsbuildinfo": 1
 } 
 

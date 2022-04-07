@@ -116,8 +116,6 @@ src/src/index.ts
 exitCode:: ExitStatus.Success
 
 getModifiedTime:: {
- "/src/src/index.ts": 1,
- "/src/src/hello.json": 1,
  "/src/dist/tsconfig_withIncludeOfJson.tsbuildinfo": 1
 }
 

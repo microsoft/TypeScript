@@ -94,9 +94,7 @@ Output::
 exitCode:: ExitStatus.Success
 
 getModifiedTime:: {
- "/src/first/first_PART1.ts": 1,
  "/src/first/bin/first-output.tsbuildinfo": 1,
- "/src/third/third_part1.ts": 1,
  "/src/third/thirdjs/output/third-output.tsbuildinfo": 1
 }
 

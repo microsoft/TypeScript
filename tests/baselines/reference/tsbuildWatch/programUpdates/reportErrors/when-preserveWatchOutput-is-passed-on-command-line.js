@@ -494,12 +494,8 @@ directoryExists:: {
 } 
 
 getModifiedTimes:: {
- "/user/username/projects/sample1/core/anothermodule.ts": 1,
- "/user/username/projects/sample1/core/index.ts": 1,
  "/user/username/projects/sample1/core/tsconfig.tsbuildinfo": 1,
- "/user/username/projects/sample1/logic/index.ts": 1,
  "/user/username/projects/sample1/logic/tsconfig.tsbuildinfo": 1,
- "/user/username/projects/sample1/tests/index.ts": 1,
  "/user/username/projects/sample1/tests/tsconfig.tsbuildinfo": 1
 } 
 
@@ -839,7 +835,8 @@ directoryExists:: {
 } 
 
 getModifiedTimes:: {
- "/user/username/projects/sample1/core/tsconfig.tsbuildinfo": 1
+ "/user/username/projects/sample1/core/tsconfig.tsbuildinfo": 1,
+ "/user/username/projects/sample1/core/anothermodule.ts": 1
 } 
 
 setModifiedTimes:: {} 

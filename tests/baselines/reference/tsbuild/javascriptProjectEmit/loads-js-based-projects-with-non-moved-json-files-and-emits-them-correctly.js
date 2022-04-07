@@ -118,12 +118,8 @@ Output::
 exitCode:: ExitStatus.Success
 
 getModifiedTime:: {
- "/src/common/index.ts": 1,
- "/src/common/obj.json": 1,
  "/src/common/tsconfig.tsbuildinfo": 1,
- "/src/sub-project/index.js": 1,
  "/out/sub-project/tsconfig.tsbuildinfo": 1,
- "/src/sub-project-2/index.js": 1,
  "/out/sub-project-2/tsconfig.tsbuildinfo": 1
 }
 

@@ -141,14 +141,7 @@ Output::
 exitCode:: ExitStatus.Success
 
 getModifiedTime:: {
- "/src/src-types/dogconfig.ts": 1,
- "/src/src-types/index.ts": 1,
  "/src/src-types/tsconfig.tsbuildinfo": 1,
- "/src/src-dogs/dog.ts": 1,
- "/src/src-dogs/dogconfig.ts": 1,
- "/src/src-dogs/index.ts": 1,
- "/src/src-dogs/lassie/lassieconfig.ts": 1,
- "/src/src-dogs/lassie/lassiedog.ts": 1,
  "/src/src-dogs/tsconfig.tsbuildinfo": 1
 }
 

@@ -307,8 +307,6 @@ directoryExists:: {
 } 
 
 getModifiedTimes:: {
- "/user/username/projects/myproject/packages/pkg2/const.cts": 1,
- "/user/username/projects/myproject/packages/pkg2/index.ts": 1,
  "/user/username/projects/myproject/packages/pkg2/build/tsconfig.tsbuildinfo": 1,
  "/user/username/projects/myproject/packages/pkg1/index.ts": 1,
  "/user/username/projects/myproject/packages/pkg1/build/index.js": 1
@@ -1005,8 +1003,9 @@ directoryExists:: {
 } 
 
 getModifiedTimes:: {
- "/user/username/projects/myproject/packages/pkg2/index.cts": 1,
- "/user/username/projects/myproject/packages/pkg2/build/tsconfig.tsbuildinfo": 1
+ "/user/username/projects/myproject/packages/pkg2/build/tsconfig.tsbuildinfo": 1,
+ "/user/username/projects/myproject/packages/pkg2/const.cts": 1,
+ "/user/username/projects/myproject/packages/pkg2/index.cts": 1
 } 
 
 setModifiedTimes:: {} 

@@ -341,11 +341,7 @@ directoryExists:: {
 } 
 
 getModifiedTimes:: {
- "/user/username/projects/demo/core/utilities.ts": 1,
  "/user/username/projects/demo/lib/core/tsconfig.tsbuildinfo": 1,
- "/user/username/projects/demo/animals/animal.ts": 1,
- "/user/username/projects/demo/animals/dog.ts": 1,
- "/user/username/projects/demo/animals/index.ts": 1,
  "/user/username/projects/demo/lib/animals/tsconfig.tsbuildinfo": 1
 } 
 

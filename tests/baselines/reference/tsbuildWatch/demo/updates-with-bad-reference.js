@@ -448,7 +448,6 @@ directoryExists:: {
 } 
 
 getModifiedTimes:: {
- "/user/username/projects/demo/core/utilities.ts": 1,
  "/user/username/projects/demo/lib/core/tsconfig.tsbuildinfo": 1
 } 
 
@@ -485,7 +484,7 @@ Output::
 >> Screen clear
 [[90m12:01:07 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:08 AM[0m] Project 'core/tsconfig.json' is out of date because oldest output 'lib/core/tsconfig.tsbuildinfo' is older than newest input 'core/utilities.ts'
+[[90m12:01:08 AM[0m] Project 'core/tsconfig.json' is out of date because buildinfo file 'lib/core/tsconfig.tsbuildinfo' indicates that some of the changes are not emitted
 
 [[90m12:01:09 AM[0m] Building project '/user/username/projects/demo/core/tsconfig.json'...
 

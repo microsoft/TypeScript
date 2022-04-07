@@ -46,8 +46,6 @@ Found 1 error.
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 getModifiedTime:: {
- "/src/a.ts": 1,
- "/src/b.ts": 1,
  "/src/tsconfig.tsbuildinfo": 1
 }
 
@@ -130,8 +128,6 @@ Found 1 error.
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 getModifiedTime:: {
- "/src/a.ts": 1,
- "/src/b.ts": 1,
  "/src/tsconfig.tsbuildinfo": 1
 }
 
@@ -167,8 +163,6 @@ Found 1 error.
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 getModifiedTime:: {
- "/src/a.ts": 1,
- "/src/b.ts": 1,
  "/src/tsconfig.tsbuildinfo": 1
 }
 
@@ -201,8 +195,6 @@ Found 1 error.
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 getModifiedTime:: {
- "/src/a.ts": 1,
- "/src/b.ts": 1,
  "/src/tsconfig.tsbuildinfo": 1
 }
 
@@ -230,8 +222,6 @@ Output::
 exitCode:: ExitStatus.Success
 
 getModifiedTime:: {
- "/src/a.ts": 1,
- "/src/b.ts": 1,
  "/src/tsconfig.tsbuildinfo": 1
 }
 

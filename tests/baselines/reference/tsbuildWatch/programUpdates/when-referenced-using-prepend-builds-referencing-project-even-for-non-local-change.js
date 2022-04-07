@@ -260,9 +260,7 @@ directoryExists:: {
 } 
 
 getModifiedTimes:: {
- "/user/username/projects/sample1/core/index.ts": 1,
  "/user/username/projects/sample1/core/index.tsbuildinfo": 1,
- "/user/username/projects/sample1/logic/index.ts": 1,
  "/user/username/projects/sample1/logic/index.tsbuildinfo": 1
 } 
 

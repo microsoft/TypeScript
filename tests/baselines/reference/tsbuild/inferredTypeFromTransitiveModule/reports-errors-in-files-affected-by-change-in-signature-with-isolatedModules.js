@@ -84,11 +84,6 @@ Output::
 exitCode:: ExitStatus.Success
 
 getModifiedTime:: {
- "/src/bar.ts": 1,
- "/src/bundling.ts": 1,
- "/src/global.d.ts": 1,
- "/src/index.ts": 1,
- "/src/lazyIndex.ts": 1,
  "/src/obj/tsconfig.tsbuildinfo": 1
 }
 
@@ -302,12 +297,8 @@ Found 1 error.
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 getModifiedTime:: {
- "/src/bar.ts": 1,
- "/src/bundling.ts": 1,
- "/src/global.d.ts": 1,
- "/src/index.ts": 1,
- "/src/lazyIndex.ts": 1,
- "/src/obj/tsconfig.tsbuildinfo": 1
+ "/src/obj/tsconfig.tsbuildinfo": 1,
+ "/src/bar.ts": 1
 }
 
 setModifiedTime:: {}
@@ -460,18 +451,13 @@ Output::
 [[90m12:00:29 AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90m12:00:30 AM[0m] Project 'src/tsconfig.json' is out of date because oldest output 'src/obj/tsconfig.tsbuildinfo' is older than newest input 'src/bar.ts'
+[[90m12:00:30 AM[0m] Project 'src/tsconfig.json' is out of date because buildinfo file 'src/obj/tsconfig.tsbuildinfo' indicates that some of the changes are not emitted
 
 [[90m12:00:31 AM[0m] Building project '/src/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 
 getModifiedTime:: {
- "/src/bar.ts": 1,
- "/src/bundling.ts": 1,
- "/src/global.d.ts": 1,
- "/src/index.ts": 1,
- "/src/lazyIndex.ts": 1,
  "/src/obj/tsconfig.tsbuildinfo": 1,
  "/src/obj/bar.d.ts": 1,
  "/src/obj/index.d.ts": 1,
@@ -622,12 +608,8 @@ Found 1 error.
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 getModifiedTime:: {
- "/src/bar.ts": 1,
- "/src/bundling.ts": 1,
- "/src/global.d.ts": 1,
- "/src/index.ts": 1,
- "/src/lazyIndex.ts": 1,
- "/src/obj/tsconfig.tsbuildinfo": 1
+ "/src/obj/tsconfig.tsbuildinfo": 1,
+ "/src/bar.ts": 1
 }
 
 setModifiedTime:: {}
@@ -775,18 +757,13 @@ Output::
 [[90m12:00:45 AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90m12:00:46 AM[0m] Project 'src/tsconfig.json' is out of date because oldest output 'src/obj/tsconfig.tsbuildinfo' is older than newest input 'src/lazyIndex.ts'
+[[90m12:00:46 AM[0m] Project 'src/tsconfig.json' is out of date because buildinfo file 'src/obj/tsconfig.tsbuildinfo' indicates that some of the changes are not emitted
 
 [[90m12:00:47 AM[0m] Building project '/src/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 
 getModifiedTime:: {
- "/src/bar.ts": 1,
- "/src/bundling.ts": 1,
- "/src/global.d.ts": 1,
- "/src/index.ts": 1,
- "/src/lazyIndex.ts": 1,
  "/src/obj/tsconfig.tsbuildinfo": 1
 }
 

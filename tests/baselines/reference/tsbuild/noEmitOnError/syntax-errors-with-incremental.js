@@ -65,9 +65,6 @@ No cached semantic diagnostics in the builder::
 No shapes updated in the builder::
 
 getModifiedTime:: {
- "/src/shared/types/db.ts": 1,
- "/src/src/main.ts": 1,
- "/src/src/other.ts": 1,
  "/src/dev-build/tsconfig.tsbuildinfo": 1
 }
 
@@ -168,9 +165,6 @@ No cached semantic diagnostics in the builder::
 No shapes updated in the builder::
 
 getModifiedTime:: {
- "/src/shared/types/db.ts": 1,
- "/src/src/main.ts": 1,
- "/src/src/other.ts": 1,
  "/src/dev-build/tsconfig.tsbuildinfo": 1
 }
 
@@ -224,9 +218,6 @@ Shape signatures in builder refreshed for::
 /src/src/other.ts (computed .d.ts)
 
 getModifiedTime:: {
- "/src/shared/types/db.ts": 1,
- "/src/src/main.ts": 1,
- "/src/src/other.ts": 1,
  "/src/dev-build/tsconfig.tsbuildinfo": 1
 }
 
@@ -330,10 +321,10 @@ Output::
 exitCode:: ExitStatus.Success
 
 getModifiedTime:: {
+ "/src/dev-build/tsconfig.tsbuildinfo": 1,
  "/src/shared/types/db.ts": 1,
  "/src/src/main.ts": 1,
  "/src/src/other.ts": 1,
- "/src/dev-build/tsconfig.tsbuildinfo": 1,
  "/src/tsconfig.json": 1
 }
 

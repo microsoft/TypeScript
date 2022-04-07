@@ -44,8 +44,6 @@ Found 1 error.
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 getModifiedTime:: {
- "/src/src/index.ts": 1,
- "/src/types/type.ts": 1,
  "/src/tsconfig.tsbuildinfo": 1
 }
 
@@ -124,8 +122,6 @@ Found 1 error.
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 getModifiedTime:: {
- "/src/src/index.ts": 1,
- "/src/types/type.ts": 1,
  "/src/tsconfig.tsbuildinfo": 1
 }
 

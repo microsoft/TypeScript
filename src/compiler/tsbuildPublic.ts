@@ -1469,39 +1469,18 @@ namespace ts {
                 if (!force) (referenceStatuses ||= []).push({ ref, refStatus });
             }
         }
-
-        // Check output files
-        let newestInputFileName: string = undefined!;
-        let newestInputFileTime = minimumDate;
-        const { host } = state;
-        // Get timestamps of input files
-        for (const inputFile of project.fileNames) {
-            const inputTime = getModifiedTime(state, inputFile);
-            if (inputTime === missingFileModifiedTime) {
-                return {
-                    type: UpToDateStatusType.Unbuildable,
-                    reason: `${inputFile} does not exist`
-                };
-            }
-
-            if (!force) {
-                if (inputTime > newestInputFileTime) {
-                    newestInputFileName = inputFile;
-                    newestInputFileTime = inputTime;
-                }
-            }
-        }
-
         if (force) return { type: UpToDateStatusType.ForceBuild };
 
+        // Check buildinfo first
+        const { host } = state;
         const buildInfoPath = getTsBuildInfoEmitOutputFilePath(project.options);
-        // Now see if all outputs are newer than the newest input
         let oldestOutputFileName = "(none)";
         let oldestOutputFileTime = maximumDate;
         let newestDeclarationFileContentChangedTime;
+        let buildInfoTime: Date | undefined;
         if (buildInfoPath) {
-            const outputTime = ts.getModifiedTime(host, buildInfoPath);
-            if (outputTime === missingFileModifiedTime) {
+            buildInfoTime = ts.getModifiedTime(host, buildInfoPath);
+            if (buildInfoTime === missingFileModifiedTime) {
                 return {
                     type: UpToDateStatusType.OutputMissing,
                     missingOutputFileName: buildInfoPath
@@ -1519,15 +1498,6 @@ namespace ts {
                 }
             }
 
-            // If an output is older than the newest input, we can stop checking
-            if (outputTime < newestInputFileTime) {
-                return {
-                    type: UpToDateStatusType.OutOfDateWithSelf,
-                    outOfDateOutputFileName: buildInfoPath,
-                    newerInputFileName: newestInputFileName
-                };
-            }
-
             if (buildInfo.program) {
                 if (buildInfo.program.changeFileSet?.length ||
                     (!buildInfo.program.options?.noEmit && buildInfo.program.affectedFilesPendingEmit?.length)) {
@@ -1538,15 +1508,44 @@ namespace ts {
                 }
             }
 
-            oldestOutputFileTime = outputTime;
+            oldestOutputFileTime = buildInfoTime;
             oldestOutputFileName = buildInfoPath;
         }
+
+        // Check input files
+        let newestInputFileName: string = undefined!;
+        let newestInputFileTime = minimumDate;
+        // Get timestamps of input files
+        for (const inputFile of project.fileNames) {
+            const inputTime = getModifiedTime(state, inputFile);
+            if (inputTime === missingFileModifiedTime) {
+                return {
+                    type: UpToDateStatusType.Unbuildable,
+                    reason: `${inputFile} does not exist`
+                };
+            }
+
+            // If an buildInfo is older than the newest input, we can stop checking
+            if (buildInfoTime && buildInfoTime < inputTime) {
+                return {
+                    type: UpToDateStatusType.OutOfDateWithSelf,
+                    outOfDateOutputFileName: buildInfoPath!,
+                    newerInputFileName: inputFile
+                };
+            }
+
+            if (inputTime > newestInputFileTime) {
+                newestInputFileName = inputFile;
+                newestInputFileTime = inputTime;
+            }
+        }
+
+        // Now see if all outputs are newer than the newest input
         // Dont check output timestamps if we have buildinfo telling us output is uptodate
-        else {
+        if (!buildInfoPath) {
             // Collect the expected outputs of this project
             const outputs = getAllProjectOutputs(project, !host.useCaseSensitiveFileNames());
             for (const output of outputs) {
-                if (buildInfoPath === output) continue;
                 // Output is missing; can stop checking
                 const outputTime = ts.getModifiedTime(state.host, output);
                 if (outputTime === missingFileModifiedTime) {
