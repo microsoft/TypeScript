@@ -1,0 +1,503 @@
+=== tests/cases/compiler/monoroutes.ts ===
+type ExtractRouteParams<T> = string extends T
+>ExtractRouteParams : Symbol(ExtractRouteParams, Decl(monoroutes.ts, 0, 0))
+>T : Symbol(T, Decl(monoroutes.ts, 0, 24))
+>T : Symbol(T, Decl(monoroutes.ts, 0, 24))
+
+    ? Record<string, string | number>
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+    : T extends `${infer _Start}<string:${infer Param}>/${infer Rest}`
+>T : Symbol(T, Decl(monoroutes.ts, 0, 24))
+>_Start : Symbol(_Start, Decl(monoroutes.ts, 2, 24))
+>Param : Symbol(Param, Decl(monoroutes.ts, 2, 47))
+>Rest : Symbol(Rest, Decl(monoroutes.ts, 2, 63))
+
+    ? ExtractRouteParams<_Start> & {[k in Param]: string} & ExtractRouteParams<Rest>
+>ExtractRouteParams : Symbol(ExtractRouteParams, Decl(monoroutes.ts, 0, 0))
+>_Start : Symbol(_Start, Decl(monoroutes.ts, 2, 24))
+>k : Symbol(k, Decl(monoroutes.ts, 3, 37))
+>Param : Symbol(Param, Decl(monoroutes.ts, 2, 47))
+>ExtractRouteParams : Symbol(ExtractRouteParams, Decl(monoroutes.ts, 0, 0))
+>Rest : Symbol(Rest, Decl(monoroutes.ts, 2, 63))
+
+    : T extends `${infer _Start}<number:${infer Param}>/${infer Rest}`
+>T : Symbol(T, Decl(monoroutes.ts, 0, 24))
+>_Start : Symbol(_Start, Decl(monoroutes.ts, 4, 24))
+>Param : Symbol(Param, Decl(monoroutes.ts, 4, 47))
+>Rest : Symbol(Rest, Decl(monoroutes.ts, 4, 63))
+
+    ? ExtractRouteParams<_Start> & {[k in Param]: number} & ExtractRouteParams<Rest>
+>ExtractRouteParams : Symbol(ExtractRouteParams, Decl(monoroutes.ts, 0, 0))
+>_Start : Symbol(_Start, Decl(monoroutes.ts, 4, 24))
+>k : Symbol(k, Decl(monoroutes.ts, 5, 37))
+>Param : Symbol(Param, Decl(monoroutes.ts, 4, 47))
+>ExtractRouteParams : Symbol(ExtractRouteParams, Decl(monoroutes.ts, 0, 0))
+>Rest : Symbol(Rest, Decl(monoroutes.ts, 4, 63))
+
+    : T extends `${infer _Start}<string:${infer Param}>`
+>T : Symbol(T, Decl(monoroutes.ts, 0, 24))
+>_Start : Symbol(_Start, Decl(monoroutes.ts, 6, 24))
+>Param : Symbol(Param, Decl(monoroutes.ts, 6, 47))
+
+    ? {[k in Param]: string}
+>k : Symbol(k, Decl(monoroutes.ts, 7, 8))
+>Param : Symbol(Param, Decl(monoroutes.ts, 6, 47))
+
+    : T extends `${infer _Start}<number:${infer Param}>`
+>T : Symbol(T, Decl(monoroutes.ts, 0, 24))
+>_Start : Symbol(_Start, Decl(monoroutes.ts, 8, 24))
+>Param : Symbol(Param, Decl(monoroutes.ts, 8, 47))
+
+    ? {[k in Param]: number}
+>k : Symbol(k, Decl(monoroutes.ts, 9, 8))
+>Param : Symbol(Param, Decl(monoroutes.ts, 8, 47))
+
+    : {};
+
+export const route = 
+>route : Symbol(route, Decl(monoroutes.ts, 12, 12))
+
+<
+    TName extends string,
+>TName : Symbol(TName, Decl(monoroutes.ts, 13, 1))
+
+    TPath extends string,
+>TPath : Symbol(TPath, Decl(monoroutes.ts, 14, 25))
+
+    TResolve extends {},
+>TResolve : Symbol(TResolve, Decl(monoroutes.ts, 15, 25))
+
+    TTabs extends string[] = ["index"]
+>TTabs : Symbol(TTabs, Decl(monoroutes.ts, 16, 24))
+
+>(options: {
+>options : Symbol(options, Decl(monoroutes.ts, 18, 2))
+
+    name: TName;
+>name : Symbol(name, Decl(monoroutes.ts, 18, 12))
+>TName : Symbol(TName, Decl(monoroutes.ts, 13, 1))
+
+    path: TPath;
+>path : Symbol(path, Decl(monoroutes.ts, 19, 16))
+>TPath : Symbol(TPath, Decl(monoroutes.ts, 14, 25))
+
+    tabs?: [...TTabs];
+>tabs : Symbol(tabs, Decl(monoroutes.ts, 20, 16))
+>TTabs : Symbol(TTabs, Decl(monoroutes.ts, 16, 24))
+
+    resolve?: (
+>resolve : Symbol(resolve, Decl(monoroutes.ts, 21, 22))
+
+        props: {
+>props : Symbol(props, Decl(monoroutes.ts, 22, 15))
+
+            params: ExtractRouteParams<TPath>;
+>params : Symbol(params, Decl(monoroutes.ts, 23, 16))
+>ExtractRouteParams : Symbol(ExtractRouteParams, Decl(monoroutes.ts, 0, 0))
+>TPath : Symbol(TPath, Decl(monoroutes.ts, 14, 25))
+
+            resolved: Record<never, never>;
+>resolved : Symbol(resolved, Decl(monoroutes.ts, 24, 46))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+        }
+    ) => TResolve
+>TResolve : Symbol(TResolve, Decl(monoroutes.ts, 15, 25))
+
+}) => {
+    const outerOptions = {
+>outerOptions : Symbol(outerOptions, Decl(monoroutes.ts, 29, 9))
+
+        ...options,
+>options : Symbol(options, Decl(monoroutes.ts, 18, 2))
+
+        resolve: options.resolve ?? (() => Promise.resolve({} as TResolve)),
+>resolve : Symbol(resolve, Decl(monoroutes.ts, 30, 19))
+>options.resolve : Symbol(resolve, Decl(monoroutes.ts, 21, 22))
+>options : Symbol(options, Decl(monoroutes.ts, 18, 2))
+>resolve : Symbol(resolve, Decl(monoroutes.ts, 21, 22))
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>TResolve : Symbol(TResolve, Decl(monoroutes.ts, 15, 25))
+
+        tabs: (options.tabs ?? ["index"]) as [...TTabs],
+>tabs : Symbol(tabs, Decl(monoroutes.ts, 31, 76))
+>options.tabs : Symbol(tabs, Decl(monoroutes.ts, 20, 16))
+>options : Symbol(options, Decl(monoroutes.ts, 18, 2))
+>tabs : Symbol(tabs, Decl(monoroutes.ts, 20, 16))
+>TTabs : Symbol(TTabs, Decl(monoroutes.ts, 16, 24))
+
+    };
+
+    const innerRoute = <
+>innerRoute : Symbol(innerRoute, Decl(monoroutes.ts, 35, 9))
+
+        TInnerName extends string,
+>TInnerName : Symbol(TInnerName, Decl(monoroutes.ts, 35, 24))
+
+        TInnerPath extends string,
+>TInnerPath : Symbol(TInnerPath, Decl(monoroutes.ts, 36, 34))
+
+        TInnerResolve,
+>TInnerResolve : Symbol(TInnerResolve, Decl(monoroutes.ts, 37, 34))
+
+        TInnerTabs extends string[] = ["index"]
+>TInnerTabs : Symbol(TInnerTabs, Decl(monoroutes.ts, 38, 22))
+
+    >(options: {
+>options : Symbol(options, Decl(monoroutes.ts, 40, 6))
+
+        name: TInnerName;
+>name : Symbol(name, Decl(monoroutes.ts, 40, 16))
+>TInnerName : Symbol(TInnerName, Decl(monoroutes.ts, 35, 24))
+
+        path: TInnerPath;
+>path : Symbol(path, Decl(monoroutes.ts, 41, 25))
+>TInnerPath : Symbol(TInnerPath, Decl(monoroutes.ts, 36, 34))
+
+        tabs?: [...TInnerTabs];
+>tabs : Symbol(tabs, Decl(monoroutes.ts, 42, 25))
+>TInnerTabs : Symbol(TInnerTabs, Decl(monoroutes.ts, 38, 22))
+
+        resolve?: (
+>resolve : Symbol(resolve, Decl(monoroutes.ts, 43, 31))
+
+            props: {
+>props : Symbol(props, Decl(monoroutes.ts, 44, 19))
+
+                params: ExtractRouteParams<`${TPath}${TInnerPath}`>;
+>params : Symbol(params, Decl(monoroutes.ts, 45, 20))
+>ExtractRouteParams : Symbol(ExtractRouteParams, Decl(monoroutes.ts, 0, 0))
+>TPath : Symbol(TPath, Decl(monoroutes.ts, 14, 25))
+>TInnerPath : Symbol(TInnerPath, Decl(monoroutes.ts, 36, 34))
+
+                resolved: TResolve;
+>resolved : Symbol(resolved, Decl(monoroutes.ts, 46, 68))
+>TResolve : Symbol(TResolve, Decl(monoroutes.ts, 15, 25))
+            }
+        ) => TInnerResolve,
+>TInnerResolve : Symbol(TInnerResolve, Decl(monoroutes.ts, 37, 34))
+
+    }) => {
+        type FullPath = `${TPath}${TInnerPath}`;
+>FullPath : Symbol(FullPath, Decl(monoroutes.ts, 50, 11))
+>TPath : Symbol(TPath, Decl(monoroutes.ts, 14, 25))
+>TInnerPath : Symbol(TInnerPath, Decl(monoroutes.ts, 36, 34))
+
+        const fullPath: FullPath = `${outerOptions.path}${options.path}`;
+>fullPath : Symbol(fullPath, Decl(monoroutes.ts, 52, 13))
+>FullPath : Symbol(FullPath, Decl(monoroutes.ts, 50, 11))
+>outerOptions.path : Symbol(path, Decl(monoroutes.ts, 19, 16))
+>outerOptions : Symbol(outerOptions, Decl(monoroutes.ts, 29, 9))
+>path : Symbol(path, Decl(monoroutes.ts, 19, 16))
+>options.path : Symbol(path, Decl(monoroutes.ts, 41, 25))
+>options : Symbol(options, Decl(monoroutes.ts, 40, 6))
+>path : Symbol(path, Decl(monoroutes.ts, 41, 25))
+
+        // This is a wrapped resolve that will resolve the outside, then inject
+        // the results into the inner resolve. Logic left out as it does not
+        // affect the bug.
+        const resolve = null as any;
+>resolve : Symbol(resolve, Decl(monoroutes.ts, 57, 13))
+
+        return route({
+>route : Symbol(route, Decl(monoroutes.ts, 12, 12))
+
+            name: options.name,
+>name : Symbol(name, Decl(monoroutes.ts, 59, 22))
+>options.name : Symbol(name, Decl(monoroutes.ts, 40, 16))
+>options : Symbol(options, Decl(monoroutes.ts, 40, 6))
+>name : Symbol(name, Decl(monoroutes.ts, 40, 16))
+
+            path: fullPath,
+>path : Symbol(path, Decl(monoroutes.ts, 60, 31))
+>fullPath : Symbol(fullPath, Decl(monoroutes.ts, 52, 13))
+
+            resolve,
+>resolve : Symbol(resolve, Decl(monoroutes.ts, 61, 27))
+
+        });
+    };
+
+    return {
+        subroute: innerRoute,
+>subroute : Symbol(subroute, Decl(monoroutes.ts, 66, 12))
+>innerRoute : Symbol(innerRoute, Decl(monoroutes.ts, 35, 9))
+
+    };
+};
+
+=== tests/cases/compiler/routes.ts ===
+import { route } from "./monoroutes";
+>route : Symbol(route, Decl(routes.ts, 0, 8))
+
+export const Share = route({
+>Share : Symbol(Share, Decl(routes.ts, 2, 12))
+>route : Symbol(route, Decl(routes.ts, 0, 8))
+
+    name: "share",
+>name : Symbol(name, Decl(routes.ts, 2, 28))
+
+    path: "/share/<string:uuid>/",
+>path : Symbol(path, Decl(routes.ts, 3, 18))
+
+});
+
+export const PasswordReset = route({
+>PasswordReset : Symbol(PasswordReset, Decl(routes.ts, 7, 12))
+>route : Symbol(route, Decl(routes.ts, 0, 8))
+
+    name: "reset",
+>name : Symbol(name, Decl(routes.ts, 7, 36))
+
+    path: "/reset/",
+>path : Symbol(path, Decl(routes.ts, 8, 18))
+
+});
+
+export const Registration = route({
+>Registration : Symbol(Registration, Decl(routes.ts, 12, 12))
+>route : Symbol(route, Decl(routes.ts, 0, 8))
+
+    name: "register",
+>name : Symbol(name, Decl(routes.ts, 12, 35))
+
+    path: "/register/",
+>path : Symbol(path, Decl(routes.ts, 13, 21))
+
+});
+
+export const Contact = route({
+>Contact : Symbol(Contact, Decl(routes.ts, 17, 12))
+>route : Symbol(route, Decl(routes.ts, 0, 8))
+
+    name: "contact",
+>name : Symbol(name, Decl(routes.ts, 17, 30))
+
+    path: "/contact/",
+>path : Symbol(path, Decl(routes.ts, 18, 20))
+
+});
+
+export const Dashboard = route({
+>Dashboard : Symbol(Dashboard, Decl(routes.ts, 22, 12))
+>route : Symbol(route, Decl(routes.ts, 0, 8))
+
+    name: "dashboard",
+>name : Symbol(name, Decl(routes.ts, 22, 32))
+
+    path: "/dashboard/<string:username>/",
+>path : Symbol(path, Decl(routes.ts, 23, 22))
+
+    tabs: ["main", "info", "charts"],
+>tabs : Symbol(tabs, Decl(routes.ts, 24, 42))
+
+    resolve: () => Promise.resolve({ resultOfApiCall: 1 }),
+>resolve : Symbol(resolve, Decl(routes.ts, 25, 37))
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>resultOfApiCall : Symbol(resultOfApiCall, Decl(routes.ts, 26, 36))
+
+});
+
+/*
+ *
+ * The idea here is that the subroute extends the parent route and gets its
+ * depedencies.
+ *
+ * The path is the concatenation of the inner route and the outer one, so
+ *
+ * "/dashboard/<string:username>/subroute/"
+ */
+export const SubRouteExample = Dashboard.subroute({
+>SubRouteExample : Symbol(SubRouteExample, Decl(routes.ts, 38, 12))
+>Dashboard.subroute : Symbol(subroute, Decl(monoroutes.ts, 66, 12))
+>Dashboard : Symbol(Dashboard, Decl(routes.ts, 22, 12))
+>subroute : Symbol(subroute, Decl(monoroutes.ts, 66, 12))
+
+    name: "subroute",
+>name : Symbol(name, Decl(routes.ts, 38, 51))
+
+    path: "subroute/",
+>path : Symbol(path, Decl(routes.ts, 39, 21))
+
+    resolve: ({ resolved }) => {
+>resolve : Symbol(resolve, Decl(routes.ts, 40, 22))
+>resolved : Symbol(resolved, Decl(routes.ts, 41, 15))
+
+    },
+});
+
+export const WidgetList = route({
+>WidgetList : Symbol(WidgetList, Decl(routes.ts, 46, 12))
+>route : Symbol(route, Decl(routes.ts, 0, 8))
+
+    name: "update_widget",
+>name : Symbol(name, Decl(routes.ts, 46, 33))
+
+    path: "widgets/",
+>path : Symbol(path, Decl(routes.ts, 47, 26))
+
+});
+
+export const CreateWidget = route({
+>CreateWidget : Symbol(CreateWidget, Decl(routes.ts, 51, 12))
+>route : Symbol(route, Decl(routes.ts, 0, 8))
+
+    name: "create_widget",
+>name : Symbol(name, Decl(routes.ts, 51, 35))
+
+    path: "widgets/create/",
+>path : Symbol(path, Decl(routes.ts, 52, 26))
+
+});
+
+export const UpdateWidget = route({
+>UpdateWidget : Symbol(UpdateWidget, Decl(routes.ts, 56, 12))
+>route : Symbol(route, Decl(routes.ts, 0, 8))
+
+    name: "update_widget",
+>name : Symbol(name, Decl(routes.ts, 56, 35))
+
+    path: "widgets/<number:widgetId>/",
+>path : Symbol(path, Decl(routes.ts, 57, 26))
+
+    tabs: ["main", "advanced"],
+>tabs : Symbol(tabs, Decl(routes.ts, 58, 39))
+
+});
+
+export const UpdateTrinket = route({
+>UpdateTrinket : Symbol(UpdateTrinket, Decl(routes.ts, 62, 12))
+>route : Symbol(route, Decl(routes.ts, 0, 8))
+
+    name: "update_trinket",
+>name : Symbol(name, Decl(routes.ts, 62, 36))
+
+    path: "trinkets/<number:trinketId>/",
+>path : Symbol(path, Decl(routes.ts, 63, 27))
+
+});
+
+// export const AdditionalRouteOne = route({
+//     name: "one",
+//     path: "one/",
+// });
+
+// export const AdditionalRouteTwo = route({
+//     name: "two",
+//     path: "two",
+// });
+
+// export const AdditionalRouteThree = route({
+//     name: "three",
+//     path: "/three/",
+// });
+
+// export const AdditionalRouteFour = route({
+//     name: "four",
+//     path: "four/",
+// });
+
+// export const AdditionalRouteFive = route({
+//     name: "five",
+//     path: "five/<number:id>/",
+//     tabs: ["foo", "bar"],
+// });
+
+// export const AdditionalRouteSix = route({
+//     name: "six",
+//     path: "six/<number:entryId>/",
+// });
+
+// export const AdditionalRouteSeven = route({
+//     name: "seven",
+//     path: "seven/",
+// });
+
+// export const AdditionalRouteEight = route({
+//     name: "eight",
+//     path: "eight/",
+//     tabs: ["snap", "spam"],
+// });
+
+// export const AdditionalRouteNine = route({
+//     name: "nine",
+//     path: "nine/",
+// });
+
+// export const AdditionalRouteTen = route({
+//     name: "ten",
+//     path: "ten/",
+// });
+
+// export const AdditionalRouteEleven = route({
+//     name: "eleven",
+//     path: "create/",
+//     tabs: ["first-tab", "second-tab"],
+// });
+
+// export const AdditionalRouteTwelve = route({
+//     name: "twelve",
+//     path: "<number:foodId>/",
+// });
+
+// export const RouteThirteen = route({
+//     name: "thirteen",
+//     path: "thirteen/",
+// });
+
+// export const Fourteen = route({
+//     name: "fourteen",
+//     path: "/fourteen/",
+// });
+
+// export const Fifteen = route({
+//     name: "fifteen",
+//     path: "/fifteen/",
+//     tabs: ["schedule", "targets"],
+// });
+
+// export const Seventeen = route({
+//     name: "seventeen",
+//     path: "/seventeen/",
+// });
+
+// export const Eighteen = route({
+//     name: "eighteen",
+//     path: "/eighteen/",
+// });
+
+// export const Nineteen = route({
+//     name: "nineteen",
+//     path: "/nineteen/",
+// });
+
+// export const Twenty = route({
+//     name: "twenty",
+//     path: "/twenty/",
+// });
+
+// export const TwentyOne = route({
+//     name: "twentyone",
+//     path: "/twentyone/",
+// });
+
+// export const TwentyTwo = route({
+//     name: "twentytwo",
+//     path: "/twentytwo/",
+// });
+
+// export const Login = route({
+//     name: "login",
+//     path: "/login/",
+// });
+
+// export const Logout = route({
+//     name: "logout",
+//     path: "/logout/",
+// });
+
+

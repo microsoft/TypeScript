@@ -140,122 +140,122 @@ export const UpdateTrinket = route({
     path: "trinkets/<number:trinketId>/",
 });
 
-export const AdditionalRouteOne = route({
-    name: "one",
-    path: "one/",
-});
+// export const AdditionalRouteOne = route({
+//     name: "one",
+//     path: "one/",
+// });
 
-export const AdditionalRouteTwo = route({
-    name: "two",
-    path: "two",
-});
+// export const AdditionalRouteTwo = route({
+//     name: "two",
+//     path: "two",
+// });
 
-export const AdditionalRouteThree = route({
-    name: "three",
-    path: "/three/",
-});
+// export const AdditionalRouteThree = route({
+//     name: "three",
+//     path: "/three/",
+// });
 
-export const AdditionalRouteFour = route({
-    name: "four",
-    path: "four/",
-});
+// export const AdditionalRouteFour = route({
+//     name: "four",
+//     path: "four/",
+// });
 
-export const AdditionalRouteFive = route({
-    name: "five",
-    path: "five/<number:id>/",
-    tabs: ["foo", "bar"],
-});
+// export const AdditionalRouteFive = route({
+//     name: "five",
+//     path: "five/<number:id>/",
+//     tabs: ["foo", "bar"],
+// });
 
-export const AdditionalRouteSix = route({
-    name: "six",
-    path: "six/<number:entryId>/",
-});
+// export const AdditionalRouteSix = route({
+//     name: "six",
+//     path: "six/<number:entryId>/",
+// });
 
-export const AdditionalRouteSeven = route({
-    name: "seven",
-    path: "seven/",
-});
+// export const AdditionalRouteSeven = route({
+//     name: "seven",
+//     path: "seven/",
+// });
 
-export const AdditionalRouteEight = route({
-    name: "eight",
-    path: "eight/",
-    tabs: ["snap", "spam"],
-});
+// export const AdditionalRouteEight = route({
+//     name: "eight",
+//     path: "eight/",
+//     tabs: ["snap", "spam"],
+// });
 
-export const AdditionalRouteNine = route({
-    name: "nine",
-    path: "nine/",
-});
+// export const AdditionalRouteNine = route({
+//     name: "nine",
+//     path: "nine/",
+// });
 
-export const AdditionalRouteTen = route({
-    name: "ten",
-    path: "ten/",
-});
+// export const AdditionalRouteTen = route({
+//     name: "ten",
+//     path: "ten/",
+// });
 
-export const AdditionalRouteEleven = route({
-    name: "eleven",
-    path: "create/",
-    tabs: ["first-tab", "second-tab"],
-});
+// export const AdditionalRouteEleven = route({
+//     name: "eleven",
+//     path: "create/",
+//     tabs: ["first-tab", "second-tab"],
+// });
 
-export const AdditionalRouteTwelve = route({
-    name: "twelve",
-    path: "<number:foodId>/",
-});
+// export const AdditionalRouteTwelve = route({
+//     name: "twelve",
+//     path: "<number:foodId>/",
+// });
 
-export const RouteThirteen = route({
-    name: "thirteen",
-    path: "thirteen/",
-});
+// export const RouteThirteen = route({
+//     name: "thirteen",
+//     path: "thirteen/",
+// });
 
-export const Fourteen = route({
-    name: "fourteen",
-    path: "/fourteen/",
-});
+// export const Fourteen = route({
+//     name: "fourteen",
+//     path: "/fourteen/",
+// });
 
-export const Fifteen = route({
-    name: "fifteen",
-    path: "/fifteen/",
-    tabs: ["schedule", "targets"],
-});
+// export const Fifteen = route({
+//     name: "fifteen",
+//     path: "/fifteen/",
+//     tabs: ["schedule", "targets"],
+// });
 
-export const Seventeen = route({
-    name: "seventeen",
-    path: "/seventeen/",
-});
+// export const Seventeen = route({
+//     name: "seventeen",
+//     path: "/seventeen/",
+// });
 
-export const Eighteen = route({
-    name: "eighteen",
-    path: "/eighteen/",
-});
+// export const Eighteen = route({
+//     name: "eighteen",
+//     path: "/eighteen/",
+// });
 
-export const Nineteen = route({
-    name: "nineteen",
-    path: "/nineteen/",
-});
+// export const Nineteen = route({
+//     name: "nineteen",
+//     path: "/nineteen/",
+// });
 
-export const Twenty = route({
-    name: "twenty",
-    path: "/twenty/",
-});
+// export const Twenty = route({
+//     name: "twenty",
+//     path: "/twenty/",
+// });
 
-export const TwentyOne = route({
-    name: "twentyone",
-    path: "/twentyone/",
-});
+// export const TwentyOne = route({
+//     name: "twentyone",
+//     path: "/twentyone/",
+// });
 
-export const TwentyTwo = route({
-    name: "twentytwo",
-    path: "/twentytwo/",
-});
+// export const TwentyTwo = route({
+//     name: "twentytwo",
+//     path: "/twentytwo/",
+// });
 
-export const Login = route({
-    name: "login",
-    path: "/login/",
-});
+// export const Login = route({
+//     name: "login",
+//     path: "/login/",
+// });
 
-export const Logout = route({
-    name: "logout",
-    path: "/logout/",
-});
+// export const Logout = route({
+//     name: "logout",
+//     path: "/logout/",
+// });
 
