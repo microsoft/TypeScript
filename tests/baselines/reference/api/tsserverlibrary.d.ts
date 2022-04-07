@@ -9911,7 +9911,7 @@ declare namespace ts.server {
         Configured = 1,
         External = 2,
         AutoImportProvider = 3,
-        SingleCommand = 4
+        Auxiliary = 4
     }
     function allRootFilesAreJsOrDts(project: Project): boolean;
     function allFilesAreJsOrDts(project: Project): boolean;

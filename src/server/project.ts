@@ -5,7 +5,7 @@ namespace ts.server {
         Configured,
         External,
         AutoImportProvider,
-        SingleCommand,
+        Auxiliary,
     }
 
     /* @internal */
@@ -209,6 +209,9 @@ namespace ts.server {
 
         /*@internal*/
         private packageJsonsForAutoImport: Set<string> | undefined;
+
+        /*@internal*/
+        private noDtsResolutionProject?: AuxiliaryProject | undefined;
 
         /*@internal*/
         getResolvedProjectReferenceToRedirect(_fileName: string): ResolvedProjectReference | undefined {
@@ -812,6 +815,10 @@ namespace ts.server {
                 this.autoImportProviderHost.close();
             }
             this.autoImportProviderHost = undefined;
+            if (this.noDtsResolutionProject) {
+                this.noDtsResolutionProject.close();
+            }
+            this.noDtsResolutionProject = undefined;
 
             // signal language service to release source files acquired from document registry
             this.languageService.dispose();
@@ -1783,36 +1790,43 @@ namespace ts.server {
         }
 
         /*@internal*/
-        withNoDtsResolutionProject(rootFileNames: string[], cb: (project: Project, ensureRoot: (fileName: string) => boolean) => void) {
-            const options: CompilerOptions = {
-                ...this.getCompilerOptions(),
-                noDtsResolution: true,
-                allowJs: true,
-                maxNodeModuleJsDepth: 3,
-                diagnostics: false,
-                skipLibCheck: true,
-                sourceMap: false,
-                types: ts.emptyArray,
-                lib: ts.emptyArray,
-                noLib: true,
-            };
-            const project = new SingleCommandProject(this.projectService, this.documentRegistry, options);
-            for (const fileName of rootFileNames) {
-                project.addRoot(this.getScriptInfo(fileName)!);
+        getNoDtsResolutionProject(rootFileNames: readonly string[]): Project {
+            if (!this.noDtsResolutionProject) {
+                const options: CompilerOptions = {
+                    ...this.getCompilerOptions(),
+                    noDtsResolution: true,
+                    allowJs: true,
+                    maxNodeModuleJsDepth: 3,
+                    diagnostics: false,
+                    skipLibCheck: true,
+                    sourceMap: false,
+                    types: ts.emptyArray,
+                    lib: ts.emptyArray,
+                    noLib: true,
+                };
+                this.noDtsResolutionProject = new AuxiliaryProject(this.projectService, this.documentRegistry, options);
             }
-            cb(
-                project,
-                fileName => {
-                    const info = project.getScriptInfo(fileName);
-                    if (!info) return false;
-                    if (!project.containsScriptInfo(info)) {
-                        project.addRoot(info);
-                        project.updateGraph();
+
+            enumerateInsertsAndDeletes<NormalizedPath, NormalizedPath>(
+                rootFileNames.map(toNormalizedPath),
+                this.noDtsResolutionProject.getRootFiles(),
+                compareStringsCaseInsensitive,
+                pathToAdd => {
+                    const info = this.noDtsResolutionProject!.getScriptInfo(pathToAdd);
+                    if (info) {
+                        this.noDtsResolutionProject!.addRoot(info, pathToAdd);
                     }
-                    return true;
-                }
+                },
+                pathToRemove => {
+                    // It may be preferable to remove roots only once project grows to a certain size?
+                    const info = this.noDtsResolutionProject!.getScriptInfo(pathToRemove);
+                    if (info) {
+                        this.noDtsResolutionProject!.removeRoot(info);
+                    }
+                },
             );
-            project.close();
+
+            return this.noDtsResolutionProject;
         }
     }
 
@@ -1954,10 +1968,10 @@ namespace ts.server {
         }
     }
 
-    class SingleCommandProject extends Project {
+    class AuxiliaryProject extends Project {
         constructor(projectService: ProjectService, documentRegistry: DocumentRegistry, compilerOptions: CompilerOptions) {
-            super(projectService.newSingleCommandProjectName(),
-                ProjectKind.SingleCommand,
+            super(projectService.newAuxiliaryProjectName(),
+                ProjectKind.Auxiliary,
                 projectService,
                 documentRegistry,
                 /*hasExplicitListOfFiles*/ false,
@@ -1967,14 +1981,6 @@ namespace ts.server {
                 /*watchOptions*/ undefined,
                 projectService.host,
                 /*currentDirectory*/ undefined);
-        }
-
-        watchDirectoryOfFailedLookupLocation(): FileWatcher {
-            return noopFileWatcher;
-        }
-
-        watchTypeRootsDirectory(): FileWatcher {
-            return noopFileWatcher;
         }
     }
 

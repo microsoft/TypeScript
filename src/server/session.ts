@@ -1249,41 +1249,40 @@ namespace ts.server {
             if (needsJsResolution) {
                 const definitionSet = createSet<DefinitionInfo>(d => d.textSpan.start, documentSpansEqual);
                 definitionSet.forEach(d => definitionSet.add(d));
-                project.withNoDtsResolutionProject([file], (noDtsProject, ensureRoot) => {
-                    const ls = noDtsProject.getLanguageService();
-                    const jsDefinitions = ls
-                        .getDefinitionAndBoundSpan(file, position, /*searchOtherFilesOnly*/ true)
-                        ?.definitions
-                        ?.filter(d => toNormalizedPath(d.fileName) !== file);
-                    if (some(jsDefinitions)) {
-                        for (const jsDefinition of jsDefinitions) {
-                            if (jsDefinition.unverified) {
-                                const refined = tryRefineDefinition(jsDefinition, project.getLanguageService().getProgram()!, ls.getProgram()!);
-                                if (some(refined)) {
-                                    for (const def of refined) {
-                                        definitionSet.add(def);
-                                    }
-                                    continue;
+                const noDtsProject = project.getNoDtsResolutionProject([file]);
+                const ls = noDtsProject.getLanguageService();
+                const jsDefinitions = ls
+                    .getDefinitionAndBoundSpan(file, position, /*searchOtherFilesOnly*/ true)
+                    ?.definitions
+                    ?.filter(d => toNormalizedPath(d.fileName) !== file);
+                if (some(jsDefinitions)) {
+                    for (const jsDefinition of jsDefinitions) {
+                        if (jsDefinition.unverified) {
+                            const refined = tryRefineDefinition(jsDefinition, project.getLanguageService().getProgram()!, ls.getProgram()!);
+                            if (some(refined)) {
+                                for (const def of refined) {
+                                    definitionSet.add(def);
                                 }
-                            }
-                            definitionSet.add(jsDefinition);
-                        }
-                    }
-                    else {
-                        const ambientCandidates = definitions.filter(d => toNormalizedPath(d.fileName) !== file && d.isAmbient);
-                        for (const candidate of ambientCandidates) {
-                            const fileNameToSearch = findImplementationFileFromDtsFileName(candidate.fileName, file, noDtsProject);
-                            if (!fileNameToSearch || !ensureRoot(fileNameToSearch)) {
                                 continue;
                             }
-                            const noDtsProgram = ls.getProgram()!;
-                            const fileToSearch = Debug.checkDefined(noDtsProgram.getSourceFile(fileNameToSearch));
-                            for (const match of searchForDeclaration(candidate.name, fileToSearch, noDtsProgram)) {
-                                definitionSet.add(match);
-                            }
+                        }
+                        definitionSet.add(jsDefinition);
+                    }
+                }
+                else {
+                    const ambientCandidates = definitions.filter(d => toNormalizedPath(d.fileName) !== file && d.isAmbient);
+                    for (const candidate of ambientCandidates) {
+                        const fileNameToSearch = findImplementationFileFromDtsFileName(candidate.fileName, file, noDtsProject);
+                        if (!fileNameToSearch || !ensureRoot(noDtsProject, fileNameToSearch)) {
+                            continue;
+                        }
+                        const noDtsProgram = ls.getProgram()!;
+                        const fileToSearch = Debug.checkDefined(noDtsProgram.getSourceFile(fileNameToSearch));
+                        for (const match of searchForDeclaration(candidate.name, fileToSearch, noDtsProgram)) {
+                            definitionSet.add(match);
                         }
                     }
-                });
+                }
                 definitions = arrayFrom(definitionSet.values());
             }
 
@@ -1369,6 +1368,16 @@ namespace ts.server {
                         return GoToDefinition.createDefinitionInfo(decl, noDtsProgram.getTypeChecker(), symbol, decl, /*unverified*/ true);
                     }
                 });
+            }
+
+            function ensureRoot(project: Project, fileName: string) {
+                const info = project.getScriptInfo(fileName);
+                if (!info) return false;
+                if (!project.containsScriptInfo(info)) {
+                    project.addRoot(info);
+                    project.updateGraph();
+                }
+                return true;
             }
         }
 

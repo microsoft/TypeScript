@@ -123,8 +123,8 @@ namespace ts.server {
     }
 
     /*@internal*/
-    export function makeSingleCommandProjectName(counter: number): string {
-        return `/dev/null/singleCommandProject${counter}*`;
+    export function makeAuxiliaryProjectName(counter: number): string {
+        return `/dev/null/auxiliaryProject${counter}*`;
     }
 
     export function createSortedArray<T>(): SortedArray<T> {
