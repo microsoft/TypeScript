@@ -1514,7 +1514,7 @@ namespace ts.refactor.extractSymbol {
                     prevStatement = statement;
                 }
 
-                if (!prevStatement && isCaseClause(curr)) {
+                if (!prevStatement && (isCaseClause(curr) || isDefaultClause(curr))) {
                     // We must have been in the expression of the case clause.
                     Debug.assert(isSwitchStatement(curr.parent.parent), "Grandparent isn't a switch statement");
                     return curr.parent.parent;
