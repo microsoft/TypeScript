@@ -102,7 +102,7 @@ Output::
 [[90m12:00:07 AM[0m] Projects in this build: 
     * src/tsconfig_withFiles.json
 
-[[90m12:00:08 AM[0m] Project 'src/tsconfig_withFiles.json' is out of date because output file 'src/src/index.js' does not exist
+[[90m12:00:08 AM[0m] Project 'src/tsconfig_withFiles.json' is out of date because output file 'src/tsconfig_withFiles.tsbuildinfo' does not exist
 
 [[90m12:00:09 AM[0m] Building project '/src/tsconfig_withFiles.json'...
 
@@ -111,7 +111,7 @@ exitCode:: ExitStatus.Success
 getModifiedTime:: {
  "/src/src/index.ts": 1,
  "/src/src/hello.json": 1,
- "/src/src/index.js": 1
+ "/src/tsconfig_withFiles.tsbuildinfo": 1
 }
 
 setModifiedTime:: {}
@@ -213,15 +213,13 @@ Output::
 [[90m12:00:14 AM[0m] Projects in this build: 
     * src/tsconfig_withFiles.json
 
-[[90m12:00:15 AM[0m] Project 'src/tsconfig_withFiles.json' is up to date because newest input 'src/src/index.ts' is older than oldest output 'src/src/index.js'
+[[90m12:00:15 AM[0m] Project 'src/tsconfig_withFiles.json' is up to date because newest input 'src/src/index.ts' is older than oldest output 'src/tsconfig_withFiles.tsbuildinfo'
 
 exitCode:: ExitStatus.Success
 
 getModifiedTime:: {
  "/src/src/index.ts": 1,
  "/src/src/hello.json": 1,
- "/src/src/index.js": 1,
- "/src/src/index.d.ts": 1,
  "/src/tsconfig_withFiles.tsbuildinfo": 1,
  "/src/tsconfig_withFiles.json": 1
 }

@@ -42,7 +42,7 @@ Output::
 [[90m12:00:28 AM[0m] Projects in this build: 
     * sample1/core/tsconfig.json
 
-[[90m12:00:29 AM[0m] Project 'sample1/core/tsconfig.json' is out of date because output file 'sample1/core/outDir/anotherModule.js' does not exist
+[[90m12:00:29 AM[0m] Project 'sample1/core/tsconfig.json' is out of date because output file 'sample1/core/outDir/tsconfig.tsbuildinfo' does not exist
 
 [[90m12:00:30 AM[0m] Building project '/user/username/projects/sample1/core/tsconfig.json'...
 
@@ -171,7 +171,7 @@ directoryExists:: {
 getModifiedTimes:: {
  "/user/username/projects/sample1/core/anothermodule.ts": 1,
  "/user/username/projects/sample1/core/index.ts": 1,
- "/user/username/projects/sample1/core/outdir/anothermodule.js": 1
+ "/user/username/projects/sample1/core/outdir/tsconfig.tsbuildinfo": 1
 } 
 
 setModifiedTimes:: {} 
@@ -234,7 +234,7 @@ Output::
 >> Screen clear
 [[90m12:00:49 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:50 AM[0m] Project 'sample1/core/tsconfig.json' is out of date because oldest output 'sample1/core/outDir/anotherModule.js' is older than newest input 'sample1/core/file3.ts'
+[[90m12:00:50 AM[0m] Project 'sample1/core/tsconfig.json' is out of date because oldest output 'sample1/core/outDir/tsconfig.tsbuildinfo' is older than newest input 'sample1/core/file3.ts'
 
 [[90m12:00:51 AM[0m] Building project '/user/username/projects/sample1/core/tsconfig.json'...
 
@@ -354,7 +354,7 @@ directoryExists:: {
 
 getModifiedTimes:: {
  "/user/username/projects/sample1/core/file3.ts": 1,
- "/user/username/projects/sample1/core/outdir/anothermodule.js": 1
+ "/user/username/projects/sample1/core/outdir/tsconfig.tsbuildinfo": 1
 } 
 
 setModifiedTimes:: {

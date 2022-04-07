@@ -130,11 +130,11 @@ Output::
     * src/src-types/tsconfig.json
     * src/src-dogs/tsconfig.json
 
-[[90m12:00:25 AM[0m] Project 'src/src-types/tsconfig.json' is out of date because output file 'src/src-types/dogconfig.js' does not exist
+[[90m12:00:25 AM[0m] Project 'src/src-types/tsconfig.json' is out of date because output file 'src/src-types/tsconfig.tsbuildinfo' does not exist
 
 [[90m12:00:26 AM[0m] Building project '/src/src-types/tsconfig.json'...
 
-[[90m12:00:33 AM[0m] Project 'src/src-dogs/tsconfig.json' is out of date because output file 'src/src-dogs/dog.js' does not exist
+[[90m12:00:33 AM[0m] Project 'src/src-dogs/tsconfig.json' is out of date because output file 'src/src-dogs/tsconfig.tsbuildinfo' does not exist
 
 [[90m12:00:34 AM[0m] Building project '/src/src-dogs/tsconfig.json'...
 
@@ -143,13 +143,13 @@ exitCode:: ExitStatus.Success
 getModifiedTime:: {
  "/src/src-types/dogconfig.ts": 1,
  "/src/src-types/index.ts": 1,
- "/src/src-types/dogconfig.js": 1,
+ "/src/src-types/tsconfig.tsbuildinfo": 1,
  "/src/src-dogs/dog.ts": 1,
  "/src/src-dogs/dogconfig.ts": 1,
  "/src/src-dogs/index.ts": 1,
  "/src/src-dogs/lassie/lassieconfig.ts": 1,
  "/src/src-dogs/lassie/lassiedog.ts": 1,
- "/src/src-dogs/dog.js": 1
+ "/src/src-dogs/tsconfig.tsbuildinfo": 1
 }
 
 setModifiedTime:: {}

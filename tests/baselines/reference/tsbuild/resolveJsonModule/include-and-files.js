@@ -102,7 +102,7 @@ Output::
 [[90m12:00:06 AM[0m] Projects in this build: 
     * src/tsconfig_withIncludeAndFiles.json
 
-[[90m12:00:07 AM[0m] Project 'src/tsconfig_withIncludeAndFiles.json' is out of date because output file 'src/dist/src/hello.json' does not exist
+[[90m12:00:07 AM[0m] Project 'src/tsconfig_withIncludeAndFiles.json' is out of date because output file 'src/dist/tsconfig_withIncludeAndFiles.tsbuildinfo' does not exist
 
 [[90m12:00:08 AM[0m] Building project '/src/tsconfig_withIncludeAndFiles.json'...
 
@@ -118,7 +118,7 @@ exitCode:: ExitStatus.Success
 getModifiedTime:: {
  "/src/src/hello.json": 1,
  "/src/src/index.ts": 1,
- "/src/dist/src/hello.json": 1
+ "/src/dist/tsconfig_withIncludeAndFiles.tsbuildinfo": 1
 }
 
 setModifiedTime:: {}

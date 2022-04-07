@@ -51,11 +51,11 @@ Output::
     * webpack/tsconfig.json
     * tsconfig.json
 
-[[90m12:00:32 AM[0m] Project 'shared/tsconfig.json' is out of date because output file 'shared/index.js' does not exist
+[[90m12:00:32 AM[0m] Project 'shared/tsconfig.json' is out of date because output file 'shared/tsconfig.tsbuildinfo' does not exist
 
 [[90m12:00:33 AM[0m] Building project '/user/username/projects/myproject/shared/tsconfig.json'...
 
-[[90m12:00:42 AM[0m] Project 'webpack/tsconfig.json' is out of date because output file 'webpack/index.js' does not exist
+[[90m12:00:42 AM[0m] Project 'webpack/tsconfig.json' is out of date because output file 'webpack/tsconfig.tsbuildinfo' does not exist
 
 [[90m12:00:43 AM[0m] Building project '/user/username/projects/myproject/webpack/tsconfig.json'...
 
@@ -266,9 +266,9 @@ directoryExists:: {
 
 getModifiedTimes:: {
  "/user/username/projects/myproject/shared/index.ts": 1,
- "/user/username/projects/myproject/shared/index.js": 1,
+ "/user/username/projects/myproject/shared/tsconfig.tsbuildinfo": 1,
  "/user/username/projects/myproject/webpack/index.ts": 1,
- "/user/username/projects/myproject/webpack/index.js": 1
+ "/user/username/projects/myproject/webpack/tsconfig.tsbuildinfo": 1
 } 
 
 setModifiedTimes:: {} 
@@ -296,7 +296,7 @@ Output::
 >> Screen clear
 [[90m12:00:55 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:56 AM[0m] Project 'shared/tsconfig.json' is out of date because oldest output 'shared/index.js' is older than newest input 'shared/index.ts'
+[[90m12:00:56 AM[0m] Project 'shared/tsconfig.json' is out of date because oldest output 'shared/tsconfig.tsbuildinfo' is older than newest input 'shared/index.ts'
 
 [[90m12:00:57 AM[0m] Building project '/user/username/projects/myproject/shared/tsconfig.json'...
 
@@ -445,7 +445,7 @@ directoryExists:: {
 } 
 
 getModifiedTimes:: {
- "/user/username/projects/myproject/shared/index.js": 1,
+ "/user/username/projects/myproject/shared/tsconfig.tsbuildinfo": 1,
  "/user/username/projects/myproject/webpack/index.d.ts": 1
 } 
 

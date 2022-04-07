@@ -3,14 +3,23 @@ namespace ts {
         useCaseSensitiveFileNames(): boolean;
         getCurrentDirectory(): string;
         readFile(fileName: string): string | undefined;
+        /*@internal*/
+        getBuildInfo?(fileName: string): BuildInfo | undefined;
     }
     export function readBuilderProgram(compilerOptions: CompilerOptions, host: ReadBuildProgramHost) {
         if (outFile(compilerOptions)) return undefined;
         const buildInfoPath = getTsBuildInfoEmitOutputFilePath(compilerOptions);
         if (!buildInfoPath) return undefined;
-        const content = host.readFile(buildInfoPath);
-        if (!content) return undefined;
-        const buildInfo = getBuildInfo(content);
+        let buildInfo;
+        if (host.getBuildInfo) {
+            buildInfo = host.getBuildInfo(buildInfoPath);
+            if (!buildInfo) return undefined;
+        }
+        else {
+            const content = host.readFile(buildInfoPath);
+            if (!content) return undefined;
+            buildInfo = getBuildInfo(content);
+        }
         if (buildInfo.version !== version) return undefined;
         if (!buildInfo.program) return undefined;
         return createBuildProgramUsingProgramBuildInfo(buildInfo.program, buildInfoPath, host);

@@ -207,6 +207,7 @@ interface Symbol {
         exportedModulesMap?: MapLike<string[]>;
         semanticDiagnosticsPerFile?: readonly ReadableProgramBuildInfoDiagnostic[];
         affectedFilesPendingEmit?: readonly ReadableProgramBuilderInfoFilePendingEmit[];
+        hasPendingChange?: boolean
     }
     type ReadableBuildInfo = Omit<BuildInfo, "program"> & { program: ReadableProgramBuildInfo | undefined; size: number; };
     function generateBuildInfoProgramBaseline(sys: System, buildInfoPath: string, buildInfo: BuildInfo) {
@@ -231,6 +232,7 @@ interface Symbol {
                     emitKind === BuilderFileEmit.Full ? "Full" :
                         Debug.assertNever(emitKind)
             ]),
+            hasPendingChange: buildInfo.program.hasPendingChange,
         };
         const version = buildInfo.version === ts.version ? fakes.version : buildInfo.version;
         const result: ReadableBuildInfo = {
@@ -480,8 +482,7 @@ interface Symbol {
                     fileNames: undefined,
                     fileNamesList: undefined,
                     fileInfos: sanitizedFileInfos,
-                    // Ignore noEmit since that shouldnt be reason to emit the tsbuild info and presence of it in the buildinfo file does not matter
-                    options: { ...readableBuildInfo.program.options, noEmit: undefined },
+                    options: sanatizeCompilerOptions(readableBuildInfo.program.options),
                     exportedModulesMap: undefined,
                     affectedFilesPendingEmit: undefined,
                 },
@@ -489,6 +490,16 @@ interface Symbol {
             },  /*replacer*/ undefined, 2),
             readableBuildInfo,
         };
+    }
+
+    function sanatizeCompilerOptions(options: CompilerOptions | undefined) {
+        if (!options) return options;
+        let result: CompilerOptions | undefined;
+        for (const name of getOwnKeys(options).sort(compareStringsCaseSensitive)) {
+            // Ignore noEmit since that shouldnt be reason to emit the tsbuild info and presence of it in the buildinfo file does not matter
+            if (name.toLowerCase() !== "noemit") (result ||= {})[name] = options[name];
+        }
+        return result;
     }
 
     export enum CleanBuildDescrepancy {

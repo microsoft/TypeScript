@@ -46,11 +46,11 @@ Output::
     * src/packages/pkg1/tsconfig.json
     * src/packages/pkg2/tsconfig.json
 
-[[90m12:00:17 AM[0m] Project 'src/packages/pkg1/tsconfig.json' is out of date because output file 'src/packages/pkg1/lib/src/index.js' does not exist
+[[90m12:00:17 AM[0m] Project 'src/packages/pkg1/tsconfig.json' is out of date because output file 'src/packages/pkg1/lib/tsconfig.tsbuildinfo' does not exist
 
 [[90m12:00:18 AM[0m] Building project '/src/packages/pkg1/tsconfig.json'...
 
-[[90m12:00:25 AM[0m] Project 'src/packages/pkg2/tsconfig.json' is out of date because output file 'src/packages/pkg2/lib/src/index.js' does not exist
+[[90m12:00:25 AM[0m] Project 'src/packages/pkg2/tsconfig.json' is out of date because output file 'src/packages/pkg2/lib/tsconfig.tsbuildinfo' does not exist
 
 [[90m12:00:26 AM[0m] Building project '/src/packages/pkg2/tsconfig.json'...
 
@@ -58,9 +58,9 @@ exitCode:: ExitStatus.Success
 
 getModifiedTime:: {
  "/src/packages/pkg1/src/index.ts": 1,
- "/src/packages/pkg1/lib/src/index.js": 1,
+ "/src/packages/pkg1/lib/tsconfig.tsbuildinfo": 1,
  "/src/packages/pkg2/src/index.ts": 1,
- "/src/packages/pkg2/lib/src/index.js": 1
+ "/src/packages/pkg2/lib/tsconfig.tsbuildinfo": 1
 }
 
 setModifiedTime:: {}

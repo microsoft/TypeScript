@@ -48,7 +48,7 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 getModifiedTime:: {
  "/src/a.ts": 1,
  "/src/b.ts": 1,
- "/src/a.js": 1
+ "/src/tsconfig.tsbuildinfo": 1
 }
 
 setModifiedTime:: {}
@@ -94,7 +94,7 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 getModifiedTime:: {
  "/src/a.ts": 1,
  "/src/b.ts": 1,
- "/src/a.js": 1
+ "/src/tsconfig.tsbuildinfo": 1
 }
 
 setModifiedTime:: {}
@@ -131,7 +131,7 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 getModifiedTime:: {
  "/src/a.ts": 1,
  "/src/b.ts": 1,
- "/src/a.js": 1
+ "/src/tsconfig.tsbuildinfo": 1
 }
 
 setModifiedTime:: {}
@@ -165,7 +165,7 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 getModifiedTime:: {
  "/src/a.ts": 1,
  "/src/b.ts": 1,
- "/src/a.js": 1
+ "/src/tsconfig.tsbuildinfo": 1
 }
 
 setModifiedTime:: {}
@@ -194,7 +194,7 @@ exitCode:: ExitStatus.Success
 getModifiedTime:: {
  "/src/a.ts": 1,
  "/src/b.ts": 1,
- "/src/a.js": 1
+ "/src/tsconfig.tsbuildinfo": 1
 }
 
 setModifiedTime:: {}

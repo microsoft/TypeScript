@@ -285,12 +285,13 @@ namespace ts {
         });
 
         describe("downstream-blocked compilations", () => {
-            verifyTsc({
+            verifyTscWithEdits({
                 scenario: "sample1",
                 subScenario: "does not build downstream projects if upstream projects have errors",
                 fs: () => projFs,
                 commandLineArgs: ["--b", "/src/tests", "--verbose"],
-                modifyFs: fs => replaceText(fs, "/src/logic/index.ts", "c.multiply(10, 15)", `c.muitply()`)
+                modifyFs: fs => replaceText(fs, "/src/logic/index.ts", "c.multiply(10, 15)", `c.muitply()`),
+                edits: noChangeOnlyRuns
             });
         });
 

@@ -85,15 +85,15 @@ Output::
     * src/tests/tsconfig.json
     * src/tsconfig.json
 
-[[90m12:00:07 AM[0m] Project 'src/src/folder/tsconfig.json' is out of date because output file 'src/src/folder/index.js' does not exist
+[[90m12:00:07 AM[0m] Project 'src/src/folder/tsconfig.json' is out of date because output file 'src/src/folder/tsconfig.tsbuildinfo' does not exist
 
 [[90m12:00:08 AM[0m] Building project '/src/src/folder/tsconfig.json'...
 
-[[90m12:00:13 AM[0m] Project 'src/src/folder2/tsconfig.json' is out of date because output file 'src/src/folder2/index.js' does not exist
+[[90m12:00:13 AM[0m] Project 'src/src/folder2/tsconfig.json' is out of date because output file 'src/src/folder2/tsconfig.tsbuildinfo' does not exist
 
 [[90m12:00:14 AM[0m] Building project '/src/src/folder2/tsconfig.json'...
 
-[[90m12:00:19 AM[0m] Project 'src/tests/tsconfig.json' is out of date because output file 'src/tests/index.js' does not exist
+[[90m12:00:19 AM[0m] Project 'src/tests/tsconfig.json' is out of date because output file 'src/tests/tsconfig.tsbuildinfo' does not exist
 
 [[90m12:00:20 AM[0m] Building project '/src/tests/tsconfig.json'...
 
@@ -101,11 +101,11 @@ exitCode:: ExitStatus.Success
 
 getModifiedTime:: {
  "/src/src/folder/index.ts": 1,
- "/src/src/folder/index.js": 1,
+ "/src/src/folder/tsconfig.tsbuildinfo": 1,
  "/src/src/folder2/index.ts": 1,
- "/src/src/folder2/index.js": 1,
+ "/src/src/folder2/tsconfig.tsbuildinfo": 1,
  "/src/tests/index.ts": 1,
- "/src/tests/index.js": 1
+ "/src/tests/tsconfig.tsbuildinfo": 1
 }
 
 setModifiedTime:: {}
@@ -275,28 +275,22 @@ Output::
     * src/tests/tsconfig.json
     * src/tsconfig.json
 
-[[90m12:00:26 AM[0m] Project 'src/src/folder/tsconfig.json' is up to date because newest input 'src/src/folder/index.ts' is older than oldest output 'src/src/folder/index.js'
+[[90m12:00:26 AM[0m] Project 'src/src/folder/tsconfig.json' is up to date because newest input 'src/src/folder/index.ts' is older than oldest output 'src/src/folder/tsconfig.tsbuildinfo'
 
-[[90m12:00:27 AM[0m] Project 'src/src/folder2/tsconfig.json' is up to date because newest input 'src/src/folder2/index.ts' is older than oldest output 'src/src/folder2/index.js'
+[[90m12:00:27 AM[0m] Project 'src/src/folder2/tsconfig.json' is up to date because newest input 'src/src/folder2/index.ts' is older than oldest output 'src/src/folder2/tsconfig.tsbuildinfo'
 
-[[90m12:00:28 AM[0m] Project 'src/tests/tsconfig.json' is up to date because newest input 'src/tests/index.ts' is older than oldest output 'src/tests/index.js'
+[[90m12:00:28 AM[0m] Project 'src/tests/tsconfig.json' is up to date because newest input 'src/tests/index.ts' is older than oldest output 'src/tests/tsconfig.tsbuildinfo'
 
 exitCode:: ExitStatus.Success
 
 getModifiedTime:: {
  "/src/src/folder/index.ts": 1,
- "/src/src/folder/index.js": 1,
- "/src/src/folder/index.d.ts": 1,
  "/src/src/folder/tsconfig.tsbuildinfo": 1,
  "/src/src/folder/tsconfig.json": 1,
  "/src/src/folder2/index.ts": 1,
- "/src/src/folder2/index.js": 1,
- "/src/src/folder2/index.d.ts": 1,
  "/src/src/folder2/tsconfig.tsbuildinfo": 1,
  "/src/src/folder2/tsconfig.json": 1,
  "/src/tests/index.ts": 1,
- "/src/tests/index.js": 1,
- "/src/tests/index.d.ts": 1,
  "/src/tests/tsconfig.tsbuildinfo": 1,
  "/src/tests/tsconfig.json": 1
 }

@@ -53,7 +53,7 @@ Output::
     * packages/pkg2/tsconfig.json
     * packages/pkg1/tsconfig.json
 
-[[90m12:00:43 AM[0m] Project 'packages/pkg2/tsconfig.json' is out of date because output file 'packages/pkg2/build/const.cjs' does not exist
+[[90m12:00:43 AM[0m] Project 'packages/pkg2/tsconfig.json' is out of date because output file 'packages/pkg2/build/tsconfig.tsbuildinfo' does not exist
 
 [[90m12:00:44 AM[0m] Building project '/user/username/projects/myproject/packages/pkg2/tsconfig.json'...
 
@@ -309,7 +309,7 @@ directoryExists:: {
 getModifiedTimes:: {
  "/user/username/projects/myproject/packages/pkg2/const.cts": 1,
  "/user/username/projects/myproject/packages/pkg2/index.ts": 1,
- "/user/username/projects/myproject/packages/pkg2/build/const.cjs": 1,
+ "/user/username/projects/myproject/packages/pkg2/build/tsconfig.tsbuildinfo": 1,
  "/user/username/projects/myproject/packages/pkg1/index.ts": 1,
  "/user/username/projects/myproject/packages/pkg1/build/index.js": 1
 } 
@@ -845,7 +845,7 @@ Output::
 >> Screen clear
 [[90m12:01:38 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:39 AM[0m] Project 'packages/pkg2/tsconfig.json' is out of date because oldest output 'packages/pkg2/build/const.cjs' is older than newest input 'packages/pkg2/index.cts'
+[[90m12:01:39 AM[0m] Project 'packages/pkg2/tsconfig.json' is out of date because oldest output 'packages/pkg2/build/tsconfig.tsbuildinfo' is older than newest input 'packages/pkg2/index.cts'
 
 [[90m12:01:40 AM[0m] Building project '/user/username/projects/myproject/packages/pkg2/tsconfig.json'...
 
@@ -1010,7 +1010,7 @@ directoryExists:: {
 
 getModifiedTimes:: {
  "/user/username/projects/myproject/packages/pkg2/index.cts": 1,
- "/user/username/projects/myproject/packages/pkg2/build/const.cjs": 1
+ "/user/username/projects/myproject/packages/pkg2/build/tsconfig.tsbuildinfo": 1
 } 
 
 setModifiedTimes:: {

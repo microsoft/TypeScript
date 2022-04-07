@@ -55,7 +55,7 @@ Output::
 [[90m12:00:32 AM[0m] Projects in this build: 
     * tsconfig.json
 
-[[90m12:00:33 AM[0m] Project 'tsconfig.json' is out of date because output file 'dev-build/shared/types/db.js' does not exist
+[[90m12:00:33 AM[0m] Project 'tsconfig.json' is out of date because output file 'dev-build/tsconfig.tsbuildinfo' does not exist
 
 [[90m12:00:34 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
@@ -117,7 +117,7 @@ getModifiedTimes:: {
  "/user/username/projects/noemitonerror/shared/types/db.ts": 1,
  "/user/username/projects/noemitonerror/src/main.ts": 1,
  "/user/username/projects/noemitonerror/src/other.ts": 1,
- "/user/username/projects/noemitonerror/dev-build/shared/types/db.js": 1
+ "/user/username/projects/noemitonerror/dev-build/tsconfig.tsbuildinfo": 1
 } 
 
 setModifiedTimes:: {} 
@@ -139,7 +139,7 @@ Output::
 >> Screen clear
 [[90m12:00:39 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:40 AM[0m] Project 'tsconfig.json' is out of date because output file 'dev-build/shared/types/db.js' does not exist
+[[90m12:00:40 AM[0m] Project 'tsconfig.json' is out of date because output file 'dev-build/tsconfig.tsbuildinfo' does not exist
 
 [[90m12:00:41 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
@@ -198,7 +198,7 @@ directoryExists:: {
 } 
 
 getModifiedTimes:: {
- "/user/username/projects/noemitonerror/dev-build/shared/types/db.js": 1
+ "/user/username/projects/noemitonerror/dev-build/tsconfig.tsbuildinfo": 1
 } 
 
 setModifiedTimes:: {} 
@@ -225,7 +225,7 @@ Output::
 >> Screen clear
 [[90m12:00:46 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:47 AM[0m] Project 'tsconfig.json' is out of date because output file 'dev-build/shared/types/db.js' does not exist
+[[90m12:00:47 AM[0m] Project 'tsconfig.json' is out of date because output file 'dev-build/tsconfig.tsbuildinfo' does not exist
 
 [[90m12:00:48 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
@@ -368,7 +368,7 @@ directoryExists:: {
 } 
 
 getModifiedTimes:: {
- "/user/username/projects/noemitonerror/dev-build/shared/types/db.js": 1
+ "/user/username/projects/noemitonerror/dev-build/tsconfig.tsbuildinfo": 1
 } 
 
 setModifiedTimes:: {} 
@@ -393,7 +393,7 @@ Output::
 >> Screen clear
 [[90m12:01:13 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:14 AM[0m] Project 'tsconfig.json' is out of date because oldest output 'dev-build/shared/types/db.js' is older than newest input 'src/main.ts'
+[[90m12:01:14 AM[0m] Project 'tsconfig.json' is out of date because oldest output 'dev-build/tsconfig.tsbuildinfo' is older than newest input 'src/main.ts'
 
 [[90m12:01:15 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
@@ -529,7 +529,7 @@ directoryExists:: {
 } 
 
 getModifiedTimes:: {
- "/user/username/projects/noemitonerror/dev-build/shared/types/db.js": 1
+ "/user/username/projects/noemitonerror/dev-build/tsconfig.tsbuildinfo": 1
 } 
 
 setModifiedTimes:: {} 
@@ -551,7 +551,7 @@ Output::
 >> Screen clear
 [[90m12:01:26 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:27 AM[0m] Project 'tsconfig.json' is out of date because oldest output 'dev-build/shared/types/db.js' is older than newest input 'src/main.ts'
+[[90m12:01:27 AM[0m] Project 'tsconfig.json' is out of date because oldest output 'dev-build/tsconfig.tsbuildinfo' is older than newest input 'src/main.ts'
 
 [[90m12:01:28 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
@@ -610,7 +610,7 @@ directoryExists:: {
 } 
 
 getModifiedTimes:: {
- "/user/username/projects/noemitonerror/dev-build/shared/types/db.js": 1
+ "/user/username/projects/noemitonerror/dev-build/tsconfig.tsbuildinfo": 1
 } 
 
 setModifiedTimes:: {} 
@@ -635,7 +635,7 @@ Output::
 >> Screen clear
 [[90m12:01:33 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:34 AM[0m] Project 'tsconfig.json' is out of date because oldest output 'dev-build/shared/types/db.js' is older than newest input 'src/main.ts'
+[[90m12:01:34 AM[0m] Project 'tsconfig.json' is out of date because oldest output 'dev-build/tsconfig.tsbuildinfo' is older than newest input 'src/main.ts'
 
 [[90m12:01:35 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
@@ -758,7 +758,7 @@ directoryExists:: {
 } 
 
 getModifiedTimes:: {
- "/user/username/projects/noemitonerror/dev-build/shared/types/db.js": 1
+ "/user/username/projects/noemitonerror/dev-build/tsconfig.tsbuildinfo": 1
 } 
 
 setModifiedTimes:: {
@@ -783,7 +783,7 @@ Output::
 >> Screen clear
 [[90m12:01:51 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:52 AM[0m] Project 'tsconfig.json' is out of date because oldest output 'dev-build/shared/types/db.js' is older than newest input 'src/main.ts'
+[[90m12:01:52 AM[0m] Project 'tsconfig.json' is out of date because oldest output 'dev-build/tsconfig.tsbuildinfo' is older than newest input 'src/main.ts'
 
 [[90m12:01:53 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
@@ -843,7 +843,7 @@ directoryExists:: {
 } 
 
 getModifiedTimes:: {
- "/user/username/projects/noemitonerror/dev-build/shared/types/db.js": 1
+ "/user/username/projects/noemitonerror/dev-build/tsconfig.tsbuildinfo": 1
 } 
 
 setModifiedTimes:: {

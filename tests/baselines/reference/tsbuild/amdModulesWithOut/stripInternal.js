@@ -99,11 +99,11 @@ Output::
     * src/lib/tsconfig.json
     * src/app/tsconfig.json
 
-[[90m12:00:10 AM[0m] Project 'src/lib/tsconfig.json' is out of date because output file 'src/lib/module.js' does not exist
+[[90m12:00:10 AM[0m] Project 'src/lib/tsconfig.json' is out of date because output file 'src/lib/module.tsbuildinfo' does not exist
 
 [[90m12:00:11 AM[0m] Building project '/src/lib/tsconfig.json'...
 
-[[90m12:00:19 AM[0m] Project 'src/app/tsconfig.json' is out of date because output file 'src/app/module.js' does not exist
+[[90m12:00:19 AM[0m] Project 'src/app/tsconfig.json' is out of date because output file 'src/app/module.tsbuildinfo' does not exist
 
 [[90m12:00:20 AM[0m] Building project '/src/app/tsconfig.json'...
 
@@ -114,10 +114,10 @@ getModifiedTime:: {
  "/src/lib/file1.ts": 1,
  "/src/lib/file2.ts": 1,
  "/src/lib/global.ts": 1,
- "/src/lib/module.js": 1,
+ "/src/lib/module.tsbuildinfo": 1,
  "/src/app/file3.ts": 1,
  "/src/app/file4.ts": 1,
- "/src/app/module.js": 1
+ "/src/app/module.tsbuildinfo": 1
 }
 
 setModifiedTime:: {}
@@ -4915,7 +4915,7 @@ Output::
     * src/lib/tsconfig.json
     * src/app/tsconfig.json
 
-[[90m12:00:34 AM[0m] Project 'src/lib/tsconfig.json' is out of date because oldest output 'src/lib/module.js' is older than newest input 'src/lib/file1.ts'
+[[90m12:00:34 AM[0m] Project 'src/lib/tsconfig.json' is out of date because oldest output 'src/lib/module.tsbuildinfo' is older than newest input 'src/lib/file1.ts'
 
 [[90m12:00:35 AM[0m] Building project '/src/lib/tsconfig.json'...
 
@@ -4932,16 +4932,13 @@ getModifiedTime:: {
  "/src/lib/file1.ts": 1,
  "/src/lib/file2.ts": 1,
  "/src/lib/global.ts": 1,
- "/src/lib/module.js": 1,
+ "/src/lib/module.tsbuildinfo": 1,
  "/src/lib/module.d.ts": 1,
  "/src/app/file3.ts": 1,
  "/src/app/file4.ts": 1,
- "/src/app/module.js": 1,
- "/src/app/module.js.map": 1,
- "/src/app/module.d.ts": 2,
- "/src/app/module.d.ts.map": 1,
  "/src/app/module.tsbuildinfo": 1,
- "/src/app/tsconfig.json": 1
+ "/src/app/tsconfig.json": 1,
+ "/src/app/module.d.ts": 1
 }
 
 setModifiedTime:: {
@@ -8758,7 +8755,7 @@ Output::
     * src/lib/tsconfig.json
     * src/app/tsconfig.json
 
-[[90m12:00:59 AM[0m] Project 'src/lib/tsconfig.json' is out of date because oldest output 'src/lib/module.js' is older than newest input 'src/lib/file1.ts'
+[[90m12:00:59 AM[0m] Project 'src/lib/tsconfig.json' is out of date because oldest output 'src/lib/module.tsbuildinfo' is older than newest input 'src/lib/file1.ts'
 
 [[90m12:01:00 AM[0m] Building project '/src/lib/tsconfig.json'...
 
@@ -8773,14 +8770,10 @@ getModifiedTime:: {
  "/src/lib/file1.ts": 1,
  "/src/lib/file2.ts": 1,
  "/src/lib/global.ts": 1,
- "/src/lib/module.js": 1,
+ "/src/lib/module.tsbuildinfo": 1,
  "/src/lib/module.d.ts": 1,
  "/src/app/file3.ts": 1,
  "/src/app/file4.ts": 1,
- "/src/app/module.js": 1,
- "/src/app/module.js.map": 1,
- "/src/app/module.d.ts": 1,
- "/src/app/module.d.ts.map": 1,
  "/src/app/module.tsbuildinfo": 1,
  "/src/app/tsconfig.json": 1
 }

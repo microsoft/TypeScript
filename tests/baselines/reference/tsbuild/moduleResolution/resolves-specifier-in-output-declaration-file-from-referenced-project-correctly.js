@@ -47,7 +47,7 @@ Output::
     * packages/pkg2/tsconfig.json
     * packages/pkg1/tsconfig.json
 
-[[90m12:00:40 AM[0m] Project 'packages/pkg2/tsconfig.json' is out of date because output file 'packages/pkg2/build/const.js' does not exist
+[[90m12:00:40 AM[0m] Project 'packages/pkg2/tsconfig.json' is out of date because output file 'packages/pkg2/build/tsconfig.tsbuildinfo' does not exist
 
 [[90m12:00:41 AM[0m] Building project '/user/username/projects/myproject/packages/pkg2/tsconfig.json'...
 
@@ -264,7 +264,7 @@ directoryExists:: {
 getModifiedTimes:: {
  "/user/username/projects/myproject/packages/pkg2/const.ts": 1,
  "/user/username/projects/myproject/packages/pkg2/index.ts": 1,
- "/user/username/projects/myproject/packages/pkg2/build/const.js": 1,
+ "/user/username/projects/myproject/packages/pkg2/build/tsconfig.tsbuildinfo": 1,
  "/user/username/projects/myproject/packages/pkg1/index.ts": 1,
  "/user/username/projects/myproject/packages/pkg1/build/index.js": 1
 } 

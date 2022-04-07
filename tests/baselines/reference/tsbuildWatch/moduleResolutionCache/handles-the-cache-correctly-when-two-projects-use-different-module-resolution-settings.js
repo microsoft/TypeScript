@@ -58,11 +58,11 @@ Output::
     * project2/tsconfig.json
     * tsconfig.json
 
-[[90m12:00:53 AM[0m] Project 'project1/tsconfig.json' is out of date because output file 'project1/index.js' does not exist
+[[90m12:00:53 AM[0m] Project 'project1/tsconfig.json' is out of date because output file 'project1/tsconfig.tsbuildinfo' does not exist
 
 [[90m12:00:54 AM[0m] Building project '/user/username/projects/myproject/project1/tsconfig.json'...
 
-[[90m12:01:03 AM[0m] Project 'project2/tsconfig.json' is out of date because output file 'project2/index.js' does not exist
+[[90m12:01:03 AM[0m] Project 'project2/tsconfig.json' is out of date because output file 'project2/tsconfig.tsbuildinfo' does not exist
 
 [[90m12:01:04 AM[0m] Building project '/user/username/projects/myproject/project2/tsconfig.json'...
 
@@ -310,9 +310,9 @@ directoryExists:: {
 
 getModifiedTimes:: {
  "/user/username/projects/myproject/project1/index.ts": 1,
- "/user/username/projects/myproject/project1/index.js": 1,
+ "/user/username/projects/myproject/project1/tsconfig.tsbuildinfo": 1,
  "/user/username/projects/myproject/project2/index.ts": 1,
- "/user/username/projects/myproject/project2/index.js": 1
+ "/user/username/projects/myproject/project2/tsconfig.tsbuildinfo": 1
 } 
 
 setModifiedTimes:: {} 
@@ -336,7 +336,7 @@ Output::
 >> Screen clear
 [[90m12:01:16 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:17 AM[0m] Project 'project1/tsconfig.json' is out of date because oldest output 'project1/index.js' is older than newest input 'project1/index.ts'
+[[90m12:01:17 AM[0m] Project 'project1/tsconfig.json' is out of date because oldest output 'project1/tsconfig.tsbuildinfo' is older than newest input 'project1/index.ts'
 
 [[90m12:01:18 AM[0m] Building project '/user/username/projects/myproject/project1/tsconfig.json'...
 
@@ -482,7 +482,7 @@ directoryExists:: {
 } 
 
 getModifiedTimes:: {
- "/user/username/projects/myproject/project1/index.js": 1,
+ "/user/username/projects/myproject/project1/tsconfig.tsbuildinfo": 1,
  "/user/username/projects/myproject/project1/index.d.ts": 1
 } 
 

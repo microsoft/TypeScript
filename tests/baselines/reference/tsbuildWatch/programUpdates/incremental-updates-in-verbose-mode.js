@@ -120,15 +120,15 @@ Output::
     * sample1/logic/tsconfig.json
     * sample1/tests/tsconfig.json
 
-[[90m12:00:47 AM[0m] Project 'sample1/core/tsconfig.json' is out of date because output file 'sample1/core/anotherModule.js' does not exist
+[[90m12:00:47 AM[0m] Project 'sample1/core/tsconfig.json' is out of date because output file 'sample1/core/tsconfig.tsbuildinfo' does not exist
 
 [[90m12:00:48 AM[0m] Building project '/user/username/projects/sample1/core/tsconfig.json'...
 
-[[90m12:01:05 AM[0m] Project 'sample1/logic/tsconfig.json' is out of date because output file 'sample1/logic/index.js' does not exist
+[[90m12:01:05 AM[0m] Project 'sample1/logic/tsconfig.json' is out of date because output file 'sample1/logic/tsconfig.tsbuildinfo' does not exist
 
 [[90m12:01:06 AM[0m] Building project '/user/username/projects/sample1/logic/tsconfig.json'...
 
-[[90m12:01:17 AM[0m] Project 'sample1/tests/tsconfig.json' is out of date because output file 'sample1/tests/index.js' does not exist
+[[90m12:01:17 AM[0m] Project 'sample1/tests/tsconfig.json' is out of date because output file 'sample1/tests/tsconfig.tsbuildinfo' does not exist
 
 [[90m12:01:18 AM[0m] Building project '/user/username/projects/sample1/tests/tsconfig.json'...
 
@@ -514,11 +514,11 @@ directoryExists:: {
 getModifiedTimes:: {
  "/user/username/projects/sample1/core/anothermodule.ts": 1,
  "/user/username/projects/sample1/core/index.ts": 1,
- "/user/username/projects/sample1/core/anothermodule.js": 1,
+ "/user/username/projects/sample1/core/tsconfig.tsbuildinfo": 1,
  "/user/username/projects/sample1/logic/index.ts": 1,
- "/user/username/projects/sample1/logic/index.js": 1,
+ "/user/username/projects/sample1/logic/tsconfig.tsbuildinfo": 1,
  "/user/username/projects/sample1/tests/index.ts": 1,
- "/user/username/projects/sample1/tests/index.js": 1
+ "/user/username/projects/sample1/tests/tsconfig.tsbuildinfo": 1
 } 
 
 setModifiedTimes:: {} 
@@ -549,7 +549,7 @@ Output::
 >> Screen clear
 [[90m12:01:31 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:32 AM[0m] Project 'sample1/logic/tsconfig.json' is out of date because oldest output 'sample1/logic/index.js' is older than newest input 'sample1/logic/index.ts'
+[[90m12:01:32 AM[0m] Project 'sample1/logic/tsconfig.json' is out of date because oldest output 'sample1/logic/tsconfig.tsbuildinfo' is older than newest input 'sample1/logic/index.ts'
 
 [[90m12:01:33 AM[0m] Building project '/user/username/projects/sample1/logic/tsconfig.json'...
 
@@ -708,7 +708,7 @@ directoryExists:: {
 } 
 
 getModifiedTimes:: {
- "/user/username/projects/sample1/logic/index.js": 1,
+ "/user/username/projects/sample1/logic/tsconfig.tsbuildinfo": 1,
  "/user/username/projects/sample1/logic/index.d.ts": 1,
  "/user/username/projects/sample1/tests/index.d.ts": 1
 } 
@@ -745,7 +745,7 @@ Output::
 >> Screen clear
 [[90m12:01:56 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:57 AM[0m] Project 'sample1/logic/tsconfig.json' is out of date because oldest output 'sample1/logic/index.js' is older than newest input 'sample1/logic/index.ts'
+[[90m12:01:57 AM[0m] Project 'sample1/logic/tsconfig.json' is out of date because oldest output 'sample1/logic/tsconfig.tsbuildinfo' is older than newest input 'sample1/logic/index.ts'
 
 [[90m12:01:58 AM[0m] Building project '/user/username/projects/sample1/logic/tsconfig.json'...
 
@@ -1012,7 +1012,7 @@ directoryExists:: {
 } 
 
 getModifiedTimes:: {
- "/user/username/projects/sample1/logic/index.js": 1,
+ "/user/username/projects/sample1/logic/tsconfig.tsbuildinfo": 1,
  "/user/username/projects/sample1/tests/index.d.ts": 1
 } 
 

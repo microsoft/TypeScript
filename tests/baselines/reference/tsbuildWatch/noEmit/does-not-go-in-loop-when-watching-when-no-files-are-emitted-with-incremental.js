@@ -40,7 +40,7 @@ Output::
 [[90m12:00:26 AM[0m] Projects in this build: 
     * tsconfig.json
 
-[[90m12:00:27 AM[0m] Project 'tsconfig.json' is out of date because oldest output 'a.js' is older than newest input 'b.ts'
+[[90m12:00:27 AM[0m] Project 'tsconfig.json' is out of date because output file 'tsconfig.tsbuildinfo' does not exist
 
 [[90m12:00:28 AM[0m] Building project '/user/username/projects/myproject/tsconfig.json'...
 
@@ -83,7 +83,7 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./a.js","./b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"5381-","5381-"],"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3],"affectedFilesPendingEmit":[[2,1],[3,1]]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./a.js","./b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"5381-","5381-"],"options":{"noEmit":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3],"affectedFilesPendingEmit":[[2,1],[3,1]]},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -108,6 +108,9 @@ exitCode:: ExitStatus.undefined
         "signature": "5381-"
       }
     },
+    "options": {
+      "noEmit": true
+    },
     "referencedMap": {},
     "exportedModulesMap": {},
     "semanticDiagnosticsPerFile": [
@@ -127,7 +130,7 @@ exitCode:: ExitStatus.undefined
     ]
   },
   "version": "FakeTSVersion",
-  "size": 730
+  "size": 756
 }
 
 
@@ -142,8 +145,9 @@ directoryExists:: {
 } 
 
 getModifiedTimes:: {
- "/user/username/projects/myproject/a.js": 2,
- "/user/username/projects/myproject/b.ts": 1
+ "/user/username/projects/myproject/a.js": 1,
+ "/user/username/projects/myproject/b.ts": 1,
+ "/user/username/projects/myproject/tsconfig.tsbuildinfo": 1
 } 
 
 setModifiedTimes:: {} 
@@ -165,7 +169,7 @@ Output::
 >> Screen clear
 [[90m12:00:37 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:38 AM[0m] Project 'tsconfig.json' is out of date because output file 'b.js' does not exist
+[[90m12:00:38 AM[0m] Project 'tsconfig.json' is out of date because oldest output 'tsconfig.tsbuildinfo' is older than newest input 'a.js'
 
 [[90m12:00:39 AM[0m] Building project '/user/username/projects/myproject/tsconfig.json'...
 
@@ -213,8 +217,7 @@ directoryExists:: {
 } 
 
 getModifiedTimes:: {
- "/user/username/projects/myproject/a.js": 1,
- "/user/username/projects/myproject/b.js": 1
+ "/user/username/projects/myproject/tsconfig.tsbuildinfo": 1
 } 
 
 setModifiedTimes:: {} 
@@ -238,7 +241,7 @@ Output::
 >> Screen clear
 [[90m12:00:44 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:45 AM[0m] Project 'tsconfig.json' is out of date because output file 'b.js' does not exist
+[[90m12:00:45 AM[0m] Project 'tsconfig.json' is out of date because oldest output 'tsconfig.tsbuildinfo' is older than newest input 'a.js'
 
 [[90m12:00:46 AM[0m] Building project '/user/username/projects/myproject/tsconfig.json'...
 
@@ -280,7 +283,7 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./a.js","./b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"5029505981-const x = 10;","signature":"-3042032780-declare const x: 10;\n","affectsGlobalScope":true},"5381-"],"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3],"affectedFilesPendingEmit":[[2,1],[3,1]]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./a.js","./b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"5029505981-const x = 10;","signature":"-3042032780-declare const x: 10;\n","affectsGlobalScope":true},"5381-"],"options":{"noEmit":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3],"affectedFilesPendingEmit":[[2,1],[3,1]]},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -306,6 +309,9 @@ exitCode:: ExitStatus.undefined
         "signature": "5381-"
       }
     },
+    "options": {
+      "noEmit": true
+    },
     "referencedMap": {},
     "exportedModulesMap": {},
     "semanticDiagnosticsPerFile": [
@@ -325,7 +331,7 @@ exitCode:: ExitStatus.undefined
     ]
   },
   "version": "FakeTSVersion",
-  "size": 836
+  "size": 862
 }
 
 
@@ -340,8 +346,7 @@ directoryExists:: {
 } 
 
 getModifiedTimes:: {
- "/user/username/projects/myproject/a.js": 1,
- "/user/username/projects/myproject/b.js": 1
+ "/user/username/projects/myproject/tsconfig.tsbuildinfo": 1
 } 
 
 setModifiedTimes:: {} 

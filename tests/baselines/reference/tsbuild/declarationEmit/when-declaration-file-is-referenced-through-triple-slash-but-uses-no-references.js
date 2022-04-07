@@ -61,7 +61,7 @@ Output::
 [[90m12:00:21 AM[0m] Projects in this build: 
     * src/solution/tsconfig.json
 
-[[90m12:00:22 AM[0m] Project 'src/solution/tsconfig.json' is out of date because output file 'src/solution/lib/src/common/nominal.js' does not exist
+[[90m12:00:22 AM[0m] Project 'src/solution/tsconfig.json' is out of date because output file 'src/solution/lib/tsconfig.tsbuildinfo' does not exist
 
 [[90m12:00:23 AM[0m] Building project '/src/solution/tsconfig.json'...
 
@@ -72,7 +72,7 @@ getModifiedTime:: {
  "/src/solution/src/common/types.d.ts": 1,
  "/src/solution/src/subProject/index.ts": 1,
  "/src/solution/src/subProject2/index.ts": 1,
- "/src/solution/lib/src/common/nominal.js": 1
+ "/src/solution/lib/tsconfig.tsbuildinfo": 1
 }
 
 setModifiedTime:: {}

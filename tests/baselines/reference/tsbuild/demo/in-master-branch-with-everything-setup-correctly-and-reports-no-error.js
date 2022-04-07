@@ -151,15 +151,15 @@ Output::
     * src/zoo/tsconfig.json
     * src/tsconfig.json
 
-[[90m12:00:07 AM[0m] Project 'src/core/tsconfig.json' is out of date because output file 'src/lib/core/utilities.js' does not exist
+[[90m12:00:07 AM[0m] Project 'src/core/tsconfig.json' is out of date because output file 'src/lib/core/tsconfig.tsbuildinfo' does not exist
 
 [[90m12:00:08 AM[0m] Building project '/src/core/tsconfig.json'...
 
-[[90m12:00:15 AM[0m] Project 'src/animals/tsconfig.json' is out of date because output file 'src/lib/animals/animal.js' does not exist
+[[90m12:00:15 AM[0m] Project 'src/animals/tsconfig.json' is out of date because output file 'src/lib/animals/tsconfig.tsbuildinfo' does not exist
 
 [[90m12:00:16 AM[0m] Building project '/src/animals/tsconfig.json'...
 
-[[90m12:00:26 AM[0m] Project 'src/zoo/tsconfig.json' is out of date because output file 'src/lib/zoo/zoo.js' does not exist
+[[90m12:00:26 AM[0m] Project 'src/zoo/tsconfig.json' is out of date because output file 'src/lib/zoo/tsconfig.tsbuildinfo' does not exist
 
 [[90m12:00:27 AM[0m] Building project '/src/zoo/tsconfig.json'...
 
@@ -167,13 +167,13 @@ exitCode:: ExitStatus.Success
 
 getModifiedTime:: {
  "/src/core/utilities.ts": 1,
- "/src/lib/core/utilities.js": 1,
+ "/src/lib/core/tsconfig.tsbuildinfo": 1,
  "/src/animals/animal.ts": 1,
  "/src/animals/dog.ts": 1,
  "/src/animals/index.ts": 1,
- "/src/lib/animals/animal.js": 1,
+ "/src/lib/animals/tsconfig.tsbuildinfo": 1,
  "/src/zoo/zoo.ts": 1,
- "/src/lib/zoo/zoo.js": 1
+ "/src/lib/zoo/tsconfig.tsbuildinfo": 1
 }
 
 setModifiedTime:: {}

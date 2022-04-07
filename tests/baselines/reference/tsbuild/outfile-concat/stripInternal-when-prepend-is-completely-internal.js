@@ -83,11 +83,11 @@ Output::
     * src/first/tsconfig.json
     * src/third/tsconfig.json
 
-[[90m12:00:11 AM[0m] Project 'src/first/tsconfig.json' is out of date because output file 'src/first/bin/first-output.js' does not exist
+[[90m12:00:11 AM[0m] Project 'src/first/tsconfig.json' is out of date because output file 'src/first/bin/first-output.tsbuildinfo' does not exist
 
 [[90m12:00:12 AM[0m] Building project '/src/first/tsconfig.json'...
 
-[[90m12:00:21 AM[0m] Project 'src/third/tsconfig.json' is out of date because output file 'src/third/thirdjs/output/third-output.js' does not exist
+[[90m12:00:21 AM[0m] Project 'src/third/tsconfig.json' is out of date because output file 'src/third/thirdjs/output/third-output.tsbuildinfo' does not exist
 
 [[90m12:00:22 AM[0m] Building project '/src/third/tsconfig.json'...
 
@@ -95,9 +95,9 @@ exitCode:: ExitStatus.Success
 
 getModifiedTime:: {
  "/src/first/first_PART1.ts": 1,
- "/src/first/bin/first-output.js": 1,
+ "/src/first/bin/first-output.tsbuildinfo": 1,
  "/src/third/third_part1.ts": 1,
- "/src/third/thirdjs/output/third-output.js": 1
+ "/src/third/thirdjs/output/third-output.tsbuildinfo": 1
 }
 
 setModifiedTime:: {}

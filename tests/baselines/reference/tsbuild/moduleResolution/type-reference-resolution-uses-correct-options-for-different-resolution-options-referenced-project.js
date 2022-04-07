@@ -40,7 +40,7 @@ Output::
     * src/packages/pkg1.tsconfig.json
     * src/packages/pkg2.tsconfig.json
 
-[[90m12:00:18 AM[0m] Project 'src/packages/pkg1.tsconfig.json' is out of date because output file 'src/packages/pkg1_index.js' does not exist
+[[90m12:00:18 AM[0m] Project 'src/packages/pkg1.tsconfig.json' is out of date because output file 'src/packages/pkg1.tsconfig.tsbuildinfo' does not exist
 
 [[90m12:00:19 AM[0m] Building project '/src/packages/pkg1.tsconfig.json'...
 
@@ -50,7 +50,7 @@ File '/src/packages/typeroot1/sometype/package.json' does not exist.
 File '/src/packages/typeroot1/sometype/index.d.ts' exist - use it as a name resolution result.
 Resolving real path for '/src/packages/typeroot1/sometype/index.d.ts', result '/src/packages/typeroot1/sometype/index.d.ts'.
 ======== Type reference directive 'sometype' was successfully resolved to '/src/packages/typeroot1/sometype/index.d.ts', primary: true. ========
-[[90m12:00:24 AM[0m] Project 'src/packages/pkg2.tsconfig.json' is out of date because output file 'src/packages/pkg2_index.js' does not exist
+[[90m12:00:24 AM[0m] Project 'src/packages/pkg2.tsconfig.json' is out of date because output file 'src/packages/pkg2.tsconfig.tsbuildinfo' does not exist
 
 [[90m12:00:25 AM[0m] Building project '/src/packages/pkg2.tsconfig.json'...
 
@@ -64,9 +64,9 @@ exitCode:: ExitStatus.Success
 
 getModifiedTime:: {
  "/src/packages/pkg1_index.ts": 1,
- "/src/packages/pkg1_index.js": 1,
+ "/src/packages/pkg1.tsconfig.tsbuildinfo": 1,
  "/src/packages/pkg2_index.ts": 1,
- "/src/packages/pkg2_index.js": 1
+ "/src/packages/pkg2.tsconfig.tsbuildinfo": 1
 }
 
 setModifiedTime:: {}

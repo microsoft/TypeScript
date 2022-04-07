@@ -800,6 +800,7 @@ namespace ts {
         exportedModulesMap?: ProgramBuildInfoReferencedMap;
         semanticDiagnosticsPerFile?: ProgramBuildInfoDiagnostic[];
         affectedFilesPendingEmit?: ProgramBuilderInfoFilePendingEmit[];
+        hasPendingChange?: boolean;
     }
 
     /**
@@ -898,6 +899,7 @@ namespace ts {
             exportedModulesMap,
             semanticDiagnosticsPerFile,
             affectedFilesPendingEmit,
+            hasPendingChange: state.changedFilesSet?.size ? true : undefined,
         };
 
         function relativeToBuildInfoEnsuringAbsolutePath(path: string) {
@@ -941,7 +943,8 @@ namespace ts {
                 // flags it controls (e.g. `strictNullChecks`) will be retrieved correctly from the buildinfo
                 optionKey === "strict" ||
                 // We need to store these to determine whether `lib` files need to be rechecked.
-                optionKey === "skiplibcheck" || optionKey === "skipdefaultlibcheck") {
+                optionKey === "skiplibcheck" || optionKey === "skipdefaultlibcheck" ||
+                optionKey === "noemit") {
                 (result ||= {})[name] = convertToReusableCompilerOptionValue(
                     optionInfo,
                     options[name] as CompilerOptionsValue,

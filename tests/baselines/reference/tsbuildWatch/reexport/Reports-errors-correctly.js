@@ -82,7 +82,7 @@ Output::
     * src/main/tsconfig.json
     * src/tsconfig.json
 
-[[90m12:00:37 AM[0m] Project 'src/pure/tsconfig.json' is out of date because output file 'out/pure/index.js' does not exist
+[[90m12:00:37 AM[0m] Project 'src/pure/tsconfig.json' is out of date because output file 'out/pure/tsconfig.tsbuildinfo' does not exist
 
 [[90m12:00:38 AM[0m] Building project '/user/username/projects/reexport/src/pure/tsconfig.json'...
 
@@ -289,7 +289,7 @@ directoryExists:: {
 getModifiedTimes:: {
  "/user/username/projects/reexport/src/pure/index.ts": 1,
  "/user/username/projects/reexport/src/pure/session.ts": 1,
- "/user/username/projects/reexport/out/pure/index.js": 1,
+ "/user/username/projects/reexport/out/pure/tsconfig.tsbuildinfo": 1,
  "/user/username/projects/reexport/src/main/index.ts": 1,
  "/user/username/projects/reexport/out/main/index.js": 1
 } 
@@ -319,7 +319,7 @@ Output::
 >> Screen clear
 [[90m12:01:07 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:08 AM[0m] Project 'src/pure/tsconfig.json' is out of date because oldest output 'out/pure/index.js' is older than newest input 'src/pure/session.ts'
+[[90m12:01:08 AM[0m] Project 'src/pure/tsconfig.json' is out of date because oldest output 'out/pure/tsconfig.tsbuildinfo' is older than newest input 'src/pure/session.ts'
 
 [[90m12:01:09 AM[0m] Building project '/user/username/projects/reexport/src/pure/tsconfig.json'...
 
@@ -492,7 +492,7 @@ directoryExists:: {
 } 
 
 getModifiedTimes:: {
- "/user/username/projects/reexport/out/pure/index.js": 1
+ "/user/username/projects/reexport/out/pure/tsconfig.tsbuildinfo": 1
 } 
 
 setModifiedTimes:: {} 
@@ -520,7 +520,7 @@ Output::
 >> Screen clear
 [[90m12:01:34 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:35 AM[0m] Project 'src/pure/tsconfig.json' is out of date because oldest output 'out/pure/index.js' is older than newest input 'src/pure/session.ts'
+[[90m12:01:35 AM[0m] Project 'src/pure/tsconfig.json' is out of date because oldest output 'out/pure/tsconfig.tsbuildinfo' is older than newest input 'src/pure/session.ts'
 
 [[90m12:01:36 AM[0m] Building project '/user/username/projects/reexport/src/pure/tsconfig.json'...
 
@@ -685,7 +685,7 @@ directoryExists:: {
 } 
 
 getModifiedTimes:: {
- "/user/username/projects/reexport/out/pure/index.js": 1
+ "/user/username/projects/reexport/out/pure/tsconfig.tsbuildinfo": 1
 } 
 
 setModifiedTimes:: {

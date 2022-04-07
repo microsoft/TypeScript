@@ -159,15 +159,15 @@ Output::
     * src/second/tsconfig.json
     * src/third/tsconfig.json
 
-[[90m12:00:09 AM[0m] Project 'src/first/tsconfig.json' is out of date because output file 'src/first/bin/first-output.js' does not exist
+[[90m12:00:09 AM[0m] Project 'src/first/tsconfig.json' is out of date because output file 'src/first/bin/first-output.tsbuildinfo' does not exist
 
 [[90m12:00:10 AM[0m] Building project '/src/first/tsconfig.json'...
 
-[[90m12:00:19 AM[0m] Project 'src/second/tsconfig.json' is out of date because output file 'src/2/second-output.js' does not exist
+[[90m12:00:19 AM[0m] Project 'src/second/tsconfig.json' is out of date because output file 'src/2/second-output.tsbuildinfo' does not exist
 
 [[90m12:00:20 AM[0m] Building project '/src/second/tsconfig.json'...
 
-[[90m12:00:29 AM[0m] Project 'src/third/tsconfig.json' is out of date because output file 'src/third/thirdjs/output/third-output.js' does not exist
+[[90m12:00:29 AM[0m] Project 'src/third/tsconfig.json' is out of date because output file 'src/third/thirdjs/output/third-output.tsbuildinfo' does not exist
 
 [[90m12:00:30 AM[0m] Building project '/src/third/tsconfig.json'...
 
@@ -177,12 +177,12 @@ getModifiedTime:: {
  "/src/first/first_PART1.ts": 1,
  "/src/first/first_part2.ts": 1,
  "/src/first/first_part3.ts": 1,
- "/src/first/bin/first-output.js": 1,
+ "/src/first/bin/first-output.tsbuildinfo": 1,
  "/src/second/second_part1.ts": 1,
  "/src/second/second_part2.ts": 1,
- "/src/2/second-output.js": 1,
+ "/src/2/second-output.tsbuildinfo": 1,
  "/src/third/third_part1.ts": 1,
- "/src/third/thirdjs/output/third-output.js": 1
+ "/src/third/thirdjs/output/third-output.tsbuildinfo": 1
 }
 
 setModifiedTime:: {}

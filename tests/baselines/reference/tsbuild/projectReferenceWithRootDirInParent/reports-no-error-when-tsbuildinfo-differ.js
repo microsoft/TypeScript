@@ -54,11 +54,11 @@ Output::
     * src/src/other/tsconfig.other.json
     * src/src/main/tsconfig.main.json
 
-[[90m12:00:11 AM[0m] Project 'src/src/other/tsconfig.other.json' is out of date because output file 'src/dist/other.js' does not exist
+[[90m12:00:11 AM[0m] Project 'src/src/other/tsconfig.other.json' is out of date because output file 'src/dist/tsconfig.other.tsbuildinfo' does not exist
 
 [[90m12:00:12 AM[0m] Building project '/src/src/other/tsconfig.other.json'...
 
-[[90m12:00:18 AM[0m] Project 'src/src/main/tsconfig.main.json' is out of date because output file 'src/dist/a.js' does not exist
+[[90m12:00:18 AM[0m] Project 'src/src/main/tsconfig.main.json' is out of date because output file 'src/dist/tsconfig.main.tsbuildinfo' does not exist
 
 [[90m12:00:19 AM[0m] Building project '/src/src/main/tsconfig.main.json'...
 
@@ -66,10 +66,10 @@ exitCode:: ExitStatus.Success
 
 getModifiedTime:: {
  "/src/src/other/other.ts": 1,
- "/src/dist/other.js": 1,
+ "/src/dist/tsconfig.other.tsbuildinfo": 1,
  "/src/src/main/a.ts": 1,
  "/src/src/main/b.ts": 1,
- "/src/dist/a.js": 1
+ "/src/dist/tsconfig.main.tsbuildinfo": 1
 }
 
 setModifiedTime:: {}

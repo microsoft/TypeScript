@@ -117,15 +117,15 @@ Output::
     * src/logic/tsconfig.json
     * src/tests/tsconfig.json
 
-[[90m12:00:08 AM[0m] Project 'src/core/tsconfig.json' is out of date because output file 'src/core/anotherModule.js' does not exist
+[[90m12:00:08 AM[0m] Project 'src/core/tsconfig.json' is out of date because output file 'src/core/tsconfig.tsbuildinfo' does not exist
 
 [[90m12:00:09 AM[0m] Building project '/src/core/tsconfig.json'...
 
-[[90m12:00:18 AM[0m] Project 'src/logic/tsconfig.json' is out of date because output file 'src/logic/index.js' does not exist
+[[90m12:00:18 AM[0m] Project 'src/logic/tsconfig.json' is out of date because output file 'src/logic/ownFile.tsbuildinfo' does not exist
 
 [[90m12:00:19 AM[0m] Building project '/src/logic/tsconfig.json'...
 
-[[90m12:00:25 AM[0m] Project 'src/tests/tsconfig.json' is out of date because output file 'src/tests/index.js' does not exist
+[[90m12:00:25 AM[0m] Project 'src/tests/tsconfig.json' is out of date because output file 'src/tests/tsconfig.tsbuildinfo' does not exist
 
 [[90m12:00:26 AM[0m] Building project '/src/tests/tsconfig.json'...
 
@@ -151,11 +151,11 @@ getModifiedTime:: {
  "/src/core/anotherModule.ts": 1,
  "/src/core/index.ts": 1,
  "/src/core/some_decl.d.ts": 1,
- "/src/core/anotherModule.js": 1,
+ "/src/core/tsconfig.tsbuildinfo": 1,
  "/src/logic/index.ts": 1,
- "/src/logic/index.js": 1,
+ "/src/logic/ownFile.tsbuildinfo": 1,
  "/src/tests/index.ts": 1,
- "/src/tests/index.js": 1
+ "/src/tests/tsconfig.tsbuildinfo": 1
 }
 
 setModifiedTime:: {}

@@ -123,15 +123,15 @@ Output::
     * src/solution/tsconfig.json
     * src/tsconfig.json
 
-[[90m12:00:20 AM[0m] Project 'src/solution/common/tsconfig.json' is out of date because output file 'src/lib/solution/common/nominal.js' does not exist
+[[90m12:00:20 AM[0m] Project 'src/solution/common/tsconfig.json' is out of date because output file 'src/lib/solution/common/tsconfig.tsbuildinfo' does not exist
 
 [[90m12:00:21 AM[0m] Building project '/src/solution/common/tsconfig.json'...
 
-[[90m12:00:29 AM[0m] Project 'src/solution/sub-project/tsconfig.json' is out of date because output file 'src/lib/solution/sub-project/index.js' does not exist
+[[90m12:00:29 AM[0m] Project 'src/solution/sub-project/tsconfig.json' is out of date because output file 'src/lib/solution/sub-project/tsconfig.tsbuildinfo' does not exist
 
 [[90m12:00:30 AM[0m] Building project '/src/solution/sub-project/tsconfig.json'...
 
-[[90m12:00:36 AM[0m] Project 'src/solution/sub-project-2/tsconfig.json' is out of date because output file 'src/lib/solution/sub-project-2/index.js' does not exist
+[[90m12:00:36 AM[0m] Project 'src/solution/sub-project-2/tsconfig.json' is out of date because output file 'src/lib/solution/sub-project-2/tsconfig.tsbuildinfo' does not exist
 
 [[90m12:00:37 AM[0m] Building project '/src/solution/sub-project-2/tsconfig.json'...
 
@@ -139,11 +139,11 @@ exitCode:: ExitStatus.Success
 
 getModifiedTime:: {
  "/src/solution/common/nominal.ts": 1,
- "/src/lib/solution/common/nominal.js": 1,
+ "/src/lib/solution/common/tsconfig.tsbuildinfo": 1,
  "/src/solution/sub-project/index.ts": 1,
- "/src/lib/solution/sub-project/index.js": 1,
+ "/src/lib/solution/sub-project/tsconfig.tsbuildinfo": 1,
  "/src/solution/sub-project-2/index.ts": 1,
- "/src/lib/solution/sub-project-2/index.js": 1
+ "/src/lib/solution/sub-project-2/tsconfig.tsbuildinfo": 1
 }
 
 setModifiedTime:: {}

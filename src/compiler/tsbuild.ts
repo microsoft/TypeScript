@@ -18,6 +18,7 @@ namespace ts {
         OutputMissing,
         OutOfDateWithSelf,
         OutOfDateWithUpstream,
+        OutOfDateBuildInfo,
         UpstreamOutOfDate,
         UpstreamBlocked,
         ComputingUpstream,
@@ -37,6 +38,7 @@ namespace ts {
         | Status.OutputMissing
         | Status.OutOfDateWithSelf
         | Status.OutOfDateWithUpstream
+        | Status.OutOfDateBuildInfo
         | Status.UpstreamOutOfDate
         | Status.UpstreamBlocked
         | Status.ComputingUpstream
@@ -100,6 +102,14 @@ namespace ts {
             type: UpToDateStatusType.OutOfDateWithSelf;
             outOfDateOutputFileName: string;
             newerInputFileName: string;
+        }
+
+        /**
+         * Buildinfo indicates that build is out of date
+         */
+        export interface OutOfDateBuildInfo {
+            type: UpToDateStatusType.OutOfDateBuildInfo,
+            buildInfoFile: string;
         }
 
         /**

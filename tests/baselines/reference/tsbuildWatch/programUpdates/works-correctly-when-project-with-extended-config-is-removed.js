@@ -55,11 +55,11 @@ Output::
     * project2.tsconfig.json
     * tsconfig.json
 
-[[90m12:00:29 AM[0m] Project 'project1.tsconfig.json' is out of date because output file 'commonFile1.js' does not exist
+[[90m12:00:29 AM[0m] Project 'project1.tsconfig.json' is out of date because output file 'project1.tsconfig.tsbuildinfo' does not exist
 
 [[90m12:00:30 AM[0m] Building project '/a/b/project1.tsconfig.json'...
 
-[[90m12:00:43 AM[0m] Project 'project2.tsconfig.json' is out of date because output file 'other.js' does not exist
+[[90m12:00:43 AM[0m] Project 'project2.tsconfig.json' is out of date because output file 'project2.tsconfig.tsbuildinfo' does not exist
 
 [[90m12:00:44 AM[0m] Building project '/a/b/project2.tsconfig.json'...
 
@@ -247,9 +247,9 @@ directoryExists:: {
 getModifiedTimes:: {
  "/a/b/commonfile1.ts": 1,
  "/a/b/commonfile2.ts": 1,
- "/a/b/commonfile1.js": 1,
+ "/a/b/project1.tsconfig.tsbuildinfo": 1,
  "/a/b/other.ts": 1,
- "/a/b/other.js": 1
+ "/a/b/project2.tsconfig.tsbuildinfo": 1
 } 
 
 setModifiedTimes:: {} 

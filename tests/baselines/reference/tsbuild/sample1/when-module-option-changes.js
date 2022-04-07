@@ -112,7 +112,7 @@ Output::
 [[90m12:00:07 AM[0m] Projects in this build: 
     * src/core/tsconfig.json
 
-[[90m12:00:08 AM[0m] Project 'src/core/tsconfig.json' is out of date because output file 'src/core/anotherModule.js' does not exist
+[[90m12:00:08 AM[0m] Project 'src/core/tsconfig.json' is out of date because output file 'src/core/tsconfig.tsbuildinfo' does not exist
 
 [[90m12:00:09 AM[0m] Building project '/src/core/tsconfig.json'...
 
@@ -122,7 +122,7 @@ getModifiedTime:: {
  "/src/core/anotherModule.ts": 1,
  "/src/core/index.ts": 1,
  "/src/core/some_decl.d.ts": 1,
- "/src/core/anotherModule.js": 1
+ "/src/core/tsconfig.tsbuildinfo": 1
 }
 
 setModifiedTime:: {}
@@ -221,7 +221,7 @@ Output::
 [[90m12:00:15 AM[0m] Projects in this build: 
     * src/core/tsconfig.json
 
-[[90m12:00:16 AM[0m] Project 'src/core/tsconfig.json' is out of date because oldest output 'src/core/anotherModule.js' is older than newest input 'src/core/tsconfig.json'
+[[90m12:00:16 AM[0m] Project 'src/core/tsconfig.json' is out of date because oldest output 'src/core/tsconfig.tsbuildinfo' is older than newest input 'src/core/tsconfig.json'
 
 [[90m12:00:17 AM[0m] Building project '/src/core/tsconfig.json'...
 
@@ -231,8 +231,6 @@ getModifiedTime:: {
  "/src/core/anotherModule.ts": 1,
  "/src/core/index.ts": 1,
  "/src/core/some_decl.d.ts": 1,
- "/src/core/anotherModule.js": 1,
- "/src/core/index.js": 1,
  "/src/core/tsconfig.tsbuildinfo": 1,
  "/src/core/tsconfig.json": 1
 }

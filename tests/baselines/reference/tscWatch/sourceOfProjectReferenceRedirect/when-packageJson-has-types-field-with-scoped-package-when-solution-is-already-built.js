@@ -217,9 +217,9 @@ directoryExists:: {
 getModifiedTimes:: {
  "/user/username/projects/myproject/packages/b/src/bar.ts": 1,
  "/user/username/projects/myproject/packages/b/src/index.ts": 1,
- "/user/username/projects/myproject/packages/b/lib/bar.js": 1,
+ "/user/username/projects/myproject/packages/b/tsconfig.tsbuildinfo": 1,
  "/user/username/projects/myproject/packages/a/src/index.ts": 1,
- "/user/username/projects/myproject/packages/a/lib/index.js": 1
+ "/user/username/projects/myproject/packages/a/tsconfig.tsbuildinfo": 1
 } 
 
 setModifiedTimes:: {} 

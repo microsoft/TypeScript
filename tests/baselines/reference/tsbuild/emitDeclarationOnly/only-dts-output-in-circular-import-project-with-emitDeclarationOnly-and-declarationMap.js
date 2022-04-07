@@ -73,7 +73,7 @@ Output::
 [[90m12:00:06 AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90m12:00:07 AM[0m] Project 'src/tsconfig.json' is out of date because output file 'src/lib/a.d.ts' does not exist
+[[90m12:00:07 AM[0m] Project 'src/tsconfig.json' is out of date because output file 'src/tsconfig.tsbuildinfo' does not exist
 
 [[90m12:00:08 AM[0m] Building project '/src/tsconfig.json'...
 
@@ -84,7 +84,7 @@ getModifiedTime:: {
  "/src/src/b.ts": 1,
  "/src/src/c.ts": 1,
  "/src/src/index.ts": 1,
- "/src/lib/a.d.ts": 1
+ "/src/tsconfig.tsbuildinfo": 1
 }
 
 setModifiedTime:: {}
@@ -269,7 +269,7 @@ Output::
 [[90m12:00:21 AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90m12:00:22 AM[0m] Project 'src/tsconfig.json' is out of date because oldest output 'src/lib/a.d.ts' is older than newest input 'src/src/a.ts'
+[[90m12:00:22 AM[0m] Project 'src/tsconfig.json' is out of date because oldest output 'src/tsconfig.tsbuildinfo' is older than newest input 'src/src/a.ts'
 
 [[90m12:00:23 AM[0m] Building project '/src/tsconfig.json'...
 
@@ -280,7 +280,7 @@ getModifiedTime:: {
  "/src/src/b.ts": 1,
  "/src/src/c.ts": 1,
  "/src/src/index.ts": 1,
- "/src/lib/a.d.ts": 1,
+ "/src/tsconfig.tsbuildinfo": 1,
  "/src/lib/b.d.ts": 1,
  "/src/lib/c.d.ts": 1,
  "/src/lib/index.d.ts": 1

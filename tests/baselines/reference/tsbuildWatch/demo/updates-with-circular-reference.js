@@ -245,15 +245,15 @@ Output::
 >> Screen clear
 [[90m12:00:52 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:53 AM[0m] Project 'core/tsconfig.json' is out of date because output file 'lib/core/utilities.js' does not exist
+[[90m12:00:53 AM[0m] Project 'core/tsconfig.json' is out of date because output file 'lib/core/tsconfig.tsbuildinfo' does not exist
 
 [[90m12:00:54 AM[0m] Building project '/user/username/projects/demo/core/tsconfig.json'...
 
-[[90m12:01:08 AM[0m] Project 'animals/tsconfig.json' is out of date because output file 'lib/animals/animal.js' does not exist
+[[90m12:01:08 AM[0m] Project 'animals/tsconfig.json' is out of date because output file 'lib/animals/tsconfig.tsbuildinfo' does not exist
 
 [[90m12:01:09 AM[0m] Building project '/user/username/projects/demo/animals/tsconfig.json'...
 
-[[90m12:01:29 AM[0m] Project 'zoo/tsconfig.json' is out of date because output file 'lib/zoo/zoo.js' does not exist
+[[90m12:01:29 AM[0m] Project 'zoo/tsconfig.json' is out of date because output file 'lib/zoo/tsconfig.tsbuildinfo' does not exist
 
 [[90m12:01:30 AM[0m] Building project '/user/username/projects/demo/zoo/tsconfig.json'...
 
@@ -712,13 +712,13 @@ directoryExists:: {
 
 getModifiedTimes:: {
  "/user/username/projects/demo/core/utilities.ts": 1,
- "/user/username/projects/demo/lib/core/utilities.js": 1,
+ "/user/username/projects/demo/lib/core/tsconfig.tsbuildinfo": 1,
  "/user/username/projects/demo/animals/animal.ts": 1,
  "/user/username/projects/demo/animals/dog.ts": 1,
  "/user/username/projects/demo/animals/index.ts": 1,
- "/user/username/projects/demo/lib/animals/animal.js": 1,
+ "/user/username/projects/demo/lib/animals/tsconfig.tsbuildinfo": 1,
  "/user/username/projects/demo/zoo/zoo.ts": 1,
- "/user/username/projects/demo/lib/zoo/zoo.js": 1
+ "/user/username/projects/demo/lib/zoo/tsconfig.tsbuildinfo": 1
 } 
 
 setModifiedTimes:: {} 
