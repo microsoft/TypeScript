@@ -1414,6 +1414,7 @@ namespace ts.server {
                 const oldOptions = this.compilerOptions;
                 this.compilerOptions = compilerOptions;
                 this.setInternalCompilerOptionsForEmittingJsFiles();
+                this.noDtsResolutionProject?.setCompilerOptions(this.getCompilerOptionsForNoDtsResolutionProject());
                 if (changesAffectModuleResolution(oldOptions, compilerOptions)) {
                     // reset cached unresolved imports if changes in compiler options affected module resolution
                     this.cachedUnresolvedImportsPerFile.clear();
@@ -1793,19 +1794,7 @@ namespace ts.server {
         getNoDtsResolutionProject(rootFileNames: readonly string[]): Project {
             Debug.assert(this.projectService.serverMode === LanguageServiceMode.Semantic);
             if (!this.noDtsResolutionProject) {
-                const options: CompilerOptions = {
-                    ...this.getCompilerOptions(),
-                    noDtsResolution: true,
-                    allowJs: true,
-                    maxNodeModuleJsDepth: 3,
-                    diagnostics: false,
-                    skipLibCheck: true,
-                    sourceMap: false,
-                    types: ts.emptyArray,
-                    lib: ts.emptyArray,
-                    noLib: true,
-                };
-                this.noDtsResolutionProject = new AuxiliaryProject(this.projectService, this.documentRegistry, options);
+                this.noDtsResolutionProject = new AuxiliaryProject(this.projectService, this.documentRegistry, this.getCompilerOptionsForNoDtsResolutionProject());
             }
 
             enumerateInsertsAndDeletes<NormalizedPath, NormalizedPath>(
@@ -1828,6 +1817,22 @@ namespace ts.server {
             );
 
             return this.noDtsResolutionProject;
+        }
+
+        /*@internal*/
+        private getCompilerOptionsForNoDtsResolutionProject() {
+            return {
+                ...this.getCompilerOptions(),
+                noDtsResolution: true,
+                allowJs: true,
+                maxNodeModuleJsDepth: 3,
+                diagnostics: false,
+                skipLibCheck: true,
+                sourceMap: false,
+                types: ts.emptyArray,
+                lib: ts.emptyArray,
+                noLib: true,
+            };
         }
     }
 
