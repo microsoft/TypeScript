@@ -1914,16 +1914,16 @@ namespace ts {
     function extensionIsOk(extensions: Extensions, extension: Extension): boolean {
         switch (extensions) {
             case Extensions.JavaScript:
-                return extension === Extension.Js || extension === Extension.Jsx;
+                return extension === Extension.Js || extension === Extension.Jsx || extension === Extension.Mjs || extension === Extension.Cjs;
             case Extensions.TSConfig:
             case Extensions.Json:
                 return extension === Extension.Json;
             case Extensions.TypeScript:
-                return extension === Extension.Ts || extension === Extension.Tsx || extension === Extension.Dts;
+                return extension === Extension.Ts || extension === Extension.Tsx || extension === Extension.Mts || extension === Extension.Cts || extension === Extension.Dts || extension === Extension.Dmts || extension === Extension.Dcts;
             case Extensions.TsOnly:
-                return extension === Extension.Ts || extension === Extension.Tsx;
+                return extension === Extension.Ts || extension === Extension.Tsx || extension === Extension.Mts || extension === Extension.Cts;
             case Extensions.DtsOnly:
-                return extension === Extension.Dts;
+                return extension === Extension.Dts || extension === Extension.Dmts || extension === Extension.Dcts;
         }
     }
 
