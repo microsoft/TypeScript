@@ -7,11 +7,11 @@ type Indices<T extends Array<any>> = {
 
 // should contain numbers
 type MyIndices = Indices<[string, number]>;
->MyIndices : ["0", "1"]
+>MyIndices : [0, 1]
 
 // union of indices should be preserved
 type StillMyIndices = MyIndices[number] & number
->StillMyIndices : never
+>StillMyIndices : StillMyIndices
 
 // simplified repro from https://twitter.com/oleg008/status/1508422774401949704
 
@@ -53,17 +53,17 @@ combine([container1, container2], (value1, value2) => {
 >[container1, container2] : [Container<string>, Container<number>]
 >container1 : Container<string>
 >container2 : Container<number>
->(value1, value2) => {  const val1: string = value1;  const val2: number = value2;} : (value1: string | number, value2: string | number) => void
->value1 : string | number
->value2 : string | number
+>(value1, value2) => {  const val1: string = value1;  const val2: number = value2;} : (value1: string, value2: number) => void
+>value1 : string
+>value2 : number
 
   const val1: string = value1;
 >val1 : string
->value1 : string | number
+>value1 : string
 
   const val2: number = value2;
 >val2 : number
->value2 : string | number
+>value2 : number
 
 });
 
