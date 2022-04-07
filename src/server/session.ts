@@ -1803,8 +1803,14 @@ namespace ts.server {
             const nameSpan = nameInfo && nameInfo.textSpan;
             const symbolStartOffset = nameSpan ? scriptInfo.positionToLineOffset(nameSpan.start).offset : 0;
             const symbolName = nameSpan ? scriptInfo.getSnapshot().getText(nameSpan.start, textSpanEnd(nameSpan)) : "";
-            const refs: readonly protocol.ReferencesResponseItem[] = flatMap(references, referencedSymbol => {
-                return referencedSymbol.references.map(entry => referenceEntryToReferencesResponseItem(this.projectService, entry)); // TODO (acasey): de-dup
+            const refs: protocol.ReferencesResponseItem[] = [];
+            const seen = createDocumentSpanSet();
+            references.forEach(referencedSymbol => {
+                referencedSymbol.references.forEach(entry => {
+                    if (tryAddToSet(seen, entry)) {
+                        refs.push(referenceEntryToReferencesResponseItem(this.projectService, entry));
+                    }
+                });
             });
             return { refs, symbolName, symbolStartOffset, symbolDisplayString };
         }
