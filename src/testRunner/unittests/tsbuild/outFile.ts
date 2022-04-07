@@ -1,78 +1,13 @@
 namespace ts {
     describe("unittests:: tsbuild:: outFile::", () => {
         let outFileFs: vfs.FileSystem;
-        const enum Ext { js, jsmap, dts, dtsmap, buildinfo }
-        const enum Project { first, second, third }
-        type OutputFile = [string, string, string, string, string];
-        function relName(path: string) {
-            return path.slice(1);
-        }
-        const outputFiles: [OutputFile, OutputFile, OutputFile] = [
-            [
-                "/src/first/bin/first-output.js",
-                "/src/first/bin/first-output.js.map",
-                "/src/first/bin/first-output.d.ts",
-                "/src/first/bin/first-output.d.ts.map",
-                "/src/first/bin/first-output.tsbuildinfo"
-            ],
-            [
-                "/src/2/second-output.js",
-                "/src/2/second-output.js.map",
-                "/src/2/second-output.d.ts",
-                "/src/2/second-output.d.ts.map",
-                "/src/2/second-output.tsbuildinfo"
-            ],
-            [
-                "/src/third/thirdjs/output/third-output.js",
-                "/src/third/thirdjs/output/third-output.js.map",
-                "/src/third/thirdjs/output/third-output.d.ts",
-                "/src/third/thirdjs/output/third-output.d.ts.map",
-                "/src/third/thirdjs/output/third-output.tsbuildinfo"
-            ]
-        ];
-        const relOutputFiles = outputFiles.map(v => v.map(relName)) as [OutputFile, OutputFile, OutputFile];
-        type Sources = [string, readonly string[]];
-        const enum Source { config, ts }
-        const enum Part { one, two, three }
-        const sources: [Sources, Sources, Sources] = [
-            [
-                "/src/first/tsconfig.json",
-                [
-                    "/src/first/first_PART1.ts",
-                    "/src/first/first_part2.ts",
-                    "/src/first/first_part3.ts"
-                ]
-            ],
-            [
-                "/src/second/tsconfig.json",
-                [
-                    "/src/second/second_part1.ts",
-                    "/src/second/second_part2.ts"
-                ]
-            ],
-            [
-                "/src/third/tsconfig.json",
-                [
-                    "/src/third/third_part1.ts"
-                ]
-            ]
-        ];
-        const relSources = sources.map(([config, sources]) => [relName(config), sources.map(relName)]) as any as [Sources, Sources, Sources];
-        let initialExpectedDiagnostics: readonly fakes.ExpectedDiagnostic[] = [
-            getExpectedDiagnosticForProjectsInBuild(relSources[Project.first][Source.config], relSources[Project.second][Source.config], relSources[Project.third][Source.config]),
-            [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, relSources[Project.first][Source.config], relOutputFiles[Project.first][Ext.js]],
-            [Diagnostics.Building_project_0, sources[Project.first][Source.config]],
-            [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, relSources[Project.second][Source.config], relOutputFiles[Project.second][Ext.js]],
-            [Diagnostics.Building_project_0, sources[Project.second][Source.config]],
-            [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, relSources[Project.third][Source.config], relOutputFiles[Project.third][Ext.js]],
-            [Diagnostics.Building_project_0, sources[Project.third][Source.config]]
-        ];
+        let outFileWithBuildFs: vfs.FileSystem;
         before(() => {
             outFileFs = loadProjectFromDisk("tests/projects/outfile-concat");
         });
         after(() => {
             outFileFs = undefined!;
-            initialExpectedDiagnostics = undefined!;
+            outFileWithBuildFs = undefined!;
         });
 
         function createSolutionBuilder(host: fakes.SolutionBuilderHost, baseOptions?: BuildOptions) {
@@ -98,26 +33,26 @@ namespace ts {
             baselineOnly,
             additionalCommandLineArgs,
         }: VerifyOutFileScenarioInput) {
-            const incrementalScenarios: TscIncremental[] = [];
+            const edits: TestTscEdit[] = [];
             if (!ignoreDtsChanged) {
-                incrementalScenarios.push({
-                    buildKind: BuildKind.IncrementalDtsChange,
-                    modifyFs: fs => replaceText(fs, relSources[Project.first][Source.ts][Part.one], "Hello", "Hola"),
+                edits.push({
+                    subScenario: "incremental-declaration-changes",
+                    modifyFs: fs => replaceText(fs, "/src/first/first_PART1.ts", "Hello", "Hola"),
                 });
             }
             if (!ignoreDtsUnchanged) {
-                incrementalScenarios.push({
-                    buildKind: BuildKind.IncrementalDtsUnchanged,
-                    modifyFs: fs => appendText(fs, relSources[Project.first][Source.ts][Part.one], "console.log(s);"),
+                edits.push({
+                    subScenario: "incremental-declaration-doesnt-change",
+                    modifyFs: fs => appendText(fs, "/src/first/first_PART1.ts", "console.log(s);"),
                 });
             }
             if (modifyAgainFs) {
-                incrementalScenarios.push({
-                    buildKind: BuildKind.IncrementalHeadersChange,
+                edits.push({
+                    subScenario: "incremental-headers-change-without-dts-changes",
                     modifyFs: modifyAgainFs
                 });
             }
-            const input: VerifyTsBuildInput = {
+            const input: VerifyTscWithEditsInput = {
                 subScenario,
                 fs: () => outFileFs,
                 scenario: "outfile-concat",
@@ -125,10 +60,10 @@ namespace ts {
                 baselineSourceMap: true,
                 modifyFs,
                 baselineReadFileCalls: !baselineOnly,
-                incrementalScenarios,
+                edits,
             };
-            return incrementalScenarios.length ?
-                verifyTscIncrementalEdits(input) :
+            return edits.length ?
+                verifyTscWithEdits(input) :
                 verifyTsc(input);
         }
 
@@ -146,7 +81,7 @@ namespace ts {
         // Verify baseline with build info + dts unChanged
         verifyOutFileScenario({
             subScenario: "when final project is not composite but uses project references",
-            modifyFs: fs => replaceText(fs, sources[Project.third][Source.config], `"composite": true,`, ""),
+            modifyFs: fs => replaceText(fs, "/src/third/tsconfig.json", `"composite": true,`, ""),
             ignoreDtsChanged: true,
             baselineOnly: true
         });
@@ -154,7 +89,7 @@ namespace ts {
         // Verify baseline with build info
         verifyOutFileScenario({
             subScenario: "when final project is not composite but incremental",
-            modifyFs: fs => replaceText(fs, sources[Project.third][Source.config], `"composite": true,`, `"incremental": true,`),
+            modifyFs: fs => replaceText(fs, "/src/third/tsconfig.json", `"composite": true,`, `"incremental": true,`),
             ignoreDtsChanged: true,
             ignoreDtsUnchanged: true,
             baselineOnly: true
@@ -163,7 +98,7 @@ namespace ts {
         // Verify baseline with build info
         verifyOutFileScenario({
             subScenario: "when final project specifies tsBuildInfoFile",
-            modifyFs: fs => replaceText(fs, sources[Project.third][Source.config], `"composite": true,`, `"composite": true,
+            modifyFs: fs => replaceText(fs, "/src/third/tsconfig.json", `"composite": true,`, `"composite": true,
         "tsBuildInfoFile": "./thirdjs/output/third.tsbuildinfo",`),
             ignoreDtsChanged: true,
             ignoreDtsUnchanged: true,
@@ -171,20 +106,21 @@ namespace ts {
         });
 
         function getOutFileFsAfterBuild() {
+            if (outFileWithBuildFs) return outFileWithBuildFs;
             const fs = outFileFs.shadow();
             const host = fakes.SolutionBuilderHost.create(fs);
             const builder = createSolutionBuilder(host);
             builder.build();
             fs.makeReadonly();
-            return fs;
+            return outFileWithBuildFs = fs;
         }
 
-        verifyTscSerializedIncrementalEdits({
+        verifyTscWithEdits({
             scenario: "outFile",
             subScenario: "clean projects",
             fs: getOutFileFsAfterBuild,
             commandLineArgs: ["--b", "/src/third", "--clean"],
-            incrementalScenarios: noChangeOnlyRuns
+            edits: noChangeOnlyRuns
         });
 
         verifyTsc({
@@ -192,7 +128,7 @@ namespace ts {
             subScenario: "verify buildInfo absence results in new build",
             fs: getOutFileFsAfterBuild,
             commandLineArgs: ["--b", "/src/third", "--verbose"],
-            modifyFs: fs => fs.unlinkSync(outputFiles[Project.first][Ext.buildinfo]),
+            modifyFs: fs => fs.unlinkSync("/src/first/bin/first-output.tsbuildinfo"),
         });
 
         verifyTsc({
@@ -200,100 +136,67 @@ namespace ts {
             subScenario: "tsbuildinfo is not generated when incremental is set to false",
             fs: () => outFileFs,
             commandLineArgs: ["--b", "/src/third", "--verbose"],
-            modifyFs: fs => replaceText(fs, sources[Project.third][Source.config], `"composite": true,`, ""),
+            modifyFs: fs => replaceText(fs, "/src/third/tsconfig.json", `"composite": true,`, ""),
         });
 
-        it("rebuilds completely when version in tsbuildinfo doesnt match ts version", () => {
-            const { fs, tick } = getFsWithTime(outFileFs);
-            const host = fakes.SolutionBuilderHost.create(fs);
-            let builder = createSolutionBuilder(host);
-            builder.build();
-            host.assertDiagnosticMessages(...initialExpectedDiagnostics);
-            host.clearDiagnostics();
-            tick();
-            builder = createSolutionBuilder(host);
-            changeCompilerVersion(host);
-            tick();
-            builder.build();
-            host.assertDiagnosticMessages(
-                getExpectedDiagnosticForProjectsInBuild(relSources[Project.first][Source.config], relSources[Project.second][Source.config], relSources[Project.third][Source.config]),
-                [Diagnostics.Project_0_is_out_of_date_because_output_for_it_was_generated_with_version_1_that_differs_with_current_version_2, relSources[Project.first][Source.config], fakes.version, version],
-                [Diagnostics.Building_project_0, sources[Project.first][Source.config]],
-                [Diagnostics.Project_0_is_out_of_date_because_output_for_it_was_generated_with_version_1_that_differs_with_current_version_2, relSources[Project.second][Source.config], fakes.version, version],
-                [Diagnostics.Building_project_0, sources[Project.second][Source.config]],
-                [Diagnostics.Project_0_is_out_of_date_because_output_for_it_was_generated_with_version_1_that_differs_with_current_version_2, relSources[Project.third][Source.config], fakes.version, version],
-                [Diagnostics.Building_project_0, sources[Project.third][Source.config]],
-            );
+        verifyTscCompileLike(testTscCompileLike, {
+            scenario: "outFile",
+            subScenario: "rebuilds completely when version in tsbuildinfo doesnt match ts version",
+            fs: getOutFileFsAfterBuild,
+            commandLineArgs: ["--b", "/src/third", "--verbose"],
+            compile: sys => {
+                // Buildinfo will have version which does not match with current ts version
+                fakes.patchHostForBuildInfoWrite(sys, "FakeTSCurrentVersion");
+                const buildHost = createSolutionBuilderHost(sys);
+                const builder = ts.createSolutionBuilder(buildHost, ["/src/third"], { verbose: true });
+                sys.exit(builder.build());
+            }
         });
 
-        it("rebuilds completely when command line incremental flag changes between non dts changes", () => {
-            const { fs, tick } = getFsWithTime(outFileFs);
+        verifyTscWithEdits({
+            scenario: "outFile",
+            subScenario: "rebuilds completely when command line incremental flag changes between non dts changes",
+            fs: () => outFileFs,
             // Make non composite third project
-            replaceText(fs, sources[Project.third][Source.config], `"composite": true,`, "");
-
+            modifyFs: fs => replaceText(fs, "/src/third/tsconfig.json", `"composite": true,`, ""),
             // Build with command line incremental
-            const host = fakes.SolutionBuilderHost.create(fs);
-            let builder = createSolutionBuilder(host, { incremental: true });
-            builder.build();
-            host.assertDiagnosticMessages(...initialExpectedDiagnostics);
-            host.clearDiagnostics();
-            tick();
-
-            // Make non incremental build with change in file that doesnt affect dts
-            appendText(fs, relSources[Project.first][Source.ts][Part.one], "console.log(s);");
-            builder = createSolutionBuilder(host, { verbose: true });
-            builder.build();
-            host.assertDiagnosticMessages(getExpectedDiagnosticForProjectsInBuild(relSources[Project.first][Source.config], relSources[Project.second][Source.config], relSources[Project.third][Source.config]),
-                [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, relSources[Project.first][Source.config], relOutputFiles[Project.first][Ext.js], relSources[Project.first][Source.ts][Part.one]],
-                [Diagnostics.Building_project_0, sources[Project.first][Source.config]],
-                [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, relSources[Project.second][Source.config], relSources[Project.second][Source.ts][Part.one], relOutputFiles[Project.second][Ext.js]],
-                [Diagnostics.Project_0_is_out_of_date_because_output_of_its_dependency_1_has_changed, relSources[Project.third][Source.config], "src/first"],
-                [Diagnostics.Building_project_0, sources[Project.third][Source.config]]
-            );
-            host.clearDiagnostics();
-            tick();
-
-            // Make incremental build with change in file that doesnt affect dts
-            appendText(fs, relSources[Project.first][Source.ts][Part.one], "console.log(s);");
-            builder = createSolutionBuilder(host, { verbose: true, incremental: true });
-            builder.build();
-            // Builds completely because tsbuildinfo is old.
-            host.assertDiagnosticMessages(
-                getExpectedDiagnosticForProjectsInBuild(relSources[Project.first][Source.config], relSources[Project.second][Source.config], relSources[Project.third][Source.config]),
-                [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, relSources[Project.first][Source.config], relOutputFiles[Project.first][Ext.js], relSources[Project.first][Source.ts][Part.one]],
-                [Diagnostics.Building_project_0, sources[Project.first][Source.config]],
-                [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, relSources[Project.second][Source.config], relSources[Project.second][Source.ts][Part.one], relOutputFiles[Project.second][Ext.js]],
-                [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, relSources[Project.third][Source.config], relOutputFiles[Project.third][Ext.buildinfo], "src/first"],
-                [Diagnostics.Building_project_0, sources[Project.third][Source.config]]
-            );
-            host.clearDiagnostics();
+            commandLineArgs: ["--b", "/src/third", "--i", "--verbose"],
+            edits: [
+                {
+                    subScenario: "Make non incremental build with change in file that doesnt affect dts",
+                    modifyFs: fs => appendText(fs, "/src/first/first_PART1.ts", "console.log(s);"),
+                    commandLineArgs: ["--b", "/src/third", "--verbose"],
+                },
+                {
+                    subScenario: "Make incremental build with change in file that doesnt affect dts",
+                    modifyFs: fs => appendText(fs, "/src/first/first_PART1.ts", "console.log(s);"),
+                    commandLineArgs: ["--b", "/src/third", "--verbose", "--incremental"],
+                }
+            ]
         });
 
-        it("builds till project specified", () => {
-            const fs = outFileFs.shadow();
-            const host = fakes.SolutionBuilderHost.create(fs);
-            const builder = createSolutionBuilder(host, { verbose: false });
-            const result = builder.build(sources[Project.second][Source.config]);
-            host.assertDiagnosticMessages(/*empty*/);
-            // First and Third is not built
-            verifyOutputsAbsent(fs, [...outputFiles[Project.first], ...outputFiles[Project.third]]);
-            // second is built
-            verifyOutputsPresent(fs, outputFiles[Project.second]);
-            assert.equal(result, ExitStatus.Success);
+        verifyTscCompileLike(testTscCompileLike, {
+            scenario: "outFile",
+            subScenario: "builds till project specified",
+            fs: () => outFileFs,
+            commandLineArgs: ["--build", "/src/second/tsconfig.json"],
+            compile: sys => {
+                const buildHost = createSolutionBuilderHost(sys);
+                const builder = ts.createSolutionBuilder(buildHost, ["/src/third/tsconfig.json"], {});
+                sys.exit(builder.build("/src/second/tsconfig.json"));
+            }
         });
 
-        it("cleans till project specified", () => {
-            const fs = outFileFs.shadow();
-            const host = fakes.SolutionBuilderHost.create(fs);
-            const builder = createSolutionBuilder(host, { verbose: false });
-            builder.build();
-            const result = builder.clean(sources[Project.second][Source.config]);
-            host.assertDiagnosticMessages(/*empty*/);
-            // First and Third output for present
-            verifyOutputsPresent(fs, [...outputFiles[Project.first], ...outputFiles[Project.third]]);
-            // second is cleaned
-            verifyOutputsAbsent(fs, outputFiles[Project.second]);
-            assert.equal(result, ExitStatus.Success);
+        verifyTscCompileLike(testTscCompileLike, {
+            scenario: "outFile",
+            subScenario: "cleans till project specified",
+            fs: getOutFileFsAfterBuild,
+            commandLineArgs: ["--build", "--clean", "/src/second/tsconfig.json"],
+            compile: sys => {
+                const buildHost = createSolutionBuilderHost(sys);
+                const builder = ts.createSolutionBuilder(buildHost, ["/src/third/tsconfig.json"], { verbose: true });
+                sys.exit(builder.clean("/src/second/tsconfig.json"));
+            }
         });
 
         describe("Prepend output with .tsbuildinfo", () => {
@@ -303,17 +206,17 @@ namespace ts {
                 verifyOutFileScenario({
                     subScenario: "strict in all projects",
                     modifyFs: fs => {
-                        enableStrict(fs, sources[Project.first][Source.config]);
-                        enableStrict(fs, sources[Project.second][Source.config]);
-                        enableStrict(fs, sources[Project.third][Source.config]);
+                        enableStrict(fs, "/src/first/tsconfig.json");
+                        enableStrict(fs, "/src/second/tsconfig.json");
+                        enableStrict(fs, "/src/third/tsconfig.json");
                     },
-                    modifyAgainFs: fs => addTestPrologue(fs, relSources[Project.first][Source.ts][Part.one], `"myPrologue"`)
+                    modifyAgainFs: fs => addTestPrologue(fs, "/src/first/first_PART1.ts", `"myPrologue"`)
                 });
 
                 // Verify ignore dtsChanged
                 verifyOutFileScenario({
                     subScenario: "strict in one dependency",
-                    modifyFs: fs => enableStrict(fs, sources[Project.second][Source.config]),
+                    modifyFs: fs => enableStrict(fs, "/src/second/tsconfig.json"),
                     modifyAgainFs: fs => addTestPrologue(fs, "src/first/first_PART1.ts", `"myPrologue"`),
                     ignoreDtsChanged: true,
                     baselineOnly: true
@@ -323,28 +226,28 @@ namespace ts {
                 verifyOutFileScenario({
                     subScenario: "multiple prologues in all projects",
                     modifyFs: fs => {
-                        enableStrict(fs, sources[Project.first][Source.config]);
-                        addTestPrologue(fs, sources[Project.first][Source.ts][Part.one], `"myPrologue"`);
-                        enableStrict(fs, sources[Project.second][Source.config]);
-                        addTestPrologue(fs, sources[Project.second][Source.ts][Part.one], `"myPrologue"`);
-                        addTestPrologue(fs, sources[Project.second][Source.ts][Part.two], `"myPrologue2";`);
-                        enableStrict(fs, sources[Project.third][Source.config]);
-                        addTestPrologue(fs, sources[Project.third][Source.ts][Part.one], `"myPrologue";`);
-                        addTestPrologue(fs, sources[Project.third][Source.ts][Part.one], `"myPrologue3";`);
+                        enableStrict(fs, "/src/first/tsconfig.json");
+                        addTestPrologue(fs, "/src/first/first_PART1.ts", `"myPrologue"`);
+                        enableStrict(fs, "/src/second/tsconfig.json");
+                        addTestPrologue(fs, "/src/second/second_part1.ts", `"myPrologue"`);
+                        addTestPrologue(fs, "/src/second/second_part2.ts", `"myPrologue2";`);
+                        enableStrict(fs, "/src/third/tsconfig.json");
+                        addTestPrologue(fs, "/src/third/third_part1.ts", `"myPrologue";`);
+                        addTestPrologue(fs, "/src/third/third_part1.ts", `"myPrologue3";`);
                     },
-                    modifyAgainFs: fs => addTestPrologue(fs, relSources[Project.first][Source.ts][Part.one], `"myPrologue5"`)
+                    modifyAgainFs: fs => addTestPrologue(fs, "/src/first/first_PART1.ts", `"myPrologue5"`)
                 });
 
                 // Verify ignore dtsChanged
                 verifyOutFileScenario({
                     subScenario: "multiple prologues in different projects",
                     modifyFs: fs => {
-                        enableStrict(fs, sources[Project.first][Source.config]);
-                        addTestPrologue(fs, sources[Project.second][Source.ts][Part.one], `"myPrologue"`);
-                        addTestPrologue(fs, sources[Project.second][Source.ts][Part.two], `"myPrologue2";`);
-                        enableStrict(fs, sources[Project.third][Source.config]);
+                        enableStrict(fs, "/src/first/tsconfig.json");
+                        addTestPrologue(fs, "/src/second/second_part1.ts", `"myPrologue"`);
+                        addTestPrologue(fs, "/src/second/second_part2.ts", `"myPrologue2";`);
+                        enableStrict(fs, "/src/third/tsconfig.json");
                     },
-                    modifyAgainFs: fs => addTestPrologue(fs, sources[Project.first][Source.ts][Part.one], `"myPrologue5"`),
+                    modifyAgainFs: fs => addTestPrologue(fs, "/src/first/first_PART1.ts", `"myPrologue5"`),
                     ignoreDtsChanged: true,
                     baselineOnly: true
                 });
@@ -456,13 +359,13 @@ namespace ts {
                 }
 
                 function diableRemoveCommentsInAll(fs: vfs.FileSystem) {
-                    disableRemoveComments(fs, sources[Project.first][Source.config]);
-                    disableRemoveComments(fs, sources[Project.second][Source.config]);
-                    disableRemoveComments(fs, sources[Project.third][Source.config]);
+                    disableRemoveComments(fs, "/src/first/tsconfig.json");
+                    disableRemoveComments(fs, "/src/second/tsconfig.json");
+                    disableRemoveComments(fs, "/src/third/tsconfig.json");
                 }
 
                 function stripInternalOfThird(fs: vfs.FileSystem) {
-                    replaceText(fs, sources[Project.third][Source.config], `"declaration": true,`, `"declaration": true,
+                    replaceText(fs, "/src/third/tsconfig.json", `"declaration": true,`, `"declaration": true,
     "stripInternal": true,`);
                 }
 
@@ -472,8 +375,8 @@ namespace ts {
                         diableRemoveCommentsInAll(fs);
                     }
                     stripInternalOfThird(fs);
-                    replaceText(fs, sources[Project.first][Source.ts][Part.one], "interface", `${internal} interface`);
-                    appendText(fs, sources[Project.second][Source.ts][Part.one], `
+                    replaceText(fs, "/src/first/first_PART1.ts", "interface", `${internal} interface`);
+                    appendText(fs, "/src/second/second_part1.ts", `
 class normalC {
     ${internal} constructor() { }
     ${internal} prop: string;
@@ -505,14 +408,14 @@ ${internal} enum internalEnum { a, b, c }`);
                 verifyOutFileScenario({
                     subScenario: "stripInternal",
                     modifyFs: stripInternalScenario,
-                    modifyAgainFs: fs => replaceText(fs, sources[Project.first][Source.ts][Part.one], `/*@internal*/ interface`, "interface"),
+                    modifyAgainFs: fs => replaceText(fs, "/src/first/first_PART1.ts", `/*@internal*/ interface`, "interface"),
                 });
 
                 // Verify ignore dtsChanged
                 verifyOutFileScenario({
                     subScenario: "stripInternal with comments emit enabled",
                     modifyFs: fs => stripInternalScenario(fs, /*removeCommentsDisabled*/ true),
-                    modifyAgainFs: fs => replaceText(fs, sources[Project.first][Source.ts][Part.one], `/*@internal*/ interface`, "interface"),
+                    modifyAgainFs: fs => replaceText(fs, "/src/first/first_PART1.ts", `/*@internal*/ interface`, "interface"),
                     ignoreDtsChanged: true,
                     baselineOnly: true
                 });
@@ -521,7 +424,7 @@ ${internal} enum internalEnum { a, b, c }`);
                 verifyOutFileScenario({
                     subScenario: "stripInternal jsdoc style comment",
                     modifyFs: fs => stripInternalScenario(fs, /*removeCommentsDisabled*/ false, /*jsDocStyle*/ true),
-                    modifyAgainFs: fs => replaceText(fs, sources[Project.first][Source.ts][Part.one], `/**@internal*/ interface`, "interface"),
+                    modifyAgainFs: fs => replaceText(fs, "/src/first/first_PART1.ts", `/**@internal*/ interface`, "interface"),
                     ignoreDtsChanged: true,
                     baselineOnly: true
                 });
@@ -536,9 +439,9 @@ ${internal} enum internalEnum { a, b, c }`);
 
                 describe("with three levels of project dependency", () => {
                     function makeOneTwoThreeDependOrder(fs: vfs.FileSystem) {
-                        replaceText(fs, sources[Project.second][Source.config], "[", `[
+                        replaceText(fs, "/src/second/tsconfig.json", "[", `[
     { "path": "../first", "prepend": true }`);
-                        replaceText(fs, sources[Project.third][Source.config], `{ "path": "../first", "prepend": true },`, "");
+                        replaceText(fs, "/src/third/tsconfig.json", `{ "path": "../first", "prepend": true },`, "");
                     }
 
                     function stripInternalWithDependentOrder(fs: vfs.FileSystem, removeCommentsDisabled?: boolean, jsDocStyle?: boolean) {
@@ -550,14 +453,14 @@ ${internal} enum internalEnum { a, b, c }`);
                     verifyOutFileScenario({
                         subScenario: "stripInternal when one-two-three are prepended in order",
                         modifyFs: stripInternalWithDependentOrder,
-                        modifyAgainFs: fs => replaceText(fs, sources[Project.first][Source.ts][Part.one], `/*@internal*/ interface`, "interface"),
+                        modifyAgainFs: fs => replaceText(fs, "/src/first/first_PART1.ts", `/*@internal*/ interface`, "interface"),
                     });
 
                     // Verify ignore dtsChanged
                     verifyOutFileScenario({
                         subScenario: "stripInternal with comments emit enabled when one-two-three are prepended in order",
                         modifyFs: fs => stripInternalWithDependentOrder(fs, /*removeCommentsDisabled*/ true),
-                        modifyAgainFs: fs => replaceText(fs, sources[Project.first][Source.ts][Part.one], `/*@internal*/ interface`, "interface"),
+                        modifyAgainFs: fs => replaceText(fs, "/src/first/first_PART1.ts", `/*@internal*/ interface`, "interface"),
                         ignoreDtsChanged: true,
                         baselineOnly: true
                     });
@@ -566,7 +469,7 @@ ${internal} enum internalEnum { a, b, c }`);
                     verifyOutFileScenario({
                         subScenario: "stripInternal jsdoc style comment when one-two-three are prepended in order",
                         modifyFs: fs => stripInternalWithDependentOrder(fs, /*removeCommentsDisabled*/ false, /*jsDocStyle*/ true),
-                        modifyAgainFs: fs => replaceText(fs, sources[Project.first][Source.ts][Part.one], `/**@internal*/ interface`, "interface"),
+                        modifyAgainFs: fs => replaceText(fs, "/src/first/first_PART1.ts", `/**@internal*/ interface`, "interface"),
                         ignoreDtsChanged: true,
                         baselineOnly: true
                     });
@@ -585,7 +488,7 @@ ${internal} enum internalEnum { a, b, c }`);
                     subScenario: "stripInternal baseline when internal is inside another internal",
                     modifyFs: fs => {
                         stripInternalOfThird(fs);
-                        prependText(fs, sources[Project.first][Source.ts][Part.one], `namespace ts {
+                        prependText(fs, "/src/first/first_PART1.ts", `namespace ts {
     /* @internal */
     /**
      * Subset of properties from SourceFile that are used in multiple utility functions
@@ -624,7 +527,7 @@ ${internal} enum internalEnum { a, b, c }`);
                     subScenario: "stripInternal when few members of enum are internal",
                     modifyFs: fs => {
                         stripInternalOfThird(fs);
-                        prependText(fs, sources[Project.first][Source.ts][Part.one], `enum TokenFlags {
+                        prependText(fs, "/src/first/first_PART1.ts", `enum TokenFlags {
     None = 0,
     /* @internal */
     PrecedingLineBreak = 1 << 0,
@@ -659,9 +562,9 @@ ${internal} enum internalEnum { a, b, c }`);
                     ignoreDtsChanged: true,
                     ignoreDtsUnchanged: true,
                     modifyFs: fs => {
-                        fs.writeFileSync(sources[Project.first][Source.ts][Part.one], "/* @internal */ const A = 1;");
-                        fs.writeFileSync(sources[Project.third][Source.ts][Part.one], "const B = 2;");
-                        fs.writeFileSync(sources[Project.first][Source.config], JSON.stringify({
+                        fs.writeFileSync("/src/first/first_PART1.ts", "/* @internal */ const A = 1;");
+                        fs.writeFileSync("/src/third/third_part1.ts", "const B = 2;");
+                        fs.writeFileSync("/src/first/tsconfig.json", JSON.stringify({
                             compilerOptions: {
                                 composite: true,
                                 declaration: true,
@@ -670,9 +573,9 @@ ${internal} enum internalEnum { a, b, c }`);
                                 sourceMap: true,
                                 outFile: "./bin/first-output.js"
                             },
-                            files: [sources[Project.first][Source.ts][Part.one]]
+                            files: ["/src/first/first_PART1.ts"]
                         }));
-                        fs.writeFileSync(sources[Project.third][Source.config], JSON.stringify({
+                        fs.writeFileSync("/src/third/tsconfig.json", JSON.stringify({
                             compilerOptions: {
                                 composite: true,
                                 declaration: true,
@@ -682,7 +585,7 @@ ${internal} enum internalEnum { a, b, c }`);
                                 outFile: "./thirdjs/output/third-output.js",
                             },
                             references: [{ path: "../first", prepend: true }],
-                            files: [sources[Project.third][Source.ts][Part.one]]
+                            files: ["/src/third/third_part1.ts"]
                         }));
                     }
                 });
@@ -690,7 +593,7 @@ ${internal} enum internalEnum { a, b, c }`);
 
             describe("empty source files", () => {
                 function makeThirdEmptySourceFile(fs: vfs.FileSystem) {
-                    fs.writeFileSync(sources[Project.third][Source.ts][Part.one], "", "utf8");
+                    fs.writeFileSync("/src/third/third_part1.ts", "", "utf8");
                 }
 
                 // Verify ignore dtsChanged
@@ -706,9 +609,9 @@ ${internal} enum internalEnum { a, b, c }`);
                     subScenario: "declarationMap and sourceMap disabled",
                     modifyFs: fs => {
                         makeThirdEmptySourceFile(fs);
-                        replaceText(fs, sources[Project.third][Source.config], `"composite": true,`, "");
-                        replaceText(fs, sources[Project.third][Source.config], `"sourceMap": true,`, "");
-                        replaceText(fs, sources[Project.third][Source.config], `"declarationMap": true,`, "");
+                        replaceText(fs, "/src/third/tsconfig.json", `"composite": true,`, "");
+                        replaceText(fs, "/src/third/tsconfig.json", `"sourceMap": true,`, "");
+                        replaceText(fs, "/src/third/tsconfig.json", `"declarationMap": true,`, "");
                     },
                     ignoreDtsChanged: true,
                     ignoreDtsUnchanged: true,
@@ -724,18 +627,18 @@ ${internal} enum internalEnum { a, b, c }`);
             commandLineArgs: ["--b", "/src/third", "--verbose"],
             modifyFs: fs => {
                 // No prepend
-                replaceText(fs, sources[Project.third][Source.config], `{ "path": "../first", "prepend": true }`, `{ "path": "../first" }`);
-                replaceText(fs, sources[Project.third][Source.config], `{ "path": "../second", "prepend": true }`, `{ "path": "../second" }`);
+                replaceText(fs, "/src/third/tsconfig.json", `{ "path": "../first", "prepend": true }`, `{ "path": "../first" }`);
+                replaceText(fs, "/src/third/tsconfig.json", `{ "path": "../second", "prepend": true }`, `{ "path": "../second" }`);
 
                 // Non Modules
-                replaceText(fs, sources[Project.first][Source.config], `"composite": true,`, `"composite": true, "module": "none",`);
-                replaceText(fs, sources[Project.second][Source.config], `"composite": true,`, `"composite": true, "module": "none",`);
-                replaceText(fs, sources[Project.third][Source.config], `"composite": true,`, `"composite": true, "module": "none",`);
+                replaceText(fs, "/src/first/tsconfig.json", `"composite": true,`, `"composite": true, "module": "none",`);
+                replaceText(fs, "/src/second/tsconfig.json", `"composite": true,`, `"composite": true, "module": "none",`);
+                replaceText(fs, "/src/third/tsconfig.json", `"composite": true,`, `"composite": true, "module": "none",`);
 
                 // Own file emit
-                replaceText(fs, sources[Project.first][Source.config], `"outFile": "./bin/first-output.js",`, "");
-                replaceText(fs, sources[Project.second][Source.config], `"outFile": "../2/second-output.js",`, "");
-                replaceText(fs, sources[Project.third][Source.config], `"outFile": "./thirdjs/output/third-output.js",`, "");
+                replaceText(fs, "/src/first/tsconfig.json", `"outFile": "./bin/first-output.js",`, "");
+                replaceText(fs, "/src/second/tsconfig.json", `"outFile": "../2/second-output.js",`, "");
+                replaceText(fs, "/src/third/tsconfig.json", `"outFile": "./thirdjs/output/third-output.js",`, "");
             },
         });
     });

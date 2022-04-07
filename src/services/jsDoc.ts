@@ -353,7 +353,8 @@ namespace ts.JsDoc {
         }
 
         const { commentOwner, parameters, hasReturn } = commentOwnerInfo;
-        if (commentOwner.getStart(sourceFile) < position) {
+        const commentOwnerJSDoc = hasJSDocNodes(commentOwner) && commentOwner.jsDoc ? lastOrUndefined(commentOwner.jsDoc) : undefined;
+        if (commentOwner.getStart(sourceFile) < position || commentOwnerJSDoc && commentOwnerJSDoc !== existingDocComment) {
             return undefined;
         }
 

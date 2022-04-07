@@ -10,12 +10,15 @@ tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotati
 tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(29,1): error TS2322: Type 'Invariant<unknown>' is not assignable to type 'Invariant<string>'.
   The types returned by 'f(...)' are incompatible between these types.
     Type 'unknown' is not assignable to type 'string'.
+tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(33,10): error TS2637: Variance annotations are only supported in type aliases for object, function, constructor, and mapped types.
+tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(34,10): error TS2637: Variance annotations are only supported in type aliases for object, function, constructor, and mapped types.
+tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(35,10): error TS2637: Variance annotations are only supported in type aliases for object, function, constructor, and mapped types.
+tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(35,17): error TS2637: Variance annotations are only supported in type aliases for object, function, constructor, and mapped types.
+tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(36,10): error TS2637: Variance annotations are only supported in type aliases for object, function, constructor, and mapped types.
 tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(40,17): error TS2636: Type 'Covariant1<super-T>' is not assignable to type 'Covariant1<sub-T>' as implied by variance annotation.
   Types of property 'x' are incompatible.
     Type 'super-T' is not assignable to type 'sub-T'.
-tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(44,21): error TS2636: Type 'keyof sub-T' is not assignable to type 'keyof super-T' as implied by variance annotation.
-  Type 'string | number | symbol' is not assignable to type 'keyof super-T'.
-    Type 'string' is not assignable to type 'keyof super-T'.
+tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(44,21): error TS2637: Variance annotations are only supported in type aliases for object, function, constructor, and mapped types.
 tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(46,21): error TS2636: Type 'Contravariant2<sub-T>' is not assignable to type 'Contravariant2<super-T>' as implied by variance annotation.
   Types of property 'f' are incompatible.
     Type '(x: sub-T) => void' is not assignable to type '(x: super-T) => void'.
@@ -37,8 +40,11 @@ tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotati
     Type 'FooFn2<sub-T>' is not assignable to type 'FooFn2<super-T>'.
       Type 'super-T' is not assignable to type 'sub-T'.
 tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(95,10): error TS1273: 'public' modifier cannot appear on a type parameter
+tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(96,10): error TS2637: Variance annotations are only supported in type aliases for object, function, constructor, and mapped types.
 tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(96,17): error TS1030: 'in' modifier already seen.
+tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(97,10): error TS2637: Variance annotations are only supported in type aliases for object, function, constructor, and mapped types.
 tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(97,17): error TS1030: 'out' modifier already seen.
+tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(98,10): error TS2637: Variance annotations are only supported in type aliases for object, function, constructor, and mapped types.
 tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(98,14): error TS1029: 'in' modifier must precede 'out' modifier.
 tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(100,21): error TS1274: 'in' modifier can only appear on a type parameter of a class, interface or type alias
 tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(101,21): error TS1274: 'out' modifier can only appear on a type parameter of a class, interface or type alias
@@ -60,7 +66,7 @@ tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotati
               Type '{ type: "RESET"; }' is not assignable to type '{ type: "PLAY"; value: number; }'.
 
 
-==== tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts (23 errors) ====
+==== tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts (31 errors) ====
     type Covariant<out T> = {
         x: T;
     }
@@ -110,9 +116,19 @@ tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotati
     // Variance of various type constructors
     
     type T10<out T> = T;
+             ~~~~~
+!!! error TS2637: Variance annotations are only supported in type aliases for object, function, constructor, and mapped types.
     type T11<in T> = keyof T;
+             ~~~~
+!!! error TS2637: Variance annotations are only supported in type aliases for object, function, constructor, and mapped types.
     type T12<out T, out K extends keyof T> = T[K];
+             ~~~~~
+!!! error TS2637: Variance annotations are only supported in type aliases for object, function, constructor, and mapped types.
+                    ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2637: Variance annotations are only supported in type aliases for object, function, constructor, and mapped types.
     type T13<in out T> = T[keyof T];
+             ~~~~~~~~
+!!! error TS2637: Variance annotations are only supported in type aliases for object, function, constructor, and mapped types.
     
     // Variance annotation errors
     
@@ -126,9 +142,7 @@ tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotati
     
     type Contravariant1<out T> = keyof T;  // Error
                         ~~~~~
-!!! error TS2636: Type 'keyof sub-T' is not assignable to type 'keyof super-T' as implied by variance annotation.
-!!! error TS2636:   Type 'string | number | symbol' is not assignable to type 'keyof super-T'.
-!!! error TS2636:     Type 'string' is not assignable to type 'keyof super-T'.
+!!! error TS2637: Variance annotations are only supported in type aliases for object, function, constructor, and mapped types.
     
     type Contravariant2<out T> = {  // Error
                         ~~~~~
@@ -208,12 +222,18 @@ tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotati
              ~~~~~~
 !!! error TS1273: 'public' modifier cannot appear on a type parameter
     type T21<in out in T> = T;  // Error
+             ~~~~~~~~~~~
+!!! error TS2637: Variance annotations are only supported in type aliases for object, function, constructor, and mapped types.
                     ~~
 !!! error TS1030: 'in' modifier already seen.
     type T22<in out out T> = T;  // Error
+             ~~~~~~~~~~~~
+!!! error TS2637: Variance annotations are only supported in type aliases for object, function, constructor, and mapped types.
                     ~~~
 !!! error TS1030: 'out' modifier already seen.
     type T23<out in T> = T;  // Error
+             ~~~~~~~~
+!!! error TS2637: Variance annotations are only supported in type aliases for object, function, constructor, and mapped types.
                  ~~
 !!! error TS1029: 'in' modifier must precede 'out' modifier.
     

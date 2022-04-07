@@ -39,6 +39,7 @@ verify.completions({
         includeCompletionsWithInsertText: true,
         includeCompletionsWithSnippetText: false,
         includeCompletionsWithObjectLiteralMethodSnippets: true,
+        useLabelDetailsInCompletionEntries: true,
     },
     includes: [
         {
@@ -52,6 +53,9 @@ verify.completions({
                 completion.SortText.ObjectLiteralProperty(completion.SortText.LocationPriority, "M")),
             source: completion.CompletionSource.ObjectLiteralMethodSnippet,
             insertText: "M(x: number): void {\n},",
+            labelDetails: {
+                detail: "(x: number): void",
+            },
         },
     ],
 });
@@ -93,6 +97,7 @@ verify.completions({
         includeCompletionsWithInsertText: true,
         includeCompletionsWithSnippetText: false,
         includeCompletionsWithObjectLiteralMethodSnippets: true,
+        useLabelDetailsInCompletionEntries: true,
     },
     includes: [
         {
@@ -106,6 +111,9 @@ verify.completions({
                 completion.SortText.ObjectLiteralProperty(completion.SortText.OptionalMember, "M")),
             source: completion.CompletionSource.ObjectLiteralMethodSnippet,
             insertText: "M(x: number): void {\n},",
+            labelDetails: {
+                detail: "(x: number): void",
+            },
         },
         {
             name: "N",
@@ -118,6 +126,9 @@ verify.completions({
                 completion.SortText.ObjectLiteralProperty(completion.SortText.LocationPriority, "N")),
             source: completion.CompletionSource.ObjectLiteralMethodSnippet,
             insertText: "N(x: string): void {\n},",
+            labelDetails: {
+                detail: "(x: string): void",
+            },
         },
         {
             name: "O",
@@ -130,6 +141,9 @@ verify.completions({
                 completion.SortText.ObjectLiteralProperty(completion.SortText.OptionalMember, "O")),
             source: completion.CompletionSource.ObjectLiteralMethodSnippet,
             insertText: "O(): void {\n},",
+            labelDetails: {
+                detail: "(): void",
+            },
         },
     ],
 });

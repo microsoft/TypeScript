@@ -314,8 +314,7 @@
           "start": 23,
           "length": 16
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       }
     ]
   },
@@ -376,8 +375,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/findAllRefsParameterPropertyDeclaration_inheritance.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -699,8 +697,7 @@
           "start": 86,
           "length": 16
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       }
     ]
   },
@@ -761,8 +758,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/findAllRefsParameterPropertyDeclaration_inheritance.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }

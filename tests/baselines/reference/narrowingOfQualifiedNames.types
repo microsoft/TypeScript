@@ -257,3 +257,76 @@ function init2(foo: DeepOptional) {
         }
     }
 }
+
+// Repro from #48289
+
+type Fish = { type: 'fish', hasFins: true }
+>Fish : Fish
+>type : "fish"
+>hasFins : true
+>true : true
+
+type Dog = { type: 'dog', saysWoof: true }
+>Dog : Dog
+>type : "dog"
+>saysWoof : true
+>true : true
+
+type Pet = Fish | Dog;
+>Pet : Pet
+
+function handleDogBroken<PetType extends Pet>(pet: PetType) {
+>handleDogBroken : <PetType extends Pet>(pet: PetType) => void
+>pet : PetType
+
+    if(pet.type === 'dog') {
+>pet.type === 'dog' : boolean
+>pet.type : "fish" | "dog"
+>pet : Pet
+>type : "fish" | "dog"
+>'dog' : "dog"
+
+        const _okay1 = pet.saysWoof;
+>_okay1 : true
+>pet.saysWoof : true
+>pet : Dog
+>saysWoof : true
+
+        const _okay2: typeof pet.saysWoof = pet.saysWoof;
+>_okay2 : true
+>pet.saysWoof : true
+>pet : Dog
+>saysWoof : true
+>pet.saysWoof : true
+>pet : Dog
+>saysWoof : true
+    }
+}
+
+function handleDogWorking(pet: Pet) {
+>handleDogWorking : (pet: Pet) => void
+>pet : Pet
+
+    if(pet.type === 'dog') {
+>pet.type === 'dog' : boolean
+>pet.type : "fish" | "dog"
+>pet : Pet
+>type : "fish" | "dog"
+>'dog' : "dog"
+
+        const _okay1 = pet.saysWoof;
+>_okay1 : true
+>pet.saysWoof : true
+>pet : Dog
+>saysWoof : true
+
+        const _okay2: typeof pet.saysWoof = pet.saysWoof;
+>_okay2 : true
+>pet.saysWoof : true
+>pet : Dog
+>saysWoof : true
+>pet.saysWoof : true
+>pet : Dog
+>saysWoof : true
+    }
+}

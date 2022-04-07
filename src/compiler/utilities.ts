@@ -2825,7 +2825,11 @@ namespace ts {
 
     export function getHostSignatureFromJSDoc(node: Node): SignatureDeclaration | undefined {
         const host = getEffectiveJSDocHost(node);
-        return host && isFunctionLike(host) ? host : undefined;
+        if (host) {
+            return isPropertySignature(host) && host.type && isFunctionLike(host.type) ? host.type :
+                isFunctionLike(host) ? host : undefined;
+        }
+        return undefined;
     }
 
     export function getEffectiveJSDocHost(node: Node): Node | undefined {

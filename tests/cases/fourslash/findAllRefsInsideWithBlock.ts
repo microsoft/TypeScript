@@ -1,12 +1,12 @@
 /// <reference path='fourslash.ts'/>
 
-////[|var [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}x|] = 0;|]
+/////*1*/var /*2*/x = 0;
 ////
 ////with ({}) {
 ////    var y = x;  // Reference of x here should not be picked
-////    /*2*/y++;        // also reference for y should be ignored
+////    y++;        // also reference for y should be ignored
 ////}
 ////
-////[|{| "isWriteAccess": true |}x|] = [|x|] + 1;
+/////*3*/x = /*4*/x + 1;
 
-verify.singleReferenceGroup("var x: number", "x");
+verify.baselineFindAllReferences('1', '2', '3', '4');

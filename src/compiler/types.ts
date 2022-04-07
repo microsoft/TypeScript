@@ -763,10 +763,11 @@ namespace ts {
         YieldContext       = 1 << 13, // If node was parsed in the 'yield' context created when parsing a generator
         DecoratorContext   = 1 << 14, // If node was parsed as part of a decorator
         AwaitContext       = 1 << 15, // If node was parsed in the 'await' context created when parsing an async function
-        ThisNodeHasError   = 1 << 16, // If the parser encountered an error when parsing the code that created this node
-        JavaScriptFile     = 1 << 17, // If node was parsed in a JavaScript
-        ThisNodeOrAnySubNodesHasError = 1 << 18, // If this node or any of its children had an error
-        HasAggregatedChildData = 1 << 19, // If we've computed data from children and cached it in this node
+        DisallowConditionalTypesContext = 1 << 16, // If node was parsed in a context where conditional types are not allowed
+        ThisNodeHasError   = 1 << 17, // If the parser encountered an error when parsing the code that created this node
+        JavaScriptFile     = 1 << 18, // If node was parsed in a JavaScript
+        ThisNodeOrAnySubNodesHasError = 1 << 19, // If this node or any of its children had an error
+        HasAggregatedChildData = 1 << 20, // If we've computed data from children and cached it in this node
 
         // These flags will be set when the parser encounters a dynamic import expression or 'import.meta' to avoid
         // walking the tree if the flags are not set. However, these flags are just a approximation
@@ -777,15 +778,15 @@ namespace ts {
         // removal, it is likely that users will add the import anyway.
         // The advantage of this approach is its simplicity. For the case of batch compilation,
         // we guarantee that users won't have to pay the price of walking the tree if a dynamic import isn't used.
-        /* @internal */ PossiblyContainsDynamicImport = 1 << 20,
-        /* @internal */ PossiblyContainsImportMeta    = 1 << 21,
+        /* @internal */ PossiblyContainsDynamicImport = 1 << 21,
+        /* @internal */ PossiblyContainsImportMeta    = 1 << 22,
 
-        JSDoc                                         = 1 << 22, // If node was parsed inside jsdoc
-        /* @internal */ Ambient                       = 1 << 23, // If node was inside an ambient context -- a declaration file, or inside something with the `declare` modifier.
-        /* @internal */ InWithStatement               = 1 << 24, // If any ancestor of node was the `statement` of a WithStatement (not the `expression`)
-        JsonFile                                      = 1 << 25, // If node was parsed in a Json
-        /* @internal */ TypeCached                    = 1 << 26, // If a type was cached for node at any point
-        /* @internal */ Deprecated                    = 1 << 27, // If has '@deprecated' JSDoc tag
+        JSDoc                                         = 1 << 23, // If node was parsed inside jsdoc
+        /* @internal */ Ambient                       = 1 << 24, // If node was inside an ambient context -- a declaration file, or inside something with the `declare` modifier.
+        /* @internal */ InWithStatement               = 1 << 25, // If any ancestor of node was the `statement` of a WithStatement (not the `expression`)
+        JsonFile                                      = 1 << 26, // If node was parsed in a Json
+        /* @internal */ TypeCached                    = 1 << 27, // If a type was cached for node at any point
+        /* @internal */ Deprecated                    = 1 << 28, // If has '@deprecated' JSDoc tag
 
         BlockScoped = Let | Const,
 
@@ -793,7 +794,7 @@ namespace ts {
         ReachabilityAndEmitFlags = ReachabilityCheckFlags | HasAsyncFunctions,
 
         // Parsing context flags
-        ContextFlags = DisallowInContext | YieldContext | DecoratorContext | AwaitContext | JavaScriptFile | InWithStatement | Ambient,
+        ContextFlags = DisallowInContext | DisallowConditionalTypesContext | YieldContext | DecoratorContext | AwaitContext | JavaScriptFile | InWithStatement | Ambient,
 
         // Exclude these flags when parsing a Type
         TypeExcludesFlags = YieldContext | AwaitContext,
@@ -3234,11 +3235,13 @@ namespace ts {
     export interface JSDocNonNullableType extends JSDocType {
         readonly kind: SyntaxKind.JSDocNonNullableType;
         readonly type: TypeNode;
+        readonly postfix: boolean;
     }
 
     export interface JSDocNullableType extends JSDocType {
         readonly kind: SyntaxKind.JSDocNullableType;
         readonly type: TypeNode;
+        readonly postfix: boolean;
     }
 
     export interface JSDocOptionalType extends JSDocType {
@@ -3458,7 +3461,6 @@ namespace ts {
         | FlowStart
         | FlowLabel
         | FlowAssignment
-        | FlowCall
         | FlowCondition
         | FlowSwitchClause
         | FlowArrayMutation
@@ -5912,6 +5914,13 @@ namespace ts {
         nonFixingMapper: TypeMapper;                  // Mapper that doesn't fix inferences
         returnMapper?: TypeMapper;                    // Type mapper for inferences from return types (if any)
         inferredTypeParameters?: readonly TypeParameter[]; // Inferred type parameters for function result
+        intraExpressionInferenceSites?: IntraExpressionInferenceSite[];
+    }
+
+    /* @internal */
+    export interface IntraExpressionInferenceSite {
+        node: Expression | MethodDeclaration;
+        type: Type;
     }
 
     /* @internal */
@@ -6148,6 +6157,7 @@ namespace ts {
         maxNodeModuleJsDepth?: number;
         module?: ModuleKind;
         moduleResolution?: ModuleResolutionKind;
+        moduleSuffixes?: string[];
         moduleDetection?: ModuleDetectionKind;
         newLine?: NewLineKind;
         noEmit?: boolean;
@@ -6452,6 +6462,7 @@ namespace ts {
     export interface CommandLineOptionOfListType extends CommandLineOptionBase {
         type: "list";
         element: CommandLineOptionOfCustomType | CommandLineOptionOfStringType | CommandLineOptionOfNumberType | CommandLineOptionOfBooleanType | TsConfigOnlyOption;
+        listPreserveFalsyValues?: boolean;
     }
 
     /* @internal */
@@ -6610,7 +6621,7 @@ namespace ts {
         realpath?(path: string): string;
         getCurrentDirectory?(): string;
         getDirectories?(path: string): string[];
-        useCaseSensitiveFileNames?: boolean | (() => boolean);
+        useCaseSensitiveFileNames?: boolean | (() => boolean) | undefined;
     }
 
     /**
@@ -7127,10 +7138,19 @@ namespace ts {
         parenthesizeExpressionOfExpressionStatement(expression: Expression): Expression;
         parenthesizeConciseBodyOfArrowFunction(body: Expression): Expression;
         parenthesizeConciseBodyOfArrowFunction(body: ConciseBody): ConciseBody;
-        parenthesizeMemberOfConditionalType(member: TypeNode): TypeNode;
-        parenthesizeMemberOfElementType(member: TypeNode): TypeNode;
-        parenthesizeElementTypeOfArrayType(member: TypeNode): TypeNode;
-        parenthesizeConstituentTypesOfUnionOrIntersectionType(members: readonly TypeNode[]): NodeArray<TypeNode>;
+        parenthesizeCheckTypeOfConditionalType(type: TypeNode): TypeNode;
+        parenthesizeExtendsTypeOfConditionalType(type: TypeNode): TypeNode;
+        parenthesizeOperandOfTypeOperator(type: TypeNode): TypeNode;
+        parenthesizeOperandOfReadonlyTypeOperator(type: TypeNode): TypeNode;
+        parenthesizeNonArrayTypeOfPostfixType(type: TypeNode): TypeNode;
+        parenthesizeElementTypesOfTupleType(types: readonly (TypeNode | NamedTupleMember)[]): NodeArray<TypeNode>;
+        parenthesizeElementTypeOfTupleType(type: TypeNode | NamedTupleMember): TypeNode | NamedTupleMember;
+        parenthesizeTypeOfOptionalType(type: TypeNode): TypeNode;
+        parenthesizeConstituentTypeOfUnionType(type: TypeNode): TypeNode;
+        parenthesizeConstituentTypesOfUnionType(constituents: readonly TypeNode[]): NodeArray<TypeNode>;
+        parenthesizeConstituentTypeOfIntersectionType(type: TypeNode): TypeNode;
+        parenthesizeConstituentTypesOfIntersectionType(constituents: readonly TypeNode[]): NodeArray<TypeNode>;
+        parenthesizeLeadingTypeArgument(typeNode: TypeNode): TypeNode;
         parenthesizeTypeArguments(typeParameters: readonly TypeNode[] | undefined): NodeArray<TypeNode> | undefined;
     }
 
@@ -7149,6 +7169,8 @@ namespace ts {
     export interface NodeFactory {
         /* @internal */ readonly parenthesizer: ParenthesizerRules;
         /* @internal */ readonly converters: NodeConverters;
+        /* @internal */ readonly baseFactory: BaseNodeFactory;
+        /* @internal */ readonly flags: NodeFactoryFlags;
         createNodeArray<T extends Node>(elements?: readonly T[], hasTrailingComma?: boolean): NodeArray<T>;
 
         //
@@ -7547,9 +7569,9 @@ namespace ts {
 
         createJSDocAllType(): JSDocAllType;
         createJSDocUnknownType(): JSDocUnknownType;
-        createJSDocNonNullableType(type: TypeNode): JSDocNonNullableType;
+        createJSDocNonNullableType(type: TypeNode, postfix?: boolean): JSDocNonNullableType;
         updateJSDocNonNullableType(node: JSDocNonNullableType, type: TypeNode): JSDocNonNullableType;
-        createJSDocNullableType(type: TypeNode): JSDocNullableType;
+        createJSDocNullableType(type: TypeNode, postfix?: boolean): JSDocNullableType;
         updateJSDocNullableType(node: JSDocNullableType, type: TypeNode): JSDocNullableType;
         createJSDocOptionalType(type: TypeNode): JSDocOptionalType;
         updateJSDocOptionalType(node: JSDocOptionalType, type: TypeNode): JSDocOptionalType;
@@ -8752,6 +8774,7 @@ namespace ts {
         readonly includeCompletionsWithInsertText?: boolean;
         readonly includeCompletionsWithClassMemberSnippets?: boolean;
         readonly includeCompletionsWithObjectLiteralMethodSnippets?: boolean;
+        readonly useLabelDetailsInCompletionEntries?: boolean;
         readonly allowIncompleteCompletions?: boolean;
         readonly importModuleSpecifierPreference?: "shortest" | "project-relative" | "relative" | "non-relative";
         /** Determines whether we import `foo/index.ts` as "foo", "foo/index", or "foo/index.js" */

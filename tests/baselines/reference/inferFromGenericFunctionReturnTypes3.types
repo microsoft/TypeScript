@@ -461,14 +461,14 @@ declare function foldLeft<U>(z: U, f: (acc: U, t: boolean) => U): U;
 
 let res: boolean = foldLeft(true, (acc, t) => acc && t);  // Error
 >res : boolean
->foldLeft(true, (acc, t) => acc && t) : true
+>foldLeft(true, (acc, t) => acc && t) : boolean
 >foldLeft : <U>(z: U, f: (acc: U, t: boolean) => U) => U
 >true : true
->(acc, t) => acc && t : (acc: true, t: boolean) => boolean
->acc : true
+>(acc, t) => acc && t : (acc: boolean, t: boolean) => boolean
+>acc : boolean
 >t : boolean
 >acc && t : boolean
->acc : true
+>acc : boolean
 >t : boolean
 
 enum State { A, B }

@@ -25,7 +25,7 @@ declare function app<State, Actions extends ActionsObject<State>>(obj: Options<S
 app({
 >app({    state: 100,    actions: {        foo: s => s // Should be typed number => number    },    view: (s, a) => undefined as any,}) : void
 >app : <State, Actions extends ActionsObject<State>>(obj: Options<State, Actions>) => void
->{    state: 100,    actions: {        foo: s => s // Should be typed number => number    },    view: (s, a) => undefined as any,} : { state: number; actions: { foo: (s: number) => number; }; view: (s: number, a: ActionsObject<number>) => any; }
+>{    state: 100,    actions: {        foo: s => s // Should be typed number => number    },    view: (s, a) => undefined as any,} : { state: number; actions: { foo: (s: number) => number; }; view: (s: number, a: { foo: (s: number) => number; }) => any; }
 
     state: 100,
 >state : number
@@ -43,10 +43,10 @@ app({
 
     },
     view: (s, a) => undefined as any,
->view : (s: number, a: ActionsObject<number>) => any
->(s, a) => undefined as any : (s: number, a: ActionsObject<number>) => any
+>view : (s: number, a: { foo: (s: number) => number; }) => any
+>(s, a) => undefined as any : (s: number, a: { foo: (s: number) => number; }) => any
 >s : number
->a : ActionsObject<number>
+>a : { foo: (s: number) => number; }
 >undefined as any : any
 >undefined : undefined
 
@@ -95,7 +95,7 @@ declare function app2<State, Actions extends ActionsObject<State>>(obj: Options2
 app2({
 >app2({    state: 100,    actions: {        foo: s => s // Should be typed number => number    },    view: (s, a) => undefined as any,}) : void
 >app2 : <State, Actions extends ActionsObject<State>>(obj: Options2<State, Actions>) => void
->{    state: 100,    actions: {        foo: s => s // Should be typed number => number    },    view: (s, a) => undefined as any,} : { state: number; actions: { foo: (s: number) => number; }; view: (s: number, a: ActionsObject<number>) => any; }
+>{    state: 100,    actions: {        foo: s => s // Should be typed number => number    },    view: (s, a) => undefined as any,} : { state: number; actions: { foo: (s: number) => number; }; view: (s: number, a: { foo: (s: number) => number; }) => any; }
 
     state: 100,
 >state : number
@@ -113,10 +113,10 @@ app2({
 
     },
     view: (s, a) => undefined as any,
->view : (s: number, a: ActionsObject<number>) => any
->(s, a) => undefined as any : (s: number, a: ActionsObject<number>) => any
+>view : (s: number, a: { foo: (s: number) => number; }) => any
+>(s, a) => undefined as any : (s: number, a: { foo: (s: number) => number; }) => any
 >s : number
->a : ActionsObject<number>
+>a : { foo: (s: number) => number; }
 >undefined as any : any
 >undefined : undefined
 
@@ -134,7 +134,7 @@ declare function app3<State, Actions extends ActionsArray<State>>(obj: Options<S
 app3({
 >app3({    state: 100,    actions: [        s => s // Should be typed number => number    ],    view: (s, a) => undefined as any,}) : void
 >app3 : <State, Actions extends ActionsArray<State>>(obj: Options<State, Actions>) => void
->{    state: 100,    actions: [        s => s // Should be typed number => number    ],    view: (s, a) => undefined as any,} : { state: number; actions: ((s: number) => number)[]; view: (s: number, a: ActionsArray<number>) => any; }
+>{    state: 100,    actions: [        s => s // Should be typed number => number    ],    view: (s, a) => undefined as any,} : { state: number; actions: ((s: number) => number)[]; view: (s: number, a: ((s: number) => number)[]) => any; }
 
     state: 100,
 >state : number
@@ -151,10 +151,10 @@ app3({
 
     ],
     view: (s, a) => undefined as any,
->view : (s: number, a: ActionsArray<number>) => any
->(s, a) => undefined as any : (s: number, a: ActionsArray<number>) => any
+>view : (s: number, a: ((s: number) => number)[]) => any
+>(s, a) => undefined as any : (s: number, a: ((s: number) => number)[]) => any
 >s : number
->a : ActionsArray<number>
+>a : ((s: number) => number)[]
 >undefined as any : any
 >undefined : undefined
 

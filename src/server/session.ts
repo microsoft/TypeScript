@@ -354,6 +354,7 @@ namespace ts.server {
                 logger.info(`Finding references to ${location.fileName} position ${location.pos} in project ${project.getProjectName()}`);
                 const projectOutputs = project.getLanguageService().findReferences(location.fileName, location.pos);
                 if (projectOutputs) {
+                    const clearIsDefinition = projectOutputs[0].references[0].isDefinition === undefined;
                     for (const referencedSymbol of projectOutputs) {
                         const mappedDefinitionFile = getMappedLocation(project, documentSpanLocation(referencedSymbol.definition));
                         const definition: ReferencedSymbolDefinitionInfo = mappedDefinitionFile === undefined ?
@@ -374,6 +375,9 @@ namespace ts.server {
                         for (const ref of referencedSymbol.references) {
                             // If it's in a mapped file, that is added to the todo list by `getMappedLocation`.
                             if (!contains(symbolToAddTo.references, ref, documentSpansEqual) && !getMappedLocation(project, documentSpanLocation(ref))) {
+                                if (clearIsDefinition) {
+                                    delete ref.isDefinition;
+                                }
                                 symbolToAddTo.references.push(ref);
                             }
                         }
@@ -1837,10 +1841,41 @@ namespace ts.server {
             const prefix = args.prefix || "";
             const entries = mapDefined<CompletionEntry, protocol.CompletionEntry>(completions.entries, entry => {
                 if (completions.isMemberCompletion || startsWith(entry.name.toLowerCase(), prefix.toLowerCase())) {
-                    const { name, kind, kindModifiers, sortText, insertText, replacementSpan, hasAction, source, sourceDisplay, isSnippet, isRecommended, isPackageJsonImport, isImportStatementCompletion, data } = entry;
+                    const {
+                        name,
+                        kind,
+                        kindModifiers,
+                        sortText,
+                        insertText,
+                        replacementSpan,
+                        hasAction,
+                        source,
+                        sourceDisplay,
+                        labelDetails,
+                        isSnippet,
+                        isRecommended,
+                        isPackageJsonImport,
+                        isImportStatementCompletion,
+                        data } = entry;
                     const convertedSpan = replacementSpan ? toProtocolTextSpan(replacementSpan, scriptInfo) : undefined;
                     // Use `hasAction || undefined` to avoid serializing `false`.
-                    return { name, kind, kindModifiers, sortText, insertText, replacementSpan: convertedSpan, isSnippet, hasAction: hasAction || undefined, source, sourceDisplay, isRecommended, isPackageJsonImport, isImportStatementCompletion, data };
+                    return {
+                        name,
+                        kind,
+                        kindModifiers,
+                        sortText,
+                        insertText,
+                        replacementSpan: convertedSpan,
+                        isSnippet,
+                        hasAction: hasAction || undefined,
+                        source,
+                        sourceDisplay,
+                        labelDetails,
+                        isRecommended,
+                        isPackageJsonImport,
+                        isImportStatementCompletion,
+                        data
+                    };
                 }
             });
 
@@ -3229,7 +3264,7 @@ namespace ts.server {
         return text;
     }
 
-    function referenceEntryToReferencesResponseItem(projectService: ProjectService, { fileName, textSpan, contextSpan, isWriteAccess, isDefinition }: ReferenceEntry): protocol.ReferencesResponseItem {
+    function referenceEntryToReferencesResponseItem(projectService: ProjectService, { fileName, textSpan, contextSpan, isWriteAccess, isDefinition }: ReferencedSymbolEntry): protocol.ReferencesResponseItem {
         const scriptInfo = Debug.checkDefined(projectService.getScriptInfo(fileName));
         const span = toProtocolTextSpanWithContext(textSpan, contextSpan, scriptInfo);
         const lineSpan = scriptInfo.lineToTextSpan(span.start.line - 1);

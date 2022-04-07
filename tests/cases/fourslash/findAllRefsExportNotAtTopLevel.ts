@@ -1,8 +1,8 @@
 /// <reference path="fourslash.ts" />
 
 ////{
-////    [|export const [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}x|] = 0;|]
-////    [|x|];
+////    /*1*/export const /*2*/x = 0;
+////    /*3*/x;
 ////}
 
-verify.singleReferenceGroup("const x: 0", "x");
+verify.baselineFindAllReferences('1', '2', '3');

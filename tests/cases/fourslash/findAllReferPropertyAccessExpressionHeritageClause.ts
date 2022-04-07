@@ -2,9 +2,9 @@
 
 //// class B {}
 //// function foo() {
-////     return {[|[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}B|]: B|]};
+////     return {/*1*/B: B};
 //// }
-//// class C extends (foo()).[|B|] {}
-//// class C1 extends foo().[|B|] {}
+//// class C extends (foo())./*2*/B {}
+//// class C1 extends foo()./*3*/B {}
 
-verify.singleReferenceGroup("(property) B: typeof B", "B");
+verify.baselineFindAllReferences('1', '2', '3');
