@@ -193,11 +193,11 @@ exitCode:: ExitStatus.Success
       },
       "./anothermodule.ts": {
         "version": "-2676574883-export const World = \"hello\";\r\n",
-        "signature": "-2676574883-export const World = \"hello\";\r\n"
+        "signature": "-8396256275-export declare const World = \"hello\";\r\n"
       },
       "./index.ts": {
         "version": "-18749805970-export const someString: string = \"HELLO WORLD\";\r\nexport function leftPad(s: string, n: number) { return s + n; }\r\nexport function multiply(a: number, b: number) { return a * b; }\r\n",
-        "signature": "-18749805970-export const someString: string = \"HELLO WORLD\";\r\nexport function leftPad(s: string, n: number) { return s + n; }\r\nexport function multiply(a: number, b: number) { return a * b; }\r\n"
+        "signature": "1874987148-export declare const someString: string;\r\nexport declare function leftPad(s: string, n: number): string;\r\nexport declare function multiply(a: number, b: number): number;\r\n"
       },
       "./some_decl.d.ts": {
         "version": "-9253692965-declare const dts: any;\r\n",
@@ -221,7 +221,7 @@ exitCode:: ExitStatus.Success
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1134
+  "size": 1431
 }
 
 //// [/src/logic/index.d.ts] file written with same contents
@@ -241,6 +241,9 @@ exitCode:: ExitStatus.Success
       [
         "../core/index.d.ts",
         "../core/anothermodule.d.ts"
+      ],
+      [
+        "../core/anothermodule.d.ts"
       ]
     ],
     "fileInfos": {
@@ -259,7 +262,7 @@ exitCode:: ExitStatus.Success
       },
       "./index.ts": {
         "version": "-5786964698-import * as c from '../core/index';\r\nexport function getSecondsInDay() {\r\n    return c.multiply(10, 15);\r\n}\r\nimport * as mod from '../core/anotherModule';\r\nexport const m = mod;\r\n",
-        "signature": "-5786964698-import * as c from '../core/index';\r\nexport function getSecondsInDay() {\r\n    return c.multiply(10, 15);\r\n}\r\nimport * as mod from '../core/anotherModule';\r\nexport const m = mod;\r\n"
+        "signature": "-6548680073-export declare function getSecondsInDay(): number;\r\nimport * as mod from '../core/anotherModule';\r\nexport declare const m: typeof mod;\r\n"
       }
     },
     "options": {
@@ -276,7 +279,6 @@ exitCode:: ExitStatus.Success
     },
     "exportedModulesMap": {
       "./index.ts": [
-        "../core/index.d.ts",
         "../core/anothermodule.d.ts"
       ]
     },
@@ -288,7 +290,7 @@ exitCode:: ExitStatus.Success
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1370
+  "size": 1555
 }
 
 //// [/src/tests/index.d.ts] file written with same contents
@@ -334,7 +336,7 @@ exitCode:: ExitStatus.Success
       },
       "./index.ts": {
         "version": "12336236525-import * as c from '../core/index';\r\nimport * as logic from '../logic/index';\r\n\r\nc.leftPad(\"\", 10);\r\nlogic.getSecondsInDay();\r\n\r\nimport * as mod from '../core/anotherModule';\r\nexport const m = mod;\r\n",
-        "signature": "12336236525-import * as c from '../core/index';\r\nimport * as logic from '../logic/index';\r\n\r\nc.leftPad(\"\", 10);\r\nlogic.getSecondsInDay();\r\n\r\nimport * as mod from '../core/anotherModule';\r\nexport const m = mod;\r\n"
+        "signature": "-9209611-import * as mod from '../core/anotherModule';\r\nexport declare const m: typeof mod;\r\n"
       }
     },
     "options": {
@@ -357,9 +359,7 @@ exitCode:: ExitStatus.Success
         "../core/anothermodule.d.ts"
       ],
       "./index.ts": [
-        "../core/index.d.ts",
-        "../core/anothermodule.d.ts",
-        "../logic/index.d.ts"
+        "../core/anothermodule.d.ts"
       ]
     },
     "semanticDiagnosticsPerFile": [
@@ -371,6 +371,6 @@ exitCode:: ExitStatus.Success
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1578
+  "size": 1702
 }
 

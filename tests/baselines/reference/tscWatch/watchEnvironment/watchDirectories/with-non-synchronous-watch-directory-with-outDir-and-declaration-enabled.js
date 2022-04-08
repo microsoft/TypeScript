@@ -47,7 +47,7 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /user/username/projects/myproject/node_modules/file2/index.d.ts (used version)
-/user/username/projects/myproject/src/file1.ts (used version)
+/user/username/projects/myproject/src/file1.ts (computed .d.ts during emit)
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:

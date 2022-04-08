@@ -9411,9 +9411,10 @@ namespace ts {
         }
     }
 
+    const dtsExtensions = [Extension.Dts, Extension.Dmts, Extension.Dcts];
     /** @internal */
     export function isDeclarationFileName(fileName: string): boolean {
-        return fileExtensionIsOneOf(fileName, [Extension.Dts, Extension.Dmts, Extension.Dcts]);
+        return fileExtensionIsOneOf(fileName, dtsExtensions);
     }
 
     /*@internal*/

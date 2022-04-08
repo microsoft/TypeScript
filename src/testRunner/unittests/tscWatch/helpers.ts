@@ -336,7 +336,7 @@ namespace ts.tscWatch {
         if (!builderProgram) return;
         if (builderProgram !== oldProgram?.[1]) {
             const state = builderProgram.getState();
-            const internalState = state as unknown as BuilderState;
+            const internalState = state as unknown as BuilderProgramState;
             if (state.semanticDiagnosticsPerFile?.size) {
                 baseline.push("Semantic diagnostics in builder refreshed for::");
                 for (const file of program.getSourceFiles()) {
@@ -354,8 +354,11 @@ namespace ts.tscWatch {
                     baseline.push("Shape signatures in builder refreshed for::");
                     internalState.hasCalledUpdateShapeSignature.forEach((path: Path) => {
                         const info = state.fileInfos.get(path);
-                        if(info?.version === info?.signature || !info?.signature) {
+                        if (info?.version === info?.signature || !info?.signature) {
                             baseline.push(path + " (used version)");
+                        }
+                        else if (internalState.filesChangingSignature?.has(path)) {
+                            baseline.push(path + " (computed .d.ts during emit)");
                         }
                         else {
                             baseline.push(path + " (computed .d.ts)");

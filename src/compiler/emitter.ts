@@ -531,6 +531,7 @@ namespace ts {
                 printer.writeFile(sourceFile!, writer, sourceMapGenerator);
             }
 
+            let sourceMapUrlPos;
             if (sourceMapGenerator) {
                 if (sourceMapDataList) {
                     sourceMapDataList.push({
@@ -548,6 +549,7 @@ namespace ts {
 
                 if (sourceMappingURL) {
                     if (!writer.isAtStartOfLine()) writer.rawWrite(newLine);
+                    sourceMapUrlPos = writer.getTextPos();
                     writer.writeComment(`//# ${"sourceMappingURL"}=${sourceMappingURL}`); // Tools can sometimes see this line as a source mapping url comment
                 }
 
@@ -562,7 +564,7 @@ namespace ts {
             }
 
             // Write the output file
-            writeFile(host, emitterDiagnostics, jsFilePath, writer.getText(), !!compilerOptions.emitBOM, sourceFiles);
+            writeFile(host, emitterDiagnostics, jsFilePath, writer.getText(), !!compilerOptions.emitBOM, sourceFiles, sourceMapUrlPos);
 
             // Reset state
             writer.clear();

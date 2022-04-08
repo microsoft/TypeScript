@@ -20,6 +20,7 @@ namespace ts {
         const host = createCompilerHostWorker(options, /*setParentNodes*/ undefined, system);
         host.createHash = maybeBind(system, system.createHash);
         host.disableUseFileVersionAsSignature = system.disableUseFileVersionAsSignature;
+        host.storeFilesChangingSignatureDuringEmit = system.storeFilesChangingSignatureDuringEmit;
         setGetSourceFileAsHashVersioned(host, system);
         changeCompilerHostLikeToUseCache(host, fileName => toPath(fileName, host.getCurrentDirectory(), host.getCanonicalFileName));
         return host;
@@ -114,6 +115,7 @@ namespace ts {
         writeFile?(path: string, data: string, writeByteOrderMark?: boolean): void;
         // For testing
         disableUseFileVersionAsSignature?: boolean;
+        storeFilesChangingSignatureDuringEmit?: boolean;
     }
 
     export interface WatchCompilerHost<T extends BuilderProgram> extends ProgramHost<T>, WatchHost {
