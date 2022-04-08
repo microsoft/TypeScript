@@ -96,7 +96,6 @@ namespace ts.Completions {
     }
 
     interface SymbolOriginInfoObjectLiteralMethod extends SymbolOriginInfo {
-        importAdder: codefix.ImportAdder,
         insertText: string,
         labelDetails: CompletionEntryLabelDetails,
         isSnippet?: true,
@@ -780,17 +779,13 @@ namespace ts.Completions {
         }
 
         if (origin && originIsObjectLiteralMethod(origin)) {
-            let importAdder;
-            ({ insertText, isSnippet, importAdder, labelDetails } = origin);
+            ({ insertText, isSnippet, labelDetails } = origin);
             if (!preferences.useLabelDetailsInCompletionEntries) {
                 name = name + labelDetails.detail;
                 labelDetails = undefined;
             }
             source = CompletionSource.ObjectLiteralMethodSnippet;
             sortText = SortText.SortBelow(sortText);
-            if (importAdder.hasFixes()) {
-                hasAction = true;
-            }
         }
 
         if (isJsxIdentifierExpected && !isRightOfOpenTag && preferences.includeCompletionsWithSnippetText && preferences.jsxAttributeCompletionStyle && preferences.jsxAttributeCompletionStyle !== "none") {
@@ -1072,14 +1067,13 @@ namespace ts.Completions {
         options: CompilerOptions,
         preferences: UserPreferences,
         formatContext: formatting.FormatContext | undefined,
-    ): { insertText: string, isSnippet?: true, importAdder: codefix.ImportAdder, labelDetails: CompletionEntryLabelDetails } | undefined {
+    ): { insertText: string, isSnippet?: true, labelDetails: CompletionEntryLabelDetails } | undefined {
         const isSnippet = preferences.includeCompletionsWithSnippetText || undefined;
         let insertText: string = name;
 
         const sourceFile = enclosingDeclaration.getSourceFile();
-        const importAdder = codefix.createImportAdder(sourceFile, program, preferences, host);
 
-        const method = createObjectLiteralMethod(symbol, enclosingDeclaration, sourceFile, program, host, preferences, importAdder);
+        const method = createObjectLiteralMethod(symbol, enclosingDeclaration, sourceFile, program, host, preferences);
         if (!method) {
             return undefined;
         }
@@ -1115,7 +1109,7 @@ namespace ts.Completions {
             method.type);
         const labelDetails = { detail: signaturePrinter.printNode(EmitHint.Unspecified, methodSignature, sourceFile) };
 
-        return { isSnippet, insertText, importAdder, labelDetails };
+        return { isSnippet, insertText, labelDetails };
 
     };
 
@@ -1126,14 +1120,12 @@ namespace ts.Completions {
         program: Program,
         host: LanguageServiceHost,
         preferences: UserPreferences,
-        importAdder: codefix.ImportAdder,
     ): MethodDeclaration | undefined {
         const declarations = symbol.getDeclarations();
         if (!(declarations && declarations.length)) {
             return undefined;
         }
         const checker = program.getTypeChecker();
-        const scriptTarget = getEmitScriptTarget(program.getCompilerOptions());
         const declaration = declarations[0];
         const name = getSynthesizedDeepClone(getNameOfDeclaration(declaration), /*includeTrivia*/ false) as PropertyName;
         const type = checker.getWidenedType(checker.getTypeOfSymbolAtLocation(symbol, enclosingDeclaration));
@@ -1163,14 +1155,9 @@ namespace ts.Completions {
                     // We don't support overloads in object literals.
                     return undefined;
                 }
-                let typeNode = checker.typeToTypeNode(effectiveType, enclosingDeclaration, builderFlags, codefix.getNoopSymbolTrackerWithResolver({ program, host }));
+                const typeNode = checker.typeToTypeNode(effectiveType, enclosingDeclaration, builderFlags, codefix.getNoopSymbolTrackerWithResolver({ program, host }));
                 if (!typeNode || !isFunctionTypeNode(typeNode)) {
                     return undefined;
-                }
-                const importableReference = codefix.tryGetAutoImportableReferenceFromTypeNode(typeNode, scriptTarget);
-                if (importableReference) {
-                    typeNode = importableReference.typeNode;
-                    codefix.importSymbols(importAdder, importableReference.symbols);
                 }
 
                 let body;
@@ -1183,15 +1170,25 @@ namespace ts.Completions {
                     body = factory.createBlock([], /* multiline */ true);
                 }
 
+                const parameters = typeNode.parameters.map(typedParam =>
+                    factory.createParameterDeclaration(
+                        /*decorators*/ undefined,
+                        /*modifiers*/ undefined,
+                        typedParam.dotDotDotToken,
+                        typedParam.name,
+                        typedParam.questionToken,
+                        /*type*/ undefined,
+                        typedParam.initializer,
+                    ));
                 return factory.createMethodDeclaration(
                     /*decorators*/ undefined,
                     /*modifiers*/ undefined,
                     /*asteriskToken*/ undefined,
                     name,
                     /*questionToken*/ undefined,
-                    (typeNode as FunctionTypeNode).typeParameters,
-                    (typeNode as FunctionTypeNode).parameters,
-                    (typeNode as FunctionTypeNode).type,
+                    /*typeParameters*/ undefined,
+                    parameters,
+                    /*type*/ undefined,
                     body);
                 }
             default:
@@ -1722,29 +1719,6 @@ namespace ts.Completions {
                 const changes = textChanges.ChangeTracker.with(
                     { host, formatContext, preferences },
                     importAdder.writeFixes);
-                return {
-                    sourceDisplay: undefined,
-                    codeActions: [{
-                        changes,
-                        description: diagnosticToString([Diagnostics.Includes_imports_of_types_referenced_by_0, name]),
-                    }],
-                };
-            }
-        }
-
-        if (source === CompletionSource.ObjectLiteralMethodSnippet) {
-            const enclosingDeclaration = tryGetObjectLikeCompletionContainer(contextToken) as ObjectLiteralExpression;
-            const { importAdder } = getEntryForObjectLiteralMethodCompletion(
-                symbol,
-                name,
-                enclosingDeclaration,
-                program,
-                host,
-                compilerOptions,
-                preferences,
-                formatContext)!;
-            if (importAdder.hasFixes()) {
-                const changes = textChanges.ChangeTracker.with({ host, formatContext, preferences }, importAdder.writeFixes);
                 return {
                     sourceDisplay: undefined,
                     codeActions: [{
