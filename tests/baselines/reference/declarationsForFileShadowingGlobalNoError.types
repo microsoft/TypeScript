@@ -4,7 +4,7 @@ export type DOMNode = Node;
 
 === tests/cases/compiler/custom.ts ===
 export type Node = {};
->Node : Node
+>Node : {}
 
 === tests/cases/compiler/index.ts ===
 import { Node } from './custom'
@@ -14,7 +14,7 @@ import { DOMNode } from './dom'
 >DOMNode : any
 
 type Constructor = new (...args: any[]) => any
->Constructor : Constructor
+>Constructor : new (...args: any[]) => any
 >args : any[]
 
 export const mixin = (Base: Constructor) => {

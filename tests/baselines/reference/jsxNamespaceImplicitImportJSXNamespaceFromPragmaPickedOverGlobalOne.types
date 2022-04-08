@@ -92,7 +92,7 @@ export namespace EmotionJSX {
         extends ReactJSXIntrinsicClassAttributes<T> { }
 
     type IntrinsicElements = {
->IntrinsicElements : IntrinsicElements
+>IntrinsicElements : { div: { css?: string | undefined; }; }
 
         [K in keyof ReactJSXIntrinsicElements]: ReactJSXIntrinsicElements[K] & {
             css?: string

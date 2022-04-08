@@ -228,7 +228,7 @@ function f4<K extends string>(a: { [key: string]: number }[K], b: number) {
 }
 
 type Item = { a: string, b: number };
->Item : Item
+>Item : { a: string; b: number; }
 >a : string
 >b : number
 
@@ -270,7 +270,7 @@ function f10<T extends Item, K extends keyof T>(obj: T, k1: string, k2: keyof It
 }
 
 type Dict = Record<string, number>;
->Dict : Dict
+>Dict : { [x: string]: number; }
 
 function f11<K extends keyof Dict>(obj: Dict, k1: keyof Dict, k2: K) {
 >f11 : <K extends string>(obj: Dict, k1: keyof Dict, k2: K) => void

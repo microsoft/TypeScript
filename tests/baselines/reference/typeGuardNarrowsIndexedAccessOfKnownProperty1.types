@@ -28,7 +28,7 @@ interface Square {
 >radius : number
 }
  type Shape = Square | Rectangle | Circle;
->Shape : Shape
+>Shape : Square | Rectangle | Circle
 
 interface Subshape {
     "0": {
@@ -208,16 +208,16 @@ interface Y {
 }
 
 type A = ["aa", number];
->A : A
+>A : ["aa", number]
 
 type B = ["bb", string];
->B : B
+>B : ["bb", string]
 
 type Z = X | Y;
->Z : Z
+>Z : X | Y
 
 type C = A | B;
->C : C
+>C : A | B
 
 function check(z: Z, c: C) {
 >check : (z: Z, c: C) => void

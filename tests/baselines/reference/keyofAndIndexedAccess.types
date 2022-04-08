@@ -125,7 +125,7 @@ type NAME = "name";
 >NAME : "name"
 
 type WIDTH_OR_HEIGHT = "width" | "height";
->WIDTH_OR_HEIGHT : WIDTH_OR_HEIGHT
+>WIDTH_OR_HEIGHT : "width" | "height"
 
 type Q10 = Shape["name"];  // string
 >Q10 : string
@@ -134,7 +134,7 @@ type Q11 = Shape["width" | "height"];  // number
 >Q11 : number
 
 type Q12 = Shape["name" | "visible"];  // string | boolean
->Q12 : Q12
+>Q12 : string | boolean
 
 type Q20 = Shape[NAME];  // string
 >Q20 : string
@@ -1196,7 +1196,7 @@ class C1 {
 }
 
 type S2 = {
->S2 : S2
+>S2 : { a: string; b: string; }
 
     a: string;
 >a : string
@@ -1448,7 +1448,7 @@ function path(obj: any, ...keys: (string | number)[]): any {
 }
 
 type Thing = {
->Thing : Thing
+>Thing : { a: {    x: number;    y: string;}; b: boolean; }
 
     a: { x: number, y: string },
 >a : { x: number; y: string; }
@@ -1646,7 +1646,7 @@ function f<K extends keyof R>(p: K) {
 // Repro from #12651
 
 type MethodDescriptor = {
->MethodDescriptor : MethodDescriptor
+>MethodDescriptor : { name: string; args: any[]; returnValue: any; }
 
 	name: string;
 >name : string
@@ -1664,7 +1664,7 @@ declare function dispatchMethod<M extends MethodDescriptor>(name: M['name'], arg
 >args : M["args"]
 
 type SomeMethodDescriptor = {
->SomeMethodDescriptor : SomeMethodDescriptor
+>SomeMethodDescriptor : { name: "someMethod"; args: [string, number]; returnValue: string[]; }
 
 	name: "someMethod";
 >name : "someMethod"
@@ -1688,7 +1688,7 @@ let result = dispatchMethod<SomeMethodDescriptor>("someMethod", ["hello", 35]);
 // Repro from #13073
 
 type KeyTypes = "a" | "b"
->KeyTypes : KeyTypes
+>KeyTypes : "a" | "b"
 
 let MyThingy: { [key in KeyTypes]: string[] };
 >MyThingy : { a: string[]; b: string[]; }

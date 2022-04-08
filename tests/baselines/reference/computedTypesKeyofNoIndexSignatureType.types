@@ -18,11 +18,11 @@ type OmitIndex<T, I extends string | number> = {
 };
 
 type IndexObject = { [key: string]: unknown; };
->IndexObject : IndexObject
+>IndexObject : { [key: string]: unknown; }
 >key : string
 
 type FooBar = { foo: "hello"; bar: "world"; };
->FooBar : FooBar
+>FooBar : { foo: "hello"; bar: "world"; }
 >foo : "hello"
 >bar : "world"
 

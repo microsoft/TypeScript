@@ -1,6 +1,6 @@
 === tests/cases/conformance/override/override19.ts ===
 type Foo = abstract new(...args: any) => any;
->Foo : Foo
+>Foo : abstract new (...args: any) => any
 >args : any
 
 declare function CreateMixin<C extends Foo, T extends Foo>(Context: C, Base: T): T & {

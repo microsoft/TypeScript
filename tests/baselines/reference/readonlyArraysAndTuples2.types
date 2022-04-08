@@ -1,21 +1,21 @@
 === tests/cases/conformance/types/tuple/readonlyArraysAndTuples2.ts ===
 type T10 = string[];
->T10 : T10
+>T10 : string[]
 
 type T11 = Array<string>;
->T11 : T11
+>T11 : string[]
 
 type T12 = readonly string[];
->T12 : T12
+>T12 : readonly string[]
 
 type T13 = ReadonlyArray<string>;
->T13 : T13
+>T13 : readonly string[]
 
 type T20 = [number, number];
->T20 : T20
+>T20 : [number, number]
 
 type T21 = readonly [number, number];
->T21 : T21
+>T21 : readonly [number, number]
 
 declare function f1(ma: string[], ra: readonly string[], mt: [string, string], rt: readonly [string, string]): readonly [string, string];
 >f1 : (ma: string[], ra: readonly string[], mt: [string, string], rt: readonly [string, string]) => readonly [string, string]

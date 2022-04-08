@@ -6,7 +6,7 @@ interface Mock<Y extends any[]> extends Function {
 >args : Y
 }
 type Tester = (opts: any, done: (...args: any[]) => any) => any;
->Tester : Tester
+>Tester : (opts: any, done: (...args: any[]) => any) => any
 >opts : any
 >done : (...args: any[]) => any
 >args : any[]

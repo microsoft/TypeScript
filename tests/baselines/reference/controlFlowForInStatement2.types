@@ -8,12 +8,12 @@ const keywordB = 'b';
 >'b' : "b"
 
 type A = { [keywordA]: number };
->A : A
+>A : { a: number; }
 >[keywordA] : number
 >keywordA : "a"
 
 type B = { [keywordB]: string };
->B : B
+>B : { b: string; }
 >[keywordB] : string
 >keywordB : "b"
 

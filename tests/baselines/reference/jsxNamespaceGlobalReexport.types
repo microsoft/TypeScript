@@ -51,16 +51,16 @@ export type ComponentType<T = {}> = {};
 >ComponentType : ComponentType<T>
 
 export type ComponentChild = {};
->ComponentChild : ComponentChild
+>ComponentChild : {}
 
 export type ComponentChildren = {};
->ComponentChildren : ComponentChildren
+>ComponentChildren : {}
 
 export type VNode<T = {}> = {};
 >VNode : VNode<T>
 
 export type Attributes = {};
->Attributes : Attributes
+>Attributes : {}
 
 export type Component<T = {}, U = {}> = {};
 >Component : Component<T, U>

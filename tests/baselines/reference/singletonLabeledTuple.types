@@ -1,6 +1,6 @@
 === tests/cases/compiler/singletonLabeledTuple.ts ===
 type AliasOptional = [p?: number]
->AliasOptional : AliasOptional
+>AliasOptional : [p?: number]
 
 // literal type vs type alias
 type Literal = [p?: number] extends [unknown] ? true : false // Expect `Literal` to be `false`
@@ -26,7 +26,7 @@ type Normal = [number?] extends [unknown] ? true : false       // Expect `Normal
 
 
 type AliasRest = [...p: number[]];
->AliasRest : AliasRest
+>AliasRest : number[]
 
 type LiteralRest = [...p: number[]] extends [unknown] ? true : false; // Expect `LiteralRest` to be `false`
 >LiteralRest : false

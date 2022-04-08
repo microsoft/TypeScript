@@ -15,7 +15,7 @@ type InferRecursive<T> = T extends Recursive<infer R> ? R : "never!"
 
 // the type we are testing with
 type t1 = Box<string | Box<number | boolean>>
->t1 : t1
+>t1 : Box<string | Box<number | boolean>>
 
 type t2 = InferRecursive<t1>
 >t2 : string | number | boolean

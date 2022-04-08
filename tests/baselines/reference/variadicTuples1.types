@@ -1390,7 +1390,7 @@ callApi(getOrgUser);
 // Repro from #40235
 
 type Numbers = number[];
->Numbers : Numbers
+>Numbers : number[]
 
 type Unbounded = [...Numbers, boolean];
 >Unbounded : [...number[], boolean]
