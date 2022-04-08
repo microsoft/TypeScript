@@ -1,6 +1,6 @@
 === tests/cases/conformance/classes/members/privateNames/typeFromPrivatePropertyAssignment.ts ===
 type Foo = { foo?: string };
->Foo : Foo
+>Foo : { foo?: string; }
 >foo : string
 
 class C {
