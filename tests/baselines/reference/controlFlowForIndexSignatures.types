@@ -10,7 +10,7 @@ const boo: Foo = { bar: 'bar' };
 >'bar' : "bar"
 
 function a(aboo1?: Foo) {
->a : (aboo1?: Foo | undefined) => void
+>a : (aboo1?: Foo) => void
 >aboo1 : Foo | undefined
 
     if (!aboo1) return;

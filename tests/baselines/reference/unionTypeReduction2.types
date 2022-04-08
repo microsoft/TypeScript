@@ -173,7 +173,7 @@ type A = {
 }
 
 type B = {
->B : { f(x?: string | undefined): void; g(): void; }
+>B : { f(x?: string): void; g(): void; }
 
     f(x?: string): void;
 >f : (x?: string) => void
