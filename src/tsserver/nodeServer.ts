@@ -383,7 +383,7 @@ namespace ts.server {
         return eventPort !== undefined && !isNaN(eventPort) ? eventPort : undefined;
     }
 
-    function startNodeSession(options: StartSessionOptions, logger: Logger, cancellationToken: ServerCancellationToken) {
+    function startNodeSession(options: StartSessionOptions, logger: Logger, cancellationToken: ServerCancellationToken, fs: ServerHost) {
         const childProcess: {
             fork(modulePath: string, args: string[], options?: { execArgv: string[], env?: MapLike<string> }): NodeChildProcess;
         } = require("child_process");
@@ -680,7 +680,7 @@ namespace ts.server {
                     this.event(body, eventName);
                 };
 
-                const host = sys as ServerHost;
+                const host = fs // sys as ServerHost;
 
                 const typingsInstaller = disableAutomaticTypingAcquisition
                     ? undefined
@@ -788,7 +788,7 @@ namespace ts.server {
 
         const eventPort: number | undefined = parseEventPort(findArgument("--eventPort"));
         const typingSafeListLocation = findArgument(Arguments.TypingSafeListLocation)!; // TODO: GH#18217
-        const typesMapLocation = findArgument(Arguments.TypesMapLocation) || combinePaths(getDirectoryPath(sys.getExecutingFilePath()), "typesMap.json");
+        const typesMapLocation = findArgument(Arguments.TypesMapLocation) || combinePaths(getDirectoryPath(fs.getExecutingFilePath()), "typesMap.json");
         const npmLocation = findArgument(Arguments.NpmLocation);
         const validateDefaultNpmLocation = hasArgument(Arguments.ValidateDefaultNpmLocation);
         const disableAutomaticTypingAcquisition = hasArgument("--disableAutomaticTypingAcquisition");

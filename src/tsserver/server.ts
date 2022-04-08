@@ -28,9 +28,9 @@ namespace ts.server {
         cancellationToken: ServerCancellationToken;
         serverMode: LanguageServiceMode | undefined;
         unknownServerMode?: string;
-        startSession: (option: StartSessionOptions, logger: Logger, cancellationToken: ServerCancellationToken) => void;
+        startSession: (option: StartSessionOptions, logger: Logger, cancellationToken: ServerCancellationToken, fs: ServerHost) => void;
     }
-    function start({ args, logger, cancellationToken, serverMode, unknownServerMode, startSession: startServer }: StartInput, platform: string) {
+    function start({ args, logger, cancellationToken, serverMode, unknownServerMode, startSession: startServer }: StartInput, platform: string, fs: ServerHost) {
         const syntaxOnly = hasArgument("--syntaxOnly");
 
         logger.info(`Starting TS Server`);
@@ -70,31 +70,24 @@ namespace ts.server {
                 serverMode
             },
             logger,
-            cancellationToken
+            cancellationToken,
+            fs
         );
     }
 
     setStackTraceLimit();
+    // TODO: Not sure this is right
+    const fs = findArgument("vfs") ? TestFSWithWatch.createVirtualServerHost([]) : ts.sys as ServerHost
     // Cannot check process var directory in webworker so has to be typeof check here
     if (typeof process !== "undefined") {
-        start(initializeNodeSystem(), require("os").platform());
-    }
-    // TODO: Not sure this is right
-    else if (findArgument("vfs")) {
-        // Get args from first message
-        const listener = (e: any) => {
-            removeEventListener("message", listener);
-            const args = e.data;
-            start(initializeVirtualFileSystem(args), "vfs");
-        };
-        addEventListener("message", listener);
+        start(initializeNodeSystem(), require("os").platform(), fs);
     }
     else {
         // Get args from first message
         const listener = (e: any) => {
             removeEventListener("message", listener);
             const args = e.data;
-            start(initializeWebSystem(args), "web");
+            start(initializeWebSystem(args), "web", fs);
         };
         addEventListener("message", listener);
     }

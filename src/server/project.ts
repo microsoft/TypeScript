@@ -229,8 +229,8 @@ namespace ts.server {
             return hasOneOrMoreJsAndNoTsFiles(this);
         }
 
-        public static resolveModule(moduleName: string, initialDir: string, host: ServerHost, log: (message: string) => void, logErrors?: (message: string) => void): {} | undefined {
-            const resolvedPath = normalizeSlashes(host.resolvePath(combinePaths(initialDir, "node_modules")));
+        public static resolveModule(moduleName: string, initialDir: string, host: ServerHost, fshost: ServerHost, log: (message: string) => void, logErrors?: (message: string) => void): {} | undefined {
+            const resolvedPath = normalizeSlashes(fshost.resolvePath(combinePaths(initialDir, "node_modules")));
             log(`Loading ${moduleName} from ${initialDir} (resolved to ${resolvedPath})`);
             const result = host.require!(resolvedPath, moduleName); // TODO: GH#18217
             if (result.error) {
@@ -312,13 +312,14 @@ namespace ts.server {
 
             this.setInternalCompilerOptionsForEmittingJsFiles();
             const host = this.projectService.host;
+            const fshost = this.projectService.fshost || this.projectService.host;
             if (this.projectService.logger.loggingEnabled()) {
                 this.trace = s => this.writeLog(s);
             }
             else if (host.trace) {
                 this.trace = s => host.trace!(s);
             }
-            this.realpath = maybeBind(host, host.realpath);
+            this.realpath = maybeBind(fshost, fshost.realpath);
 
             // Use the current directory as resolution root only if the project created using current directory string
             this.resolutionCache = createResolutionCache(
@@ -450,19 +451,19 @@ namespace ts.server {
         }
 
         useCaseSensitiveFileNames() {
-            return this.projectService.host.useCaseSensitiveFileNames;
+            return (this.projectService.fshost || this.projectService.host).useCaseSensitiveFileNames;
         }
 
         readDirectory(path: string, extensions?: readonly string[], exclude?: readonly string[], include?: readonly string[], depth?: number): string[] {
-            return this.directoryStructureHost.readDirectory!(path, extensions, exclude, include, depth);
+            return this.directoryStructureHost.readDirectory!(path, extensions, exclude, include, depth) 
         }
 
         readFile(fileName: string): string | undefined {
-            return this.projectService.host.readFile(fileName);
+            return (this.projectService.fshost || this.projectService.host).readFile(fileName);
         }
 
         writeFile(fileName: string, content: string): void {
-            return this.projectService.host.writeFile(fileName, content);
+            return (this.projectService.fshost || this.projectService.host).writeFile(fileName, content);
         }
 
         fileExists(file: string): boolean {
@@ -1598,7 +1599,7 @@ namespace ts.server {
                 (errorLogs || (errorLogs = [])).push(message);
             };
             const resolvedModule = firstDefined(searchPaths, searchPath =>
-                Project.resolveModule(pluginConfigEntry.name, searchPath, this.projectService.host, log, logError) as PluginModuleFactory | undefined);
+                Project.resolveModule(pluginConfigEntry.name, searchPath, this.projectService.host, this.projectService.fshost || this.projectService.host, log, logError) as PluginModuleFactory | undefined);
             if (resolvedModule) {
                 const configurationOverride = pluginConfigOverrides && pluginConfigOverrides.get(pluginConfigEntry.name);
                 if (configurationOverride) {
@@ -1622,13 +1623,13 @@ namespace ts.server {
                     this.projectService.logger.info(`Skipped loading plugin ${configEntry.name} because it did not expose a proper factory function`);
                     return;
                 }
-
+                // TODO: serverHost very likely needs to be fshost, or an object that defaults to fshost
                 const info: PluginCreateInfo = {
                     config: configEntry,
                     project: this,
                     languageService: this.languageService,
                     languageServiceHost: this,
-                    serverHost: this.projectService.host,
+                    serverHost: this.projectService.fshost || this.projectService.host,
                     session: this.projectService.session
                 };
 
@@ -1716,17 +1717,19 @@ namespace ts.server {
         /*@internal*/
         getModuleResolutionHostForAutoImportProvider(): ModuleResolutionHost {
             if (this.program) {
+                const fshost = this.projectService.fshost || this.projectService.host;
                 return {
                     fileExists: this.program.fileExists,
                     directoryExists: this.program.directoryExists,
-                    realpath: this.program.realpath || this.projectService.host.realpath?.bind(this.projectService.host),
+                    realpath: this.program.realpath || fshost.realpath?.bind(fshost),
                     getCurrentDirectory: this.getCurrentDirectory.bind(this),
-                    readFile: this.projectService.host.readFile.bind(this.projectService.host),
-                    getDirectories: this.projectService.host.getDirectories.bind(this.projectService.host),
+                    readFile: fshost.readFile.bind(fshost),
+                    getDirectories: fshost.getDirectories.bind(fshost),
                     trace: this.projectService.host.trace?.bind(this.projectService.host),
                     useCaseSensitiveFileNames: this.program.useCaseSensitiveFileNames(),
                 };
             }
+            // TODO: Not sure whether this needs to be fshost or host or an object that can fall back fshost->host
             return this.projectService.host;
         }
 
@@ -1864,7 +1867,7 @@ namespace ts.server {
                 compilerOptions,
                 /*compileOnSaveEnabled*/ false,
                 watchOptions,
-                projectService.host,
+                projectService.fshost || projectService.host,
                 currentDirectory);
             this.typeAcquisition = typeAcquisition;
             this.projectRootPath = projectRootPath && projectService.toCanonicalFileName(projectRootPath);
@@ -2092,7 +2095,7 @@ namespace ts.server {
                 compilerOptions,
                 /*compileOnSaveEnabled*/ false,
                 hostProject.getWatchOptions(),
-                hostProject.projectService.host,
+                hostProject.projectService.fshost || hostProject.projectService.host,
                 hostProject.currentDirectory);
 
             this.rootFileNames = initialRootNames;
@@ -2517,7 +2520,7 @@ namespace ts.server {
                 compilerOptions,
                 compileOnSaveEnabled,
                 watchOptions,
-                projectService.host,
+                projectService.fshost || projectService.host,
                 getDirectoryPath(projectFilePath || normalizeSlashes(externalProjectName)));
             this.enableGlobalPlugins(this.getCompilerOptions(), pluginConfigOverrides);
         }

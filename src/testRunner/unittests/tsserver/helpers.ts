@@ -366,6 +366,7 @@ namespace ts.projectSystem {
 
         const sessionOptions: TestSessionOptions = {
             host,
+            fshost: undefined,
             cancellationToken: server.nullCancellationToken,
             useSingleInferredProject: false,
             useInferredProjectPerProjectRoot: false,
@@ -413,6 +414,31 @@ namespace ts.projectSystem {
         }
     }
 
+    export function createVirtualFilesystemSession(host: server.ServerHost, fshost: TestFSWithWatch.VirtualServerHost | undefined, opts: Partial<TestSessionOptions> = {}) {
+        if (opts.typingsInstaller === undefined) {
+            opts.typingsInstaller = new TestTypingsInstaller("/a/data/", /*throttleLimit*/ 5, host);
+        }
+
+        if (opts.eventHandler !== undefined) {
+            opts.canUseEvents = true;
+        }
+
+        const sessionOptions: TestSessionOptions = {
+            host,
+            fshost,
+            cancellationToken: server.nullCancellationToken,
+            useSingleInferredProject: false,
+            useInferredProjectPerProjectRoot: false,
+            typingsInstaller: undefined!, // TODO: GH#18217
+            byteLength: Utils.byteLength,
+            hrtime: process.hrtime,
+            logger: opts.logger || createHasErrorMessageLogger(),
+            canUseEvents: false
+        };
+
+        return new TestSession({ ...sessionOptions, ...opts });
+    }
+
     export interface TestProjectServiceOptions extends server.ProjectServiceOptions {
         logger: Logger;
     }
@@ -422,6 +448,7 @@ namespace ts.projectSystem {
             typingsInstaller: server.ITypingsInstaller, opts: Partial<TestProjectServiceOptions> = {}) {
             super({
                 host,
+                fshost: undefined, // TODO: should provide this for fshost tests
                 logger,
                 session: undefined,
                 cancellationToken,

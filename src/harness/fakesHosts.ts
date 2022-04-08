@@ -224,6 +224,7 @@ namespace fakes {
         private readonly _outputsMap: collections.SortedMap<string, number>;
         public readonly traces: string[] = [];
         public readonly shouldAssertInvariants = !Harness.lightMode;
+
         private _setParentNodes: boolean;
         private _sourceFiles: collections.SortedMap<string, ts.SourceFile>;
         private _parseConfigHost: ParseConfigHost | undefined;

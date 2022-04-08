@@ -991,6 +991,7 @@ namespace Harness.LanguageService {
             const serverHost = new SessionServerHost(clientHost);
             const opts: ts.server.SessionOptions = {
                 host: serverHost,
+                fshost: undefined, // TODO: fshost tests will want to provide this for testing language service?
                 cancellationToken: ts.server.nullCancellationToken,
                 useSingleInferredProject: false,
                 useInferredProjectPerProjectRoot: false,

@@ -46,18 +46,6 @@ namespace ts.server {
         };
     }
 
-    export function initializeVirtualFileSystem(args: string[]): StartInput {
-        createVirtualFileSystem();
-        return {
-            args,
-            logger: createLogger(),
-            cancellationToken: nullCancellationToken,
-            // Only semantic mode right now
-            serverMode: LanguageServiceMode.Semantic,
-            startSession: startVirtualFileSystemSession
-        };
-    }
-
     function createLogger() {
         const cmdLineVerbosity = getLogLevel(findArgument("--logVerbosity"));
         return cmdLineVerbosity !== undefined ? new MainProcessLogger(cmdLineVerbosity, { writeMessage }) : nullLogger;
@@ -93,19 +81,6 @@ namespace ts.server {
         }
     }
 
-
-    function createVirtualFileSystem() {
-        Debug.assert(sys === undefined);
-        // TODO: I don't think I need the XMLHttpRequest code since vfs will get its files from messages sent by the owner
-        // ...but this means I may not need the webSession-copied code in startVirtualFileSystemSession
-        const vfshost = TestFSWithWatch.createVirtualServerHost([]);
-        setSys(vfshost);
-        const localeStr = findArgument("--locale");
-        if (localeStr) {
-            validateLocaleAndSetLanguage(localeStr, sys);
-        }
-    }
-
     function hrtime(previous?: [number, number]) {
         const now = self.performance.now() * 1e-3;
         let seconds = Math.floor(now);
@@ -121,9 +96,12 @@ namespace ts.server {
         return [seconds, nanoseconds];
     }
 
-    function startWebSession(options: StartSessionOptions, logger: Logger, cancellationToken: ServerCancellationToken) {
+    // TODO: Maybe should leave as ServerHost cast below and declare fs: System
+    // TODO: host is probably still a better name
+    function startWebSession(options: StartSessionOptions, logger: Logger, cancellationToken: ServerCancellationToken, fs: ServerHost) {
         class WorkerSession extends server.WorkerSession {
             constructor() {
+                // TODO: Not really sure this is the way to do it
                 super(sys as ServerHost, { writeMessage }, options, logger, cancellationToken, hrtime);
             }
 
@@ -140,30 +118,6 @@ namespace ts.server {
             }
         }
 
-        const session = new WorkerSession();
-
-        // Start listening
-        session.listen();
-    }
-
-    function startVirtualFileSystemSession(options: StartSessionOptions, logger: Logger, cancellationToken: ServerCancellationToken) {
-        class WorkerSession extends server.WorkerSession {
-            constructor() {
-                super(sys as ServerHost, { writeMessage }, options, logger, cancellationToken, hrtime);
-            }
-
-            exit() {
-                this.logger.info("Exiting...");
-                this.projectService.closeLog();
-                close();
-            }
-
-            listen() {
-                addEventListener("message", (message: any) => {
-                    this.onMessage(message.data);
-                });
-            }
-        }
         const session = new WorkerSession();
 
         // Start listening

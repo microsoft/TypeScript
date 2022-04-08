@@ -181,6 +181,7 @@ namespace ts.server {
         constructor(host: ServerHost, private webHost: HostWithWriteMessage, options: StartSessionOptions, logger: Logger, cancellationToken: ServerCancellationToken, hrtime: SessionOptions["hrtime"]) {
             super({
                 host,
+                fshost: undefined, // TODO: Provide this? Check Sheetal's comments.
                 cancellationToken,
                 ...options,
                 typingsInstaller: nullTypingsInstaller,

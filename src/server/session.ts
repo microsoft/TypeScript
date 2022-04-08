@@ -641,6 +641,7 @@ namespace ts.server {
 
     export interface SessionOptions {
         host: ServerHost;
+        fshost: ServerHost | undefined;
         cancellationToken: ServerCancellationToken;
         useSingleInferredProject: boolean;
         useInferredProjectPerProjectRoot: boolean;
@@ -688,9 +689,12 @@ namespace ts.server {
         private suppressDiagnosticEvents?: boolean;
         private eventHandler: ProjectServiceEventHandler | undefined;
         private readonly noGetErrOnBackgroundUpdate?: boolean;
+        // TODO: Also need to do this in all of project too
+        private fshost: ServerHost | undefined
 
         constructor(opts: SessionOptions) {
             this.host = opts.host;
+            this.fshost = opts.fshost;
             this.cancellationToken = opts.cancellationToken;
             this.typingsInstaller = opts.typingsInstaller;
             this.byteLength = opts.byteLength;
@@ -716,6 +720,7 @@ namespace ts.server {
             this.errorCheck = new MultistepOperation(multistepOperationHost);
             const settings: ProjectServiceOptions = {
                 host: this.host,
+                fshost: this.fshost,
                 logger: this.logger,
                 cancellationToken: this.cancellationToken,
                 useSingleInferredProject: opts.useSingleInferredProject,
@@ -1954,7 +1959,8 @@ namespace ts.server {
                 return args.richResponse ? { emitSkipped: true, diagnostics: [] } : false;
             }
             const scriptInfo = project.getScriptInfo(file)!;
-            const { emitSkipped, diagnostics } = project.emitFile(scriptInfo, (path, data, writeByteOrderMark) => this.host.writeFile(path, data, writeByteOrderMark));
+            const h = this.fshost || this.host;
+            const { emitSkipped, diagnostics } = project.emitFile(scriptInfo, (path, data, writeByteOrderMark) => h.writeFile(path, data, writeByteOrderMark));
             return args.richResponse ?
                 {
                     emitSkipped,
@@ -2653,7 +2659,7 @@ namespace ts.server {
         }
 
         getCanonicalFileName(fileName: string) {
-            const name = this.host.useCaseSensitiveFileNames ? fileName : toFileNameLowerCase(fileName);
+            const name = (this.fshost || this.host).useCaseSensitiveFileNames ? fileName : toFileNameLowerCase(fileName);
             return normalizePath(name);
         }
 

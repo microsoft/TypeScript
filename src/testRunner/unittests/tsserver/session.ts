@@ -42,6 +42,7 @@ namespace ts.server {
         function createSession(): TestSession {
             const opts: SessionOptions = {
                 host: mockHost,
+                fshost: undefined,
                 cancellationToken: nullCancellationToken,
                 useSingleInferredProject: false,
                 useInferredProjectPerProjectRoot: false,
@@ -465,6 +466,7 @@ namespace ts.server {
             constructor() {
                 super({
                     host: mockHost,
+                    fshost: undefined,
                     cancellationToken: nullCancellationToken,
                     useSingleInferredProject: false,
                     useInferredProjectPerProjectRoot: false,
@@ -512,6 +514,7 @@ namespace ts.server {
             constructor() {
                 super({
                     host: mockHost,
+                    fshost: undefined,
                     cancellationToken: nullCancellationToken,
                     useSingleInferredProject: false,
                     useInferredProjectPerProjectRoot: false,
@@ -580,6 +583,7 @@ namespace ts.server {
             constructor(private client: InProcClient) {
                 super({
                     host: mockHost,
+                    fshost: undefined,
                     cancellationToken: nullCancellationToken,
                     useSingleInferredProject: false,
                     useInferredProjectPerProjectRoot: false,

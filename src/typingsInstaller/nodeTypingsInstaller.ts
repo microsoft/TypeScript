@@ -84,6 +84,7 @@ namespace ts.server.typingsInstaller {
         private delayedInitializationError: InitializationFailedResponse | undefined;
 
         constructor(globalTypingsCacheLocation: string, typingSafeListLocation: string, typesMapLocation: string, npmLocation: string | undefined, validateDefaultNpmLocation: boolean, throttleLimit: number, log: Log) {
+            // TODO: This just uses sys, I'm not sure how to circumvent that
             super(
                 sys,
                 globalTypingsCacheLocation,
