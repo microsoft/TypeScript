@@ -1,6 +1,7 @@
 /// <reference path="fourslash.ts" />
 
-////import { TypeA, TypeB, TypeC, UnreferencedType } from 'my-types';
+// @Filename: /test.ts
+////import { TypeA, TypeB, TypeC, UnreferencedType } from './my-types';
 ////
 /////**
 //// * MyClass {@link TypeA}
@@ -27,7 +28,12 @@
 ////  }
 ////}
 
-verify.organizeImports(`import { TypeA, TypeB, TypeC } from 'my-types';
+// @Filename: /my-types.ts
+//// export type TypeA = string;
+//// export class TypeB { }
+//// export type TypeC = () => string;
+
+verify.organizeImports(`import { TypeA, TypeB, TypeC } from './my-types';
 
 /**
  * MyClass {@link TypeA}

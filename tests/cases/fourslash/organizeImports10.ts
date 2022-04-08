@@ -1,11 +1,17 @@
 /// <reference path="fourslash.ts" />
 
-////import type { ZodType } from 'zod';
+// @Filename: /module.ts
+////import type { ZodType } from './declaration';
 ////
 /////** Intended to be used in combination with {@link ZodType} */
 ////export function fun() { /* ... */ }
 
-verify.organizeImports(`import type { ZodType } from 'zod';
+// @Filename: /declaration.ts
+//// type ZodType = {};
+//// export type { ZodType }
+
+
+verify.organizeImports(`import type { ZodType } from './declaration';
 
 /** Intended to be used in combination with {@link ZodType} */
 export function fun() { /* ... */ }`
