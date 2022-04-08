@@ -429,7 +429,11 @@ namespace ts.server {
         // of each definition and merging references from all the projects where they appear.
 
         const results: ReferencedSymbol[] = [];
+        const seenRefs = createDocumentSpanSet(); // It doesn't make sense to have a reference in two definition lists, so we de-dup globally
 
+        // TODO: We might end up with a more logical allocation of refs to defs if we pre-sorted the defs by descending ref-count.
+        // Otherwise, it just ends up attached to the first corresponding def we happen to process.  The others may or may not be
+        // dropped later when we check for defs with ref-count 0.
         perProjectResults.forEach((projectResults, project) => {
             for (const referencedSymbol of projectResults) {
                 const mappedDefinitionFile = getMappedLocationForProject(documentSpanLocation(referencedSymbol.definition), project);
@@ -449,7 +453,8 @@ namespace ts.server {
                 }
 
                 for (const ref of referencedSymbol.references) {
-                    if (!contains(symbolToAddTo.references, ref, documentSpansEqual) && !getMappedLocationForProject(documentSpanLocation(ref), project)) {
+                    if (!seenRefs.has(ref) && !getMappedLocationForProject(documentSpanLocation(ref), project)) {
+                        seenRefs.add(ref);
                         symbolToAddTo.references.push(ref);
                     }
                 }
@@ -1803,14 +1808,8 @@ namespace ts.server {
             const nameSpan = nameInfo && nameInfo.textSpan;
             const symbolStartOffset = nameSpan ? scriptInfo.positionToLineOffset(nameSpan.start).offset : 0;
             const symbolName = nameSpan ? scriptInfo.getSnapshot().getText(nameSpan.start, textSpanEnd(nameSpan)) : "";
-            const refs: protocol.ReferencesResponseItem[] = [];
-            const seen = createDocumentSpanSet();
-            references.forEach(referencedSymbol => {
-                referencedSymbol.references.forEach(entry => {
-                    if (tryAddToSet(seen, entry)) {
-                        refs.push(referenceEntryToReferencesResponseItem(this.projectService, entry));
-                    }
-                });
+            const refs: readonly protocol.ReferencesResponseItem[] = flatMap(references, referencedSymbol => {
+                return referencedSymbol.references.map(entry => referenceEntryToReferencesResponseItem(this.projectService, entry));
             });
             return { refs, symbolName, symbolStartOffset, symbolDisplayString };
         }

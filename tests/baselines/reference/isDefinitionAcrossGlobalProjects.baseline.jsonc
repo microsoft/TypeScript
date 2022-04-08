@@ -108,11 +108,11 @@
 //     export function FC() {}
 // }
 // 
-// interface [|I|][|I|] {
+// interface [|I|] {
 //     FC();
 // }
 // 
-// const ic: [|I|][|I|] = { FC() {} };
+// const ic: [|I|] = { FC() {} };
 
 // === /a/index.ts ===
 // namespace NS {
@@ -226,61 +226,6 @@
           "length": 1
         },
         "fileName": "/a/index.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/c/index.ts",
-      "kind": "interface",
-      "name": "interface I",
-      "textSpan": {
-        "start": 56,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "interface",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "I",
-          "kind": "interfaceName"
-        }
-      ],
-      "contextSpan": {
-        "start": 46,
-        "length": 25
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 56,
-          "length": 1
-        },
-        "fileName": "/c/index.ts",
-        "contextSpan": {
-          "start": 46,
-          "length": 25
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 83,
-          "length": 1
-        },
-        "fileName": "/c/index.ts",
         "isWriteAccess": false,
         "isDefinition": false
       }
@@ -533,11 +478,11 @@
 //     export function FC() {}
 // }
 // 
-// interface [|I|][|I|] {
+// interface [|I|] {
 //     FC();
 // }
 // 
-// const ic: [|I|][|I|] = { FC() {} };
+// const ic: [|I|] = { FC() {} };
 
 // === /a/index.ts ===
 // namespace NS {
@@ -651,61 +596,6 @@
           "length": 1
         },
         "fileName": "/a/index.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/c/index.ts",
-      "kind": "interface",
-      "name": "interface I",
-      "textSpan": {
-        "start": 56,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "interface",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "I",
-          "kind": "interfaceName"
-        }
-      ],
-      "contextSpan": {
-        "start": 46,
-        "length": 25
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 56,
-          "length": 1
-        },
-        "fileName": "/c/index.ts",
-        "contextSpan": {
-          "start": 46,
-          "length": 25
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 83,
-          "length": 1
-        },
-        "fileName": "/c/index.ts",
         "isWriteAccess": false,
         "isDefinition": false
       }
@@ -945,11 +835,11 @@
 //     export function FC() {}
 // }
 // 
-// interface /*FIND ALL REFS*/[|I|]/*FIND ALL REFS*/[|I|] {
+// interface /*FIND ALL REFS*/[|I|] {
 //     FC();
 // }
 // 
-// const ic: [|I|][|I|] = { FC() {} };
+// const ic: [|I|] = { FC() {} };
 
 // === /b/index.ts ===
 // namespace NS {
@@ -1085,28 +975,6 @@
           "length": 1
         },
         "fileName": "/b/index.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 56,
-          "length": 1
-        },
-        "fileName": "/c/index.ts",
-        "contextSpan": {
-          "start": 46,
-          "length": 25
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 83,
-          "length": 1
-        },
-        "fileName": "/c/index.ts",
         "isWriteAccess": false,
         "isDefinition": false
       },
