@@ -751,13 +751,18 @@ namespace ts {
             const signature = state.currentAffectedFilesSignatures && state.currentAffectedFilesSignatures.get(key);
             const actualSignature = signature ?? value.signature;
             return value.version === actualSignature ?
-                value.affectsGlobalScope ?
-                    { version: value.version, signature: undefined, affectsGlobalScope: true, impliedFormat: value.impliedFormat } :
+                value.affectsGlobalScope || value.impliedFormat ?
+                    // If file version is same as signature, dont serialize signature
+                    { version: value.version, signature: undefined, affectsGlobalScope: value.affectsGlobalScope, impliedFormat: value.impliedFormat } :
+                    // If file info only contains version and signature and both are same we can just write string
                     value.version :
-                actualSignature !== undefined ?
+                actualSignature !== undefined ? // If signature is not same as version, encode signature in the fileInfo
                     signature === undefined ?
+                        // If we havent computed signature, use fileInfo as is
                         value :
+                        // Serialize fileInfo with new updated signature
                         { version: value.version, signature, affectsGlobalScope: value.affectsGlobalScope, impliedFormat: value.impliedFormat } :
+                    // Signature of the FileInfo is undefined, serialize it as false
                     { version: value.version, signature: false, affectsGlobalScope: value.affectsGlobalScope, impliedFormat: value.impliedFormat };
         });
 
