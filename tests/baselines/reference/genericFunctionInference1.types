@@ -801,7 +801,7 @@ const fn20 = pipe((_a?: {}) => 1);
 >fn20 : (_a?: {} | undefined) => number
 >pipe((_a?: {}) => 1) : (_a?: {} | undefined) => number
 >pipe : { <A extends any[], B>(ab: (...args: A) => B): (...args: A) => B; <A extends any[], B, C>(ab: (...args: A) => B, bc: (b: B) => C): (...args: A) => C; <A extends any[], B, C, D>(ab: (...args: A) => B, bc: (b: B) => C, cd: (c: C) => D): (...args: A) => D; }
->(_a?: {}) => 1 : (_a?: {} | undefined) => number
+>(_a?: {}) => 1 : (_a?: {}) => number
 >_a : {} | undefined
 >1 : 1
 
@@ -968,7 +968,7 @@ const fn62 = pipe(
 // Repro from #30297
 
 declare function foo2<T, U = T>(fn: T, a?: U, b?: U): [T, U];
->foo2 : <T, U = T>(fn: T, a?: U | undefined, b?: U | undefined) => [T, U]
+>foo2 : <T, U = T>(fn: T, a?: U, b?: U) => [T, U]
 >fn : T
 >a : U | undefined
 >b : U | undefined

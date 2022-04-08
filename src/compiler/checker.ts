@@ -5915,9 +5915,6 @@ namespace ts {
                 if (parameterDeclaration && isRequiredInitializedParameter(parameterDeclaration)) {
                     parameterType = getOptionalType(parameterType);
                 }
-                if ((context.flags & NodeBuilderFlags.NoUndefinedOptionalParameterType) && parameterDeclaration && !isJSDocParameterTag(parameterDeclaration) && isOptionalUninitializedParameter(parameterDeclaration)) {
-                    parameterType = getTypeWithFacts(parameterType, TypeFacts.NEUndefined);
-                }
                 const parameterTypeNode = serializeTypeForDeclaration(context, parameterType, parameterSymbol, context.enclosingDeclaration, privateSymbolVisitor, bundledImports);
 
                 const modifiers = !(context.flags & NodeBuilderFlags.OmitParameterModifiers) && preserveModifierFlags && parameterDeclaration && parameterDeclaration.modifiers ? parameterDeclaration.modifiers.map(factory.cloneNode) : undefined;
@@ -6544,7 +6541,7 @@ namespace ts {
                     if (declWithExistingAnnotation && !isFunctionLikeDeclaration(declWithExistingAnnotation) && !isGetAccessorDeclaration(declWithExistingAnnotation)) {
                         // try to reuse the existing annotation
                         const existing = getEffectiveTypeAnnotationNode(declWithExistingAnnotation)!;
-                        if (getTypeFromTypeNode(existing) === type && existingTypeNodeIsNotReferenceOrIsReferenceWithCompatibleTypeArgumentCount(existing, type)) {
+                        if (typeNodeIsEquivalentToType(existing, declWithExistingAnnotation, type) && existingTypeNodeIsNotReferenceOrIsReferenceWithCompatibleTypeArgumentCount(existing, type)) {
                             const result = serializeExistingTypeNode(context, existing, includePrivateSymbol, bundled);
                             if (result) {
                                 return result;
@@ -6560,6 +6557,17 @@ namespace ts {
                 const result = typeToTypeNodeHelper(type, context);
                 context.flags = oldFlags;
                 return result;
+            }
+
+            function typeNodeIsEquivalentToType(typeNode: TypeNode, annotatedDeclaration: Declaration, type: Type) {
+                const typeFromTypeNode = getTypeFromTypeNode(typeNode);
+                if (typeFromTypeNode === type) {
+                    return true;
+                }
+                if (isParameter(annotatedDeclaration) && annotatedDeclaration.questionToken) {
+                    return getTypeWithFacts(type, TypeFacts.NEUndefined) === typeFromTypeNode;
+                }
+                return false;
             }
 
             function serializeReturnTypeForSignature(context: NodeBuilderContext, type: Type, signature: Signature, includePrivateSymbol?: (s: Symbol) => void, bundled?: boolean) {
@@ -42577,12 +42585,6 @@ namespace ts {
                 isOptionalParameter(parameter) &&
                 !parameter.initializer &&
                 hasSyntacticModifier(parameter, ModifierFlags.ParameterPropertyModifier);
-        }
-
-        function isOptionalUninitializedParameter(parameter: ParameterDeclaration) {
-            return !!strictNullChecks &&
-                isOptionalParameter(parameter) &&
-                !parameter.initializer;
         }
 
         function isExpandoFunctionDeclaration(node: Declaration): boolean {

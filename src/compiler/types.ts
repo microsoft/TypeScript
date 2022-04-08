@@ -4490,7 +4490,6 @@ namespace ts {
         UseAliasDefinedOutsideCurrentScope      = 1 << 14,  // Allow non-visible aliases
         UseSingleQuotesForStringLiteralType     = 1 << 28,  // Use single quotes for string literal type
         NoTypeReduction                         = 1 << 29,  // Don't call getReducedType
-        NoUndefinedOptionalParameterType        = 1 << 30,  // Do not add undefined to optional parameter type
 
         // Error handling
         AllowThisInObjectLiteral                = 1 << 15,

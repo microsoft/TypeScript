@@ -194,7 +194,6 @@ namespace ts.codefix {
         const scriptTarget = getEmitScriptTarget(program.getCompilerOptions());
         const flags =
             NodeBuilderFlags.NoTruncation
-            | NodeBuilderFlags.NoUndefinedOptionalParameterType
             | NodeBuilderFlags.SuppressAnyReturnType
             | NodeBuilderFlags.AllowEmptyTuple
             | (quotePreference === QuotePreference.Single ? NodeBuilderFlags.UseSingleQuotesForStringLiteralType : NodeBuilderFlags.None);
