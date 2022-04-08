@@ -249,15 +249,15 @@ Output::
 
 [[90m12:00:54 AM[0m] Building project '/user/username/projects/demo/core/tsconfig.json'...
 
-[[90m12:01:08 AM[0m] Project 'animals/tsconfig.json' is out of date because output file 'lib/animals/tsconfig.tsbuildinfo' does not exist
+[[90m12:01:09 AM[0m] Project 'animals/tsconfig.json' is out of date because output file 'lib/animals/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:01:09 AM[0m] Building project '/user/username/projects/demo/animals/tsconfig.json'...
+[[90m12:01:10 AM[0m] Building project '/user/username/projects/demo/animals/tsconfig.json'...
 
-[[90m12:01:29 AM[0m] Project 'zoo/tsconfig.json' is out of date because output file 'lib/zoo/tsconfig.tsbuildinfo' does not exist
+[[90m12:01:31 AM[0m] Project 'zoo/tsconfig.json' is out of date because output file 'lib/zoo/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:01:30 AM[0m] Building project '/user/username/projects/demo/zoo/tsconfig.json'...
+[[90m12:01:32 AM[0m] Building project '/user/username/projects/demo/zoo/tsconfig.json'...
 
-[[90m12:01:42 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:45 AM[0m] Found 0 errors. Watching for file changes.
 
 
 

@@ -55,11 +55,11 @@ Output::
 
 [[90m12:00:28 AM[0m] Building project '/a/b/project1.tsconfig.json'...
 
-[[90m12:00:41 AM[0m] Project 'project2.tsconfig.json' is out of date because output file 'project2.tsconfig.tsbuildinfo' does not exist
+[[90m12:00:42 AM[0m] Project 'project2.tsconfig.json' is out of date because output file 'project2.tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:42 AM[0m] Building project '/a/b/project2.tsconfig.json'...
+[[90m12:00:43 AM[0m] Building project '/a/b/project2.tsconfig.json'...
 
-[[90m12:00:51 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:53 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -257,13 +257,13 @@ setModifiedTimes:: {}
 
 Output::
 >> Screen clear
-[[90m12:00:55 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:57 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:56 AM[0m] Project 'project1.tsconfig.json' is out of date because oldest output 'project1.tsconfig.tsbuildinfo' is older than newest input 'alpha.tsconfig.json'
+[[90m12:00:58 AM[0m] Project 'project1.tsconfig.json' is out of date because oldest output 'project1.tsconfig.tsbuildinfo' is older than newest input 'alpha.tsconfig.json'
 
-[[90m12:00:57 AM[0m] Building project '/a/b/project1.tsconfig.json'...
+[[90m12:00:59 AM[0m] Building project '/a/b/project1.tsconfig.json'...
 
-[[90m12:00:58 AM[0m] Updating unchanged output timestamps of project '/a/b/project1.tsconfig.json'...
+[[90m12:01:00 AM[0m] Updating unchanged output timestamps of project '/a/b/project1.tsconfig.json'...
 
 
 
@@ -318,7 +318,6 @@ directoryExists:: {
 } 
 
 getModifiedTimes:: {
- "/a/b/project1.tsconfig.tsbuildinfo": 1,
  "/a/b/commonfile1.ts": 1,
  "/a/b/commonfile2.ts": 1,
  "/a/b/project1.tsconfig.json": 1,
@@ -343,13 +342,13 @@ getModifiedTimes:: {}
 setModifiedTimes:: {} 
 
 Output::
-[[90m12:01:00 AM[0m] Project 'project2.tsconfig.json' is out of date because oldest output 'project2.tsconfig.tsbuildinfo' is older than newest input 'alpha.tsconfig.json'
+[[90m12:01:02 AM[0m] Project 'project2.tsconfig.json' is out of date because oldest output 'project2.tsconfig.tsbuildinfo' is older than newest input 'alpha.tsconfig.json'
 
-[[90m12:01:01 AM[0m] Building project '/a/b/project2.tsconfig.json'...
+[[90m12:01:03 AM[0m] Building project '/a/b/project2.tsconfig.json'...
 
-[[90m12:01:02 AM[0m] Updating unchanged output timestamps of project '/a/b/project2.tsconfig.json'...
+[[90m12:01:04 AM[0m] Updating unchanged output timestamps of project '/a/b/project2.tsconfig.json'...
 
-[[90m12:01:04 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:06 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -399,7 +398,6 @@ directoryExists:: {
 } 
 
 getModifiedTimes:: {
- "/a/b/project2.tsconfig.tsbuildinfo": 1,
  "/a/b/other.ts": 1,
  "/a/b/project2.tsconfig.json": 1,
  "/a/b/bravo.tsconfig.json": 1,
@@ -427,15 +425,15 @@ setModifiedTimes:: {}
 
 Output::
 >> Screen clear
-[[90m12:01:08 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:10 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:09 AM[0m] Project 'project2.tsconfig.json' is out of date because oldest output 'project2.tsconfig.tsbuildinfo' is older than newest input 'bravo.tsconfig.json'
+[[90m12:01:11 AM[0m] Project 'project2.tsconfig.json' is out of date because oldest output 'project2.tsconfig.tsbuildinfo' is older than newest input 'bravo.tsconfig.json'
 
-[[90m12:01:10 AM[0m] Building project '/a/b/project2.tsconfig.json'...
+[[90m12:01:12 AM[0m] Building project '/a/b/project2.tsconfig.json'...
 
-[[90m12:01:11 AM[0m] Updating unchanged output timestamps of project '/a/b/project2.tsconfig.json'...
+[[90m12:01:13 AM[0m] Updating unchanged output timestamps of project '/a/b/project2.tsconfig.json'...
 
-[[90m12:01:13 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:15 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -488,7 +486,6 @@ directoryExists:: {
 } 
 
 getModifiedTimes:: {
- "/a/b/project2.tsconfig.tsbuildinfo": 1,
  "/a/b/other.d.ts": 1
 } 
 
@@ -513,13 +510,13 @@ setModifiedTimes:: {}
 
 Output::
 >> Screen clear
-[[90m12:01:17 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:19 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:18 AM[0m] Project 'project2.tsconfig.json' is out of date because oldest output 'commonFile1.js' is older than newest input 'project2.tsconfig.json'
+[[90m12:01:20 AM[0m] Project 'project2.tsconfig.json' is out of date because oldest output 'commonFile1.js' is older than newest input 'project2.tsconfig.json'
 
-[[90m12:01:19 AM[0m] Building project '/a/b/project2.tsconfig.json'...
+[[90m12:01:21 AM[0m] Building project '/a/b/project2.tsconfig.json'...
 
-[[90m12:01:29 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:31 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -616,13 +613,13 @@ setModifiedTimes:: {}
 
 Output::
 >> Screen clear
-[[90m12:01:33 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:35 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:34 AM[0m] Project 'project1.tsconfig.json' is out of date because oldest output 'project1.tsconfig.tsbuildinfo' is older than newest input 'alpha.tsconfig.json'
+[[90m12:01:36 AM[0m] Project 'project1.tsconfig.json' is out of date because oldest output 'project1.tsconfig.tsbuildinfo' is older than newest input 'alpha.tsconfig.json'
 
-[[90m12:01:35 AM[0m] Building project '/a/b/project1.tsconfig.json'...
+[[90m12:01:37 AM[0m] Building project '/a/b/project1.tsconfig.json'...
 
-[[90m12:01:36 AM[0m] Updating unchanged output timestamps of project '/a/b/project1.tsconfig.json'...
+[[90m12:01:38 AM[0m] Updating unchanged output timestamps of project '/a/b/project1.tsconfig.json'...
 
 
 
@@ -676,7 +673,6 @@ directoryExists:: {
 } 
 
 getModifiedTimes:: {
- "/a/b/project1.tsconfig.tsbuildinfo": 1,
  "/a/b/commonfile1.d.ts": 1,
  "/a/b/commonfile2.d.ts": 1
 } 
@@ -698,13 +694,13 @@ getModifiedTimes:: {}
 setModifiedTimes:: {} 
 
 Output::
-[[90m12:01:38 AM[0m] Project 'project2.tsconfig.json' is out of date because oldest output 'commonFile1.js' is older than newest input 'alpha.tsconfig.json'
+[[90m12:01:40 AM[0m] Project 'project2.tsconfig.json' is out of date because oldest output 'commonFile1.js' is older than newest input 'alpha.tsconfig.json'
 
-[[90m12:01:39 AM[0m] Building project '/a/b/project2.tsconfig.json'...
+[[90m12:01:41 AM[0m] Building project '/a/b/project2.tsconfig.json'...
 
-[[90m12:01:40 AM[0m] Updating unchanged output timestamps of project '/a/b/project2.tsconfig.json'...
+[[90m12:01:42 AM[0m] Updating unchanged output timestamps of project '/a/b/project2.tsconfig.json'...
 
-[[90m12:01:42 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:44 AM[0m] Found 0 errors. Watching for file changes.
 
 
 

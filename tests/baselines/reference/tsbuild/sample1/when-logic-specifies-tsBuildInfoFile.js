@@ -121,13 +121,13 @@ Output::
 
 [[90m12:00:09 AM[0m] Building project '/src/core/tsconfig.json'...
 
-[[90m12:00:18 AM[0m] Project 'src/logic/tsconfig.json' is out of date because output file 'src/logic/ownFile.tsbuildinfo' does not exist
+[[90m12:00:19 AM[0m] Project 'src/logic/tsconfig.json' is out of date because output file 'src/logic/ownFile.tsbuildinfo' does not exist
 
-[[90m12:00:19 AM[0m] Building project '/src/logic/tsconfig.json'...
+[[90m12:00:20 AM[0m] Building project '/src/logic/tsconfig.json'...
 
-[[90m12:00:25 AM[0m] Project 'src/tests/tsconfig.json' is out of date because output file 'src/tests/tsconfig.tsbuildinfo' does not exist
+[[90m12:00:27 AM[0m] Project 'src/tests/tsconfig.json' is out of date because output file 'src/tests/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:26 AM[0m] Building project '/src/tests/tsconfig.json'...
+[[90m12:00:28 AM[0m] Building project '/src/tests/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 readFiles:: {

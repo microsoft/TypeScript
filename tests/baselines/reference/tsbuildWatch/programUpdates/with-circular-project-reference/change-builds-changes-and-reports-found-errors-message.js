@@ -89,7 +89,7 @@ Output::
 >> Screen clear
 [[90m12:00:39 AM[0m] Starting compilation in watch mode...
 
-[[90m12:01:10 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:13 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -487,7 +487,7 @@ setModifiedTimes:: {}
 
 Output::
 >> Screen clear
-[[90m12:01:14 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:17 AM[0m] File change detected. Starting incremental compilation...
 
 
 
@@ -611,7 +611,6 @@ directoryExists:: {
 } 
 
 getModifiedTimes:: {
- "/user/username/projects/sample1/core/tsconfig.tsbuildinfo": 1,
  "/user/username/projects/sample1/core/anothermodule.ts": 1
 } 
 
@@ -780,7 +779,7 @@ getModifiedTimes:: {}
 setModifiedTimes:: {} 
 
 Output::
-[[90m12:01:54 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:02:00 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -953,7 +952,7 @@ setModifiedTimes:: {}
 
 Output::
 >> Screen clear
-[[90m12:01:58 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:02:04 AM[0m] File change detected. Starting incremental compilation...
 
 
 
@@ -1068,9 +1067,7 @@ directoryExists:: {
  "/node_modules/@types": 1
 } 
 
-getModifiedTimes:: {
- "/user/username/projects/sample1/core/tsconfig.tsbuildinfo": 1
-} 
+getModifiedTimes:: {} 
 
 setModifiedTimes:: {} 
 
@@ -1237,7 +1234,7 @@ getModifiedTimes:: {}
 setModifiedTimes:: {} 
 
 Output::
-[[90m12:02:38 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:02:47 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -1412,7 +1409,7 @@ setModifiedTimes:: {}
 
 Output::
 >> Screen clear
-[[90m12:02:45 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:02:54 AM[0m] File change detected. Starting incremental compilation...
 
 
 
@@ -1543,9 +1540,7 @@ directoryExists:: {
  "/node_modules/@types": 1
 } 
 
-getModifiedTimes:: {
- "/user/username/projects/sample1/core/tsconfig.tsbuildinfo": 1
-} 
+getModifiedTimes:: {} 
 
 setModifiedTimes:: {} 
 
@@ -1712,7 +1707,7 @@ getModifiedTimes:: {}
 setModifiedTimes:: {} 
 
 Output::
-[[90m12:03:25 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:03:37 AM[0m] Found 0 errors. Watching for file changes.
 
 
 

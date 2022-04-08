@@ -58,9 +58,9 @@ Output::
 
 [[90m12:00:12 AM[0m] Building project '/src/src/other/tsconfig.other.json'...
 
-[[90m12:00:18 AM[0m] Project 'src/src/main/tsconfig.main.json' is out of date because output file 'src/dist/tsconfig.main.tsbuildinfo' does not exist
+[[90m12:00:19 AM[0m] Project 'src/src/main/tsconfig.main.json' is out of date because output file 'src/dist/tsconfig.main.tsbuildinfo' does not exist
 
-[[90m12:00:19 AM[0m] Building project '/src/src/main/tsconfig.main.json'...
+[[90m12:00:20 AM[0m] Building project '/src/src/main/tsconfig.main.json'...
 
 exitCode:: ExitStatus.Success
 

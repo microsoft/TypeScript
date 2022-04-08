@@ -169,8 +169,6 @@ directoryExists:: {
  "/node_modules/@types": 1
 } 
 
-getModifiedTimes:: {
- "/user/username/projects/solution/app/tsconfig.tsbuildinfo": 1
-} 
+getModifiedTimes:: {} 
 
 setModifiedTimes:: {} 

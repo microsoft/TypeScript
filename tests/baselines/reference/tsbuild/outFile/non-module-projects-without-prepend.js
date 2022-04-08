@@ -140,13 +140,13 @@ Output::
 
 [[90m12:00:16 AM[0m] Building project '/src/first/tsconfig.json'...
 
-[[90m12:00:31 AM[0m] Project 'src/second/tsconfig.json' is out of date because output file 'src/second/tsconfig.tsbuildinfo' does not exist
+[[90m12:00:32 AM[0m] Project 'src/second/tsconfig.json' is out of date because output file 'src/second/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:32 AM[0m] Building project '/src/second/tsconfig.json'...
+[[90m12:00:33 AM[0m] Building project '/src/second/tsconfig.json'...
 
-[[90m12:00:43 AM[0m] Project 'src/third/tsconfig.json' is out of date because output file 'src/third/tsconfig.tsbuildinfo' does not exist
+[[90m12:00:45 AM[0m] Project 'src/third/tsconfig.json' is out of date because output file 'src/third/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:44 AM[0m] Building project '/src/third/tsconfig.json'...
+[[90m12:00:46 AM[0m] Building project '/src/third/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 

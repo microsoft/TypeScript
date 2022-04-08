@@ -118,13 +118,13 @@ Output::
     [7m [0m [96m                                               ~~~~~~~~~~~~~~~~~~[0m
     File is matched by 'files' list specified here.
 
-[[90m12:00:13 AM[0m] Project 'src/logic/tsconfig.json' can't be built because its dependency 'src/core' has errors
+[[90m12:00:14 AM[0m] Project 'src/logic/tsconfig.json' can't be built because its dependency 'src/core' has errors
 
-[[90m12:00:14 AM[0m] Skipping build of project '/src/logic/tsconfig.json' because its dependency '/src/core' has errors
+[[90m12:00:15 AM[0m] Skipping build of project '/src/logic/tsconfig.json' because its dependency '/src/core' has errors
 
-[[90m12:00:15 AM[0m] Project 'src/tests/tsconfig.json' can't be built because its dependency 'src/core' has errors
+[[90m12:00:16 AM[0m] Project 'src/tests/tsconfig.json' can't be built because its dependency 'src/core' has errors
 
-[[90m12:00:16 AM[0m] Skipping build of project '/src/tests/tsconfig.json' because its dependency '/src/core' has errors
+[[90m12:00:17 AM[0m] Skipping build of project '/src/tests/tsconfig.json' because its dependency '/src/core' has errors
 
 
 Found 1 error.

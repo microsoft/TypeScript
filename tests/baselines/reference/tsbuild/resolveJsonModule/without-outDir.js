@@ -208,10 +208,10 @@ Input::
 
 Output::
 /lib/tsc --b src/tsconfig_withFiles.json --verbose
-[[90m12:00:14 AM[0m] Projects in this build: 
+[[90m12:00:15 AM[0m] Projects in this build: 
     * src/tsconfig_withFiles.json
 
-[[90m12:00:15 AM[0m] Project 'src/tsconfig_withFiles.json' is up to date because newest input 'src/src/index.ts' is older than oldest output 'src/tsconfig_withFiles.tsbuildinfo'
+[[90m12:00:16 AM[0m] Project 'src/tsconfig_withFiles.json' is up to date because newest input 'src/src/index.ts' is older than oldest output 'src/tsconfig_withFiles.tsbuildinfo'
 
 exitCode:: ExitStatus.Success
 

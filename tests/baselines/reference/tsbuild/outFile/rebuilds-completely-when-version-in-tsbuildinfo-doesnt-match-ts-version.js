@@ -542,13 +542,13 @@ Output::
 
 [[90m12:00:40 AM[0m] Building project '/src/first/tsconfig.json'...
 
-[[90m12:00:48 AM[0m] Project 'src/second/tsconfig.json' is out of date because output for it was generated with version 'FakeTSVersion' that differs with current version 'FakeTSCurrentVersion'
+[[90m12:00:49 AM[0m] Project 'src/second/tsconfig.json' is out of date because output for it was generated with version 'FakeTSVersion' that differs with current version 'FakeTSCurrentVersion'
 
-[[90m12:00:49 AM[0m] Building project '/src/second/tsconfig.json'...
+[[90m12:00:50 AM[0m] Building project '/src/second/tsconfig.json'...
 
-[[90m12:00:57 AM[0m] Project 'src/third/tsconfig.json' is out of date because output for it was generated with version 'FakeTSVersion' that differs with current version 'FakeTSCurrentVersion'
+[[90m12:00:59 AM[0m] Project 'src/third/tsconfig.json' is out of date because output for it was generated with version 'FakeTSVersion' that differs with current version 'FakeTSCurrentVersion'
 
-[[90m12:00:58 AM[0m] Building project '/src/third/tsconfig.json'...
+[[90m12:01:00 AM[0m] Building project '/src/third/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 

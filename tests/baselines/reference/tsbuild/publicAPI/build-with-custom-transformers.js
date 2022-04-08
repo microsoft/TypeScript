@@ -50,9 +50,9 @@ Output::
 
 [[90m12:00:15 AM[0m] Building project '/src/shared/tsconfig.json'...
 
-[[90m12:00:20 AM[0m] Project 'src/webpack/tsconfig.json' is out of date because output file 'src/webpack/tsconfig.tsbuildinfo' does not exist
+[[90m12:00:21 AM[0m] Project 'src/webpack/tsconfig.json' is out of date because output file 'src/webpack/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:21 AM[0m] Building project '/src/webpack/tsconfig.json'...
+[[90m12:00:22 AM[0m] Building project '/src/webpack/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 Program root files: ["/src/shared/index.ts"]

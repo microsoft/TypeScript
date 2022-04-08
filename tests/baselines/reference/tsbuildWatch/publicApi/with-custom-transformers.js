@@ -55,11 +55,11 @@ Output::
 
 [[90m12:00:33 AM[0m] Building project '/user/username/projects/myproject/shared/tsconfig.json'...
 
-[[90m12:00:42 AM[0m] Project 'webpack/tsconfig.json' is out of date because output file 'webpack/tsconfig.tsbuildinfo' does not exist
+[[90m12:00:43 AM[0m] Project 'webpack/tsconfig.json' is out of date because output file 'webpack/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:43 AM[0m] Building project '/user/username/projects/myproject/webpack/tsconfig.json'...
+[[90m12:00:44 AM[0m] Building project '/user/username/projects/myproject/webpack/tsconfig.json'...
 
-[[90m12:00:52 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:54 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -292,19 +292,19 @@ setModifiedTimes:: {}
 
 Output::
 >> Screen clear
-[[90m12:00:55 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:57 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:56 AM[0m] Project 'shared/tsconfig.json' is out of date because oldest output 'shared/tsconfig.tsbuildinfo' is older than newest input 'shared/index.ts'
+[[90m12:00:58 AM[0m] Project 'shared/tsconfig.json' is out of date because oldest output 'shared/tsconfig.tsbuildinfo' is older than newest input 'shared/index.ts'
 
-[[90m12:00:57 AM[0m] Building project '/user/username/projects/myproject/shared/tsconfig.json'...
+[[90m12:00:59 AM[0m] Building project '/user/username/projects/myproject/shared/tsconfig.json'...
 
-[[90m12:01:10 AM[0m] Project 'webpack/tsconfig.json' is out of date because oldest output 'webpack/index.js' is older than newest input 'shared/tsconfig.json'
+[[90m12:01:13 AM[0m] Project 'webpack/tsconfig.json' is out of date because oldest output 'webpack/index.js' is older than newest input 'shared/tsconfig.json'
 
-[[90m12:01:11 AM[0m] Building project '/user/username/projects/myproject/webpack/tsconfig.json'...
+[[90m12:01:14 AM[0m] Building project '/user/username/projects/myproject/webpack/tsconfig.json'...
 
-[[90m12:01:12 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/webpack/tsconfig.json'...
+[[90m12:01:15 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/webpack/tsconfig.json'...
 
-[[90m12:01:14 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:17 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -441,7 +441,6 @@ directoryExists:: {
 } 
 
 getModifiedTimes:: {
- "/user/username/projects/myproject/shared/tsconfig.tsbuildinfo": 1,
  "/user/username/projects/myproject/webpack/index.d.ts": 1
 } 
 

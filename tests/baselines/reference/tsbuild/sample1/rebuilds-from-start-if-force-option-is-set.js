@@ -384,22 +384,22 @@ export function run() {
 
 Output::
 /lib/tsc --b /src/tests --verbose --force
-[[90m12:00:23 AM[0m] Projects in this build: 
+[[90m12:00:26 AM[0m] Projects in this build: 
     * src/core/tsconfig.json
     * src/logic/tsconfig.json
     * src/tests/tsconfig.json
 
-[[90m12:00:24 AM[0m] Project 'src/core/tsconfig.json' is being forcibly rebuilt
+[[90m12:00:27 AM[0m] Project 'src/core/tsconfig.json' is being forcibly rebuilt
 
-[[90m12:00:25 AM[0m] Building project '/src/core/tsconfig.json'...
+[[90m12:00:28 AM[0m] Building project '/src/core/tsconfig.json'...
 
-[[90m12:00:34 AM[0m] Project 'src/logic/tsconfig.json' is being forcibly rebuilt
+[[90m12:00:37 AM[0m] Project 'src/logic/tsconfig.json' is being forcibly rebuilt
 
-[[90m12:00:35 AM[0m] Building project '/src/logic/tsconfig.json'...
+[[90m12:00:38 AM[0m] Building project '/src/logic/tsconfig.json'...
 
-[[90m12:00:41 AM[0m] Project 'src/tests/tsconfig.json' is being forcibly rebuilt
+[[90m12:00:44 AM[0m] Project 'src/tests/tsconfig.json' is being forcibly rebuilt
 
-[[90m12:00:42 AM[0m] Building project '/src/tests/tsconfig.json'...
+[[90m12:00:45 AM[0m] Building project '/src/tests/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 

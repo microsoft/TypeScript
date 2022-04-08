@@ -59,11 +59,11 @@ Output::
 
 [[90m12:00:30 AM[0m] Building project '/a/b/project1.tsconfig.json'...
 
-[[90m12:00:43 AM[0m] Project 'project2.tsconfig.json' is out of date because output file 'project2.tsconfig.tsbuildinfo' does not exist
+[[90m12:00:44 AM[0m] Project 'project2.tsconfig.json' is out of date because output file 'project2.tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:44 AM[0m] Building project '/a/b/project2.tsconfig.json'...
+[[90m12:00:45 AM[0m] Building project '/a/b/project2.tsconfig.json'...
 
-[[90m12:00:53 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:55 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -268,9 +268,9 @@ setModifiedTimes:: {}
 
 Output::
 >> Screen clear
-[[90m12:00:56 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:58 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:57 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:59 AM[0m] Found 0 errors. Watching for file changes.
 
 
 

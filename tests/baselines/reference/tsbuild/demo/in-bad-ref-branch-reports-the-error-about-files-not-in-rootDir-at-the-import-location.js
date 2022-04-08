@@ -207,13 +207,13 @@ Output::
     [7m [0m [96m                   ~~~[0m
     File is included via import here.
 
-[[90m12:00:14 AM[0m] Project 'src/animals/tsconfig.json' can't be built because its dependency 'src/core' has errors
+[[90m12:00:15 AM[0m] Project 'src/animals/tsconfig.json' can't be built because its dependency 'src/core' has errors
 
-[[90m12:00:15 AM[0m] Skipping build of project '/src/animals/tsconfig.json' because its dependency '/src/core' has errors
+[[90m12:00:16 AM[0m] Skipping build of project '/src/animals/tsconfig.json' because its dependency '/src/core' has errors
 
-[[90m12:00:16 AM[0m] Project 'src/zoo/tsconfig.json' can't be built because its dependency 'src/animals' was not built
+[[90m12:00:17 AM[0m] Project 'src/zoo/tsconfig.json' can't be built because its dependency 'src/animals' was not built
 
-[[90m12:00:17 AM[0m] Skipping build of project '/src/zoo/tsconfig.json' because its dependency '/src/animals' was not built
+[[90m12:00:18 AM[0m] Skipping build of project '/src/zoo/tsconfig.json' because its dependency '/src/animals' was not built
 
 
 Found 7 errors.

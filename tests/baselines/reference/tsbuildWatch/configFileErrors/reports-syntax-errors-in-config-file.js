@@ -48,7 +48,7 @@ Output::
 [7m7[0m         "b.ts"
 [7m [0m [91m        ~~~~~~[0m
 
-[[90m12:00:28 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:00:29 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -159,14 +159,14 @@ setModifiedTimes:: {}
 
 Output::
 >> Screen clear
-[[90m12:00:32 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:33 AM[0m] File change detected. Starting incremental compilation...
 
 [96mtsconfig.json[0m:[93m8[0m:[93m9[0m - [91merror[0m[90m TS1005: [0m',' expected.
 
 [7m8[0m         "b.ts"
 [7m [0m [91m        ~~~~~~[0m
 
-[[90m12:00:33 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:00:34 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -207,9 +207,7 @@ directoryExists:: {
  "/node_modules/@types": 1
 } 
 
-getModifiedTimes:: {
- "/user/username/projects/myproject/tsconfig.tsbuildinfo": 1
-} 
+getModifiedTimes:: {} 
 
 setModifiedTimes:: {} 
 
@@ -230,14 +228,14 @@ setModifiedTimes:: {}
 
 Output::
 >> Screen clear
-[[90m12:00:37 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:38 AM[0m] File change detected. Starting incremental compilation...
 
 [96mtsconfig.json[0m:[93m8[0m:[93m9[0m - [91merror[0m[90m TS1005: [0m',' expected.
 
 [7m8[0m         "b.ts"
 [7m [0m [91m        ~~~~~~[0m
 
-[[90m12:00:38 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:00:39 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -278,9 +276,7 @@ directoryExists:: {
  "/node_modules/@types": 1
 } 
 
-getModifiedTimes:: {
- "/user/username/projects/myproject/tsconfig.tsbuildinfo": 1
-} 
+getModifiedTimes:: {} 
 
 setModifiedTimes:: {} 
 
@@ -299,14 +295,14 @@ setModifiedTimes:: {}
 
 Output::
 >> Screen clear
-[[90m12:00:42 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:43 AM[0m] File change detected. Starting incremental compilation...
 
 [96mtsconfig.json[0m:[93m8[0m:[93m9[0m - [91merror[0m[90m TS1005: [0m',' expected.
 
 [7m8[0m         "b.ts"
 [7m [0m [91m        ~~~~~~[0m
 
-[[90m12:00:43 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:00:44 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -347,9 +343,7 @@ directoryExists:: {
  "/node_modules/@types": 1
 } 
 
-getModifiedTimes:: {
- "/user/username/projects/myproject/tsconfig.tsbuildinfo": 1
-} 
+getModifiedTimes:: {} 
 
 setModifiedTimes:: {} 
 
@@ -370,9 +364,9 @@ setModifiedTimes:: {}
 
 Output::
 >> Screen clear
-[[90m12:00:47 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:48 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:02 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:04 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -485,8 +479,6 @@ directoryExists:: {
  "/node_modules/@types": 1
 } 
 
-getModifiedTimes:: {
- "/user/username/projects/myproject/tsconfig.tsbuildinfo": 1
-} 
+getModifiedTimes:: {} 
 
 setModifiedTimes:: {} 

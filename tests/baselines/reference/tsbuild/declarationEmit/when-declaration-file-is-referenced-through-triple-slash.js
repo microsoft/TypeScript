@@ -69,13 +69,13 @@ Output::
 
 [[90m12:00:23 AM[0m] Building project '/src/solution/src/common/tsconfig.json'...
 
-[[90m12:00:31 AM[0m] Project 'src/solution/src/subProject/tsconfig.json' is out of date because output file 'src/solution/lib/src/subProject/tsconfig.tsbuildinfo' does not exist
+[[90m12:00:32 AM[0m] Project 'src/solution/src/subProject/tsconfig.json' is out of date because output file 'src/solution/lib/src/subProject/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:32 AM[0m] Building project '/src/solution/src/subProject/tsconfig.json'...
+[[90m12:00:33 AM[0m] Building project '/src/solution/src/subProject/tsconfig.json'...
 
-[[90m12:00:38 AM[0m] Project 'src/solution/src/subProject2/tsconfig.json' is out of date because output file 'src/solution/lib/src/subProject2/tsconfig.tsbuildinfo' does not exist
+[[90m12:00:40 AM[0m] Project 'src/solution/src/subProject2/tsconfig.json' is out of date because output file 'src/solution/lib/src/subProject2/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:39 AM[0m] Building project '/src/solution/src/subProject2/tsconfig.json'...
+[[90m12:00:41 AM[0m] Building project '/src/solution/src/subProject2/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 

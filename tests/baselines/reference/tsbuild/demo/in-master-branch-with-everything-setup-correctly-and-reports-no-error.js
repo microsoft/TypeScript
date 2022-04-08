@@ -155,13 +155,13 @@ Output::
 
 [[90m12:00:08 AM[0m] Building project '/src/core/tsconfig.json'...
 
-[[90m12:00:15 AM[0m] Project 'src/animals/tsconfig.json' is out of date because output file 'src/lib/animals/tsconfig.tsbuildinfo' does not exist
+[[90m12:00:16 AM[0m] Project 'src/animals/tsconfig.json' is out of date because output file 'src/lib/animals/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:16 AM[0m] Building project '/src/animals/tsconfig.json'...
+[[90m12:00:17 AM[0m] Building project '/src/animals/tsconfig.json'...
 
-[[90m12:00:26 AM[0m] Project 'src/zoo/tsconfig.json' is out of date because output file 'src/lib/zoo/tsconfig.tsbuildinfo' does not exist
+[[90m12:00:28 AM[0m] Project 'src/zoo/tsconfig.json' is out of date because output file 'src/lib/zoo/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:27 AM[0m] Building project '/src/zoo/tsconfig.json'...
+[[90m12:00:29 AM[0m] Building project '/src/zoo/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 

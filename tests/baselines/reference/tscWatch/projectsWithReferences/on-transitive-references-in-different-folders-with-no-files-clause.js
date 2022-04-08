@@ -213,9 +213,9 @@ setModifiedTimes:: {}
 /a/lib/tsc.js -w -p c
 Output::
 >> Screen clear
-[[90m12:00:57 AM[0m] Starting compilation in watch mode...
+[[90m12:00:59 AM[0m] Starting compilation in watch mode...
 
-[[90m12:01:01 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:03 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -450,9 +450,9 @@ setModifiedTimes:: {}
 
 Output::
 >> Screen clear
-[[90m12:01:16 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:19 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:20 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:23 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -566,9 +566,9 @@ setModifiedTimes:: {}
 
 Output::
 >> Screen clear
-[[90m12:01:28 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:31 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:32 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:35 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -706,9 +706,9 @@ setModifiedTimes:: {}
 
 Output::
 >> Screen clear
-[[90m12:01:36 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:39 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:40 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:43 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -846,9 +846,9 @@ setModifiedTimes:: {}
 
 Output::
 >> Screen clear
-[[90m12:01:44 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:47 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:45 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:48 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -969,9 +969,9 @@ setModifiedTimes:: {}
 
 Output::
 >> Screen clear
-[[90m12:01:49 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:52 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:50 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:53 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -1083,14 +1083,14 @@ setModifiedTimes:: {}
 
 Output::
 >> Screen clear
-[[90m12:01:52 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:55 AM[0m] File change detected. Starting incremental compilation...
 
 [96mc/tsconfig.json[0m:[93m1[0m:[93m84[0m - [91merror[0m[90m TS6053: [0mFile '/user/username/projects/transitiveReferences/b' not found.
 
 [7m1[0m {"compilerOptions":{"baseUrl":"./","paths":{"@ref/*":["../refs/*"]}},"references":[{"path":"../b"}]}
 [7m [0m [91m                                                                                   ~~~~~~~~~~~~~~~[0m
 
-[[90m12:01:59 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:02:02 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -1203,9 +1203,9 @@ setModifiedTimes:: {}
 
 Output::
 >> Screen clear
-[[90m12:02:02 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:02:05 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:02:06 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:02:09 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -1333,14 +1333,14 @@ setModifiedTimes:: {}
 
 Output::
 >> Screen clear
-[[90m12:02:08 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:02:11 AM[0m] File change detected. Starting incremental compilation...
 
 [96mb/tsconfig.json[0m:[93m1[0m:[93m96[0m - [91merror[0m[90m TS6053: [0mFile '/user/username/projects/transitiveReferences/a' not found.
 
 [7m1[0m {"compilerOptions":{"composite":true,"baseUrl":"./","paths":{"@ref/*":["../*"]}},"references":[{"path":"../a"}]}
 [7m [0m [91m                                                                                               ~~~~~~~~~~~~~~~[0m
 
-[[90m12:02:12 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:02:15 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -1459,9 +1459,9 @@ setModifiedTimes:: {}
 
 Output::
 >> Screen clear
-[[90m12:02:15 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:02:18 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:02:16 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:02:19 AM[0m] Found 0 errors. Watching for file changes.
 
 
 

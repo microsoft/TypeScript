@@ -6069,13 +6069,13 @@ Output::
 
 [[90m12:00:55 AM[0m] Building project '/src/first/tsconfig.json'...
 
-[[90m12:01:03 AM[0m] Project 'src/second/tsconfig.json' is out of date because output of its dependency 'src/first' has changed
+[[90m12:01:04 AM[0m] Project 'src/second/tsconfig.json' is out of date because output of its dependency 'src/first' has changed
 
-[[90m12:01:04 AM[0m] Updating output of project '/src/second/tsconfig.json'...
+[[90m12:01:05 AM[0m] Updating output of project '/src/second/tsconfig.json'...
 
-[[90m12:01:10 AM[0m] Project 'src/third/tsconfig.json' is out of date because output of its dependency 'src/second' has changed
+[[90m12:01:12 AM[0m] Project 'src/third/tsconfig.json' is out of date because output of its dependency 'src/second' has changed
 
-[[90m12:01:11 AM[0m] Updating output of project '/src/third/tsconfig.json'...
+[[90m12:01:13 AM[0m] Updating output of project '/src/third/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 

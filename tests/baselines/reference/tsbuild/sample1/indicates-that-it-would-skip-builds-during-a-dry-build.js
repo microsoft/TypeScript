@@ -384,11 +384,11 @@ export function run() {
 
 Output::
 /lib/tsc --b /src/tests --dry
-[[90m12:00:23 AM[0m] Project '/src/core/tsconfig.json' is up to date
+[[90m12:00:26 AM[0m] Project '/src/core/tsconfig.json' is up to date
 
-[[90m12:00:24 AM[0m] Project '/src/logic/tsconfig.json' is up to date
+[[90m12:00:27 AM[0m] Project '/src/logic/tsconfig.json' is up to date
 
-[[90m12:00:25 AM[0m] Project '/src/tests/tsconfig.json' is up to date
+[[90m12:00:28 AM[0m] Project '/src/tests/tsconfig.json' is up to date
 
 exitCode:: ExitStatus.Success
 

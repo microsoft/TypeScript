@@ -120,18 +120,18 @@ Output::
 
 [[90m12:00:09 AM[0m] Building project '/src/core/tsconfig.json'...
 
-[[90m12:00:18 AM[0m] Project 'src/logic/tsconfig.json' is out of date because output file 'src/logic/tsconfig.tsbuildinfo' does not exist
+[[90m12:00:19 AM[0m] Project 'src/logic/tsconfig.json' is out of date because output file 'src/logic/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:19 AM[0m] Building project '/src/logic/tsconfig.json'...
+[[90m12:00:20 AM[0m] Building project '/src/logic/tsconfig.json'...
 
 [96msrc/logic/index.ts[0m:[93m3[0m:[93m14[0m - [91merror[0m[90m TS2339: [0mProperty 'muitply' does not exist on type 'typeof import("/src/core/index")'.
 
 [7m3[0m     return c.muitply();
 [7m [0m [91m             ~~~~~~~[0m
 
-[[90m12:00:22 AM[0m] Project 'src/tests/tsconfig.json' can't be built because its dependency 'src/logic' has errors
+[[90m12:00:24 AM[0m] Project 'src/tests/tsconfig.json' can't be built because its dependency 'src/logic' has errors
 
-[[90m12:00:23 AM[0m] Skipping build of project '/src/tests/tsconfig.json' because its dependency '/src/logic' has errors
+[[90m12:00:25 AM[0m] Skipping build of project '/src/tests/tsconfig.json' because its dependency '/src/logic' has errors
 
 
 Found 1 error.
@@ -344,25 +344,25 @@ Input::
 
 Output::
 /lib/tsc --b /src/tests --verbose
-[[90m12:00:24 AM[0m] Projects in this build: 
+[[90m12:00:26 AM[0m] Projects in this build: 
     * src/core/tsconfig.json
     * src/logic/tsconfig.json
     * src/tests/tsconfig.json
 
-[[90m12:00:25 AM[0m] Project 'src/core/tsconfig.json' is up to date because newest input 'src/core/anotherModule.ts' is older than oldest output 'src/core/tsconfig.tsbuildinfo'
+[[90m12:00:27 AM[0m] Project 'src/core/tsconfig.json' is up to date because newest input 'src/core/anotherModule.ts' is older than oldest output 'src/core/tsconfig.tsbuildinfo'
 
-[[90m12:00:26 AM[0m] Project 'src/logic/tsconfig.json' is out of date because buildinfo file 'src/logic/tsconfig.tsbuildinfo' indicates that some of the changes are not emitted
+[[90m12:00:28 AM[0m] Project 'src/logic/tsconfig.json' is out of date because buildinfo file 'src/logic/tsconfig.tsbuildinfo' indicates that some of the changes are not emitted
 
-[[90m12:00:27 AM[0m] Building project '/src/logic/tsconfig.json'...
+[[90m12:00:29 AM[0m] Building project '/src/logic/tsconfig.json'...
 
 [96msrc/logic/index.ts[0m:[93m3[0m:[93m14[0m - [91merror[0m[90m TS2339: [0mProperty 'muitply' does not exist on type 'typeof import("/src/core/index")'.
 
 [7m3[0m     return c.muitply();
 [7m [0m [91m             ~~~~~~~[0m
 
-[[90m12:00:28 AM[0m] Project 'src/tests/tsconfig.json' can't be built because its dependency 'src/logic' has errors
+[[90m12:00:30 AM[0m] Project 'src/tests/tsconfig.json' can't be built because its dependency 'src/logic' has errors
 
-[[90m12:00:29 AM[0m] Skipping build of project '/src/tests/tsconfig.json' because its dependency '/src/logic' has errors
+[[90m12:00:31 AM[0m] Skipping build of project '/src/tests/tsconfig.json' because its dependency '/src/logic' has errors
 
 
 Found 1 error.

@@ -83,7 +83,7 @@ Output::
 
 [91merror[0m[90m TS5083: [0mCannot read file '/user/username/projects/sample1/logic/tsconfig.json'.
 
-[[90m12:00:54 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:00:55 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -252,7 +252,7 @@ setModifiedTimes:: {}
 
 Output::
 >> Screen clear
-[[90m12:00:57 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:58 AM[0m] File change detected. Starting incremental compilation...
 
 
 
@@ -428,7 +428,7 @@ getModifiedTimes:: {}
 setModifiedTimes:: {} 
 
 Output::
-[[90m12:01:16 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:19 AM[0m] Found 0 errors. Watching for file changes.
 
 
 

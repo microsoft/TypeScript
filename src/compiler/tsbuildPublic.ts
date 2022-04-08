@@ -221,6 +221,7 @@ namespace ts {
     interface BuildInfoCacheEntry {
         path: Path;
         buildInfo: BuildInfo | false | string;
+        modifiedTime: Date;
     }
 
     interface SolutionBuilderState<T extends BuilderProgram = BuilderProgram> extends WatchFactory<WatchType, ResolvedConfigFileName> {
@@ -306,7 +307,7 @@ namespace ts {
             compilerHost.resolveTypeReferenceDirectives = (typeReferenceDirectiveNames, containingFile, redirectedReference, _options, containingFileMode) =>
                 loadWithTypeDirectiveCache<ResolvedTypeReferenceDirective>(Debug.checkEachDefined(typeReferenceDirectiveNames), containingFile, redirectedReference, containingFileMode, loader);
         }
-        compilerHost.getBuildInfo = (fileName, configFilePath) => getBuildInfo(state, fileName, toResolvedConfigFilePath(state, configFilePath as ResolvedConfigFileName));
+        compilerHost.getBuildInfo = (fileName, configFilePath) => getBuildInfo(state, fileName, toResolvedConfigFilePath(state, configFilePath as ResolvedConfigFileName), /*modifiedTime*/ undefined);
 
         const { watchFile, watchDirectory, writeLog } = createWatchFactory<ResolvedConfigFileName>(hostWithWatch, options);
 
@@ -998,7 +999,10 @@ namespace ts {
 
                 const path = toPath(state, name);
                 emittedOutputs.set(path, name);
-                if (buildInfo?.path === path) buildInfo.buildInfo = text;
+                if (buildInfo?.path === path) {
+                    buildInfo.buildInfo = text;
+                    buildInfo.modifiedTime = getCurrentTime(state);
+                }
                 writeFile(writeFileCallback ? { writeFile: writeFileCallback } : compilerHost, emitterDiagnostics, name, text, writeByteOrderMark);
             });
 
@@ -1018,7 +1022,10 @@ namespace ts {
             const emitResult = program.emitBuildInfo((name, data, writeByteOrderMark, onError, sourceFiles) => {
                 const path = toPath(state, name);
                 const buildInfo = state.buildInfoCache.get(projectPath);
-                if (buildInfo?.path === path) buildInfo.buildInfo = data;
+                if (buildInfo?.path === path) {
+                    buildInfo.buildInfo = data;
+                    buildInfo.modifiedTime = getCurrentTime(state);
+                }
                 if (writeFileCallback) writeFileCallback(name, data, writeByteOrderMark, onError, sourceFiles);
                 else state.compilerHost.writeFile(name, data, writeByteOrderMark, onError, sourceFiles);
             }, cancellationToken);
@@ -1122,7 +1129,10 @@ namespace ts {
             outputFiles.forEach(({ name, text, writeByteOrderMark }) => {
                 const path = toPath(state, name);
                 emittedOutputs.set(path, name);
-                if (buildInfo?.path === path) buildInfo.buildInfo = text;
+                if (buildInfo?.path === path) {
+                    buildInfo.buildInfo = text;
+                    buildInfo.modifiedTime = getCurrentTime(state);
+                }
                 writeFile(writeFileCallback ? { writeFile: writeFileCallback } : compilerHost, emitterDiagnostics, name, text, writeByteOrderMark);
             });
 
@@ -1411,7 +1421,13 @@ namespace ts {
         };
     }
 
-    function getBuildInfo(state: SolutionBuilderState, buildInfoPath: string, resolvedConfigPath: ResolvedConfigFilePath): BuildInfo | undefined {
+    function getBuildInfoCacheEntry(state: SolutionBuilderState, buildInfoPath: string, resolvedConfigPath: ResolvedConfigFilePath) {
+        const path = toPath(state, buildInfoPath);
+        const existing = state.buildInfoCache.get(resolvedConfigPath);
+        return existing?.path === path ? existing : undefined;
+    }
+
+    function getBuildInfo(state: SolutionBuilderState, buildInfoPath: string, resolvedConfigPath: ResolvedConfigFilePath, modifiedTime: Date | undefined): BuildInfo | undefined {
         const path = toPath(state, buildInfoPath);
         const existing = state.buildInfoCache.get(resolvedConfigPath);
         if (existing !== undefined && existing.path === path) {
@@ -1421,7 +1437,8 @@ namespace ts {
         }
         const value = state.readFileWithCache(buildInfoPath);
         const buildInfo = value ? ts.getBuildInfo(value) : undefined;
-        state.buildInfoCache.set(resolvedConfigPath, { path, buildInfo: buildInfo || false });
+        Debug.assert(modifiedTime || !buildInfo);
+        state.buildInfoCache.set(resolvedConfigPath, { path, buildInfo: buildInfo || false, modifiedTime: modifiedTime || missingFileModifiedTime });
         return buildInfo;
     }
 
@@ -1492,7 +1509,8 @@ namespace ts {
         let newestDeclarationFileContentChangedTime;
         let buildInfoTime: Date | undefined;
         if (buildInfoPath) {
-            buildInfoTime = ts.getModifiedTime(host, buildInfoPath);
+            const buildInfoCacheEntry = getBuildInfoCacheEntry(state, buildInfoPath, resolvedPath);
+            buildInfoTime = buildInfoCacheEntry?.modifiedTime || ts.getModifiedTime(host, buildInfoPath);
             if (buildInfoTime === missingFileModifiedTime) {
                 return {
                     type: UpToDateStatusType.OutputMissing,
@@ -1500,7 +1518,7 @@ namespace ts {
                 };
             }
 
-            const buildInfo = Debug.checkDefined(getBuildInfo(state, buildInfoPath, resolvedPath));
+            const buildInfo = Debug.checkDefined(getBuildInfo(state, buildInfoPath, resolvedPath, buildInfoTime));
             if (!state.buildInfoChecked.has(resolvedPath)) {
                 state.buildInfoChecked.set(resolvedPath, true);
                 if (buildInfo && (buildInfo.bundle || buildInfo.program) && buildInfo.version !== version) {
@@ -1670,6 +1688,10 @@ namespace ts {
         return actual;
     }
 
+    function getCurrentTime(state: SolutionBuilderState) {
+        return state.host.now ? state.host.now() : new Date();
+    }
+
     function updateOutputTimestampsWorker(state: SolutionBuilderState, proj: ParsedCommandLine, anyDtsChange: boolean, verboseMessage: DiagnosticMessage, newestDeclarationFileContentChangedTime?: Date, skipOutputs?: ESMap<Path, string>) {
         if (proj.options.noEmit) return undefined;
 
@@ -1694,7 +1716,7 @@ namespace ts {
                         reportStatus(state, verboseMessage, proj.options.configFilePath!);
                     }
 
-                    host.setModifiedTime(file, now ||= host.now ? host.now() : new Date());
+                    host.setModifiedTime(file, now ||= getCurrentTime(state));
                 }
             }
         }

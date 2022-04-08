@@ -219,12 +219,12 @@ export interface A {
 
 Output::
 /lib/tsc --b /src --verbose
-[[90m12:00:21 AM[0m] Projects in this build: 
+[[90m12:00:22 AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90m12:00:22 AM[0m] Project 'src/tsconfig.json' is out of date because oldest output 'src/tsconfig.tsbuildinfo' is older than newest input 'src/src/a.ts'
+[[90m12:00:23 AM[0m] Project 'src/tsconfig.json' is out of date because oldest output 'src/tsconfig.tsbuildinfo' is older than newest input 'src/src/a.ts'
 
-[[90m12:00:23 AM[0m] Building project '/src/tsconfig.json'...
+[[90m12:00:24 AM[0m] Building project '/src/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 
@@ -350,12 +350,12 @@ export interface A {
 
 Output::
 /lib/tsc --b /src --verbose
-[[90m12:00:29 AM[0m] Projects in this build: 
+[[90m12:00:31 AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90m12:00:30 AM[0m] Project 'src/tsconfig.json' is out of date because oldest output 'src/tsconfig.tsbuildinfo' is older than newest input 'src/src/a.ts'
+[[90m12:00:32 AM[0m] Project 'src/tsconfig.json' is out of date because oldest output 'src/tsconfig.tsbuildinfo' is older than newest input 'src/src/a.ts'
 
-[[90m12:00:31 AM[0m] Building project '/src/tsconfig.json'...
+[[90m12:00:33 AM[0m] Building project '/src/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 

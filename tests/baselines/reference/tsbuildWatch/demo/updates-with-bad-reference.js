@@ -217,15 +217,15 @@ Output::
     [7m [0m [96m                   ~~~[0m
     File is included via import here.
 
-[[90m12:00:59 AM[0m] Project 'animals/tsconfig.json' can't be built because its dependency 'core' has errors
+[[90m12:01:00 AM[0m] Project 'animals/tsconfig.json' can't be built because its dependency 'core' has errors
 
-[[90m12:01:00 AM[0m] Skipping build of project '/user/username/projects/demo/animals/tsconfig.json' because its dependency '/user/username/projects/demo/core' has errors
+[[90m12:01:01 AM[0m] Skipping build of project '/user/username/projects/demo/animals/tsconfig.json' because its dependency '/user/username/projects/demo/core' has errors
 
-[[90m12:01:01 AM[0m] Project 'zoo/tsconfig.json' can't be built because its dependency 'animals' was not built
+[[90m12:01:02 AM[0m] Project 'zoo/tsconfig.json' can't be built because its dependency 'animals' was not built
 
-[[90m12:01:02 AM[0m] Skipping build of project '/user/username/projects/demo/zoo/tsconfig.json' because its dependency '/user/username/projects/demo/animals' was not built
+[[90m12:01:03 AM[0m] Skipping build of project '/user/username/projects/demo/zoo/tsconfig.json' because its dependency '/user/username/projects/demo/animals' was not built
 
-[[90m12:01:03 AM[0m] Found 7 errors. Watching for file changes.
+[[90m12:01:04 AM[0m] Found 7 errors. Watching for file changes.
 
 
 
@@ -482,11 +482,11 @@ setModifiedTimes:: {}
 
 Output::
 >> Screen clear
-[[90m12:01:07 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:08 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:08 AM[0m] Project 'core/tsconfig.json' is out of date because buildinfo file 'lib/core/tsconfig.tsbuildinfo' indicates that some of the changes are not emitted
+[[90m12:01:09 AM[0m] Project 'core/tsconfig.json' is out of date because buildinfo file 'lib/core/tsconfig.tsbuildinfo' indicates that some of the changes are not emitted
 
-[[90m12:01:09 AM[0m] Building project '/user/username/projects/demo/core/tsconfig.json'...
+[[90m12:01:10 AM[0m] Building project '/user/username/projects/demo/core/tsconfig.json'...
 
 [96manimals/index.ts[0m:[93m1[0m:[93m20[0m - [91merror[0m[90m TS6059: [0mFile '/user/username/projects/demo/animals/animal.ts' is not under 'rootDir' '/user/username/projects/demo/core'. 'rootDir' is expected to contain all source files.
 
@@ -539,7 +539,7 @@ Output::
     [7m [0m [96m                   ~~~[0m
     File is included via import here.
 
-[[90m12:01:16 AM[0m] Found 7 errors. Watching for file changes.
+[[90m12:01:18 AM[0m] Found 7 errors. Watching for file changes.
 
 
 
@@ -750,8 +750,6 @@ directoryExists:: {
  "/node_modules/@types": 1
 } 
 
-getModifiedTimes:: {
- "/user/username/projects/demo/lib/core/tsconfig.tsbuildinfo": 1
-} 
+getModifiedTimes:: {} 
 
 setModifiedTimes:: {} 

@@ -393,9 +393,9 @@ setModifiedTimes:: {}
 /a/lib/tsc.js -w -p tests
 Output::
 >> Screen clear
-[[90m12:01:13 AM[0m] Starting compilation in watch mode...
+[[90m12:01:16 AM[0m] Starting compilation in watch mode...
 
-[[90m12:01:14 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:17 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -614,9 +614,9 @@ setModifiedTimes:: {}
 
 Output::
 >> Screen clear
-[[90m12:01:32 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:36 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:33 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:37 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -832,9 +832,9 @@ setModifiedTimes:: {}
 
 Output::
 >> Screen clear
-[[90m12:01:51 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:56 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:02:01 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:02:06 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -1131,9 +1131,9 @@ setModifiedTimes:: {}
 
 Output::
 >> Screen clear
-[[90m12:02:22 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:02:28 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:02:32 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:02:38 AM[0m] Found 0 errors. Watching for file changes.
 
 
 

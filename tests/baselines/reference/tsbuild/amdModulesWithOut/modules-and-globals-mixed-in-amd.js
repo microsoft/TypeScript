@@ -986,9 +986,9 @@ Output::
 
 [[90m12:00:32 AM[0m] Building project '/src/lib/tsconfig.json'...
 
-[[90m12:00:40 AM[0m] Project 'src/app/tsconfig.json' is out of date because output of its dependency 'src/lib' has changed
+[[90m12:00:41 AM[0m] Project 'src/app/tsconfig.json' is out of date because output of its dependency 'src/lib' has changed
 
-[[90m12:00:41 AM[0m] Updating output of project '/src/app/tsconfig.json'...
+[[90m12:00:42 AM[0m] Updating output of project '/src/app/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 

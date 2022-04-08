@@ -86,11 +86,11 @@ Output::
 
 [[90m12:00:38 AM[0m] Building project '/user/username/projects/reexport/src/pure/tsconfig.json'...
 
-[[90m12:00:56 AM[0m] Project 'src/main/tsconfig.json' is out of date because output file 'out/main/index.js' does not exist
+[[90m12:00:57 AM[0m] Project 'src/main/tsconfig.json' is out of date because output file 'out/main/index.js' does not exist
 
-[[90m12:00:57 AM[0m] Building project '/user/username/projects/reexport/src/main/tsconfig.json'...
+[[90m12:00:58 AM[0m] Building project '/user/username/projects/reexport/src/main/tsconfig.json'...
 
-[[90m12:01:03 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:04 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -315,15 +315,15 @@ setModifiedTimes:: {}
 
 Output::
 >> Screen clear
-[[90m12:01:07 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:08 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:08 AM[0m] Project 'src/pure/tsconfig.json' is out of date because oldest output 'out/pure/tsconfig.tsbuildinfo' is older than newest input 'src/pure/session.ts'
+[[90m12:01:09 AM[0m] Project 'src/pure/tsconfig.json' is out of date because oldest output 'out/pure/tsconfig.tsbuildinfo' is older than newest input 'src/pure/session.ts'
 
-[[90m12:01:09 AM[0m] Building project '/user/username/projects/reexport/src/pure/tsconfig.json'...
+[[90m12:01:10 AM[0m] Building project '/user/username/projects/reexport/src/pure/tsconfig.json'...
 
-[[90m12:01:28 AM[0m] Project 'src/main/tsconfig.json' is out of date because oldest output 'out/main/index.js' is older than newest input 'src/pure/tsconfig.json'
+[[90m12:01:30 AM[0m] Project 'src/main/tsconfig.json' is out of date because oldest output 'out/main/index.js' is older than newest input 'src/pure/tsconfig.json'
 
-[[90m12:01:29 AM[0m] Building project '/user/username/projects/reexport/src/main/tsconfig.json'...
+[[90m12:01:31 AM[0m] Building project '/user/username/projects/reexport/src/main/tsconfig.json'...
 
 [96msrc/main/index.ts[0m:[93m3[0m:[93m14[0m - [91merror[0m[90m TS2741: [0mProperty 'bar' is missing in type '{ foo: number; }' but required in type 'Session'.
 
@@ -335,7 +335,7 @@ Output::
     [7m [0m [96m    ~~~[0m
     'bar' is declared here.
 
-[[90m12:01:30 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:01:32 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -490,7 +490,6 @@ directoryExists:: {
 } 
 
 getModifiedTimes:: {
- "/user/username/projects/reexport/out/pure/tsconfig.tsbuildinfo": 1,
  "/user/username/projects/reexport/src/pure/index.ts": 1
 } 
 
@@ -517,19 +516,19 @@ setModifiedTimes:: {}
 
 Output::
 >> Screen clear
-[[90m12:01:34 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:36 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:35 AM[0m] Project 'src/pure/tsconfig.json' is out of date because oldest output 'out/pure/tsconfig.tsbuildinfo' is older than newest input 'src/pure/session.ts'
+[[90m12:01:37 AM[0m] Project 'src/pure/tsconfig.json' is out of date because oldest output 'out/pure/tsconfig.tsbuildinfo' is older than newest input 'src/pure/session.ts'
 
-[[90m12:01:36 AM[0m] Building project '/user/username/projects/reexport/src/pure/tsconfig.json'...
+[[90m12:01:38 AM[0m] Building project '/user/username/projects/reexport/src/pure/tsconfig.json'...
 
-[[90m12:01:55 AM[0m] Failed to parse file 'src/main/tsconfig.json': Semantic errors.
+[[90m12:01:58 AM[0m] Failed to parse file 'src/main/tsconfig.json': Semantic errors.
 
-[[90m12:01:56 AM[0m] Building project '/user/username/projects/reexport/src/main/tsconfig.json'...
+[[90m12:01:59 AM[0m] Building project '/user/username/projects/reexport/src/main/tsconfig.json'...
 
-[[90m12:01:57 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/reexport/src/main/tsconfig.json'...
+[[90m12:02:00 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/reexport/src/main/tsconfig.json'...
 
-[[90m12:01:59 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:02:02 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -683,9 +682,7 @@ directoryExists:: {
  "/user/username/projects/reexport/src/main/node_modules/@types": 1
 } 
 
-getModifiedTimes:: {
- "/user/username/projects/reexport/out/pure/tsconfig.tsbuildinfo": 1
-} 
+getModifiedTimes:: {} 
 
 setModifiedTimes:: {
  "/user/username/projects/reexport/out/main/index.js": 1

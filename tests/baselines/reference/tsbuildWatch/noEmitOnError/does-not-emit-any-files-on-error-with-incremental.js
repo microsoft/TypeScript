@@ -64,7 +64,7 @@ Output::
 [7m4[0m ;
 [7m [0m [91m~[0m
 
-[[90m12:00:42 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:00:43 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -189,18 +189,18 @@ setModifiedTimes:: {}
 
 Output::
 >> Screen clear
-[[90m12:00:46 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:47 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:47 AM[0m] Project 'tsconfig.json' is out of date because buildinfo file 'dev-build/tsconfig.tsbuildinfo' indicates that some of the changes are not emitted
+[[90m12:00:48 AM[0m] Project 'tsconfig.json' is out of date because buildinfo file 'dev-build/tsconfig.tsbuildinfo' indicates that some of the changes are not emitted
 
-[[90m12:00:48 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
+[[90m12:00:49 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
 [96msrc/main.ts[0m:[93m4[0m:[93m1[0m - [91merror[0m[90m TS1005: [0m',' expected.
 
 [7m4[0m ;
 [7m [0m [91m~[0m
 
-[[90m12:00:49 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:00:50 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -249,9 +249,7 @@ directoryExists:: {
  "/node_modules/@types": 1
 } 
 
-getModifiedTimes:: {
- "/user/username/projects/noemitonerror/dev-build/tsconfig.tsbuildinfo": 1
-} 
+getModifiedTimes:: {} 
 
 setModifiedTimes:: {} 
 
@@ -275,13 +273,13 @@ setModifiedTimes:: {}
 
 Output::
 >> Screen clear
-[[90m12:00:53 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:54 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:54 AM[0m] Project 'tsconfig.json' is out of date because buildinfo file 'dev-build/tsconfig.tsbuildinfo' indicates that some of the changes are not emitted
+[[90m12:00:55 AM[0m] Project 'tsconfig.json' is out of date because buildinfo file 'dev-build/tsconfig.tsbuildinfo' indicates that some of the changes are not emitted
 
-[[90m12:00:55 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
+[[90m12:00:56 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
-[[90m12:01:16 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:18 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -418,9 +416,7 @@ directoryExists:: {
  "/user/username/projects/noemitonerror/dev-build/src": 1
 } 
 
-getModifiedTimes:: {
- "/user/username/projects/noemitonerror/dev-build/tsconfig.tsbuildinfo": 1
-} 
+getModifiedTimes:: {} 
 
 setModifiedTimes:: {} 
 
@@ -442,18 +438,18 @@ setModifiedTimes:: {}
 
 Output::
 >> Screen clear
-[[90m12:01:20 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:22 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:21 AM[0m] Project 'tsconfig.json' is out of date because oldest output 'dev-build/tsconfig.tsbuildinfo' is older than newest input 'src/main.ts'
+[[90m12:01:23 AM[0m] Project 'tsconfig.json' is out of date because oldest output 'dev-build/tsconfig.tsbuildinfo' is older than newest input 'src/main.ts'
 
-[[90m12:01:22 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
+[[90m12:01:24 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
 [96msrc/main.ts[0m:[93m2[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'number' is not assignable to type 'string'.
 
 [7m2[0m const a: string = 10;
 [7m [0m [91m      ~[0m
 
-[[90m12:01:29 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:01:32 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -580,7 +576,6 @@ directoryExists:: {
 } 
 
 getModifiedTimes:: {
- "/user/username/projects/noemitonerror/dev-build/tsconfig.tsbuildinfo": 1,
  "/user/username/projects/noemitonerror/shared/types/db.ts": 1
 } 
 
@@ -601,18 +596,18 @@ setModifiedTimes:: {}
 
 Output::
 >> Screen clear
-[[90m12:01:33 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:36 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:34 AM[0m] Project 'tsconfig.json' is out of date because buildinfo file 'dev-build/tsconfig.tsbuildinfo' indicates that some of the changes are not emitted
+[[90m12:01:37 AM[0m] Project 'tsconfig.json' is out of date because buildinfo file 'dev-build/tsconfig.tsbuildinfo' indicates that some of the changes are not emitted
 
-[[90m12:01:35 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
+[[90m12:01:38 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
 [96msrc/main.ts[0m:[93m2[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'number' is not assignable to type 'string'.
 
 [7m2[0m const a: string = 10;
 [7m [0m [91m      ~[0m
 
-[[90m12:01:36 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:01:39 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -661,9 +656,7 @@ directoryExists:: {
  "/node_modules/@types": 1
 } 
 
-getModifiedTimes:: {
- "/user/username/projects/noemitonerror/dev-build/tsconfig.tsbuildinfo": 1
-} 
+getModifiedTimes:: {} 
 
 setModifiedTimes:: {} 
 
@@ -685,13 +678,13 @@ setModifiedTimes:: {}
 
 Output::
 >> Screen clear
-[[90m12:01:40 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:43 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:41 AM[0m] Project 'tsconfig.json' is out of date because buildinfo file 'dev-build/tsconfig.tsbuildinfo' indicates that some of the changes are not emitted
+[[90m12:01:44 AM[0m] Project 'tsconfig.json' is out of date because buildinfo file 'dev-build/tsconfig.tsbuildinfo' indicates that some of the changes are not emitted
 
-[[90m12:01:42 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
+[[90m12:01:45 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
-[[90m12:01:52 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:56 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -805,9 +798,7 @@ directoryExists:: {
  "/node_modules/@types": 1
 } 
 
-getModifiedTimes:: {
- "/user/username/projects/noemitonerror/dev-build/tsconfig.tsbuildinfo": 1
-} 
+getModifiedTimes:: {} 
 
 setModifiedTimes:: {} 
 
@@ -826,15 +817,15 @@ setModifiedTimes:: {}
 
 Output::
 >> Screen clear
-[[90m12:01:56 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:02:00 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:57 AM[0m] Project 'tsconfig.json' is out of date because oldest output 'dev-build/tsconfig.tsbuildinfo' is older than newest input 'src/main.ts'
+[[90m12:02:01 AM[0m] Project 'tsconfig.json' is out of date because oldest output 'dev-build/tsconfig.tsbuildinfo' is older than newest input 'src/main.ts'
 
-[[90m12:01:58 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
+[[90m12:02:02 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
-[[90m12:01:59 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/noEmitOnError/tsconfig.json'...
+[[90m12:02:03 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
-[[90m12:02:01 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:02:05 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -884,9 +875,7 @@ directoryExists:: {
  "/node_modules/@types": 1
 } 
 
-getModifiedTimes:: {
- "/user/username/projects/noemitonerror/dev-build/tsconfig.tsbuildinfo": 1
-} 
+getModifiedTimes:: {} 
 
 setModifiedTimes:: {
  "/user/username/projects/noemitonerror/dev-build/tsconfig.tsbuildinfo": 1
