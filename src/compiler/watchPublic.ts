@@ -4,7 +4,7 @@ namespace ts {
         getCurrentDirectory(): string;
         readFile(fileName: string): string | undefined;
         /*@internal*/
-        getBuildInfo?(fileName: string): BuildInfo | undefined;
+        getBuildInfo?(fileName: string, configFilePath: string | undefined): BuildInfo | undefined;
     }
     export function readBuilderProgram(compilerOptions: CompilerOptions, host: ReadBuildProgramHost) {
         if (outFile(compilerOptions)) return undefined;
@@ -12,7 +12,7 @@ namespace ts {
         if (!buildInfoPath) return undefined;
         let buildInfo;
         if (host.getBuildInfo) {
-            buildInfo = host.getBuildInfo(buildInfoPath);
+            buildInfo = host.getBuildInfo(buildInfoPath, compilerOptions.configFilePath);
             if (!buildInfo) return undefined;
         }
         else {
