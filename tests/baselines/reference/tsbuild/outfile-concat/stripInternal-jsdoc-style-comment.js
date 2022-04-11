@@ -5448,8 +5448,6 @@ Output::
 
 [[90m12:01:00 AM[0m] Updating output of project '/src/third/tsconfig.json'...
 
-[[90m12:01:05 AM[0m] Updating unchanged output timestamps of project '/src/third/tsconfig.json'...
-
 exitCode:: ExitStatus.Success
 
 getModifiedTime:: {
@@ -5468,10 +5466,7 @@ getModifiedTime:: {
  "/src/third/thirdjs/output/third-output.d.ts": 1
 }
 
-setModifiedTime:: {
- "/src/third/thirdjs/output/third-output.d.ts": 1,
- "/src/third/thirdjs/output/third-output.d.ts.map": 1
-}
+setModifiedTime:: {}
 
 fileExists:: {
  "/src/first/bin/first-output.js": 1,
@@ -5746,8 +5741,6 @@ declare function f(): string;
   "size": 290
 }
 
-//// [/src/third/thirdjs/output/third-output.d.ts] file changed its modified time
-//// [/src/third/thirdjs/output/third-output.d.ts.map] file changed its modified time
 //// [/src/third/thirdjs/output/third-output.js]
 var s = "Hello, world";
 console.log(s);
@@ -7796,22 +7789,20 @@ console.log(s);
 
 Output::
 /lib/tsc --b /src/third --verbose
-[[90m12:01:14 AM[0m] Projects in this build: 
+[[90m12:01:10 AM[0m] Projects in this build: 
     * src/first/tsconfig.json
     * src/second/tsconfig.json
     * src/third/tsconfig.json
 
-[[90m12:01:15 AM[0m] Project 'src/first/tsconfig.json' is out of date because oldest output 'src/first/bin/first-output.tsbuildinfo' is older than newest input 'src/first/first_PART1.ts'
+[[90m12:01:11 AM[0m] Project 'src/first/tsconfig.json' is out of date because oldest output 'src/first/bin/first-output.tsbuildinfo' is older than newest input 'src/first/first_PART1.ts'
 
-[[90m12:01:16 AM[0m] Building project '/src/first/tsconfig.json'...
+[[90m12:01:12 AM[0m] Building project '/src/first/tsconfig.json'...
 
-[[90m12:01:24 AM[0m] Project 'src/second/tsconfig.json' is up to date because newest input 'src/second/second_part1.ts' is older than oldest output 'src/2/second-output.tsbuildinfo'
+[[90m12:01:20 AM[0m] Project 'src/second/tsconfig.json' is up to date because newest input 'src/second/second_part1.ts' is older than oldest output 'src/2/second-output.tsbuildinfo'
 
-[[90m12:01:25 AM[0m] Project 'src/third/tsconfig.json' is out of date because output of its dependency 'src/first' has changed
+[[90m12:01:21 AM[0m] Project 'src/third/tsconfig.json' is out of date because output of its dependency 'src/first' has changed
 
-[[90m12:01:26 AM[0m] Updating output of project '/src/third/tsconfig.json'...
-
-[[90m12:01:31 AM[0m] Updating unchanged output timestamps of project '/src/third/tsconfig.json'...
+[[90m12:01:22 AM[0m] Updating output of project '/src/third/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 
@@ -7830,10 +7821,7 @@ getModifiedTime:: {
  "/src/third/tsconfig.json": 1
 }
 
-setModifiedTime:: {
- "/src/third/thirdjs/output/third-output.js": 1,
- "/src/third/thirdjs/output/third-output.js.map": 1
-}
+setModifiedTime:: {}
 
 fileExists:: {
  "/src/first/bin/first-output.js": 1,
@@ -8544,8 +8532,6 @@ sourceFile:../../third_part1.ts
 ---
 >>>//# sourceMappingURL=third-output.d.ts.map
 
-//// [/src/third/thirdjs/output/third-output.js] file changed its modified time
-//// [/src/third/thirdjs/output/third-output.js.map] file changed its modified time
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo]
 {"bundle":{"commonSourceDirectory":"../..","sourceFiles":["../../third_part1.ts"],"js":{"sections":[{"pos":0,"end":127,"kind":"prepend","data":"../../../first/bin/first-output.js","texts":[{"pos":0,"end":127,"kind":"text"}]},{"pos":127,"end":3180,"kind":"prepend","data":"../../../2/second-output.js","texts":[{"pos":127,"end":3180,"kind":"text"}]},{"pos":3180,"end":3216,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":157,"kind":"prepend","data":"../../../first/bin/first-output.d.ts","texts":[{"pos":0,"end":157,"kind":"text"}]},{"pos":157,"end":317,"kind":"prepend","data":"../../../2/second-output.d.ts","texts":[{"pos":157,"end":317,"kind":"text"}]},{"pos":317,"end":336,"kind":"text"}]}},"version":"FakeTSVersion"}
 

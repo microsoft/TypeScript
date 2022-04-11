@@ -532,8 +532,6 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
-//// [/user/username/projects/sample1/core/anotherModule.js] file changed its modified time
-//// [/user/username/projects/sample1/core/anotherModule.d.ts] file changed its modified time
 //// [/user/username/projects/sample1/core/index.js]
 "use strict";
 exports.__esModule = true;
@@ -618,10 +616,7 @@ getModifiedTimes:: {
  "/user/username/projects/sample1/core/tsconfig.tsbuildinfo": 1
 } 
 
-setModifiedTimes:: {
- "/user/username/projects/sample1/core/anothermodule.js": 1,
- "/user/username/projects/sample1/core/anothermodule.d.ts": 1
-} 
+setModifiedTimes:: {} 
 
 Change:: Build logic or update time stamps
 
@@ -786,7 +781,7 @@ getModifiedTimes:: {}
 setModifiedTimes:: {} 
 
 Output::
-[[90m12:01:55 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:54 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -959,7 +954,7 @@ setModifiedTimes:: {}
 
 Output::
 >> Screen clear
-[[90m12:01:59 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:58 AM[0m] File change detected. Starting incremental compilation...
 
 
 
@@ -1003,8 +998,6 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
-//// [/user/username/projects/sample1/core/anotherModule.js] file changed its modified time
-//// [/user/username/projects/sample1/core/anotherModule.d.ts] file changed its modified time
 //// [/user/username/projects/sample1/core/index.js]
 "use strict";
 exports.__esModule = true;
@@ -1080,10 +1073,7 @@ getModifiedTimes:: {
  "/user/username/projects/sample1/core/tsconfig.tsbuildinfo": 1
 } 
 
-setModifiedTimes:: {
- "/user/username/projects/sample1/core/anothermodule.js": 1,
- "/user/username/projects/sample1/core/anothermodule.d.ts": 1
-} 
+setModifiedTimes:: {} 
 
 Change:: Build logic or update time stamps
 
@@ -1248,7 +1238,7 @@ getModifiedTimes:: {}
 setModifiedTimes:: {} 
 
 Output::
-[[90m12:02:40 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:02:38 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -1423,7 +1413,7 @@ setModifiedTimes:: {}
 
 Output::
 >> Screen clear
-[[90m12:02:47 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:02:45 AM[0m] File change detected. Starting incremental compilation...
 
 
 
@@ -1467,8 +1457,6 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
-//// [/user/username/projects/sample1/core/anotherModule.js] file changed its modified time
-//// [/user/username/projects/sample1/core/anotherModule.d.ts] file changed its modified time
 //// [/user/username/projects/sample1/core/index.js]
 "use strict";
 exports.__esModule = true;
@@ -1560,10 +1548,7 @@ getModifiedTimes:: {
  "/user/username/projects/sample1/core/tsconfig.tsbuildinfo": 1
 } 
 
-setModifiedTimes:: {
- "/user/username/projects/sample1/core/anothermodule.js": 1,
- "/user/username/projects/sample1/core/anothermodule.d.ts": 1
-} 
+setModifiedTimes:: {} 
 
 Change:: Build logic or update time stamps
 
@@ -1728,7 +1713,7 @@ getModifiedTimes:: {}
 setModifiedTimes:: {} 
 
 Output::
-[[90m12:03:28 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:03:25 AM[0m] Found 0 errors. Watching for file changes.
 
 
 

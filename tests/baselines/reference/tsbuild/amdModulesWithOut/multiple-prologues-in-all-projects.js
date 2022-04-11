@@ -1282,8 +1282,6 @@ Output::
 
 [[90m12:00:48 AM[0m] Updating output of project '/src/app/tsconfig.json'...
 
-[[90m12:00:53 AM[0m] Updating unchanged output timestamps of project '/src/app/tsconfig.json'...
-
 exitCode:: ExitStatus.Success
 
 getModifiedTime:: {
@@ -1300,10 +1298,7 @@ getModifiedTime:: {
  "/src/app/module.d.ts": 1
 }
 
-setModifiedTime:: {
- "/src/app/module.d.ts": 1,
- "/src/app/module.d.ts.map": 1
-}
+setModifiedTime:: {}
 
 fileExists:: {
  "/src/lib/module.js": 1,
@@ -1319,8 +1314,6 @@ directoryExists:: {
 }
 
 
-//// [/src/app/module.d.ts] file changed its modified time
-//// [/src/app/module.d.ts.map] file changed its modified time
 //// [/src/app/module.js]
 "use strict";
 "myPrologue";
@@ -2191,19 +2184,17 @@ export const x = 10;console.log(x);
 
 Output::
 /lib/tsc --b /src/app --verbose
-[[90m12:01:02 AM[0m] Projects in this build: 
+[[90m12:00:58 AM[0m] Projects in this build: 
     * src/lib/tsconfig.json
     * src/app/tsconfig.json
 
-[[90m12:01:03 AM[0m] Project 'src/lib/tsconfig.json' is out of date because oldest output 'src/lib/module.tsbuildinfo' is older than newest input 'src/lib/file1.ts'
+[[90m12:00:59 AM[0m] Project 'src/lib/tsconfig.json' is out of date because oldest output 'src/lib/module.tsbuildinfo' is older than newest input 'src/lib/file1.ts'
 
-[[90m12:01:04 AM[0m] Building project '/src/lib/tsconfig.json'...
+[[90m12:01:00 AM[0m] Building project '/src/lib/tsconfig.json'...
 
-[[90m12:01:12 AM[0m] Project 'src/app/tsconfig.json' is out of date because output of its dependency 'src/lib' has changed
+[[90m12:01:08 AM[0m] Project 'src/app/tsconfig.json' is out of date because output of its dependency 'src/lib' has changed
 
-[[90m12:01:13 AM[0m] Updating output of project '/src/app/tsconfig.json'...
-
-[[90m12:01:19 AM[0m] Updating unchanged output timestamps of project '/src/app/tsconfig.json'...
+[[90m12:01:09 AM[0m] Updating output of project '/src/app/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 
@@ -2221,9 +2212,7 @@ getModifiedTime:: {
  "/src/app/module.d.ts": 1
 }
 
-setModifiedTime:: {
- "/src/app/module.d.ts": 1
-}
+setModifiedTime:: {}
 
 fileExists:: {
  "/src/lib/module.js": 1,
@@ -2239,7 +2228,6 @@ directoryExists:: {
 }
 
 
-//// [/src/app/module.d.ts] file changed its modified time
 //// [/src/app/module.d.ts.map]
 {"version":3,"file":"module.d.ts","sourceRoot":"","sources":["../lib/file0.ts","../lib/file1.ts","../lib/file2.ts","../lib/global.ts","file3.ts","file4.ts"],"names":[],"mappings":"AACA,QAAA,MAAM,MAAM,KAAK,CAAC;;ICAlB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;;ICApB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,WAAW,KAAK,CAAC;;ICAvB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,KAAK,KAAK,CAAC"}
 

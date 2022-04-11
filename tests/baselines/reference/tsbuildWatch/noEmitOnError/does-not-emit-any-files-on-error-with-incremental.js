@@ -639,9 +639,7 @@ Output::
 
 [[90m12:01:35 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
-[[90m12:01:43 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/noEmitOnError/tsconfig.json'...
-
-[[90m12:01:47 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:45 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -678,14 +676,12 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
-//// [/user/username/projects/noEmitOnError/dev-build/shared/types/db.js] file changed its modified time
 //// [/user/username/projects/noEmitOnError/dev-build/src/main.js]
 "use strict";
 exports.__esModule = true;
 var a = "hello";
 
 
-//// [/user/username/projects/noEmitOnError/dev-build/src/other.js] file changed its modified time
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo]
 {"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../shared/types/db.ts","../src/main.ts","../src/other.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-9621097780-export interface A {\r\n    name: string;\r\n}","signature":"-5014788164-export interface A {\n    name: string;\n}\n"},{"version":"-8373351622-import { A } from \"../shared/types/db\";\nconst a: string = \"hello\";","signature":"-3531856636-export {};\n"},{"version":"11373096570-console.log(\"hi\");\r\nexport { }","signature":"-3531856636-export {};\n"}],"options":{"noEmitOnError":true,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3,4]},"version":"FakeTSVersion"}
 
@@ -761,10 +757,7 @@ getModifiedTimes:: {
  "/user/username/projects/noemitonerror/dev-build/tsconfig.tsbuildinfo": 1
 } 
 
-setModifiedTimes:: {
- "/user/username/projects/noemitonerror/dev-build/shared/types/db.js": 1,
- "/user/username/projects/noemitonerror/dev-build/src/other.js": 1
-} 
+setModifiedTimes:: {} 
 
 Change:: No change
 
@@ -781,15 +774,15 @@ setModifiedTimes:: {}
 
 Output::
 >> Screen clear
-[[90m12:01:51 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:49 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:52 AM[0m] Project 'tsconfig.json' is out of date because oldest output 'dev-build/tsconfig.tsbuildinfo' is older than newest input 'src/main.ts'
+[[90m12:01:50 AM[0m] Project 'tsconfig.json' is out of date because oldest output 'dev-build/tsconfig.tsbuildinfo' is older than newest input 'src/main.ts'
 
-[[90m12:01:53 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
+[[90m12:01:51 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
-[[90m12:01:55 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/noEmitOnError/tsconfig.json'...
+[[90m12:01:52 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
-[[90m12:01:56 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:54 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -824,9 +817,6 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
-//// [/user/username/projects/noEmitOnError/dev-build/shared/types/db.js] file changed its modified time
-//// [/user/username/projects/noEmitOnError/dev-build/src/main.js] file changed its modified time
-//// [/user/username/projects/noEmitOnError/dev-build/src/other.js] file changed its modified time
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo] file changed its modified time
 
 fileExists:: {
@@ -847,8 +837,5 @@ getModifiedTimes:: {
 } 
 
 setModifiedTimes:: {
- "/user/username/projects/noemitonerror/dev-build/shared/types/db.js": 1,
- "/user/username/projects/noemitonerror/dev-build/src/main.js": 1,
- "/user/username/projects/noemitonerror/dev-build/src/other.js": 1,
  "/user/username/projects/noemitonerror/dev-build/tsconfig.tsbuildinfo": 1
 } 

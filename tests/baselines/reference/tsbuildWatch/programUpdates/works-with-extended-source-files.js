@@ -266,7 +266,7 @@ Output::
 
 [[90m12:00:57 AM[0m] Building project '/a/b/project1.tsconfig.json'...
 
-[[90m12:00:59 AM[0m] Updating unchanged output timestamps of project '/a/b/project1.tsconfig.json'...
+[[90m12:00:58 AM[0m] Updating unchanged output timestamps of project '/a/b/project1.tsconfig.json'...
 
 
 
@@ -307,10 +307,6 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
-//// [/a/b/commonFile1.js] file changed its modified time
-//// [/a/b/commonFile1.d.ts] file changed its modified time
-//// [/a/b/commonFile2.js] file changed its modified time
-//// [/a/b/commonFile2.d.ts] file changed its modified time
 //// [/a/b/project1.tsconfig.tsbuildinfo] file changed its modified time
 
 fileExists:: {
@@ -332,10 +328,6 @@ getModifiedTimes:: {
 } 
 
 setModifiedTimes:: {
- "/a/b/commonfile1.js": 1,
- "/a/b/commonfile1.d.ts": 1,
- "/a/b/commonfile2.js": 1,
- "/a/b/commonfile2.d.ts": 1,
  "/a/b/project1.tsconfig.tsbuildinfo": 1
 } 
 
@@ -356,7 +348,7 @@ Output::
 
 [[90m12:01:01 AM[0m] Building project '/a/b/project2.tsconfig.json'...
 
-[[90m12:01:03 AM[0m] Updating unchanged output timestamps of project '/a/b/project2.tsconfig.json'...
+[[90m12:01:02 AM[0m] Updating unchanged output timestamps of project '/a/b/project2.tsconfig.json'...
 
 [[90m12:01:04 AM[0m] Found 0 errors. Watching for file changes.
 
@@ -397,8 +389,6 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
-//// [/a/b/other.js] file changed its modified time
-//// [/a/b/other.d.ts] file changed its modified time
 //// [/a/b/project2.tsconfig.tsbuildinfo] file changed its modified time
 
 fileExists:: {} 
@@ -417,8 +407,6 @@ getModifiedTimes:: {
 } 
 
 setModifiedTimes:: {
- "/a/b/other.js": 1,
- "/a/b/other.d.ts": 1,
  "/a/b/project2.tsconfig.tsbuildinfo": 1
 } 
 
@@ -445,7 +433,7 @@ Output::
 
 [[90m12:01:10 AM[0m] Building project '/a/b/project2.tsconfig.json'...
 
-[[90m12:01:12 AM[0m] Updating unchanged output timestamps of project '/a/b/project2.tsconfig.json'...
+[[90m12:01:11 AM[0m] Updating unchanged output timestamps of project '/a/b/project2.tsconfig.json'...
 
 [[90m12:01:13 AM[0m] Found 0 errors. Watching for file changes.
 
@@ -486,8 +474,6 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
-//// [/a/b/other.js] file changed its modified time
-//// [/a/b/other.d.ts] file changed its modified time
 //// [/a/b/project2.tsconfig.tsbuildinfo] file changed its modified time
 
 fileExists:: {
@@ -507,8 +493,6 @@ getModifiedTimes:: {
 } 
 
 setModifiedTimes:: {
- "/a/b/other.js": 1,
- "/a/b/other.d.ts": 1,
  "/a/b/project2.tsconfig.tsbuildinfo": 1
 } 
 
@@ -638,7 +622,7 @@ Output::
 
 [[90m12:01:35 AM[0m] Building project '/a/b/project1.tsconfig.json'...
 
-[[90m12:01:37 AM[0m] Updating unchanged output timestamps of project '/a/b/project1.tsconfig.json'...
+[[90m12:01:36 AM[0m] Updating unchanged output timestamps of project '/a/b/project1.tsconfig.json'...
 
 
 
@@ -679,10 +663,6 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
-//// [/a/b/commonFile1.js] file changed its modified time
-//// [/a/b/commonFile1.d.ts] file changed its modified time
-//// [/a/b/commonFile2.js] file changed its modified time
-//// [/a/b/commonFile2.d.ts] file changed its modified time
 //// [/a/b/project1.tsconfig.tsbuildinfo] file changed its modified time
 
 fileExists:: {
@@ -702,10 +682,6 @@ getModifiedTimes:: {
 } 
 
 setModifiedTimes:: {
- "/a/b/commonfile1.js": 1,
- "/a/b/commonfile1.d.ts": 1,
- "/a/b/commonfile2.js": 1,
- "/a/b/commonfile2.d.ts": 1,
  "/a/b/project1.tsconfig.tsbuildinfo": 1
 } 
 
@@ -722,11 +698,11 @@ getModifiedTimes:: {}
 setModifiedTimes:: {} 
 
 Output::
-[[90m12:01:38 AM[0m] Project 'project2.tsconfig.json' is out of date because oldest output 'other.js' is older than newest input 'alpha.tsconfig.json'
+[[90m12:01:38 AM[0m] Project 'project2.tsconfig.json' is out of date because oldest output 'commonFile1.js' is older than newest input 'alpha.tsconfig.json'
 
 [[90m12:01:39 AM[0m] Building project '/a/b/project2.tsconfig.json'...
 
-[[90m12:01:41 AM[0m] Updating unchanged output timestamps of project '/a/b/project2.tsconfig.json'...
+[[90m12:01:40 AM[0m] Updating unchanged output timestamps of project '/a/b/project2.tsconfig.json'...
 
 [[90m12:01:42 AM[0m] Found 0 errors. Watching for file changes.
 

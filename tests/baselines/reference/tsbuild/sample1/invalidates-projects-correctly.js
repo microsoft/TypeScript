@@ -522,8 +522,6 @@ setModifiedTimes:: {}
 non Dts change to logic:: After building next project
 Output::
 
-//// [/user/username/projects/tests/index.js] file changed its modified time
-//// [/user/username/projects/tests/index.d.ts] file changed its modified time
 //// [/user/username/projects/tests/tsconfig.tsbuildinfo] file changed its modified time
 
 fileExists:: {} 
@@ -535,8 +533,6 @@ getModifiedTimes:: {
 } 
 
 setModifiedTimes:: {
- "/user/username/projects/tests/index.js": 1,
- "/user/username/projects/tests/index.d.ts": 1,
  "/user/username/projects/tests/tsconfig.tsbuildinfo": 1
 } 
 

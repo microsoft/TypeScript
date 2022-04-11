@@ -571,9 +571,6 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
-//// [/user/username/projects/sample1/core/anotherModule.js] file changed its modified time
-//// [/user/username/projects/sample1/core/anotherModule.d.ts.map] file changed its modified time
-//// [/user/username/projects/sample1/core/anotherModule.d.ts] file changed its modified time
 //// [/user/username/projects/sample1/core/index.js]
 "use strict";
 exports.__esModule = true;
@@ -650,11 +647,7 @@ getModifiedTimes:: {
  "/user/username/projects/sample1/core/anothermodule.d.ts": 1
 } 
 
-setModifiedTimes:: {
- "/user/username/projects/sample1/core/anothermodule.js": 1,
- "/user/username/projects/sample1/core/anothermodule.d.ts": 1,
- "/user/username/projects/sample1/core/anothermodule.d.ts.map": 1
-} 
+setModifiedTimes:: {} 
 
 Change:: Build logic or update time stamps
 
@@ -696,9 +689,6 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
-//// [/user/username/projects/sample1/logic/index.js.map] file changed its modified time
-//// [/user/username/projects/sample1/logic/index.js] file changed its modified time
-//// [/user/username/projects/sample1/logic/index.d.ts] file changed its modified time
 //// [/user/username/projects/sample1/logic/tsconfig.tsbuildinfo] file changed its modified time
 
 fileExists:: {} 
@@ -710,9 +700,6 @@ getModifiedTimes:: {
 } 
 
 setModifiedTimes:: {
- "/user/username/projects/sample1/logic/index.js": 1,
- "/user/username/projects/sample1/logic/index.js.map": 1,
- "/user/username/projects/sample1/logic/index.d.ts": 1,
  "/user/username/projects/sample1/logic/tsconfig.tsbuildinfo": 1
 } 
 
@@ -729,7 +716,7 @@ getModifiedTimes:: {}
 setModifiedTimes:: {} 
 
 Output::
-[[90m12:01:43 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:42 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -759,8 +746,6 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
-//// [/user/username/projects/sample1/tests/index.js] file changed its modified time
-//// [/user/username/projects/sample1/tests/index.d.ts] file changed its modified time
 //// [/user/username/projects/sample1/tests/tsconfig.tsbuildinfo] file changed its modified time
 
 fileExists:: {} 
@@ -772,7 +757,5 @@ getModifiedTimes:: {
 } 
 
 setModifiedTimes:: {
- "/user/username/projects/sample1/tests/index.js": 1,
- "/user/username/projects/sample1/tests/index.d.ts": 1,
  "/user/username/projects/sample1/tests/tsconfig.tsbuildinfo": 1
 } 

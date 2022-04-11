@@ -545,8 +545,6 @@ Output::
 
 [[90m12:00:51 AM[0m] Updating output of project '/src/third/tsconfig.json'...
 
-[[90m12:00:54 AM[0m] Updating unchanged output timestamps of project '/src/third/tsconfig.json'...
-
 exitCode:: ExitStatus.Success
 
 getModifiedTime:: {
@@ -565,12 +563,7 @@ getModifiedTime:: {
  "/src/third/thirdjs/output/third-output.d.ts": 1
 }
 
-setModifiedTime:: {
- "/src/third/thirdjs/output/third-output.js": 1,
- "/src/third/thirdjs/output/third-output.js.map": 1,
- "/src/third/thirdjs/output/third-output.d.ts": 1,
- "/src/third/thirdjs/output/third-output.d.ts.map": 1
-}
+setModifiedTime:: {}
 
 fileExists:: {
  "/src/first/bin/first-output.js": 1,
@@ -595,10 +588,6 @@ directoryExists:: {
 
 //// [/src/first/bin/first-output.tsbuildinfo.baseline.txt] file written with same contents
 //// [/src/first/bin/first-output.tsbuildinfo.readable.baseline.txt] file written with same contents
-//// [/src/third/thirdjs/output/third-output.d.ts] file changed its modified time
-//// [/src/third/thirdjs/output/third-output.d.ts.map] file changed its modified time
-//// [/src/third/thirdjs/output/third-output.js] file changed its modified time
-//// [/src/third/thirdjs/output/third-output.js.map] file changed its modified time
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo] file written with same contents
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo.baseline.txt] file written with same contents
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo.readable.baseline.txt] file written with same contents

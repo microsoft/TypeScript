@@ -720,7 +720,7 @@ getModifiedTimes:: {}
 setModifiedTimes:: {} 
 
 Output::
-[[90m12:01:58 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:57 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -751,7 +751,6 @@ function bar() { return foo() + 1; }
 ;
 
 
-//// [/user/username/projects/sample1/logic/index.d.ts] file changed its modified time
 //// [/user/username/projects/sample1/logic/index.tsbuildinfo]
 {"bundle":{"commonSourceDirectory":"./","sourceFiles":["./index.ts"],"js":{"sections":[{"pos":0,"end":64,"kind":"prepend","data":"../core/index.js","texts":[{"pos":0,"end":64,"kind":"text"}]},{"pos":64,"end":103,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":67,"kind":"prepend","data":"../core/index.d.ts","texts":[{"pos":0,"end":67,"kind":"text"}]},{"pos":67,"end":99,"kind":"text"}]}},"version":"FakeTSVersion"}
 
@@ -854,6 +853,4 @@ getModifiedTimes:: {
  "/user/username/projects/sample1/logic/index.d.ts": 1
 } 
 
-setModifiedTimes:: {
- "/user/username/projects/sample1/logic/index.d.ts": 1
-} 
+setModifiedTimes:: {} 

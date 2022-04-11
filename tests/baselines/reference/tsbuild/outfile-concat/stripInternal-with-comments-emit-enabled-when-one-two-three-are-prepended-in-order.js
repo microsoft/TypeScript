@@ -5937,13 +5937,9 @@ Output::
 
 [[90m12:01:04 AM[0m] Updating output of project '/src/second/tsconfig.json'...
 
-[[90m12:01:09 AM[0m] Updating unchanged output timestamps of project '/src/second/tsconfig.json'...
+[[90m12:01:10 AM[0m] Project 'src/third/tsconfig.json' is out of date because output of its dependency 'src/second' has changed
 
-[[90m12:01:14 AM[0m] Project 'src/third/tsconfig.json' is out of date because output of its dependency 'src/second' has changed
-
-[[90m12:01:15 AM[0m] Updating output of project '/src/third/tsconfig.json'...
-
-[[90m12:01:20 AM[0m] Updating unchanged output timestamps of project '/src/third/tsconfig.json'...
+[[90m12:01:11 AM[0m] Updating output of project '/src/third/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 
@@ -5964,12 +5960,7 @@ getModifiedTime:: {
  "/src/third/thirdjs/output/third-output.d.ts": 1
 }
 
-setModifiedTime:: {
- "/src/2/second-output.d.ts": 1,
- "/src/2/second-output.d.ts.map": 1,
- "/src/third/thirdjs/output/third-output.d.ts": 1,
- "/src/third/thirdjs/output/third-output.d.ts.map": 1
-}
+setModifiedTime:: {}
 
 fileExists:: {
  "/src/first/bin/first-output.js": 1,
@@ -5987,8 +5978,6 @@ directoryExists:: {
 }
 
 
-//// [/src/2/second-output.d.ts] file changed its modified time
-//// [/src/2/second-output.d.ts.map] file changed its modified time
 //// [/src/2/second-output.js]
 var s = "Hello, world";
 console.log(s);
@@ -8379,8 +8368,6 @@ declare function f(): string;
   "size": 290
 }
 
-//// [/src/third/thirdjs/output/third-output.d.ts] file changed its modified time
-//// [/src/third/thirdjs/output/third-output.d.ts.map] file changed its modified time
 //// [/src/third/thirdjs/output/third-output.js]
 var s = "Hello, world";
 console.log(s);
@@ -10493,26 +10480,22 @@ console.log(s);
 
 Output::
 /lib/tsc --b /src/third --verbose
-[[90m12:01:30 AM[0m] Projects in this build: 
+[[90m12:01:22 AM[0m] Projects in this build: 
     * src/first/tsconfig.json
     * src/second/tsconfig.json
     * src/third/tsconfig.json
 
-[[90m12:01:31 AM[0m] Project 'src/first/tsconfig.json' is out of date because oldest output 'src/first/bin/first-output.tsbuildinfo' is older than newest input 'src/first/first_PART1.ts'
+[[90m12:01:23 AM[0m] Project 'src/first/tsconfig.json' is out of date because oldest output 'src/first/bin/first-output.tsbuildinfo' is older than newest input 'src/first/first_PART1.ts'
 
-[[90m12:01:32 AM[0m] Building project '/src/first/tsconfig.json'...
+[[90m12:01:24 AM[0m] Building project '/src/first/tsconfig.json'...
 
-[[90m12:01:40 AM[0m] Project 'src/second/tsconfig.json' is out of date because output of its dependency 'src/first' has changed
+[[90m12:01:32 AM[0m] Project 'src/second/tsconfig.json' is out of date because output of its dependency 'src/first' has changed
 
-[[90m12:01:41 AM[0m] Updating output of project '/src/second/tsconfig.json'...
+[[90m12:01:33 AM[0m] Updating output of project '/src/second/tsconfig.json'...
 
-[[90m12:01:45 AM[0m] Updating unchanged output timestamps of project '/src/second/tsconfig.json'...
+[[90m12:01:38 AM[0m] Project 'src/third/tsconfig.json' is out of date because output of its dependency 'src/second' has changed
 
-[[90m12:01:51 AM[0m] Project 'src/third/tsconfig.json' is out of date because output of its dependency 'src/second' has changed
-
-[[90m12:01:52 AM[0m] Updating output of project '/src/third/tsconfig.json'...
-
-[[90m12:01:57 AM[0m] Updating unchanged output timestamps of project '/src/third/tsconfig.json'...
+[[90m12:01:39 AM[0m] Updating output of project '/src/third/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 
@@ -10532,13 +10515,7 @@ getModifiedTime:: {
  "/src/third/tsconfig.json": 1
 }
 
-setModifiedTime:: {
- "/src/2/second-output.js": 1,
- "/src/2/second-output.js.map": 1,
- "/src/2/second-output.d.ts": 1,
- "/src/third/thirdjs/output/third-output.js": 1,
- "/src/third/thirdjs/output/third-output.js.map": 1
-}
+setModifiedTime:: {}
 
 fileExists:: {
  "/src/first/bin/first-output.js": 1,
@@ -10556,7 +10533,6 @@ directoryExists:: {
 }
 
 
-//// [/src/2/second-output.d.ts] file changed its modified time
 //// [/src/2/second-output.d.ts.map]
 {"version":3,"file":"second-output.d.ts","sourceRoot":"","sources":["../first/first_PART1.ts","../first/first_part3.ts","../second/second_part1.ts","../second/second_part2.ts"],"names":[],"mappings":"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;ACRD,iBAAS,CAAC,WAET;ACFD,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;AAED,cAAM,OAAO;;IAEK,IAAI,EAAE,MAAM,CAAC;IACb,MAAM;IACN,IAAI,CAAC,IACM,MAAM,CADK;IACtB,IAAI,CAAC,CAAC,KAAK,MAAM,EAAK;CACvC;AACD,kBAAU,OAAO,CAAC;IACA,MAAa,CAAC;KAAI;IAClB,SAAgB,GAAG,SAAK;IACxB,UAAiB,aAAa,CAAC;QAAE,MAAa,CAAC;SAAG;KAAE;IACpD,UAAiB,SAAS,CAAC,SAAS,CAAC;QAAE,MAAa,SAAS;SAAG;KAAE;IAClE,MAAM,QAAQ,UAAU,GAAG,aAAa,CAAC,CAAC,CAAC;IAC3C,KAAY,YAAY,GAAG,SAAS,CAAC;IAC9B,MAAM,aAAa,KAAK,CAAC;IAChC,KAAY,YAAY;QAAG,CAAC,IAAA;QAAE,CAAC,IAAA;QAAE,CAAC,IAAA;KAAE;CACrD;AACa,cAAM,SAAS;CAAG;AAClB,iBAAS,WAAW,SAAK;AACzB,kBAAU,iBAAiB,CAAC;IAAE,MAAa,SAAS;KAAG;CAAE;AACzD,kBAAU,aAAa,CAAC,SAAS,CAAC;IAAE,MAAa,SAAS;KAAG;CAAE;AAC/D,OAAO,cAAc,GAAG,iBAAiB,CAAC,SAAS,CAAC;AACpD,aAAK,YAAY,GAAG,SAAS,CAAC;AAC9B,QAAA,MAAM,aAAa,KAAK,CAAC;AACzB,aAAK,YAAY;IAAG,CAAC,IAAA;IAAE,CAAC,IAAA;IAAE,CAAC,IAAA;CAAE;ACpC3C,cAAM,CAAC;IACH,WAAW;CAGd"}
 
@@ -11368,8 +11344,6 @@ sourceFile:../second/second_part2.ts
 ---
 >>>//# sourceMappingURL=second-output.d.ts.map
 
-//// [/src/2/second-output.js] file changed its modified time
-//// [/src/2/second-output.js.map] file changed its modified time
 //// [/src/2/second-output.tsbuildinfo]
 {"bundle":{"commonSourceDirectory":"../second","sourceFiles":["../second/second_part1.ts","../second/second_part2.ts"],"js":{"sections":[{"pos":0,"end":127,"kind":"prepend","data":"../first/bin/first-output.js","texts":[{"pos":0,"end":127,"kind":"text"}]},{"pos":127,"end":3544,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":157,"kind":"prepend","data":"../first/bin/first-output.d.ts","texts":[{"pos":0,"end":157,"kind":"text"}]},{"pos":157,"end":234,"kind":"text"},{"pos":234,"end":339,"kind":"internal"},{"pos":341,"end":373,"kind":"text"},{"pos":373,"end":765,"kind":"internal"},{"pos":767,"end":770,"kind":"text"},{"pos":770,"end":1183,"kind":"internal"},{"pos":1185,"end":1233,"kind":"text"}]}},"version":"FakeTSVersion"}
 
@@ -12365,8 +12339,6 @@ sourceFile:../../third_part1.ts
 ---
 >>>//# sourceMappingURL=third-output.d.ts.map
 
-//// [/src/third/thirdjs/output/third-output.js] file changed its modified time
-//// [/src/third/thirdjs/output/third-output.js.map] file changed its modified time
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo]
 {"bundle":{"commonSourceDirectory":"../..","sourceFiles":["../../third_part1.ts"],"js":{"sections":[{"pos":0,"end":3544,"kind":"prepend","data":"../../../2/second-output.js","texts":[{"pos":0,"end":3544,"kind":"text"}]},{"pos":3544,"end":3580,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":317,"kind":"prepend","data":"../../../2/second-output.d.ts","texts":[{"pos":0,"end":317,"kind":"text"}]},{"pos":317,"end":336,"kind":"text"}]}},"version":"FakeTSVersion"}
 

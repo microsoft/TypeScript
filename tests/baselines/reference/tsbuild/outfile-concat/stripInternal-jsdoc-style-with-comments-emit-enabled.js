@@ -5784,8 +5784,6 @@ Output::
 
 [[90m12:01:03 AM[0m] Updating output of project '/src/third/tsconfig.json'...
 
-[[90m12:01:08 AM[0m] Updating unchanged output timestamps of project '/src/third/tsconfig.json'...
-
 exitCode:: ExitStatus.Success
 
 getModifiedTime:: {
@@ -5804,10 +5802,7 @@ getModifiedTime:: {
  "/src/third/thirdjs/output/third-output.d.ts": 1
 }
 
-setModifiedTime:: {
- "/src/third/thirdjs/output/third-output.d.ts": 1,
- "/src/third/thirdjs/output/third-output.d.ts.map": 1
-}
+setModifiedTime:: {}
 
 fileExists:: {
  "/src/first/bin/first-output.js": 1,
@@ -6082,8 +6077,6 @@ declare function f(): string;
   "size": 290
 }
 
-//// [/src/third/thirdjs/output/third-output.d.ts] file changed its modified time
-//// [/src/third/thirdjs/output/third-output.d.ts.map] file changed its modified time
 //// [/src/third/thirdjs/output/third-output.js]
 var s = "Hello, world";
 console.log(s);

@@ -537,15 +537,13 @@ Output::
 
 [[90m12:00:40 AM[0m] Building project '/src/core/tsconfig.json'...
 
-[[90m12:00:46 AM[0m] Updating unchanged output timestamps of project '/src/core/tsconfig.json'...
+[[90m12:00:46 AM[0m] Project 'src/logic/tsconfig.json' is up to date with .d.ts files from its dependencies
 
-[[90m12:00:51 AM[0m] Project 'src/logic/tsconfig.json' is up to date with .d.ts files from its dependencies
+[[90m12:00:47 AM[0m] Updating output timestamps of project '/src/logic/tsconfig.json'...
 
-[[90m12:00:53 AM[0m] Updating output timestamps of project '/src/logic/tsconfig.json'...
+[[90m12:00:50 AM[0m] Project 'src/tests/tsconfig.json' is up to date with .d.ts files from its dependencies
 
-[[90m12:00:58 AM[0m] Project 'src/tests/tsconfig.json' is up to date with .d.ts files from its dependencies
-
-[[90m12:01:00 AM[0m] Updating output timestamps of project '/src/tests/tsconfig.json'...
+[[90m12:00:51 AM[0m] Updating output timestamps of project '/src/tests/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 
@@ -567,15 +565,7 @@ getModifiedTime:: {
 }
 
 setModifiedTime:: {
- "/src/core/anotherModule.js": 1,
- "/src/core/anotherModule.d.ts": 1,
- "/src/core/anotherModule.d.ts.map": 1,
- "/src/logic/index.js": 1,
- "/src/logic/index.js.map": 1,
- "/src/logic/index.d.ts": 1,
  "/src/logic/tsconfig.tsbuildinfo": 1,
- "/src/tests/index.js": 1,
- "/src/tests/index.d.ts": 1,
  "/src/tests/tsconfig.tsbuildinfo": 1
 }
 
@@ -655,7 +645,6 @@ exports.multiply = multiply;
 }
 
 //// [/src/logic/tsconfig.tsbuildinfo] file changed its modified time
-//// [/src/tests/index.d.ts] file changed its modified time
 //// [/src/tests/tsconfig.tsbuildinfo] file changed its modified time
 
 
@@ -680,18 +669,18 @@ Input::
 
 Output::
 /lib/tsc --b /src/tests --verbose
-[[90m12:01:05 AM[0m] Projects in this build: 
+[[90m12:00:55 AM[0m] Projects in this build: 
     * src/core/tsconfig.json
     * src/logic/tsconfig.json
     * src/tests/tsconfig.json
 
-[[90m12:01:06 AM[0m] Project 'src/core/tsconfig.json' is up to date because newest input 'src/core/index.ts' is older than oldest output 'src/core/tsconfig.tsbuildinfo'
+[[90m12:00:56 AM[0m] Project 'src/core/tsconfig.json' is up to date because newest input 'src/core/index.ts' is older than oldest output 'src/core/tsconfig.tsbuildinfo'
 
-[[90m12:01:07 AM[0m] Project 'src/logic/tsconfig.json' is up to date because newest input 'src/logic/index.ts' is older than oldest output 'src/logic/tsconfig.tsbuildinfo'
+[[90m12:00:57 AM[0m] Project 'src/logic/tsconfig.json' is up to date because newest input 'src/logic/index.ts' is older than oldest output 'src/logic/tsconfig.tsbuildinfo'
 
-[[90m12:01:08 AM[0m] Project 'src/tests/tsconfig.json' is out of date because oldest output 'src/tests/tsconfig.tsbuildinfo' is older than newest input 'src/tests/tsconfig.json'
+[[90m12:00:58 AM[0m] Project 'src/tests/tsconfig.json' is out of date because oldest output 'src/tests/tsconfig.tsbuildinfo' is older than newest input 'src/tests/tsconfig.json'
 
-[[90m12:01:09 AM[0m] Building project '/src/tests/tsconfig.json'...
+[[90m12:00:59 AM[0m] Building project '/src/tests/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 

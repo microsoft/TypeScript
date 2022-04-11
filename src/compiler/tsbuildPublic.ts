@@ -1660,26 +1660,30 @@ namespace ts {
 
     function updateOutputTimestampsWorker(state: SolutionBuilderState, proj: ParsedCommandLine, anyDtsChange: boolean, verboseMessage: DiagnosticMessage, newestDeclarationFileContentChangedTime?: Date, skipOutputs?: ESMap<Path, string>) {
         if (proj.options.noEmit) return undefined;
+
+        const buildInfoPath = getTsBuildInfoEmitOutputFilePath(proj.options);
         const { host } = state;
         const outputs = getAllProjectOutputs(proj, !host.useCaseSensitiveFileNames());
         if (!skipOutputs || outputs.length !== skipOutputs.size) {
             let reportVerbose = !!state.options.verbose;
-            const now = host.now ? host.now() : new Date();
+            let now: Date | undefined;
             for (const file of outputs) {
                 if (skipOutputs && skipOutputs.has(toPath(state, file))) {
                     continue;
-                }
-
-                if (reportVerbose) {
-                    reportVerbose = false;
-                    reportStatus(state, verboseMessage, proj.options.configFilePath!);
                 }
 
                 if (!anyDtsChange && isDeclarationFileName(file)) {
                     newestDeclarationFileContentChangedTime = newer(newestDeclarationFileContentChangedTime, ts.getModifiedTime(host, file));
                 }
 
-                host.setModifiedTime(file, now);
+                if (!buildInfoPath || file === buildInfoPath) {
+                    if (reportVerbose) {
+                        reportVerbose = false;
+                        reportStatus(state, verboseMessage, proj.options.configFilePath!);
+                    }
+
+                    host.setModifiedTime(file, now ||= host.now ? host.now() : new Date());
+                }
             }
         }
 

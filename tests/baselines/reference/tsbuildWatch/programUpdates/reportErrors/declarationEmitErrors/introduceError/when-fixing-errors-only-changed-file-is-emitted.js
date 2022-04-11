@@ -275,7 +275,7 @@ Output::
 >> Screen clear
 [[90m12:00:47 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:01 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:00 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -311,8 +311,6 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/solution/app/fileWithError.js] file written with same contents
 //// [/user/username/projects/solution/app/fileWithError.d.ts] file written with same contents
-//// [/user/username/projects/solution/app/fileWithoutError.js] file changed its modified time
-//// [/user/username/projects/solution/app/fileWithoutError.d.ts] file changed its modified time
 //// [/user/username/projects/solution/app/tsconfig.tsbuildinfo] file written with same contents
 //// [/user/username/projects/solution/app/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
 
@@ -333,7 +331,4 @@ getModifiedTimes:: {
  "/user/username/projects/solution/app/filewithouterror.d.ts": 1
 } 
 
-setModifiedTimes:: {
- "/user/username/projects/solution/app/filewithouterror.js": 1,
- "/user/username/projects/solution/app/filewithouterror.d.ts": 1
-} 
+setModifiedTimes:: {} 

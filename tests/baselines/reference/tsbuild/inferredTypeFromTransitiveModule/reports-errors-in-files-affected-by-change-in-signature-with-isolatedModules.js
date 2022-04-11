@@ -464,8 +464,6 @@ Output::
 
 [[90m12:00:31 AM[0m] Building project '/src/tsconfig.json'...
 
-[[90m12:00:38 AM[0m] Updating unchanged output timestamps of project '/src/tsconfig.json'...
-
 exitCode:: ExitStatus.Success
 
 getModifiedTime:: {
@@ -481,12 +479,7 @@ getModifiedTime:: {
  "/src/obj/bundling.d.ts": 1
 }
 
-setModifiedTime:: {
- "/src/obj/bundling.js": 1,
- "/src/obj/bundling.d.ts": 1,
- "/src/obj/index.js": 1,
- "/src/obj/lazyIndex.js": 1
-}
+setModifiedTime:: {}
 
 fileExists:: {
  "/src/bundling.ts": 1,
@@ -611,12 +604,12 @@ export default foo()(function foobar(): void {
 
 Output::
 /lib/tsc --b /src --verbose
-[[90m12:00:45 AM[0m] Projects in this build: 
+[[90m12:00:39 AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90m12:00:46 AM[0m] Project 'src/tsconfig.json' is out of date because oldest output 'src/obj/tsconfig.tsbuildinfo' is older than newest input 'src/bar.ts'
+[[90m12:00:40 AM[0m] Project 'src/tsconfig.json' is out of date because oldest output 'src/obj/tsconfig.tsbuildinfo' is older than newest input 'src/bar.ts'
 
-[[90m12:00:47 AM[0m] Building project '/src/tsconfig.json'...
+[[90m12:00:41 AM[0m] Building project '/src/tsconfig.json'...
 
 [96msrc/lazyIndex.ts[0m:[93m4[0m:[93m5[0m - [91merror[0m[90m TS2554: [0mExpected 0 arguments, but got 1.
 
@@ -779,14 +772,12 @@ bar();
 
 Output::
 /lib/tsc --b /src --verbose
-[[90m12:00:51 AM[0m] Projects in this build: 
+[[90m12:00:45 AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90m12:00:52 AM[0m] Project 'src/tsconfig.json' is out of date because oldest output 'src/obj/tsconfig.tsbuildinfo' is older than newest input 'src/lazyIndex.ts'
+[[90m12:00:46 AM[0m] Project 'src/tsconfig.json' is out of date because oldest output 'src/obj/tsconfig.tsbuildinfo' is older than newest input 'src/lazyIndex.ts'
 
-[[90m12:00:53 AM[0m] Building project '/src/tsconfig.json'...
-
-[[90m12:01:01 AM[0m] Updating unchanged output timestamps of project '/src/tsconfig.json'...
+[[90m12:00:47 AM[0m] Building project '/src/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 
@@ -799,11 +790,7 @@ getModifiedTime:: {
  "/src/obj/tsconfig.tsbuildinfo": 1
 }
 
-setModifiedTime:: {
- "/src/obj/bundling.js": 1,
- "/src/obj/bundling.d.ts": 1,
- "/src/obj/index.js": 1
-}
+setModifiedTime:: {}
 
 fileExists:: {
  "/src/bundling.ts": 1,

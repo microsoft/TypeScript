@@ -521,9 +521,7 @@ getModifiedTime:: {
  "/src/sub-project-2/sub-project-2.d.ts": 1
 }
 
-setModifiedTime:: {
- "/src/sub-project-2/sub-project-2.d.ts": 1
-}
+setModifiedTime:: {}
 
 fileExists:: {
  "/src/tsconfig.base.json": 3,
@@ -652,7 +650,6 @@ type MyNominal = Nominal<string, 'MyNominal'>;
   "size": 425
 }
 
-//// [/src/sub-project-2/sub-project-2.d.ts] file changed its modified time
 //// [/src/sub-project-2/sub-project-2.js]
 /**
  * @template T, Name

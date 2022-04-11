@@ -304,7 +304,7 @@ Output::
 
 [[90m12:01:11 AM[0m] Building project '/user/username/projects/myproject/webpack/tsconfig.json'...
 
-[[90m12:01:13 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/webpack/tsconfig.json'...
+[[90m12:01:12 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/webpack/tsconfig.json'...
 
 [[90m12:01:14 AM[0m] Found 0 errors. Watching for file changes.
 
@@ -428,8 +428,6 @@ export declare function f2(): void;
   "size": 983
 }
 
-//// [/user/username/projects/myproject/webpack/index.js] file changed its modified time
-//// [/user/username/projects/myproject/webpack/index.d.ts] file changed its modified time
 //// [/user/username/projects/myproject/webpack/tsconfig.tsbuildinfo] file changed its modified time
 
 fileExists:: {} 
@@ -450,7 +448,5 @@ getModifiedTimes:: {
 } 
 
 setModifiedTimes:: {
- "/user/username/projects/myproject/webpack/index.js": 1,
- "/user/username/projects/myproject/webpack/index.d.ts": 1,
  "/user/username/projects/myproject/webpack/tsconfig.tsbuildinfo": 1
 } 

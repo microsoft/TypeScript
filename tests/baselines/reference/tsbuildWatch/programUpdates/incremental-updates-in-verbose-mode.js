@@ -555,7 +555,7 @@ Output::
 
 [[90m12:01:49 AM[0m] Project 'sample1/tests/tsconfig.json' is up to date with .d.ts files from its dependencies
 
-[[90m12:01:51 AM[0m] Updating output timestamps of project '/user/username/projects/sample1/tests/tsconfig.json'...
+[[90m12:01:50 AM[0m] Updating output timestamps of project '/user/username/projects/sample1/tests/tsconfig.json'...
 
 [[90m12:01:52 AM[0m] Found 0 errors. Watching for file changes.
 
@@ -688,8 +688,6 @@ function someFn() { }
   "size": 1493
 }
 
-//// [/user/username/projects/sample1/tests/index.js] file changed its modified time
-//// [/user/username/projects/sample1/tests/index.d.ts] file changed its modified time
 //// [/user/username/projects/sample1/tests/tsconfig.tsbuildinfo] file changed its modified time
 
 fileExists:: {
@@ -714,8 +712,6 @@ getModifiedTimes:: {
 } 
 
 setModifiedTimes:: {
- "/user/username/projects/sample1/tests/index.js": 1,
- "/user/username/projects/sample1/tests/index.d.ts": 1,
  "/user/username/projects/sample1/tests/tsconfig.tsbuildinfo": 1
 } 
 

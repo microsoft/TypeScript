@@ -861,8 +861,6 @@ File '/user/username/projects/myproject/packages/pkg2/const.cts' exist - use it 
 File '/a/lib/package.json' does not exist.
 File '/a/package.json' does not exist.
 File '/package.json' does not exist.
-[[90m12:01:49 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/packages/pkg2/tsconfig.json'...
-
 
 
 Program root files: ["/user/username/projects/myproject/packages/pkg2/const.cts","/user/username/projects/myproject/packages/pkg2/index.cts"]
@@ -913,8 +911,6 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
-//// [/user/username/projects/myproject/packages/pkg2/build/const.cjs] file changed its modified time
-//// [/user/username/projects/myproject/packages/pkg2/build/const.d.cts] file changed its modified time
 //// [/user/username/projects/myproject/packages/pkg2/build/tsconfig.tsbuildinfo]
 {"program":{"fileNames":["../../../../../../../a/lib/lib.es2020.full.d.ts","../const.cts","../index.cts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-11202312776-export type TheNum = 42;","signature":"-9649133742-export declare type TheNum = 42;\n","impliedFormat":1},{"version":"-9668872159-export type { TheNum } from './const.cjs';","signature":"-9835135925-export type { TheNum } from './const.cjs';\n","impliedFormat":1}],"options":{"composite":true,"module":100,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3]},"version":"FakeTSVersion"}
 
@@ -1013,7 +1009,4 @@ getModifiedTimes:: {
  "/user/username/projects/myproject/packages/pkg2/build/tsconfig.tsbuildinfo": 1
 } 
 
-setModifiedTimes:: {
- "/user/username/projects/myproject/packages/pkg2/build/const.cjs": 1,
- "/user/username/projects/myproject/packages/pkg2/build/const.d.cts": 1
-} 
+setModifiedTimes:: {} 
