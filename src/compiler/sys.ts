@@ -1663,7 +1663,7 @@ namespace ts {
                             if (watcher) {
                                 sysLog(`sysLog:: ${relativeName}:: Resetting watch on present file after rename event`);
                                 watcher.close();
-                                watcher = watchPresentFileSystemEntryWithFsWatchFile();
+                                watcher = watchPresentFileSystemEntry();
                             }
                         }
                     }
