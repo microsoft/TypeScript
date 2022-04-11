@@ -1092,7 +1092,7 @@ namespace ts {
         }
         return factory.createYieldExpression(asteriskToken, expression);
     } as {
-        (expression?: Expression): YieldExpression;
+        (expression?: Expression | undefined): YieldExpression;
         (asteriskToken: AsteriskToken | undefined, expression: Expression): YieldExpression;
     }, factoryDeprecation);
 
