@@ -1134,12 +1134,15 @@ namespace ts {
                         sourceMaps
                     };
                 }
-                else if (state.affectedFilesPendingEmitKind) {
+                // In non Emit builder, clear affected files pending emit
+                else if (state.affectedFilesPendingEmitKind?.size) {
                     Debug.assert(kind === BuilderProgramKind.SemanticDiagnosticsBuilderProgram);
-                    // Remove files from affected files pending emit
-                    if (!emitOnlyDtsFiles || !find(state.affectedFilesPendingEmit!, (path, index) =>
-                        index >= state.affectedFilesPendingEmitIndex! &&
-                        state.affectedFilesPendingEmitKind!.get(path) !== BuilderFileEmit.DtsOnly)) {
+                    // State can clear affected files pending emit if
+                    if (!emitOnlyDtsFiles // If we are doing complete emit, affected files pending emit can be cleared
+                        // If every file pending emit is pending on only dts emit
+                        || every(state.affectedFilesPendingEmit, (path, index) =>
+                            index < state.affectedFilesPendingEmitIndex! ||
+                            state.affectedFilesPendingEmitKind!.get(path) === BuilderFileEmit.DtsOnly)) {
                         clearAffectedFilesPendingEmit(state);
                     }
                 }
