@@ -169,7 +169,7 @@ createReducer(
 // #25814
 
 type R = {
->R : R
+>R : { a: (x: number) => void; b: (x: string) => void; }
 
   a: (x: number) => void;
 >a : (x: number) => void
@@ -182,7 +182,7 @@ type R = {
 };
 
 type O = {
->O : O
+>O : { on<P extends keyof R>(x: P, callback: R[P]): void; }
 
   on<P extends keyof R>(x: P, callback: R[P]): void;
 >on : <P extends keyof R>(x: P, callback: R[P]) => void
@@ -329,7 +329,7 @@ passContentsToFunc(outerBoxOfString, box => box.value);
 // Repro from #32349
 
 type DooDad = 'SOMETHING' | 'ELSE' ;
->DooDad : DooDad
+>DooDad : "SOMETHING" | "ELSE"
 
 class Interesting {
 >Interesting : Interesting

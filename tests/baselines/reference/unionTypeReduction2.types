@@ -166,14 +166,14 @@ function f6(x: (x: 'hello' | undefined) => void, y: (x?: string) => void) {
 }
 
 type A = {
->A : A
+>A : { f(): void; }
 
     f(): void;
 >f : () => void
 }
 
 type B = {
->B : B
+>B : { f(x?: string | undefined): void; g(): void; }
 
     f(x?: string): void;
 >f : (x?: string | undefined) => void

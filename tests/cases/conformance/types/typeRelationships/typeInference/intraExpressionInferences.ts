@@ -92,6 +92,14 @@ test({
     }
 });
 
+test({
+    a: () => 0,
+    b: (a) => a,
+    c: (b) => {
+        const x: number = b;
+    }
+});
+
 // Repro from #41712
 
 class Wrapper<T = any> {
@@ -176,3 +184,18 @@ example({
     fetch: (params: Params, foo) => 123,
     map: (number) => String(number)
 });
+
+// Repro from #45255
+
+declare const branch:
+  <T, U extends T>(_: { test: T, if: (t: T) => t is U, then: (u: U) => void }) => void
+
+declare const x: "a" | "b"
+
+branch({
+  test: x,
+  if: (t): t is "a" => t === "a",
+  then: u => {
+    let test1: "a" = u
+  }
+})

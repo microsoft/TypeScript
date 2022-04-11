@@ -90,7 +90,7 @@ class BigMonkey extends Monkey<BigBanana> {
 // Another repro
 
 type Item = {
->Item : Item
+>Item : { (): string; x: string; }
 
     (): string;
     x: string;

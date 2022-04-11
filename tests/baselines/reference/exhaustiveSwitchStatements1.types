@@ -155,7 +155,7 @@ interface Triangle { kind: "triangle"; side: number; }
 >side : number
 
 type Shape = Square | Rectangle | Circle | Triangle;
->Shape : Shape
+>Shape : Square | Rectangle | Circle | Triangle
 
 function area(s: Shape): number {
 >area : (s: Shape) => number
@@ -481,7 +481,7 @@ interface Circle2 {
 }
 
 type Shape2 = Square2 | Circle2;
->Shape2 : Shape2
+>Shape2 : Square2 | Circle2
 
 function withDefault(s1: Shape2, s2: Shape2): string {
 >withDefault : (s1: Shape2, s2: Shape2) => string
@@ -665,7 +665,7 @@ function foo() {
 // Repro from #35070
 
 type O = {
->O : O
+>O : { a: number; b: number; }
 
     a: number,
 >a : number
@@ -675,7 +675,7 @@ type O = {
 
 };
 type K = keyof O | 'c';
->K : K
+>K : keyof O | "c"
 
 function ff(o: O, k: K) {
 >ff : (o: O, k: K) => number
@@ -706,7 +706,7 @@ function ff(o: O, k: K) {
 
 // Repro from #35431
 type A = { kind: "abc" } | { kind: "def" };
->A : A
+>A : { kind: "abc"; } | { kind: "def"; }
 >kind : "abc"
 >kind : "def"
 

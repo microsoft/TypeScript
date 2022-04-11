@@ -1,6 +1,6 @@
 === tests/cases/compiler/noImplicitAnyDestructuringInPrivateMethod.ts ===
 type Arg = {
->Arg : Arg
+>Arg : { a: number; }
 
     a: number;
 >a : number

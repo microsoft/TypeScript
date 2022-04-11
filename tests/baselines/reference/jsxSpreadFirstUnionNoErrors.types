@@ -3,7 +3,7 @@ import React from "react";
 >React : typeof React
 
 type InfoProps =
->InfoProps : InfoProps
+>InfoProps : { status: "hidden"; } | { status: "visible"; content: string; }
 
 | { status: "hidden" }
 >status : "hidden"

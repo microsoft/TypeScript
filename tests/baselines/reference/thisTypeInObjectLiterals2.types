@@ -72,7 +72,7 @@ let obj1 = {
 // contextual type.
 
 type Point = {
->Point : Point
+>Point : { x: number; y: number; z?: number | undefined; moveBy(dx: number, dy: number, dz?: number | undefined): void; }
 
     x: number;
 >x : number

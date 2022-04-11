@@ -168,7 +168,7 @@ let spreadFunc = { ...(function () { }) };
 >function () { } : () => void
 
 type Header = { head: string, body: string, authToken: string }
->Header : Header
+>Header : { head: string; body: string; authToken: string; }
 >head : string
 >body : string
 >authToken : string

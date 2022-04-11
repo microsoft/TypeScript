@@ -1,21 +1,21 @@
 === tests/cases/conformance/types/conditional/conditionalTypes1.ts ===
 type T00 = Exclude<"a" | "b" | "c" | "d", "a" | "c" | "f">;  // "b" | "d"
->T00 : T00
+>T00 : "b" | "d"
 
 type T01 = Extract<"a" | "b" | "c" | "d", "a" | "c" | "f">;  // "a" | "c"
->T01 : T01
+>T01 : "a" | "c"
 
 type T02 = Exclude<string | number | (() => void), Function>;  // string | number
->T02 : T02
+>T02 : string | number
 
 type T03 = Extract<string | number | (() => void), Function>;  // () => void
 >T03 : () => void
 
 type T04 = NonNullable<string | number | undefined>;  // string | number
->T04 : T04
+>T04 : string | number
 
 type T05 = NonNullable<(() => string) | string[] | null | undefined>;  // (() => string) | string[]
->T05 : T05
+>T05 : (() => string) | string[]
 >null : null
 
 function f1<T>(x: T, y: NonNullable<T>) {
@@ -100,7 +100,7 @@ function f4<T extends { x: string | undefined }>(x: T["x"], y: NonNullable<T["x"
 }
 
 type Options = { k: "a", a: number } | { k: "b", b: string } | { k: "c", c: boolean };
->Options : Options
+>Options : { k: "a"; a: number; } | { k: "b"; b: string; } | { k: "c"; c: boolean; }
 >k : "a"
 >a : number
 >k : "b"
@@ -113,7 +113,7 @@ type T10 = Exclude<Options, { k: "a" | "b" }>;  // { k: "c", c: boolean }
 >k : "a" | "b"
 
 type T11 = Extract<Options, { k: "a" | "b" }>;  // { k: "a", a: number } | { k: "b", b: string }
->T11 : T11
+>T11 : { k: "a"; a: number; } | { k: "b"; b: string; }
 >k : "a" | "b"
 
 type T12 = Exclude<Options, { k: "a" } | { k: "b" }>;  // { k: "c", c: boolean }
@@ -122,12 +122,12 @@ type T12 = Exclude<Options, { k: "a" } | { k: "b" }>;  // { k: "c", c: boolean }
 >k : "b"
 
 type T13 = Extract<Options, { k: "a" } | { k: "b" }>;  // { k: "a", a: number } | { k: "b", b: string }
->T13 : T13
+>T13 : { k: "a"; a: number; } | { k: "b"; b: string; }
 >k : "a"
 >k : "b"
 
 type T14 = Exclude<Options, { q: "a" }>;  // Options
->T14 : T14
+>T14 : { k: "a"; a: number; } | { k: "b"; b: string; } | { k: "c"; c: boolean; }
 >q : "a"
 
 type T15 = Extract<Options, { q: "a" }>;  // never
@@ -150,13 +150,13 @@ type OptionsOfKind<K extends Options["k"]> = Extract<Options, { k: K }>;
 >k : K
 
 type T16 = OptionsOfKind<"a" | "b">;  // { k: "a", a: number } | { k: "b", b: string }
->T16 : T16
+>T16 : { k: "a"; a: number; } | { k: "b"; b: string; }
 
 type Select<T, K extends keyof T, V extends T[K]> = Extract<T, { [P in K]: V }>;
 >Select : Select<T, K, V>
 
 type T17 = Select<Options, "k", "a" | "b">;  // // { k: "a", a: number } | { k: "b", b: string }
->T17 : T17
+>T17 : { k: "a"; a: number; } | { k: "b"; b: string; }
 
 type TypeName<T> =
 >TypeName : TypeName<T>
@@ -169,7 +169,7 @@ type TypeName<T> =
     "object";
 
 type T20 = TypeName<string | (() => void)>;  // "string" | "function"
->T20 : T20
+>T20 : "string" | "function"
 
 type T21 = TypeName<any>;  // "string" | "number" | "boolean" | "undefined" | "function" | "object"
 >T21 : "string" | "number" | "boolean" | "undefined" | "object" | "function"
@@ -239,10 +239,10 @@ type NonFunctionProperties<T> = Pick<T, NonFunctionPropertyNames<T>>;
 >NonFunctionProperties : NonFunctionProperties<T>
 
 type T30 = FunctionProperties<Part>;
->T30 : T30
+>T30 : { updatePart: (newName: string) => void; }
 
 type T31 = NonFunctionProperties<Part>;
->T31 : T31
+>T31 : { id: number; name: string; subparts: Part[]; }
 
 function f7<T>(x: T, y: FunctionProperties<T>, z: NonFunctionProperties<T>) {
 >f7 : <T>(x: T, y: FunctionProperties<T>, z: NonFunctionProperties<T>) => void
@@ -559,7 +559,7 @@ type N2 = Not<true>;  // false
 >true : true
 
 type N3 = Not<boolean>;  // boolean
->N3 : N3
+>N3 : boolean
 
 type A1 = And<false, false>;  // false
 >A1 : false
@@ -590,7 +590,7 @@ type A6 = And<false, boolean>;  // false
 >false : false
 
 type A7 = And<boolean, true>;  // boolean
->A7 : A7
+>A7 : boolean
 >true : true
 
 type A8 = And<true, boolean>;  // boolean
@@ -598,7 +598,7 @@ type A8 = And<true, boolean>;  // boolean
 >true : true
 
 type A9 = And<boolean, boolean>;  // boolean
->A9 : A9
+>A9 : boolean
 
 type O1 = Or<false, false>;  // false
 >O1 : false
@@ -621,7 +621,7 @@ type O4 = Or<true, true>;  // true
 >true : true
 
 type O5 = Or<boolean, false>;  // boolean
->O5 : O5
+>O5 : boolean
 >false : false
 
 type O6 = Or<false, boolean>;  // boolean
@@ -637,7 +637,7 @@ type O8 = Or<true, boolean>;  // true
 >true : true
 
 type O9 = Or<boolean, boolean>;  // boolean
->O9 : O9
+>O9 : boolean
 
 type T40 = never extends never ? true : false;  // true
 >T40 : true
@@ -977,13 +977,13 @@ type NonFooKeys2<T extends object> = Exclude<keyof T, 'foo'>;
 >NonFooKeys2 : NonFooKeys2<T>
 
 type Test1 = NonFooKeys1<{foo: 1, bar: 2, baz: 3}>;  // "bar" | "baz"
->Test1 : Test1
+>Test1 : "bar" | "baz"
 >foo : 1
 >bar : 2
 >baz : 3
 
 type Test2 = NonFooKeys2<{foo: 1, bar: 2, baz: 3}>;  // "bar" | "baz"
->Test2 : Test2
+>Test2 : "bar" | "baz"
 >foo : 1
 >bar : 2
 >baz : 3
@@ -997,7 +997,7 @@ interface Bar2 { bar: string; }
 >bar : string
 
 type FooBar = Foo2 | Bar2;
->FooBar : FooBar
+>FooBar : Foo2 | Bar2
 
 declare interface ExtractFooBar<FB extends FooBar> { }
 
