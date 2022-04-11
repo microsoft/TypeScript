@@ -81,7 +81,7 @@ namespace ts {
         export interface FileInfo {
             readonly version: string;
             signature: string | undefined;
-            affectsGlobalScope: boolean | undefined;
+            affectsGlobalScope: true | undefined;
             impliedFormat: number | undefined;
         }
 
