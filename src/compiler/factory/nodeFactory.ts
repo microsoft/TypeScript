@@ -1093,13 +1093,12 @@ namespace ts {
         //
 
         // @api
-        function createQualifiedName(left: EntityName, right: string | Identifier) {
+        function createQualifiedName(left: EntityName, right: string | MemberName) {
             const node = createBaseNode<QualifiedName>(SyntaxKind.QualifiedName);
             node.left = left;
             node.right = asName(right);
             node.transformFlags |=
-                propagateChildFlags(node.left) |
-                propagateIdentifierNameFlags(node.right);
+                propagateChildFlags(node.left) | (isIdentifier(node.right) ? propagateIdentifierNameFlags(node.right) : propagateChildFlags(node.right));
             return node;
         }
 

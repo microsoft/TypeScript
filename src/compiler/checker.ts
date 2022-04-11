@@ -5490,16 +5490,20 @@ namespace ts {
                                 qualifier = factory.updateIdentifier(qualifier, typeArguments);
                             }
                             else {
-                                qualifier = factory.updateQualifiedName(qualifier,
-                                    qualifier.left,
-                                    factory.updateIdentifier(qualifier.right, typeArguments));
+                                if (isIdentifier(qualifier.right)) {
+                                    qualifier = factory.updateQualifiedName(qualifier,
+                                        qualifier.left,
+                                        factory.updateIdentifier(qualifier.right, typeArguments));
+                                }
                             }
                         }
                         typeArguments = ref.typeArguments;
                         // then move qualifiers
                         const ids = getAccessStack(ref);
                         for (const id of ids) {
-                            qualifier = qualifier ? factory.createQualifiedName(qualifier, id) : id;
+                            if (isIdentifier(id)) {
+                                qualifier = qualifier ? factory.createQualifiedName(qualifier, id) : id;
+                            }
                         }
                         return factory.updateImportTypeNode(
                             root,
@@ -5516,9 +5520,11 @@ namespace ts {
                             typeName = factory.updateIdentifier(typeName, typeArguments);
                         }
                         else {
-                            typeName = factory.updateQualifiedName(typeName,
-                                typeName.left,
-                                factory.updateIdentifier(typeName.right, typeArguments));
+                            if (isIdentifier(typeName.right)) {
+                                typeName = factory.updateQualifiedName(typeName,
+                                    typeName.left,
+                                    factory.updateIdentifier(typeName.right, typeArguments));
+                            }
                         }
                         typeArguments = ref.typeArguments;
                         // then move qualifiers
@@ -5533,7 +5539,7 @@ namespace ts {
                     }
                 }
 
-                function getAccessStack(ref: TypeReferenceNode): Identifier[] {
+                function getAccessStack(ref: TypeReferenceNode): MemberName[] {
                     let state = ref.typeName;
                     const ids = [];
                     while (!isIdentifier(state)) {
@@ -5920,12 +5926,7 @@ namespace ts {
                 const modifiers = !(context.flags & NodeBuilderFlags.OmitParameterModifiers) && preserveModifierFlags && parameterDeclaration && parameterDeclaration.modifiers ? parameterDeclaration.modifiers.map(factory.cloneNode) : undefined;
                 const isRest = parameterDeclaration && isRestParameter(parameterDeclaration) || getCheckFlags(parameterSymbol) & CheckFlags.RestParameter;
                 const dotDotDotToken = isRest ? factory.createToken(SyntaxKind.DotDotDotToken) : undefined;
-                const name = parameterDeclaration ? parameterDeclaration.name ?
-                    parameterDeclaration.name.kind === SyntaxKind.Identifier ? setEmitFlags(factory.cloneNode(parameterDeclaration.name), EmitFlags.NoAsciiEscaping) :
-                    parameterDeclaration.name.kind === SyntaxKind.QualifiedName ? setEmitFlags(factory.cloneNode(parameterDeclaration.name.right), EmitFlags.NoAsciiEscaping) :
-                    cloneBindingName(parameterDeclaration.name) :
-                    symbolName(parameterSymbol) :
-                    symbolName(parameterSymbol);
+                const name = createParameterName(parameterSymbol, parameterDeclaration);
                 const isOptional = parameterDeclaration && isOptionalParameter(parameterDeclaration) || getCheckFlags(parameterSymbol) & CheckFlags.OptionalParameter;
                 const questionToken = isOptional ? factory.createToken(SyntaxKind.QuestionToken) : undefined;
                 const parameterNode = factory.createParameterDeclaration(
@@ -5938,6 +5939,19 @@ namespace ts {
                     /*initializer*/ undefined);
                 context.approximateLength += symbolName(parameterSymbol).length + 3;
                 return parameterNode;
+
+                function createParameterName(symbol: Symbol, declaration: ParameterDeclaration | JSDocParameterTag | undefined): string | BindingName {
+                    if (declaration && declaration.name) {
+                        if (isIdentifier(declaration.name)) {
+                            return setEmitFlags(factory.cloneNode(declaration.name), EmitFlags.NoAsciiEscaping);
+                        }
+                        if (isQualifiedName(declaration.name)) {
+                            return isIdentifier(declaration.name.right) ? setEmitFlags(factory.cloneNode(declaration.name.right), EmitFlags.NoAsciiEscaping) : symbolName(symbol);
+                        }
+                        return cloneBindingName(declaration.name);
+                    }
+                    return symbolName(symbol);
+                }
 
                 function cloneBindingName(node: BindingName): BindingName {
                     return elideInitializerAndSetEmitFlags(node) as BindingName;
@@ -6241,7 +6255,9 @@ namespace ts {
                     if (!nonRootParts || isEntityName(nonRootParts)) {
                         if (nonRootParts) {
                             const lastId = isIdentifier(nonRootParts) ? nonRootParts : nonRootParts.right;
-                            lastId.typeArguments = undefined;
+                            if (isIdentifier(lastId)) {
+                                lastId.typeArguments = undefined;
+                            }
                         }
                         return factory.createImportTypeNode(lit, assertion, nonRootParts as EntityName, typeParameterNodes as readonly TypeNode[], isTypeOf);
                     }
@@ -6261,9 +6277,12 @@ namespace ts {
                 }
                 else {
                     const lastId = isIdentifier(entityName) ? entityName : entityName.right;
-                    const lastTypeArgs = lastId.typeArguments;
-                    lastId.typeArguments = undefined;
-                    return factory.createTypeReferenceNode(entityName, lastTypeArgs as NodeArray<TypeNode>);
+                    let lastTypeArgs;
+                    if (isIdentifier(lastId)) {
+                        lastTypeArgs = lastId.typeArguments as NodeArray<TypeNode>;
+                        lastId.typeArguments = undefined;
+                    }
+                    return factory.createTypeReferenceNode(entityName, lastTypeArgs);
                 }
 
                 function createAccessFromSymbolChain(chain: Symbol[], index: number, stopper: number): EntityName | IndexedAccessTypeNode {
@@ -16152,7 +16171,7 @@ namespace ts {
             return links.resolvedType;
         }
 
-        function getIdentifierChain(node: EntityName): Identifier[] {
+        function getIdentifierChain(node: EntityName): MemberName[] {
             if (isIdentifier(node)) {
                 return [node];
             }
@@ -16183,9 +16202,9 @@ namespace ts {
                 }
                 const moduleSymbol = resolveExternalModuleSymbol(innerModuleSymbol, /*dontResolveAlias*/ false);
                 if (!nodeIsMissing(node.qualifier)) {
-                    const nameStack: Identifier[] = getIdentifierChain(node.qualifier!);
+                    const nameStack: MemberName[] = getIdentifierChain(node.qualifier!);
                     let currentNamespace = moduleSymbol;
-                    let current: Identifier | undefined;
+                    let current: MemberName | undefined;
                     while (current = nameStack.shift()) {
                         const meaning = nameStack.length ? SymbolFlags.Namespace : targetMeaning;
                         // typeof a.b.c is normally resolved using `checkExpression` which in turn defers to `checkQualifiedName`
@@ -29315,7 +29334,7 @@ namespace ts {
             return symbolResult && symbolName(symbolResult);
         }
 
-        function getSuggestedSymbolForNonexistentModule(name: Identifier, targetModule: Symbol): Symbol | undefined {
+        function getSuggestedSymbolForNonexistentModule(name: MemberName, targetModule: Symbol): Symbol | undefined {
             return targetModule.exports && getSpellingSuggestionForName(idText(name), getExportsOfModuleAsArray(targetModule), SymbolFlags.ModuleMember);
         }
 

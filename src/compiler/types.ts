@@ -1166,7 +1166,7 @@ namespace ts {
     export interface QualifiedName extends Node {
         readonly kind: SyntaxKind.QualifiedName;
         readonly left: EntityName;
-        readonly right: Identifier;
+        readonly right: MemberName;
         /*@internal*/ jsdocDotPos?: number;                      // QualifiedName occurs in JSDoc-style generic: Id1.Id2.<T>
     }
 
@@ -4326,7 +4326,7 @@ namespace ts {
         /* @internal */ getSuggestionForNonexistentProperty(name: MemberName | string, containingType: Type): string | undefined;
         /* @internal */ getSuggestedSymbolForNonexistentSymbol(location: Node, name: string, meaning: SymbolFlags): Symbol | undefined;
         /* @internal */ getSuggestionForNonexistentSymbol(location: Node, name: string, meaning: SymbolFlags): string | undefined;
-        /* @internal */ getSuggestedSymbolForNonexistentModule(node: Identifier, target: Symbol): Symbol | undefined;
+        /* @internal */ getSuggestedSymbolForNonexistentModule(node: MemberName, target: Symbol): Symbol | undefined;
         /* @internal */ getSuggestedSymbolForNonexistentClassMember(name: string, baseType: Type): Symbol | undefined;
         /* @internal */ getSuggestionForNonexistentExport(node: Identifier, target: Symbol): string | undefined;
         getBaseConstraintOfType(type: Type): Type | undefined;
@@ -7257,8 +7257,8 @@ namespace ts {
         // Names
         //
 
-        createQualifiedName(left: EntityName, right: string | Identifier): QualifiedName;
-        updateQualifiedName(node: QualifiedName, left: EntityName, right: Identifier): QualifiedName;
+        createQualifiedName(left: EntityName, right: string | MemberName): QualifiedName;
+        updateQualifiedName(node: QualifiedName, left: EntityName, right: MemberName): QualifiedName;
         createComputedPropertyName(expression: Expression): ComputedPropertyName;
         updateComputedPropertyName(node: ComputedPropertyName, expression: Expression): ComputedPropertyName;
 

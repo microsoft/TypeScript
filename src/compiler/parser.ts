@@ -2843,7 +2843,7 @@ namespace ts {
                 entity = finishNode(
                     factory.createQualifiedName(
                         entity,
-                        parseRightSideOfDot(allowReservedWords, allowPrivateIdentifiers) as Identifier
+                        parseRightSideOfDot(allowReservedWords, allowPrivateIdentifiers)
                     ),
                     pos
                 );

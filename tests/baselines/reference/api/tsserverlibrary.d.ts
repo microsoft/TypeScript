@@ -659,7 +659,7 @@ declare namespace ts {
     export interface QualifiedName extends Node {
         readonly kind: SyntaxKind.QualifiedName;
         readonly left: EntityName;
-        readonly right: Identifier;
+        readonly right: MemberName;
     }
     export type EntityName = Identifier | QualifiedName;
     export type PropertyName = Identifier | StringLiteral | NumericLiteral | ComputedPropertyName | PrivateIdentifier;
@@ -3395,8 +3395,8 @@ declare namespace ts {
         createFalse(): FalseLiteral;
         createModifier<T extends ModifierSyntaxKind>(kind: T): ModifierToken<T>;
         createModifiersFromModifierFlags(flags: ModifierFlags): Modifier[] | undefined;
-        createQualifiedName(left: EntityName, right: string | Identifier): QualifiedName;
-        updateQualifiedName(node: QualifiedName, left: EntityName, right: Identifier): QualifiedName;
+        createQualifiedName(left: EntityName, right: string | MemberName): QualifiedName;
+        updateQualifiedName(node: QualifiedName, left: EntityName, right: MemberName): QualifiedName;
         createComputedPropertyName(expression: Expression): ComputedPropertyName;
         updateComputedPropertyName(node: ComputedPropertyName, expression: Expression): ComputedPropertyName;
         createTypeParameterDeclaration(modifiers: readonly Modifier[] | undefined, name: string | Identifier, constraint?: TypeNode, defaultType?: TypeNode): TypeParameterDeclaration;
@@ -10803,9 +10803,9 @@ declare namespace ts {
     /** @deprecated Use `factory.createModifiersFromModifierFlags` or the factory supplied by your transformation context instead. */
     const createModifiersFromModifierFlags: (flags: ModifierFlags) => Modifier[] | undefined;
     /** @deprecated Use `factory.createQualifiedName` or the factory supplied by your transformation context instead. */
-    const createQualifiedName: (left: EntityName, right: string | Identifier) => QualifiedName;
+    const createQualifiedName: (left: EntityName, right: string | MemberName) => QualifiedName;
     /** @deprecated Use `factory.updateQualifiedName` or the factory supplied by your transformation context instead. */
-    const updateQualifiedName: (node: QualifiedName, left: EntityName, right: Identifier) => QualifiedName;
+    const updateQualifiedName: (node: QualifiedName, left: EntityName, right: MemberName) => QualifiedName;
     /** @deprecated Use `factory.createComputedPropertyName` or the factory supplied by your transformation context instead. */
     const createComputedPropertyName: (expression: Expression) => ComputedPropertyName;
     /** @deprecated Use `factory.updateComputedPropertyName` or the factory supplied by your transformation context instead. */
