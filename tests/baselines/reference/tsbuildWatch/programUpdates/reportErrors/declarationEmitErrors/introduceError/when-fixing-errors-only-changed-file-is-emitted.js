@@ -155,12 +155,7 @@ export declare class myClass {
 }
 
 
-fileExists:: {
- "/user/username/projects/solution/app/filewitherror.ts": 1,
- "/user/username/projects/solution/app/filewithouterror.ts": 1,
- "/user/username/projects/solution/app/filewitherror.js": 1,
- "/user/username/projects/solution/app/filewitherror.d.ts": 1
-} 
+fileExists:: {} 
 
 directoryExists:: {
  "/user/username/projects/solution/app/node_modules/@types": 1,
@@ -173,7 +168,9 @@ directoryExists:: {
 
 getModifiedTimes:: {
  "/user/username/projects/solution/app/filewitherror.ts": 1,
- "/user/username/projects/solution/app/filewithouterror.ts": 1
+ "/user/username/projects/solution/app/filewithouterror.ts": 1,
+ "/user/username/projects/solution/app/filewitherror.js": 1,
+ "/user/username/projects/solution/app/filewitherror.d.ts": 1
 } 
 
 setModifiedTimes:: {} 
@@ -240,11 +237,7 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 
-fileExists:: {
- "/user/username/projects/solution/app/filewitherror.ts": 1,
- "/user/username/projects/solution/app/filewithouterror.ts": 1,
- "/user/username/projects/solution/app/filewitherror.js": 1
-} 
+fileExists:: {} 
 
 directoryExists:: {
  "/user/username/projects/solution/app/node_modules/@types": 1,
@@ -326,12 +319,7 @@ exitCode:: ExitStatus.undefined
 //// [/user/username/projects/solution/app/tsconfig.tsbuildinfo] file written with same contents
 //// [/user/username/projects/solution/app/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
 
-fileExists:: {
- "/user/username/projects/solution/app/filewitherror.ts": 1,
- "/user/username/projects/solution/app/filewithouterror.ts": 1,
- "/user/username/projects/solution/app/filewitherror.js": 1,
- "/user/username/projects/solution/app/filewitherror.d.ts": 1
-} 
+fileExists:: {} 
 
 directoryExists:: {
  "/user/username/projects/solution/app/node_modules/@types": 1,

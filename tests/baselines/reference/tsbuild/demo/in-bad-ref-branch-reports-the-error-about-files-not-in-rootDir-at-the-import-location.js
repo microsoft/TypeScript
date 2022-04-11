@@ -222,18 +222,19 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 getModifiedTime:: {
  "/src/core/utilities.ts": 1,
+ "/src/lib/core/utilities.js": 1,
  "/src/animals/animal.ts": 1,
  "/src/animals/dog.ts": 1,
  "/src/animals/index.ts": 1,
- "/src/zoo/zoo.ts": 1
+ "/src/lib/animals/animal.js": 1,
+ "/src/zoo/zoo.ts": 1,
+ "/src/lib/zoo/zoo.js": 1
 }
 
 setModifiedTime:: {}
 
 fileExists:: {
  "/src/tsconfig-base.json": 3,
- "/src/core/utilities.ts": 1,
- "/src/lib/core/utilities.js": 1,
  "/src/animals.ts": 1,
  "/src/animals.tsx": 1,
  "/src/animals.d.ts": 1,
@@ -241,9 +242,7 @@ fileExists:: {
  "/src/animals/index.ts": 1,
  "/src/animals/animal.ts": 1,
  "/src/animals/dog.ts": 1,
- "/src/lib/animals/animal.js": 1,
- "/src/zoo/zoo.ts": 1,
- "/src/lib/zoo/zoo.js": 1
+ "/src/core/utilities.ts": 1
 }
 
 directoryExists:: {

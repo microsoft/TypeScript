@@ -224,14 +224,7 @@ declare let z: number;
 
 fileExists:: {
  "/a/b/alpha.tsconfig.json": 2,
- "/a/b/bravo.tsconfig.json": 1,
- "/a/b/commonfile1.ts": 1,
- "/a/b/commonfile2.ts": 1,
- "/a/b/commonfile1.js": 1,
- "/a/b/commonfile1.d.ts": 1,
- "/a/b/other.ts": 1,
- "/a/b/other.js": 1,
- "/a/b/other.d.ts": 1
+ "/a/b/bravo.tsconfig.json": 1
 } 
 
 directoryExists:: {
@@ -243,7 +236,11 @@ directoryExists:: {
 getModifiedTimes:: {
  "/a/b/commonfile1.ts": 1,
  "/a/b/commonfile2.ts": 1,
- "/a/b/other.ts": 1
+ "/a/b/commonfile1.js": 1,
+ "/a/b/commonfile1.d.ts": 1,
+ "/a/b/other.ts": 1,
+ "/a/b/other.js": 1,
+ "/a/b/other.d.ts": 1
 } 
 
 setModifiedTimes:: {} 
@@ -320,14 +317,7 @@ exitCode:: ExitStatus.undefined
 
 fileExists:: {
  "/a/b/alpha.tsconfig.json": 1,
- "/a/b/bravo.tsconfig.json": 1,
- "/a/b/commonfile1.ts": 1,
- "/a/b/commonfile2.ts": 1,
- "/a/b/commonfile1.js": 1,
- "/a/b/commonfile1.d.ts": 1,
- "/a/b/commonfile2.js": 1,
- "/a/b/commonfile2.d.ts": 1,
- "/a/b/project1.tsconfig.tsbuildinfo": 1
+ "/a/b/bravo.tsconfig.json": 1
 } 
 
 directoryExists:: {
@@ -418,12 +408,7 @@ exitCode:: ExitStatus.undefined
 //// [/a/b/other.d.ts] file changed its modified time
 //// [/a/b/project2.tsconfig.tsbuildinfo] file changed its modified time
 
-fileExists:: {
- "/a/b/other.ts": 1,
- "/a/b/other.js": 1,
- "/a/b/other.d.ts": 1,
- "/a/b/project2.tsconfig.tsbuildinfo": 1
-} 
+fileExists:: {} 
 
 directoryExists:: {
  "/a/b/node_modules/@types": 1,
@@ -517,11 +502,7 @@ exitCode:: ExitStatus.undefined
 
 fileExists:: {
  "/a/b/bravo.tsconfig.json": 1,
- "/a/b/alpha.tsconfig.json": 1,
- "/a/b/other.ts": 1,
- "/a/b/other.js": 1,
- "/a/b/other.d.ts": 1,
- "/a/b/project2.tsconfig.tsbuildinfo": 1
+ "/a/b/alpha.tsconfig.json": 1
 } 
 
 directoryExists:: {
@@ -633,13 +614,7 @@ var z = 0;
 
 
 fileExists:: {
- "/a/b/alpha.tsconfig.json": 1,
- "/a/b/commonfile1.ts": 1,
- "/a/b/commonfile2.ts": 1,
- "/a/b/other.ts": 1,
- "/a/b/commonfile1.js": 1,
- "/a/b/commonfile2.js": 1,
- "/a/b/other.js": 1
+ "/a/b/alpha.tsconfig.json": 1
 } 
 
 directoryExists:: {
@@ -733,14 +708,7 @@ exitCode:: ExitStatus.undefined
 //// [/a/b/project1.tsconfig.tsbuildinfo] file changed its modified time
 
 fileExists:: {
- "/a/b/alpha.tsconfig.json": 1,
- "/a/b/commonfile1.ts": 1,
- "/a/b/commonfile2.ts": 1,
- "/a/b/commonfile1.js": 1,
- "/a/b/commonfile1.d.ts": 1,
- "/a/b/commonfile2.js": 1,
- "/a/b/commonfile2.d.ts": 1,
- "/a/b/project1.tsconfig.tsbuildinfo": 1
+ "/a/b/alpha.tsconfig.json": 1
 } 
 
 directoryExists:: {
@@ -837,10 +805,7 @@ exitCode:: ExitStatus.undefined
 //// [/a/b/commonFile2.js] file changed its modified time
 //// [/a/b/other.js] file changed its modified time
 
-fileExists:: {
- "/a/b/other.ts": 1,
- "/a/b/other.js": 1
-} 
+fileExists:: {} 
 
 directoryExists:: {
  "/a/b/node_modules/@types": 1,

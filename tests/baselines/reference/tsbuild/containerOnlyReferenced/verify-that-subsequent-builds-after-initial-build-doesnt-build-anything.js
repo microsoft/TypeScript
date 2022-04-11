@@ -101,14 +101,6 @@ exitCode:: ExitStatus.Success
 
 getModifiedTime:: {
  "/src/src/folder/index.ts": 1,
- "/src/src/folder2/index.ts": 1,
- "/src/tests/index.ts": 1
-}
-
-setModifiedTime:: {}
-
-fileExists:: {
- "/src/src/folder/index.ts": 1,
  "/src/src/folder/index.js": 1,
  "/src/src/folder/index.d.ts": 1,
  "/src/src/folder2/index.ts": 1,
@@ -118,6 +110,10 @@ fileExists:: {
  "/src/tests/index.js": 1,
  "/src/tests/index.d.ts": 1
 }
+
+setModifiedTime:: {}
+
+fileExists:: {}
 
 directoryExists:: {
  "/src/src/folder/node_modules/@types": 1,
@@ -310,20 +306,7 @@ getModifiedTime:: {
 
 setModifiedTime:: {}
 
-fileExists:: {
- "/src/src/folder/index.ts": 1,
- "/src/src/folder/index.js": 1,
- "/src/src/folder/index.d.ts": 1,
- "/src/src/folder/tsconfig.tsbuildinfo": 1,
- "/src/src/folder2/index.ts": 1,
- "/src/src/folder2/index.js": 1,
- "/src/src/folder2/index.d.ts": 1,
- "/src/src/folder2/tsconfig.tsbuildinfo": 1,
- "/src/tests/index.ts": 1,
- "/src/tests/index.js": 1,
- "/src/tests/index.d.ts": 1,
- "/src/tests/tsconfig.tsbuildinfo": 1
-}
+fileExists:: {}
 
 directoryExists:: {}
 

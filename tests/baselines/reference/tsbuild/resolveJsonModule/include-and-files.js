@@ -117,21 +117,20 @@ exitCode:: ExitStatus.Success
 
 getModifiedTime:: {
  "/src/src/hello.json": 1,
- "/src/src/index.ts": 1
+ "/src/src/index.ts": 1,
+ "/src/dist/src/hello.json": 1,
+ "/src/dist/src/index.d.ts": 1
 }
 
 setModifiedTime:: {}
 
 fileExists:: {
- "/src/src/hello.json": 1,
- "/src/src/index.ts": 1,
- "/src/dist/src/hello.json": 1,
  "/src/src/hello.json.ts": 1,
  "/src/src/hello.json.tsx": 1,
  "/src/src/hello.json.d.ts": 1,
  "/src/src/hello.json.js": 1,
  "/src/src/hello.json.jsx": 1,
- "/src/dist/src/index.d.ts": 1
+ "/src/src/hello.json": 1
 }
 
 directoryExists:: {

@@ -79,11 +79,7 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 
-fileExists:: {
- "/user/username/projects/myproject/a.ts": 1,
- "/user/username/projects/myproject/b.ts": 1,
- "/user/username/projects/myproject/a.js": 1
-} 
+fileExists:: {} 
 
 directoryExists:: {
  "/user/username/projects/myproject/node_modules/@types": 1,
@@ -95,7 +91,8 @@ directoryExists:: {
 
 getModifiedTimes:: {
  "/user/username/projects/myproject/a.ts": 1,
- "/user/username/projects/myproject/b.ts": 1
+ "/user/username/projects/myproject/b.ts": 1,
+ "/user/username/projects/myproject/a.js": 1
 } 
 
 setModifiedTimes:: {} 
@@ -164,11 +161,7 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 
-fileExists:: {
- "/user/username/projects/myproject/a.ts": 1,
- "/user/username/projects/myproject/b.ts": 1,
- "/user/username/projects/myproject/a.js": 1
-} 
+fileExists:: {} 
 
 directoryExists:: {
  "/user/username/projects/myproject/node_modules/@types": 1,
@@ -180,7 +173,8 @@ directoryExists:: {
 
 getModifiedTimes:: {
  "/user/username/projects/myproject/a.ts": 1,
- "/user/username/projects/myproject/b.ts": 1
+ "/user/username/projects/myproject/b.ts": 1,
+ "/user/username/projects/myproject/a.js": 1
 } 
 
 setModifiedTimes:: {} 
@@ -240,11 +234,7 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 
-fileExists:: {
- "/user/username/projects/myproject/a.ts": 1,
- "/user/username/projects/myproject/b.ts": 1,
- "/user/username/projects/myproject/a.js": 1
-} 
+fileExists:: {} 
 
 directoryExists:: {
  "/user/username/projects/myproject/node_modules/@types": 1,
@@ -256,7 +246,8 @@ directoryExists:: {
 
 getModifiedTimes:: {
  "/user/username/projects/myproject/a.ts": 1,
- "/user/username/projects/myproject/b.ts": 1
+ "/user/username/projects/myproject/b.ts": 1,
+ "/user/username/projects/myproject/a.js": 1
 } 
 
 setModifiedTimes:: {} 
@@ -314,11 +305,7 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 
-fileExists:: {
- "/user/username/projects/myproject/a.ts": 1,
- "/user/username/projects/myproject/b.ts": 1,
- "/user/username/projects/myproject/a.js": 1
-} 
+fileExists:: {} 
 
 directoryExists:: {
  "/user/username/projects/myproject/node_modules/@types": 1,
@@ -330,7 +317,8 @@ directoryExists:: {
 
 getModifiedTimes:: {
  "/user/username/projects/myproject/a.ts": 1,
- "/user/username/projects/myproject/b.ts": 1
+ "/user/username/projects/myproject/b.ts": 1,
+ "/user/username/projects/myproject/a.js": 1
 } 
 
 setModifiedTimes:: {} 
@@ -457,12 +445,7 @@ export declare function bar(): void;
 }
 
 
-fileExists:: {
- "/user/username/projects/myproject/a.ts": 1,
- "/user/username/projects/myproject/b.ts": 1,
- "/user/username/projects/myproject/a.js": 1,
- "/user/username/projects/myproject/a.d.ts": 1
-} 
+fileExists:: {} 
 
 directoryExists:: {
  "/user/username/projects/myproject/node_modules/@types": 1,
@@ -474,7 +457,9 @@ directoryExists:: {
 
 getModifiedTimes:: {
  "/user/username/projects/myproject/a.ts": 1,
- "/user/username/projects/myproject/b.ts": 1
+ "/user/username/projects/myproject/b.ts": 1,
+ "/user/username/projects/myproject/a.js": 1,
+ "/user/username/projects/myproject/a.d.ts": 1
 } 
 
 setModifiedTimes:: {} 

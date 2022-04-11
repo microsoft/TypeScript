@@ -83,10 +83,7 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 
-fileExists:: {
- "/user/username/projects/myproject/a.js": 1,
- "/user/username/projects/myproject/b.ts": 1
-} 
+fileExists:: {} 
 
 directoryExists:: {
  "/user/username/projects/myproject/node_modules/@types": 1,
@@ -157,11 +154,7 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 
-fileExists:: {
- "/user/username/projects/myproject/a.js": 1,
- "/user/username/projects/myproject/b.ts": 1,
- "/user/username/projects/myproject/b.js": 1
-} 
+fileExists:: {} 
 
 directoryExists:: {
  "/user/username/projects/myproject/node_modules/@types": 1,
@@ -173,7 +166,8 @@ directoryExists:: {
 
 getModifiedTimes:: {
  "/user/username/projects/myproject/a.js": 2,
- "/user/username/projects/myproject/b.ts": 1
+ "/user/username/projects/myproject/b.ts": 1,
+ "/user/username/projects/myproject/b.js": 1
 } 
 
 setModifiedTimes:: {} 
@@ -239,11 +233,7 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 
-fileExists:: {
- "/user/username/projects/myproject/a.js": 1,
- "/user/username/projects/myproject/b.ts": 1,
- "/user/username/projects/myproject/b.js": 1
-} 
+fileExists:: {} 
 
 directoryExists:: {
  "/user/username/projects/myproject/node_modules/@types": 1,
@@ -255,7 +245,8 @@ directoryExists:: {
 
 getModifiedTimes:: {
  "/user/username/projects/myproject/a.js": 2,
- "/user/username/projects/myproject/b.ts": 1
+ "/user/username/projects/myproject/b.ts": 1,
+ "/user/username/projects/myproject/b.js": 1
 } 
 
 setModifiedTimes:: {} 

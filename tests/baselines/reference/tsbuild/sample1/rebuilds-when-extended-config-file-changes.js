@@ -137,17 +137,6 @@ getModifiedTime:: {
  "/src/core/anotherModule.ts": 1,
  "/src/core/index.ts": 1,
  "/src/core/some_decl.d.ts": 1,
- "/src/logic/index.ts": 1,
- "/src/tests/index.ts": 1
-}
-
-setModifiedTime:: {}
-
-fileExists:: {
- "/src/tests/tsconfig.base.json": 1,
- "/src/core/anotherModule.ts": 1,
- "/src/core/index.ts": 1,
- "/src/core/some_decl.d.ts": 1,
  "/src/core/anotherModule.js": 1,
  "/src/core/anotherModule.d.ts": 1,
  "/src/logic/index.ts": 1,
@@ -156,6 +145,15 @@ fileExists:: {
  "/src/tests/index.ts": 1,
  "/src/tests/index.js": 1,
  "/src/tests/index.d.ts": 1
+}
+
+setModifiedTime:: {}
+
+fileExists:: {
+ "/src/tests/tsconfig.base.json": 1,
+ "/src/core/index.ts": 1,
+ "/src/core/anotherModule.ts": 1,
+ "/src/logic/index.ts": 1
 }
 
 directoryExists:: {
@@ -499,25 +497,9 @@ setModifiedTime:: {}
 
 fileExists:: {
  "/src/tests/tsconfig.base.json": 1,
- "/src/core/anotherModule.ts": 1,
  "/src/core/index.ts": 1,
- "/src/core/some_decl.d.ts": 1,
- "/src/core/anotherModule.js": 1,
- "/src/core/anotherModule.d.ts": 1,
- "/src/core/anotherModule.d.ts.map": 1,
- "/src/core/index.js": 1,
- "/src/core/index.d.ts": 1,
- "/src/core/index.d.ts.map": 1,
- "/src/core/tsconfig.tsbuildinfo": 1,
  "/src/logic/index.ts": 1,
- "/src/logic/index.js": 1,
- "/src/logic/index.js.map": 1,
- "/src/logic/index.d.ts": 1,
- "/src/logic/tsconfig.tsbuildinfo": 1,
- "/src/tests/index.ts": 1,
- "/src/tests/index.js": 1,
- "/src/tests/index.d.ts": 1,
- "/src/tests/tsconfig.tsbuildinfo": 1
+ "/src/core/anotherModule.ts": 1
 }
 
 directoryExists:: {

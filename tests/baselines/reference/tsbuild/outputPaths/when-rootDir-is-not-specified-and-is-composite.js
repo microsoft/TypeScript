@@ -34,16 +34,14 @@ Output::
 exitCode:: ExitStatus.Success
 
 getModifiedTime:: {
- "/src/src/index.ts": 1
-}
-
-setModifiedTime:: {}
-
-fileExists:: {
  "/src/src/index.ts": 1,
  "/src/dist/src/index.js": 1,
  "/src/dist/src/index.d.ts": 1
 }
+
+setModifiedTime:: {}
+
+fileExists:: {}
 
 directoryExists:: {
  "/src/node_modules/@types": 1,
@@ -123,12 +121,7 @@ getModifiedTime:: {
 
 setModifiedTime:: {}
 
-fileExists:: {
- "/src/src/index.ts": 1,
- "/src/dist/src/index.js": 1,
- "/src/dist/src/index.d.ts": 1,
- "/src/dist/tsconfig.tsbuildinfo": 1
-}
+fileExists:: {}
 
 directoryExists:: {}
 

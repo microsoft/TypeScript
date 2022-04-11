@@ -206,14 +206,7 @@ export declare function multiply(a: number, b: number): number;
 }
 
 
-fileExists:: {
- "/user/username/projects/sample1/core/anothermodule.ts": 1,
- "/user/username/projects/sample1/core/index.ts": 1,
- "/user/username/projects/sample1/core/anothermodule.js": 1,
- "/user/username/projects/sample1/core/anothermodule.d.ts": 1,
- "/user/username/projects/sample1/tests/index.ts": 1,
- "/user/username/projects/sample1/tests/index.js": 1
-} 
+fileExists:: {} 
 
 directoryExists:: {
  "/user/username/projects/sample1/core/node_modules/@types": 1,
@@ -227,7 +220,10 @@ directoryExists:: {
 getModifiedTimes:: {
  "/user/username/projects/sample1/core/anothermodule.ts": 1,
  "/user/username/projects/sample1/core/index.ts": 1,
- "/user/username/projects/sample1/tests/index.ts": 1
+ "/user/username/projects/sample1/core/anothermodule.js": 1,
+ "/user/username/projects/sample1/core/anothermodule.d.ts": 1,
+ "/user/username/projects/sample1/tests/index.ts": 1,
+ "/user/username/projects/sample1/tests/index.js": 1
 } 
 
 setModifiedTimes:: {} 
@@ -404,11 +400,8 @@ export declare const m: typeof mod;
 
 
 fileExists:: {
- "/user/username/projects/sample1/logic/index.ts": 1,
- "/user/username/projects/sample1/logic/index.js": 1,
  "/user/username/projects/sample1/core/index.ts": 1,
- "/user/username/projects/sample1/core/anothermodule.ts": 1,
- "/user/username/projects/sample1/logic/index.d.ts": 1
+ "/user/username/projects/sample1/core/anothermodule.ts": 1
 } 
 
 directoryExists:: {
@@ -422,7 +415,9 @@ directoryExists:: {
 } 
 
 getModifiedTimes:: {
- "/user/username/projects/sample1/logic/index.ts": 1
+ "/user/username/projects/sample1/logic/index.ts": 1,
+ "/user/username/projects/sample1/logic/index.js": 1,
+ "/user/username/projects/sample1/logic/index.d.ts": 1
 } 
 
 setModifiedTimes:: {} 
@@ -594,9 +589,7 @@ export declare const m: typeof mod;
 
 
 fileExists:: {
- "/user/username/projects/sample1/tests/index.ts": 1,
- "/user/username/projects/sample1/tests/index.js": 1,
- "/user/username/projects/sample1/tests/index.d.ts": 1
+ "/user/username/projects/sample1/logic/index.ts": 1
 } 
 
 directoryExists:: {
@@ -611,7 +604,9 @@ directoryExists:: {
 } 
 
 getModifiedTimes:: {
- "/user/username/projects/sample1/tests/index.ts": 1
+ "/user/username/projects/sample1/tests/index.ts": 1,
+ "/user/username/projects/sample1/tests/index.js": 1,
+ "/user/username/projects/sample1/tests/index.d.ts": 1
 } 
 
 setModifiedTimes:: {} 

@@ -119,29 +119,28 @@ exitCode:: ExitStatus.Success
 
 getModifiedTime:: {
  "/src/common/nominal.js": 1,
+ "/lib/common/nominal.js": 1,
+ "/lib/common/nominal.d.ts": 1,
  "/src/sub-project/index.js": 1,
- "/src/sub-project-2/index.js": 1
+ "/lib/sub-project/index.js": 1,
+ "/lib/sub-project/index.d.ts": 1,
+ "/src/sub-project-2/index.js": 1,
+ "/lib/sub-project-2/index.js": 1,
+ "/lib/sub-project-2/index.d.ts": 1
 }
 
 setModifiedTime:: {}
 
 fileExists:: {
  "/src/tsconfig.base.json": 3,
- "/src/common/nominal.js": 1,
- "/lib/common/nominal.js": 1,
- "/lib/common/nominal.d.ts": 1,
- "/src/sub-project/index.js": 1,
- "/lib/sub-project/index.js": 1,
  "/src/common/nominal.ts": 1,
  "/src/common/nominal.tsx": 1,
  "/src/common/nominal.d.ts": 1,
- "/lib/sub-project/index.d.ts": 1,
- "/src/sub-project-2/index.js": 1,
- "/lib/sub-project-2/index.js": 1,
+ "/src/common/nominal.js": 1,
  "/src/sub-project/index.ts": 1,
  "/src/sub-project/index.tsx": 1,
  "/src/sub-project/index.d.ts": 1,
- "/lib/sub-project-2/index.d.ts": 1
+ "/src/sub-project/index.js": 1
 }
 
 directoryExists:: {

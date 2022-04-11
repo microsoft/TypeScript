@@ -99,25 +99,20 @@ getModifiedTime:: {
  "/src/lib/file2.ts": 1,
  "/src/lib/global.ts": 1,
  "/src/lib/tripleRef.d.ts": 1,
+ "/src/lib/module.js": 1,
+ "/src/lib/module.d.ts": 1,
  "/src/app/file3.ts": 1,
  "/src/app/file4.ts": 1,
- "/src/app/tripleRef.d.ts": 1
+ "/src/app/tripleRef.d.ts": 1,
+ "/src/app/module.js": 1,
+ "/src/app/module.d.ts": 1
 }
 
 setModifiedTime:: {}
 
 fileExists:: {
- "/src/lib/file0.ts": 1,
- "/src/lib/file1.ts": 1,
- "/src/lib/file2.ts": 1,
- "/src/lib/global.ts": 1,
- "/src/lib/tripleRef.d.ts": 1,
- "/src/lib/module.js": 3,
- "/src/lib/module.d.ts": 2,
- "/src/app/file3.ts": 1,
- "/src/app/file4.ts": 1,
- "/src/app/tripleRef.d.ts": 1,
- "/src/app/module.js": 2,
+ "/src/lib/module.js": 2,
+ "/src/lib/module.d.ts": 1,
  "/src/app/file1.ts": 1,
  "/src/app/file1.tsx": 1,
  "/src/app/file1.d.ts": 1,
@@ -133,7 +128,8 @@ fileExists:: {
  "/src/file1.jsx": 1,
  "/file1.js": 1,
  "/file1.jsx": 1,
- "/src/app/module.d.ts": 2
+ "/src/app/module.js": 1,
+ "/src/app/module.d.ts": 1
 }
 
 directoryExists:: {
@@ -1268,21 +1264,10 @@ setModifiedTime:: {
 }
 
 fileExists:: {
- "/src/lib/file0.ts": 1,
- "/src/lib/file1.ts": 1,
- "/src/lib/file2.ts": 1,
- "/src/lib/global.ts": 1,
- "/src/lib/tripleRef.d.ts": 1,
- "/src/lib/module.js": 2,
- "/src/lib/module.d.ts": 2,
- "/src/app/file3.ts": 1,
- "/src/app/file4.ts": 1,
- "/src/app/tripleRef.d.ts": 1,
- "/src/app/module.js": 2,
- "/src/app/module.js.map": 1,
- "/src/app/module.d.ts": 2,
- "/src/app/module.d.ts.map": 1,
- "/src/app/module.tsbuildinfo": 1
+ "/src/lib/module.js": 1,
+ "/src/lib/module.d.ts": 1,
+ "/src/app/module.js": 1,
+ "/src/app/module.d.ts": 1
 }
 
 directoryExists:: {

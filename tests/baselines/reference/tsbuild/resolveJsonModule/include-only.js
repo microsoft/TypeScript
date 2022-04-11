@@ -123,14 +123,13 @@ Found 1 error.
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 getModifiedTime:: {
- "/src/src/index.ts": 1
+ "/src/src/index.ts": 1,
+ "/src/dist/src/index.js": 1
 }
 
 setModifiedTime:: {}
 
 fileExists:: {
- "/src/src/index.ts": 1,
- "/src/dist/src/index.js": 1,
  "/src/src/hello.json.ts": 1,
  "/src/src/hello.json.tsx": 1,
  "/src/src/hello.json.d.ts": 1,

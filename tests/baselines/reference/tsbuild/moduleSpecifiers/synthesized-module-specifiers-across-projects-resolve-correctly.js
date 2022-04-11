@@ -143,23 +143,7 @@ exitCode:: ExitStatus.Success
 getModifiedTime:: {
  "/src/src-types/dogconfig.ts": 1,
  "/src/src-types/index.ts": 1,
- "/src/src-dogs/dog.ts": 1,
- "/src/src-dogs/dogconfig.ts": 1,
- "/src/src-dogs/index.ts": 1,
- "/src/src-dogs/lassie/lassieconfig.ts": 1,
- "/src/src-dogs/lassie/lassiedog.ts": 1
-}
-
-setModifiedTime:: {}
-
-fileExists:: {
- "/src/tsconfig-base.json": 2,
- "/src/src-types/dogconfig.ts": 1,
- "/src/src-types/index.ts": 1,
  "/src/src-types/dogconfig.js": 1,
- "/src/src-types/package.json": 1,
- "/lib/package.json": 1,
- "/package.json": 1,
  "/src/src-types/dogconfig.d.ts": 1,
  "/src/src-dogs/dog.ts": 1,
  "/src/src-dogs/dogconfig.ts": 1,
@@ -167,11 +151,26 @@ fileExists:: {
  "/src/src-dogs/lassie/lassieconfig.ts": 1,
  "/src/src-dogs/lassie/lassiedog.ts": 1,
  "/src/src-dogs/dog.js": 1,
+ "/src/src-dogs/dogconfig.d.ts": 1
+}
+
+setModifiedTime:: {}
+
+fileExists:: {
+ "/src/tsconfig-base.json": 2,
+ "/src/src-types/package.json": 1,
+ "/src/src-types/dogconfig.ts": 1,
+ "/lib/package.json": 1,
+ "/package.json": 1,
  "/src/src-dogs/package.json": 1,
  "/src/src-dogs/node_modules/src-types/package.json": 1,
  "/src/src-dogs/node_modules/src-types/index.ts": 1,
+ "/src/src-types/index.ts": 1,
+ "/src/src-dogs/dogconfig.ts": 1,
+ "/src/src-dogs/lassie/lassiedog.ts": 1,
  "/src/src-dogs/lassie/package.json": 1,
- "/src/src-dogs/dogconfig.d.ts": 1
+ "/src/src-dogs/dog.ts": 1,
+ "/src/src-dogs/lassie/lassieconfig.ts": 1
 }
 
 directoryExists:: {

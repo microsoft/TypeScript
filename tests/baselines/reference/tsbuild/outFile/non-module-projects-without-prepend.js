@@ -154,17 +154,6 @@ getModifiedTime:: {
  "/src/first/first_PART1.ts": 1,
  "/src/first/first_part2.ts": 1,
  "/src/first/first_part3.ts": 1,
- "/src/second/second_part1.ts": 1,
- "/src/second/second_part2.ts": 1,
- "/src/third/third_part1.ts": 1
-}
-
-setModifiedTime:: {}
-
-fileExists:: {
- "/src/first/first_PART1.ts": 1,
- "/src/first/first_part2.ts": 1,
- "/src/first/first_part3.ts": 1,
  "/src/first/first_PART1.js": 1,
  "/src/first/first_PART1.d.ts": 1,
  "/src/second/second_part1.ts": 1,
@@ -175,6 +164,10 @@ fileExists:: {
  "/src/third/third_part1.js": 1,
  "/src/third/third_part1.d.ts": 1
 }
+
+setModifiedTime:: {}
+
+fileExists:: {}
 
 directoryExists:: {
  "/src/first/node_modules/@types": 1,

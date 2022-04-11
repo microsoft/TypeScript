@@ -187,11 +187,6 @@ export declare function multiply(a: number, b: number): number;
 
 
 fileExists:: {
- "/user/username/projects/core/anothermodule.ts": 1,
- "/user/username/projects/core/index.ts": 1,
- "/user/username/projects/core/some_decl.d.ts": 1,
- "/user/username/projects/core/anothermodule.js": 1,
- "/user/username/projects/core/anothermodule.d.ts": 1,
  "/user/username/projects/core/tsconfig.tsbuildinfo": 1
 } 
 
@@ -206,7 +201,9 @@ directoryExists:: {
 getModifiedTimes:: {
  "/user/username/projects/core/anothermodule.ts": 1,
  "/user/username/projects/core/index.ts": 1,
- "/user/username/projects/core/some_decl.d.ts": 1
+ "/user/username/projects/core/some_decl.d.ts": 1,
+ "/user/username/projects/core/anothermodule.js": 1,
+ "/user/username/projects/core/anothermodule.d.ts": 1
 } 
 
 setModifiedTimes:: {} 
@@ -306,9 +303,8 @@ export declare const m: typeof mod;
 
 
 fileExists:: {
- "/user/username/projects/logic/index.ts": 1,
- "/user/username/projects/logic/index.js": 1,
- "/user/username/projects/logic/index.d.ts": 1,
+ "/user/username/projects/core/index.ts": 1,
+ "/user/username/projects/core/anothermodule.ts": 1,
  "/user/username/projects/logic/tsconfig.tsbuildinfo": 1
 } 
 
@@ -322,7 +318,9 @@ directoryExists:: {
 } 
 
 getModifiedTimes:: {
- "/user/username/projects/logic/index.ts": 1
+ "/user/username/projects/logic/index.ts": 1,
+ "/user/username/projects/logic/index.js": 1,
+ "/user/username/projects/logic/index.d.ts": 1
 } 
 
 setModifiedTimes:: {} 
@@ -430,9 +428,7 @@ export declare const m: typeof mod;
 
 
 fileExists:: {
- "/user/username/projects/tests/index.ts": 1,
- "/user/username/projects/tests/index.js": 1,
- "/user/username/projects/tests/index.d.ts": 1,
+ "/user/username/projects/logic/index.ts": 1,
  "/user/username/projects/tests/tsconfig.tsbuildinfo": 1
 } 
 
@@ -447,7 +443,9 @@ directoryExists:: {
 } 
 
 getModifiedTimes:: {
- "/user/username/projects/tests/index.ts": 1
+ "/user/username/projects/tests/index.ts": 1,
+ "/user/username/projects/tests/index.js": 1,
+ "/user/username/projects/tests/index.d.ts": 1
 } 
 
 setModifiedTimes:: {} 

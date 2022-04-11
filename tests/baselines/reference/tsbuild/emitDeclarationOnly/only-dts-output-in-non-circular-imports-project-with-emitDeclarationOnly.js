@@ -76,16 +76,15 @@ exitCode:: ExitStatus.Success
 getModifiedTime:: {
  "/src/src/a.ts": 1,
  "/src/src/b.ts": 1,
- "/src/src/c.ts": 1
+ "/src/src/c.ts": 1,
+ "/src/lib/a.d.ts": 2
 }
 
 setModifiedTime:: {}
 
 fileExists:: {
- "/src/src/a.ts": 1,
- "/src/src/b.ts": 1,
  "/src/src/c.ts": 1,
- "/src/lib/a.d.ts": 1
+ "/src/src/a.ts": 1
 }
 
 directoryExists:: {
@@ -251,10 +250,8 @@ setModifiedTime:: {
 }
 
 fileExists:: {
- "/src/src/a.ts": 1,
- "/src/src/b.ts": 1,
  "/src/src/c.ts": 1,
- "/src/lib/a.d.ts": 1
+ "/src/src/a.ts": 1
 }
 
 directoryExists:: {
@@ -378,18 +375,15 @@ getModifiedTime:: {
  "/src/src/a.ts": 1,
  "/src/src/b.ts": 1,
  "/src/src/c.ts": 1,
- "/src/lib/a.d.ts": 1,
+ "/src/lib/a.d.ts": 2,
  "/src/lib/b.d.ts": 1
 }
 
 setModifiedTime:: {}
 
 fileExists:: {
- "/src/src/a.ts": 1,
- "/src/src/b.ts": 1,
  "/src/src/c.ts": 1,
- "/src/lib/a.d.ts": 1,
- "/src/lib/b.d.ts": 1
+ "/src/src/a.ts": 1
 }
 
 directoryExists:: {

@@ -177,13 +177,7 @@ export {};
 
 
 fileExists:: {
- "/user/username/projects/myproject/packages/b/src/bar.ts": 1,
- "/user/username/projects/myproject/packages/b/src/index.ts": 1,
- "/user/username/projects/myproject/packages/b/lib/bar.js": 1,
- "/user/username/projects/myproject/packages/b/lib/bar.d.ts": 2,
  "/user/username/projects/myproject/packages/b/tsconfig.tsbuildinfo": 1,
- "/user/username/projects/myproject/packages/a/src/index.ts": 1,
- "/user/username/projects/myproject/packages/a/lib/index.js": 1,
  "/user/username/projects/myproject/node_modules/b/package.json": 1,
  "/user/username/projects/myproject/node_modules/b.ts": 1,
  "/user/username/projects/myproject/node_modules/b.tsx": 1,
@@ -193,7 +187,7 @@ fileExists:: {
  "/user/username/projects/myproject/node_modules/b/lib/bar.ts": 1,
  "/user/username/projects/myproject/node_modules/b/lib/bar.tsx": 1,
  "/user/username/projects/myproject/node_modules/b/lib/bar.d.ts": 1,
- "/user/username/projects/myproject/packages/a/lib/index.d.ts": 1,
+ "/user/username/projects/myproject/packages/b/lib/bar.d.ts": 1,
  "/user/username/projects/myproject/packages/a/tsconfig.tsbuildinfo": 1
 } 
 
@@ -222,7 +216,11 @@ directoryExists:: {
 getModifiedTimes:: {
  "/user/username/projects/myproject/packages/b/src/bar.ts": 1,
  "/user/username/projects/myproject/packages/b/src/index.ts": 1,
- "/user/username/projects/myproject/packages/a/src/index.ts": 1
+ "/user/username/projects/myproject/packages/b/lib/bar.js": 1,
+ "/user/username/projects/myproject/packages/b/lib/bar.d.ts": 1,
+ "/user/username/projects/myproject/packages/a/src/index.ts": 1,
+ "/user/username/projects/myproject/packages/a/lib/index.js": 1,
+ "/user/username/projects/myproject/packages/a/lib/index.d.ts": 1
 } 
 
 setModifiedTimes:: {} 

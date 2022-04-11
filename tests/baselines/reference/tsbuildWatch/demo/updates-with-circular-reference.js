@@ -685,18 +685,11 @@ export declare function createZoo(): Array<Dog>;
 
 fileExists:: {
  "/user/username/projects/demo/tsconfig-base.json": 1,
- "/user/username/projects/demo/core/utilities.ts": 1,
- "/user/username/projects/demo/lib/core/utilities.js": 1,
- "/user/username/projects/demo/lib/core/utilities.d.ts": 1,
- "/user/username/projects/demo/animals/animal.ts": 1,
- "/user/username/projects/demo/animals/dog.ts": 1,
- "/user/username/projects/demo/animals/index.ts": 1,
- "/user/username/projects/demo/lib/animals/animal.js": 1,
  "/user/username/projects/demo/animals/package.json": 1,
- "/user/username/projects/demo/lib/animals/animal.d.ts": 1,
- "/user/username/projects/demo/zoo/zoo.ts": 1,
- "/user/username/projects/demo/lib/zoo/zoo.js": 1,
- "/user/username/projects/demo/lib/zoo/zoo.d.ts": 1
+ "/user/username/projects/demo/animals/index.ts": 1,
+ "/user/username/projects/demo/core/utilities.ts": 1,
+ "/user/username/projects/demo/animals/animal.ts": 1,
+ "/user/username/projects/demo/animals/dog.ts": 1
 } 
 
 directoryExists:: {
@@ -719,10 +712,16 @@ directoryExists:: {
 
 getModifiedTimes:: {
  "/user/username/projects/demo/core/utilities.ts": 1,
+ "/user/username/projects/demo/lib/core/utilities.js": 1,
+ "/user/username/projects/demo/lib/core/utilities.d.ts": 1,
  "/user/username/projects/demo/animals/animal.ts": 1,
  "/user/username/projects/demo/animals/dog.ts": 1,
  "/user/username/projects/demo/animals/index.ts": 1,
- "/user/username/projects/demo/zoo/zoo.ts": 1
+ "/user/username/projects/demo/lib/animals/animal.js": 1,
+ "/user/username/projects/demo/lib/animals/animal.d.ts": 1,
+ "/user/username/projects/demo/zoo/zoo.ts": 1,
+ "/user/username/projects/demo/lib/zoo/zoo.js": 1,
+ "/user/username/projects/demo/lib/zoo/zoo.d.ts": 1
 } 
 
 setModifiedTimes:: {} 

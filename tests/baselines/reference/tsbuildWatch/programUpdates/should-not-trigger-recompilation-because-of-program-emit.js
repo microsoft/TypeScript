@@ -170,12 +170,7 @@ export declare function multiply(a: number, b: number): number;
 }
 
 
-fileExists:: {
- "/user/username/projects/sample1/core/anothermodule.ts": 1,
- "/user/username/projects/sample1/core/index.ts": 1,
- "/user/username/projects/sample1/core/anothermodule.js": 1,
- "/user/username/projects/sample1/core/anothermodule.d.ts": 1
-} 
+fileExists:: {} 
 
 directoryExists:: {
  "/user/username/projects/sample1/core/node_modules/@types": 1,
@@ -188,7 +183,9 @@ directoryExists:: {
 
 getModifiedTimes:: {
  "/user/username/projects/sample1/core/anothermodule.ts": 1,
- "/user/username/projects/sample1/core/index.ts": 1
+ "/user/username/projects/sample1/core/index.ts": 1,
+ "/user/username/projects/sample1/core/anothermodule.js": 1,
+ "/user/username/projects/sample1/core/anothermodule.d.ts": 1
 } 
 
 setModifiedTimes:: {} 
@@ -365,13 +362,7 @@ export declare const y = 10;
 //# sourceMappingURL=file3.d.ts.map
 
 
-fileExists:: {
- "/user/username/projects/sample1/core/anothermodule.ts": 1,
- "/user/username/projects/sample1/core/file3.ts": 1,
- "/user/username/projects/sample1/core/index.ts": 1,
- "/user/username/projects/sample1/core/anothermodule.js": 1,
- "/user/username/projects/sample1/core/file3.d.ts": 1
-} 
+fileExists:: {} 
 
 directoryExists:: {
  "/user/username/projects/sample1/core/node_modules/@types": 1,
@@ -387,6 +378,7 @@ getModifiedTimes:: {
  "/user/username/projects/sample1/core/file3.ts": 1,
  "/user/username/projects/sample1/core/index.ts": 1,
  "/user/username/projects/sample1/core/anothermodule.js": 1,
+ "/user/username/projects/sample1/core/file3.d.ts": 1,
  "/user/username/projects/sample1/core/anothermodule.d.ts": 1,
  "/user/username/projects/sample1/core/index.d.ts": 1
 } 

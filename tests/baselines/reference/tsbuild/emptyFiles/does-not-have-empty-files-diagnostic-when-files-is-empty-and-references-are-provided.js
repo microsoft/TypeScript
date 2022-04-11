@@ -64,16 +64,14 @@ Output::
 exitCode:: ExitStatus.Success
 
 getModifiedTime:: {
- "/src/core/index.ts": 1
-}
-
-setModifiedTime:: {}
-
-fileExists:: {
  "/src/core/index.ts": 1,
  "/src/core/index.js": 1,
  "/src/core/index.d.ts": 1
 }
+
+setModifiedTime:: {}
+
+fileExists:: {}
 
 directoryExists:: {
  "/src/core/node_modules/@types": 1,

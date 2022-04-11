@@ -81,20 +81,18 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 getModifiedTime:: {
  "/src/src/other/other.ts": 1,
+ "/src/dist/other.js": 1,
+ "/src/dist/other.d.ts": 1,
  "/src/src/main/a.ts": 1,
- "/src/src/main/b.ts": 1
+ "/src/src/main/b.ts": 1,
+ "/src/dist/a.js": 1
 }
 
 setModifiedTime:: {}
 
 fileExists:: {
  "/src/tsconfig.base.json": 2,
- "/src/src/other/other.ts": 1,
- "/src/dist/other.js": 1,
- "/src/dist/other.d.ts": 1,
- "/src/src/main/a.ts": 1,
- "/src/src/main/b.ts": 1,
- "/src/dist/a.js": 1
+ "/src/src/main/b.ts": 1
 }
 
 directoryExists:: {

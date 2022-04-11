@@ -223,17 +223,7 @@ exports.pkg3 = 3;
 
 
 
-fileExists:: {
- "/user/username/projects/myproject/pkg0/index.ts": 1,
- "/user/username/projects/myproject/typings/xterm.d.ts": 1,
- "/user/username/projects/myproject/pkg0/index.js": 1,
- "/user/username/projects/myproject/pkg1/index.ts": 1,
- "/user/username/projects/myproject/pkg1/index.js": 1,
- "/user/username/projects/myproject/pkg2/index.ts": 1,
- "/user/username/projects/myproject/pkg2/index.js": 1,
- "/user/username/projects/myproject/pkg3/index.ts": 1,
- "/user/username/projects/myproject/pkg3/index.js": 1
-} 
+fileExists:: {} 
 
 directoryExists:: {
  "/user/username/projects/myproject/pkg0/node_modules/@types": 1,
@@ -250,9 +240,13 @@ directoryExists:: {
 getModifiedTimes:: {
  "/user/username/projects/myproject/pkg0/index.ts": 1,
  "/user/username/projects/myproject/typings/xterm.d.ts": 4,
+ "/user/username/projects/myproject/pkg0/index.js": 1,
  "/user/username/projects/myproject/pkg1/index.ts": 1,
+ "/user/username/projects/myproject/pkg1/index.js": 1,
  "/user/username/projects/myproject/pkg2/index.ts": 1,
- "/user/username/projects/myproject/pkg3/index.ts": 1
+ "/user/username/projects/myproject/pkg2/index.js": 1,
+ "/user/username/projects/myproject/pkg3/index.ts": 1,
+ "/user/username/projects/myproject/pkg3/index.js": 1
 } 
 
 setModifiedTimes:: {} 
@@ -404,17 +398,7 @@ exitCode:: ExitStatus.undefined
 //// [/user/username/projects/myproject/pkg2/index.js] file changed its modified time
 //// [/user/username/projects/myproject/pkg3/index.js] file changed its modified time
 
-fileExists:: {
- "/user/username/projects/myproject/pkg0/index.ts": 1,
- "/user/username/projects/myproject/typings/xterm.d.ts": 1,
- "/user/username/projects/myproject/pkg0/index.js": 1,
- "/user/username/projects/myproject/pkg1/index.ts": 1,
- "/user/username/projects/myproject/pkg1/index.js": 1,
- "/user/username/projects/myproject/pkg2/index.ts": 1,
- "/user/username/projects/myproject/pkg2/index.js": 1,
- "/user/username/projects/myproject/pkg3/index.ts": 1,
- "/user/username/projects/myproject/pkg3/index.js": 1
-} 
+fileExists:: {} 
 
 directoryExists:: {
  "/user/username/projects/myproject/pkg0/node_modules/@types": 1,
@@ -630,15 +614,7 @@ exitCode:: ExitStatus.undefined
 //// [/user/username/projects/myproject/pkg1/index.js] file changed its modified time
 //// [/user/username/projects/myproject/pkg2/index.js] file changed its modified time
 
-fileExists:: {
- "/user/username/projects/myproject/pkg0/index.ts": 1,
- "/user/username/projects/myproject/typings/xterm.d.ts": 1,
- "/user/username/projects/myproject/pkg0/index.js": 1,
- "/user/username/projects/myproject/pkg1/index.ts": 1,
- "/user/username/projects/myproject/pkg1/index.js": 1,
- "/user/username/projects/myproject/pkg2/index.ts": 1,
- "/user/username/projects/myproject/pkg2/index.js": 1
-} 
+fileExists:: {} 
 
 directoryExists:: {
  "/user/username/projects/myproject/pkg0/node_modules/@types": 1,

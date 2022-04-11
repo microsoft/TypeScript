@@ -279,16 +279,10 @@ exports.theNum = 42;
 
 
 fileExists:: {
- "/user/username/projects/myproject/packages/pkg2/const.ts": 1,
- "/user/username/projects/myproject/packages/pkg2/index.ts": 1,
- "/user/username/projects/myproject/packages/pkg2/other.ts": 1,
- "/user/username/projects/myproject/packages/pkg2/build/const.js": 1,
  "/user/username/projects/myproject/packages/pkg2/const.js.ts": 1,
  "/user/username/projects/myproject/packages/pkg2/const.js.tsx": 1,
  "/user/username/projects/myproject/packages/pkg2/const.js.d.ts": 1,
- "/user/username/projects/myproject/packages/pkg2/build/const.d.ts": 2,
- "/user/username/projects/myproject/packages/pkg1/index.ts": 1,
- "/user/username/projects/myproject/packages/pkg1/build/index.js": 1,
+ "/user/username/projects/myproject/packages/pkg2/const.ts": 1,
  "/user/username/projects/myproject/node_modules/pkg2/package.json": 1,
  "/user/username/projects/myproject/node_modules/pkg2.ts": 1,
  "/user/username/projects/myproject/node_modules/pkg2.tsx": 1,
@@ -305,7 +299,8 @@ fileExists:: {
  "/user/username/projects/myproject/packages/pkg2/build/const.js.tsx": 1,
  "/user/username/projects/myproject/packages/pkg2/build/const.js.d.ts": 1,
  "/user/username/projects/myproject/packages/pkg2/build/const.ts": 1,
- "/user/username/projects/myproject/packages/pkg2/build/const.tsx": 1
+ "/user/username/projects/myproject/packages/pkg2/build/const.tsx": 1,
+ "/user/username/projects/myproject/packages/pkg2/build/const.d.ts": 1
 } 
 
 directoryExists:: {
@@ -332,7 +327,10 @@ getModifiedTimes:: {
  "/user/username/projects/myproject/packages/pkg2/const.ts": 1,
  "/user/username/projects/myproject/packages/pkg2/index.ts": 1,
  "/user/username/projects/myproject/packages/pkg2/other.ts": 1,
- "/user/username/projects/myproject/packages/pkg1/index.ts": 1
+ "/user/username/projects/myproject/packages/pkg2/build/const.js": 1,
+ "/user/username/projects/myproject/packages/pkg2/build/const.d.ts": 1,
+ "/user/username/projects/myproject/packages/pkg1/index.ts": 1,
+ "/user/username/projects/myproject/packages/pkg1/build/index.js": 1
 } 
 
 setModifiedTimes:: {} 
@@ -438,8 +436,6 @@ exitCode:: ExitStatus.undefined
 
 
 fileExists:: {
- "/user/username/projects/myproject/packages/pkg1/index.ts": 1,
- "/user/username/projects/myproject/packages/pkg1/build/index.js": 1,
  "/user/username/projects/myproject/node_modules/pkg2/package.json": 1,
  "/user/username/projects/myproject/node_modules/pkg2.ts": 1,
  "/user/username/projects/myproject/node_modules/pkg2.tsx": 1,
@@ -588,8 +584,6 @@ exitCode:: ExitStatus.undefined
 //// [/user/username/projects/myproject/packages/pkg1/build/index.js] file written with same contents
 
 fileExists:: {
- "/user/username/projects/myproject/packages/pkg1/index.ts": 1,
- "/user/username/projects/myproject/packages/pkg1/build/index.js": 1,
  "/user/username/projects/myproject/node_modules/pkg2/package.json": 1,
  "/user/username/projects/myproject/node_modules/pkg2.ts": 1,
  "/user/username/projects/myproject/node_modules/pkg2.tsx": 1,

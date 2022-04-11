@@ -139,15 +139,6 @@ exitCode:: ExitStatus.Success
 
 getModifiedTime:: {
  "/src/solution/common/nominal.ts": 1,
- "/src/solution/sub-project/index.ts": 1,
- "/src/solution/sub-project-2/index.ts": 1
-}
-
-setModifiedTime:: {}
-
-fileExists:: {
- "/src/tsconfig.base.json": 3,
- "/src/solution/common/nominal.ts": 1,
  "/src/lib/solution/common/nominal.js": 1,
  "/src/lib/solution/common/nominal.d.ts": 1,
  "/src/solution/sub-project/index.ts": 1,
@@ -156,6 +147,14 @@ fileExists:: {
  "/src/solution/sub-project-2/index.ts": 1,
  "/src/lib/solution/sub-project-2/index.js": 1,
  "/src/lib/solution/sub-project-2/index.d.ts": 1
+}
+
+setModifiedTime:: {}
+
+fileExists:: {
+ "/src/tsconfig.base.json": 3,
+ "/src/solution/common/nominal.ts": 1,
+ "/src/solution/sub-project/index.ts": 1
 }
 
 directoryExists:: {

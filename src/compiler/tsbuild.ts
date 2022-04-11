@@ -68,8 +68,6 @@ namespace ts {
             newestInputFileTime?: Date;
             newestInputFileName?: string;
             newestDeclarationFileContentChangedTime?: Date;
-            newestOutputFileTime?: Date;
-            newestOutputFileName?: string;
             oldestOutputFileName: string;
         }
 

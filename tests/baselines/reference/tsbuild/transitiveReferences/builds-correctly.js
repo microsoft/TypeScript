@@ -83,21 +83,20 @@ exitCode:: ExitStatus.Success
 
 getModifiedTime:: {
  "/src/a.ts": 1,
- "/src/b.ts": 1,
- "/src/c.ts": 1
-}
-
-setModifiedTime:: {}
-
-fileExists:: {
- "/src/a.ts": 1,
  "/src/a.js": 1,
  "/src/a.d.ts": 1,
  "/src/b.ts": 1,
  "/src/b.js": 1,
  "/src/b.d.ts": 1,
  "/src/c.ts": 1,
- "/src/c.js": 1,
+ "/src/c.js": 1
+}
+
+setModifiedTime:: {}
+
+fileExists:: {
+ "/src/a.ts": 1,
+ "/src/b.ts": 1,
  "/src/refs/a.ts": 1,
  "/src/refs/a.tsx": 1,
  "/src/refs/a.d.ts": 1

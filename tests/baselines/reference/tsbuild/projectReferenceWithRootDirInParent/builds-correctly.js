@@ -61,21 +61,19 @@ exitCode:: ExitStatus.Success
 
 getModifiedTime:: {
  "/src/src/other/other.ts": 1,
- "/src/src/main/a.ts": 1,
- "/src/src/main/b.ts": 1
-}
-
-setModifiedTime:: {}
-
-fileExists:: {
- "/src/tsconfig.base.json": 2,
- "/src/src/other/other.ts": 1,
  "/src/dist/other/other.js": 1,
  "/src/dist/other/other.d.ts": 1,
  "/src/src/main/a.ts": 1,
  "/src/src/main/b.ts": 1,
  "/src/dist/main/a.js": 1,
  "/src/dist/main/b.d.ts": 1
+}
+
+setModifiedTime:: {}
+
+fileExists:: {
+ "/src/tsconfig.base.json": 2,
+ "/src/src/main/b.ts": 1
 }
 
 directoryExists:: {

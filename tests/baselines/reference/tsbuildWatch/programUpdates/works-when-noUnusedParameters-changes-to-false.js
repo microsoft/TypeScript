@@ -71,10 +71,7 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 
-fileExists:: {
- "/user/username/projects/myproject/index.ts": 1,
- "/user/username/projects/myproject/index.js": 1
-} 
+fileExists:: {} 
 
 directoryExists:: {
  "/user/username/projects/myproject/node_modules/@types": 1,
@@ -85,7 +82,8 @@ directoryExists:: {
 } 
 
 getModifiedTimes:: {
- "/user/username/projects/myproject/index.ts": 1
+ "/user/username/projects/myproject/index.ts": 1,
+ "/user/username/projects/myproject/index.js": 1
 } 
 
 setModifiedTimes:: {} 
@@ -145,10 +143,7 @@ var fn = function (a, b) { return b; };
 
 
 
-fileExists:: {
- "/user/username/projects/myproject/index.ts": 1,
- "/user/username/projects/myproject/index.js": 1
-} 
+fileExists:: {} 
 
 directoryExists:: {
  "/user/username/projects/myproject/node_modules/@types": 1,
@@ -159,7 +154,8 @@ directoryExists:: {
 } 
 
 getModifiedTimes:: {
- "/user/username/projects/myproject/index.ts": 1
+ "/user/username/projects/myproject/index.ts": 1,
+ "/user/username/projects/myproject/index.js": 1
 } 
 
 setModifiedTimes:: {} 

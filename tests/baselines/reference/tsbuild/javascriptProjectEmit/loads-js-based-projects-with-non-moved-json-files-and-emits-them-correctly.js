@@ -120,36 +120,35 @@ exitCode:: ExitStatus.Success
 getModifiedTime:: {
  "/src/common/index.ts": 1,
  "/src/common/obj.json": 1,
+ "/src/common/index.js": 1,
+ "/src/common/index.d.ts": 1,
  "/src/sub-project/index.js": 1,
- "/src/sub-project-2/index.js": 1
+ "/out/sub-project/index.js": 1,
+ "/out/sub-project/index.d.ts": 1,
+ "/src/sub-project-2/index.js": 1,
+ "/out/sub-project-2/index.js": 1,
+ "/out/sub-project-2/index.d.ts": 1
 }
 
 setModifiedTime:: {}
 
 fileExists:: {
  "/src/tsconfig.base.json": 3,
- "/src/common/index.ts": 1,
- "/src/common/obj.json": 1,
- "/src/common/index.js": 1,
  "/src/common/obj.json.ts": 1,
  "/src/common/obj.json.tsx": 1,
  "/src/common/obj.json.d.ts": 1,
  "/src/common/obj.json.js": 1,
  "/src/common/obj.json.jsx": 1,
- "/src/common/index.d.ts": 1,
- "/src/sub-project/index.js": 1,
- "/out/sub-project/index.js": 1,
+ "/src/common/obj.json": 1,
  "/src/common.ts": 1,
  "/src/common.tsx": 1,
  "/src/common.d.ts": 1,
  "/src/common/package.json": 1,
- "/out/sub-project/index.d.ts": 1,
- "/src/sub-project-2/index.js": 1,
- "/out/sub-project-2/index.js": 1,
+ "/src/common/index.ts": 1,
  "/src/sub-project/index.ts": 1,
  "/src/sub-project/index.tsx": 1,
  "/src/sub-project/index.d.ts": 1,
- "/out/sub-project-2/index.d.ts": 1
+ "/src/sub-project/index.js": 1
 }
 
 directoryExists:: {
