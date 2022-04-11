@@ -1931,7 +1931,7 @@ namespace ts.server {
 
                     const compilationSettings = project.getCompilationSettings();
 
-                    if (!!compilationSettings.noEmit || fileExtensionIs(info.fileName, Extension.Dts) && !dtsChangeCanAffectEmit(compilationSettings)) {
+                    if (!!compilationSettings.noEmit || isDeclarationFileName(info.fileName) && !dtsChangeCanAffectEmit(compilationSettings)) {
                         // avoid triggering emit when a change is made in a .d.ts when declaration emit and decorator metadata emit are disabled
                         return undefined;
                     }
@@ -2479,7 +2479,7 @@ namespace ts.server {
                 else {
                     const info = this.projectService.getScriptInfo(fileNameInProject)!; // TODO: GH#18217
                     if (!info.isScriptOpen()) {
-                        if (fileExtensionIs(fileNameInProject, Extension.Dts)) {
+                        if (isDeclarationFileName(fileNameInProject)) {
                             veryLowPriorityFiles.push(fileNameInProject);
                         }
                         else {
