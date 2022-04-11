@@ -52,9 +52,9 @@ verify.completions({
             sortText: completion.SortText.SortBelow(
                 completion.SortText.ObjectLiteralProperty(completion.SortText.LocationPriority, "M")),
             source: completion.CompletionSource.ObjectLiteralMethodSnippet,
-            insertText: "M(x: number): void {\n},",
+            insertText: "M(x) {\n},",
             labelDetails: {
-                detail: "(x: number): void",
+                detail: "(x)",
             },
         },
     ],
@@ -110,9 +110,9 @@ verify.completions({
             sortText: completion.SortText.SortBelow(
                 completion.SortText.ObjectLiteralProperty(completion.SortText.OptionalMember, "M")),
             source: completion.CompletionSource.ObjectLiteralMethodSnippet,
-            insertText: "M(x: number): void {\n},",
+            insertText: "M(x) {\n},",
             labelDetails: {
-                detail: "(x: number): void",
+                detail: "(x)",
             },
         },
         {
@@ -125,9 +125,9 @@ verify.completions({
             sortText: completion.SortText.SortBelow(
                 completion.SortText.ObjectLiteralProperty(completion.SortText.LocationPriority, "N")),
             source: completion.CompletionSource.ObjectLiteralMethodSnippet,
-            insertText: "N(x: string): void {\n},",
+            insertText: "N(x) {\n},",
             labelDetails: {
-                detail: "(x: string): void",
+                detail: "(x)",
             },
         },
         {
@@ -140,9 +140,9 @@ verify.completions({
             sortText: completion.SortText.SortBelow(
                 completion.SortText.ObjectLiteralProperty(completion.SortText.OptionalMember, "O")),
             source: completion.CompletionSource.ObjectLiteralMethodSnippet,
-            insertText: "O(): void {\n},",
+            insertText: "O() {\n},",
             labelDetails: {
-                detail: "(): void",
+                detail: "()",
             },
         },
     ],

@@ -51,9 +51,9 @@ verify.completions({
             sortText: completion.SortText.SortBelow(
                 completion.SortText.ObjectLiteralProperty(completion.SortText.LocationPriority, "bar")),
             source: completion.CompletionSource.ObjectLiteralMethodSnippet,
-            insertText: "bar(x: number): void {\n},",
+            insertText: "bar(x) {\n},",
             labelDetails: {
-                detail: "(x: number): void",
+                detail: "(x)",
             },
         },
     ],
@@ -77,9 +77,9 @@ verify.completions({
             sortText: completion.SortText.SortBelow(
                 completion.SortText.ObjectLiteralProperty(completion.SortText.LocationPriority, "bar")),
             source: completion.CompletionSource.ObjectLiteralMethodSnippet,
-            insertText: "bar(x: number): void {\n},",
+            insertText: "bar(x) {\n},",
             labelDetails: {
-                detail: "(x: number): void",
+                detail: "(x)",
             },
         },
         {
@@ -92,9 +92,9 @@ verify.completions({
             sortText: completion.SortText.SortBelow(
                 completion.SortText.ObjectLiteralProperty(completion.SortText.LocationPriority, "foo")),
             source: completion.CompletionSource.ObjectLiteralMethodSnippet,
-            insertText: "foo(x: string): string {\n},",
+            insertText: "foo(x) {\n},",
             labelDetails: {
-                detail: "(x: string): string",
+                detail: "(x)",
             },
         },
     ],
@@ -134,9 +134,9 @@ verify.completions({
             sortText: completion.SortText.SortBelow(
                 completion.SortText.ObjectLiteralProperty(completion.SortText.LocationPriority, "\"space bar\"")),
             source: completion.CompletionSource.ObjectLiteralMethodSnippet,
-            insertText: "\"space bar\"(): string {\n},",
+            insertText: "\"space bar\"() {\n},",
             labelDetails: {
-                detail: "(): string",
+                detail: "()",
             },
         },
     ],
@@ -161,9 +161,9 @@ verify.completions({
                 completion.SortText.ObjectLiteralProperty(completion.SortText.LocationPriority, "bar")),
             source: completion.CompletionSource.ObjectLiteralMethodSnippet,
             isSnippet: true,
-            insertText: "bar(x: number): void {\n    $0\n},",
+            insertText: "bar(x) {\n    $0\n},",
             labelDetails: {
-                detail: "(x: number): void",
+                detail: "(x)",
             },
         },
     ],
@@ -183,12 +183,12 @@ verify.completions({
             insertText: undefined,
         },
         {
-            name: "bar(x: number): void",
+            name: "bar(x)",
             sortText: completion.SortText.SortBelow(
                 completion.SortText.ObjectLiteralProperty(completion.SortText.LocationPriority, "bar")),
             source: completion.CompletionSource.ObjectLiteralMethodSnippet,
             isSnippet: true,
-            insertText: "bar(x: number): void {\n    $0\n},",
+            insertText: "bar(x) {\n    $0\n},",
         },
     ],
 });
