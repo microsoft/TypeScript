@@ -458,11 +458,7 @@ Output::
 exitCode:: ExitStatus.Success
 
 getModifiedTime:: {
- "/src/obj/tsconfig.tsbuildinfo": 1,
- "/src/obj/bar.d.ts": 1,
- "/src/obj/index.d.ts": 1,
- "/src/obj/lazyIndex.d.ts": 1,
- "/src/obj/bundling.d.ts": 1
+ "/src/obj/tsconfig.tsbuildinfo": 1
 }
 
 setModifiedTime:: {}

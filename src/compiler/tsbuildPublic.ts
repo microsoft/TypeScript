@@ -990,7 +990,9 @@ namespace ts {
                 if (resultFlags === BuildResultFlags.DeclarationOutputUnchanged && isDeclarationFileName(name)) {
                     // Check for unchanged .d.ts files
                     if (state.readFileWithCache(name) === text) {
-                        newestDeclarationFileContentChangedTime = newer(newestDeclarationFileContentChangedTime, ts.getModifiedTime(host, name));
+                        if (config.options.composite) {
+                            newestDeclarationFileContentChangedTime = newer(newestDeclarationFileContentChangedTime, ts.getModifiedTime(host, name));
+                        }
                     }
                     else {
                         resultFlags &= ~BuildResultFlags.DeclarationOutputUnchanged;
@@ -1506,7 +1508,6 @@ namespace ts {
         const buildInfoPath = getTsBuildInfoEmitOutputFilePath(project.options);
         let oldestOutputFileName = "(none)";
         let oldestOutputFileTime = maximumDate;
-        let newestDeclarationFileContentChangedTime;
         let buildInfoTime: Date | undefined;
         if (buildInfoPath) {
             const buildInfoCacheEntry = getBuildInfoCacheEntry(state, buildInfoPath, resolvedPath);
@@ -1599,14 +1600,6 @@ namespace ts {
                         newerInputFileName: newestInputFileName
                     };
                 }
-
-                // Keep track of when the most recent time a .d.ts file was changed.
-                // In addition to file timestamps, we also keep track of when a .d.ts file
-                // had its file touched but not had its contents changed - this allows us
-                // to skip a downstream typecheck
-                if (isDeclarationFileName(output)) {
-                    newestDeclarationFileContentChangedTime = newer(newestDeclarationFileContentChangedTime, outputTime);
-                }
             }
         }
 
@@ -1666,7 +1659,7 @@ namespace ts {
         // Up to date
         return {
             type: pseudoUpToDate ? UpToDateStatusType.UpToDateWithUpstreamTypes : UpToDateStatusType.UpToDate,
-            newestDeclarationFileContentChangedTime,
+            newestDeclarationFileContentChangedTime: undefined,
             newestInputFileTime,
             newestInputFileName,
             oldestOutputFileName
@@ -1706,7 +1699,7 @@ namespace ts {
                     continue;
                 }
 
-                if (!anyDtsChange && isDeclarationFileName(file)) {
+                if (proj.options.composite && !anyDtsChange && isDeclarationFileName(file)) {
                     newestDeclarationFileContentChangedTime = newer(newestDeclarationFileContentChangedTime, ts.getModifiedTime(host, file));
                 }
 

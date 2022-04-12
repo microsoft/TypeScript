@@ -1778,7 +1778,7 @@ getModifiedTime:: {
  "/src/third/third_part1.ts": 1,
  "/src/third/thirdjs/output/third-output.js": 1,
  "/src/third/thirdjs/output/third-output.js.map": 1,
- "/src/third/thirdjs/output/third-output.d.ts": 2,
+ "/src/third/thirdjs/output/third-output.d.ts": 1,
  "/src/third/thirdjs/output/third-output.d.ts.map": 1,
  "/src/third/tsconfig.json": 1
 }
