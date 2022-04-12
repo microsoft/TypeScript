@@ -55,11 +55,11 @@ Output::
 
 [[90m12:00:28 AM[0m] Building project '/a/b/project1.tsconfig.json'...
 
-[[90m12:00:42 AM[0m] Project 'project2.tsconfig.json' is out of date because output file 'project2.tsconfig.tsbuildinfo' does not exist
+[[90m12:00:43 AM[0m] Project 'project2.tsconfig.json' is out of date because output file 'project2.tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:43 AM[0m] Building project '/a/b/project2.tsconfig.json'...
+[[90m12:00:44 AM[0m] Building project '/a/b/project2.tsconfig.json'...
 
-[[90m12:00:53 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:55 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -135,7 +135,7 @@ declare let y: number;
 
 
 //// [/a/b/project1.tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../lib/lib.d.ts","./commonfile1.ts","./commonfile2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"2167136208-let x = 1","signature":"2842409786-declare let x: number;\n","affectsGlobalScope":true},{"version":"2168322129-let y = 1","signature":"784887931-declare let y: number;\n","affectsGlobalScope":true}],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[2,3,1]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../lib/lib.d.ts","./commonfile1.ts","./commonfile2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"2167136208-let x = 1","signature":"2842409786-declare let x: number;\n","affectsGlobalScope":true},{"version":"2168322129-let y = 1","signature":"784887931-declare let y: number;\n","affectsGlobalScope":true}],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[2,3,1],"dtsChangeTime":29000},"version":"FakeTSVersion"}
 
 //// [/a/b/project1.tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -171,10 +171,11 @@ declare let y: number;
       "./commonfile1.ts",
       "./commonfile2.ts",
       "../lib/lib.d.ts"
-    ]
+    ],
+    "dtsChangeTime": 29000
   },
   "version": "FakeTSVersion",
-  "size": 852
+  "size": 874
 }
 
 //// [/a/b/other.js]
@@ -186,7 +187,7 @@ declare let z: number;
 
 
 //// [/a/b/project2.tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../lib/lib.d.ts","./other.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"2874288940-let z = 0;","signature":"-1272633924-declare let z: number;\n","affectsGlobalScope":true}],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[2,1]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../lib/lib.d.ts","./other.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"2874288940-let z = 0;","signature":"-1272633924-declare let z: number;\n","affectsGlobalScope":true}],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[2,1],"dtsChangeTime":45000},"version":"FakeTSVersion"}
 
 //// [/a/b/project2.tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -215,10 +216,11 @@ declare let z: number;
     "semanticDiagnosticsPerFile": [
       "./other.ts",
       "../lib/lib.d.ts"
-    ]
+    ],
+    "dtsChangeTime": 45000
   },
   "version": "FakeTSVersion",
-  "size": 717
+  "size": 739
 }
 
 
@@ -257,13 +259,13 @@ setModifiedTimes:: {}
 
 Output::
 >> Screen clear
-[[90m12:00:57 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:59 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:58 AM[0m] Project 'project1.tsconfig.json' is out of date because oldest output 'project1.tsconfig.tsbuildinfo' is older than newest input 'alpha.tsconfig.json'
+[[90m12:01:00 AM[0m] Project 'project1.tsconfig.json' is out of date because oldest output 'project1.tsconfig.tsbuildinfo' is older than newest input 'alpha.tsconfig.json'
 
-[[90m12:00:59 AM[0m] Building project '/a/b/project1.tsconfig.json'...
+[[90m12:01:01 AM[0m] Building project '/a/b/project1.tsconfig.json'...
 
-[[90m12:01:00 AM[0m] Updating unchanged output timestamps of project '/a/b/project1.tsconfig.json'...
+[[90m12:01:02 AM[0m] Updating unchanged output timestamps of project '/a/b/project1.tsconfig.json'...
 
 
 
@@ -320,9 +322,7 @@ directoryExists:: {
 getModifiedTimes:: {
  "/a/b/commonfile1.ts": 1,
  "/a/b/commonfile2.ts": 1,
- "/a/b/project1.tsconfig.json": 1,
- "/a/b/commonfile1.d.ts": 1,
- "/a/b/commonfile2.d.ts": 1
+ "/a/b/project1.tsconfig.json": 1
 } 
 
 setModifiedTimes:: {
@@ -342,13 +342,13 @@ getModifiedTimes:: {}
 setModifiedTimes:: {} 
 
 Output::
-[[90m12:01:02 AM[0m] Project 'project2.tsconfig.json' is out of date because oldest output 'project2.tsconfig.tsbuildinfo' is older than newest input 'alpha.tsconfig.json'
+[[90m12:01:04 AM[0m] Project 'project2.tsconfig.json' is out of date because oldest output 'project2.tsconfig.tsbuildinfo' is older than newest input 'alpha.tsconfig.json'
 
-[[90m12:01:03 AM[0m] Building project '/a/b/project2.tsconfig.json'...
+[[90m12:01:05 AM[0m] Building project '/a/b/project2.tsconfig.json'...
 
-[[90m12:01:04 AM[0m] Updating unchanged output timestamps of project '/a/b/project2.tsconfig.json'...
+[[90m12:01:06 AM[0m] Updating unchanged output timestamps of project '/a/b/project2.tsconfig.json'...
 
-[[90m12:01:06 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:08 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -400,8 +400,7 @@ directoryExists:: {
 getModifiedTimes:: {
  "/a/b/other.ts": 1,
  "/a/b/project2.tsconfig.json": 1,
- "/a/b/bravo.tsconfig.json": 1,
- "/a/b/other.d.ts": 1
+ "/a/b/bravo.tsconfig.json": 1
 } 
 
 setModifiedTimes:: {
@@ -425,15 +424,15 @@ setModifiedTimes:: {}
 
 Output::
 >> Screen clear
-[[90m12:01:10 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:12 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:11 AM[0m] Project 'project2.tsconfig.json' is out of date because oldest output 'project2.tsconfig.tsbuildinfo' is older than newest input 'bravo.tsconfig.json'
+[[90m12:01:13 AM[0m] Project 'project2.tsconfig.json' is out of date because oldest output 'project2.tsconfig.tsbuildinfo' is older than newest input 'bravo.tsconfig.json'
 
-[[90m12:01:12 AM[0m] Building project '/a/b/project2.tsconfig.json'...
+[[90m12:01:14 AM[0m] Building project '/a/b/project2.tsconfig.json'...
 
-[[90m12:01:13 AM[0m] Updating unchanged output timestamps of project '/a/b/project2.tsconfig.json'...
+[[90m12:01:15 AM[0m] Updating unchanged output timestamps of project '/a/b/project2.tsconfig.json'...
 
-[[90m12:01:15 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:17 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -485,9 +484,7 @@ directoryExists:: {
  "/node_modules/@types": 1
 } 
 
-getModifiedTimes:: {
- "/a/b/other.d.ts": 1
-} 
+getModifiedTimes:: {} 
 
 setModifiedTimes:: {
  "/a/b/project2.tsconfig.tsbuildinfo": 1
@@ -510,13 +507,13 @@ setModifiedTimes:: {}
 
 Output::
 >> Screen clear
-[[90m12:01:19 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:21 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:20 AM[0m] Project 'project2.tsconfig.json' is out of date because oldest output 'commonFile1.js' is older than newest input 'project2.tsconfig.json'
+[[90m12:01:22 AM[0m] Project 'project2.tsconfig.json' is out of date because oldest output 'commonFile1.js' is older than newest input 'project2.tsconfig.json'
 
-[[90m12:01:21 AM[0m] Building project '/a/b/project2.tsconfig.json'...
+[[90m12:01:23 AM[0m] Building project '/a/b/project2.tsconfig.json'...
 
-[[90m12:01:31 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:33 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -613,13 +610,13 @@ setModifiedTimes:: {}
 
 Output::
 >> Screen clear
-[[90m12:01:35 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:37 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:36 AM[0m] Project 'project1.tsconfig.json' is out of date because oldest output 'project1.tsconfig.tsbuildinfo' is older than newest input 'alpha.tsconfig.json'
+[[90m12:01:38 AM[0m] Project 'project1.tsconfig.json' is out of date because oldest output 'project1.tsconfig.tsbuildinfo' is older than newest input 'alpha.tsconfig.json'
 
-[[90m12:01:37 AM[0m] Building project '/a/b/project1.tsconfig.json'...
+[[90m12:01:39 AM[0m] Building project '/a/b/project1.tsconfig.json'...
 
-[[90m12:01:38 AM[0m] Updating unchanged output timestamps of project '/a/b/project1.tsconfig.json'...
+[[90m12:01:40 AM[0m] Updating unchanged output timestamps of project '/a/b/project1.tsconfig.json'...
 
 
 
@@ -672,10 +669,7 @@ directoryExists:: {
  "/node_modules/@types": 1
 } 
 
-getModifiedTimes:: {
- "/a/b/commonfile1.d.ts": 1,
- "/a/b/commonfile2.d.ts": 1
-} 
+getModifiedTimes:: {} 
 
 setModifiedTimes:: {
  "/a/b/project1.tsconfig.tsbuildinfo": 1
@@ -694,13 +688,13 @@ getModifiedTimes:: {}
 setModifiedTimes:: {} 
 
 Output::
-[[90m12:01:40 AM[0m] Project 'project2.tsconfig.json' is out of date because oldest output 'commonFile1.js' is older than newest input 'alpha.tsconfig.json'
+[[90m12:01:42 AM[0m] Project 'project2.tsconfig.json' is out of date because oldest output 'commonFile1.js' is older than newest input 'alpha.tsconfig.json'
 
-[[90m12:01:41 AM[0m] Building project '/a/b/project2.tsconfig.json'...
+[[90m12:01:43 AM[0m] Building project '/a/b/project2.tsconfig.json'...
 
-[[90m12:01:42 AM[0m] Updating unchanged output timestamps of project '/a/b/project2.tsconfig.json'...
+[[90m12:01:44 AM[0m] Updating unchanged output timestamps of project '/a/b/project2.tsconfig.json'...
 
-[[90m12:01:44 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:46 AM[0m] Found 0 errors. Watching for file changes.
 
 
 

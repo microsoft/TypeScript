@@ -140,13 +140,13 @@ Output::
 
 [[90m12:00:08 AM[0m] Building project '/src/first/tsconfig.json'...
 
-[[90m12:00:17 AM[0m] Project 'src/second/tsconfig.json' is out of date because output file 'src/2/second-output.tsbuildinfo' does not exist
+[[90m12:00:18 AM[0m] Project 'src/second/tsconfig.json' is out of date because output file 'src/2/second-output.tsbuildinfo' does not exist
 
-[[90m12:00:18 AM[0m] Building project '/src/second/tsconfig.json'...
+[[90m12:00:19 AM[0m] Building project '/src/second/tsconfig.json'...
 
-[[90m12:00:27 AM[0m] Project 'src/third/tsconfig.json' is out of date because output file 'src/third/thirdjs/output/third-output.tsbuildinfo' does not exist
+[[90m12:00:29 AM[0m] Project 'src/third/tsconfig.json' is out of date because output file 'src/third/thirdjs/output/third-output.tsbuildinfo' does not exist
 
-[[90m12:00:28 AM[0m] Building project '/src/third/tsconfig.json'...
+[[90m12:00:30 AM[0m] Building project '/src/third/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 readFiles:: {
@@ -1930,20 +1930,20 @@ console.log(s);
 
 Output::
 /lib/tsc --b /src/third --verbose
-[[90m12:00:45 AM[0m] Projects in this build: 
+[[90m12:00:48 AM[0m] Projects in this build: 
     * src/first/tsconfig.json
     * src/second/tsconfig.json
     * src/third/tsconfig.json
 
-[[90m12:00:46 AM[0m] Project 'src/first/tsconfig.json' is out of date because oldest output 'src/first/bin/first-output.tsbuildinfo' is older than newest input 'src/first/first_PART1.ts'
+[[90m12:00:49 AM[0m] Project 'src/first/tsconfig.json' is out of date because oldest output 'src/first/bin/first-output.tsbuildinfo' is older than newest input 'src/first/first_PART1.ts'
 
-[[90m12:00:47 AM[0m] Building project '/src/first/tsconfig.json'...
+[[90m12:00:50 AM[0m] Building project '/src/first/tsconfig.json'...
 
-[[90m12:00:56 AM[0m] Project 'src/second/tsconfig.json' is up to date because newest input 'src/second/second_part1.ts' is older than oldest output 'src/2/second-output.tsbuildinfo'
+[[90m12:00:59 AM[0m] Project 'src/second/tsconfig.json' is up to date because newest input 'src/second/second_part1.ts' is older than oldest output 'src/2/second-output.tsbuildinfo'
 
-[[90m12:00:57 AM[0m] Project 'src/third/tsconfig.json' is out of date because oldest output 'src/third/thirdjs/output/third-output.tsbuildinfo' is older than newest input 'src/first'
+[[90m12:01:00 AM[0m] Project 'src/third/tsconfig.json' is out of date because oldest output 'src/third/thirdjs/output/third-output.tsbuildinfo' is older than newest input 'src/first'
 
-[[90m12:00:58 AM[0m] Building project '/src/third/tsconfig.json'...
+[[90m12:01:01 AM[0m] Building project '/src/third/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 readFiles:: {
@@ -3274,20 +3274,20 @@ console.log(s);
 
 Output::
 /lib/tsc --b /src/third --verbose
-[[90m12:01:12 AM[0m] Projects in this build: 
+[[90m12:01:15 AM[0m] Projects in this build: 
     * src/first/tsconfig.json
     * src/second/tsconfig.json
     * src/third/tsconfig.json
 
-[[90m12:01:13 AM[0m] Project 'src/first/tsconfig.json' is out of date because oldest output 'src/first/bin/first-output.tsbuildinfo' is older than newest input 'src/first/first_PART1.ts'
+[[90m12:01:16 AM[0m] Project 'src/first/tsconfig.json' is out of date because oldest output 'src/first/bin/first-output.tsbuildinfo' is older than newest input 'src/first/first_PART1.ts'
 
-[[90m12:01:14 AM[0m] Building project '/src/first/tsconfig.json'...
+[[90m12:01:17 AM[0m] Building project '/src/first/tsconfig.json'...
 
-[[90m12:01:23 AM[0m] Project 'src/second/tsconfig.json' is up to date because newest input 'src/second/second_part1.ts' is older than oldest output 'src/2/second-output.tsbuildinfo'
+[[90m12:01:26 AM[0m] Project 'src/second/tsconfig.json' is up to date because newest input 'src/second/second_part1.ts' is older than oldest output 'src/2/second-output.tsbuildinfo'
 
-[[90m12:01:24 AM[0m] Project 'src/third/tsconfig.json' is out of date because output of its dependency 'src/first' has changed
+[[90m12:01:27 AM[0m] Project 'src/third/tsconfig.json' is out of date because output of its dependency 'src/first' has changed
 
-[[90m12:01:25 AM[0m] Updating output of project '/src/third/tsconfig.json'...
+[[90m12:01:28 AM[0m] Updating output of project '/src/third/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 readFiles:: {

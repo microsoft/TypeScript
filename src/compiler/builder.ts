@@ -74,6 +74,10 @@ namespace ts {
          * true if semantic diagnostics are ReusableDiagnostic instead of Diagnostic
          */
         hasReusableDiagnostic?: true;
+
+        emitSignatures?: ReadonlyESMap<Path, string>;
+        dtsChangeTime: number | undefined;
+        hasChangedEmitSignature?: boolean;
     }
 
     export const enum BuilderFileEmit {
@@ -137,6 +141,9 @@ namespace ts {
          * compilerOptions for the program
          */
         compilerOptions: CompilerOptions;
+        emitSignatures?: ESMap<Path, string>;
+        dtsChangeTime: number | undefined;
+        hasChangedEmitSignature?: boolean;
         /**
          * Files pending to be emitted
          */
@@ -178,16 +185,23 @@ namespace ts {
         state.program = newProgram;
         const compilerOptions = newProgram.getCompilerOptions();
         state.compilerOptions = compilerOptions;
+        const isOutFile = !!outFile(compilerOptions);
         // With --out or --outFile, any change affects all semantic diagnostics so no need to cache them
-        if (!outFile(compilerOptions)) {
+        if (!isOutFile) {
             state.semanticDiagnosticsPerFile = new Map();
         }
         state.changedFilesSet = new Set();
+        state.dtsChangeTime = oldState?.dtsChangeTime;
 
         const useOldState = BuilderState.canReuseOldState(state.referencedMap, oldState);
         const oldCompilerOptions = useOldState ? oldState!.compilerOptions : undefined;
         const canCopySemanticDiagnostics = useOldState && oldState!.semanticDiagnosticsPerFile && !!state.semanticDiagnosticsPerFile &&
             !compilerOptionsAffectSemanticDiagnostics(compilerOptions, oldCompilerOptions!);
+        const canCopyEmitSignatures = compilerOptions.composite &&
+            oldState?.emitSignatures &&
+            oldCompilerOptions &&
+            !isOutFile &&
+            !compilerOptionsAffectDeclarationPath(compilerOptions, oldCompilerOptions);
         if (useOldState) {
             // Verify the sanity of old state
             if (!oldState!.currentChangedFilePath) {
@@ -201,7 +215,7 @@ namespace ts {
 
             // Copy old state's changed files set
             changedFilesSet.forEach(value => state.changedFilesSet.add(value));
-            if (!outFile(compilerOptions) && oldState!.affectedFilesPendingEmit) {
+            if (!isOutFile && oldState!.affectedFilesPendingEmit) {
                 state.affectedFilesPendingEmit = oldState!.affectedFilesPendingEmit.slice();
                 state.affectedFilesPendingEmitKind = oldState!.affectedFilesPendingEmitKind && new Map(oldState!.affectedFilesPendingEmitKind);
                 state.affectedFilesPendingEmitIndex = oldState!.affectedFilesPendingEmitIndex;
@@ -247,6 +261,10 @@ namespace ts {
                     state.semanticDiagnosticsFromOldState.add(sourceFilePath);
                 }
             }
+            if (canCopyEmitSignatures) {
+                const oldEmitSignature = oldState.emitSignatures.get(sourceFilePath);
+                if (oldEmitSignature) (state.emitSignatures ||= new Map()).set(sourceFilePath, oldEmitSignature);
+            }
         });
 
         // If the global file is removed, add all files as changed
@@ -254,7 +272,7 @@ namespace ts {
             BuilderState.getAllFilesExcludingDefaultLibraryFile(state, newProgram, /*firstSourceFile*/ undefined)
                 .forEach(file => state.changedFilesSet.add(file.resolvedPath));
         }
-        else if (oldCompilerOptions && !outFile(compilerOptions) && compilerOptionsAffectEmit(compilerOptions, oldCompilerOptions)) {
+        else if (oldCompilerOptions && !isOutFile && compilerOptionsAffectEmit(compilerOptions, oldCompilerOptions)) {
             // Add all files to affectedFilesPendingEmit since emit changed
             newProgram.getSourceFiles().forEach(f => addToAffectedFilesPendingEmit(state, f.resolvedPath, BuilderFileEmit.Full));
             Debug.assert(!state.seenAffectedFiles || !state.seenAffectedFiles.size);
@@ -334,6 +352,10 @@ namespace ts {
         newState.affectedFilesPendingEmitIndex = state.affectedFilesPendingEmitIndex;
         newState.seenEmittedFiles = state.seenEmittedFiles && new Map(state.seenEmittedFiles);
         newState.programEmitComplete = state.programEmitComplete;
+        newState.filesChangingSignature = state.filesChangingSignature && new Set(state.filesChangingSignature);
+        newState.emitSignatures = state.emitSignatures && new Map(state.emitSignatures);
+        newState.dtsChangeTime = state.dtsChangeTime;
+        newState.hasChangedEmitSignature = state.hasChangedEmitSignature;
         return newState;
     }
 
@@ -789,6 +811,12 @@ namespace ts {
         signature: string | false | undefined;
     };
     /**
+     * Signature if different from file's signature
+     * [fileId, signature] if different from file's signature
+     * fileId if file wasnt emitted
+     */
+    export type ProgramBuildInfoEmitSignature = ProgramBuildInfoFileId | [fileId: ProgramBuildInfoFileId, signature: string];
+    /**
      * ProgramBuildInfoFileInfo is string if FileInfo.version === FileInfo.signature && !FileInfo.affectsGlobalScope otherwise encoded FileInfo
      */
     export type ProgramBuildInfoFileInfo = string | ProgramBuildInfoBuilderStateFileInfo;
@@ -802,12 +830,14 @@ namespace ts {
         semanticDiagnosticsPerFile?: ProgramBuildInfoDiagnostic[];
         affectedFilesPendingEmit?: ProgramBuilderInfoFilePendingEmit[];
         changeFileSet?: readonly ProgramBuildInfoFileId[];
+        emitSignatures?: readonly ProgramBuildInfoEmitSignature[];
+        dtsChangeTime?: number;
     }
 
     /**
      * Gets the program information to be emitted in buildInfo so that we can use it to create new program
      */
-    function getProgramBuildInfo(state: Readonly<ReusableBuilderProgramState>, getCanonicalFileName: GetCanonicalFileName): ProgramBuildInfo | undefined {
+    function getProgramBuildInfo(state: ReusableBuilderProgramState, getCanonicalFileName: GetCanonicalFileName, host: BuilderProgramHost): ProgramBuildInfo | undefined {
         if (outFile(state.compilerOptions)) return undefined;
         const currentDirectory = Debug.checkDefined(state.program).getCurrentDirectory();
         const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(getTsBuildInfoEmitOutputFilePath(state.compilerOptions)!, currentDirectory));
@@ -815,12 +845,22 @@ namespace ts {
         const fileNameToFileId = new Map<string, ProgramBuildInfoFileId>();
         let fileIdsList: (readonly ProgramBuildInfoFileId[])[] | undefined;
         let fileNamesToFileIdListId: ESMap<string, ProgramBuildInfoFileIdListId> | undefined;
+        let emitSignatures: ProgramBuildInfoEmitSignature[] | undefined;
         const fileInfos = arrayFrom(state.fileInfos.entries(), ([key, value]): ProgramBuildInfoFileInfo => {
             // Ensure fileId
             const fileId = toFileId(key);
             Debug.assert(fileNames[fileId - 1] === relativeToBuildInfo(key));
             const signature = state.currentAffectedFilesSignatures && state.currentAffectedFilesSignatures.get(key);
             const actualSignature = signature ?? value.signature;
+            if (state.compilerOptions.composite) {
+                const file = state.program!.getSourceFileByPath(key)!;
+                if (!isJsonSourceFile(file) && sourceFileMayBeEmitted(file, state.program!)) {
+                    const emitSignature = state.emitSignatures?.get(key);
+                    if (emitSignature !== actualSignature) {
+                        (emitSignatures ||= []).push(emitSignature === undefined ? fileId : [fileId, emitSignature]);
+                    }
+                }
+            }
             return value.version === actualSignature ?
                 value.affectsGlobalScope || value.impliedFormat ?
                     // If file version is same as signature, dont serialize signature
@@ -908,6 +948,8 @@ namespace ts {
             semanticDiagnosticsPerFile,
             affectedFilesPendingEmit,
             changeFileSet,
+            emitSignatures,
+            dtsChangeTime: state.dtsChangeTime = state.hasChangedEmitSignature ? getCurrentTime(host).getTime() : state.dtsChangeTime,
         };
 
         function relativeToBuildInfoEnsuringAbsolutePath(path: string) {
@@ -1069,7 +1111,7 @@ namespace ts {
         const computeHash = maybeBind(host, host.createHash);
         let state = createBuilderProgramState(newProgram, getCanonicalFileName, oldState, host.disableUseFileVersionAsSignature);
         let backupState: BuilderProgramState | undefined;
-        newProgram.getProgramBuildInfo = () => getProgramBuildInfo(state, getCanonicalFileName);
+        newProgram.getProgramBuildInfo = () => getProgramBuildInfo(state, getCanonicalFileName, host);
 
         // To ensure that we arent storing any references to old program or new program without state
         newProgram = undefined!; // TODO: GH#18217
@@ -1163,8 +1205,8 @@ namespace ts {
                 // Otherwise just affected file
                 Debug.checkDefined(state.program).emit(
                     affected === state.program ? undefined : affected as SourceFile,
-                    affected !== state.program && getEmitDeclarations(state.compilerOptions) && !customTransformers ?
-                    getWriteFileUpdatingSignatureCallback(writeFile) :
+                    affected !== state.program && getEmitDeclarations(state.compilerOptions) ?
+                        getWriteFileCallback(writeFile, customTransformers) :
                         writeFile || maybeBind(host, host.writeFile),
                     cancellationToken,
                     emitOnlyDtsFiles || emitKind === BuilderFileEmit.DtsOnly,
@@ -1176,25 +1218,38 @@ namespace ts {
             );
         }
 
-        function getWriteFileUpdatingSignatureCallback(writeFile: WriteFileCallback | undefined): WriteFileCallback {
+        function getWriteFileCallback(writeFile: WriteFileCallback | undefined, customTransformers: CustomTransformers | undefined): WriteFileCallback {
             return (fileName, text, writeByteOrderMark, onError, sourceFiles, data) => {
                 if (isDeclarationFileName(fileName)) {
                     Debug.assert(sourceFiles?.length === 1);
-                    const file = sourceFiles[0];
-                    const info = state.fileInfos.get(file.resolvedPath)!;
-                    const signature = state.currentAffectedFilesSignatures?.get(file.resolvedPath) || info.signature;
-                    if (signature === file.version) {
-                        const newSignature = (computeHash || generateDjb2Hash)(data?.sourceMapUrlPos !== undefined ? text.substring(0, data.sourceMapUrlPos) : text);
-                        if (newSignature !== file.version) { // Update it
-                            if (host.storeFilesChangingSignatureDuringEmit) (state.filesChangingSignature ||= new Set()).add(file.resolvedPath);
-                            if (state.exportedModulesMap) BuilderState.updateExportedModules(file, file.exportedModulesFromDeclarationEmit, state.currentAffectedFilesExportedModulesMap ||= BuilderState.createManyToManyPathMap());
-                            if (state.affectedFiles && state.affectedFilesIndex! < state.affectedFiles.length) {
-                                state.currentAffectedFilesSignatures!.set(file.resolvedPath, newSignature);
+                    let newSignature;
+                    if (!customTransformers) {
+                        const file = sourceFiles[0];
+                        const info = state.fileInfos.get(file.resolvedPath)!;
+                        const signature = state.currentAffectedFilesSignatures?.get(file.resolvedPath) || info.signature;
+                        if (signature === file.version) {
+                            newSignature = computeSignature(text, data);
+                            if (newSignature !== file.version) { // Update it
+                                if (host.storeFilesChangingSignatureDuringEmit) (state.filesChangingSignature ||= new Set()).add(file.resolvedPath);
+                                if (state.exportedModulesMap) BuilderState.updateExportedModules(file, file.exportedModulesFromDeclarationEmit, state.currentAffectedFilesExportedModulesMap ||= BuilderState.createManyToManyPathMap());
+                                if (state.affectedFiles && state.affectedFilesIndex! < state.affectedFiles.length) {
+                                    state.currentAffectedFilesSignatures!.set(file.resolvedPath, newSignature);
+                                }
+                                else {
+                                    info.signature = newSignature;
+                                    if (state.exportedModulesMap) BuilderState.updateExportedFilesMapFromCache(state, state.currentAffectedFilesExportedModulesMap);
+                                }
                             }
-                            else {
-                                info.signature = newSignature;
-                                if (state.exportedModulesMap) BuilderState.updateExportedFilesMapFromCache(state, state.currentAffectedFilesExportedModulesMap);
-                            }
+                        }
+                    }
+
+                    if (state.compilerOptions.composite) {
+                        const filePath = sourceFiles[0].resolvedPath;
+                        const oldSignature = state.emitSignatures?.get(filePath);
+                        newSignature ||= computeSignature(text, data);
+                        if (newSignature !== oldSignature) {
+                            (state.emitSignatures ||= new Map()).set(filePath, newSignature);
+                            state.hasChangedEmitSignature = true;
                         }
                     }
                 }
@@ -1202,6 +1257,10 @@ namespace ts {
                 else if (host.writeFile) host.writeFile(fileName, text, writeByteOrderMark, onError, sourceFiles, data);
                 else state.program!.writeFile(fileName, text, writeByteOrderMark, onError, sourceFiles, data);
             };
+        }
+
+        function computeSignature(text: string, data: WriteFileCallbackData | undefined) {
+            return BuilderState.computeSignature(data?.sourceMapUrlPos !== undefined ? text.substring(0, data.sourceMapUrlPos) : text, computeHash);
         }
 
         /**
@@ -1260,8 +1319,8 @@ namespace ts {
             }
             return Debug.checkDefined(state.program).emit(
                 targetSourceFile,
-                !outFile(state.compilerOptions) && getEmitDeclarations(state.compilerOptions) && !customTransformers ?
-                    getWriteFileUpdatingSignatureCallback(writeFile) :
+                !outFile(state.compilerOptions) && getEmitDeclarations(state.compilerOptions) ?
+                    getWriteFileCallback(writeFile, customTransformers) :
                     writeFile || maybeBind(host, host.writeFile),
                 cancellationToken,
                 emitOnlyDtsFiles,
@@ -1377,7 +1436,17 @@ namespace ts {
         const filePaths = program.fileNames.map(toPath);
         const filePathsSetList = program.fileIdsList?.map(fileIds => new Set(fileIds.map(toFilePath)));
         const fileInfos = new Map<Path, BuilderState.FileInfo>();
-        program.fileInfos.forEach((fileInfo, index) => fileInfos.set(toFilePath(index + 1 as ProgramBuildInfoFileId), toBuilderStateFileInfo(fileInfo)));
+        const emitSignatures = program.options?.composite ? new Map<Path, string>() : undefined;
+        program.fileInfos.forEach((fileInfo, index) => {
+            const path = toFilePath(index + 1 as ProgramBuildInfoFileId);
+            const stateFileInfo = toBuilderStateFileInfo(fileInfo);
+            fileInfos.set(path, stateFileInfo);
+            if (emitSignatures && stateFileInfo.signature) emitSignatures.set(path, stateFileInfo.signature);
+        });
+        program.emitSignatures?.forEach(value => {
+            if (isNumber(value)) emitSignatures!.delete(toFilePath(value));
+            else emitSignatures!.set(toFilePath(value[0]), value[1]);
+        });
         const state: ReusableBuilderProgramState = {
             fileInfos,
             compilerOptions: program.options ? convertToOptionsWithAbsolutePaths(program.options, toAbsolutePath) : {},
@@ -1389,6 +1458,8 @@ namespace ts {
             affectedFilesPendingEmitKind: program.affectedFilesPendingEmit && arrayToMap(program.affectedFilesPendingEmit, value => toFilePath(value[0]), value => value[1]),
             affectedFilesPendingEmitIndex: program.affectedFilesPendingEmit && 0,
             changedFilesSet: new Set(map(program.changeFileSet, toFilePath)),
+            dtsChangeTime: program.dtsChangeTime,
+            emitSignatures: emitSignatures?.size ? emitSignatures : undefined,
         };
         return {
             getState: () => state,

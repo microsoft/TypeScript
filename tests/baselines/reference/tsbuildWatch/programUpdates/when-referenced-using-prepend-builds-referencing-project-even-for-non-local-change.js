@@ -38,7 +38,7 @@ Output::
 >> Screen clear
 [[90m12:00:29 AM[0m] Starting compilation in watch mode...
 
-[[90m12:00:50 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:52 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -284,7 +284,7 @@ setModifiedTimes:: {}
 
 Output::
 >> Screen clear
-[[90m12:00:54 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:56 AM[0m] File change detected. Starting incremental compilation...
 
 
 
@@ -395,9 +395,7 @@ directoryExists:: {
  "/node_modules/@types": 1
 } 
 
-getModifiedTimes:: {
- "/user/username/projects/sample1/core/index.tsbuildinfo": 1
-} 
+getModifiedTimes:: {} 
 
 setModifiedTimes:: {} 
 
@@ -414,7 +412,7 @@ getModifiedTimes:: {}
 setModifiedTimes:: {} 
 
 Output::
-[[90m12:01:26 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:29 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -591,7 +589,7 @@ setModifiedTimes:: {}
 
 Output::
 >> Screen clear
-[[90m12:01:30 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:33 AM[0m] File change detected. Starting incremental compilation...
 
 
 
@@ -717,7 +715,7 @@ getModifiedTimes:: {}
 setModifiedTimes:: {} 
 
 Output::
-[[90m12:01:59 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:02:03 AM[0m] Found 0 errors. Watching for file changes.
 
 
 

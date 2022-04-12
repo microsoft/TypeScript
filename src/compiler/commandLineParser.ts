@@ -522,6 +522,7 @@ namespace ts {
             name: "outFile",
             type: "string",
             affectsEmit: true,
+            affectsDeclarationPath: true,
             isFilePath: true,
             paramType: Diagnostics.FILE,
             showInSimplifiedHelpView: true,
@@ -533,6 +534,7 @@ namespace ts {
             name: "outDir",
             type: "string",
             affectsEmit: true,
+            affectsDeclarationPath: true,
             isFilePath: true,
             paramType: Diagnostics.DIRECTORY,
             showInSimplifiedHelpView: true,
@@ -543,6 +545,7 @@ namespace ts {
             name: "rootDir",
             type: "string",
             affectsEmit: true,
+            affectsDeclarationPath: true,
             isFilePath: true,
             paramType: Diagnostics.LOCATION,
             category: Diagnostics.Modules,
@@ -988,6 +991,7 @@ namespace ts {
             name: "out",
             type: "string",
             affectsEmit: true,
+            affectsDeclarationPath: true,
             isFilePath: false, // This is intentionally broken to support compatability with existing tsconfig files
             // for correct behaviour, please use outFile
             category: Diagnostics.Backwards_Compatibility,
@@ -1144,6 +1148,7 @@ namespace ts {
             name: "declarationDir",
             type: "string",
             affectsEmit: true,
+            affectsDeclarationPath: true,
             isFilePath: true,
             paramType: Diagnostics.DIRECTORY,
             category: Diagnostics.Emit,
@@ -1280,6 +1285,10 @@ namespace ts {
     /* @internal */
     export const affectsEmitOptionDeclarations: readonly CommandLineOption[] =
         optionDeclarations.filter(option => !!option.affectsEmit);
+
+    /* @internal */
+    export const affectsDeclarationPathOptionDeclarations: readonly CommandLineOption[] =
+        optionDeclarations.filter(option => !!option.affectsDeclarationPath);
 
     /* @internal */
     export const moduleResolutionOptionDeclarations: readonly CommandLineOption[] =

@@ -25,6 +25,11 @@ namespace ts {
          */
         /*@internal*/
         storeFilesChangingSignatureDuringEmit?: boolean;
+        /**
+         * Gets the current time
+         */
+        /*@internal*/
+        now?(): Date;
     }
 
     /**

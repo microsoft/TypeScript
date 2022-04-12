@@ -198,6 +198,7 @@ interface Symbol {
 
     type ReadableProgramBuildInfoDiagnostic = string | [string, readonly ReusableDiagnostic[]];
     type ReadableProgramBuilderInfoFilePendingEmit = [string, "DtsOnly" | "Full"];
+    type ReadableProgramBuildInfoEmitSignature = string | [string, string];
     interface ReadableProgramBuildInfo {
         fileNames: readonly string[];
         fileNamesList: readonly (readonly string[])[] | undefined;
@@ -208,6 +209,8 @@ interface Symbol {
         semanticDiagnosticsPerFile?: readonly ReadableProgramBuildInfoDiagnostic[];
         affectedFilesPendingEmit?: readonly ReadableProgramBuilderInfoFilePendingEmit[];
         changeFileSet?: readonly string[];
+        emitSignatures?: readonly ReadableProgramBuildInfoEmitSignature[];
+        dtsChangeTime?: number;
     }
     type ReadableBuildInfo = Omit<BuildInfo, "program"> & { program: ReadableProgramBuildInfo | undefined; size: number; };
     function generateBuildInfoProgramBaseline(sys: System, buildInfoPath: string, buildInfo: BuildInfo) {
@@ -233,6 +236,12 @@ interface Symbol {
                         Debug.assertNever(emitKind)
             ]),
             changeFileSet: buildInfo.program.changeFileSet?.map(toFileName),
+            emitSignatures: buildInfo.program.emitSignatures?.map(s =>
+                isNumber(s) ?
+                    toFileName(s) :
+                    [toFileName(s[0]), s[1]]
+            ),
+            dtsChangeTime: buildInfo.program.dtsChangeTime,
         };
         const version = buildInfo.version === ts.version ? fakes.version : buildInfo.version;
         const result: ReadableBuildInfo = {
@@ -485,6 +494,7 @@ interface Symbol {
                     options: sanatizeCompilerOptions(readableBuildInfo.program.options),
                     exportedModulesMap: undefined,
                     affectedFilesPendingEmit: undefined,
+                    dtsChangeTime: readableBuildInfo.program.dtsChangeTime ? "FakeTime" : undefined,
                 },
                 size: undefined, // Size doesnt need to be equal
             },  /*replacer*/ undefined, 2),

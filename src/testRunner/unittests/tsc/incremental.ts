@@ -123,10 +123,20 @@ const a: string = 10;`, "utf-8"),
             verifyNoEmitChanges({ composite: true });
 
             function verifyNoEmitChanges(compilerOptions: CompilerOptions) {
+                const descripencyExplaination = () => [
+                    ...noChangeWithExportsDescripencyRun.descripencyExplaination!(),
+                    "Clean build will not have dtsChangeTime as there was no emit and emitSignatures as undefined for files",
+                    "Incremental will store the past dtsChangeTime and emitSignatures",
+                ];
                 const noChangeRunWithNoEmit: TestTscEdit = {
-                    ...(getEmitDeclarations(compilerOptions) ? noChangeRun : noChangeWithExportsDescripencyRun),
+                    ...noChangeRun,
                     subScenario: "No Change run with noEmit",
                     commandLineArgs: ["--p", "src/project", "--noEmit"],
+                    descripencyExplaination: compilerOptions.composite ?
+                        descripencyExplaination :
+                        !compilerOptions.declaration ?
+                            noChangeWithExportsDescripencyRun.descripencyExplaination :
+                            undefined,
                 };
                 const noChangeRunWithEmit: TestTscEdit = {
                     ...(getEmitDeclarations(compilerOptions) ? noChangeRun : noChangeWithExportsDescripencyRun),
@@ -152,7 +162,11 @@ const a: string = 10;`, "utf-8"),
                             subScenario: "Introduce error but still noEmit",
                             commandLineArgs: ["--p", "src/project", "--noEmit"],
                             modifyFs: fs => replaceText(fs, "/src/project/src/class.ts", "prop", "prop1"),
-                            descripencyExplaination: getEmitDeclarations(compilerOptions) ? noChangeWithExportsDescripencyRun.descripencyExplaination : undefined,
+                            descripencyExplaination: compilerOptions.composite ?
+                                descripencyExplaination :
+                                compilerOptions.declaration ?
+                                    noChangeWithExportsDescripencyRun.descripencyExplaination :
+                                    undefined,
                         },
                         {
                             subScenario: "Fix error and emit",
@@ -176,7 +190,9 @@ const a: string = 10;`, "utf-8"),
                             subScenario: "Fix error and no emit",
                             commandLineArgs: ["--p", "src/project", "--noEmit"],
                             modifyFs: fs => replaceText(fs, "/src/project/src/class.ts", "prop1", "prop"),
-                            descripencyExplaination: noChangeWithExportsDescripencyRun.descripencyExplaination,
+                            descripencyExplaination: compilerOptions.composite ?
+                                descripencyExplaination :
+                                noChangeWithExportsDescripencyRun.descripencyExplaination,
                         },
                         noChangeRunWithEmit,
                         noChangeRunWithNoEmit,
@@ -200,7 +216,9 @@ const a: string = 10;`, "utf-8"),
                         {
                             subScenario: "Fix error and no emit",
                             modifyFs: fs => replaceText(fs, "/src/project/src/class.ts", "prop1", "prop"),
-                            descripencyExplaination: noChangeWithExportsDescripencyRun.descripencyExplaination
+                            descripencyExplaination: compilerOptions.composite ?
+                                descripencyExplaination :
+                                noChangeWithExportsDescripencyRun.descripencyExplaination,
                         },
                         noChangeRunWithEmit,
                     ],

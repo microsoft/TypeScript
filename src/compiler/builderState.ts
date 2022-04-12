@@ -29,7 +29,7 @@ namespace ts {
         readonly exportedModulesMap?: BuilderState.ReadonlyManyToManyPathMap | undefined;
     }
 
-    export interface BuilderState {
+    export interface BuilderState extends ReusableBuilderState {
         /**
          * Information of the file eg. its version, signature etc
          */
@@ -423,7 +423,7 @@ namespace ts {
                 const firstDts = firstOrUndefined(emitOutput.outputFiles);
                 if (firstDts) {
                     Debug.assert(isDeclarationFileName(firstDts.name), "File extension for signature expected to be dts", () => `Found: ${getAnyExtensionFromPath(firstDts.name)} for ${firstDts.name}:: All output files: ${JSON.stringify(emitOutput.outputFiles.map(f => f.name))}`);
-                    latestSignature = (computeHash || generateDjb2Hash)(firstDts.text);
+                    latestSignature = computeSignature(firstDts.text, computeHash);
                     if (exportedModulesMapCache && latestSignature !== prevSignature) {
                         updateExportedModules(sourceFile, emitOutput.exportedModulesFromDeclarationEmit, exportedModulesMapCache);
                     }
@@ -445,6 +445,10 @@ namespace ts {
             }
             cacheToUpdateSignature.set(sourceFile.resolvedPath, latestSignature);
             return latestSignature !== prevSignature;
+        }
+
+        export function computeSignature(text: string, computeHash: ComputeHash | undefined) {
+            return (computeHash || generateDjb2Hash)(text);
         }
 
         /**
