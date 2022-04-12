@@ -1,5 +1,5 @@
 tests/cases/conformance/jsdoc/test.js(1,12): error TS8030: The type of a function declaration must match the function's signature.
-tests/cases/conformance/jsdoc/test.js(7,5): error TS2741: Property 'prop' is missing in type '(prop: any) => void' but required in type '{ prop: string; }'.
+tests/cases/conformance/jsdoc/test.js(7,5): error TS2322: Type '(prop: any) => void' is not assignable to type '{ prop: string; }'.
 tests/cases/conformance/jsdoc/test.js(10,12): error TS8030: The type of a function declaration must match the function's signature.
 
 
@@ -14,8 +14,7 @@ tests/cases/conformance/jsdoc/test.js(10,12): error TS8030: The type of a functi
     /** @type {{ prop: string }} */
     var g = function (prop) {
         ~
-!!! error TS2741: Property 'prop' is missing in type '(prop: any) => void' but required in type '{ prop: string; }'.
-!!! related TS2728 tests/cases/conformance/jsdoc/test.js:6:14: 'prop' is declared here.
+!!! error TS2322: Type '(prop: any) => void' is not assignable to type '{ prop: string; }'.
     }
     
     /** @type {(a: number) => number} */

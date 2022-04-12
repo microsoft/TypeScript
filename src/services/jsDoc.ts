@@ -169,7 +169,27 @@ namespace ts.JsDoc {
             case SyntaxKind.JSDocAugmentsTag:
                 return withNode((tag as JSDocAugmentsTag).class);
             case SyntaxKind.JSDocTemplateTag:
-                return addComment((tag as JSDocTemplateTag).typeParameters.map(tp => tp.getText()).join(", "));
+                const templateTag = tag as JSDocTemplateTag;
+                const displayParts: SymbolDisplayPart[] = [];
+                if (templateTag.constraint) {
+                    displayParts.push(textPart(templateTag.constraint.getText()));
+                }
+                if (length(templateTag.typeParameters)) {
+                    if (length(displayParts)) {
+                        displayParts.push(spacePart());
+                    }
+                    const lastTypeParameter = templateTag.typeParameters[templateTag.typeParameters.length - 1];
+                    forEach(templateTag.typeParameters, tp => {
+                        displayParts.push(namePart(tp.getText()));
+                        if (lastTypeParameter !== tp) {
+                            displayParts.push(...[punctuationPart(SyntaxKind.CommaToken), spacePart()]);
+                        }
+                    });
+                }
+                if (comment) {
+                    displayParts.push(...[spacePart(), ...getDisplayPartsFromComment(comment, checker)]);
+                }
+                return displayParts;
             case SyntaxKind.JSDocTypeTag:
                 return withNode((tag as JSDocTypeTag).typeExpression);
             case SyntaxKind.JSDocTypedefTag:
@@ -333,7 +353,8 @@ namespace ts.JsDoc {
         }
 
         const { commentOwner, parameters, hasReturn } = commentOwnerInfo;
-        if (commentOwner.getStart(sourceFile) < position) {
+        const commentOwnerJSDoc = hasJSDocNodes(commentOwner) && commentOwner.jsDoc ? lastOrUndefined(commentOwner.jsDoc) : undefined;
+        if (commentOwner.getStart(sourceFile) < position || commentOwnerJSDoc && commentOwnerJSDoc !== existingDocComment) {
             return undefined;
         }
 

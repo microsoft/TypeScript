@@ -1,15 +1,15 @@
 === tests/cases/conformance/types/tuple/unionsOfTupleTypes1.ts ===
 type T1 = [string, number];
->T1 : T1
+>T1 : [string, number]
 
 type T2 = [boolean] | [string, number];
->T2 : T2
+>T2 : [boolean] | [string, number]
 
 type T3 = [string, ...number[]];
->T3 : T3
+>T3 : [string, ...number[]]
 
 type T4 = [boolean] | [string, ...number[]];
->T4 : T4
+>T4 : [boolean] | [string, ...number[]]
 
 type T10 = T1[0];  // string
 >T10 : string
@@ -251,7 +251,7 @@ function f1(t1: T1, t2: T2, t3: T3, t4: T4, x: number) {
 // Repro from #27543
 
 type Unioned = [string] | [string, number];
->Unioned : Unioned
+>Unioned : [string, number] | [string]
 
 const ex: Unioned = ["hi"] as Unioned;
 >ex : Unioned

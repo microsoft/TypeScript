@@ -9,7 +9,7 @@ type T3 = Awaited<number | Promise<number>>;
 >T3 : number
 
 type T4 = Awaited<number | Promise<string>>;
->T4 : T4
+>T4 : string | number
 
 type T5 = Awaited<{ then: number }>;
 >T5 : { then: number; }

@@ -4,9 +4,9 @@ const options = new Intl.NumberFormat('en-NZ', { style: 'currency', currency: 'N
 >new Intl.NumberFormat('en-NZ', { style: 'currency', currency: 'NZD', currencySign: 'accounting' }).resolvedOptions() : Intl.ResolvedNumberFormatOptions
 >new Intl.NumberFormat('en-NZ', { style: 'currency', currency: 'NZD', currencySign: 'accounting' }).resolvedOptions : { (): Intl.ResolvedNumberFormatOptions; (): Intl.ResolvedNumberFormatOptions; }
 >new Intl.NumberFormat('en-NZ', { style: 'currency', currency: 'NZD', currencySign: 'accounting' }) : Intl.NumberFormat
->Intl.NumberFormat : { (locales?: string | string[] | undefined, options?: Intl.NumberFormatOptions | undefined): Intl.NumberFormat; new (locales?: string | string[] | undefined, options?: Intl.NumberFormatOptions | undefined): Intl.NumberFormat; supportedLocalesOf(locales: string | string[], options?: Intl.NumberFormatOptions | undefined): string[]; }
+>Intl.NumberFormat : { (locales?: string | string[] | undefined, options?: Intl.NumberFormatOptions | undefined): Intl.NumberFormat; new (locales?: string | string[] | undefined, options?: Intl.NumberFormatOptions | undefined): Intl.NumberFormat; supportedLocalesOf(locales: string | string[], options?: Intl.NumberFormatOptions | undefined): string[]; readonly prototype: Intl.NumberFormat; }
 >Intl : typeof Intl
->NumberFormat : { (locales?: string | string[] | undefined, options?: Intl.NumberFormatOptions | undefined): Intl.NumberFormat; new (locales?: string | string[] | undefined, options?: Intl.NumberFormatOptions | undefined): Intl.NumberFormat; supportedLocalesOf(locales: string | string[], options?: Intl.NumberFormatOptions | undefined): string[]; }
+>NumberFormat : { (locales?: string | string[] | undefined, options?: Intl.NumberFormatOptions | undefined): Intl.NumberFormat; new (locales?: string | string[] | undefined, options?: Intl.NumberFormatOptions | undefined): Intl.NumberFormat; supportedLocalesOf(locales: string | string[], options?: Intl.NumberFormatOptions | undefined): string[]; readonly prototype: Intl.NumberFormat; }
 >'en-NZ' : "en-NZ"
 >{ style: 'currency', currency: 'NZD', currencySign: 'accounting' } : { style: string; currency: string; currencySign: string; }
 >style : string

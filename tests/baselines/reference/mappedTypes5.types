@@ -74,7 +74,7 @@ function f<T>(p: Partial<T>, r: Readonly<T>, pr: Partial<Readonly<T>>, rp: Reado
 // Repro from #17682
 
 type State = {
->State : State
+>State : { [key: string]: string | number | boolean | null; }
 
     [key: string]: string | boolean | number | null;
 >key : string
@@ -137,12 +137,12 @@ function doit<T extends State>() {
 }
 
 type State2 = { foo: number, bar: string };
->State2 : State2
+>State2 : { foo: number; bar: string; }
 >foo : number
 >bar : string
 
 type Args3 = {
->Args3 : Args3
+>Args3 : { readonly previous: Readonly<Partial<State2>>; readonly current: Readonly<Partial<State2>>; }
 
     readonly previous: Readonly<Partial<State2>>;
 >previous : Readonly<Partial<State2>>
@@ -153,7 +153,7 @@ type Args3 = {
 };
 
 type Args4 = {
->Args4 : Args4
+>Args4 : { readonly previous: Partial<Readonly<State2>>; readonly current: Partial<Readonly<State2>>; }
 
     readonly previous: Partial<Readonly<State2>>;
 >previous : Partial<Readonly<State2>>

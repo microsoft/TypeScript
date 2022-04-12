@@ -168,7 +168,7 @@ namespace FourSlash {
         // The position of the end of the current selection, or -1 if nothing is selected
         public selectionEnd = -1;
 
-        public lastKnownMarker = "";
+        public lastKnownMarker: string | undefined;
 
         // The file that's currently 'opened'
         public activeFile!: FourSlashFile;
@@ -400,7 +400,7 @@ namespace FourSlash {
                         continue;
                     }
                     const memo = Utils.memoize(
-                        (_version: number, _active: string, _caret: number, _selectEnd: number, _marker: string, ...args: any[]) => (ls[key] as Function)(...args),
+                        (_version: number, _active: string, _caret: number, _selectEnd: number, _marker: string | undefined, ...args: any[]) => (ls[key] as Function)(...args),
                         (...args) => args.map(a => a && typeof a === "object" ? JSON.stringify(a) : a).join("|,|")
                     );
                     proxy[key] = (...args: any[]) => memo(
@@ -540,8 +540,8 @@ namespace FourSlash {
         }
 
         private messageAtLastKnownMarker(message: string) {
-            const locationDescription = this.lastKnownMarker ? this.lastKnownMarker : this.getLineColStringAtPosition(this.currentCaretPosition);
-            return `At ${locationDescription}: ${message}`;
+            const locationDescription = this.lastKnownMarker !== undefined ? this.lastKnownMarker : this.getLineColStringAtPosition(this.currentCaretPosition);
+            return `At marker '${locationDescription}': ${message}`;
         }
 
         private assertionMessageAtLastKnownMarker(msg: string) {
@@ -841,7 +841,7 @@ namespace FourSlash {
             });
         }
 
-        public verifyInlayHints(expected: readonly FourSlashInterface.VerifyInlayHintsOptions[], span: ts.TextSpan = { start: 0, length: this.activeFile.content.length }, preference?: ts.InlayHintsOptions) {
+        public verifyInlayHints(expected: readonly FourSlashInterface.VerifyInlayHintsOptions[], span: ts.TextSpan = { start: 0, length: this.activeFile.content.length }, preference?: ts.UserPreferences) {
             const hints = this.languageService.provideInlayHints(this.activeFile.fileName, span, preference);
             assert.equal(hints.length, expected.length, "Number of hints");
 
@@ -864,7 +864,7 @@ namespace FourSlash {
             else {
                 for (const marker of toArray(options.marker)) {
                     this.goToMarker(marker);
-                    this.verifyCompletionsWorker(options);
+                    this.verifyCompletionsWorker({ ...options, marker });
                 }
             }
         }
@@ -960,7 +960,7 @@ namespace FourSlash {
             expected = typeof expected === "string" ? { name: expected } : expected;
 
             if (actual.insertText !== expected.insertText) {
-                this.raiseError(`Completion insert text did not match: ${showTextDiff(expected.insertText || "", actual.insertText || "")}`);
+                this.raiseError(`At entry ${actual.name}: Completion insert text did not match: ${showTextDiff(expected.insertText || "", actual.insertText || "")}`);
             }
             const convertedReplacementSpan = expected.replacementSpan && ts.createTextSpanFromRange(expected.replacementSpan);
             if (convertedReplacementSpan?.length) {
@@ -968,28 +968,30 @@ namespace FourSlash {
                     assert.deepEqual(actual.replacementSpan, convertedReplacementSpan);
                 }
                 catch {
-                    this.raiseError(`Expected completion replacementSpan to be ${stringify(convertedReplacementSpan)}, got ${stringify(actual.replacementSpan)}`);
+                    this.raiseError(`At entry ${actual.name}: Expected completion replacementSpan to be ${stringify(convertedReplacementSpan)}, got ${stringify(actual.replacementSpan)}`);
                 }
             }
 
             if (expected.kind !== undefined || expected.kindModifiers !== undefined) {
-                assert.equal(actual.kind, expected.kind, `Expected 'kind' for ${actual.name} to match`);
-                assert.equal(actual.kindModifiers, expected.kindModifiers || "", `Expected 'kindModifiers' for ${actual.name} to match`);
+                assert.equal(actual.kind, expected.kind, `At entry ${actual.name}: Expected 'kind' for ${actual.name} to match`);
+                assert.equal(actual.kindModifiers, expected.kindModifiers || "", `At entry ${actual.name}:  Expected 'kindModifiers' for ${actual.name} to match`);
             }
             if (expected.isFromUncheckedFile !== undefined) {
-                assert.equal<boolean | undefined>(actual.isFromUncheckedFile, expected.isFromUncheckedFile, "Expected 'isFromUncheckedFile' properties to match");
+                assert.equal<boolean | undefined>(actual.isFromUncheckedFile, expected.isFromUncheckedFile, `At entry ${actual.name}: Expected 'isFromUncheckedFile' properties to match`);
             }
             if (expected.isPackageJsonImport !== undefined) {
-                assert.equal<boolean | undefined>(actual.isPackageJsonImport, expected.isPackageJsonImport, "Expected 'isPackageJsonImport' properties to match");
+                assert.equal<boolean | undefined>(actual.isPackageJsonImport, expected.isPackageJsonImport, `At entry ${actual.name}: Expected 'isPackageJsonImport' properties to match`);
             }
 
-            assert.equal(actual.hasAction, expected.hasAction, `Expected 'hasAction' properties to match`);
-            assert.equal(actual.isRecommended, expected.isRecommended, `Expected 'isRecommended' properties to match'`);
-            assert.equal(actual.isSnippet, expected.isSnippet, `Expected 'isSnippet' properties to match`);
-            assert.equal(actual.source, expected.source, `Expected 'source' values to match`);
-            assert.equal(actual.sortText, expected.sortText || ts.Completions.SortText.LocationPriority, `Expected 'sortText' properties to match`);
+            assert.equal(actual.labelDetails?.description, expected.labelDetails?.description, `At entry ${actual.name}: Expected 'labelDetails.description' properties to match`);
+            assert.equal(actual.labelDetails?.detail, expected.labelDetails?.detail, `At entry ${actual.name}: Expected 'labelDetails.detail' properties to match`);
+            assert.equal(actual.hasAction, expected.hasAction, `At entry ${actual.name}: Expected 'hasAction' properties to match`);
+            assert.equal(actual.isRecommended, expected.isRecommended, `At entry ${actual.name}: Expected 'isRecommended' properties to match'`);
+            assert.equal(actual.isSnippet, expected.isSnippet, `At entry ${actual.name}: Expected 'isSnippet' properties to match`);
+            assert.equal(actual.source, expected.source, `At entry ${actual.name}: Expected 'source' values to match`);
+            assert.equal(actual.sortText, expected.sortText || ts.Completions.SortText.LocationPriority, `At entry ${actual.name}: Expected 'sortText' properties to match`);
             if (expected.sourceDisplay && actual.sourceDisplay) {
-                assert.equal(ts.displayPartsToString(actual.sourceDisplay), expected.sourceDisplay, `Expected 'sourceDisplay' properties to match`);
+                assert.equal(ts.displayPartsToString(actual.sourceDisplay), expected.sourceDisplay, `At entry ${actual.name}: Expected 'sourceDisplay' properties to match`);
             }
 
             if (expected.text !== undefined) {
@@ -1120,83 +1122,18 @@ namespace FourSlash {
             }
         }
 
-        private verifyDocumentHighlightsRespectFilesList(files: readonly string[]): void {
-            const startFile = this.activeFile.fileName;
-            for (const fileName of files) {
-                const searchFileNames = startFile === fileName ? [startFile] : [startFile, fileName];
-                const highlights = this.getDocumentHighlightsAtCurrentPosition(searchFileNames);
-                if (highlights && !highlights.every(dh => ts.contains(searchFileNames, dh.fileName))) {
-                    this.raiseError(`When asking for document highlights only in files ${searchFileNames}, got document highlights in ${unique(highlights, dh => dh.fileName)}`);
-                }
-            }
-        }
-
-        public verifyReferenceGroups(starts: ArrayOrSingle<string> | ArrayOrSingle<Range>, parts: readonly FourSlashInterface.ReferenceGroup[]): void {
-            interface ReferenceGroupJson {
-                definition: string | { text: string, range: ts.TextSpan };
-                references: ts.ReferenceEntry[];
-            }
-            interface RangeMarkerData {
-                id?: string;
-                isWriteAccess?: boolean,
-                isDefinition?: boolean,
-                isInString?: true,
-                contextRangeIndex?: number,
-                contextRangeDelta?: number,
-                contextRangeId?: string
-            }
-            const fullExpected = ts.map<FourSlashInterface.ReferenceGroup, ReferenceGroupJson>(parts, ({ definition, ranges }) => ({
-                definition: typeof definition === "string" ? definition : { ...definition, range: ts.createTextSpanFromRange(definition.range) },
-                references: ranges.map<ts.ReferenceEntry>(r => {
-                    const { isWriteAccess = false, isDefinition = false, isInString, contextRangeIndex, contextRangeDelta, contextRangeId } = (r.marker && r.marker.data || {}) as RangeMarkerData;
-                    let contextSpan: ts.TextSpan | undefined;
-                    if (contextRangeDelta !== undefined) {
-                        const allRanges = this.getRanges();
-                        const index = allRanges.indexOf(r);
-                        if (index !== -1) {
-                            contextSpan = ts.createTextSpanFromRange(allRanges[index + contextRangeDelta]);
-                        }
-                    }
-                    else if (contextRangeId !== undefined) {
-                        const allRanges = this.getRanges();
-                        const contextRange = ts.find(allRanges, range => (range.marker?.data as RangeMarkerData)?.id === contextRangeId);
-                        if (contextRange) {
-                            contextSpan = ts.createTextSpanFromRange(contextRange);
-                        }
-                    }
-                    else if (contextRangeIndex !== undefined) {
-                        contextSpan = ts.createTextSpanFromRange(this.getRanges()[contextRangeIndex]);
-                    }
-                    return {
-                        textSpan: ts.createTextSpanFromRange(r),
-                        fileName: r.fileName,
-                        ...(contextSpan ? { contextSpan } : undefined),
-                        isWriteAccess,
-                        isDefinition,
-                        ...(isInString ? { isInString: true } : undefined),
-                    };
-                }),
-            }));
-
-            for (const start of toArray<string | Range>(starts)) {
-                this.goToMarkerOrRange(start);
-                const fullActual = ts.map<ts.ReferencedSymbol, ReferenceGroupJson>(this.findReferencesAtCaret(), ({ definition, references }, i) => {
-                    const text = definition.displayParts.map(d => d.text).join("");
-                    return {
-                        definition: fullExpected.length > i && typeof fullExpected[i].definition === "string" ? text : { text, range: definition.textSpan },
-                        references,
-                    };
-                });
-                this.assertObjectsEqual(fullActual, fullExpected);
-
-                if (parts) {
-                    this.verifyDocumentHighlightsRespectFilesList(unique(ts.flatMap(parts, p => p.ranges), r => r.fileName));
-                }
-            }
-        }
-
         public verifyBaselineFindAllReferences(...markerNames: string[]) {
+            ts.Debug.assert(markerNames.length > 0, "Must pass at least one marker name to `verifyBaselineFindAllReferences()`");
+            this.verifyBaselineFindAllReferencesWorker("", markerNames);
+        }
+
+        // Used when a single test needs to produce multiple baselines
+        public verifyBaselineFindAllReferencesMulti(seq: number, ...markerNames: string[]) {
             ts.Debug.assert(markerNames.length > 0, "Must pass at least one marker name to `baselineFindAllReferences()`");
+            this.verifyBaselineFindAllReferencesWorker(`.${seq}`, markerNames);
+        }
+
+        private verifyBaselineFindAllReferencesWorker(suffix: string, markerNames: string[]) {
             const baseline = markerNames.map(markerName => {
                 this.goToMarker(markerName);
                 const marker = this.getMarkerByName(markerName);
@@ -1211,7 +1148,7 @@ namespace FourSlash {
                 // Write response JSON
                 return baselineContent + JSON.stringify(references, undefined, 2);
             }).join("\n\n");
-            Harness.Baseline.runBaseline(this.getBaselineFileNameForContainingTestFile(".baseline.jsonc"), baseline);
+            Harness.Baseline.runBaseline(this.getBaselineFileNameForContainingTestFile(`${suffix}.baseline.jsonc`), baseline);
         }
 
         public verifyBaselineGetFileReferences(fileName: string) {
@@ -1276,11 +1213,6 @@ namespace FourSlash {
                 newContent += content.slice(pos);
                 return newContent.split(/\r?\n/).map(l => "// " + l).join("\n");
             }
-        }
-
-        public verifySingleReferenceGroup(definition: FourSlashInterface.ReferenceGroupDefinition, ranges?: Range[] | string) {
-            ranges = ts.isString(ranges) ? this.rangesByText().get(ranges)! : ranges || this.getRanges();
-            this.verifyReferenceGroups(ranges, [{ definition, ranges }]);
         }
 
         private assertObjectsEqual<T>(fullActual: T, fullExpected: T, msgPrefix = ""): void {
@@ -2118,7 +2050,8 @@ namespace FourSlash {
         }
 
         private getBaselineFileNameForContainingTestFile(ext = ".baseline") {
-            return ts.getBaseFileName(this.originalInputFileName).replace(ts.Extension.Ts, ext);
+            return this.testData.globalOptions[MetadataOptionNames.baselineFile] ||
+                ts.getBaseFileName(this.originalInputFileName).replace(ts.Extension.Ts, ext);
         }
 
         private getSignatureHelp({ triggerReason }: FourSlashInterface.VerifySignatureHelpOptions): ts.SignatureHelpItems | undefined {
@@ -2293,8 +2226,18 @@ namespace FourSlash {
             // Check syntactic structure
             const content = this.getFileContent(this.activeFile.fileName);
 
+            const options: ts.CreateSourceFileOptions = {
+                languageVersion: ts.ScriptTarget.Latest,
+                impliedNodeFormat: ts.getImpliedNodeFormatForFile(
+                    ts.toPath(this.activeFile.fileName, this.languageServiceAdapterHost.sys.getCurrentDirectory(), ts.hostGetCanonicalFileName(this.languageServiceAdapterHost)),
+                    /*cache*/ undefined,
+                    this.languageServiceAdapterHost,
+                    this.languageService.getProgram()?.getCompilerOptions() || {}
+                ),
+                setExternalModuleIndicator: ts.getSetExternalModuleIndicator(this.languageService.getProgram()?.getCompilerOptions() || {})
+            };
             const referenceSourceFile = ts.createLanguageServiceSourceFile(
-                this.activeFile.fileName, createScriptSnapShot(content), ts.ScriptTarget.Latest, /*version:*/ "0", /*setNodeParents:*/ false);
+                this.activeFile.fileName, createScriptSnapShot(content), options, /*version:*/ "0", /*setNodeParents:*/ false);
             const referenceSyntaxDiagnostics = referenceSourceFile.parseDiagnostics;
 
             Utils.assertDiagnosticsEquals(incrementalSyntaxDiagnostics, referenceSyntaxDiagnostics);
@@ -2388,15 +2331,6 @@ namespace FourSlash {
         public goToEOF() {
             const len = this.getFileContent(this.activeFile.fileName).length;
             this.goToPosition(len);
-        }
-
-        private goToMarkerOrRange(markerOrRange: string | Range) {
-            if (typeof markerOrRange === "string") {
-                this.goToMarker(markerOrRange);
-            }
-            else {
-                this.goToRangeStart(markerOrRange);
-            }
         }
 
         public goToRangeStart({ fileName, pos }: Range) {
@@ -3146,11 +3080,12 @@ namespace FourSlash {
             });
         }
 
-        public verifyImportFixModuleSpecifiers(markerName: string, moduleSpecifiers: string[]) {
+        public verifyImportFixModuleSpecifiers(markerName: string, moduleSpecifiers: string[], preferences?: ts.UserPreferences) {
             const marker = this.getMarkerByName(markerName);
             const codeFixes = this.getCodeFixes(marker.fileName, ts.Diagnostics.Cannot_find_name_0.code, {
                 includeCompletionsForModuleExports: true,
-                includeCompletionsWithInsertText: true
+                includeCompletionsWithInsertText: true,
+                ...preferences,
             }, marker.position).filter(f => f.fixName === ts.codefix.importFixName);
 
             const actualModuleSpecifiers = ts.mapDefined(codeFixes, fix => {
@@ -3515,9 +3450,10 @@ namespace FourSlash {
             };
         }
 
-        public verifyRefactorAvailable(negative: boolean, triggerReason: ts.RefactorTriggerReason, name: string, actionName?: string) {
+        public verifyRefactorAvailable(negative: boolean, triggerReason: ts.RefactorTriggerReason, name: string, actionName?: string, actionDescription?: string) {
             let refactors = this.getApplicableRefactorsAtSelection(triggerReason);
-            refactors = refactors.filter(r => r.name === name && (actionName === undefined || r.actions.some(a => a.name === actionName)));
+            refactors = refactors.filter(r =>
+                r.name === name && (actionName === undefined || r.actions.some(a => a.name === actionName)) && (actionDescription === undefined || r.actions.some(a => a.description === actionDescription)));
             const isAvailable = refactors.length > 0;
 
             if (negative) {

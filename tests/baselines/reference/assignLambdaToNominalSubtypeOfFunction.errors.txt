@@ -1,7 +1,5 @@
 tests/cases/compiler/assignLambdaToNominalSubtypeOfFunction.ts(7,4): error TS2345: Argument of type '(a: any, b: any) => boolean' is not assignable to parameter of type 'IResultCallback'.
-  Property 'x' is missing in type '(a: any, b: any) => boolean' but required in type 'IResultCallback'.
 tests/cases/compiler/assignLambdaToNominalSubtypeOfFunction.ts(8,4): error TS2345: Argument of type '(a: any, b: any) => boolean' is not assignable to parameter of type 'IResultCallback'.
-  Property 'x' is missing in type '(a: any, b: any) => boolean' but required in type 'IResultCallback'.
 
 
 ==== tests/cases/compiler/assignLambdaToNominalSubtypeOfFunction.ts (2 errors) ====
@@ -14,11 +12,7 @@ tests/cases/compiler/assignLambdaToNominalSubtypeOfFunction.ts(8,4): error TS234
     fn((a, b) => true);
        ~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '(a: any, b: any) => boolean' is not assignable to parameter of type 'IResultCallback'.
-!!! error TS2345:   Property 'x' is missing in type '(a: any, b: any) => boolean' but required in type 'IResultCallback'.
-!!! related TS2728 tests/cases/compiler/assignLambdaToNominalSubtypeOfFunction.ts:2:5: 'x' is declared here.
     fn(function (a, b) { return true; })
        ~~~~~~~~
 !!! error TS2345: Argument of type '(a: any, b: any) => boolean' is not assignable to parameter of type 'IResultCallback'.
-!!! error TS2345:   Property 'x' is missing in type '(a: any, b: any) => boolean' but required in type 'IResultCallback'.
-!!! related TS2728 tests/cases/compiler/assignLambdaToNominalSubtypeOfFunction.ts:2:5: 'x' is declared here.
     

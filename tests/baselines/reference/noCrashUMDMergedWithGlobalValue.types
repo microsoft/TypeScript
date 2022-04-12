@@ -3,7 +3,7 @@ export as namespace SomeInterface;
 >SomeInterface : typeof import("/other")
 
 export type Action = "PUSH" | "POP" | "REPLACE";
->Action : Action
+>Action : "PUSH" | "POP" | "REPLACE"
 
 === /main.ts ===
 interface SomeInterface {

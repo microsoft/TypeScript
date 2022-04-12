@@ -34,8 +34,7 @@
           "length": 6
         },
         "fileName": "/tests/cases/fourslash/findAllRefsClassStaticBlocks.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -77,8 +76,7 @@
           "length": 6
         },
         "fileName": "/tests/cases/fourslash/findAllRefsClassStaticBlocks.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -120,8 +118,7 @@
           "length": 6
         },
         "fileName": "/tests/cases/fourslash/findAllRefsClassStaticBlocks.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }

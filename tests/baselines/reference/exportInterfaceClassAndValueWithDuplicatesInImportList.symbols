@@ -1,0 +1,15 @@
+=== tests/cases/compiler/exportInterfaceClassAndValueWithDuplicatesInImportList.ts ===
+const foo = 1
+>foo : Symbol(foo, Decl(exportInterfaceClassAndValueWithDuplicatesInImportList.ts, 0, 5))
+
+class Foo {}
+>Foo : Symbol(Foo, Decl(exportInterfaceClassAndValueWithDuplicatesInImportList.ts, 0, 13), Decl(exportInterfaceClassAndValueWithDuplicatesInImportList.ts, 1, 12))
+
+interface Foo {}
+>Foo : Symbol(Foo, Decl(exportInterfaceClassAndValueWithDuplicatesInImportList.ts, 0, 13), Decl(exportInterfaceClassAndValueWithDuplicatesInImportList.ts, 1, 12))
+
+export {foo, Foo, Foo}
+>foo : Symbol(foo, Decl(exportInterfaceClassAndValueWithDuplicatesInImportList.ts, 4, 8))
+>Foo : Symbol(Foo, Decl(exportInterfaceClassAndValueWithDuplicatesInImportList.ts, 4, 12))
+>Foo : Symbol(Foo, Decl(exportInterfaceClassAndValueWithDuplicatesInImportList.ts, 4, 17))
+

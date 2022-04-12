@@ -539,7 +539,7 @@ namespace ts {
         const useCaseSensitiveFileNames = host.useCaseSensitiveFileNames();
         const hostGetNewLine = memoize(() => host.getNewLine());
         return {
-            getSourceFile: (fileName, languageVersion, onError) => {
+            getSourceFile: (fileName, languageVersionOrOptions, onError) => {
                 let text: string | undefined;
                 try {
                     performance.mark("beforeIORead");
@@ -554,7 +554,7 @@ namespace ts {
                     text = "";
                 }
 
-                return text !== undefined ? createSourceFile(fileName, text, languageVersion) : undefined;
+                return text !== undefined ? createSourceFile(fileName, text, languageVersionOrOptions) : undefined;
             },
             getDefaultLibLocation: maybeBind(host, host.getDefaultLibLocation),
             getDefaultLibFileName: options => host.getDefaultLibFileName(options),
