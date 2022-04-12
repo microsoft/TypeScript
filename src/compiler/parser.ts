@@ -9413,7 +9413,7 @@ namespace ts {
 
     /** @internal */
     export function isDeclarationFileName(fileName: string): boolean {
-        return fileExtensionIsOneOf(fileName, [Extension.Dts, Extension.Dmts, Extension.Dcts]);
+        return fileExtensionIsOneOf(fileName, supportedDeclarationExtensions);
     }
 
     /*@internal*/
