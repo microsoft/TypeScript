@@ -1,0 +1,42 @@
+=== tests/cases/compiler/inferImpliedConstraintNotExecuted.ts ===
+type KnownKeys<T> = {
+>KnownKeys : Symbol(KnownKeys, Decl(inferImpliedConstraintNotExecuted.ts, 0, 0))
+>T : Symbol(T, Decl(inferImpliedConstraintNotExecuted.ts, 0, 15))
+
+    [K in keyof T]: string extends K ? never : number extends K ? never : K
+>K : Symbol(K, Decl(inferImpliedConstraintNotExecuted.ts, 1, 5))
+>T : Symbol(T, Decl(inferImpliedConstraintNotExecuted.ts, 0, 15))
+>K : Symbol(K, Decl(inferImpliedConstraintNotExecuted.ts, 1, 5))
+>K : Symbol(K, Decl(inferImpliedConstraintNotExecuted.ts, 1, 5))
+>K : Symbol(K, Decl(inferImpliedConstraintNotExecuted.ts, 1, 5))
+
+} extends { [_ in keyof T]: infer U } ? U : never;
+>_ : Symbol(_, Decl(inferImpliedConstraintNotExecuted.ts, 2, 13))
+>T : Symbol(T, Decl(inferImpliedConstraintNotExecuted.ts, 0, 15))
+>U : Symbol(U, Decl(inferImpliedConstraintNotExecuted.ts, 2, 33))
+>U : Symbol(U, Decl(inferImpliedConstraintNotExecuted.ts, 2, 33))
+
+
+interface HasStringKeys {
+>HasStringKeys : Symbol(HasStringKeys, Decl(inferImpliedConstraintNotExecuted.ts, 2, 50))
+
+    [s: string]: any;
+>s : Symbol(s, Decl(inferImpliedConstraintNotExecuted.ts, 6, 5))
+}
+
+interface ThingWithKeys extends HasStringKeys {
+>ThingWithKeys : Symbol(ThingWithKeys, Decl(inferImpliedConstraintNotExecuted.ts, 7, 1))
+>HasStringKeys : Symbol(HasStringKeys, Decl(inferImpliedConstraintNotExecuted.ts, 2, 50))
+
+    foo: unknown;
+>foo : Symbol(ThingWithKeys.foo, Decl(inferImpliedConstraintNotExecuted.ts, 9, 47))
+
+    bar: unknown;
+>bar : Symbol(ThingWithKeys.bar, Decl(inferImpliedConstraintNotExecuted.ts, 10, 17))
+}
+
+const demo: KnownKeys<ThingWithKeys> = 'foo';
+>demo : Symbol(demo, Decl(inferImpliedConstraintNotExecuted.ts, 14, 5))
+>KnownKeys : Symbol(KnownKeys, Decl(inferImpliedConstraintNotExecuted.ts, 0, 0))
+>ThingWithKeys : Symbol(ThingWithKeys, Decl(inferImpliedConstraintNotExecuted.ts, 7, 1))
+

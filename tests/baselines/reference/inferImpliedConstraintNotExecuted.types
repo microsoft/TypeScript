@@ -1,0 +1,25 @@
+=== tests/cases/compiler/inferImpliedConstraintNotExecuted.ts ===
+type KnownKeys<T> = {
+>KnownKeys : KnownKeys<T>
+
+    [K in keyof T]: string extends K ? never : number extends K ? never : K
+} extends { [_ in keyof T]: infer U } ? U : never;
+
+
+interface HasStringKeys {
+    [s: string]: any;
+>s : string
+}
+
+interface ThingWithKeys extends HasStringKeys {
+    foo: unknown;
+>foo : unknown
+
+    bar: unknown;
+>bar : unknown
+}
+
+const demo: KnownKeys<ThingWithKeys> = 'foo';
+>demo : "foo" | "bar"
+>'foo' : "foo"
+

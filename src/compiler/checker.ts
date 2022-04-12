@@ -13373,10 +13373,34 @@ namespace ts {
                             (grandParent.parent as ConditionalTypeNode).extendsType === grandParent && (grandParent.parent as ConditionalTypeNode).checkType.kind === SyntaxKind.MappedType &&
                             ((grandParent.parent as ConditionalTypeNode).checkType as MappedTypeNode).type) {
                             const checkMappedType = (grandParent.parent as ConditionalTypeNode).checkType as MappedTypeNode;
-                            const nodeType = getTypeFromTypeNode(checkMappedType.type!);
+                            let nodeType = getTypeFromTypeNode(checkMappedType.type!);
+                            // Unwrap any top-level conditionals in the template type to their constraints
+                            while (someType(nodeType, isOrHasGenericConditional)) {
+                                const original = nodeType;
+                                nodeType = mapType(nodeType, t => t.flags & TypeFlags.Conditional && getConstraintFromConditionalType(t as ConditionalType) || t);
+                                if (nodeType === original) {
+                                    break;
+                                }
+                            }
+                            // Instantiate away the mapped type parameter into the parameter's constraint
                             inferences = append(inferences, instantiateType(nodeType,
                                 makeUnaryTypeMapper(getDeclaredTypeOfTypeParameter(getSymbolOfNode(checkMappedType.typeParameter)), checkMappedType.typeParameter.constraint ? getTypeFromTypeNode(checkMappedType.typeParameter.constraint) : keyofConstraintType)
                             ));
+                            // This isn't the highest precision constraint we could make, but the alternatives are very invasive and very ugly
+                            // Specifically, it'd be more correct to do something like manufacture
+                            // {[K in U]: WhateverTemplate<K>}[U]
+                            // or equivalently
+                            // U extends infer K extends U ? WhateverTemplate<K> : never
+                            // but both are _very_ complicated types which encounter issues elsewhere in the checker, even in the common case.
+                            // Specifically
+                            // - the first incorrectly simplifies to `WhateverTemplate<U>` in `getSimplifiedType`, removing the notion of
+                            // distribution over keys from the type and making the template resolve incorrectly if it contains conditionals
+                            // - the second has relationship issues; namely conditional types are usually only related by === equality, but
+                            // are over-instantiated today because `isTypeParamaterPossibleReferenced` doesn't filter outer type parameters
+                            // well enough (or at all, from what I've seen - it only filters out parameters which are unreferenced _everywhere_,
+                            // rather than those which are unused within the given node).
+                            //
+                            // Each of those relationship issues, in turn, then cause inference of the `infer` type parameter in question to fail.
                         }
                     }
                 }

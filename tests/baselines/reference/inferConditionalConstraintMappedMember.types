@@ -9,7 +9,7 @@ type KeysWithoutStringIndex<T> =
 
 // Only "foo" | "bar" as expected, [string] index signature removed
 type test = KeysWithoutStringIndex<{ [index: string]: string; foo: string; bar: 'baz' }>
->test : never
+>test : "foo" | "bar"
 >index : string
 >foo : string
 >bar : "baz"
