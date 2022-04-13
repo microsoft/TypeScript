@@ -39,7 +39,7 @@ declare function createMachine<TEvent extends { type: string }>(
 createMachine({
 >createMachine({  schema: {    events: {} as { type: "FOO" } | { type: "BAR" },  },  on: {    FOO: (ev) => {      ev.type; // should be 'FOO'    },  },}) : void
 >createMachine : <TEvent extends { type: string; }>(config: MachineConfig<TEvent>) => void
->{  schema: {    events: {} as { type: "FOO" } | { type: "BAR" },  },  on: {    FOO: (ev) => {      ev.type; // should be 'FOO'    },  },} : { schema: { events: { type: "FOO"; } | { type: "BAR"; }; }; on: { FOO: (ev: any) => void; }; }
+>{  schema: {    events: {} as { type: "FOO" } | { type: "BAR" },  },  on: {    FOO: (ev) => {      ev.type; // should be 'FOO'    },  },} : { schema: { events: { type: "FOO"; } | { type: "BAR"; }; }; on: { FOO: (ev: { type: "FOO"; }) => void; }; }
 
   schema: {
 >schema : { events: { type: "FOO"; } | { type: "BAR"; }; }
@@ -54,18 +54,18 @@ createMachine({
 
   },
   on: {
->on : { FOO: (ev: any) => void; }
->{    FOO: (ev) => {      ev.type; // should be 'FOO'    },  } : { FOO: (ev: any) => void; }
+>on : { FOO: (ev: { type: "FOO"; }) => void; }
+>{    FOO: (ev) => {      ev.type; // should be 'FOO'    },  } : { FOO: (ev: { type: "FOO"; }) => void; }
 
     FOO: (ev) => {
->FOO : (ev: any) => void
->(ev) => {      ev.type; // should be 'FOO'    } : (ev: any) => void
->ev : any
+>FOO : (ev: { type: "FOO"; }) => void
+>(ev) => {      ev.type; // should be 'FOO'    } : (ev: { type: "FOO"; }) => void
+>ev : { type: "FOO"; }
 
       ev.type; // should be 'FOO'
->ev.type : any
->ev : any
->type : any
+>ev.type : "FOO"
+>ev : { type: "FOO"; }
+>type : "FOO"
 
     },
   },

@@ -72,7 +72,9 @@ createMachine({
 >ev : Symbol(ev, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 22, 10))
 
       ev.type; // should be 'FOO'
+>ev.type : Symbol(type, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 19, 19))
 >ev : Symbol(ev, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 22, 10))
+>type : Symbol(type, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 19, 19))
 
     },
   },
