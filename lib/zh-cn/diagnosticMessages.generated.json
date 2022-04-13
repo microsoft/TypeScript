@@ -1088,7 +1088,7 @@
   "Property_0_does_not_exist_on_type_1_Do_you_need_to_change_your_target_library_Try_changing_the_lib_c_2550": "属性“{0}”在类型“{1}”上不存在。是否需要更改目标库? 请尝试将 “lib” 编译器选项更改为“{2}”或更高版本。",
   "Property_0_does_not_exist_on_type_1_Try_changing_the_lib_compiler_option_to_include_dom_2812": "属性“{0}”在类型 “{1}” 上不存在。请尝试将 “lib” 编译器选项更改为包含 “dom”。",
   "Property_0_has_no_initializer_and_is_not_definitely_assigned_in_a_class_static_block_2817": "属性“{0}”没有初始化表达式，并且未在类静态块中明确分配。",
-  "Property_0_has_no_initializer_and_is_not_definitely_assigned_in_the_constructor_2564": "属性“{0}”没有初始化表达式，且未在构造函数中明确赋值。",
+  "Property_0_has_no_initializer_and_is_definitely_not_assigned_in_the_constructor_2564": "属性“{0}”没有初始化表达式，且未在构造函数中明确赋值。",
   "Property_0_implicitly_has_type_any_because_its_get_accessor_lacks_a_return_type_annotation_7033": "属性“{0}”隐式具有类型 \"any\"，因为其 get 访问器缺少返回类型批注。",
   "Property_0_implicitly_has_type_any_because_its_set_accessor_lacks_a_parameter_type_annotation_7032": "属性“{0}”隐式具有类型 \"any\"，因为其 set 访问器缺少参数类型批注。",
   "Property_0_implicitly_has_type_any_but_a_better_type_for_its_get_accessor_may_be_inferred_from_usage_7048": "属性 \"{0}\" 隐式具有类型 \"any\"，但可从用法为其 get 访问器推断出更好类型。",

@@ -2491,7 +2491,7 @@
         "category": "Error",
         "code": 2563
     },
-    "Property '{0}' has no initializer and is not definitely assigned in the constructor.": {
+    "Property '{0}' has no initializer and is definitely not assigned in the constructor.": {
         "category": "Error",
         "code": 2564
     },
@@ -3393,7 +3393,7 @@
         "category": "Error",
         "code": 2816
     },
-    "Property '{0}' has no initializer and is not definitely assigned in a class static block.": {
+    "Property '{0}' has no initializer and is definitely not assigned in a class static block.": {
         "category": "Error",
         "code": 2817
     },

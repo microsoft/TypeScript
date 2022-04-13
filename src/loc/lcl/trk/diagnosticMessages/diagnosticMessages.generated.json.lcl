@@ -10225,16 +10225,16 @@
       </Item>
       <Item ItemId=";Property_0_has_no_initializer_and_is_not_definitely_assigned_in_a_class_static_block_2817" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Property '{0}' has no initializer and is not definitely assigned in a class static block.]]></Val>
+          <Val><![CDATA[Property '{0}' has no initializer and is definitely not assigned in a class static block.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA['{0}' özelliği başlatıcı içermiyor ve kesinlikle bir sınıf statik bloğuna atanmamış.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Property_0_has_no_initializer_and_is_not_definitely_assigned_in_the_constructor_2564" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Property_0_has_no_initializer_and_is_definitely_not_assigned_in_the_constructor_2564" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Property '{0}' has no initializer and is not definitely assigned in the constructor.]]></Val>
+          <Val><![CDATA[Property '{0}' has no initializer and is definitely not assigned in the constructor.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA['{0}' özelliği başlatıcı içermiyor ve oluşturucuda kesin olarak atanmamış.]]></Val>
           </Tgt>

@@ -39952,7 +39952,7 @@ namespace ts {
                         const type = getTypeOfSymbol(getSymbolOfNode(member));
                         if (!(type.flags & TypeFlags.AnyOrUnknown || getFalsyFlags(type) & TypeFlags.Undefined)) {
                             if (!constructor || !isPropertyInitializedInConstructor(propName, type, constructor)) {
-                                error(member.name, Diagnostics.Property_0_has_no_initializer_and_is_not_definitely_assigned_in_the_constructor, declarationNameToString(propName));
+                                error(member.name, Diagnostics.Property_0_has_no_initializer_and_is_definitely_not_assigned_in_the_constructor, declarationNameToString(propName));
                             }
                         }
                     }

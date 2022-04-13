@@ -1088,7 +1088,7 @@
   "Property_0_does_not_exist_on_type_1_Do_you_need_to_change_your_target_library_Try_changing_the_lib_c_2550": "プロパティ '{0}' が型 '{1}' に存在しません。ターゲット ライブラリを変更する必要がありますか? 'lib' コンパイラ オプションを '{2}' 以降に変更してみてください。",
   "Property_0_does_not_exist_on_type_1_Try_changing_the_lib_compiler_option_to_include_dom_2812": "プロパティ ' {0} ' は型 ' {1} ' に存在しません。' lib ' コンパイラ オプションを ' dom ' を含むように変更してみてください。",
   "Property_0_has_no_initializer_and_is_not_definitely_assigned_in_a_class_static_block_2817": "プロパティ '{0}' に初期化子がなく、クラスの静的ブロックで明確に割り当てられていません。",
-  "Property_0_has_no_initializer_and_is_not_definitely_assigned_in_the_constructor_2564": "プロパティ '{0}' に初期化子がなく、コンストラクターで明確に割り当てられていません。",
+  "Property_0_has_no_initializer_and_is_definitely_not_assigned_in_the_constructor_2564": "プロパティ '{0}' に初期化子がなく、コンストラクターで明確に割り当てられていません。",
   "Property_0_implicitly_has_type_any_because_its_get_accessor_lacks_a_return_type_annotation_7033": "プロパティ '{0}' には型 'any' が暗黙的に設定されています。get アクセサーには戻り値の型の注釈がないためです。",
   "Property_0_implicitly_has_type_any_because_its_set_accessor_lacks_a_parameter_type_annotation_7032": "プロパティ '{0}' には型 'any' が暗黙的に設定されています。set アクセサーにはパラメーター型の注釈がないためです。",
   "Property_0_implicitly_has_type_any_but_a_better_type_for_its_get_accessor_may_be_inferred_from_usage_7048": "プロパティ '{0}' の型は暗黙的に 'any' ですが、その get アクセサーのために、使い方からより良い型を推論する場合があります。",

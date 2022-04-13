@@ -1,5 +1,5 @@
-tests/cases/compiler/narrowingOfDottedNames.ts(45,5): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
-tests/cases/compiler/narrowingOfDottedNames.ts(54,5): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+tests/cases/compiler/narrowingOfDottedNames.ts(45,5): error TS2564: Property 'x' has no initializer and is definitely not assigned in the constructor.
+tests/cases/compiler/narrowingOfDottedNames.ts(54,5): error TS2564: Property 'x' has no initializer and is definitely not assigned in the constructor.
 
 
 ==== tests/cases/compiler/narrowingOfDottedNames.ts (2 errors) ====
@@ -49,7 +49,7 @@ tests/cases/compiler/narrowingOfDottedNames.ts(54,5): error TS2564: Property 'x'
     {
         x: number;  // Error
         ~
-!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+!!! error TS2564: Property 'x' has no initializer and is definitely not assigned in the constructor.
         constructor() {
             if (this instanceof Boolean) {
             }
@@ -60,7 +60,7 @@ tests/cases/compiler/narrowingOfDottedNames.ts(54,5): error TS2564: Property 'x'
     {
         x: number;  // Error
         ~
-!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+!!! error TS2564: Property 'x' has no initializer and is definitely not assigned in the constructor.
         constructor() {
         }
     }

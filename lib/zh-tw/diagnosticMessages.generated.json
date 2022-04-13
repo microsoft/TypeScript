@@ -1088,7 +1088,7 @@
   "Property_0_does_not_exist_on_type_1_Do_you_need_to_change_your_target_library_Try_changing_the_lib_c_2550": "類型 '{1}' 沒有屬性 '{0}'。要變更您的目標程式庫嗎? 請嘗試將 'lib' 編譯器選項變更為 '{2}' 或更新版本。",
   "Property_0_does_not_exist_on_type_1_Try_changing_the_lib_compiler_option_to_include_dom_2812": "屬性 '{0}' 不存在於類型 '{1}' 上。嘗試將 'lib' 編譯器選項變更為包含 'dom'。",
   "Property_0_has_no_initializer_and_is_not_definitely_assigned_in_a_class_static_block_2817": "屬性 '{0}' 沒有初始設定式，且未在類別靜態區塊中明確指派。",
-  "Property_0_has_no_initializer_and_is_not_definitely_assigned_in_the_constructor_2564": "屬性 '{0}' 沒有初始設定式，且未在建構函式中明確指派。",
+  "Property_0_has_no_initializer_and_is_definitely_not_assigned_in_the_constructor_2564": "屬性 '{0}' 沒有初始設定式，且未在建構函式中明確指派。",
   "Property_0_implicitly_has_type_any_because_its_get_accessor_lacks_a_return_type_annotation_7033": "因為屬性 '{0}' 的 get 存取子沒有傳回類型註釋，致使該屬性意味著類型 'any'。",
   "Property_0_implicitly_has_type_any_because_its_set_accessor_lacks_a_parameter_type_annotation_7032": "因為屬性 '{0}' 的 set 存取子沒有參數類型註釋，致使該屬性意味著類型 'any'。",
   "Property_0_implicitly_has_type_any_but_a_better_type_for_its_get_accessor_may_be_inferred_from_usage_7048": "屬性 '{0}' 隱含類型 'any'，但可從使用方式推斷更適合其 get 存取子的類型。",

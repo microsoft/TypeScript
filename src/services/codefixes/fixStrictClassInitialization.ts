@@ -4,7 +4,7 @@ namespace ts.codefix {
     const fixIdAddDefiniteAssignmentAssertions = "addMissingPropertyDefiniteAssignmentAssertions";
     const fixIdAddUndefinedType = "addMissingPropertyUndefinedType";
     const fixIdAddInitializer = "addMissingPropertyInitializer";
-    const errorCodes = [Diagnostics.Property_0_has_no_initializer_and_is_not_definitely_assigned_in_the_constructor.code];
+    const errorCodes = [Diagnostics.Property_0_has_no_initializer_and_is_definitely_not_assigned_in_the_constructor.code];
     registerCodeFix({
         errorCodes,
         getCodeActions: function getCodeActionsForStrictClassInitializationErrors(context) {

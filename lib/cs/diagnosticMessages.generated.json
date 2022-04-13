@@ -1088,7 +1088,7 @@
   "Property_0_does_not_exist_on_type_1_Do_you_need_to_change_your_target_library_Try_changing_the_lib_c_2550": "Vlastnost ‚{0}‘ neexistuje u typu ‚{1}‘. Potřebujete změnit cílovou knihovnu? Zkuste změnit možnost kompilátoru ‚lib‘ na ‚{2}‘ nebo novější.",
   "Property_0_does_not_exist_on_type_1_Try_changing_the_lib_compiler_option_to_include_dom_2812": "Vlastnost „{0}“ pro typ „{1}“ neexistuje. Zkuste změnit možnost kompilátoru „lib“, aby zahrnovala „dom“.",
   "Property_0_has_no_initializer_and_is_not_definitely_assigned_in_a_class_static_block_2817": "Vlastnost „{0}“ nemá žádný inicializátor a není jednoznačně přiřazena ve statickém bloku třídy.",
-  "Property_0_has_no_initializer_and_is_not_definitely_assigned_in_the_constructor_2564": "Vlastnost {0} nemá žádný inicializátor a není jednoznačně přiřazena v konstruktoru.",
+  "Property_0_has_no_initializer_and_is_definitely_not_assigned_in_the_constructor_2564": "Vlastnost {0} nemá žádný inicializátor a není jednoznačně přiřazena v konstruktoru.",
   "Property_0_implicitly_has_type_any_because_its_get_accessor_lacks_a_return_type_annotation_7033": "Vlastnost {0} má implicitně typ any, protože její přistupující objekt get nemá anotaci návratového typu.",
   "Property_0_implicitly_has_type_any_because_its_set_accessor_lacks_a_parameter_type_annotation_7032": "Vlastnost {0} má implicitně typ any, protože její přistupující objekt set nemá anotaci parametrového typu.",
   "Property_0_implicitly_has_type_any_but_a_better_type_for_its_get_accessor_may_be_inferred_from_usage_7048": "Vlastnost {0} má implicitně typ any, ale je možné, že lepší typ pro jeho přístupový objekt get by se vyvodil z použití.",

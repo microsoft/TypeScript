@@ -1,4 +1,4 @@
-tests/cases/conformance/controlFlow/definiteAssignmentAssertions.ts(5,5): error TS2564: Property 'b' has no initializer and is not definitely assigned in the constructor.
+tests/cases/conformance/controlFlow/definiteAssignmentAssertions.ts(5,5): error TS2564: Property 'b' has no initializer and is definitely not assigned in the constructor.
 tests/cases/conformance/controlFlow/definiteAssignmentAssertions.ts(20,6): error TS1263: Declarations with initializers cannot also have definite assignment assertions.
 tests/cases/conformance/controlFlow/definiteAssignmentAssertions.ts(21,6): error TS1263: Declarations with initializers cannot also have definite assignment assertions.
 tests/cases/conformance/controlFlow/definiteAssignmentAssertions.ts(22,13): error TS1255: A definite assignment assertion '!' is not permitted in this context.
@@ -21,7 +21,7 @@ tests/cases/conformance/controlFlow/definiteAssignmentAssertions.ts(80,7): error
         a!: number;
         b: string;  // Error
         ~
-!!! error TS2564: Property 'b' has no initializer and is not definitely assigned in the constructor.
+!!! error TS2564: Property 'b' has no initializer and is definitely not assigned in the constructor.
     }
     
     // Suppress definite assignment check in constructor

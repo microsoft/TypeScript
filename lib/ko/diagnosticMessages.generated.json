@@ -1088,7 +1088,7 @@
   "Property_0_does_not_exist_on_type_1_Do_you_need_to_change_your_target_library_Try_changing_the_lib_c_2550": "'{0}' 속성이 '{1}' 형식에 없습니다. 대상 라이브러리를 변경해야 하는 경우 'lib' 컴파일러 옵션을 '{2}' 이상으로 변경해 보세요.",
   "Property_0_does_not_exist_on_type_1_Try_changing_the_lib_compiler_option_to_include_dom_2812": "속성 '{0}'(은)는 '{1}'에 없습니다. 'lib' 컴파일러 옵션을 변경하여 'dom'을 포함하세요.",
   "Property_0_has_no_initializer_and_is_not_definitely_assigned_in_a_class_static_block_2817": "'{0}' 속성에 이니셜라이저가 없으며 클래스 정적 블록에 확실히 할당되지 않았습니다.",
-  "Property_0_has_no_initializer_and_is_not_definitely_assigned_in_the_constructor_2564": "속성 '{0}'은(는) 이니셜라이저가 없고 생성자에 할당되어 있지 않습니다.",
+  "Property_0_has_no_initializer_and_is_definitely_not_assigned_in_the_constructor_2564": "속성 '{0}'은(는) 이니셜라이저가 없고 생성자에 할당되어 있지 않습니다.",
   "Property_0_implicitly_has_type_any_because_its_get_accessor_lacks_a_return_type_annotation_7033": "'{0}' 속성에는 해당 get 접근자에 반환 형식 주석이 없으므로 암시적으로 'any' 형식이 포함됩니다.",
   "Property_0_implicitly_has_type_any_because_its_set_accessor_lacks_a_parameter_type_annotation_7032": "'{0}' 속성에는 해당 set 접근자에 매개 변수 형식 주석이 없으므로 암시적으로 'any' 형식이 포함됩니다.",
   "Property_0_implicitly_has_type_any_but_a_better_type_for_its_get_accessor_may_be_inferred_from_usage_7048": "'{0}' 속성은 암시적으로 'any' 형식이지만, 사용량에서 get 접근자의 더 나은 형식을 유추할 수 있습니다.",

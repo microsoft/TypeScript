@@ -1,10 +1,10 @@
-tests/cases/conformance/classes/propertyMemberDeclarations/strictPropertyInitialization.ts(4,5): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
-tests/cases/conformance/classes/propertyMemberDeclarations/strictPropertyInitialization.ts(6,5): error TS2564: Property 'c' has no initializer and is not definitely assigned in the constructor.
-tests/cases/conformance/classes/propertyMemberDeclarations/strictPropertyInitialization.ts(8,5): error TS2564: Property '#f' has no initializer and is not definitely assigned in the constructor.
-tests/cases/conformance/classes/propertyMemberDeclarations/strictPropertyInitialization.ts(10,5): error TS2564: Property '#h' has no initializer and is not definitely assigned in the constructor.
-tests/cases/conformance/classes/propertyMemberDeclarations/strictPropertyInitialization.ts(62,5): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
-tests/cases/conformance/classes/propertyMemberDeclarations/strictPropertyInitialization.ts(63,5): error TS2564: Property '#b' has no initializer and is not definitely assigned in the constructor.
-tests/cases/conformance/classes/propertyMemberDeclarations/strictPropertyInitialization.ts(90,5): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+tests/cases/conformance/classes/propertyMemberDeclarations/strictPropertyInitialization.ts(4,5): error TS2564: Property 'a' has no initializer and is definitely not assigned in the constructor.
+tests/cases/conformance/classes/propertyMemberDeclarations/strictPropertyInitialization.ts(6,5): error TS2564: Property 'c' has no initializer and is definitely not assigned in the constructor.
+tests/cases/conformance/classes/propertyMemberDeclarations/strictPropertyInitialization.ts(8,5): error TS2564: Property '#f' has no initializer and is definitely not assigned in the constructor.
+tests/cases/conformance/classes/propertyMemberDeclarations/strictPropertyInitialization.ts(10,5): error TS2564: Property '#h' has no initializer and is definitely not assigned in the constructor.
+tests/cases/conformance/classes/propertyMemberDeclarations/strictPropertyInitialization.ts(62,5): error TS2564: Property 'a' has no initializer and is definitely not assigned in the constructor.
+tests/cases/conformance/classes/propertyMemberDeclarations/strictPropertyInitialization.ts(63,5): error TS2564: Property '#b' has no initializer and is definitely not assigned in the constructor.
+tests/cases/conformance/classes/propertyMemberDeclarations/strictPropertyInitialization.ts(90,5): error TS2564: Property 'a' has no initializer and is definitely not assigned in the constructor.
 tests/cases/conformance/classes/propertyMemberDeclarations/strictPropertyInitialization.ts(113,22): error TS2565: Property 'a' is used before being assigned.
 tests/cases/conformance/classes/propertyMemberDeclarations/strictPropertyInitialization.ts(114,23): error TS2565: Property 'b' is used before being assigned.
 tests/cases/conformance/classes/propertyMemberDeclarations/strictPropertyInitialization.ts(115,23): error TS2565: Property '#d' is used before being assigned.
@@ -16,19 +16,19 @@ tests/cases/conformance/classes/propertyMemberDeclarations/strictPropertyInitial
     class C1 {
         a: number;  // Error
         ~
-!!! error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+!!! error TS2564: Property 'a' has no initializer and is definitely not assigned in the constructor.
         b: number | undefined;
         c: number | null;  // Error
         ~
-!!! error TS2564: Property 'c' has no initializer and is not definitely assigned in the constructor.
+!!! error TS2564: Property 'c' has no initializer and is definitely not assigned in the constructor.
         d?: number;
         #f: number; //Error
         ~~
-!!! error TS2564: Property '#f' has no initializer and is not definitely assigned in the constructor.
+!!! error TS2564: Property '#f' has no initializer and is definitely not assigned in the constructor.
         #g: number | undefined;
         #h: number | null; //Error
         ~~
-!!! error TS2564: Property '#h' has no initializer and is not definitely assigned in the constructor.
+!!! error TS2564: Property '#h' has no initializer and is definitely not assigned in the constructor.
         #i?: number;
     }
     
@@ -82,10 +82,10 @@ tests/cases/conformance/classes/propertyMemberDeclarations/strictPropertyInitial
     class C6 {
         a: number;  // Error
         ~
-!!! error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+!!! error TS2564: Property 'a' has no initializer and is definitely not assigned in the constructor.
         #b: number
         ~~
-!!! error TS2564: Property '#b' has no initializer and is not definitely assigned in the constructor.
+!!! error TS2564: Property '#b' has no initializer and is definitely not assigned in the constructor.
         constructor(cond: boolean) {
             if (cond) {
                 return;
@@ -114,7 +114,7 @@ tests/cases/conformance/classes/propertyMemberDeclarations/strictPropertyInitial
     class C8 {
         a: number;  // Error
         ~
-!!! error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+!!! error TS2564: Property 'a' has no initializer and is definitely not assigned in the constructor.
         "b": number;
         0: number;
     }

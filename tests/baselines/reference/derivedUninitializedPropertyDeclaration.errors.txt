@@ -2,8 +2,8 @@ tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedP
 tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts(15,5): error TS1031: 'declare' modifier cannot appear on class elements of this kind.
 tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts(15,17): error TS1183: An implementation cannot be declared in ambient contexts.
 tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts(17,24): error TS1039: Initializers are not allowed in ambient contexts.
-tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts(24,5): error TS2564: Property 'p' has no initializer and is not definitely assigned in the constructor.
-tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts(27,5): error TS2564: Property 'p' has no initializer and is not definitely assigned in the constructor.
+tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts(24,5): error TS2564: Property 'p' has no initializer and is definitely not assigned in the constructor.
+tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts(27,5): error TS2564: Property 'p' has no initializer and is definitely not assigned in the constructor.
 
 
 ==== tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts (6 errors) ====
@@ -40,12 +40,12 @@ tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedP
     class C {
         p: string;
         ~
-!!! error TS2564: Property 'p' has no initializer and is not definitely assigned in the constructor.
+!!! error TS2564: Property 'p' has no initializer and is definitely not assigned in the constructor.
     }
     class D extends C {
         p: 'hi'; // error
         ~
-!!! error TS2564: Property 'p' has no initializer and is not definitely assigned in the constructor.
+!!! error TS2564: Property 'p' has no initializer and is definitely not assigned in the constructor.
     }
     class DD extends C {
         declare p: 'bye'; // ok
