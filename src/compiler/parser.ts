@@ -5735,34 +5735,10 @@ namespace ts {
                 case SyntaxKind.OpenParenToken:                 // foo<x>(
                 case SyntaxKind.NoSubstitutionTemplateLiteral:  // foo<T> `...`
                 case SyntaxKind.TemplateHead:                   // foo<T> `...${100}...`
-                // These tokens can't follow in a call expression, nor can they start an
-                // expression. So, consider the type argument list part of an instantiation
-                // expression.
-                // falls through
-                case SyntaxKind.CommaToken:                     // foo<x>,
-                case SyntaxKind.DotToken:                       // foo<x>.
-                case SyntaxKind.QuestionDotToken:               // foo<x>?.
-                case SyntaxKind.CloseParenToken:                // foo<x>)
-                case SyntaxKind.CloseBracketToken:              // foo<x>]
-                case SyntaxKind.ColonToken:                     // foo<x>:
-                case SyntaxKind.SemicolonToken:                 // foo<x>;
-                case SyntaxKind.QuestionToken:                  // foo<x>?
-                case SyntaxKind.EqualsEqualsToken:              // foo<x> ==
-                case SyntaxKind.EqualsEqualsEqualsToken:        // foo<x> ===
-                case SyntaxKind.ExclamationEqualsToken:         // foo<x> !=
-                case SyntaxKind.ExclamationEqualsEqualsToken:   // foo<x> !==
-                case SyntaxKind.AmpersandAmpersandToken:        // foo<x> &&
-                case SyntaxKind.BarBarToken:                    // foo<x> ||
-                case SyntaxKind.QuestionQuestionToken:          // foo<x> ??
-                case SyntaxKind.CaretToken:                     // foo<x> ^
-                case SyntaxKind.AmpersandToken:                 // foo<x> &
-                case SyntaxKind.BarToken:                       // foo<x> |
-                case SyntaxKind.CloseBraceToken:                // foo<x> }
-                case SyntaxKind.EndOfFileToken:                 // foo<x>
                     return true;
             }
-            // Treat anything else as an expression.
-            return false;
+            // Consider something a type argument list only if the following token can't start an expression.
+            return !isStartOfExpression();
         }
 
         function parsePrimaryExpression(): PrimaryExpression {

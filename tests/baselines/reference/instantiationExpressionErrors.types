@@ -122,3 +122,13 @@ const x3 = f<true>;
 true;
 >true : true
 
+// Parsed as instantiation expression
+
+const x4 = f<true>
+>x4 : { (): true; g<U>(): U; }
+>f : { <T>(): T; g<U>(): U; }
+>true : true
+
+if (true) {}
+>true : true
+
