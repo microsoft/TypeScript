@@ -10101,7 +10101,6 @@ declare namespace ts.server {
         private rootFileNames;
         isOrphan(): boolean;
         updateGraph(): boolean;
-        scheduleInvalidateResolutionsOfFailedLookupLocations(): void;
         hasRoots(): boolean;
         markAsDirty(): void;
         getScriptFileNames(): string[];

@@ -1996,6 +1996,7 @@ namespace ts.server {
             return true;
         }
 
+        /*@internal*/
         scheduleInvalidateResolutionsOfFailedLookupLocations(): void {
             // Invalidation will happen on-demand as part of updateGraph
             return;
@@ -2211,6 +2212,7 @@ namespace ts.server {
             return hasSameSetOfFiles;
         }
 
+        /*@internal*/
         scheduleInvalidateResolutionsOfFailedLookupLocations(): void {
             // Invalidation will happen on-demand as part of updateGraph
             return;
