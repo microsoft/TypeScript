@@ -1800,9 +1800,12 @@ namespace ts.server {
             enumerateInsertsAndDeletes<NormalizedPath, NormalizedPath>(
                 rootFileNames.map(toNormalizedPath),
                 this.noDtsResolutionProject.getRootFiles(),
-                getStringComparer(!this.useCaseSensitiveFileNames),
+                getStringComparer(!this.useCaseSensitiveFileNames()),
                 pathToAdd => {
-                    const info = this.noDtsResolutionProject!.getScriptInfo(pathToAdd);
+                    const info = this.projectService.getOrCreateScriptInfoNotOpenedByClient(
+                        pathToAdd,
+                        this.currentDirectory,
+                        this.noDtsResolutionProject!.directoryStructureHost);
                     if (info) {
                         this.noDtsResolutionProject!.addRoot(info, pathToAdd);
                     }
@@ -2206,6 +2209,11 @@ namespace ts.server {
                 this.hostProject.clearCachedExportInfoMap();
             }
             return hasSameSetOfFiles;
+        }
+
+        scheduleInvalidateResolutionsOfFailedLookupLocations(): void {
+            // Invalidation will happen on-demand as part of updateGraph
+            return;
         }
 
         hasRoots() {
