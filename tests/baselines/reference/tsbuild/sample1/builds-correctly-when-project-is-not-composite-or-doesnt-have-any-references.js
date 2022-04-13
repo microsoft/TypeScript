@@ -60,12 +60,12 @@ declare const dts: any;
 
 Output::
 /lib/tsc --b /src/core --verbose
-[[90m12:00:00 AM[0m] Projects in this build: 
+[[90m12:00:07 AM[0m] Projects in this build: 
     * src/core/tsconfig.json
 
-[[90m12:00:00 AM[0m] Project 'src/core/tsconfig.json' is out of date because output file 'src/core/anotherModule.js' does not exist
+[[90m12:00:08 AM[0m] Project 'src/core/tsconfig.json' is out of date because output file 'src/core/anotherModule.js' does not exist
 
-[[90m12:00:00 AM[0m] Building project '/src/core/tsconfig.json'...
+[[90m12:00:09 AM[0m] Building project '/src/core/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 

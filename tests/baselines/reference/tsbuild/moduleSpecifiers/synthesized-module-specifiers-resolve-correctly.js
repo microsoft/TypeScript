@@ -116,24 +116,24 @@ export function getVar(): keyof typeof variable {
 
 Output::
 /lib/tsc -b /src --verbose
-[[90m12:00:00 AM[0m] Projects in this build: 
+[[90m12:00:19 AM[0m] Projects in this build: 
     * src/solution/common/tsconfig.json
     * src/solution/sub-project/tsconfig.json
     * src/solution/sub-project-2/tsconfig.json
     * src/solution/tsconfig.json
     * src/tsconfig.json
 
-[[90m12:00:00 AM[0m] Project 'src/solution/common/tsconfig.json' is out of date because output file 'src/lib/solution/common/nominal.js' does not exist
+[[90m12:00:20 AM[0m] Project 'src/solution/common/tsconfig.json' is out of date because output file 'src/lib/solution/common/nominal.js' does not exist
 
-[[90m12:00:00 AM[0m] Building project '/src/solution/common/tsconfig.json'...
+[[90m12:00:21 AM[0m] Building project '/src/solution/common/tsconfig.json'...
 
-[[90m12:00:00 AM[0m] Project 'src/solution/sub-project/tsconfig.json' is out of date because output file 'src/lib/solution/sub-project/index.js' does not exist
+[[90m12:00:29 AM[0m] Project 'src/solution/sub-project/tsconfig.json' is out of date because output file 'src/lib/solution/sub-project/index.js' does not exist
 
-[[90m12:00:00 AM[0m] Building project '/src/solution/sub-project/tsconfig.json'...
+[[90m12:00:30 AM[0m] Building project '/src/solution/sub-project/tsconfig.json'...
 
-[[90m12:00:00 AM[0m] Project 'src/solution/sub-project-2/tsconfig.json' is out of date because output file 'src/lib/solution/sub-project-2/index.js' does not exist
+[[90m12:00:36 AM[0m] Project 'src/solution/sub-project-2/tsconfig.json' is out of date because output file 'src/lib/solution/sub-project-2/index.js' does not exist
 
-[[90m12:00:00 AM[0m] Building project '/src/solution/sub-project-2/tsconfig.json'...
+[[90m12:00:37 AM[0m] Building project '/src/solution/sub-project-2/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 

@@ -48,12 +48,12 @@ type A = HKT<number>[typeof sym];
 
 Output::
 /lib/tsc --b /src/tsconfig.json --verbose
-[[90m12:01:00 AM[0m] Projects in this build: 
+[[90m12:00:06 AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90m12:01:00 AM[0m] Project 'src/tsconfig.json' is out of date because output file 'src/src/hkt.js' does not exist
+[[90m12:00:07 AM[0m] Project 'src/tsconfig.json' is out of date because output file 'src/src/hkt.js' does not exist
 
-[[90m12:01:00 AM[0m] Building project '/src/tsconfig.json'...
+[[90m12:00:08 AM[0m] Building project '/src/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 
@@ -155,14 +155,14 @@ type A = HKT<number>[typeof sym];
 
 Output::
 /lib/tsc --b /src/tsconfig.json --verbose
-[[90m12:04:00 AM[0m] Projects in this build: 
+[[90m12:00:14 AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90m12:04:00 AM[0m] Project 'src/tsconfig.json' is out of date because oldest output 'src/src/hkt.js' is older than newest input 'src/src/main.ts'
+[[90m12:00:15 AM[0m] Project 'src/tsconfig.json' is out of date because oldest output 'src/src/hkt.js' is older than newest input 'src/src/main.ts'
 
-[[90m12:04:00 AM[0m] Building project '/src/tsconfig.json'...
+[[90m12:00:16 AM[0m] Building project '/src/tsconfig.json'...
 
-[[90m12:04:00 AM[0m] Updating unchanged output timestamps of project '/src/tsconfig.json'...
+[[90m12:00:20 AM[0m] Updating unchanged output timestamps of project '/src/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 
@@ -258,14 +258,14 @@ type A = HKT<number>[typeof sym];const x = 10;
 
 Output::
 /lib/tsc --b /src/tsconfig.json --verbose
-[[90m12:07:00 AM[0m] Projects in this build: 
+[[90m12:00:24 AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90m12:07:00 AM[0m] Project 'src/tsconfig.json' is out of date because oldest output 'src/src/hkt.js' is older than newest input 'src/src/main.ts'
+[[90m12:00:25 AM[0m] Project 'src/tsconfig.json' is out of date because oldest output 'src/src/hkt.js' is older than newest input 'src/src/main.ts'
 
-[[90m12:07:00 AM[0m] Building project '/src/tsconfig.json'...
+[[90m12:00:26 AM[0m] Building project '/src/tsconfig.json'...
 
-[[90m12:07:00 AM[0m] Updating unchanged output timestamps of project '/src/tsconfig.json'...
+[[90m12:00:30 AM[0m] Updating unchanged output timestamps of project '/src/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 

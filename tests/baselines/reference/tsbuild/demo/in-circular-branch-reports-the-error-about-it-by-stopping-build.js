@@ -93,7 +93,7 @@ Input::
 
 Output::
 /lib/tsc --b /src/tsconfig.json --verbose
-[[90m12:00:00 AM[0m] Projects in this build: 
+[[90m12:00:07 AM[0m] Projects in this build: 
     * src/animals/tsconfig.json
     * src/zoo/tsconfig.json
     * src/core/tsconfig.json

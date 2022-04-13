@@ -57,12 +57,12 @@ export default hello.hello
 
 Output::
 /lib/tsc --b /src/tsconfig_withIncludeAndFiles.json --v --explainFiles
-[[90m12:00:00 AM[0m] Projects in this build: 
+[[90m12:00:06 AM[0m] Projects in this build: 
     * src/tsconfig_withIncludeAndFiles.json
 
-[[90m12:00:00 AM[0m] Project 'src/tsconfig_withIncludeAndFiles.json' is out of date because output file 'src/dist/src/hello.json' does not exist
+[[90m12:00:07 AM[0m] Project 'src/tsconfig_withIncludeAndFiles.json' is out of date because output file 'src/dist/src/hello.json' does not exist
 
-[[90m12:00:00 AM[0m] Building project '/src/tsconfig_withIncludeAndFiles.json'...
+[[90m12:00:08 AM[0m] Building project '/src/tsconfig_withIncludeAndFiles.json'...
 
 lib/lib.d.ts
   Default library for target 'es3'

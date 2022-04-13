@@ -207,22 +207,22 @@ c.doSomething();
 
 Output::
 /lib/tsc --b /src/third --verbose
-[[90m12:00:00 AM[0m] Projects in this build: 
+[[90m12:00:25 AM[0m] Projects in this build: 
     * src/first/tsconfig.json
     * src/second/tsconfig.json
     * src/third/tsconfig.json
 
-[[90m12:00:00 AM[0m] Project 'src/first/tsconfig.json' is out of date because output for it was generated with version 'FakeTSVersion' that differs with current version 'FakeTSCurrentVersion'
+[[90m12:00:26 AM[0m] Project 'src/first/tsconfig.json' is out of date because output for it was generated with version 'FakeTSVersion' that differs with current version 'FakeTSCurrentVersion'
 
-[[90m12:00:00 AM[0m] Building project '/src/first/tsconfig.json'...
+[[90m12:00:27 AM[0m] Building project '/src/first/tsconfig.json'...
 
-[[90m12:00:00 AM[0m] Project 'src/second/tsconfig.json' is out of date because output for it was generated with version 'FakeTSVersion' that differs with current version 'FakeTSCurrentVersion'
+[[90m12:00:35 AM[0m] Project 'src/second/tsconfig.json' is out of date because output for it was generated with version 'FakeTSVersion' that differs with current version 'FakeTSCurrentVersion'
 
-[[90m12:00:00 AM[0m] Building project '/src/second/tsconfig.json'...
+[[90m12:00:36 AM[0m] Building project '/src/second/tsconfig.json'...
 
-[[90m12:00:00 AM[0m] Project 'src/third/tsconfig.json' is out of date because output for it was generated with version 'FakeTSVersion' that differs with current version 'FakeTSCurrentVersion'
+[[90m12:00:44 AM[0m] Project 'src/third/tsconfig.json' is out of date because output for it was generated with version 'FakeTSVersion' that differs with current version 'FakeTSCurrentVersion'
 
-[[90m12:00:00 AM[0m] Building project '/src/third/tsconfig.json'...
+[[90m12:00:45 AM[0m] Building project '/src/third/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 
