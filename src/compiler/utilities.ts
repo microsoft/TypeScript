@@ -3112,7 +3112,10 @@ namespace ts {
                 return (parent as BindingElement | ImportSpecifier).propertyName === node;
             case SyntaxKind.ExportSpecifier:
             case SyntaxKind.JsxAttribute:
-                // Any name in an export specifier or JSX Attribute
+            case SyntaxKind.JsxSelfClosingElement:
+            case SyntaxKind.JsxOpeningElement:
+            case SyntaxKind.JsxClosingElement:
+                // Any name in an export specifier or JSX Attribute or Jsx Element
                 return true;
         }
         return false;
