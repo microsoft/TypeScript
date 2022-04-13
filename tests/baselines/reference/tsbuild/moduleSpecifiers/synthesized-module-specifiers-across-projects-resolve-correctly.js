@@ -114,17 +114,17 @@ export * from './dogconfig.js';
 
 Output::
 /lib/tsc -b src/src-types src/src-dogs --verbose
-[[90m12:00:00 AM[0m] Projects in this build: 
+[[90m12:00:24 AM[0m] Projects in this build: 
     * src/src-types/tsconfig.json
     * src/src-dogs/tsconfig.json
 
-[[90m12:00:00 AM[0m] Project 'src/src-types/tsconfig.json' is out of date because output file 'src/src-types/dogconfig.js' does not exist
+[[90m12:00:25 AM[0m] Project 'src/src-types/tsconfig.json' is out of date because output file 'src/src-types/dogconfig.js' does not exist
 
-[[90m12:00:00 AM[0m] Building project '/src/src-types/tsconfig.json'...
+[[90m12:00:26 AM[0m] Building project '/src/src-types/tsconfig.json'...
 
-[[90m12:00:00 AM[0m] Project 'src/src-dogs/tsconfig.json' is out of date because output file 'src/src-dogs/dog.js' does not exist
+[[90m12:00:33 AM[0m] Project 'src/src-dogs/tsconfig.json' is out of date because output file 'src/src-dogs/dog.js' does not exist
 
-[[90m12:00:00 AM[0m] Building project '/src/src-dogs/tsconfig.json'...
+[[90m12:00:34 AM[0m] Building project '/src/src-dogs/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 

@@ -54,12 +54,12 @@ export default hello.hello
 
 Output::
 /lib/tsc --b src/tsconfig_withFiles.json --verbose
-[[90m12:01:00 AM[0m] Projects in this build: 
+[[90m12:00:07 AM[0m] Projects in this build: 
     * src/tsconfig_withFiles.json
 
-[[90m12:01:00 AM[0m] Project 'src/tsconfig_withFiles.json' is out of date because output file 'src/src/index.js' does not exist
+[[90m12:00:08 AM[0m] Project 'src/tsconfig_withFiles.json' is out of date because output file 'src/src/index.js' does not exist
 
-[[90m12:01:00 AM[0m] Building project '/src/tsconfig_withFiles.json'...
+[[90m12:00:09 AM[0m] Building project '/src/tsconfig_withFiles.json'...
 
 exitCode:: ExitStatus.Success
 
@@ -145,10 +145,10 @@ Input::
 
 Output::
 /lib/tsc --b src/tsconfig_withFiles.json --verbose
-[[90m12:04:00 AM[0m] Projects in this build: 
+[[90m12:00:14 AM[0m] Projects in this build: 
     * src/tsconfig_withFiles.json
 
-[[90m12:04:00 AM[0m] Project 'src/tsconfig_withFiles.json' is up to date because newest input 'src/src/index.ts' is older than oldest output 'src/src/index.js'
+[[90m12:00:15 AM[0m] Project 'src/tsconfig_withFiles.json' is up to date because newest input 'src/src/index.ts' is older than oldest output 'src/src/index.js'
 
 exitCode:: ExitStatus.Success
 

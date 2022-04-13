@@ -224,22 +224,22 @@ c.doSomething();
 
 Output::
 /lib/tsc --b /src/third --verbose
-[[90m12:00:00 AM[0m] Projects in this build: 
+[[90m12:00:26 AM[0m] Projects in this build: 
     * src/first/tsconfig.json
     * src/second/tsconfig.json
     * src/third/tsconfig.json
 
-[[90m12:00:00 AM[0m] Project 'src/first/tsconfig.json' is out of date because output file 'src/first/bin/first-output.tsbuildinfo' does not exist
+[[90m12:00:27 AM[0m] Project 'src/first/tsconfig.json' is out of date because output file 'src/first/bin/first-output.tsbuildinfo' does not exist
 
-[[90m12:00:00 AM[0m] Building project '/src/first/tsconfig.json'...
+[[90m12:00:28 AM[0m] Building project '/src/first/tsconfig.json'...
 
-[[90m12:00:00 AM[0m] Project 'src/second/tsconfig.json' is up to date because newest input 'src/second/second_part1.ts' is older than oldest output 'src/2/second-output.js'
+[[90m12:00:36 AM[0m] Project 'src/second/tsconfig.json' is up to date because newest input 'src/second/second_part1.ts' is older than oldest output 'src/2/second-output.js.map'
 
-[[90m12:00:00 AM[0m] Project 'src/third/tsconfig.json' is out of date because output of its dependency 'src/first' has changed
+[[90m12:00:37 AM[0m] Project 'src/third/tsconfig.json' is out of date because output of its dependency 'src/first' has changed
 
-[[90m12:00:00 AM[0m] Updating output of project '/src/third/tsconfig.json'...
+[[90m12:00:38 AM[0m] Updating output of project '/src/third/tsconfig.json'...
 
-[[90m12:00:00 AM[0m] Updating unchanged output timestamps of project '/src/third/tsconfig.json'...
+[[90m12:00:41 AM[0m] Updating unchanged output timestamps of project '/src/third/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 
@@ -311,6 +311,10 @@ declare function f(): string;
   "size": 252
 }
 
+//// [/src/third/thirdjs/output/third-output.d.ts] file changed its modified time
+//// [/src/third/thirdjs/output/third-output.d.ts.map] file changed its modified time
+//// [/src/third/thirdjs/output/third-output.js] file changed its modified time
+//// [/src/third/thirdjs/output/third-output.js.map] file changed its modified time
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo] file written with same contents
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo.baseline.txt]
 ======================================================================

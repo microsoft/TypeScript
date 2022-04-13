@@ -131,16 +131,16 @@ export declare const m: typeof mod;
 
 Output::
 /lib/tsc --b /src/tests --verbose
-[[90m12:01:00 AM[0m] Projects in this build: 
+[[90m12:00:20 AM[0m] Projects in this build: 
     * src/core/tsconfig.json
     * src/logic/tsconfig.json
     * src/tests/tsconfig.json
 
-[[90m12:01:00 AM[0m] Project 'src/core/tsconfig.json' is up to date because newest input 'src/core/anotherModule.ts' is older than oldest output 'src/core/anotherModule.js'
+[[90m12:00:21 AM[0m] Project 'src/core/tsconfig.json' is up to date because newest input 'src/core/anotherModule.ts' is older than oldest output 'src/core/anotherModule.js'
 
-[[90m12:01:00 AM[0m] Project 'src/logic/tsconfig.json' is up to date because newest input 'src/logic/index.ts' is older than oldest output 'src/logic/index.js'
+[[90m12:00:22 AM[0m] Project 'src/logic/tsconfig.json' is up to date because newest input 'src/logic/index.ts' is older than oldest output 'src/logic/index.js.map'
 
-[[90m12:01:00 AM[0m] Project 'src/tests/tsconfig.json' is up to date because newest input 'src/tests/index.ts' is older than oldest output 'src/tests/index.js'
+[[90m12:00:23 AM[0m] Project 'src/tests/tsconfig.json' is up to date because newest input 'src/tests/index.ts' is older than oldest output 'src/tests/index.js'
 
 exitCode:: ExitStatus.Success
 
@@ -156,18 +156,18 @@ const m = 10;
 
 Output::
 /lib/tsc --b /src/tests --verbose
-[[90m12:04:00 AM[0m] Projects in this build: 
+[[90m12:00:25 AM[0m] Projects in this build: 
     * src/core/tsconfig.json
     * src/logic/tsconfig.json
     * src/tests/tsconfig.json
 
-[[90m12:04:00 AM[0m] Project 'src/core/tsconfig.json' is up to date because newest input 'src/core/anotherModule.ts' is older than oldest output 'src/core/anotherModule.js'
+[[90m12:00:26 AM[0m] Project 'src/core/tsconfig.json' is up to date because newest input 'src/core/anotherModule.ts' is older than oldest output 'src/core/anotherModule.js'
 
-[[90m12:04:00 AM[0m] Project 'src/logic/tsconfig.json' is up to date because newest input 'src/logic/index.ts' is older than oldest output 'src/logic/index.js'
+[[90m12:00:27 AM[0m] Project 'src/logic/tsconfig.json' is up to date because newest input 'src/logic/index.ts' is older than oldest output 'src/logic/index.js.map'
 
-[[90m12:04:00 AM[0m] Project 'src/tests/tsconfig.json' is out of date because oldest output 'src/tests/index.js' is older than newest input 'src/tests/index.ts'
+[[90m12:00:28 AM[0m] Project 'src/tests/tsconfig.json' is out of date because oldest output 'src/tests/index.js' is older than newest input 'src/tests/index.ts'
 
-[[90m12:04:00 AM[0m] Building project '/src/tests/tsconfig.json'...
+[[90m12:00:29 AM[0m] Building project '/src/tests/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 
@@ -232,24 +232,24 @@ export function multiply(a: number, b: number) { return a * b; }
 
 Output::
 /lib/tsc --b /src/tests --verbose
-[[90m12:07:00 AM[0m] Projects in this build: 
+[[90m12:00:35 AM[0m] Projects in this build: 
     * src/core/tsconfig.json
     * src/logic/tsconfig.json
     * src/tests/tsconfig.json
 
-[[90m12:07:00 AM[0m] Project 'src/core/tsconfig.json' is out of date because oldest output 'src/core/anotherModule.js' is older than newest input 'src/core/index.ts'
+[[90m12:00:36 AM[0m] Project 'src/core/tsconfig.json' is out of date because oldest output 'src/core/anotherModule.js' is older than newest input 'src/core/index.ts'
 
-[[90m12:07:00 AM[0m] Building project '/src/core/tsconfig.json'...
+[[90m12:00:37 AM[0m] Building project '/src/core/tsconfig.json'...
 
-[[90m12:07:00 AM[0m] Updating unchanged output timestamps of project '/src/core/tsconfig.json'...
+[[90m12:00:43 AM[0m] Updating unchanged output timestamps of project '/src/core/tsconfig.json'...
 
-[[90m12:07:00 AM[0m] Project 'src/logic/tsconfig.json' is up to date with .d.ts files from its dependencies
+[[90m12:00:48 AM[0m] Project 'src/logic/tsconfig.json' is up to date with .d.ts files from its dependencies
 
-[[90m12:07:00 AM[0m] Updating output timestamps of project '/src/logic/tsconfig.json'...
+[[90m12:00:50 AM[0m] Updating output timestamps of project '/src/logic/tsconfig.json'...
 
-[[90m12:07:00 AM[0m] Project 'src/tests/tsconfig.json' is up to date with .d.ts files from its dependencies
+[[90m12:00:55 AM[0m] Project 'src/tests/tsconfig.json' is up to date with .d.ts files from its dependencies
 
-[[90m12:07:00 AM[0m] Updating output timestamps of project '/src/tests/tsconfig.json'...
+[[90m12:00:57 AM[0m] Updating output timestamps of project '/src/tests/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 
@@ -346,18 +346,18 @@ Input::
 
 Output::
 /lib/tsc --b /src/tests --verbose
-[[90m12:10:00 AM[0m] Projects in this build: 
+[[90m12:01:02 AM[0m] Projects in this build: 
     * src/core/tsconfig.json
     * src/logic/tsconfig.json
     * src/tests/tsconfig.json
 
-[[90m12:10:00 AM[0m] Project 'src/core/tsconfig.json' is up to date because newest input 'src/core/index.ts' is older than oldest output 'src/core/anotherModule.js'
+[[90m12:01:03 AM[0m] Project 'src/core/tsconfig.json' is up to date because newest input 'src/core/index.ts' is older than oldest output 'src/core/index.js'
 
-[[90m12:10:00 AM[0m] Project 'src/logic/tsconfig.json' is up to date because newest input 'src/logic/index.ts' is older than oldest output 'src/logic/index.js'
+[[90m12:01:04 AM[0m] Project 'src/logic/tsconfig.json' is up to date because newest input 'src/logic/index.ts' is older than oldest output 'src/logic/index.js'
 
-[[90m12:10:00 AM[0m] Project 'src/tests/tsconfig.json' is out of date because oldest output 'src/tests/index.js' is older than newest input 'src/tests/tsconfig.json'
+[[90m12:01:05 AM[0m] Project 'src/tests/tsconfig.json' is out of date because oldest output 'src/tests/index.js' is older than newest input 'src/tests/tsconfig.json'
 
-[[90m12:10:00 AM[0m] Building project '/src/tests/tsconfig.json'...
+[[90m12:01:06 AM[0m] Building project '/src/tests/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 

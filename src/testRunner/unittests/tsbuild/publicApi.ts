@@ -2,7 +2,7 @@ namespace ts {
     describe("unittests:: tsbuild:: Public API with custom transformers when passed to build", () => {
         let sys: TscCompileSystem;
         before(() => {
-            const initialFs = getFsWithTime(loadProjectFromFiles({
+            const inputFs = loadProjectFromFiles({
                 "/src/tsconfig.json": JSON.stringify({
                     references: [
                         { path: "./shared/tsconfig.json" },
@@ -29,9 +29,7 @@ export class c2 { }
 export enum e2 { }
 // leading
 export function f22() { } // trailing`,
-            })).fs.makeReadonly();
-            const inputFs = initialFs.shadow();
-            inputFs.makeReadonly();
+            }).makeReadonly();
             const fs = inputFs.shadow();
 
             // Create system

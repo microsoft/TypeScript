@@ -149,22 +149,22 @@ export const m = mod;
 
 Output::
 /lib/tsc --b /src/tests --verbose --force
-[[90m12:00:00 AM[0m] Projects in this build: 
+[[90m12:00:20 AM[0m] Projects in this build: 
     * src/core/tsconfig.json
     * src/logic/tsconfig.json
     * src/tests/tsconfig.json
 
-[[90m12:00:00 AM[0m] Project 'src/core/tsconfig.json' is being forcibly rebuilt
+[[90m12:00:21 AM[0m] Project 'src/core/tsconfig.json' is being forcibly rebuilt
 
-[[90m12:00:00 AM[0m] Building project '/src/core/tsconfig.json'...
+[[90m12:00:22 AM[0m] Building project '/src/core/tsconfig.json'...
 
-[[90m12:00:00 AM[0m] Project 'src/logic/tsconfig.json' is being forcibly rebuilt
+[[90m12:00:31 AM[0m] Project 'src/logic/tsconfig.json' is being forcibly rebuilt
 
-[[90m12:00:00 AM[0m] Building project '/src/logic/tsconfig.json'...
+[[90m12:00:32 AM[0m] Building project '/src/logic/tsconfig.json'...
 
-[[90m12:00:00 AM[0m] Project 'src/tests/tsconfig.json' is being forcibly rebuilt
+[[90m12:00:38 AM[0m] Project 'src/tests/tsconfig.json' is being forcibly rebuilt
 
-[[90m12:00:00 AM[0m] Building project '/src/tests/tsconfig.json'...
+[[90m12:00:39 AM[0m] Building project '/src/tests/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 

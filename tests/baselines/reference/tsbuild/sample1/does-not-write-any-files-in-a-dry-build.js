@@ -67,11 +67,11 @@ Input::
 
 Output::
 /lib/tsc --b /src/tests --dry
-[[90m12:00:00 AM[0m] A non-dry build would build project '/src/core/tsconfig.json'
+[[90m12:00:06 AM[0m] A non-dry build would build project '/src/core/tsconfig.json'
 
-[[90m12:00:00 AM[0m] A non-dry build would build project '/src/logic/tsconfig.json'
+[[90m12:00:07 AM[0m] A non-dry build would build project '/src/logic/tsconfig.json'
 
-[[90m12:00:00 AM[0m] A non-dry build would build project '/src/tests/tsconfig.json'
+[[90m12:00:08 AM[0m] A non-dry build would build project '/src/tests/tsconfig.json'
 
 exitCode:: ExitStatus.Success
 

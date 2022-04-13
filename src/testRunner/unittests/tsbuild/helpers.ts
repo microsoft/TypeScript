@@ -78,26 +78,6 @@ namespace ts {
         };
     }
 
-    export function getTime() {
-        let currentTime = 100;
-        return { tick, time, touch };
-
-        function tick() {
-            currentTime += 60_000;
-        }
-
-        function time() {
-            return currentTime;
-        }
-
-        function touch(fs: vfs.FileSystem, path: string) {
-            if (!fs.statSync(path).isFile()) {
-                throw new Error(`File ${path} does not exist`);
-            }
-            fs.utimesSync(path, new Date(time()), new Date(time()));
-        }
-    }
-
     export const libContent = `${TestFSWithWatch.libFile.content}
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };`;
@@ -152,26 +132,6 @@ interface Symbol {
         fs.mkdirSync("/lib");
         fs.writeFileSync("/lib/lib.d.ts", libContentToAppend ? `${libContent}${libContentToAppend}` : libContent);
         fs.makeReadonly();
-    }
-
-    /**
-     * Gets the FS mountuing existing fs's /src and /lib folder
-     */
-    export function getFsWithTime(baseFs: vfs.FileSystem) {
-        const { time, tick } = getTime();
-        const host = new fakes.System(baseFs) as any as vfs.FileSystemResolverHost;
-        host.getWorkspaceRoot = notImplemented;
-        const resolver = vfs.createResolver(host);
-        const fs = new vfs.FileSystem(/*ignoreCase*/ true, {
-            files: {
-                ["/src"]: new vfs.Mount("/src", resolver),
-                ["/lib"]: new vfs.Mount("/lib", resolver)
-            },
-            cwd: "/",
-            meta: { defaultLibLocation: "/lib" },
-            time
-        });
-        return { fs, time, tick };
     }
 
     export function verifyOutputsPresent(fs: vfs.FileSystem, outputs: readonly string[]) {
@@ -336,7 +296,6 @@ interface Symbol {
         commandLineArgs: TestTscCompile["commandLineArgs"];
         modifyFs: TestTscCompile["modifyFs"];
         editFs: TestTscEdit["modifyFs"];
-        tick: () => void;
         baseFs: vfs.FileSystem;
         newSys: TscCompileSystem;
         cleanBuildDiscrepancies: TestTscEdit["cleanBuildDiscrepancies"];
@@ -347,7 +306,7 @@ interface Symbol {
             const {
                 scenario, commandLineArgs, cleanBuildDiscrepancies,
                 modifyFs, editFs,
-                tick, baseFs, newSys
+                baseFs, newSys
             } = input();
             const sys = testTscCompile({
                 scenario,
@@ -355,7 +314,6 @@ interface Symbol {
                 fs: () => baseFs.makeReadonly(),
                 commandLineArgs,
                 modifyFs: fs => {
-                    tick();
                     if (modifyFs) modifyFs(fs);
                     editFs(fs);
                 },
@@ -532,22 +490,18 @@ interface Symbol {
         edits
     }: VerifyTscWithEditsWorkerInput) {
         describe(`tsc ${commandLineArgs.join(" ")} ${scenario}:: ${subScenario} serializedEdits`, () => {
-            let tick: () => void;
             let sys: TscCompileSystem;
             let baseFs: vfs.FileSystem;
             let editsSys: TscCompileSystem[];
             before(() => {
                 Debug.assert(!!edits.length, `${scenario}/${subScenario}:: No incremental scenarios, you probably want to use verifyTsc instead.`);
-                ({ fs: baseFs, tick } = getFsWithTime(fs()));
+                baseFs = fs().makeReadonly();
                 sys = testTscCompile({
                     scenario,
                     subScenario,
-                    fs: () => baseFs.makeReadonly(),
+                    fs: () => baseFs,
                     commandLineArgs,
-                    modifyFs: fs => {
-                        if (modifyFs) modifyFs(fs);
-                        tick();
-                    },
+                    modifyFs,
                     baselineSourceMap,
                     baselineReadFileCalls,
                     baselinePrograms
@@ -556,18 +510,13 @@ interface Symbol {
                     { modifyFs, subScenario: editScenario, commandLineArgs: editCommandLineArgs },
                     index
                 ) => {
-                    tick();
                     (editsSys || (editsSys = [])).push(testTscCompile({
                         scenario,
                         subScenario: editScenario || subScenario,
                         diffWithInitial: true,
                         fs: () => index === 0 ? sys.vfs : editsSys[index - 1].vfs,
                         commandLineArgs: editCommandLineArgs || commandLineArgs,
-                        modifyFs: fs => {
-                            tick();
-                            modifyFs(fs);
-                            tick();
-                        },
+                        modifyFs,
                         baselineSourceMap,
                         baselineReadFileCalls,
                         baselinePrograms
@@ -577,7 +526,6 @@ interface Symbol {
             after(() => {
                 baseFs = undefined!;
                 sys = undefined!;
-                tick = undefined!;
                 editsSys = undefined!;
             });
             describe("tsc invocation after edit", () => {
@@ -608,7 +556,6 @@ interface Symbol {
                         }
                     },
                     modifyFs,
-                    tick
                 }), index, subScenario));
             });
         });
