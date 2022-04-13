@@ -17,6 +17,12 @@ Input::
 //// [/src/2/second-output.tsbuildinfo]
 
 
+//// [/src/2/second-output.tsbuildinfo.baseline.txt]
+
+
+//// [/src/2/second-output.tsbuildinfo.readable.baseline.txt]
+
+
 //// [/src/first/bin/first-output.d.ts]
 
 
@@ -30,6 +36,12 @@ Input::
 
 
 //// [/src/first/bin/first-output.tsbuildinfo]
+
+
+//// [/src/first/bin/first-output.tsbuildinfo.baseline.txt]
+
+
+//// [/src/first/bin/first-output.tsbuildinfo.readable.baseline.txt]
 
 
 //// [/src/first/first_PART1.ts]
@@ -100,6 +112,12 @@ Input::
 
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo]
+
+
+//// [/src/third/thirdjs/output/third-output.tsbuildinfo.baseline.txt]
+
+
+//// [/src/third/thirdjs/output/third-output.tsbuildinfo.readable.baseline.txt]
 
 
 //// [/src/third/third_part1.ts]

@@ -21,7 +21,8 @@ namespace ts {
         function getSampleFsAfterBuild() {
             if (projFsWithBuild) return projFsWithBuild;
             const fs = projFs.shadow();
-            const host = fakes.SolutionBuilderHost.create(fs);
+            const sys = new fakes.System(fs, { executingFilePath: "/lib/tsc" });
+            const host = createSolutionBuilderHostForBaseline(sys as TscCompileSystem);
             const builder = createSolutionBuilder(host, ["/src/tests"], {});
             builder.build();
             fs.makeReadonly();
