@@ -42,6 +42,9 @@ Input::
 //// [/src/core/tsconfig.tsbuildinfo]
 
 
+//// [/src/core/tsconfig.tsbuildinfo.readable.baseline.txt]
+
+
 //// [/src/logic/index.d.ts]
 
 
@@ -72,6 +75,9 @@ Input::
 //// [/src/logic/tsconfig.tsbuildinfo]
 
 
+//// [/src/logic/tsconfig.tsbuildinfo.readable.baseline.txt]
+
+
 //// [/src/tests/index.d.ts]
 
 
@@ -97,6 +103,9 @@ Input::
 }
 
 //// [/src/tests/tsconfig.tsbuildinfo]
+
+
+//// [/src/tests/tsconfig.tsbuildinfo.readable.baseline.txt]
 
 
 //// [/src/ui/index.ts]

@@ -104,7 +104,8 @@ namespace ts {
         function getOutFileFsAfterBuild() {
             if (outFileWithBuildFs) return outFileWithBuildFs;
             const fs = outFileFs.shadow();
-            const host = fakes.SolutionBuilderHost.create(fs);
+            const sys = new fakes.System(fs, { executingFilePath: "/lib/tsc" });
+            const host = createSolutionBuilderHostForBaseline(sys as TscCompileSystem);
             const builder = createSolutionBuilder(host, ["/src/third"], { dry: false, force: false, verbose: true });
             builder.build();
             fs.makeReadonly();
