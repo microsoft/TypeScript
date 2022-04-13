@@ -1210,11 +1210,13 @@ namespace ts {
         base64decode?(input: string): string;
         base64encode?(input: string): string;
         /*@internal*/ bufferFrom?(input: string, encoding?: string): Buffer;
+        /*@internal*/ require?(baseDir: string, moduleName: string): RequireResult;
+        /*@internal*/ defaultWatchFileKind?(): WatchFileKind | undefined;
+
         // For testing
         /*@internal*/ now?(): Date;
         /*@internal*/ disableUseFileVersionAsSignature?: boolean;
-        /*@internal*/ require?(baseDir: string, moduleName: string): RequireResult;
-        /*@internal*/ defaultWatchFileKind?(): WatchFileKind | undefined;
+        /*@internal*/ storeFilesChangingSignatureDuringEmit?: boolean;
     }
 
     export interface FileWatcher {

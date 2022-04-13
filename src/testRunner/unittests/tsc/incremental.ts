@@ -124,12 +124,12 @@ const a: string = 10;`, "utf-8"),
 
             function verifyNoEmitChanges(compilerOptions: CompilerOptions) {
                 const noChangeRunWithNoEmit: TestTscEdit = {
-                    ...noChangeWithExportsDescripencyRun,
+                    ...(getEmitDeclarations(compilerOptions) ? noChangeRun : noChangeWithExportsDescripencyRun),
                     subScenario: "No Change run with noEmit",
                     commandLineArgs: ["--p", "src/project", "--noEmit"],
                 };
                 const noChangeRunWithEmit: TestTscEdit = {
-                    ...noChangeWithExportsDescripencyRun,
+                    ...(getEmitDeclarations(compilerOptions) ? noChangeRun : noChangeWithExportsDescripencyRun),
                     subScenario: "No Change run with emit",
                     commandLineArgs: ["--p", "src/project"],
                 };
@@ -152,11 +152,12 @@ const a: string = 10;`, "utf-8"),
                             subScenario: "Introduce error but still noEmit",
                             commandLineArgs: ["--p", "src/project", "--noEmit"],
                             modifyFs: fs => replaceText(fs, "/src/project/src/class.ts", "prop", "prop1"),
+                            descripencyExplaination: getEmitDeclarations(compilerOptions) ? noChangeWithExportsDescripencyRun.descripencyExplaination : undefined,
                         },
                         {
                             subScenario: "Fix error and emit",
                             modifyFs: fs => replaceText(fs, "/src/project/src/class.ts", "prop1", "prop"),
-                            descripencyExplaination: noChangeWithExportsDescripencyRun.descripencyExplaination,
+                            descripencyExplaination: getEmitDeclarations(compilerOptions) ? undefined : noChangeWithExportsDescripencyRun.descripencyExplaination,
                         },
                         noChangeRunWithEmit,
                         noChangeRunWithNoEmit,
@@ -165,7 +166,7 @@ const a: string = 10;`, "utf-8"),
                         {
                             subScenario: "Introduce error and emit",
                             modifyFs: fs => replaceText(fs, "/src/project/src/class.ts", "prop", "prop1"),
-                            descripencyExplaination: noChangeWithExportsDescripencyRun.descripencyExplaination,
+                            descripencyExplaination: getEmitDeclarations(compilerOptions) ? undefined : noChangeWithExportsDescripencyRun.descripencyExplaination,
                         },
                         noChangeRunWithEmit,
                         noChangeRunWithNoEmit,
@@ -256,7 +257,7 @@ const a: string = 10;`, "utf-8"),
             }),
             commandLineArgs: ["--p", "src/project"],
             edits: [
-                noChangeWithExportsDescripencyRun,
+                noChangeRun,
                 {
                     subScenario: "Modify main file",
                     modifyFs: fs => appendText(fs, `/src/project/src/main.ts`, `something();`),

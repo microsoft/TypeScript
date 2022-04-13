@@ -450,7 +450,7 @@ namespace ts {
         /**
          * Coverts the declaration emit result into exported modules map
          */
-        function updateExportedModules(sourceFile: SourceFile, exportedModulesFromDeclarationEmit: ExportedModulesFromDeclarationEmit | undefined, exportedModulesMapCache: ManyToManyPathMap) {
+        export function updateExportedModules(sourceFile: SourceFile, exportedModulesFromDeclarationEmit: ExportedModulesFromDeclarationEmit | undefined, exportedModulesMapCache: ManyToManyPathMap) {
             if (!exportedModulesFromDeclarationEmit) {
                 exportedModulesMapCache.deleteKey(sourceFile.resolvedPath);
                 return;

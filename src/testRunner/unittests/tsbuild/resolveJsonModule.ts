@@ -57,7 +57,7 @@ export default hello.hello`);
             fs: () => projFs,
             commandLineArgs: ["--b", "src/tsconfig_withFiles.json", "--verbose", "--explainFiles"],
             modifyFs: fs => replaceText(fs, "src/tsconfig_withFiles.json", `"composite": true,`, `"composite": true, "sourceMap": true,`),
-            edits: noChangeWithExportsDescripencyOnlyRuns
+            edits: noChangeOnlyRuns
         });
 
         verifyTscWithEdits({
@@ -66,7 +66,7 @@ export default hello.hello`);
             fs: () => projFs,
             commandLineArgs: ["--b", "src/tsconfig_withFiles.json", "--verbose"],
             modifyFs: fs => replaceText(fs, "src/tsconfig_withFiles.json", `"outDir": "dist",`, ""),
-            edits: noChangeWithExportsDescripencyOnlyRuns
+            edits: noChangeOnlyRuns
         });
     });
 
@@ -76,7 +76,7 @@ export default hello.hello`);
             subScenario: "importing json module from project reference",
             fs: () => loadProjectFromDisk("tests/projects/importJsonFromProjectReference"),
             commandLineArgs: ["--b", "src/tsconfig.json", "--verbose", "--explainFiles"],
-            edits: noChangeWithExportsDescripencyOnlyRuns
+            edits: noChangeOnlyRuns
         });
     });
 }
