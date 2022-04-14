@@ -25,7 +25,7 @@ jobs:
         github-token: ${{ secrets.TS_BOT_GITHUB_TOKEN }}
   
   bisect:
-    if: ${{ github.event.label.name == "Bisect Repro" }}
+    if: ${{ github.event.label.name == 'Bisect Repro' }}
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
