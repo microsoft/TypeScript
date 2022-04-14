@@ -1104,13 +1104,13 @@ namespace ts {
         }
 
         function getWriteFileUpdatingSignatureCallback(writeFile: WriteFileCallback | undefined): WriteFileCallback {
-            return (fileName, data, writeByteOrderMark, onError, sourceFiles, sourceMapUrlPos) => {
+            return (fileName, text, writeByteOrderMark, onError, sourceFiles, data) => {
                 if (sourceFiles?.length === 1 && isDeclarationFileName(fileName)) {
                     const file = sourceFiles[0];
                     const info = state.fileInfos.get(file.resolvedPath)!;
                     const signature = state.currentAffectedFilesSignatures?.get(file.resolvedPath) || info.signature;
                     if (signature === file.version) {
-                        const newSignature = (computeHash || generateDjb2Hash)(sourceMapUrlPos !== undefined ? data.substring(0, sourceMapUrlPos) : data);
+                        const newSignature = (computeHash || generateDjb2Hash)(data?.sourceMapUrlPos !== undefined ? text.substring(0, data.sourceMapUrlPos) : text);
                         if (newSignature !== file.version) { // Update it
                             if (host.storeFilesChangingSignatureDuringEmit) (state.filesChangingSignature ||= new Set()).add(file.resolvedPath);
                             if (state.exportedModulesMap) BuilderState.updateExportedModules(file, file.exportedModulesFromDeclarationEmit, state.currentAffectedFilesExportedModulesMap ||= BuilderState.createManyToManyPathMap());
@@ -1124,9 +1124,9 @@ namespace ts {
                         }
                     }
                 }
-                if (writeFile) writeFile(fileName, data, writeByteOrderMark, onError, sourceFiles, sourceMapUrlPos);
-                else if (host.writeFile) host.writeFile(fileName, data, writeByteOrderMark, onError, sourceFiles, sourceMapUrlPos);
-                else state.program!.writeFile(fileName, data, writeByteOrderMark, onError, sourceFiles, sourceMapUrlPos);
+                if (writeFile) writeFile(fileName, text, writeByteOrderMark, onError, sourceFiles, data);
+                else if (host.writeFile) host.writeFile(fileName, text, writeByteOrderMark, onError, sourceFiles, data);
+                else state.program!.writeFile(fileName, text, writeByteOrderMark, onError, sourceFiles, data);
             };
         }
 

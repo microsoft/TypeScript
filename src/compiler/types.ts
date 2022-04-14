@@ -3856,13 +3856,16 @@ namespace ts {
      */
     export type ResolvedConfigFileName = string & { _isResolvedConfigFileName: never };
 
+    export interface WriteFileCallbackData {
+        /*@internal*/ sourceMapUrlPos?: number;
+    }
     export type WriteFileCallback = (
         fileName: string,
-        data: string,
+        text: string,
         writeByteOrderMark: boolean,
         onError?: (message: string) => void,
         sourceFiles?: readonly SourceFile[],
-        sourceMapUrlPos?: number,
+        data?: WriteFileCallbackData,
     ) => void;
 
     export class OperationCanceledException { }

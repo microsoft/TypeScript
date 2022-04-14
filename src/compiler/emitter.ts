@@ -564,7 +564,7 @@ namespace ts {
             }
 
             // Write the output file
-            writeFile(host, emitterDiagnostics, jsFilePath, writer.getText(), !!compilerOptions.emitBOM, sourceFiles, sourceMapUrlPos);
+            writeFile(host, emitterDiagnostics, jsFilePath, writer.getText(), !!compilerOptions.emitBOM, sourceFiles, { sourceMapUrlPos });
 
             // Reset state
             writer.clear();

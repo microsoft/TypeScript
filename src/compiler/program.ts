@@ -1916,13 +1916,13 @@ namespace ts {
 
         function writeFile(
             fileName: string,
-            data: string,
+            text: string,
             writeByteOrderMark: boolean,
             onError?: (message: string) => void,
             sourceFiles?: readonly SourceFile[],
-            sourceMapUrlPos?: number,
+            data?: WriteFileCallbackData
         ) {
-            host.writeFile(fileName, data, writeByteOrderMark, onError, sourceFiles, sourceMapUrlPos);
+            host.writeFile(fileName, text, writeByteOrderMark, onError, sourceFiles, data);
         }
 
         function emitBuildInfo(writeFileCallback?: WriteFileCallback): EmitResult {
