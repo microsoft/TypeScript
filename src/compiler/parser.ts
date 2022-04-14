@@ -3817,7 +3817,13 @@ namespace ts {
                 assertions = parseImportTypeAssertions();
             }
             parseExpected(SyntaxKind.CloseParenToken);
-            const qualifier = parseOptional(SyntaxKind.DotToken) ? parseEntityNameOfTypeReference() : undefined;
+            const qualifier = parseOptional(SyntaxKind.DotToken)
+                ? parseEntityName(
+                      /*allowReservedWords*/ true,
+                      /*allowPrivateIdentifiers*/ true,
+                      Diagnostics.Type_expected
+                  )
+                : undefined;
             const typeArguments = parseTypeArgumentsOfTypeReference();
             return finishNode(factory.createImportTypeNode(type, assertions, qualifier, typeArguments, isTypeOf), pos);
         }

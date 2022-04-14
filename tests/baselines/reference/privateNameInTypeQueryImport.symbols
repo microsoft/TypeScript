@@ -1,0 +1,18 @@
+=== tests/cases/conformance/classes/members/privateNames/main.ts ===
+export class Foo {
+>Foo : Symbol(Foo, Decl(main.ts, 0, 0))
+
+  static #m = 1;
+>#m : Symbol(Foo.#m, Decl(main.ts, 0, 18))
+
+  static #f(x: typeof import("./lib").Bar.#m) {}
+>#f : Symbol(Foo.#f, Decl(main.ts, 1, 16))
+>x : Symbol(x, Decl(main.ts, 2, 12))
+>Bar : Symbol(Bar, Decl(lib.ts, 0, 8))
+}
+
+=== tests/cases/conformance/classes/members/privateNames/lib.ts ===
+export { Foo as Bar } from "./main";
+>Foo : Symbol(Foo, Decl(main.ts, 0, 0))
+>Bar : Symbol(Bar, Decl(lib.ts, 0, 8))
+

@@ -1,0 +1,14 @@
+tests/cases/conformance/classes/members/privateNames/main.ts(3,43): error TS2694: Namespace '"tests/cases/conformance/classes/members/privateNames/lib".Bar' has no exported member '#m'.
+
+
+==== tests/cases/conformance/classes/members/privateNames/main.ts (1 errors) ====
+    export class Foo {
+      static #m = 1;
+      static #f(x: typeof import("./lib").Bar.#m) {}
+                                              ~~
+!!! error TS2694: Namespace '"tests/cases/conformance/classes/members/privateNames/lib".Bar' has no exported member '#m'.
+    }
+    
+==== tests/cases/conformance/classes/members/privateNames/lib.ts (0 errors) ====
+    export { Foo as Bar } from "./main";
+    
