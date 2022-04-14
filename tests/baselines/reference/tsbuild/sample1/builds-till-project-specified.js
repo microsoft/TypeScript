@@ -63,6 +63,14 @@ export const m = mod;
 
 
 //// [/src/tests/index.ts]
+import * as c from '../core/index';
+import * as logic from '../logic/index';
+
+c.leftPad("", 10);
+logic.getSecondsInDay();
+
+import * as mod from '../core/anotherModule';
+export const m = mod;
 
 
 //// [/src/tests/tsconfig.json]
@@ -81,9 +89,22 @@ export const m = mod;
 }
 
 //// [/src/ui/index.ts]
+import * as logic from '../logic';
+
+export function run() {
+    console.log(logic.getSecondsInDay());
+}
 
 
 //// [/src/ui/tsconfig.json]
+{
+    "compilerOptions": {
+        "skipDefaultLibCheck": true
+    },
+    "references": [
+        { "path": "../logic/index" }
+    ]
+}
 
 
 

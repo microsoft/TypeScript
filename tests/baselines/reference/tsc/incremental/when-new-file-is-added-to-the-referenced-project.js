@@ -18,7 +18,7 @@ declare const console: { log(msg: any): void; };
 declare class class1 {}
 
 //// [/src/projects/project1/class1.ts]
-
+class class1 {}
 
 //// [/src/projects/project1/tsconfig.json]
 {"compilerOptions":{"module":"none","composite":true},"exclude":["temp"]}

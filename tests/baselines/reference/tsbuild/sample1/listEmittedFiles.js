@@ -89,9 +89,22 @@ export const m = mod;
 }
 
 //// [/src/ui/index.ts]
+import * as logic from '../logic';
+
+export function run() {
+    console.log(logic.getSecondsInDay());
+}
 
 
 //// [/src/ui/tsconfig.json]
+{
+    "compilerOptions": {
+        "skipDefaultLibCheck": true
+    },
+    "references": [
+        { "path": "../logic/index" }
+    ]
+}
 
 
 

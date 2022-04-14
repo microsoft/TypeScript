@@ -25,7 +25,21 @@ import hello from "./hello.json"
 export default hello.hello
 
 //// [/src/tsconfig_withFiles.json]
-
+{
+  "compilerOptions": {
+    "composite": true,
+    "moduleResolution": "node",
+    "module": "commonjs",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "outDir": "dist",
+    "skipDefaultLibCheck": true
+  },
+  "files": [
+    "src/index.ts", "src/hello.json"
+  ]
+}
 
 //// [/src/tsconfig_withInclude.json]
 {
@@ -45,10 +59,41 @@ export default hello.hello
 }
 
 //// [/src/tsconfig_withIncludeAndFiles.json]
-
+{
+  "compilerOptions": {
+    "composite": true,
+    "moduleResolution": "node",
+    "module": "commonjs",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "outDir": "dist",
+    "skipDefaultLibCheck": true
+  },
+  "files": [
+    "src/hello.json"
+  ],
+  "include": [
+    "src/**/*"
+  ]
+}
 
 //// [/src/tsconfig_withIncludeOfJson.json]
-
+{
+  "compilerOptions": {
+    "composite": true,
+    "moduleResolution": "node",
+    "module": "commonjs",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "outDir": "dist",
+    "skipDefaultLibCheck": true
+  },
+  "include": [
+    "src/**/*", "src/**/*.json"
+  ]
+}
 
 
 

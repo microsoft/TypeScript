@@ -27,7 +27,7 @@ export const a: Unrestricted = 1;
 type Unrestricted = any;
 
 //// [/src/tsconfig.json]
-
+{"references":[{"path":"./shared/tsconfig.json"},{"path":"./webpack/tsconfig.json"}],"files":[]}
 
 //// [/src/webpack/index.ts]
 export const b: Unrestricted = 1;
