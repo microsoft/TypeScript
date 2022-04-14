@@ -3858,6 +3858,7 @@ namespace ts {
 
     export interface WriteFileCallbackData {
         /*@internal*/ sourceMapUrlPos?: number;
+        /*@internal*/ buildInfo?: BuildInfo;
     }
     export type WriteFileCallback = (
         fileName: string,

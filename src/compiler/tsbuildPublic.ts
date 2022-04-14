@@ -220,7 +220,7 @@ namespace ts {
 
     interface BuildInfoCacheEntry {
         path: Path;
-        buildInfo: BuildInfo | false | string;
+        buildInfo: BuildInfo | false;
         modifiedTime: Date;
     }
 
@@ -956,7 +956,7 @@ namespace ts {
                 reportDeclarationDiagnostics,
                 /*write*/ undefined,
                 /*reportSummary*/ undefined,
-                (name, text, writeByteOrderMark) => outputFiles.push({ name, text, writeByteOrderMark }),
+                (name, text, writeByteOrderMark, _onError, _sourceFiles, data) => outputFiles.push({ name, text, writeByteOrderMark, buildInfo: data?.buildInfo }),
                 cancellationToken,
                 /*emitOnlyDts*/ false,
                 customTransformers || state.host.getCustomTransformers?.(project)
@@ -985,8 +985,8 @@ namespace ts {
             let newestDeclarationFileContentChangedTime: Date | undefined;
             const emitterDiagnostics = createDiagnosticCollection();
             const emittedOutputs = new Map<Path, string>();
-            const buildInfo = state.buildInfoCache.get(projectPath);
-            outputFiles.forEach(({ name, text, writeByteOrderMark }) => {
+            const buildInfoEntry = state.buildInfoCache.get(projectPath);
+            outputFiles.forEach(({ name, text, writeByteOrderMark, buildInfo }) => {
                 if (resultFlags === BuildResultFlags.DeclarationOutputUnchanged && isDeclarationFileName(name)) {
                     // Check for unchanged .d.ts files
                     if (state.readFileWithCache(name) === text) {
@@ -1001,9 +1001,9 @@ namespace ts {
 
                 const path = toPath(state, name);
                 emittedOutputs.set(path, name);
-                if (buildInfo?.path === path) {
-                    buildInfo.buildInfo = text;
-                    buildInfo.modifiedTime = getCurrentTime(state);
+                if (buildInfoEntry?.path === path) {
+                    buildInfoEntry.buildInfo = buildInfo!;
+                    buildInfoEntry.modifiedTime = getCurrentTime(state);
                 }
                 writeFile(writeFileCallback ? { writeFile: writeFileCallback } : compilerHost, emitterDiagnostics, name, text, writeByteOrderMark);
             });
@@ -1021,15 +1021,15 @@ namespace ts {
         function emitBuildInfo(writeFileCallback?: WriteFileCallback, cancellationToken?: CancellationToken): EmitResult {
             Debug.assertIsDefined(program);
             Debug.assert(step === BuildStep.EmitBuildInfo);
-            const emitResult = program.emitBuildInfo((name, data, writeByteOrderMark, onError, sourceFiles) => {
+            const emitResult = program.emitBuildInfo((name, text, writeByteOrderMark, onError, sourceFiles, data) => {
                 const path = toPath(state, name);
                 const buildInfo = state.buildInfoCache.get(projectPath);
                 if (buildInfo?.path === path) {
-                    buildInfo.buildInfo = data;
+                    buildInfo.buildInfo = data!.buildInfo!;
                     buildInfo.modifiedTime = getCurrentTime(state);
                 }
-                if (writeFileCallback) writeFileCallback(name, data, writeByteOrderMark, onError, sourceFiles);
-                else state.compilerHost.writeFile(name, data, writeByteOrderMark, onError, sourceFiles);
+                if (writeFileCallback) writeFileCallback(name, text, writeByteOrderMark, onError, sourceFiles, data);
+                else state.compilerHost.writeFile(name, text, writeByteOrderMark, onError, sourceFiles, data);
             }, cancellationToken);
             if (emitResult.diagnostics.length) {
                 reportErrors(state, emitResult.diagnostics);
@@ -1127,13 +1127,13 @@ namespace ts {
             Debug.assert(!!outputFiles.length);
             const emitterDiagnostics = createDiagnosticCollection();
             const emittedOutputs = new Map<Path, string>();
-            const buildInfo = state.buildInfoCache.get(projectPath);
-            outputFiles.forEach(({ name, text, writeByteOrderMark }) => {
+            const buildInfoEntry = state.buildInfoCache.get(projectPath);
+            outputFiles.forEach(({ name, text, writeByteOrderMark, buildInfo }) => {
                 const path = toPath(state, name);
                 emittedOutputs.set(path, name);
-                if (buildInfo?.path === path) {
-                    buildInfo.buildInfo = text;
-                    buildInfo.modifiedTime = getCurrentTime(state);
+                if (buildInfoEntry?.path === path) {
+                    buildInfoEntry.buildInfo = buildInfo!;
+                    buildInfoEntry.modifiedTime = getCurrentTime(state);
                 }
                 writeFile(writeFileCallback ? { writeFile: writeFileCallback } : compilerHost, emitterDiagnostics, name, text, writeByteOrderMark);
             });
@@ -1433,9 +1433,7 @@ namespace ts {
         const path = toPath(state, buildInfoPath);
         const existing = state.buildInfoCache.get(resolvedConfigPath);
         if (existing !== undefined && existing.path === path) {
-            return isString(existing.buildInfo) ?
-                existing.buildInfo = ts.getBuildInfo(existing.buildInfo) :
-                existing.buildInfo || undefined;
+            return existing.buildInfo || undefined;
         }
         const value = state.readFileWithCache(buildInfoPath);
         const buildInfo = value ? ts.getBuildInfo(value) : undefined;

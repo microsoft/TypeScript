@@ -366,7 +366,8 @@ namespace ts {
                 return;
             }
             const version = ts.version; // Extracted into a const so the form is stable between namespace and module
-            writeFile(host, emitterDiagnostics, buildInfoPath, getBuildInfoText({ bundle, program, version }), /*writeByteOrderMark*/ false);
+            const buildInfo: BuildInfo = { bundle, program, version };
+            writeFile(host, emitterDiagnostics, buildInfoPath, getBuildInfoText(buildInfo), /*writeByteOrderMark*/ false, /*sourceFiles*/ undefined, { buildInfo });
         }
 
         function emitJsFileOrBundle(
@@ -794,7 +795,7 @@ namespace ts {
             getResolvedProjectReferenceToRedirect: returnUndefined,
             getProjectReferenceRedirect: returnUndefined,
             isSourceOfProjectReferenceRedirect: returnFalse,
-            writeFile: (name, text, writeByteOrderMark) => {
+            writeFile: (name, text, writeByteOrderMark, _onError, _sourceFiles, data) => {
                 switch (name) {
                     case jsFilePath:
                         if (jsFileText === text) return;
@@ -803,7 +804,7 @@ namespace ts {
                         if (sourceMapText === text) return;
                         break;
                     case buildInfoPath:
-                        const newBuildInfo = getBuildInfo(text);
+                        const newBuildInfo = data!.buildInfo!;
                         newBuildInfo.program = buildInfo.program;
                         // Update sourceFileInfo
                         const { js, dts, sourceFiles } = buildInfo.bundle!;
@@ -812,7 +813,7 @@ namespace ts {
                             newBuildInfo.bundle!.dts!.sources = dts.sources;
                         }
                         newBuildInfo.bundle!.sourceFiles = sourceFiles;
-                        outputFiles.push({ name, text: getBuildInfoText(newBuildInfo), writeByteOrderMark });
+                        outputFiles.push({ name, text: getBuildInfoText(newBuildInfo), writeByteOrderMark, buildInfo: newBuildInfo });
                         return;
                     case declarationFilePath:
                         if (declarationText === text) return;
