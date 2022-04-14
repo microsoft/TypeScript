@@ -4444,10 +4444,10 @@ namespace ts {
         return combinePaths(newDirPath, sourceFilePath);
     }
 
-    export function writeFile(host: { writeFile: WriteFileCallback; }, diagnostics: DiagnosticCollection, fileName: string, data: string, writeByteOrderMark: boolean, sourceFiles?: readonly SourceFile[], sourceMapUrlPos?: number) {
-        host.writeFile(fileName, data, writeByteOrderMark, hostErrorMessage => {
+    export function writeFile(host: { writeFile: WriteFileCallback; }, diagnostics: DiagnosticCollection, fileName: string, text: string, writeByteOrderMark: boolean, sourceFiles?: readonly SourceFile[], data?: WriteFileCallbackData) {
+        host.writeFile(fileName, text, writeByteOrderMark, hostErrorMessage => {
             diagnostics.add(createCompilerDiagnostic(Diagnostics.Could_not_write_file_0_Colon_1, fileName, hostErrorMessage));
-        }, sourceFiles, sourceMapUrlPos);
+        }, sourceFiles, data);
     }
 
     function ensureDirectoriesExist(
