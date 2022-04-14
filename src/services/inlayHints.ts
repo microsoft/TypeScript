@@ -63,6 +63,22 @@ namespace ts.InlayHints {
             else if (shouldShowParameterNameHints(preferences) && (isCallExpression(node) || isNewExpression(node))) {
                 visitCallOrNewExpression(node);
             }
+            else if (isElementAccessExpression(node)) {
+                const type = checker.getTypeAtLocation(node.expression);
+                if (!isModuleReferenceType(type) && node.argumentExpression.kind === SyntaxKind.NumericLiteral) {
+                    const labeledElementDeclarations = (type as TupleTypeReference).target.labeledElementDeclarations;
+                    if (labeledElementDeclarations) {
+                        const labelDecl = labeledElementDeclarations[parseInt(node.argumentExpression.getText())];
+                        Debug.assertNode(labelDecl.name, isIdentifier);
+                        result.push({
+                            text: `(${truncation(idText(labelDecl.name), maxHintsLength)})`,
+                            position: node.argumentExpression.end,
+                            kind: InlayHintKind.Parameter,
+                            whitespaceBefore: true
+                        });
+                    }
+                }
+            }
             else {
                 if (preferences.includeInlayFunctionParameterTypeHints && isFunctionLikeDeclaration(node) && hasContextSensitiveParameters(node)) {
                     visitFunctionLikeForParameterType(node);
