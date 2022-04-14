@@ -1512,6 +1512,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";All_declarations_of_0_must_have_identical_constraints_2838" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[All declarations of '{0}' must have identical constraints.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}' 的所有宣告都必須有相同的限制式。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";All_declarations_of_0_must_have_identical_modifiers_2687" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[All declarations of '{0}' must have identical modifiers.]]></Val>
@@ -15089,6 +15098,15 @@
           <Val><![CDATA[Variadic element at position {0} in source does not match element at position {1} in target.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[來源中位於 {0} 的可變元素與目標中位於 {1} 的元素不相符。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Variance_annotations_are_only_supported_in_type_aliases_for_object_function_constructor_and_mapped_t_2637" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Variance annotations are only supported in type aliases for object, function, constructor, and mapped types.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[只有物件、函式、建構函式和對應類型的類型別名才支援差異註釋。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

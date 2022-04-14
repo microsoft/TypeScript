@@ -7,7 +7,7 @@ declare var console: {
 >msg : string
 }
 type MultiSkilledRobot = [string, [string, string]];
->MultiSkilledRobot : MultiSkilledRobot
+>MultiSkilledRobot : [string, [string, string]]
 
 var multiRobotA: MultiSkilledRobot = ["mower", ["mowing", ""]];
 >multiRobotA : MultiSkilledRobot

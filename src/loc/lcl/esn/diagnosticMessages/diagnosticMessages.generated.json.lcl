@@ -1524,6 +1524,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";All_declarations_of_0_must_have_identical_constraints_2838" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[All declarations of '{0}' must have identical constraints.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Todas las declaraciones de "{0}" deben tener delimitaciones idénticas.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";All_declarations_of_0_must_have_identical_modifiers_2687" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[All declarations of '{0}' must have identical modifiers.]]></Val>
@@ -15101,6 +15110,15 @@
           <Val><![CDATA[Variadic element at position {0} in source does not match element at position {1} in target.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[El elemento variádico en la posición {0} del origen no coincide con el elemento en la posición {1} del destino.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Variance_annotations_are_only_supported_in_type_aliases_for_object_function_constructor_and_mapped_t_2637" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Variance annotations are only supported in type aliases for object, function, constructor, and mapped types.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Las anotaciones de varianza solo se admiten en alias de tipo para los tipos objeto, función, constructor y asignado.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

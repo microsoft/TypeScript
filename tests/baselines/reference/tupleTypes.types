@@ -227,7 +227,7 @@ a3 = a2;
 >a2 : [number, number]
 
 type B = Pick<[number], 'length'>;
->B : B
+>B : { length: 1; }
 
 declare const b: B;
 >b : B

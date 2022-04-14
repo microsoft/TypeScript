@@ -1,0 +1,29 @@
+=== tests/cases/compiler/a.tsx ===
+declare const React: any;
+>React : any
+
+declare module JSX {
+    interface IntrinsicElements {
+        ["package"]: any;
+>["package"] : any
+>"package" : "package"
+    }
+}
+
+function A() {
+>A : () => any
+
+    return <package />
+><package /> : error
+>package : any
+}
+
+function B() {
+>B : () => any
+
+    return <package></package>
+><package></package> : error
+>package : any
+>package : any
+}
+

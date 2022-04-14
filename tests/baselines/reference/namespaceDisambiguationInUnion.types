@@ -1,13 +1,13 @@
 === tests/cases/compiler/namespaceDisambiguationInUnion.ts ===
 namespace Foo {
   export type Yep = { type: "foo.yep" };
->Yep : Yep
+>Yep : { type: "foo.yep"; }
 >type : "foo.yep"
 }
 
 namespace Bar {
   export type Yep = { type: "bar.yep" };
->Yep : Yep
+>Yep : { type: "bar.yep"; }
 >type : "bar.yep"
 }
 

@@ -3,7 +3,7 @@ import React = require('react');
 >React : typeof React
 
 type TypeProps = { foo?: boolean; };
->TypeProps : TypeProps
+>TypeProps : { foo?: boolean; }
 >foo : boolean
 
 interface InterfaceProps { foo?: boolean; }

@@ -348,7 +348,7 @@ namespace ts {
      * This is to allow the callers to be able to actually remove affected file only when the operation is complete
      * eg. if during diagnostics check cancellation token ends up cancelling the request, the affected file should be retained
      */
-    function getNextAffectedFile(state: BuilderProgramState, cancellationToken: CancellationToken | undefined, computeHash: BuilderState.ComputeHash): SourceFile | Program | undefined {
+    function getNextAffectedFile(state: BuilderProgramState, cancellationToken: CancellationToken | undefined, computeHash: BuilderState.ComputeHash, host: BuilderProgramHost): SourceFile | Program | undefined {
         while (true) {
             const { affectedFiles } = state;
             if (affectedFiles) {
@@ -359,7 +359,7 @@ namespace ts {
                     if (!seenAffectedFiles.has(affectedFile.resolvedPath)) {
                         // Set the next affected file as seen and remove the cached semantic diagnostics
                         state.affectedFilesIndex = affectedFilesIndex;
-                        handleDtsMayChangeOfAffectedFile(state, affectedFile, cancellationToken, computeHash);
+                        handleDtsMayChangeOfAffectedFile(state, affectedFile, cancellationToken, computeHash, host);
                         return affectedFile;
                     }
                     affectedFilesIndex++;
@@ -403,6 +403,12 @@ namespace ts {
         }
     }
 
+    function clearAffectedFilesPendingEmit(state: BuilderProgramState) {
+        state.affectedFilesPendingEmit = undefined;
+        state.affectedFilesPendingEmitKind = undefined;
+        state.affectedFilesPendingEmitIndex = undefined;
+    }
+
     /**
      * Returns next file to be emitted from files that retrieved semantic diagnostics but did not emit yet
      */
@@ -422,9 +428,7 @@ namespace ts {
                     }
                 }
             }
-            state.affectedFilesPendingEmit = undefined;
-            state.affectedFilesPendingEmitKind = undefined;
-            state.affectedFilesPendingEmitIndex = undefined;
+            clearAffectedFilesPendingEmit(state);
         }
         return undefined;
     }
@@ -433,7 +437,7 @@ namespace ts {
      *  Handles semantic diagnostics and dts emit for affectedFile and files, that are referencing modules that export entities from affected file
      *  This is because even though js emit doesnt change, dts emit / type used can change resulting in need for dts emit and js change
      */
-    function handleDtsMayChangeOfAffectedFile(state: BuilderProgramState, affectedFile: SourceFile, cancellationToken: CancellationToken | undefined, computeHash: BuilderState.ComputeHash) {
+    function handleDtsMayChangeOfAffectedFile(state: BuilderProgramState, affectedFile: SourceFile, cancellationToken: CancellationToken | undefined, computeHash: BuilderState.ComputeHash, host: BuilderProgramHost) {
         removeSemanticDiagnosticsOf(state, affectedFile.resolvedPath);
 
         // If affected files is everything except default library, then nothing more to do
@@ -467,7 +471,7 @@ namespace ts {
         }
 
         if (!state.compilerOptions.assumeChangesOnlyAffectDirectDependencies) {
-            forEachReferencingModulesOfExportOfAffectedFile(state, affectedFile, (state, path) => handleDtsMayChangeOf(state, path, cancellationToken, computeHash));
+            forEachReferencingModulesOfExportOfAffectedFile(state, affectedFile, (state, path) => handleDtsMayChangeOf(state, path, cancellationToken, computeHash, host));
         }
     }
 
@@ -475,7 +479,7 @@ namespace ts {
      * Handle the dts may change, so they need to be added to pending emit if dts emit is enabled,
      * Also we need to make sure signature is updated for these files
      */
-    function handleDtsMayChangeOf(state: BuilderProgramState, path: Path, cancellationToken: CancellationToken | undefined, computeHash: BuilderState.ComputeHash): void {
+    function handleDtsMayChangeOf(state: BuilderProgramState, path: Path, cancellationToken: CancellationToken | undefined, computeHash: BuilderState.ComputeHash, host: BuilderProgramHost): void {
         removeSemanticDiagnosticsOf(state, path);
 
         if (!state.changedFilesSet.has(path)) {
@@ -495,7 +499,7 @@ namespace ts {
                     cancellationToken,
                     computeHash,
                     state.currentAffectedFilesExportedModulesMap,
-                    /* useFileVersionAsSignature */ true
+                    !host.disableUseFileVersionAsSignature
                 );
                 // If not dts emit, nothing more to do
                 if (getEmitDeclarations(state.compilerOptions)) {
@@ -751,13 +755,18 @@ namespace ts {
             const signature = state.currentAffectedFilesSignatures && state.currentAffectedFilesSignatures.get(key);
             const actualSignature = signature ?? value.signature;
             return value.version === actualSignature ?
-                value.affectsGlobalScope ?
-                    { version: value.version, signature: undefined, affectsGlobalScope: true, impliedFormat: value.impliedFormat } :
+                value.affectsGlobalScope || value.impliedFormat ?
+                    // If file version is same as signature, dont serialize signature
+                    { version: value.version, signature: undefined, affectsGlobalScope: value.affectsGlobalScope, impliedFormat: value.impliedFormat } :
+                    // If file info only contains version and signature and both are same we can just write string
                     value.version :
-                actualSignature !== undefined ?
+                actualSignature !== undefined ? // If signature is not same as version, encode signature in the fileInfo
                     signature === undefined ?
+                        // If we havent computed signature, use fileInfo as is
                         value :
+                        // Serialize fileInfo with new updated signature
                         { version: value.version, signature, affectsGlobalScope: value.affectsGlobalScope, impliedFormat: value.impliedFormat } :
+                    // Signature of the FileInfo is undefined, serialize it as false
                     { version: value.version, signature: false, affectsGlobalScope: value.affectsGlobalScope, impliedFormat: value.impliedFormat };
         });
 
@@ -1039,7 +1048,7 @@ namespace ts {
          * in that order would be used to write the files
          */
         function emitNextAffectedFile(writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): AffectedFileResult<EmitResult> {
-            let affected = getNextAffectedFile(state, cancellationToken, computeHash);
+            let affected = getNextAffectedFile(state, cancellationToken, computeHash, host);
             let emitKind = BuilderFileEmit.Full;
             let isPendingEmitFile = false;
             if (!affected) {
@@ -1101,57 +1110,47 @@ namespace ts {
          * in that order would be used to write the files
          */
         function emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): EmitResult {
-            let restorePendingEmitOnHandlingNoEmitSuccess = false;
-            let savedAffectedFilesPendingEmit;
-            let savedAffectedFilesPendingEmitKind;
-            let savedAffectedFilesPendingEmitIndex;
-            // Backup and restore affected pendings emit state for non emit Builder if noEmitOnError is enabled and emitBuildInfo could be written in case there are errors
-            // This ensures pending files to emit is updated in tsbuildinfo
-            // Note that when there are no errors, emit proceeds as if everything is emitted as it is callers reponsibility to write the files to disk if at all (because its builder that doesnt track files to emit)
-            if (kind !== BuilderProgramKind.EmitAndSemanticDiagnosticsBuilderProgram &&
-                !targetSourceFile &&
-                !outFile(state.compilerOptions) &&
-                !state.compilerOptions.noEmit &&
-                state.compilerOptions.noEmitOnError) {
-                restorePendingEmitOnHandlingNoEmitSuccess = true;
-                savedAffectedFilesPendingEmit = state.affectedFilesPendingEmit && state.affectedFilesPendingEmit.slice();
-                savedAffectedFilesPendingEmitKind = state.affectedFilesPendingEmitKind && new Map(state.affectedFilesPendingEmitKind);
-                savedAffectedFilesPendingEmitIndex = state.affectedFilesPendingEmitIndex;
-            }
-
             if (kind === BuilderProgramKind.EmitAndSemanticDiagnosticsBuilderProgram) {
                 assertSourceFileOkWithoutNextAffectedCall(state, targetSourceFile);
             }
             const result = handleNoEmitOptions(builderProgram, targetSourceFile, writeFile, cancellationToken);
             if (result) return result;
 
-            if (restorePendingEmitOnHandlingNoEmitSuccess) {
-                state.affectedFilesPendingEmit = savedAffectedFilesPendingEmit;
-                state.affectedFilesPendingEmitKind = savedAffectedFilesPendingEmitKind;
-                state.affectedFilesPendingEmitIndex = savedAffectedFilesPendingEmitIndex;
-            }
-
             // Emit only affected files if using builder for emit
-            if (!targetSourceFile && kind === BuilderProgramKind.EmitAndSemanticDiagnosticsBuilderProgram) {
-                // Emit and report any errors we ran into.
-                let sourceMaps: SourceMapEmitResult[] = [];
-                let emitSkipped = false;
-                let diagnostics: Diagnostic[] | undefined;
-                let emittedFiles: string[] = [];
+            if (!targetSourceFile) {
+                if (kind === BuilderProgramKind.EmitAndSemanticDiagnosticsBuilderProgram) {
+                    // Emit and report any errors we ran into.
+                    let sourceMaps: SourceMapEmitResult[] = [];
+                    let emitSkipped = false;
+                    let diagnostics: Diagnostic[] | undefined;
+                    let emittedFiles: string[] = [];
 
-                let affectedEmitResult: AffectedFileResult<EmitResult>;
-                while (affectedEmitResult = emitNextAffectedFile(writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers)) {
-                    emitSkipped = emitSkipped || affectedEmitResult.result.emitSkipped;
-                    diagnostics = addRange(diagnostics, affectedEmitResult.result.diagnostics);
-                    emittedFiles = addRange(emittedFiles, affectedEmitResult.result.emittedFiles);
-                    sourceMaps = addRange(sourceMaps, affectedEmitResult.result.sourceMaps);
+                    let affectedEmitResult: AffectedFileResult<EmitResult>;
+                    while (affectedEmitResult = emitNextAffectedFile(writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers)) {
+                        emitSkipped = emitSkipped || affectedEmitResult.result.emitSkipped;
+                        diagnostics = addRange(diagnostics, affectedEmitResult.result.diagnostics);
+                        emittedFiles = addRange(emittedFiles, affectedEmitResult.result.emittedFiles);
+                        sourceMaps = addRange(sourceMaps, affectedEmitResult.result.sourceMaps);
+                    }
+                    return {
+                        emitSkipped,
+                        diagnostics: diagnostics || emptyArray,
+                        emittedFiles,
+                        sourceMaps
+                    };
                 }
-                return {
-                    emitSkipped,
-                    diagnostics: diagnostics || emptyArray,
-                    emittedFiles,
-                    sourceMaps
-                };
+                // In non Emit builder, clear affected files pending emit
+                else if (state.affectedFilesPendingEmitKind?.size) {
+                    Debug.assert(kind === BuilderProgramKind.SemanticDiagnosticsBuilderProgram);
+                    // State can clear affected files pending emit if
+                    if (!emitOnlyDtsFiles // If we are doing complete emit, affected files pending emit can be cleared
+                        // If every file pending emit is pending on only dts emit
+                        || every(state.affectedFilesPendingEmit, (path, index) =>
+                            index < state.affectedFilesPendingEmitIndex! ||
+                            state.affectedFilesPendingEmitKind!.get(path) === BuilderFileEmit.DtsOnly)) {
+                        clearAffectedFilesPendingEmit(state);
+                    }
+                }
             }
             return Debug.checkDefined(state.program).emit(targetSourceFile, writeFile || maybeBind(host, host.writeFile), cancellationToken, emitOnlyDtsFiles, customTransformers);
         }
@@ -1162,7 +1161,7 @@ namespace ts {
          */
         function getSemanticDiagnosticsOfNextAffectedFile(cancellationToken?: CancellationToken, ignoreSourceFile?: (sourceFile: SourceFile) => boolean): AffectedFileResult<readonly Diagnostic[]> {
             while (true) {
-                const affected = getNextAffectedFile(state, cancellationToken, computeHash);
+                const affected = getNextAffectedFile(state, cancellationToken, computeHash, host);
                 if (!affected) {
                     // Done
                     return undefined;

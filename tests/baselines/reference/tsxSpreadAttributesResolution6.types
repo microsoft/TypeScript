@@ -3,7 +3,7 @@ import React = require('react');
 >React : typeof React
 
 type TextProps = { editable: false }
->TextProps : TextProps
+>TextProps : { editable: false; } | { editable: true; onEdit: (newText: string) => void; }
 >editable : false
 >false : false
 

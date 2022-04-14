@@ -24,7 +24,7 @@ enum AlienAnimalTypes {
 };
 
 type AnimalTypes = TerrestrialAnimalTypes | AlienAnimalTypes;
->AnimalTypes : AnimalTypes
+>AnimalTypes : TerrestrialAnimalTypes | AlienAnimalTypes
 
 interface TerrestrialCat {
   type: TerrestrialAnimalTypes.CAT;
@@ -45,10 +45,10 @@ interface AlienCat {
 }
 
 type Cats = TerrestrialCat | AlienCat;
->Cats : Cats
+>Cats : TerrestrialCat | AlienCat
 
 type CatMap = {
->CatMap : CatMap
+>CatMap : { cat: (TerrestrialCat | AlienCat)[]; dog: never[]; }
 
   [V in AnimalTypes]: Extract<Cats, { type: V }>[]
 >type : V
