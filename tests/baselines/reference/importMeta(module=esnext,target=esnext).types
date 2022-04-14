@@ -9,7 +9,7 @@
 >response : Response
 >await fetch(new URL("../hamsters.jpg", import.meta.url).toString()) : Response
 >fetch(new URL("../hamsters.jpg", import.meta.url).toString()) : Promise<Response>
->fetch : (input: RequestInfo, init?: RequestInit) => Promise<Response>
+>fetch : (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>
 >new URL("../hamsters.jpg", import.meta.url).toString() : string
 >new URL("../hamsters.jpg", import.meta.url).toString : () => string
 >new URL("../hamsters.jpg", import.meta.url) : URL

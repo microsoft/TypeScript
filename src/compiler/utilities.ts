@@ -2338,18 +2338,13 @@ namespace ts {
         if (isPropertyNameLiteral(name) && isPropertyNameLiteral(initializer)) {
             return getTextOfIdentifierOrLiteral(name) === getTextOfIdentifierOrLiteral(initializer);
         }
-        if (isIdentifier(name) && isLiteralLikeAccess(initializer) &&
+        if (isMemberName(name) && isLiteralLikeAccess(initializer) &&
             (initializer.expression.kind === SyntaxKind.ThisKeyword ||
                 isIdentifier(initializer.expression) &&
                 (initializer.expression.escapedText === "window" ||
                     initializer.expression.escapedText === "self" ||
                     initializer.expression.escapedText === "global"))) {
-
-            const nameOrArgument = getNameOrArgument(initializer);
-            if (isPrivateIdentifier(nameOrArgument)) {
-                Debug.fail("Unexpected PrivateIdentifier in name expression with literal-like access.");
-            }
-            return isSameEntityName(name, nameOrArgument);
+            return isSameEntityName(name, getNameOrArgument(initializer));
         }
         if (isLiteralLikeAccess(name) && isLiteralLikeAccess(initializer)) {
             return getElementOrPropertyAccessName(name) === getElementOrPropertyAccessName(initializer)
@@ -2825,7 +2820,11 @@ namespace ts {
 
     export function getHostSignatureFromJSDoc(node: Node): SignatureDeclaration | undefined {
         const host = getEffectiveJSDocHost(node);
-        return host && isFunctionLike(host) ? host : undefined;
+        if (host) {
+            return isPropertySignature(host) && host.type && isFunctionLike(host.type) ? host.type :
+                isFunctionLike(host) ? host : undefined;
+        }
+        return undefined;
     }
 
     export function getEffectiveJSDocHost(node: Node): Node | undefined {
@@ -3113,7 +3112,10 @@ namespace ts {
                 return (parent as BindingElement | ImportSpecifier).propertyName === node;
             case SyntaxKind.ExportSpecifier:
             case SyntaxKind.JsxAttribute:
-                // Any name in an export specifier or JSX Attribute
+            case SyntaxKind.JsxSelfClosingElement:
+            case SyntaxKind.JsxOpeningElement:
+            case SyntaxKind.JsxClosingElement:
+                // Any name in an export specifier or JSX Attribute or Jsx Element
                 return true;
         }
         return false;
@@ -6914,6 +6916,7 @@ namespace ts {
     export const supportedJSExtensionsFlat: readonly Extension[] = flatten(supportedJSExtensions);
     const allSupportedExtensions: readonly Extension[][] = [[Extension.Ts, Extension.Tsx, Extension.Dts, Extension.Js, Extension.Jsx], [Extension.Cts, Extension.Dcts, Extension.Cjs], [Extension.Mts, Extension.Dmts, Extension.Mjs]];
     const allSupportedExtensionsWithJson: readonly Extension[][] = [...allSupportedExtensions, [Extension.Json]];
+    export const supportedDeclarationExtensions: readonly Extension[] = [Extension.Dts, Extension.Dcts, Extension.Dmts];
 
     export function getSupportedExtensions(options?: CompilerOptions): readonly Extension[][];
     export function getSupportedExtensions(options?: CompilerOptions, extraFileExtensions?: readonly FileExtensionInfo[]): readonly string[][];
@@ -7654,5 +7657,9 @@ namespace ts {
         fileNameIndex = partStart;
 
         return state > States.NodeModules ? { topLevelNodeModulesIndex, topLevelPackageNameIndex, packageRootIndex, fileNameIndex } : undefined;
+    }
+
+    export function getParameterTypeNode(parameter: ParameterDeclaration | JSDocParameterTag) {
+        return parameter.kind === SyntaxKind.JSDocParameterTag ? parameter.typeExpression?.type : parameter.type;
     }
 }

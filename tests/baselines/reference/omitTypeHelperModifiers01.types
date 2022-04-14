@@ -1,6 +1,6 @@
 === tests/cases/compiler/omitTypeHelperModifiers01.ts ===
 type A = {
->A : A
+>A : { a: number; b?: string | undefined; readonly c: boolean; d: unknown; }
 
     a: number;
 >a : number
@@ -17,7 +17,7 @@ type A = {
 };
 
 type B = Omit<A, 'a'>;
->B : B
+>B : { b?: string | undefined; readonly c: boolean; d: unknown; }
 
 function f(x: B) {
 >f : (x: B) => void

@@ -14,10 +14,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Use node version 12.x
+    - name: Use node version 14.x
       uses: actions/setup-node@v1
       with:
-        node-version: 12.x
+        node-version: 14.x
     - uses: actions/checkout@v2
       with:
         ref: ${{ github.event.inputs.branch_name || github.event.client_payload.branch_name }}

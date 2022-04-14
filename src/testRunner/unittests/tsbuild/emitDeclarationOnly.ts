@@ -9,7 +9,7 @@ namespace ts {
         });
 
         function verifyEmitDeclarationOnly(disableMap?: true) {
-            verifyTscSerializedIncrementalEdits({
+            verifyTscWithEdits({
                 subScenario: `only dts output in circular import project with emitDeclarationOnly${disableMap ? "" : " and declarationMap"}`,
                 fs: () => projFs,
                 scenario: "emitDeclarationOnly",
@@ -17,8 +17,8 @@ namespace ts {
                 modifyFs: disableMap ?
                     (fs => replaceText(fs, "/src/tsconfig.json", `"declarationMap": true,`, "")) :
                     undefined,
-                incrementalScenarios: [{
-                    buildKind: BuildKind.IncrementalDtsChange,
+                edits: [{
+                    subScenario: "incremental-declaration-changes",
                     modifyFs: fs => replaceText(fs, "/src/src/a.ts", "b: B;", "b: B; foo: any;"),
                 }],
             });
@@ -26,7 +26,7 @@ namespace ts {
         verifyEmitDeclarationOnly();
         verifyEmitDeclarationOnly(/*disableMap*/ true);
 
-        verifyTscSerializedIncrementalEdits({
+        verifyTscWithEdits({
             subScenario: `only dts output in non circular imports project with emitDeclarationOnly`,
             fs: () => projFs,
             scenario: "emitDeclarationOnly",
@@ -35,17 +35,16 @@ namespace ts {
                 fs.rimrafSync("/src/src/index.ts");
                 replaceText(fs, "/src/src/a.ts", `import { B } from "./b";`, `export class B { prop = "hello"; }`);
             },
-            incrementalScenarios: [
+            edits: [
                 {
-                    buildKind: BuildKind.IncrementalDtsUnchanged,
+                    subScenario: "incremental-declaration-doesnt-change",
                     modifyFs: fs => replaceText(fs, "/src/src/a.ts", "export interface A {", `class C { }
 export interface A {`),
 
                 },
                 {
-                    buildKind: BuildKind.IncrementalDtsChange,
+                    subScenario: "incremental-declaration-changes",
                     modifyFs: fs => replaceText(fs, "/src/src/a.ts", "b: B;", "b: B; foo: any;"),
-
                 },
             ],
         });

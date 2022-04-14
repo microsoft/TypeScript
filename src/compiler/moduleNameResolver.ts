@@ -1498,9 +1498,9 @@ namespace ts {
     }
 
     function loadJSOrExactTSFileName(extensions: Extensions, candidate: string, onlyRecordFailures: boolean, state: ModuleResolutionState): PathAndExtension | undefined {
-        if ((extensions === Extensions.TypeScript || extensions === Extensions.DtsOnly) && fileExtensionIsOneOf(candidate, [Extension.Dts, Extension.Dcts, Extension.Dmts])) {
+        if ((extensions === Extensions.TypeScript || extensions === Extensions.DtsOnly) && isDeclarationFileName(candidate)) {
             const result = tryFile(candidate, onlyRecordFailures, state);
-            return result !== undefined ? { path: candidate, ext: forEach([Extension.Dts, Extension.Dcts, Extension.Dmts], e => fileExtensionIs(candidate, e) ? e : undefined)! } : undefined;
+            return result !== undefined ? { path: candidate, ext: forEach(supportedDeclarationExtensions, e => fileExtensionIs(candidate, e) ? e : undefined)! } : undefined;
         }
 
         return loadModuleFromFileNoImplicitExtensions(extensions, candidate, onlyRecordFailures, state);
@@ -1576,6 +1576,16 @@ namespace ts {
 
     /** Return the file if it exists. */
     function tryFile(fileName: string, onlyRecordFailures: boolean, state: ModuleResolutionState): string | undefined {
+        if (!state.compilerOptions.moduleSuffixes?.length) {
+            return tryFileLookup(fileName, onlyRecordFailures, state);
+        }
+
+        const ext = tryGetExtensionFromPath(fileName) ?? "";
+        const fileNameNoExtension = ext ? removeExtension(fileName, ext) : fileName;
+        return forEach(state.compilerOptions.moduleSuffixes, suffix => tryFileLookup(fileNameNoExtension + suffix + ext, onlyRecordFailures, state));
+    }
+
+    function tryFileLookup(fileName: string, onlyRecordFailures: boolean, state: ModuleResolutionState): string | undefined {
         if (!onlyRecordFailures) {
             if (state.host.fileExists(fileName)) {
                 if (state.traceEnabled) {

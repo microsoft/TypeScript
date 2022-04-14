@@ -32,7 +32,7 @@ namespace ts.server {
                     result.jsxSize! += fileSize;
                     break;
                 case ScriptKind.TS:
-                    if (fileExtensionIs(info.fileName, Extension.Dts)) {
+                    if (isDeclarationFileName(info.fileName)) {
                         result.dts += 1;
                         result.dtsSize! += fileSize;
                     }
@@ -71,7 +71,7 @@ namespace ts.server {
 
     /* @internal */
     export function hasNoTypeScriptSource(fileNames: string[]): boolean {
-        return !fileNames.some(fileName => (fileExtensionIs(fileName, Extension.Ts) && !fileExtensionIs(fileName, Extension.Dts)) || fileExtensionIs(fileName, Extension.Tsx));
+        return !fileNames.some(fileName => (fileExtensionIs(fileName, Extension.Ts) && !isDeclarationFileName(fileName)) || fileExtensionIs(fileName, Extension.Tsx));
     }
 
     /* @internal */
@@ -686,7 +686,7 @@ namespace ts.server {
 
                 // Update the signature
                 if (this.builderState && getEmitDeclarations(this.compilerOptions)) {
-                    const dtsFiles = outputFiles.filter(f => fileExtensionIs(f.name, Extension.Dts));
+                    const dtsFiles = outputFiles.filter(f => isDeclarationFileName(f.name));
                     if (dtsFiles.length === 1) {
                         const sourceFile = this.program!.getSourceFile(scriptInfo.fileName)!;
                         const signature = this.projectService.host.createHash ?

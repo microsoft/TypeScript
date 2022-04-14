@@ -143,7 +143,7 @@ declare namespace Tools {
 
 declare namespace R {
     export type Placeholder = { __placeholder: void };
->Placeholder : Placeholder
+>Placeholder : { __placeholder: void; }
 >__placeholder : void
 }
 

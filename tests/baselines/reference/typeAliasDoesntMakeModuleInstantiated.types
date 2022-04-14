@@ -2,7 +2,7 @@
 declare module m {
     // type alias declaration here shouldnt make the module declaration instantiated
     type Selector = string| string[] |Function;
->Selector : Selector
+>Selector : string | Function | string[]
 
     export interface IStatic {
         (selector: any /* Selector */): IInstance;

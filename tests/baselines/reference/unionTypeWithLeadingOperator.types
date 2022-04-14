@@ -3,7 +3,7 @@ type A = | string;
 >A : string
 
 type B =
->B : B
+>B : { type: "INCREMENT"; } | { type: "DECREMENT"; }
 
   | { type: "INCREMENT" }
 >type : "INCREMENT"
@@ -12,10 +12,10 @@ type B =
 >type : "DECREMENT"
 
 type C = [| 0 | 1, | "foo" | "bar"];
->C : C
+>C : [0 | 1, "foo" | "bar"]
 
 export type D = 
->D : D
+>D : 1 | 2
 
   /*leading0*/
   | /*leading1*/ 1 /*trailing1*/ 

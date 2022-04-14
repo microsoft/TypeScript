@@ -64,7 +64,7 @@ g(async v => v ? "contextuallyTypable" : Promise.reject());
 >reject : <T = never>(reason?: any) => Promise<T>
 
 type MyCallback = (thing: string) => void;
->MyCallback : MyCallback
+>MyCallback : (thing: string) => void
 >thing : string
 
 declare function h(cb: (v: boolean) => MyCallback | PromiseLike<MyCallback>): void;

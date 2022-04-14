@@ -18,7 +18,7 @@ type Pair<T> = Pairs<T>[keyof T];
 >Pair : Pair<T>
 
 type FooBar = {
->FooBar : FooBar
+>FooBar : { foo: string; bar: number; }
 
     foo: string;
 >foo : string

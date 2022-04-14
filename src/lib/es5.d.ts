@@ -4404,7 +4404,7 @@ declare namespace Intl {
         hour?: "numeric" | "2-digit" | undefined;
         minute?: "numeric" | "2-digit" | undefined;
         second?: "numeric" | "2-digit" | undefined;
-        timeZoneName?: "long" | "short" | undefined;
+        timeZoneName?: "short" | "long" | "shortOffset" | "longOffset" | "shortGeneric" | "longGeneric" | undefined;
         formatMatcher?: "best fit" | "basic" | undefined;
         hour12?: boolean | undefined;
         timeZone?: string | undefined;

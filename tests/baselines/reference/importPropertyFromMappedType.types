@@ -10,7 +10,7 @@ declare const createHttpError: createHttpError.NamedConstructors;
 
 declare namespace createHttpError {
     type NamedConstructors =  { [P in 'NotFound']: unknown;}
->NamedConstructors : NamedConstructors
+>NamedConstructors : { NotFound: unknown; }
 }
 
 === tests/cases/compiler/main.ts ===

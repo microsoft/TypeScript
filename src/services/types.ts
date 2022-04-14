@@ -886,7 +886,6 @@ namespace ts {
 
     export interface ReferenceEntry extends DocumentSpan {
         isWriteAccess: boolean;
-        isDefinition: boolean;
         isInString?: true;
     }
 
@@ -1046,7 +1045,11 @@ namespace ts {
 
     export interface ReferencedSymbol {
         definition: ReferencedSymbolDefinitionInfo;
-        references: ReferenceEntry[];
+        references: ReferencedSymbolEntry[];
+    }
+
+    export interface ReferencedSymbolEntry extends ReferenceEntry {
+        isDefinition?: boolean;
     }
 
     export enum SymbolDisplayPartKind {
@@ -1232,6 +1235,7 @@ namespace ts {
         hasAction?: true;
         source?: string;
         sourceDisplay?: SymbolDisplayPart[];
+        labelDetails?: CompletionEntryLabelDetails;
         isRecommended?: true;
         isFromUncheckedFile?: true;
         isPackageJsonImport?: true;
@@ -1245,6 +1249,11 @@ namespace ts {
          * is an auto-import.
          */
         data?: CompletionEntryData;
+    }
+
+    export interface CompletionEntryLabelDetails {
+        detail?: string;
+        description?: string;
     }
 
     export interface CompletionEntryDetails {
