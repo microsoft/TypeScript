@@ -17,6 +17,7 @@ jobs:
   run:
     if: ${{ !github.event.label }}
     runs-on: ubuntu-latest
+    if: github.repository == 'microsoft/TypeScript'
     steps:
     - name: Use node
       uses: actions/setup-node@v1
