@@ -3112,7 +3112,10 @@ namespace ts {
                 return (parent as BindingElement | ImportSpecifier).propertyName === node;
             case SyntaxKind.ExportSpecifier:
             case SyntaxKind.JsxAttribute:
-                // Any name in an export specifier or JSX Attribute
+            case SyntaxKind.JsxSelfClosingElement:
+            case SyntaxKind.JsxOpeningElement:
+            case SyntaxKind.JsxClosingElement:
+                // Any name in an export specifier or JSX Attribute or Jsx Element
                 return true;
         }
         return false;
@@ -6913,6 +6916,7 @@ namespace ts {
     export const supportedJSExtensionsFlat: readonly Extension[] = flatten(supportedJSExtensions);
     const allSupportedExtensions: readonly Extension[][] = [[Extension.Ts, Extension.Tsx, Extension.Dts, Extension.Js, Extension.Jsx], [Extension.Cts, Extension.Dcts, Extension.Cjs], [Extension.Mts, Extension.Dmts, Extension.Mjs]];
     const allSupportedExtensionsWithJson: readonly Extension[][] = [...allSupportedExtensions, [Extension.Json]];
+    export const supportedDeclarationExtensions: readonly Extension[] = [Extension.Dts, Extension.Dcts, Extension.Dmts];
 
     export function getSupportedExtensions(options?: CompilerOptions): readonly Extension[][];
     export function getSupportedExtensions(options?: CompilerOptions, extraFileExtensions?: readonly FileExtensionInfo[]): readonly string[][];

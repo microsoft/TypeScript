@@ -167,7 +167,7 @@ namespace ts {
     }
 
     function getOwnOutputFileNames(configFile: ParsedCommandLine, inputFileName: string, ignoreCase: boolean, addOutput: ReturnType<typeof createAddOutput>["addOutput"], getCommonSourceDirectory?: () => string) {
-        if (fileExtensionIs(inputFileName, Extension.Dts)) return;
+        if (isDeclarationFileName(inputFileName)) return;
         const js = getOutputJSFileName(inputFileName, configFile, ignoreCase, getCommonSourceDirectory);
         addOutput(js);
         if (fileExtensionIs(inputFileName, Extension.Json)) return;
@@ -219,7 +219,7 @@ namespace ts {
     export function getCommonSourceDirectoryOfConfig({ options, fileNames }: ParsedCommandLine, ignoreCase: boolean): string {
         return getCommonSourceDirectory(
             options,
-            () => filter(fileNames, file => !(options.noEmitForJsFiles && fileExtensionIsOneOf(file, supportedJSExtensionsFlat)) && !fileExtensionIs(file, Extension.Dts)),
+            () => filter(fileNames, file => !(options.noEmitForJsFiles && fileExtensionIsOneOf(file, supportedJSExtensionsFlat)) && !isDeclarationFileName(file)),
             getDirectoryPath(normalizeSlashes(Debug.checkDefined(options.configFilePath))),
             createGetCanonicalFileName(!ignoreCase)
         );
@@ -263,7 +263,7 @@ namespace ts {
 
         const getCommonSourceDirectory = memoize(() => getCommonSourceDirectoryOfConfig(configFile, ignoreCase));
         for (const inputFileName of configFile.fileNames) {
-            if (fileExtensionIs(inputFileName, Extension.Dts)) continue;
+            if (isDeclarationFileName(inputFileName)) continue;
             const jsFilePath = getOutputJSFileName(inputFileName, configFile, ignoreCase, getCommonSourceDirectory);
             if (jsFilePath) return jsFilePath;
             if (fileExtensionIs(inputFileName, Extension.Json)) continue;

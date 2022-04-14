@@ -72,10 +72,6 @@ namespace ts {
         return date2 > date1 ? date2 : date1;
     }
 
-    function isDeclarationFile(fileName: string) {
-        return fileExtensionIs(fileName, Extension.Dts);
-    }
-
     export type ReportEmitErrorSummary = (errorCount: number, filesInError: (ReportFileInError | undefined)[]) => void;
 
     export interface ReportFileInError {
@@ -972,7 +968,7 @@ namespace ts {
             const emittedOutputs = new Map<Path, string>();
             outputFiles.forEach(({ name, text, writeByteOrderMark }) => {
                 let priorChangeTime: Date | undefined;
-                if (!anyDtsChanged && isDeclarationFile(name)) {
+                if (!anyDtsChanged && isDeclarationFileName(name)) {
                     // Check for unchanged .d.ts files
                     if (host.fileExists(name) && state.readFileWithCache(name) === text) {
                         priorChangeTime = host.getModifiedTime(name);
@@ -1421,7 +1417,7 @@ namespace ts {
                 // In addition to file timestamps, we also keep track of when a .d.ts file
                 // had its file touched but not had its contents changed - this allows us
                 // to skip a downstream typecheck
-                if (isDeclarationFile(output)) {
+                if (isDeclarationFileName(output)) {
                     const outputModifiedTime = getModifiedTime(host, output);
                     newestDeclarationFileContentChangedTime = newer(newestDeclarationFileContentChangedTime, outputModifiedTime);
                 }
@@ -1589,7 +1585,7 @@ namespace ts {
                     reportStatus(state, verboseMessage, proj.options.configFilePath!);
                 }
 
-                if (isDeclarationFile(file)) {
+                if (isDeclarationFileName(file)) {
                     priorNewestUpdateTime = newer(priorNewestUpdateTime, getModifiedTime(host, file));
                 }
 
