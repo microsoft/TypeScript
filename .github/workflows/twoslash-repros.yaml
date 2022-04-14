@@ -8,17 +8,33 @@ on:
     - cron:  '0 8 * * *'
   repository_dispatch:
     types: run-twoslash-repros
+  issues:
+    types:
+      - labeled
   workflow_dispatch: {}
 
 jobs:
-  build:
+  run:
+    if: ${{ !github.event.label }}
     runs-on: ubuntu-latest
     steps:
     - name: Use node
       uses: actions/setup-node@v1
-    - run: |
-       npm init -y
-       npm install --save typescript@next
     - uses: microsoft/TypeScript-Twoslash-Repro-Action@master
       with: 
         github-token: ${{ secrets.TS_BOT_GITHUB_TOKEN }}
+  
+  bisect:
+    if: ${{ github.event.label.name == 'Bisect Repro' }}
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+    - uses: actions/setup-node@v1
+      with:
+        node-version: 16
+    - uses: microsoft/TypeScript-Twoslash-Repro-Action@master
+      with: 
+        github-token: ${{ secrets.TS_BOT_GITHUB_TOKEN }}
+        bisect: ${{ github.event.issue.number }}
