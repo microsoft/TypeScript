@@ -332,24 +332,21 @@ namespace ts.server {
             }));
         }
 
-        getSourceDefinitionAndBoundSpan(fileName: string, position: number): DefinitionInfoAndBoundSpan {
+        getSourceDefinitionAndBoundSpan(fileName: string, position: number): DefinitionInfo[] {
             const args: protocol.FileLocationRequestArgs = this.createFileLocationRequestArgs(fileName, position);
-            const request = this.processRequest<protocol.SourceDefinitionAndBoundSpanRequest>(CommandNames.SourceDefinitionAndBoundSpan, args);
-            const response = this.processResponse<protocol.DefinitionInfoAndBoundSpanResponse>(request);
+            const request = this.processRequest<protocol.FindSourceDefinitionRequest>(CommandNames.FindSourceDefinition, args);
+            const response = this.processResponse<protocol.DefinitionResponse>(request);
             const body = Debug.checkDefined(response.body); // TODO: GH#18217
 
-            return {
-                definitions: body.definitions.map(entry => ({
-                    containerKind: ScriptElementKind.unknown,
-                    containerName: "",
-                    fileName: entry.file,
-                    textSpan: this.decodeSpan(entry),
-                    kind: ScriptElementKind.unknown,
-                    name: "",
-                    unverified: entry.unverified,
-                })),
-                textSpan: this.decodeSpan(body.textSpan, request.arguments.file)
-            };
+            return body.map(entry => ({
+                containerKind: ScriptElementKind.unknown,
+                containerName: "",
+                fileName: entry.file,
+                textSpan: this.decodeSpan(entry),
+                kind: ScriptElementKind.unknown,
+                name: "",
+                unverified: entry.unverified,
+            }));
         }
 
         getImplementationAtPosition(fileName: string, position: number): ImplementationLocation[] {

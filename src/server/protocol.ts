@@ -83,9 +83,7 @@ namespace ts.server.protocol {
         SignatureHelp = "signatureHelp",
         /* @internal */
         SignatureHelpFull = "signatureHelp-full",
-        SourceDefinitionAndBoundSpan = "sourceDefinitionAndBoundSpan",
-        /* @internal */
-        SourceDefinitionAndBoundSpanFull = "sourceDefinitionAndBoundSpan-full",
+        FindSourceDefinition = "findSourceDefinition",
         Status = "status",
         TypeDefinition = "typeDefinition",
         ProjectInfo = "projectInfo",
@@ -907,8 +905,8 @@ namespace ts.server.protocol {
         readonly command: CommandTypes.DefinitionAndBoundSpan;
     }
 
-    export interface SourceDefinitionAndBoundSpanRequest extends FileLocationRequest {
-        readonly command: CommandTypes.SourceDefinitionAndBoundSpan;
+    export interface FindSourceDefinitionRequest extends FileLocationRequest {
+        readonly command: CommandTypes.FindSourceDefinition;
     }
 
     export interface DefinitionAndBoundSpanResponse extends Response {

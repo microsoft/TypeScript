@@ -1229,14 +1229,11 @@ namespace ts.server {
             };
         }
 
-        private getSourceDefinitionAndBoundSpan(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): protocol.DefinitionInfoAndBoundSpan | DefinitionInfoAndBoundSpan {
+        private findSourceDefinition(args: protocol.FileLocationRequestArgs): readonly protocol.DefinitionInfo[] {
             const { file, project } = this.getFileAndProject(args);
             const position = this.getPositionInFile(args, file);
-            const scriptInfo = Debug.checkDefined(project.getScriptInfo(file));
-
-            const unmappedDefinitionAndBoundSpan = project.getLanguageService().getDefinitionAndBoundSpan(file, position);
-            let definitions = this.mapDefinitionInfoLocations(unmappedDefinitionAndBoundSpan?.definitions || emptyArray, project).slice();
-            let textSpan = unmappedDefinitionAndBoundSpan?.textSpan;
+            const unmappedDefinitions = project.getLanguageService().getDefinitionAtPosition(file, position);
+            let definitions: readonly DefinitionInfo[] = this.mapDefinitionInfoLocations(unmappedDefinitions || emptyArray, project).slice();
             const needsJsResolution = this.projectService.serverMode === LanguageServiceMode.Semantic && (
                 !some(definitions, d => toNormalizedPath(d.fileName) !== file && !d.isAmbient) ||
                 some(definitions, d => !!d.failedAliasResolution));
@@ -1246,10 +1243,7 @@ namespace ts.server {
                 definitions?.forEach(d => definitionSet.add(d));
                 const noDtsProject = project.getNoDtsResolutionProject([file]);
                 const ls = noDtsProject.getLanguageService();
-                const definitionAndBoundSpan = ls.getDefinitionAndBoundSpan(file, position, /*searchOtherFilesOnly*/ true);
-                textSpan ||= definitionAndBoundSpan?.textSpan;
-                const jsDefinitions = definitionAndBoundSpan
-                    ?.definitions
+                const jsDefinitions = ls.getDefinitionAtPosition(file, position, /*searchOtherFilesOnly*/ true)
                     ?.filter(d => toNormalizedPath(d.fileName) !== file);
                 if (some(jsDefinitions)) {
                     for (const jsDefinition of jsDefinitions) {
@@ -1282,23 +1276,8 @@ namespace ts.server {
                 definitions = arrayFrom(definitionSet.values());
             }
 
-            if (!textSpan) {
-                return { definitions: emptyArray, textSpan: undefined! };
-            }
-
             definitions = definitions.filter(d => !d.isAmbient && !d.failedAliasResolution);
-
-            if (simplifiedResult) {
-                return {
-                    definitions: this.mapDefinitionInfo(definitions, project),
-                    textSpan: toProtocolTextSpan(textSpan, scriptInfo)
-                };
-            }
-
-            return {
-                definitions: definitions.map(Session.mapToOriginalLocation),
-                textSpan,
-            };
+            return this.mapDefinitionInfo(definitions, project);
 
             function findImplementationFileFromDtsFileName(fileName: string, resolveFromFile: string, auxiliaryProject: Project) {
                 const nodeModulesPathParts = getNodeModulePathParts(fileName);
@@ -1348,7 +1327,6 @@ namespace ts.server {
                 const ls = project.getLanguageService();
                 const program = ls.getProgram()!;
                 const initialNode = getTouchingPropertyName(program.getSourceFile(file)!, position);
-                textSpan = createTextSpanFromNode(initialNode); // TODO remove me
                 if ((isStringLiteralLike(initialNode) || isIdentifier(initialNode)) && isAccessExpression(initialNode.parent)) {
                     return forEachNameInAccessChainWalkingLeft(initialNode, nameInChain => {
                         if (nameInChain === initialNode) return undefined;
@@ -2933,11 +2911,8 @@ namespace ts.server {
             [CommandNames.DefinitionAndBoundSpanFull]: (request: protocol.DefinitionAndBoundSpanRequest) => {
                 return this.requiredResponse(this.getDefinitionAndBoundSpan(request.arguments, /*simplifiedResult*/ false));
             },
-            [CommandNames.SourceDefinitionAndBoundSpan]: (request: protocol.SourceDefinitionAndBoundSpanRequest) => {
-                return this.requiredResponse(this.getSourceDefinitionAndBoundSpan(request.arguments, /*simplifiedResult*/ true));
-            },
-            [CommandNames.SourceDefinitionAndBoundSpanFull]: (request: protocol.SourceDefinitionAndBoundSpanRequest) => {
-                return this.requiredResponse(this.getSourceDefinitionAndBoundSpan(request.arguments, /*simplifiedResult*/ false));
+            [CommandNames.FindSourceDefinition]: (request: protocol.FindSourceDefinitionRequest) => {
+                return this.requiredResponse(this.findSourceDefinition(request.arguments));
             },
             [CommandNames.EmitOutput]: (request: protocol.EmitOutputRequest) => {
                 return this.requiredResponse(this.getEmitOutput(request.arguments));

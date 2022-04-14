@@ -265,8 +265,8 @@ namespace ts.GoToDefinition {
         return undefined;
     }
 
-    export function getDefinitionAndBoundSpan(program: Program, sourceFile: SourceFile, position: number, searchOtherFilesOnly?: boolean): DefinitionInfoAndBoundSpan | undefined {
-        const definitions = getDefinitionAtPosition(program, sourceFile, position, searchOtherFilesOnly);
+    export function getDefinitionAndBoundSpan(program: Program, sourceFile: SourceFile, position: number): DefinitionInfoAndBoundSpan | undefined {
+        const definitions = getDefinitionAtPosition(program, sourceFile, position);
 
         if (!definitions || definitions.length === 0) {
             return undefined;
