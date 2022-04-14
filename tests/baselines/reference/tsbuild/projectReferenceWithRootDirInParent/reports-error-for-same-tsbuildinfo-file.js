@@ -33,7 +33,18 @@ export const Other = 0;
 {"compilerOptions":{"composite":true,"outDir":"../../dist/"}}
 
 //// [/src/tsconfig.base.json]
-
+{
+  "compilerOptions": {
+    "composite": true,
+    "declaration": true,
+    "rootDir": "./src/",
+    "outDir": "./dist/",
+    "skipDefaultLibCheck": true
+  },
+  "exclude": [
+    "node_modules"
+  ]
+}
 
 
 

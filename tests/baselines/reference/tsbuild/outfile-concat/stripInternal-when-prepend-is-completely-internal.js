@@ -18,21 +18,55 @@ declare const console: { log(msg: any): void; };
 /* @internal */ const A = 1;
 
 //// [/src/first/first_part2.ts]
+console.log(f());
 
 
 //// [/src/first/first_part3.ts]
-
+function f() {
+    return "JS does hoists";
+}
 
 //// [/src/first/tsconfig.json]
 {"compilerOptions":{"composite":true,"declaration":true,"declarationMap":true,"skipDefaultLibCheck":true,"sourceMap":true,"outFile":"./bin/first-output.js"},"files":["/src/first/first_PART1.ts"]}
 
 //// [/src/second/second_part1.ts]
+namespace N {
+    // Comment text
+}
+
+namespace N {
+    function f() {
+        console.log('testing');
+    }
+
+    f();
+}
 
 
 //// [/src/second/second_part2.ts]
+class C {
+    doSomething() {
+        console.log("something got done");
+    }
+}
 
 
 //// [/src/second/tsconfig.json]
+{
+  "compilerOptions": {
+    "target": "es5",
+    "composite": true,
+    "removeComments": true,
+    "strict": false,
+    "sourceMap": true,
+    "declarationMap": true,
+    "declaration": true,
+    "outFile": "../2/second-output.js",
+    "skipDefaultLibCheck": true
+  },
+  "references": [
+  ]
+}
 
 
 //// [/src/third/third_part1.ts]

@@ -23,9 +23,14 @@ import {A} from 'a';
 export const b = new A();
 
 //// [/src/c.ts]
-
+import {b} from './b';
+import {X} from "@ref/a";
+b;
+X;
 
 //// [/src/refs/a.d.ts]
+export class X {}
+export class A {}
 
 
 //// [/src/tsconfig.a.json]

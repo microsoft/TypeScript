@@ -21,7 +21,7 @@ import { x } from "../utils";
 {"references":[{"path":"../utils"}]}
 
 //// [/src/utils/index.ts]
-
+export const x = 10;
 
 //// [/src/utils/tsconfig.json]
 {"compilerOptions":{"composite":true,"noEmit":true}}

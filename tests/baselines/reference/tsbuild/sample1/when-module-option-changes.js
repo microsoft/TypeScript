@@ -37,21 +37,72 @@ declare const dts: any;
 }
 
 //// [/src/logic/index.ts]
+import * as c from '../core/index';
+export function getSecondsInDay() {
+    return c.multiply(10, 15);
+}
+import * as mod from '../core/anotherModule';
+export const m = mod;
 
 
 //// [/src/logic/tsconfig.json]
+{
+    "compilerOptions": {
+        "composite": true,
+        "declaration": true,
+        "sourceMap": true,
+        "forceConsistentCasingInFileNames": true,
+        "skipDefaultLibCheck": true
+    },
+    "references": [
+        { "path": "../core" }
+    ]
+}
 
 
 //// [/src/tests/index.ts]
+import * as c from '../core/index';
+import * as logic from '../logic/index';
+
+c.leftPad("", 10);
+logic.getSecondsInDay();
+
+import * as mod from '../core/anotherModule';
+export const m = mod;
 
 
 //// [/src/tests/tsconfig.json]
-
+{
+    "references": [
+        { "path": "../core" },
+        { "path": "../logic" }
+    ],
+    "files": ["index.ts"],
+    "compilerOptions": {
+        "composite": true,
+        "declaration": true,
+        "forceConsistentCasingInFileNames": true,
+        "skipDefaultLibCheck": true
+    }
+}
 
 //// [/src/ui/index.ts]
+import * as logic from '../logic';
+
+export function run() {
+    console.log(logic.getSecondsInDay());
+}
 
 
 //// [/src/ui/tsconfig.json]
+{
+    "compilerOptions": {
+        "skipDefaultLibCheck": true
+    },
+    "references": [
+        { "path": "../logic/index" }
+    ]
+}
 
 
 

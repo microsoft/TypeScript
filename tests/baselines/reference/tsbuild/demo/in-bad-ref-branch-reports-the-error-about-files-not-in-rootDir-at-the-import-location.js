@@ -132,6 +132,14 @@ export function lastElementOf<T>(arr: T[]): T | undefined {
 }
 
 //// [/src/zoo/zoo.ts]
+import { Dog, createDog } from '../animals/index';
+
+export function createZoo(): Array<Dog> {
+    return [
+        createDog()
+    ];
+}
+
 
 
 

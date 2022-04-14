@@ -700,6 +700,7 @@ namespace vfs {
          * @param base The base file system. If not provided, this file system's `shadowRoot` is used (if present).
          */
         public diff(base?: FileSystem | undefined, options: DiffOptions = {}) {
+            debugger;
             if (!base && !options.baseIsNotShadowRoot) base = this.shadowRoot;
             const differences: FileSet = {};
             const hasDifferences = base ?
@@ -842,7 +843,7 @@ namespace vfs {
                 container[basename] = new Symlink(node.symlink);
             }
             else {
-                container[basename] = new File(node.buffer || "");
+                container[basename] = new File(changed._getBuffer(node));
             }
             return true;
         }
