@@ -7,7 +7,8 @@
 //// export declare const a: string;
 
 // @Filename: /index.ts
-//// import { a } from "./a";
-//// [|a/*start*/|]
+//// import { a } from [|"./a"/*moduleSpecifier*/|];
+//// [|a/*identifier*/|]
 
-verify.goToSourceDefinition("start", "end");
+verify.goToSourceDefinition("identifier", "end");
+verify.goToSourceDefinition("moduleSpecifier", { file: "/a.js" })

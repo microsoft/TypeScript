@@ -472,10 +472,13 @@ namespace ts {
 
         getSmartSelectionRange(fileName: string, position: number): SelectionRange;
 
+        /*@internal*/
+        // eslint-disable-next-line @typescript-eslint/unified-signatures
+        getDefinitionAtPosition(fileName: string, position: number, searchOtherFilesOnly: boolean): readonly DefinitionInfo[] | undefined;
         getDefinitionAtPosition(fileName: string, position: number): readonly DefinitionInfo[] | undefined;
         /*@internal*/
         // eslint-disable-next-line @typescript-eslint/unified-signatures
-        getDefinitionAndBoundSpan(fileName: string, position: number, aliasesOnly: boolean): DefinitionInfoAndBoundSpan | undefined;
+        getDefinitionAndBoundSpan(fileName: string, position: number, searchOtherFilesOnly: boolean): DefinitionInfoAndBoundSpan | undefined;
         getDefinitionAndBoundSpan(fileName: string, position: number): DefinitionInfoAndBoundSpan | undefined;
         getTypeDefinitionAtPosition(fileName: string, position: number): readonly DefinitionInfo[] | undefined;
         getImplementationAtPosition(fileName: string, position: number): readonly ImplementationLocation[] | undefined;

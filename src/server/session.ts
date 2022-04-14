@@ -1235,26 +1235,20 @@ namespace ts.server {
             const scriptInfo = Debug.checkDefined(project.getScriptInfo(file));
 
             const unmappedDefinitionAndBoundSpan = project.getLanguageService().getDefinitionAndBoundSpan(file, position);
-
-            if (!unmappedDefinitionAndBoundSpan || !unmappedDefinitionAndBoundSpan.definitions) {
-                return {
-                    definitions: emptyArray,
-                    textSpan: undefined! // TODO: GH#18217
-                };
-            }
-
-            let definitions = this.mapDefinitionInfoLocations(unmappedDefinitionAndBoundSpan.definitions, project).slice();
+            let definitions = this.mapDefinitionInfoLocations(unmappedDefinitionAndBoundSpan?.definitions || emptyArray, project).slice();
+            let textSpan = unmappedDefinitionAndBoundSpan?.textSpan;
             const needsJsResolution = this.projectService.serverMode === LanguageServiceMode.Semantic && (
                 !some(definitions, d => toNormalizedPath(d.fileName) !== file && !d.isAmbient) ||
                 some(definitions, d => !!d.failedAliasResolution));
 
             if (needsJsResolution) {
                 const definitionSet = createSet<DefinitionInfo>(d => d.textSpan.start, documentSpansEqual);
-                definitionSet.forEach(d => definitionSet.add(d));
+                definitions?.forEach(d => definitionSet.add(d));
                 const noDtsProject = project.getNoDtsResolutionProject([file]);
                 const ls = noDtsProject.getLanguageService();
-                const jsDefinitions = ls
-                    .getDefinitionAndBoundSpan(file, position, /*searchOtherFilesOnly*/ true)
+                const definitionAndBoundSpan = ls.getDefinitionAndBoundSpan(file, position, /*searchOtherFilesOnly*/ true);
+                textSpan ||= definitionAndBoundSpan?.textSpan;
+                const jsDefinitions = definitionAndBoundSpan
                     ?.definitions
                     ?.filter(d => toNormalizedPath(d.fileName) !== file);
                 if (some(jsDefinitions)) {
@@ -1273,7 +1267,7 @@ namespace ts.server {
                 }
                 else {
                     const ambientCandidates = definitions.filter(d => toNormalizedPath(d.fileName) !== file && d.isAmbient);
-                    for (const candidate of ambientCandidates) {
+                    for (const candidate of some(ambientCandidates) ? ambientCandidates : getAmbientCandidatesByClimbingAccessChain()) {
                         const fileNameToSearch = findImplementationFileFromDtsFileName(candidate.fileName, file, noDtsProject);
                         if (!fileNameToSearch || !ensureRoot(noDtsProject, fileNameToSearch)) {
                             continue;
@@ -1288,8 +1282,11 @@ namespace ts.server {
                 definitions = arrayFrom(definitionSet.values());
             }
 
+            if (!textSpan) {
+                return { definitions: emptyArray, textSpan: undefined! };
+            }
+
             definitions = definitions.filter(d => !d.isAmbient && !d.failedAliasResolution);
-            const { textSpan } = unmappedDefinitionAndBoundSpan;
 
             if (simplifiedResult) {
                 return {
@@ -1343,6 +1340,30 @@ namespace ts.server {
                 // We're not in node_modules, and we only get to this function if non-dts module resolution failed.
                 // I'm not sure what else I can do here that isn't already covered by that module resolution.
                 return undefined;
+            }
+
+            // In 'foo.bar./**/baz', if we got not results on 'baz', see if we can get an ambient definition
+            // for 'bar' or 'foo' (in that order) so we can search for declarations of 'baz' later.
+            function getAmbientCandidatesByClimbingAccessChain(): readonly { name: string, fileName: string }[] {
+                const ls = project.getLanguageService();
+                const program = ls.getProgram()!;
+                const initialNode = getTouchingPropertyName(program.getSourceFile(file)!, position);
+                textSpan = createTextSpanFromNode(initialNode); // TODO remove me
+                if ((isStringLiteralLike(initialNode) || isIdentifier(initialNode)) && isAccessExpression(initialNode.parent)) {
+                    return forEachNameInAccessChainWalkingLeft(initialNode, nameInChain => {
+                        if (nameInChain === initialNode) return undefined;
+                        const candidates = ls.getDefinitionAtPosition(file, nameInChain.getStart(), /*searchOtherFilesOnly*/ true)
+                            ?.filter(d => toNormalizedPath(d.fileName) !== file && d.isAmbient)
+                            .map(d => ({
+                                fileName: d.fileName,
+                                name: getTextOfIdentifierOrLiteral(initialNode)
+                            }));
+                        if (some(candidates)) {
+                            return candidates;
+                        }
+                    }) || emptyArray;
+                }
+                return emptyArray;
             }
 
             function tryRefineDefinition(definition: DefinitionInfo, program: Program, noDtsProgram: Program) {

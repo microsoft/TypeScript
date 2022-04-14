@@ -45,7 +45,7 @@ namespace ts.GoToDefinition {
 
         if (searchOtherFilesOnly && failedAliasResolution) {
             // We couldn't resolve the specific import, try on the module specifier.
-            const importDeclaration = findAncestor(node, isAnyImportOrBareOrAccessedRequire);
+            const importDeclaration = forEach([node, ...symbol?.declarations || emptyArray], n => findAncestor(n, isAnyImportOrBareOrAccessedRequire));
             const moduleSpecifier = importDeclaration && tryGetModuleSpecifierFromDeclaration(importDeclaration);
             if (moduleSpecifier) {
                 ({ symbol, failedAliasResolution } = getSymbol(moduleSpecifier, typeChecker));

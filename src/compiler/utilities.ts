@@ -5159,6 +5159,11 @@ namespace ts {
             (node.parent.kind === SyntaxKind.PropertyAccessExpression && (node.parent as PropertyAccessExpression).name === node);
     }
 
+    export function isRightSideOfAccessExpression(node: Node) {
+        return isPropertyAccessExpression(node.parent) && node.parent.name === node
+            || isElementAccessExpression(node.parent) && node.parent.argumentExpression === node;
+    }
+
     export function isRightSideOfQualifiedNameOrPropertyAccessOrJSDocMemberName(node: Node) {
         return isQualifiedName(node.parent) && node.parent.right === node
             || isPropertyAccessExpression(node.parent) && node.parent.name === node
@@ -5845,6 +5850,45 @@ namespace ts {
         }
         return expr;
     }
+
+    export function forEachNameInAccessChainWalkingLeft<T>(name: MemberName | StringLiteralLike, action: (name: MemberName | StringLiteralLike) => T | undefined): T | undefined {
+        if (isAccessExpression(name.parent) && isRightSideOfAccessExpression(name)) {
+            return walkAccessExpression(name.parent);
+        }
+
+        function walkAccessExpression(access: AccessExpression): T | undefined {
+            if (access.kind === SyntaxKind.PropertyAccessExpression) {
+                const res = action(access.name);
+                if (res !== undefined) {
+                    return res;
+                }
+            }
+            else if (access.kind === SyntaxKind.ElementAccessExpression) {
+                if (isIdentifier(access.argumentExpression) || isStringLiteralLike(access.argumentExpression)) {
+                    const res = action(access.argumentExpression);
+                    if (res !== undefined) {
+                        return res;
+                    }
+                }
+                else {
+                    // Chain interrupted by non-static-name access 'x[expr()].y.z'
+                    return undefined;
+                }
+            }
+
+            if (isAccessExpression(access.expression)) {
+                return walkAccessExpression(access.expression);
+            }
+            if (isIdentifier(access.expression)) {
+                // End of chain at Identifier 'x.y.z'
+                return action(access.expression);
+            }
+            // End of chain at non-Identifier 'x().y.z'
+            return undefined;
+        }
+    }
+
+
 
     export function getLeftmostExpression(node: Expression, stopAtCallExpressions: boolean) {
         while (true) {

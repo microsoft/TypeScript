@@ -22,12 +22,12 @@
 ////      * _.add(6, 4);
 ////      * // => 10
 ////      */
-////     var add = createMathOperation(function(augend, addend) {
+////     var [|/*variable*/add|] = createMathOperation(function(augend, addend) {
 ////      return augend + addend;
 ////     }, 0);
 ////
 ////     function lodash(value) {}
-////     lodash.add = add;
+////     lodash.[|/*property*/add|] = add;
 ////
 ////     /** Detect free variable `global` from Node.js. */
 ////     var freeGlobal = typeof global == 'object' && global && global.Object === Object && global;
@@ -73,7 +73,9 @@
 
 // @Filename: /index.ts
 //// import [|/*defaultImport*/_|], { [|/*unresolvableNamedImport*/foo|] } from [|/*moduleSpecifier*/'lodash'|];
+//// _.[|/*propertyAccess*/add|]
 
 verify.goToSourceDefinition("defaultImport", { file: "/node_modules/lodash/lodash.js", unverified: true });
 verify.goToSourceDefinition("unresolvableNamedImport", { file: "/node_modules/lodash/lodash.js", unverified: true });
 verify.goToSourceDefinition("moduleSpecifier", { file: "/node_modules/lodash/lodash.js", unverified: true });
+verify.goToSourceDefinition("propertyAccess", [{ marker: "variable", unverified: true }, { marker: "property", unverified: true }])
