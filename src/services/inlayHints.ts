@@ -72,10 +72,28 @@ namespace ts.InlayHints {
                         Debug.assertNode(labelDecl.name, isIdentifier);
                         result.push({
                             text: `(${truncation(idText(labelDecl.name), maxHintsLength)})`,
-                            position: node.argumentExpression.end,
+                            position: node.argumentExpression.getStart(),
                             kind: InlayHintKind.Parameter,
-                            whitespaceBefore: true
+                            whitespaceAfter: true
                         });
+                    }
+                }
+            }
+            else if (isArrayLiteralExpression(node)) {
+                const type = checker.getContextualType(node);
+                if (type && !isModuleReferenceType(type)) {
+                    const labeledElementDeclarations = (type as TupleTypeReference).target.labeledElementDeclarations;
+                    if (labeledElementDeclarations) {
+                        for (let i = 0; i < node.elements.length; i++) {
+                            const labelDecl = labeledElementDeclarations[i] as NamedTupleMember;
+                            Debug.assertNode(labelDecl.name, isIdentifier);
+                            result.push({
+                                text: `(${truncation(idText(labelDecl.name), maxHintsLength)})`,
+                                position: node.elements[i].getStart(),
+                                kind: InlayHintKind.Parameter,
+                                whitespaceAfter: true
+                            });
+                        }
                     }
                 }
             }
