@@ -69,7 +69,8 @@ namespace ts {
         JavaScript, /** '.js' or '.jsx' */
         Json,       /** '.json' */
         TSConfig,   /** '.json' with `tsconfig` used instead of `index` */
-        DtsOnly /** Only '.d.ts' */
+        DtsOnly,    /** Only '.d.ts' */
+        TsOnly,     /** '.[cm]tsx?' but not .d.ts variants */
     }
 
     interface PathAndPackageId {
@@ -1290,7 +1291,19 @@ namespace ts {
     export function nodeModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference): ResolvedModuleWithFailedLookupLocations;
     /* @internal */ export function nodeModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference, lookupConfig?: boolean): ResolvedModuleWithFailedLookupLocations; // eslint-disable-line @typescript-eslint/unified-signatures
     export function nodeModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference, lookupConfig?: boolean): ResolvedModuleWithFailedLookupLocations {
-        return nodeModuleNameResolverWorker(NodeResolutionFeatures.None, moduleName, getDirectoryPath(containingFile), compilerOptions, host, cache, lookupConfig ? tsconfigExtensions : (compilerOptions.resolveJsonModule ? tsPlusJsonExtensions : tsExtensions), redirectedReference);
+        let extensions;
+        if (lookupConfig) {
+            extensions = tsconfigExtensions;
+        }
+        else if (compilerOptions.noDtsResolution) {
+            extensions = [Extensions.TsOnly];
+            if (compilerOptions.allowJs) extensions.push(Extensions.JavaScript);
+            if (compilerOptions.resolveJsonModule) extensions.push(Extensions.Json);
+        }
+        else {
+            extensions = compilerOptions.resolveJsonModule ? tsPlusJsonExtensions : tsExtensions;
+        }
+        return nodeModuleNameResolverWorker(NodeResolutionFeatures.None, moduleName, getDirectoryPath(containingFile), compilerOptions, host, cache, extensions, redirectedReference);
     }
 
     function nodeModuleNameResolverWorker(features: NodeResolutionFeatures, moduleName: string, containingDirectory: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache: ModuleResolutionCache | undefined, extensions: Extensions[], redirectedReference: ResolvedProjectReference | undefined): ResolvedModuleWithFailedLookupLocations {
@@ -1299,6 +1312,11 @@ namespace ts {
         const failedLookupLocations: string[] = [];
         // conditions are only used by the node12/nodenext resolver - there's no priority order in the list,
         //it's essentially a set (priority is determined by object insertion order in the object we look at).
+        const conditions = features & NodeResolutionFeatures.EsmMode ? ["node", "import", "types"] : ["node", "require", "types"];
+        if (compilerOptions.noDtsResolution) {
+            conditions.pop();
+        }
+
         const state: ModuleResolutionState = {
             compilerOptions,
             host,
@@ -1306,7 +1324,7 @@ namespace ts {
             failedLookupLocations,
             packageJsonInfoCache: cache,
             features,
-            conditions: features & NodeResolutionFeatures.EsmMode ? ["node", "import", "types"] : ["node", "require", "types"]
+            conditions,
         };
 
         const result = forEach(extensions, ext => tryResolve(ext));
@@ -1533,20 +1551,22 @@ namespace ts {
                     default: return tryExtension(Extension.Dts);
                 }
             case Extensions.TypeScript:
+            case Extensions.TsOnly:
+                const useDts = extensions === Extensions.TypeScript;
                 switch (originalExtension) {
                     case Extension.Mjs:
                     case Extension.Mts:
                     case Extension.Dmts:
-                        return tryExtension(Extension.Mts) || tryExtension(Extension.Dmts);
+                        return tryExtension(Extension.Mts) || (useDts ? tryExtension(Extension.Dmts) : undefined);
                     case Extension.Cjs:
                     case Extension.Cts:
                     case Extension.Dcts:
-                        return tryExtension(Extension.Cts) || tryExtension(Extension.Dcts);
+                        return tryExtension(Extension.Cts) || (useDts ? tryExtension(Extension.Dcts) : undefined);
                     case Extension.Json:
                         candidate += Extension.Json;
-                        return tryExtension(Extension.Dts);
+                        return useDts ? tryExtension(Extension.Dts) : undefined;
                     default:
-                        return tryExtension(Extension.Ts) || tryExtension(Extension.Tsx) || tryExtension(Extension.Dts);
+                        return tryExtension(Extension.Ts) || tryExtension(Extension.Tsx) || (useDts ? tryExtension(Extension.Dts) : undefined);
                 }
             case Extensions.JavaScript:
                 switch (originalExtension) {
@@ -1813,6 +1833,7 @@ namespace ts {
             switch (extensions) {
                 case Extensions.JavaScript:
                 case Extensions.Json:
+                case Extensions.TsOnly:
                     packageFile = readPackageJsonMainField(jsonContent, candidate, state);
                     break;
                 case Extensions.TypeScript:
@@ -1893,14 +1914,16 @@ namespace ts {
     function extensionIsOk(extensions: Extensions, extension: Extension): boolean {
         switch (extensions) {
             case Extensions.JavaScript:
-                return extension === Extension.Js || extension === Extension.Jsx;
+                return extension === Extension.Js || extension === Extension.Jsx || extension === Extension.Mjs || extension === Extension.Cjs;
             case Extensions.TSConfig:
             case Extensions.Json:
                 return extension === Extension.Json;
             case Extensions.TypeScript:
-                return extension === Extension.Ts || extension === Extension.Tsx || extension === Extension.Dts;
+                return extension === Extension.Ts || extension === Extension.Tsx || extension === Extension.Mts || extension === Extension.Cts || extension === Extension.Dts || extension === Extension.Dmts || extension === Extension.Dcts;
+            case Extensions.TsOnly:
+                return extension === Extension.Ts || extension === Extension.Tsx || extension === Extension.Mts || extension === Extension.Cts;
             case Extensions.DtsOnly:
-                return extension === Extension.Dts;
+                return extension === Extension.Dts || extension === Extension.Dmts || extension === Extension.Dcts;
         }
     }
 
