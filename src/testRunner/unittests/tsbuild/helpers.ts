@@ -200,9 +200,9 @@ interface Symbol {
     type ReadableProgramBuilderInfoFilePendingEmit = [string, "DtsOnly" | "Full"];
     type ReadableProgramBuildInfoEmitSignature = string | [string, string];
     interface ReadableProgramBuildInfo {
-        fileNames: readonly string[];
+        fileNames: readonly string[] | undefined;
         fileNamesList: readonly (readonly string[])[] | undefined;
-        fileInfos: MapLike<BuilderState.FileInfo>;
+        fileInfos: MapLike<BuilderState.FileInfo> | undefined;
         options: CompilerOptions | undefined;
         referencedMap?: MapLike<string[]>;
         exportedModulesMap?: MapLike<string[]>;
@@ -210,17 +210,18 @@ interface Symbol {
         affectedFilesPendingEmit?: readonly ReadableProgramBuilderInfoFilePendingEmit[];
         changeFileSet?: readonly string[];
         emitSignatures?: readonly ReadableProgramBuildInfoEmitSignature[];
+        outSignature?: string;
         dtsChangeTime?: number;
     }
     type ReadableBuildInfo = Omit<BuildInfo, "program"> & { program: ReadableProgramBuildInfo | undefined; size: number; };
     function generateBuildInfoProgramBaseline(sys: System, buildInfoPath: string, buildInfo: BuildInfo) {
         const fileInfos: ReadableProgramBuildInfo["fileInfos"] = {};
-        buildInfo.program?.fileInfos.forEach((fileInfo, index) => fileInfos[toFileName(index + 1 as ProgramBuildInfoFileId)] = toBuilderStateFileInfo(fileInfo));
+        buildInfo.program?.fileInfos?.forEach((fileInfo, index) => fileInfos[toFileName(index + 1 as ProgramBuildInfoFileId)] = toBuilderStateFileInfo(fileInfo));
         const fileNamesList = buildInfo.program?.fileIdsList?.map(fileIdsListId => fileIdsListId.map(toFileName));
         const program: ReadableProgramBuildInfo | undefined = buildInfo.program && {
             fileNames: buildInfo.program.fileNames,
             fileNamesList,
-            fileInfos,
+            fileInfos: buildInfo.program.fileInfos ? fileInfos : undefined,
             options: buildInfo.program.options,
             referencedMap: toMapOfReferencedSet(buildInfo.program.referencedMap),
             exportedModulesMap: toMapOfReferencedSet(buildInfo.program.exportedModulesMap),
@@ -241,6 +242,7 @@ interface Symbol {
                     toFileName(s) :
                     [toFileName(s[0]), s[1]]
             ),
+            outSignature: buildInfo.program.outSignature,
             dtsChangeTime: buildInfo.program.dtsChangeTime,
         };
         const version = buildInfo.version === ts.version ? fakes.version : buildInfo.version;
@@ -254,7 +256,7 @@ interface Symbol {
         sys.writeFile(`${buildInfoPath}.readable.baseline.txt`, JSON.stringify(result, /*replacer*/ undefined, 2));
 
         function toFileName(fileId: ProgramBuildInfoFileId) {
-            return buildInfo.program!.fileNames[fileId - 1];
+            return buildInfo.program!.fileNames![fileId - 1];
         }
 
         function toFileNames(fileIdsListId: ProgramBuildInfoFileIdListId) {

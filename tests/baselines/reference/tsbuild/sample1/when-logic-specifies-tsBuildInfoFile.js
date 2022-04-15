@@ -138,14 +138,13 @@ readFiles:: {
  "/src/core/anotherModule.ts": 1,
  "/src/core/index.ts": 1,
  "/src/core/some_decl.d.ts": 1,
- "/src/core/anotherModule.d.ts": 2,
  "/src/logic/ownFile.tsbuildinfo": 1,
  "/src/logic/index.ts": 1,
  "/src/core/index.d.ts": 1,
- "/src/logic/index.d.ts": 2,
+ "/src/core/anotherModule.d.ts": 1,
  "/src/tests/tsconfig.tsbuildinfo": 1,
  "/src/tests/index.ts": 1,
- "/src/tests/index.d.ts": 1
+ "/src/logic/index.d.ts": 1
 } 
 getModifiedTime:: {
  "/src/core/tsconfig.tsbuildinfo": 1,

@@ -155,39 +155,39 @@ Output::
 
 [[90m12:00:14 AM[0m] Building project '/src/first/tsconfig.json'...
 
-[[90m12:00:24 AM[0m] Project 'src/second/tsconfig.json' is out of date because output file 'src/2/second-output.tsbuildinfo' does not exist
+[[90m12:00:25 AM[0m] Project 'src/second/tsconfig.json' is out of date because output file 'src/2/second-output.tsbuildinfo' does not exist
 
-[[90m12:00:25 AM[0m] Building project '/src/second/tsconfig.json'...
+[[90m12:00:26 AM[0m] Building project '/src/second/tsconfig.json'...
 
-[[90m12:00:35 AM[0m] Project 'src/third/tsconfig.json' is out of date because output file 'src/third/thirdjs/output/third-output.tsbuildinfo' does not exist
+[[90m12:00:37 AM[0m] Project 'src/third/tsconfig.json' is out of date because output file 'src/third/thirdjs/output/third-output.tsbuildinfo' does not exist
 
-[[90m12:00:36 AM[0m] Building project '/src/third/tsconfig.json'...
+[[90m12:00:38 AM[0m] Building project '/src/third/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 readFiles:: {
  "/src/third/tsconfig.json": 1,
  "/src/first/tsconfig.json": 1,
  "/src/second/tsconfig.json": 1,
+ "/src/first/bin/first-output.tsbuildinfo": 2,
  "/src/first/first_PART1.ts": 1,
  "/src/first/first_part2.ts": 1,
  "/src/first/tripleRef.d.ts": 1,
  "/src/first/first_part3.ts": 1,
- "/src/first/bin/first-output.d.ts": 2,
+ "/src/2/second-output.tsbuildinfo": 2,
  "/src/second/second_part1.ts": 1,
  "/src/second/tripleRef.d.ts": 1,
  "/src/second/second_part2.ts": 1,
- "/src/2/second-output.d.ts": 2,
+ "/src/third/thirdjs/output/third-output.tsbuildinfo": 1,
+ "/src/first/bin/first-output.d.ts": 1,
+ "/src/2/second-output.d.ts": 1,
  "/src/third/third_part1.ts": 1,
  "/src/third/tripleRef.d.ts": 1,
- "/src/first/bin/first-output.tsbuildinfo": 1,
- "/src/2/second-output.tsbuildinfo": 1,
  "/src/first/bin/first-output.js": 1,
  "/src/2/second-output.js": 1,
  "/src/first/bin/first-output.js.map": 1,
  "/src/2/second-output.js.map": 1,
  "/src/first/bin/first-output.d.ts.map": 1,
- "/src/2/second-output.d.ts.map": 1,
- "/src/third/thirdjs/output/third-output.d.ts": 1
+ "/src/2/second-output.d.ts.map": 1
 } 
 getModifiedTime:: {
  "/src/first/bin/first-output.tsbuildinfo": 1,
@@ -655,7 +655,7 @@ sourceFile:../second/second_part2.ts
 >>>//# sourceMappingURL=second-output.js.map
 
 //// [/src/2/second-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"../second","sourceFiles":["../second/second_part1.ts","../second/second_part2.ts"],"js":{"sections":[{"pos":0,"end":336,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":49,"kind":"reference","data":"../second/tripleRef.d.ts"},{"pos":51,"end":205,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"../second","sourceFiles":["../second/second_part1.ts","../second/second_part2.ts"],"js":{"sections":[{"pos":0,"end":336,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":49,"kind":"reference","data":"../second/tripleRef.d.ts"},{"pos":51,"end":205,"kind":"text"}]}},"program":{"options":{"composite":true,"outFile":"./second-output.js"},"outSignature":"-1874117338-/// <reference path=\"../second/tripleRef.d.ts\" />\r\ndeclare const second_part1Const: secondsecond_part1;\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\n","dtsChangeTime":27000},"version":"FakeTSVersion"}
 
 //// [/src/2/second-output.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -731,8 +731,16 @@ declare class C {
       ]
     }
   },
+  "program": {
+    "options": {
+      "composite": true,
+      "outFile": "./second-output.js"
+    },
+    "outSignature": "-1874117338-/// <reference path=\"../second/tripleRef.d.ts\" />\r\ndeclare const second_part1Const: secondsecond_part1;\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\n",
+    "dtsChangeTime": 27000
+  },
   "version": "FakeTSVersion",
-  "size": 328
+  "size": 677
 }
 
 //// [/src/first/bin/first-output.d.ts]
@@ -1093,7 +1101,7 @@ sourceFile:../first_part3.ts
 >>>//# sourceMappingURL=first-output.js.map
 
 //// [/src/first/bin/first-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"..","sourceFiles":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"js":{"sections":[{"pos":0,"end":158,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":42,"kind":"reference","data":"../tripleRef.d.ts"},{"pos":44,"end":252,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"..","sourceFiles":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"js":{"sections":[{"pos":0,"end":158,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":42,"kind":"reference","data":"../tripleRef.d.ts"},{"pos":44,"end":252,"kind":"text"}]}},"program":{"options":{"composite":true,"outFile":"./first-output.js"},"outSignature":"27529827898-/// <reference path=\"../tripleRef.d.ts\" />\r\ninterface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare const first_part2Const: firstfirst_part2;\r\ndeclare function f(): string;\r\n","dtsChangeTime":15000},"version":"FakeTSVersion"}
 
 //// [/src/first/bin/first-output.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -1162,8 +1170,16 @@ declare function f(): string;
       ]
     }
   },
+  "program": {
+    "options": {
+      "composite": true,
+      "outFile": "./first-output.js"
+    },
+    "outSignature": "27529827898-/// <reference path=\"../tripleRef.d.ts\" />\r\ninterface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare const first_part2Const: firstfirst_part2;\r\ndeclare function f(): string;\r\n",
+    "dtsChangeTime": 15000
+  },
   "version": "FakeTSVersion",
-  "size": 318
+  "size": 717
 }
 
 //// [/src/third/thirdjs/output/third-output.d.ts]
@@ -2068,7 +2084,7 @@ sourceFile:../../third_part1.ts
 >>>//# sourceMappingURL=third-output.js.map
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"../..","sourceFiles":["../../third_part1.ts"],"js":{"sections":[{"pos":0,"end":158,"kind":"prepend","data":"../../../first/bin/first-output.js","texts":[{"pos":0,"end":158,"kind":"text"}]},{"pos":158,"end":494,"kind":"prepend","data":"../../../2/second-output.js","texts":[{"pos":158,"end":494,"kind":"text"}]},{"pos":494,"end":578,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":45,"kind":"reference","data":"../../tripleRef.d.ts"},{"pos":47,"end":101,"kind":"reference","data":"../../../first/tripleRef.d.ts"},{"pos":103,"end":158,"kind":"reference","data":"../../../second/tripleRef.d.ts"},{"pos":160,"end":368,"kind":"prepend","data":"../../../first/bin/first-output.d.ts","texts":[{"pos":160,"end":368,"kind":"text"}]},{"pos":368,"end":522,"kind":"prepend","data":"../../../2/second-output.d.ts","texts":[{"pos":368,"end":522,"kind":"text"}]},{"pos":522,"end":592,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"../..","sourceFiles":["../../third_part1.ts"],"js":{"sections":[{"pos":0,"end":158,"kind":"prepend","data":"../../../first/bin/first-output.js","texts":[{"pos":0,"end":158,"kind":"text"}]},{"pos":158,"end":494,"kind":"prepend","data":"../../../2/second-output.js","texts":[{"pos":158,"end":494,"kind":"text"}]},{"pos":494,"end":578,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":45,"kind":"reference","data":"../../tripleRef.d.ts"},{"pos":47,"end":101,"kind":"reference","data":"../../../first/tripleRef.d.ts"},{"pos":103,"end":158,"kind":"reference","data":"../../../second/tripleRef.d.ts"},{"pos":160,"end":368,"kind":"prepend","data":"../../../first/bin/first-output.d.ts","texts":[{"pos":160,"end":368,"kind":"text"}]},{"pos":368,"end":522,"kind":"prepend","data":"../../../2/second-output.d.ts","texts":[{"pos":368,"end":522,"kind":"text"}]},{"pos":522,"end":592,"kind":"text"}]}},"program":{"options":{"composite":true,"outFile":"./third-output.js"},"outSignature":"-22286623866-/// <reference path=\"../../tripleRef.d.ts\" />\r\n/// <reference path=\"../../../first/tripleRef.d.ts\" />\r\n/// <reference path=\"../../../second/tripleRef.d.ts\" />\r\ninterface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare const first_part2Const: firstfirst_part2;\r\ndeclare function f(): string;\r\ndeclare const second_part1Const: secondsecond_part1;\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare const third_part1Const: thirdthird_part1;\r\ndeclare var c: C;\r\n","dtsChangeTime":39000},"version":"FakeTSVersion"}
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -2254,8 +2270,16 @@ declare var c: C;
       ]
     }
   },
+  "program": {
+    "options": {
+      "composite": true,
+      "outFile": "./third-output.js"
+    },
+    "outSignature": "-22286623866-/// <reference path=\"../../tripleRef.d.ts\" />\r\n/// <reference path=\"../../../first/tripleRef.d.ts\" />\r\n/// <reference path=\"../../../second/tripleRef.d.ts\" />\r\ninterface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare const first_part2Const: firstfirst_part2;\r\ndeclare function f(): string;\r\ndeclare const second_part1Const: secondsecond_part1;\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare const third_part1Const: thirdthird_part1;\r\ndeclare var c: C;\r\n",
+    "dtsChangeTime": 39000
+  },
   "version": "FakeTSVersion",
-  "size": 952
+  "size": 1720
 }
 
 
@@ -2280,20 +2304,20 @@ console.log(s);
 
 Output::
 /lib/tsc --b /src/third --verbose
-[[90m12:00:54 AM[0m] Projects in this build: 
+[[90m12:00:57 AM[0m] Projects in this build: 
     * src/first/tsconfig.json
     * src/second/tsconfig.json
     * src/third/tsconfig.json
 
-[[90m12:00:55 AM[0m] Project 'src/first/tsconfig.json' is out of date because oldest output 'src/first/bin/first-output.tsbuildinfo' is older than newest input 'src/first/first_PART1.ts'
+[[90m12:00:58 AM[0m] Project 'src/first/tsconfig.json' is out of date because oldest output 'src/first/bin/first-output.tsbuildinfo' is older than newest input 'src/first/first_PART1.ts'
 
-[[90m12:00:56 AM[0m] Building project '/src/first/tsconfig.json'...
+[[90m12:00:59 AM[0m] Building project '/src/first/tsconfig.json'...
 
-[[90m12:01:05 AM[0m] Project 'src/second/tsconfig.json' is up to date because newest input 'src/second/second_part1.ts' is older than oldest output 'src/2/second-output.tsbuildinfo'
+[[90m12:01:09 AM[0m] Project 'src/second/tsconfig.json' is up to date because newest input 'src/second/second_part1.ts' is older than oldest output 'src/2/second-output.tsbuildinfo'
 
-[[90m12:01:06 AM[0m] Project 'src/third/tsconfig.json' is out of date because oldest output 'src/third/thirdjs/output/third-output.tsbuildinfo' is older than newest input 'src/first'
+[[90m12:01:10 AM[0m] Project 'src/third/tsconfig.json' is out of date because oldest output 'src/third/thirdjs/output/third-output.tsbuildinfo' is older than newest input 'src/first'
 
-[[90m12:01:07 AM[0m] Building project '/src/third/tsconfig.json'...
+[[90m12:01:11 AM[0m] Building project '/src/third/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 readFiles:: {
@@ -2305,9 +2329,9 @@ readFiles:: {
  "/src/first/first_part2.ts": 1,
  "/src/first/tripleRef.d.ts": 1,
  "/src/first/first_part3.ts": 1,
- "/src/first/bin/first-output.d.ts": 2,
  "/src/2/second-output.tsbuildinfo": 1,
  "/src/third/thirdjs/output/third-output.tsbuildinfo": 1,
+ "/src/first/bin/first-output.d.ts": 1,
  "/src/2/second-output.d.ts": 1,
  "/src/second/tripleRef.d.ts": 1,
  "/src/third/third_part1.ts": 1,
@@ -2317,8 +2341,7 @@ readFiles:: {
  "/src/first/bin/first-output.js.map": 1,
  "/src/2/second-output.js.map": 1,
  "/src/first/bin/first-output.d.ts.map": 1,
- "/src/2/second-output.d.ts.map": 1,
- "/src/third/thirdjs/output/third-output.d.ts": 1
+ "/src/2/second-output.d.ts.map": 1
 } 
 getModifiedTime:: {
  "/src/first/bin/first-output.tsbuildinfo": 1,
@@ -2708,7 +2731,7 @@ sourceFile:../first_part3.ts
 >>>//# sourceMappingURL=first-output.js.map
 
 //// [/src/first/bin/first-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"..","sourceFiles":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"js":{"sections":[{"pos":0,"end":157,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":42,"kind":"reference","data":"../tripleRef.d.ts"},{"pos":44,"end":251,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"..","sourceFiles":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"js":{"sections":[{"pos":0,"end":157,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":42,"kind":"reference","data":"../tripleRef.d.ts"},{"pos":44,"end":251,"kind":"text"}]}},"program":{"options":{"composite":true,"outFile":"./first-output.js"},"outSignature":"6858951242-/// <reference path=\"../tripleRef.d.ts\" />\r\ninterface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hola, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare const first_part2Const: firstfirst_part2;\r\ndeclare function f(): string;\r\n","dtsChangeTime":60000},"version":"FakeTSVersion"}
 
 //// [/src/first/bin/first-output.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -2777,8 +2800,16 @@ declare function f(): string;
       ]
     }
   },
+  "program": {
+    "options": {
+      "composite": true,
+      "outFile": "./first-output.js"
+    },
+    "outSignature": "6858951242-/// <reference path=\"../tripleRef.d.ts\" />\r\ninterface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hola, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare const first_part2Const: firstfirst_part2;\r\ndeclare function f(): string;\r\n",
+    "dtsChangeTime": 60000
+  },
   "version": "FakeTSVersion",
-  "size": 318
+  "size": 715
 }
 
 //// [/src/third/thirdjs/output/third-output.d.ts]
@@ -3683,7 +3714,7 @@ sourceFile:../../third_part1.ts
 >>>//# sourceMappingURL=third-output.js.map
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"../..","sourceFiles":["../../third_part1.ts"],"js":{"sections":[{"pos":0,"end":157,"kind":"prepend","data":"../../../first/bin/first-output.js","texts":[{"pos":0,"end":157,"kind":"text"}]},{"pos":157,"end":493,"kind":"prepend","data":"../../../2/second-output.js","texts":[{"pos":157,"end":493,"kind":"text"}]},{"pos":493,"end":577,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":45,"kind":"reference","data":"../../tripleRef.d.ts"},{"pos":47,"end":101,"kind":"reference","data":"../../../first/tripleRef.d.ts"},{"pos":103,"end":158,"kind":"reference","data":"../../../second/tripleRef.d.ts"},{"pos":160,"end":367,"kind":"prepend","data":"../../../first/bin/first-output.d.ts","texts":[{"pos":160,"end":367,"kind":"text"}]},{"pos":367,"end":521,"kind":"prepend","data":"../../../2/second-output.d.ts","texts":[{"pos":367,"end":521,"kind":"text"}]},{"pos":521,"end":591,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"../..","sourceFiles":["../../third_part1.ts"],"js":{"sections":[{"pos":0,"end":157,"kind":"prepend","data":"../../../first/bin/first-output.js","texts":[{"pos":0,"end":157,"kind":"text"}]},{"pos":157,"end":493,"kind":"prepend","data":"../../../2/second-output.js","texts":[{"pos":157,"end":493,"kind":"text"}]},{"pos":493,"end":577,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":45,"kind":"reference","data":"../../tripleRef.d.ts"},{"pos":47,"end":101,"kind":"reference","data":"../../../first/tripleRef.d.ts"},{"pos":103,"end":158,"kind":"reference","data":"../../../second/tripleRef.d.ts"},{"pos":160,"end":367,"kind":"prepend","data":"../../../first/bin/first-output.d.ts","texts":[{"pos":160,"end":367,"kind":"text"}]},{"pos":367,"end":521,"kind":"prepend","data":"../../../2/second-output.d.ts","texts":[{"pos":367,"end":521,"kind":"text"}]},{"pos":521,"end":591,"kind":"text"}]}},"program":{"options":{"composite":true,"outFile":"./third-output.js"},"outSignature":"15835693622-/// <reference path=\"../../tripleRef.d.ts\" />\r\n/// <reference path=\"../../../first/tripleRef.d.ts\" />\r\n/// <reference path=\"../../../second/tripleRef.d.ts\" />\r\ninterface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hola, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare const first_part2Const: firstfirst_part2;\r\ndeclare function f(): string;\r\ndeclare const second_part1Const: secondsecond_part1;\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare const third_part1Const: thirdthird_part1;\r\ndeclare var c: C;\r\n","dtsChangeTime":72000},"version":"FakeTSVersion"}
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -3869,8 +3900,16 @@ declare var c: C;
       ]
     }
   },
+  "program": {
+    "options": {
+      "composite": true,
+      "outFile": "./third-output.js"
+    },
+    "outSignature": "15835693622-/// <reference path=\"../../tripleRef.d.ts\" />\r\n/// <reference path=\"../../../first/tripleRef.d.ts\" />\r\n/// <reference path=\"../../../second/tripleRef.d.ts\" />\r\ninterface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hola, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare const first_part2Const: firstfirst_part2;\r\ndeclare function f(): string;\r\ndeclare const second_part1Const: secondsecond_part1;\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare const third_part1Const: thirdthird_part1;\r\ndeclare var c: C;\r\n",
+    "dtsChangeTime": 72000
+  },
   "version": "FakeTSVersion",
-  "size": 952
+  "size": 1718
 }
 
 
@@ -3895,20 +3934,20 @@ console.log(s);
 
 Output::
 /lib/tsc --b /src/third --verbose
-[[90m12:01:21 AM[0m] Projects in this build: 
+[[90m12:01:26 AM[0m] Projects in this build: 
     * src/first/tsconfig.json
     * src/second/tsconfig.json
     * src/third/tsconfig.json
 
-[[90m12:01:22 AM[0m] Project 'src/first/tsconfig.json' is out of date because oldest output 'src/first/bin/first-output.tsbuildinfo' is older than newest input 'src/first/first_PART1.ts'
+[[90m12:01:27 AM[0m] Project 'src/first/tsconfig.json' is out of date because oldest output 'src/first/bin/first-output.tsbuildinfo' is older than newest input 'src/first/first_PART1.ts'
 
-[[90m12:01:23 AM[0m] Building project '/src/first/tsconfig.json'...
+[[90m12:01:28 AM[0m] Building project '/src/first/tsconfig.json'...
 
-[[90m12:01:32 AM[0m] Project 'src/second/tsconfig.json' is up to date because newest input 'src/second/second_part1.ts' is older than oldest output 'src/2/second-output.tsbuildinfo'
+[[90m12:01:37 AM[0m] Project 'src/second/tsconfig.json' is up to date because newest input 'src/second/second_part1.ts' is older than oldest output 'src/2/second-output.tsbuildinfo'
 
-[[90m12:01:33 AM[0m] Project 'src/third/tsconfig.json' is out of date because output of its dependency 'src/first' has changed
+[[90m12:01:38 AM[0m] Project 'src/third/tsconfig.json' is out of date because output of its dependency 'src/first' has changed
 
-[[90m12:01:34 AM[0m] Updating output of project '/src/third/tsconfig.json'...
+[[90m12:01:39 AM[0m] Updating output of project '/src/third/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 readFiles:: {
@@ -3920,7 +3959,6 @@ readFiles:: {
  "/src/first/first_part2.ts": 1,
  "/src/first/tripleRef.d.ts": 1,
  "/src/first/first_part3.ts": 1,
- "/src/first/bin/first-output.d.ts": 1,
  "/src/2/second-output.tsbuildinfo": 1,
  "/src/third/thirdjs/output/third-output.tsbuildinfo": 1,
  "/src/third/thirdjs/output/third-output.js": 1,
@@ -3931,6 +3969,7 @@ readFiles:: {
  "/src/2/second-output.js": 1,
  "/src/first/bin/first-output.js.map": 1,
  "/src/2/second-output.js.map": 1,
+ "/src/first/bin/first-output.d.ts": 1,
  "/src/2/second-output.d.ts": 1,
  "/src/first/bin/first-output.d.ts.map": 1,
  "/src/2/second-output.d.ts.map": 1
@@ -3938,7 +3977,6 @@ readFiles:: {
 getModifiedTime:: {
  "/src/first/bin/first-output.tsbuildinfo": 1,
  "/src/first/first_PART1.ts": 1,
- "/src/first/bin/first-output.d.ts": 1,
  "/src/2/second-output.tsbuildinfo": 1,
  "/src/second/second_part1.ts": 1,
  "/src/second/second_part2.ts": 1,
@@ -3946,8 +3984,7 @@ getModifiedTime:: {
  "/src/second/tsconfig.json": 1,
  "/src/third/thirdjs/output/third-output.tsbuildinfo": 1,
  "/src/third/third_part1.ts": 1,
- "/src/third/tsconfig.json": 1,
- "/src/third/thirdjs/output/third-output.d.ts": 1
+ "/src/third/tsconfig.json": 1
 }
 
 setModifiedTime:: {}
@@ -4184,7 +4221,7 @@ sourceFile:../first_part3.ts
 >>>//# sourceMappingURL=first-output.js.map
 
 //// [/src/first/bin/first-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"..","sourceFiles":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"js":{"sections":[{"pos":0,"end":174,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":42,"kind":"reference","data":"../tripleRef.d.ts"},{"pos":44,"end":251,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"..","sourceFiles":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"js":{"sections":[{"pos":0,"end":174,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":42,"kind":"reference","data":"../tripleRef.d.ts"},{"pos":44,"end":251,"kind":"text"}]}},"program":{"options":{"composite":true,"outFile":"./first-output.js"},"outSignature":"6858951242-/// <reference path=\"../tripleRef.d.ts\" />\r\ninterface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hola, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare const first_part2Const: firstfirst_part2;\r\ndeclare function f(): string;\r\n","dtsChangeTime":60000},"version":"FakeTSVersion"}
 
 //// [/src/first/bin/first-output.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -4254,8 +4291,16 @@ declare function f(): string;
       ]
     }
   },
+  "program": {
+    "options": {
+      "composite": true,
+      "outFile": "./first-output.js"
+    },
+    "outSignature": "6858951242-/// <reference path=\"../tripleRef.d.ts\" />\r\ninterface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hola, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare const first_part2Const: firstfirst_part2;\r\ndeclare function f(): string;\r\n",
+    "dtsChangeTime": 60000
+  },
   "version": "FakeTSVersion",
-  "size": 318
+  "size": 715
 }
 
 //// [/src/third/thirdjs/output/third-output.js]
@@ -4846,7 +4891,7 @@ sourceFile:../../third_part1.ts
 >>>//# sourceMappingURL=third-output.js.map
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"../..","sourceFiles":["../../third_part1.ts"],"js":{"sections":[{"pos":0,"end":174,"kind":"prepend","data":"../../../first/bin/first-output.js","texts":[{"pos":0,"end":174,"kind":"text"}]},{"pos":174,"end":510,"kind":"prepend","data":"../../../2/second-output.js","texts":[{"pos":174,"end":510,"kind":"text"}]},{"pos":510,"end":594,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":45,"kind":"reference","data":"../../tripleRef.d.ts"},{"pos":47,"end":101,"kind":"reference","data":"../../../first/tripleRef.d.ts"},{"pos":103,"end":158,"kind":"reference","data":"../../../second/tripleRef.d.ts"},{"pos":160,"end":367,"kind":"prepend","data":"../../../first/bin/first-output.d.ts","texts":[{"pos":160,"end":367,"kind":"text"}]},{"pos":367,"end":521,"kind":"prepend","data":"../../../2/second-output.d.ts","texts":[{"pos":367,"end":521,"kind":"text"}]},{"pos":521,"end":591,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"../..","sourceFiles":["../../third_part1.ts"],"js":{"sections":[{"pos":0,"end":174,"kind":"prepend","data":"../../../first/bin/first-output.js","texts":[{"pos":0,"end":174,"kind":"text"}]},{"pos":174,"end":510,"kind":"prepend","data":"../../../2/second-output.js","texts":[{"pos":174,"end":510,"kind":"text"}]},{"pos":510,"end":594,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":45,"kind":"reference","data":"../../tripleRef.d.ts"},{"pos":47,"end":101,"kind":"reference","data":"../../../first/tripleRef.d.ts"},{"pos":103,"end":158,"kind":"reference","data":"../../../second/tripleRef.d.ts"},{"pos":160,"end":367,"kind":"prepend","data":"../../../first/bin/first-output.d.ts","texts":[{"pos":160,"end":367,"kind":"text"}]},{"pos":367,"end":521,"kind":"prepend","data":"../../../2/second-output.d.ts","texts":[{"pos":367,"end":521,"kind":"text"}]},{"pos":521,"end":591,"kind":"text"}]}},"program":{"options":{"composite":true,"outFile":"./third-output.js"},"outSignature":"15835693622-/// <reference path=\"../../tripleRef.d.ts\" />\r\n/// <reference path=\"../../../first/tripleRef.d.ts\" />\r\n/// <reference path=\"../../../second/tripleRef.d.ts\" />\r\ninterface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hola, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare const first_part2Const: firstfirst_part2;\r\ndeclare function f(): string;\r\ndeclare const second_part1Const: secondsecond_part1;\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare const third_part1Const: thirdthird_part1;\r\ndeclare var c: C;\r\n","dtsChangeTime":72000},"version":"FakeTSVersion"}
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -5033,7 +5078,15 @@ declare var c: C;
       ]
     }
   },
+  "program": {
+    "options": {
+      "composite": true,
+      "outFile": "./third-output.js"
+    },
+    "outSignature": "15835693622-/// <reference path=\"../../tripleRef.d.ts\" />\r\n/// <reference path=\"../../../first/tripleRef.d.ts\" />\r\n/// <reference path=\"../../../second/tripleRef.d.ts\" />\r\ninterface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hola, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare const first_part2Const: firstfirst_part2;\r\ndeclare function f(): string;\r\ndeclare const second_part1Const: secondsecond_part1;\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare const third_part1Const: thirdthird_part1;\r\ndeclare var c: C;\r\n",
+    "dtsChangeTime": 72000
+  },
   "version": "FakeTSVersion",
-  "size": 952
+  "size": 1718
 }
 

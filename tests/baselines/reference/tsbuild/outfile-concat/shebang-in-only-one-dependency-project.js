@@ -141,13 +141,13 @@ Output::
 
 [[90m12:00:09 AM[0m] Building project '/src/first/tsconfig.json'...
 
-[[90m12:00:19 AM[0m] Project 'src/second/tsconfig.json' is out of date because output file 'src/2/second-output.tsbuildinfo' does not exist
+[[90m12:00:20 AM[0m] Project 'src/second/tsconfig.json' is out of date because output file 'src/2/second-output.tsbuildinfo' does not exist
 
-[[90m12:00:20 AM[0m] Building project '/src/second/tsconfig.json'...
+[[90m12:00:21 AM[0m] Building project '/src/second/tsconfig.json'...
 
-[[90m12:00:30 AM[0m] Project 'src/third/tsconfig.json' is out of date because output file 'src/third/thirdjs/output/third-output.tsbuildinfo' does not exist
+[[90m12:00:32 AM[0m] Project 'src/third/tsconfig.json' is out of date because output file 'src/third/thirdjs/output/third-output.tsbuildinfo' does not exist
 
-[[90m12:00:31 AM[0m] Building project '/src/third/tsconfig.json'...
+[[90m12:00:33 AM[0m] Building project '/src/third/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 
@@ -569,7 +569,7 @@ sourceFile:../second/second_part2.ts
 >>>//# sourceMappingURL=second-output.js.map
 
 //// [/src/2/second-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"../second","sourceFiles":["../second/second_part1.ts","../second/second_part2.ts"],"js":{"sections":[{"pos":35,"end":320,"kind":"text"}]},"dts":{"sections":[{"pos":35,"end":135,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"../second","sourceFiles":["../second/second_part1.ts","../second/second_part2.ts"],"js":{"sections":[{"pos":35,"end":320,"kind":"text"}]},"dts":{"sections":[{"pos":35,"end":135,"kind":"text"}]}},"program":{"options":{"composite":true,"outFile":"./second-output.js"},"outSignature":"-11559081780-#!someshebang second second_part1\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\n","dtsChangeTime":22000},"version":"FakeTSVersion"}
 
 //// [/src/2/second-output.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -634,8 +634,16 @@ declare class C {
       ]
     }
   },
+  "program": {
+    "options": {
+      "composite": true,
+      "outFile": "./second-output.js"
+    },
+    "outSignature": "-11559081780-#!someshebang second second_part1\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\n",
+    "dtsChangeTime": 22000
+  },
   "version": "FakeTSVersion",
-  "size": 257
+  "size": 533
 }
 
 //// [/src/first/bin/first-output.d.ts]
@@ -939,7 +947,7 @@ sourceFile:../first_part3.ts
 >>>//# sourceMappingURL=first-output.js.map
 
 //// [/src/first/bin/first-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"..","sourceFiles":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"js":{"sections":[{"pos":0,"end":110,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":157,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"..","sourceFiles":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"js":{"sections":[{"pos":0,"end":110,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":157,"kind":"text"}]}},"program":{"options":{"composite":true,"outFile":"./first-output.js"},"outSignature":"-16746818465-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\n","dtsChangeTime":10000},"version":"FakeTSVersion"}
 
 //// [/src/first/bin/first-output.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -997,8 +1005,16 @@ declare function f(): string;
       ]
     }
   },
+  "program": {
+    "options": {
+      "composite": true,
+      "outFile": "./first-output.js"
+    },
+    "outSignature": "-16746818465-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\n",
+    "dtsChangeTime": 10000
+  },
   "version": "FakeTSVersion",
-  "size": 252
+  "size": 551
 }
 
 //// [/src/third/thirdjs/output/third-output.d.ts]
@@ -1743,7 +1759,7 @@ sourceFile:../../third_part1.ts
 >>>//# sourceMappingURL=third-output.js.map
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"../..","sourceFiles":["../../third_part1.ts"],"js":{"sections":[{"pos":35,"end":145,"kind":"prepend","data":"../../../first/bin/first-output.js","texts":[{"pos":35,"end":145,"kind":"text"}]},{"pos":145,"end":430,"kind":"prepend","data":"../../../2/second-output.js","texts":[{"pos":145,"end":430,"kind":"text"}]},{"pos":430,"end":466,"kind":"text"}]},"dts":{"sections":[{"pos":35,"end":192,"kind":"prepend","data":"../../../first/bin/first-output.d.ts","texts":[{"pos":35,"end":192,"kind":"text"}]},{"pos":192,"end":292,"kind":"prepend","data":"../../../2/second-output.d.ts","texts":[{"pos":192,"end":292,"kind":"text"}]},{"pos":292,"end":311,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"../..","sourceFiles":["../../third_part1.ts"],"js":{"sections":[{"pos":35,"end":145,"kind":"prepend","data":"../../../first/bin/first-output.js","texts":[{"pos":35,"end":145,"kind":"text"}]},{"pos":145,"end":430,"kind":"prepend","data":"../../../2/second-output.js","texts":[{"pos":145,"end":430,"kind":"text"}]},{"pos":430,"end":466,"kind":"text"}]},"dts":{"sections":[{"pos":35,"end":192,"kind":"prepend","data":"../../../first/bin/first-output.d.ts","texts":[{"pos":35,"end":192,"kind":"text"}]},{"pos":192,"end":292,"kind":"prepend","data":"../../../2/second-output.d.ts","texts":[{"pos":192,"end":292,"kind":"text"}]},{"pos":292,"end":311,"kind":"text"}]}},"program":{"options":{"composite":true,"outFile":"./third-output.js"},"outSignature":"34342993937-#!someshebang second second_part1\r\ninterface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare var c: C;\r\n","dtsChangeTime":34000},"version":"FakeTSVersion"}
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -1896,8 +1912,16 @@ declare var c: C;
       ]
     }
   },
+  "program": {
+    "options": {
+      "composite": true,
+      "outFile": "./third-output.js"
+    },
+    "outSignature": "34342993937-#!someshebang second second_part1\r\ninterface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare var c: C;\r\n",
+    "dtsChangeTime": 34000
+  },
   "version": "FakeTSVersion",
-  "size": 724
+  "size": 1194
 }
 
 
@@ -1922,35 +1946,33 @@ console.log(s);
 
 Output::
 /lib/tsc --b /src/third --verbose
-[[90m12:00:49 AM[0m] Projects in this build: 
+[[90m12:00:52 AM[0m] Projects in this build: 
     * src/first/tsconfig.json
     * src/second/tsconfig.json
     * src/third/tsconfig.json
 
-[[90m12:00:50 AM[0m] Project 'src/first/tsconfig.json' is out of date because oldest output 'src/first/bin/first-output.tsbuildinfo' is older than newest input 'src/first/first_PART1.ts'
+[[90m12:00:53 AM[0m] Project 'src/first/tsconfig.json' is out of date because oldest output 'src/first/bin/first-output.tsbuildinfo' is older than newest input 'src/first/first_PART1.ts'
 
-[[90m12:00:51 AM[0m] Building project '/src/first/tsconfig.json'...
+[[90m12:00:54 AM[0m] Building project '/src/first/tsconfig.json'...
 
-[[90m12:01:00 AM[0m] Project 'src/second/tsconfig.json' is up to date because newest input 'src/second/second_part1.ts' is older than oldest output 'src/2/second-output.tsbuildinfo'
+[[90m12:01:03 AM[0m] Project 'src/second/tsconfig.json' is up to date because newest input 'src/second/second_part1.ts' is older than oldest output 'src/2/second-output.tsbuildinfo'
 
-[[90m12:01:01 AM[0m] Project 'src/third/tsconfig.json' is out of date because output of its dependency 'src/first' has changed
+[[90m12:01:04 AM[0m] Project 'src/third/tsconfig.json' is out of date because output of its dependency 'src/first' has changed
 
-[[90m12:01:02 AM[0m] Updating output of project '/src/third/tsconfig.json'...
+[[90m12:01:05 AM[0m] Updating output of project '/src/third/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 
 getModifiedTime:: {
  "/src/first/bin/first-output.tsbuildinfo": 1,
  "/src/first/first_PART1.ts": 1,
- "/src/first/bin/first-output.d.ts": 1,
  "/src/2/second-output.tsbuildinfo": 1,
  "/src/second/second_part1.ts": 1,
  "/src/second/second_part2.ts": 1,
  "/src/second/tsconfig.json": 1,
  "/src/third/thirdjs/output/third-output.tsbuildinfo": 1,
  "/src/third/third_part1.ts": 1,
- "/src/third/tsconfig.json": 1,
- "/src/third/thirdjs/output/third-output.d.ts": 1
+ "/src/third/tsconfig.json": 1
 }
 
 setModifiedTime:: {}
@@ -2158,7 +2180,7 @@ sourceFile:../first_part3.ts
 >>>//# sourceMappingURL=first-output.js.map
 
 //// [/src/first/bin/first-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"..","sourceFiles":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"js":{"sections":[{"pos":0,"end":127,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":157,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"..","sourceFiles":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"js":{"sections":[{"pos":0,"end":127,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":157,"kind":"text"}]}},"program":{"options":{"composite":true,"outFile":"./first-output.js"},"outSignature":"-16746818465-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\n","dtsChangeTime":10000},"version":"FakeTSVersion"}
 
 //// [/src/first/bin/first-output.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -2217,8 +2239,16 @@ declare function f(): string;
       ]
     }
   },
+  "program": {
+    "options": {
+      "composite": true,
+      "outFile": "./first-output.js"
+    },
+    "outSignature": "-16746818465-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\n",
+    "dtsChangeTime": 10000
+  },
   "version": "FakeTSVersion",
-  "size": 252
+  "size": 551
 }
 
 //// [/src/third/thirdjs/output/third-output.js]
@@ -2725,7 +2755,7 @@ sourceFile:../../third_part1.ts
 >>>//# sourceMappingURL=third-output.js.map
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"../..","sourceFiles":["../../third_part1.ts"],"js":{"sections":[{"pos":35,"end":162,"kind":"prepend","data":"../../../first/bin/first-output.js","texts":[{"pos":35,"end":162,"kind":"text"}]},{"pos":162,"end":447,"kind":"prepend","data":"../../../2/second-output.js","texts":[{"pos":162,"end":447,"kind":"text"}]},{"pos":447,"end":483,"kind":"text"}]},"dts":{"sections":[{"pos":35,"end":192,"kind":"prepend","data":"../../../first/bin/first-output.d.ts","texts":[{"pos":35,"end":192,"kind":"text"}]},{"pos":192,"end":292,"kind":"prepend","data":"../../../2/second-output.d.ts","texts":[{"pos":192,"end":292,"kind":"text"}]},{"pos":292,"end":311,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"../..","sourceFiles":["../../third_part1.ts"],"js":{"sections":[{"pos":35,"end":162,"kind":"prepend","data":"../../../first/bin/first-output.js","texts":[{"pos":35,"end":162,"kind":"text"}]},{"pos":162,"end":447,"kind":"prepend","data":"../../../2/second-output.js","texts":[{"pos":162,"end":447,"kind":"text"}]},{"pos":447,"end":483,"kind":"text"}]},"dts":{"sections":[{"pos":35,"end":192,"kind":"prepend","data":"../../../first/bin/first-output.d.ts","texts":[{"pos":35,"end":192,"kind":"text"}]},{"pos":192,"end":292,"kind":"prepend","data":"../../../2/second-output.d.ts","texts":[{"pos":192,"end":292,"kind":"text"}]},{"pos":292,"end":311,"kind":"text"}]}},"program":{"options":{"composite":true,"outFile":"./third-output.js"},"outSignature":"34342993937-#!someshebang second second_part1\r\ninterface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare var c: C;\r\n","dtsChangeTime":34000},"version":"FakeTSVersion"}
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -2879,7 +2909,15 @@ declare var c: C;
       ]
     }
   },
+  "program": {
+    "options": {
+      "composite": true,
+      "outFile": "./third-output.js"
+    },
+    "outSignature": "34342993937-#!someshebang second second_part1\r\ninterface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare var c: C;\r\n",
+    "dtsChangeTime": 34000
+  },
   "version": "FakeTSVersion",
-  "size": 724
+  "size": 1194
 }
 

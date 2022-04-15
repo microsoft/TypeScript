@@ -38,7 +38,7 @@ Output::
 >> Screen clear
 [[90m12:00:29 AM[0m] Starting compilation in watch mode...
 
-[[90m12:00:52 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:54 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -94,7 +94,7 @@ declare function foo(): number;
 
 
 //// [/user/username/projects/sample1/core/index.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./index.ts"],"js":{"sections":[{"pos":0,"end":30,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":32,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./index.ts"],"js":{"sections":[{"pos":0,"end":30,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":32,"kind":"text"}]}},"program":{"options":{"composite":true,"outFile":"./index.js"},"outSignature":"517738360-declare function foo(): number;\n","dtsChangeTime":30000},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/sample1/core/index.tsbuildinfo.readable.baseline.txt]
 {
@@ -122,8 +122,16 @@ declare function foo(): number;
       ]
     }
   },
+  "program": {
+    "options": {
+      "composite": true,
+      "outFile": "./index.js"
+    },
+    "outSignature": "517738360-declare function foo(): number;\n",
+    "dtsChangeTime": 30000
+  },
   "version": "FakeTSVersion",
-  "size": 203
+  "size": 350
 }
 
 //// [/user/username/projects/sample1/core/index.tsbuildinfo.baseline.txt]
@@ -154,7 +162,7 @@ declare function bar(): number;
 
 
 //// [/user/username/projects/sample1/logic/index.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./index.ts"],"js":{"sections":[{"pos":0,"end":30,"kind":"prepend","data":"../core/index.js","texts":[{"pos":0,"end":30,"kind":"text"}]},{"pos":30,"end":69,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":32,"kind":"prepend","data":"../core/index.d.ts","texts":[{"pos":0,"end":32,"kind":"text"}]},{"pos":32,"end":64,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./index.ts"],"js":{"sections":[{"pos":0,"end":30,"kind":"prepend","data":"../core/index.js","texts":[{"pos":0,"end":30,"kind":"text"}]},{"pos":30,"end":69,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":32,"kind":"prepend","data":"../core/index.d.ts","texts":[{"pos":0,"end":32,"kind":"text"}]},{"pos":32,"end":64,"kind":"text"}]}},"program":{"options":{"composite":true,"outFile":"./index.js"},"outSignature":"9641219228-declare function foo(): number;\ndeclare function bar(): number;\n","dtsChangeTime":42000},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/sample1/logic/index.tsbuildinfo.readable.baseline.txt]
 {
@@ -208,8 +216,16 @@ declare function bar(): number;
       ]
     }
   },
+  "program": {
+    "options": {
+      "composite": true,
+      "outFile": "./index.js"
+    },
+    "outSignature": "9641219228-declare function foo(): number;\ndeclare function bar(): number;\n",
+    "dtsChangeTime": 42000
+  },
   "version": "FakeTSVersion",
-  "size": 417
+  "size": 598
 }
 
 //// [/user/username/projects/sample1/logic/index.tsbuildinfo.baseline.txt]
@@ -284,7 +300,7 @@ setModifiedTimes:: {}
 
 Output::
 >> Screen clear
-[[90m12:00:56 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:58 AM[0m] File change detected. Starting incremental compilation...
 
 
 
@@ -330,7 +346,7 @@ declare function myFunc(): number;
 
 
 //// [/user/username/projects/sample1/core/index.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./index.ts"],"js":{"sections":[{"pos":0,"end":63,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":67,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./index.ts"],"js":{"sections":[{"pos":0,"end":63,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":67,"kind":"text"}]}},"program":{"options":{"composite":true,"outFile":"./index.js"},"outSignature":"2172043225-declare function foo(): number;\ndeclare function myFunc(): number;\n","dtsChangeTime":59000},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/sample1/core/index.tsbuildinfo.readable.baseline.txt]
 {
@@ -358,8 +374,16 @@ declare function myFunc(): number;
       ]
     }
   },
+  "program": {
+    "options": {
+      "composite": true,
+      "outFile": "./index.js"
+    },
+    "outSignature": "2172043225-declare function foo(): number;\ndeclare function myFunc(): number;\n",
+    "dtsChangeTime": 59000
+  },
   "version": "FakeTSVersion",
-  "size": 203
+  "size": 387
 }
 
 //// [/user/username/projects/sample1/core/index.tsbuildinfo.baseline.txt]
@@ -412,7 +436,7 @@ getModifiedTimes:: {}
 setModifiedTimes:: {} 
 
 Output::
-[[90m12:01:29 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:33 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -462,7 +486,7 @@ declare function bar(): number;
 
 
 //// [/user/username/projects/sample1/logic/index.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./index.ts"],"js":{"sections":[{"pos":0,"end":63,"kind":"prepend","data":"../core/index.js","texts":[{"pos":0,"end":63,"kind":"text"}]},{"pos":63,"end":102,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":67,"kind":"prepend","data":"../core/index.d.ts","texts":[{"pos":0,"end":67,"kind":"text"}]},{"pos":67,"end":99,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./index.ts"],"js":{"sections":[{"pos":0,"end":63,"kind":"prepend","data":"../core/index.js","texts":[{"pos":0,"end":63,"kind":"text"}]},{"pos":63,"end":102,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":67,"kind":"prepend","data":"../core/index.d.ts","texts":[{"pos":0,"end":67,"kind":"text"}]},{"pos":67,"end":99,"kind":"text"}]}},"program":{"options":{"composite":true,"outFile":"./index.js"},"outSignature":"-2581247747-declare function foo(): number;\ndeclare function myFunc(): number;\ndeclare function bar(): number;\n","dtsChangeTime":76000},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/sample1/logic/index.tsbuildinfo.readable.baseline.txt]
 {
@@ -516,8 +540,16 @@ declare function bar(): number;
       ]
     }
   },
+  "program": {
+    "options": {
+      "composite": true,
+      "outFile": "./index.js"
+    },
+    "outSignature": "-2581247747-declare function foo(): number;\ndeclare function myFunc(): number;\ndeclare function bar(): number;\n",
+    "dtsChangeTime": 76000
+  },
   "version": "FakeTSVersion",
-  "size": 418
+  "size": 636
 }
 
 //// [/user/username/projects/sample1/logic/index.tsbuildinfo.baseline.txt]
@@ -589,7 +621,7 @@ setModifiedTimes:: {}
 
 Output::
 >> Screen clear
-[[90m12:01:33 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:37 AM[0m] File change detected. Starting incremental compilation...
 
 
 
@@ -631,7 +663,7 @@ function myFunc() { return 100; }
 
 //// [/user/username/projects/sample1/core/index.d.ts] file written with same contents
 //// [/user/username/projects/sample1/core/index.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./index.ts"],"js":{"sections":[{"pos":0,"end":64,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":67,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./index.ts"],"js":{"sections":[{"pos":0,"end":64,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":67,"kind":"text"}]}},"program":{"options":{"composite":true,"outFile":"./index.js"},"outSignature":"2172043225-declare function foo(): number;\ndeclare function myFunc(): number;\n","dtsChangeTime":59000},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/sample1/core/index.tsbuildinfo.readable.baseline.txt]
 {
@@ -659,8 +691,16 @@ function myFunc() { return 100; }
       ]
     }
   },
+  "program": {
+    "options": {
+      "composite": true,
+      "outFile": "./index.js"
+    },
+    "outSignature": "2172043225-declare function foo(): number;\ndeclare function myFunc(): number;\n",
+    "dtsChangeTime": 59000
+  },
   "version": "FakeTSVersion",
-  "size": 203
+  "size": 387
 }
 
 //// [/user/username/projects/sample1/core/index.tsbuildinfo.baseline.txt]
@@ -696,9 +736,7 @@ directoryExists:: {
  "/node_modules/@types": 1
 } 
 
-getModifiedTimes:: {
- "/user/username/projects/sample1/core/index.d.ts": 1
-} 
+getModifiedTimes:: {} 
 
 setModifiedTimes:: {} 
 
@@ -715,7 +753,7 @@ getModifiedTimes:: {}
 setModifiedTimes:: {} 
 
 Output::
-[[90m12:02:03 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:02:07 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -747,7 +785,7 @@ function bar() { return foo() + 1; }
 
 
 //// [/user/username/projects/sample1/logic/index.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./index.ts"],"js":{"sections":[{"pos":0,"end":64,"kind":"prepend","data":"../core/index.js","texts":[{"pos":0,"end":64,"kind":"text"}]},{"pos":64,"end":103,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":67,"kind":"prepend","data":"../core/index.d.ts","texts":[{"pos":0,"end":67,"kind":"text"}]},{"pos":67,"end":99,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./index.ts"],"js":{"sections":[{"pos":0,"end":64,"kind":"prepend","data":"../core/index.js","texts":[{"pos":0,"end":64,"kind":"text"}]},{"pos":64,"end":103,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":67,"kind":"prepend","data":"../core/index.d.ts","texts":[{"pos":0,"end":67,"kind":"text"}]},{"pos":67,"end":99,"kind":"text"}]}},"program":{"options":{"composite":true,"outFile":"./index.js"},"outSignature":"-2581247747-declare function foo(): number;\ndeclare function myFunc(): number;\ndeclare function bar(): number;\n","dtsChangeTime":76000},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/sample1/logic/index.tsbuildinfo.readable.baseline.txt]
 {
@@ -801,8 +839,16 @@ function bar() { return foo() + 1; }
       ]
     }
   },
+  "program": {
+    "options": {
+      "composite": true,
+      "outFile": "./index.js"
+    },
+    "outSignature": "-2581247747-declare function foo(): number;\ndeclare function myFunc(): number;\ndeclare function bar(): number;\n",
+    "dtsChangeTime": 76000
+  },
   "version": "FakeTSVersion",
-  "size": 418
+  "size": 636
 }
 
 //// [/user/username/projects/sample1/logic/index.tsbuildinfo.baseline.txt]
@@ -844,8 +890,6 @@ fileExists:: {
 
 directoryExists:: {} 
 
-getModifiedTimes:: {
- "/user/username/projects/sample1/logic/index.d.ts": 1
-} 
+getModifiedTimes:: {} 
 
 setModifiedTimes:: {} 

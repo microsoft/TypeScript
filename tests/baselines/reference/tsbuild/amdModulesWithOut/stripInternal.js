@@ -103,9 +103,9 @@ Output::
 
 [[90m12:00:11 AM[0m] Building project '/src/lib/tsconfig.json'...
 
-[[90m12:00:20 AM[0m] Project 'src/app/tsconfig.json' is out of date because output file 'src/app/module.tsbuildinfo' does not exist
+[[90m12:00:21 AM[0m] Project 'src/app/tsconfig.json' is out of date because output file 'src/app/module.tsbuildinfo' does not exist
 
-[[90m12:00:21 AM[0m] Building project '/src/app/tsconfig.json'...
+[[90m12:00:22 AM[0m] Building project '/src/app/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 
@@ -2021,7 +2021,7 @@ sourceFile:file4.ts
 >>>//# sourceMappingURL=module.js.map
 
 //// [/src/app/module.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file3.ts","./file4.ts"],"js":{"sections":[{"pos":0,"end":4382,"kind":"prepend","data":"../lib/module.js","texts":[{"pos":0,"end":4382,"kind":"text"}]},{"pos":4382,"end":4608,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":217,"kind":"prepend","data":"../lib/module.d.ts","texts":[{"pos":0,"end":217,"kind":"text"}]},{"pos":217,"end":299,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file3.ts","./file4.ts"],"js":{"sections":[{"pos":0,"end":4382,"kind":"prepend","data":"../lib/module.js","texts":[{"pos":0,"end":4382,"kind":"text"}]},{"pos":4382,"end":4608,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":217,"kind":"prepend","data":"../lib/module.d.ts","texts":[{"pos":0,"end":217,"kind":"text"}]},{"pos":217,"end":299,"kind":"text"}]}},"program":{"options":{"composite":true,"outFile":"./module.js"},"outSignature":"21439035937-declare module \"file1\" {\r\n    export const x = 10;\r\n    export class normalC {\r\n    }\r\n    export namespace normalN {\r\n    }\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\ndeclare module \"file3\" {\r\n    export const z = 30;\r\n}\r\ndeclare const myVar = 30;\r\n","dtsChangeTime":23000},"version":"FakeTSVersion"}
 
 //// [/src/app/module.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -2226,8 +2226,16 @@ declare const myVar = 30;
       ]
     }
   },
+  "program": {
+    "options": {
+      "composite": true,
+      "outFile": "./module.js"
+    },
+    "outSignature": "21439035937-declare module \"file1\" {\r\n    export const x = 10;\r\n    export class normalC {\r\n    }\r\n    export namespace normalN {\r\n    }\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\ndeclare module \"file3\" {\r\n    export const z = 30;\r\n}\r\ndeclare const myVar = 30;\r\n",
+    "dtsChangeTime": 23000
+  },
   "version": "FakeTSVersion",
-  "size": 442
+  "size": 894
 }
 
 //// [/src/lib/module.d.ts]
@@ -4609,7 +4617,7 @@ sourceFile:global.ts
 >>>//# sourceMappingURL=module.js.map
 
 //// [/src/lib/module.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file0.ts","./file1.ts","./file2.ts","./global.ts"],"js":{"sections":[{"pos":0,"end":4382,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":26,"kind":"internal"},{"pos":28,"end":108,"kind":"text"},{"pos":108,"end":233,"kind":"internal"},{"pos":235,"end":274,"kind":"text"},{"pos":274,"end":742,"kind":"internal"},{"pos":744,"end":751,"kind":"text"},{"pos":751,"end":1240,"kind":"internal"},{"pos":1242,"end":1333,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file0.ts","./file1.ts","./file2.ts","./global.ts"],"js":{"sections":[{"pos":0,"end":4382,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":26,"kind":"internal"},{"pos":28,"end":108,"kind":"text"},{"pos":108,"end":233,"kind":"internal"},{"pos":235,"end":274,"kind":"text"},{"pos":274,"end":742,"kind":"internal"},{"pos":744,"end":751,"kind":"text"},{"pos":751,"end":1240,"kind":"internal"},{"pos":1242,"end":1333,"kind":"text"}]}},"program":{"options":{"composite":true,"outFile":"./module.js"},"outSignature":"16122271483-declare const myGlob = 20;\r\ndeclare module \"file1\" {\r\n    export const x = 10;\r\n    export class normalC {\r\n        constructor();\r\n        prop: string;\r\n        method(): void;\r\n        get c(): number;\r\n        set c(val: number);\r\n    }\r\n    export namespace normalN {\r\n        class C {\r\n        }\r\n        function foo(): void;\r\n        namespace someNamespace {\r\n            class C {\r\n            }\r\n        }\r\n        namespace someOther.something {\r\n            class someClass {\r\n            }\r\n        }\r\n        export import someImport = someNamespace.C;\r\n        type internalType = internalC;\r\n        const internalConst = 10;\r\n        enum internalEnum {\r\n            a = 0,\r\n            b = 1,\r\n            c = 2\r\n        }\r\n    }\r\n    export class internalC {\r\n    }\r\n    export function internalfoo(): void;\r\n    export namespace internalNamespace {\r\n        class someClass {\r\n        }\r\n    }\r\n    export namespace internalOther.something {\r\n        class someClass {\r\n        }\r\n    }\r\n    export import internalImport = internalNamespace.someClass;\r\n    export type internalType = internalC;\r\n    export const internalConst = 10;\r\n    export enum internalEnum {\r\n        a = 0,\r\n        b = 1,\r\n        c = 2\r\n    }\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\n","dtsChangeTime":12000},"version":"FakeTSVersion"}
 
 //// [/src/lib/module.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -4865,8 +4873,16 @@ declare const globalConst = 10;
       ]
     }
   },
+  "program": {
+    "options": {
+      "composite": true,
+      "outFile": "./module.js"
+    },
+    "outSignature": "16122271483-declare const myGlob = 20;\r\ndeclare module \"file1\" {\r\n    export const x = 10;\r\n    export class normalC {\r\n        constructor();\r\n        prop: string;\r\n        method(): void;\r\n        get c(): number;\r\n        set c(val: number);\r\n    }\r\n    export namespace normalN {\r\n        class C {\r\n        }\r\n        function foo(): void;\r\n        namespace someNamespace {\r\n            class C {\r\n            }\r\n        }\r\n        namespace someOther.something {\r\n            class someClass {\r\n            }\r\n        }\r\n        export import someImport = someNamespace.C;\r\n        type internalType = internalC;\r\n        const internalConst = 10;\r\n        enum internalEnum {\r\n            a = 0,\r\n            b = 1,\r\n            c = 2\r\n        }\r\n    }\r\n    export class internalC {\r\n    }\r\n    export function internalfoo(): void;\r\n    export namespace internalNamespace {\r\n        class someClass {\r\n        }\r\n    }\r\n    export namespace internalOther.something {\r\n        class someClass {\r\n        }\r\n    }\r\n    export import internalImport = internalNamespace.someClass;\r\n    export type internalType = internalC;\r\n    export const internalConst = 10;\r\n    export enum internalEnum {\r\n        a = 0,\r\n        b = 1,\r\n        c = 2\r\n    }\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\n",
+    "dtsChangeTime": 12000
+  },
   "version": "FakeTSVersion",
-  "size": 515
+  "size": 2079
 }
 
 
@@ -4905,17 +4921,17 @@ export namespace normalN {
 
 Output::
 /lib/tsc --b /src/app --verbose
-[[90m12:00:35 AM[0m] Projects in this build: 
+[[90m12:00:37 AM[0m] Projects in this build: 
     * src/lib/tsconfig.json
     * src/app/tsconfig.json
 
-[[90m12:00:36 AM[0m] Project 'src/lib/tsconfig.json' is out of date because oldest output 'src/lib/module.tsbuildinfo' is older than newest input 'src/lib/file1.ts'
+[[90m12:00:38 AM[0m] Project 'src/lib/tsconfig.json' is out of date because oldest output 'src/lib/module.tsbuildinfo' is older than newest input 'src/lib/file1.ts'
 
-[[90m12:00:37 AM[0m] Building project '/src/lib/tsconfig.json'...
+[[90m12:00:39 AM[0m] Building project '/src/lib/tsconfig.json'...
 
-[[90m12:00:46 AM[0m] Project 'src/app/tsconfig.json' is out of date because output of its dependency 'src/lib' has changed
+[[90m12:00:48 AM[0m] Project 'src/app/tsconfig.json' is out of date because output of its dependency 'src/lib' has changed
 
-[[90m12:00:47 AM[0m] Updating output of project '/src/app/tsconfig.json'...
+[[90m12:00:49 AM[0m] Updating output of project '/src/app/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 
@@ -4923,12 +4939,10 @@ getModifiedTime:: {
  "/src/lib/module.tsbuildinfo": 1,
  "/src/lib/file0.ts": 1,
  "/src/lib/file1.ts": 1,
- "/src/lib/module.d.ts": 1,
  "/src/app/module.tsbuildinfo": 1,
  "/src/app/file3.ts": 1,
  "/src/app/file4.ts": 1,
- "/src/app/tsconfig.json": 1,
- "/src/app/module.d.ts": 1
+ "/src/app/tsconfig.json": 1
 }
 
 setModifiedTime:: {}
@@ -6617,7 +6631,7 @@ sourceFile:file4.ts
 >>>//# sourceMappingURL=module.js.map
 
 //// [/src/app/module.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file3.ts","./file4.ts"],"js":{"sections":[{"pos":0,"end":4411,"kind":"prepend","data":"../lib/module.js","texts":[{"pos":0,"end":4411,"kind":"text"}]},{"pos":4411,"end":4637,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":217,"kind":"prepend","data":"../lib/module.d.ts","texts":[{"pos":0,"end":217,"kind":"text"}]},{"pos":217,"end":299,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file3.ts","./file4.ts"],"js":{"sections":[{"pos":0,"end":4411,"kind":"prepend","data":"../lib/module.js","texts":[{"pos":0,"end":4411,"kind":"text"}]},{"pos":4411,"end":4637,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":217,"kind":"prepend","data":"../lib/module.d.ts","texts":[{"pos":0,"end":217,"kind":"text"}]},{"pos":217,"end":299,"kind":"text"}]}},"program":{"options":{"composite":true,"outFile":"./module.js"},"outSignature":"21439035937-declare module \"file1\" {\r\n    export const x = 10;\r\n    export class normalC {\r\n    }\r\n    export namespace normalN {\r\n    }\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\ndeclare module \"file3\" {\r\n    export const z = 30;\r\n}\r\ndeclare const myVar = 30;\r\n","dtsChangeTime":23000},"version":"FakeTSVersion"}
 
 //// [/src/app/module.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -6823,8 +6837,16 @@ declare const myVar = 30;
       ]
     }
   },
+  "program": {
+    "options": {
+      "composite": true,
+      "outFile": "./module.js"
+    },
+    "outSignature": "21439035937-declare module \"file1\" {\r\n    export const x = 10;\r\n    export class normalC {\r\n    }\r\n    export namespace normalN {\r\n    }\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\ndeclare module \"file3\" {\r\n    export const z = 30;\r\n}\r\ndeclare const myVar = 30;\r\n",
+    "dtsChangeTime": 23000
+  },
   "version": "FakeTSVersion",
-  "size": 442
+  "size": 894
 }
 
 //// [/src/lib/module.d.ts] file written with same contents
@@ -8439,7 +8461,7 @@ sourceFile:global.ts
 >>>//# sourceMappingURL=module.js.map
 
 //// [/src/lib/module.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file0.ts","./file1.ts","./file2.ts","./global.ts"],"js":{"sections":[{"pos":0,"end":4411,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":26,"kind":"internal"},{"pos":28,"end":108,"kind":"text"},{"pos":108,"end":233,"kind":"internal"},{"pos":235,"end":274,"kind":"text"},{"pos":274,"end":742,"kind":"internal"},{"pos":744,"end":751,"kind":"text"},{"pos":751,"end":1240,"kind":"internal"},{"pos":1242,"end":1333,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file0.ts","./file1.ts","./file2.ts","./global.ts"],"js":{"sections":[{"pos":0,"end":4411,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":26,"kind":"internal"},{"pos":28,"end":108,"kind":"text"},{"pos":108,"end":233,"kind":"internal"},{"pos":235,"end":274,"kind":"text"},{"pos":274,"end":742,"kind":"internal"},{"pos":744,"end":751,"kind":"text"},{"pos":751,"end":1240,"kind":"internal"},{"pos":1242,"end":1333,"kind":"text"}]}},"program":{"options":{"composite":true,"outFile":"./module.js"},"outSignature":"16122271483-declare const myGlob = 20;\r\ndeclare module \"file1\" {\r\n    export const x = 10;\r\n    export class normalC {\r\n        constructor();\r\n        prop: string;\r\n        method(): void;\r\n        get c(): number;\r\n        set c(val: number);\r\n    }\r\n    export namespace normalN {\r\n        class C {\r\n        }\r\n        function foo(): void;\r\n        namespace someNamespace {\r\n            class C {\r\n            }\r\n        }\r\n        namespace someOther.something {\r\n            class someClass {\r\n            }\r\n        }\r\n        export import someImport = someNamespace.C;\r\n        type internalType = internalC;\r\n        const internalConst = 10;\r\n        enum internalEnum {\r\n            a = 0,\r\n            b = 1,\r\n            c = 2\r\n        }\r\n    }\r\n    export class internalC {\r\n    }\r\n    export function internalfoo(): void;\r\n    export namespace internalNamespace {\r\n        class someClass {\r\n        }\r\n    }\r\n    export namespace internalOther.something {\r\n        class someClass {\r\n        }\r\n    }\r\n    export import internalImport = internalNamespace.someClass;\r\n    export type internalType = internalC;\r\n    export const internalConst = 10;\r\n    export enum internalEnum {\r\n        a = 0,\r\n        b = 1,\r\n        c = 2\r\n    }\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\n","dtsChangeTime":12000},"version":"FakeTSVersion"}
 
 //// [/src/lib/module.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -8696,8 +8718,16 @@ declare const globalConst = 10;
       ]
     }
   },
+  "program": {
+    "options": {
+      "composite": true,
+      "outFile": "./module.js"
+    },
+    "outSignature": "16122271483-declare const myGlob = 20;\r\ndeclare module \"file1\" {\r\n    export const x = 10;\r\n    export class normalC {\r\n        constructor();\r\n        prop: string;\r\n        method(): void;\r\n        get c(): number;\r\n        set c(val: number);\r\n    }\r\n    export namespace normalN {\r\n        class C {\r\n        }\r\n        function foo(): void;\r\n        namespace someNamespace {\r\n            class C {\r\n            }\r\n        }\r\n        namespace someOther.something {\r\n            class someClass {\r\n            }\r\n        }\r\n        export import someImport = someNamespace.C;\r\n        type internalType = internalC;\r\n        const internalConst = 10;\r\n        enum internalEnum {\r\n            a = 0,\r\n            b = 1,\r\n            c = 2\r\n        }\r\n    }\r\n    export class internalC {\r\n    }\r\n    export function internalfoo(): void;\r\n    export namespace internalNamespace {\r\n        class someClass {\r\n        }\r\n    }\r\n    export namespace internalOther.something {\r\n        class someClass {\r\n        }\r\n    }\r\n    export import internalImport = internalNamespace.someClass;\r\n    export type internalType = internalC;\r\n    export const internalConst = 10;\r\n    export enum internalEnum {\r\n        a = 0,\r\n        b = 1,\r\n        c = 2\r\n    }\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\n",
+    "dtsChangeTime": 12000
+  },
   "version": "FakeTSVersion",
-  "size": 515
+  "size": 2079
 }
 
 
@@ -8736,17 +8766,17 @@ export namespace normalN {
 
 Output::
 /lib/tsc --b /src/app --verbose
-[[90m12:00:58 AM[0m] Projects in this build: 
+[[90m12:01:00 AM[0m] Projects in this build: 
     * src/lib/tsconfig.json
     * src/app/tsconfig.json
 
-[[90m12:00:59 AM[0m] Project 'src/lib/tsconfig.json' is out of date because oldest output 'src/lib/module.tsbuildinfo' is older than newest input 'src/lib/file1.ts'
+[[90m12:01:01 AM[0m] Project 'src/lib/tsconfig.json' is out of date because oldest output 'src/lib/module.tsbuildinfo' is older than newest input 'src/lib/file1.ts'
 
-[[90m12:01:00 AM[0m] Building project '/src/lib/tsconfig.json'...
+[[90m12:01:02 AM[0m] Building project '/src/lib/tsconfig.json'...
 
-[[90m12:01:09 AM[0m] Project 'src/app/tsconfig.json' is out of date because output of its dependency 'src/lib' has changed
+[[90m12:01:11 AM[0m] Project 'src/app/tsconfig.json' is out of date because output of its dependency 'src/lib' has changed
 
-[[90m12:01:10 AM[0m] Updating output of project '/src/app/tsconfig.json'...
+[[90m12:01:12 AM[0m] Updating output of project '/src/app/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 
@@ -8754,7 +8784,6 @@ getModifiedTime:: {
  "/src/lib/module.tsbuildinfo": 1,
  "/src/lib/file0.ts": 1,
  "/src/lib/file1.ts": 1,
- "/src/lib/module.d.ts": 1,
  "/src/app/module.tsbuildinfo": 1,
  "/src/app/file3.ts": 1,
  "/src/app/file4.ts": 1,
@@ -10654,7 +10683,7 @@ sourceFile:file4.ts
 >>>//# sourceMappingURL=module.js.map
 
 //// [/src/app/module.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file3.ts","./file4.ts"],"js":{"sections":[{"pos":0,"end":4425,"kind":"prepend","data":"../lib/module.js","texts":[{"pos":0,"end":4425,"kind":"text"}]},{"pos":4425,"end":4651,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":191,"kind":"prepend","data":"../lib/module.d.ts","texts":[{"pos":0,"end":191,"kind":"text"}]},{"pos":191,"end":273,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file3.ts","./file4.ts"],"js":{"sections":[{"pos":0,"end":4425,"kind":"prepend","data":"../lib/module.js","texts":[{"pos":0,"end":4425,"kind":"text"}]},{"pos":4425,"end":4651,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":191,"kind":"prepend","data":"../lib/module.d.ts","texts":[{"pos":0,"end":191,"kind":"text"}]},{"pos":191,"end":273,"kind":"text"}]}},"program":{"options":{"composite":true,"outFile":"./module.js"},"outSignature":"22164052496-declare module \"file1\" {\r\n    export class normalC {\r\n    }\r\n    export namespace normalN {\r\n    }\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\ndeclare module \"file3\" {\r\n    export const z = 30;\r\n}\r\ndeclare const myVar = 30;\r\n","dtsChangeTime":73000},"version":"FakeTSVersion"}
 
 //// [/src/app/module.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -10859,8 +10888,16 @@ declare const myVar = 30;
       ]
     }
   },
+  "program": {
+    "options": {
+      "composite": true,
+      "outFile": "./module.js"
+    },
+    "outSignature": "22164052496-declare module \"file1\" {\r\n    export class normalC {\r\n    }\r\n    export namespace normalN {\r\n    }\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\ndeclare module \"file3\" {\r\n    export const z = 30;\r\n}\r\ndeclare const myVar = 30;\r\n",
+    "dtsChangeTime": 73000
+  },
   "version": "FakeTSVersion",
-  "size": 442
+  "size": 866
 }
 
 //// [/src/lib/module.d.ts] file written with same contents
@@ -13218,7 +13255,7 @@ sourceFile:global.ts
 >>>//# sourceMappingURL=module.js.map
 
 //// [/src/lib/module.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file0.ts","./file1.ts","./file2.ts","./global.ts"],"js":{"sections":[{"pos":0,"end":4425,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":26,"kind":"internal"},{"pos":28,"end":54,"kind":"text"},{"pos":54,"end":78,"kind":"internal"},{"pos":80,"end":108,"kind":"text"},{"pos":108,"end":233,"kind":"internal"},{"pos":235,"end":274,"kind":"text"},{"pos":274,"end":742,"kind":"internal"},{"pos":744,"end":751,"kind":"text"},{"pos":751,"end":1240,"kind":"internal"},{"pos":1242,"end":1333,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file0.ts","./file1.ts","./file2.ts","./global.ts"],"js":{"sections":[{"pos":0,"end":4425,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":26,"kind":"internal"},{"pos":28,"end":54,"kind":"text"},{"pos":54,"end":78,"kind":"internal"},{"pos":80,"end":108,"kind":"text"},{"pos":108,"end":233,"kind":"internal"},{"pos":235,"end":274,"kind":"text"},{"pos":274,"end":742,"kind":"internal"},{"pos":744,"end":751,"kind":"text"},{"pos":751,"end":1240,"kind":"internal"},{"pos":1242,"end":1333,"kind":"text"}]}},"program":{"options":{"composite":true,"outFile":"./module.js"},"outSignature":"16122271483-declare const myGlob = 20;\r\ndeclare module \"file1\" {\r\n    export const x = 10;\r\n    export class normalC {\r\n        constructor();\r\n        prop: string;\r\n        method(): void;\r\n        get c(): number;\r\n        set c(val: number);\r\n    }\r\n    export namespace normalN {\r\n        class C {\r\n        }\r\n        function foo(): void;\r\n        namespace someNamespace {\r\n            class C {\r\n            }\r\n        }\r\n        namespace someOther.something {\r\n            class someClass {\r\n            }\r\n        }\r\n        export import someImport = someNamespace.C;\r\n        type internalType = internalC;\r\n        const internalConst = 10;\r\n        enum internalEnum {\r\n            a = 0,\r\n            b = 1,\r\n            c = 2\r\n        }\r\n    }\r\n    export class internalC {\r\n    }\r\n    export function internalfoo(): void;\r\n    export namespace internalNamespace {\r\n        class someClass {\r\n        }\r\n    }\r\n    export namespace internalOther.something {\r\n        class someClass {\r\n        }\r\n    }\r\n    export import internalImport = internalNamespace.someClass;\r\n    export type internalType = internalC;\r\n    export const internalConst = 10;\r\n    export enum internalEnum {\r\n        a = 0,\r\n        b = 1,\r\n        c = 2\r\n    }\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\n","dtsChangeTime":12000},"version":"FakeTSVersion"}
 
 //// [/src/lib/module.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -13490,7 +13527,15 @@ declare const globalConst = 10;
       ]
     }
   },
+  "program": {
+    "options": {
+      "composite": true,
+      "outFile": "./module.js"
+    },
+    "outSignature": "16122271483-declare const myGlob = 20;\r\ndeclare module \"file1\" {\r\n    export const x = 10;\r\n    export class normalC {\r\n        constructor();\r\n        prop: string;\r\n        method(): void;\r\n        get c(): number;\r\n        set c(val: number);\r\n    }\r\n    export namespace normalN {\r\n        class C {\r\n        }\r\n        function foo(): void;\r\n        namespace someNamespace {\r\n            class C {\r\n            }\r\n        }\r\n        namespace someOther.something {\r\n            class someClass {\r\n            }\r\n        }\r\n        export import someImport = someNamespace.C;\r\n        type internalType = internalC;\r\n        const internalConst = 10;\r\n        enum internalEnum {\r\n            a = 0,\r\n            b = 1,\r\n            c = 2\r\n        }\r\n    }\r\n    export class internalC {\r\n    }\r\n    export function internalfoo(): void;\r\n    export namespace internalNamespace {\r\n        class someClass {\r\n        }\r\n    }\r\n    export namespace internalOther.something {\r\n        class someClass {\r\n        }\r\n    }\r\n    export import internalImport = internalNamespace.someClass;\r\n    export type internalType = internalC;\r\n    export const internalConst = 10;\r\n    export enum internalEnum {\r\n        a = 0,\r\n        b = 1,\r\n        c = 2\r\n    }\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\n",
+    "dtsChangeTime": 12000
+  },
   "version": "FakeTSVersion",
-  "size": 587
+  "size": 2151
 }
 

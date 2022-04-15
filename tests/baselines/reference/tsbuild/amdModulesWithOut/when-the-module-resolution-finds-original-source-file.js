@@ -77,9 +77,9 @@ Output::
 
 [[90m12:00:10 AM[0m] Building project '/src/lib/tsconfig.json'...
 
-[[90m12:00:19 AM[0m] Project 'src/app/tsconfig.json' is out of date because output file 'src/app/module.tsbuildinfo' does not exist
+[[90m12:00:20 AM[0m] Project 'src/app/tsconfig.json' is out of date because output file 'src/app/module.tsbuildinfo' does not exist
 
-[[90m12:00:20 AM[0m] Building project '/src/app/tsconfig.json'...
+[[90m12:00:21 AM[0m] Building project '/src/app/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 
@@ -495,7 +495,7 @@ sourceFile:file4.ts
 >>>//# sourceMappingURL=module.js.map
 
 //// [/src/app/module.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file3.ts","./file4.ts"],"js":{"sections":[{"pos":0,"end":467,"kind":"prepend","data":"../module.js","texts":[{"pos":0,"end":467,"kind":"text"}]},{"pos":467,"end":693,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":179,"kind":"prepend","data":"../module.d.ts","texts":[{"pos":0,"end":179,"kind":"text"}]},{"pos":179,"end":261,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file3.ts","./file4.ts"],"js":{"sections":[{"pos":0,"end":467,"kind":"prepend","data":"../module.js","texts":[{"pos":0,"end":467,"kind":"text"}]},{"pos":467,"end":693,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":179,"kind":"prepend","data":"../module.d.ts","texts":[{"pos":0,"end":179,"kind":"text"}]},{"pos":179,"end":261,"kind":"text"}]}},"program":{"options":{"composite":true,"outFile":"./module.js"},"outSignature":"22493213257-declare const myGlob = 20;\r\ndeclare module \"lib/file1\" {\r\n    export const x = 10;\r\n}\r\ndeclare module \"lib/file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\ndeclare module \"file3\" {\r\n    export const z = 30;\r\n}\r\ndeclare const myVar = 30;\r\n","dtsChangeTime":22000},"version":"FakeTSVersion"}
 
 //// [/src/app/module.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -607,8 +607,16 @@ declare const myVar = 30;
       ]
     }
   },
+  "program": {
+    "options": {
+      "composite": true,
+      "outFile": "./module.js"
+    },
+    "outSignature": "22493213257-declare const myGlob = 20;\r\ndeclare module \"lib/file1\" {\r\n    export const x = 10;\r\n}\r\ndeclare module \"lib/file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\ndeclare module \"file3\" {\r\n    export const z = 30;\r\n}\r\ndeclare const myVar = 30;\r\n",
+    "dtsChangeTime": 22000
+  },
   "version": "FakeTSVersion",
-  "size": 430
+  "size": 838
 }
 
 //// [/src/module.d.ts]
@@ -880,7 +888,7 @@ sourceFile:lib/global.ts
 >>>//# sourceMappingURL=module.js.map
 
 //// [/src/module.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./lib/file0.ts","./lib/file1.ts","./lib/file2.ts","./lib/global.ts"],"js":{"sections":[{"pos":0,"end":467,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":179,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./lib/file0.ts","./lib/file1.ts","./lib/file2.ts","./lib/global.ts"],"js":{"sections":[{"pos":0,"end":467,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":179,"kind":"text"}]}},"program":{"options":{"composite":true,"outFile":"./module.js"},"outSignature":"29375769481-declare const myGlob = 20;\r\ndeclare module \"lib/file1\" {\r\n    export const x = 10;\r\n}\r\ndeclare module \"lib/file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\n","dtsChangeTime":11000},"version":"FakeTSVersion"}
 
 //// [/src/module.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -947,7 +955,15 @@ declare const globalConst = 10;
       ]
     }
   },
+  "program": {
+    "options": {
+      "composite": true,
+      "outFile": "./module.js"
+    },
+    "outSignature": "29375769481-declare const myGlob = 20;\r\ndeclare module \"lib/file1\" {\r\n    export const x = 10;\r\n}\r\ndeclare module \"lib/file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\n",
+    "dtsChangeTime": 11000
+  },
   "version": "FakeTSVersion",
-  "size": 261
+  "size": 577
 }
 

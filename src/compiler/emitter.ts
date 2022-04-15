@@ -710,6 +710,8 @@ namespace ts {
         getCanonicalFileName(fileName: string): string;
         useCaseSensitiveFileNames(): boolean;
         getNewLine(): string;
+        createHash?(data: string): string;
+        now?(): Date;
     }
 
     function createSourceFilesFromBundleBuildInfo(bundle: BundleBuildInfo, buildInfoDirectory: string, host: EmitUsingBuildInfoHost): readonly SourceFile[] {
@@ -780,6 +782,8 @@ namespace ts {
         const outputFiles: OutputFile[] = [];
         const prependNodes = createPrependNodes(config.projectReferences, getCommandLine, f => host.readFile(f));
         const sourceFilesForJsEmit = createSourceFilesFromBundleBuildInfo(buildInfo.bundle, buildInfoDirectory, host);
+        let changedDtsText: string | undefined;
+        let changedDtsData: WriteFileCallbackData | undefined;
         const emitHost: EmitHost = {
             getPrependNodes: memoize(() => [...prependNodes, ownPrependInput]),
             getCanonicalFileName: host.getCanonicalFileName,
@@ -806,6 +810,11 @@ namespace ts {
                     case buildInfoPath:
                         const newBuildInfo = data!.buildInfo!;
                         newBuildInfo.program = buildInfo.program;
+                        if (newBuildInfo.program && changedDtsText !== undefined && config.options.composite) {
+                            // Update the output signature
+                            newBuildInfo.program.outSignature = computeSignature(changedDtsText, changedDtsData, maybeBind(host, host.createHash));
+                            newBuildInfo.program.dtsChangeTime = getCurrentTime(host).getTime();
+                        }
                         // Update sourceFileInfo
                         const { js, dts, sourceFiles } = buildInfo.bundle!;
                         newBuildInfo.bundle!.js!.sources = js!.sources;
@@ -817,6 +826,8 @@ namespace ts {
                         return;
                     case declarationFilePath:
                         if (declarationText === text) return;
+                        changedDtsText = text;
+                        changedDtsData = data;
                         break;
                     case declarationMapPath:
                         if (declarationMapText === text) return;

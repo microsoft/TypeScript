@@ -163,13 +163,13 @@ Output::
 
 [[90m12:00:10 AM[0m] Building project '/src/first/tsconfig.json'...
 
-[[90m12:00:20 AM[0m] Project 'src/second/tsconfig.json' is out of date because output file 'src/2/second-output.tsbuildinfo' does not exist
+[[90m12:00:21 AM[0m] Project 'src/second/tsconfig.json' is out of date because output file 'src/2/second-output.tsbuildinfo' does not exist
 
-[[90m12:00:21 AM[0m] Building project '/src/second/tsconfig.json'...
+[[90m12:00:22 AM[0m] Building project '/src/second/tsconfig.json'...
 
-[[90m12:00:31 AM[0m] Project 'src/third/tsconfig.json' is out of date because output file 'src/third/thirdjs/output/third-output.tsbuildinfo' does not exist
+[[90m12:00:33 AM[0m] Project 'src/third/tsconfig.json' is out of date because output file 'src/third/thirdjs/output/third-output.tsbuildinfo' does not exist
 
-[[90m12:00:32 AM[0m] Building project '/src/third/tsconfig.json'...
+[[90m12:00:34 AM[0m] Building project '/src/third/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 
@@ -585,7 +585,7 @@ sourceFile:../second/second_part2.ts
 >>>//# sourceMappingURL=second-output.js.map
 
 //// [/src/2/second-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"../second","sourceFiles":["../second/second_part1.ts","../second/second_part2.ts"],"js":{"sections":[{"pos":0,"end":285,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":100,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"../second","sourceFiles":["../second/second_part1.ts","../second/second_part2.ts"],"js":{"sections":[{"pos":0,"end":285,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":100,"kind":"text"}]}},"program":{"options":{"composite":true,"outFile":"./second-output.js"},"outSignature":"7003440774-declare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\n","dtsChangeTime":23000},"version":"FakeTSVersion"}
 
 //// [/src/2/second-output.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -650,8 +650,16 @@ declare class C {
       ]
     }
   },
+  "program": {
+    "options": {
+      "composite": true,
+      "outFile": "./second-output.js"
+    },
+    "outSignature": "7003440774-declare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\n",
+    "dtsChangeTime": 23000
+  },
   "version": "FakeTSVersion",
-  "size": 255
+  "size": 492
 }
 
 //// [/src/first/bin/first-output.d.ts]
@@ -1437,7 +1445,7 @@ sourceFile:../first_part3.ts
 >>>//# sourceMappingURL=first-output.js.map
 
 //// [/src/first/bin/first-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"..","sourceFiles":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"js":{"sections":[{"pos":0,"end":1131,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":42,"kind":"text"},{"pos":42,"end":156,"kind":"internal"},{"pos":158,"end":276,"kind":"text"},{"pos":276,"end":371,"kind":"internal"},{"pos":373,"end":533,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"..","sourceFiles":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"js":{"sections":[{"pos":0,"end":1131,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":42,"kind":"text"},{"pos":42,"end":156,"kind":"internal"},{"pos":158,"end":276,"kind":"text"},{"pos":276,"end":371,"kind":"internal"},{"pos":373,"end":533,"kind":"text"}]}},"program":{"options":{"composite":true,"outFile":"./first-output.js"},"outSignature":"8051664902-declare enum TokenFlags {\r\n    None = 0,\r\n    PrecedingLineBreak = 1,\r\n    PrecedingJSDocComment = 2,\r\n    Unterminated = 4,\r\n    ExtendedUnicodeEscape = 8,\r\n    Scientific = 16,\r\n    Octal = 32,\r\n    HexSpecifier = 64,\r\n    BinarySpecifier = 128,\r\n    OctalSpecifier = 256,\r\n    ContainsSeparator = 512,\r\n    BinaryOrOctalSpecifier = 384,\r\n    NumericLiteralFlags = 1008\r\n}\r\ninterface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\n","dtsChangeTime":11000},"version":"FakeTSVersion"}
 
 //// [/src/first/bin/first-output.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -1556,8 +1564,16 @@ declare function f(): string;
       ]
     }
   },
+  "program": {
+    "options": {
+      "composite": true,
+      "outFile": "./first-output.js"
+    },
+    "outSignature": "8051664902-declare enum TokenFlags {\r\n    None = 0,\r\n    PrecedingLineBreak = 1,\r\n    PrecedingJSDocComment = 2,\r\n    Unterminated = 4,\r\n    ExtendedUnicodeEscape = 8,\r\n    Scientific = 16,\r\n    Octal = 32,\r\n    HexSpecifier = 64,\r\n    BinarySpecifier = 128,\r\n    OctalSpecifier = 256,\r\n    ContainsSeparator = 512,\r\n    BinaryOrOctalSpecifier = 384,\r\n    NumericLiteralFlags = 1008\r\n}\r\ninterface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\n",
+    "dtsChangeTime": 11000
+  },
   "version": "FakeTSVersion",
-  "size": 403
+  "size": 1106
 }
 
 //// [/src/third/thirdjs/output/third-output.d.ts]
@@ -2690,7 +2706,7 @@ sourceFile:../../third_part1.ts
 >>>//# sourceMappingURL=third-output.js.map
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"../..","sourceFiles":["../../third_part1.ts"],"js":{"sections":[{"pos":0,"end":1131,"kind":"prepend","data":"../../../first/bin/first-output.js","texts":[{"pos":0,"end":1131,"kind":"text"}]},{"pos":1131,"end":1416,"kind":"prepend","data":"../../../2/second-output.js","texts":[{"pos":1131,"end":1416,"kind":"text"}]},{"pos":1416,"end":1452,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":320,"kind":"prepend","data":"../../../first/bin/first-output.d.ts","texts":[{"pos":0,"end":320,"kind":"text"}]},{"pos":320,"end":420,"kind":"prepend","data":"../../../2/second-output.d.ts","texts":[{"pos":320,"end":420,"kind":"text"}]},{"pos":420,"end":439,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"../..","sourceFiles":["../../third_part1.ts"],"js":{"sections":[{"pos":0,"end":1131,"kind":"prepend","data":"../../../first/bin/first-output.js","texts":[{"pos":0,"end":1131,"kind":"text"}]},{"pos":1131,"end":1416,"kind":"prepend","data":"../../../2/second-output.js","texts":[{"pos":1131,"end":1416,"kind":"text"}]},{"pos":1416,"end":1452,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":320,"kind":"prepend","data":"../../../first/bin/first-output.d.ts","texts":[{"pos":0,"end":320,"kind":"text"}]},{"pos":320,"end":420,"kind":"prepend","data":"../../../2/second-output.d.ts","texts":[{"pos":320,"end":420,"kind":"text"}]},{"pos":420,"end":439,"kind":"text"}]}},"program":{"options":{"composite":true,"outFile":"./third-output.js"},"outSignature":"-41732646255-declare enum TokenFlags {\r\n    None = 0,\r\n    Scientific = 16,\r\n    Octal = 32,\r\n    HexSpecifier = 64,\r\n    BinarySpecifier = 128,\r\n    OctalSpecifier = 256,\r\n}\r\ninterface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare var c: C;\r\n","dtsChangeTime":35000},"version":"FakeTSVersion"}
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -2867,7 +2883,15 @@ declare var c: C;
       ]
     }
   },
+  "program": {
+    "options": {
+      "composite": true,
+      "outFile": "./third-output.js"
+    },
+    "outSignature": "-41732646255-declare enum TokenFlags {\r\n    None = 0,\r\n    Scientific = 16,\r\n    Octal = 32,\r\n    HexSpecifier = 64,\r\n    BinarySpecifier = 128,\r\n    OctalSpecifier = 256,\r\n}\r\ninterface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare var c: C;\r\n",
+    "dtsChangeTime": 35000
+  },
   "version": "FakeTSVersion",
-  "size": 728
+  "size": 1341
 }
 

@@ -68,10 +68,6 @@ namespace ts {
         return getOrCreateValueFromConfigFileMap(configFileMap, resolved, () => new Map());
     }
 
-    function newer(date1: Date | undefined, date2: Date): Date | undefined {
-        return date1 ? date2 > date1 ? date2 : date1 : date2;
-    }
-
     /*@internal*/
     export function getCurrentTime(host: { now?(): Date; }) {
         return host.now ? host.now() : new Date();
@@ -987,33 +983,23 @@ namespace ts {
             // Actual Emit
             const { host, compilerHost } = state;
             let resultFlags = BuildResultFlags.DeclarationOutputUnchanged;
-            let newestDeclarationFileContentChangedTime: Date | undefined;
+            const existingBuildInfo = state.buildInfoCache.get(projectPath)?.buildInfo || undefined;
             const emitterDiagnostics = createDiagnosticCollection();
             const emittedOutputs = new Map<Path, string>();
-            const isOutFile = outFile(config.options);
             outputFiles.forEach(({ name, text, writeByteOrderMark, buildInfo }) => {
-                if (resultFlags === BuildResultFlags.DeclarationOutputUnchanged && isDeclarationFileName(name)) {
-                    // Check for unchanged .d.ts files
-                    if (state.readFileWithCache(name) === text) {
-                        if (config.options.composite && isOutFile) {
-                            newestDeclarationFileContentChangedTime = newer(newestDeclarationFileContentChangedTime, ts.getModifiedTime(host, name));
-                        }
-                    }
-                    else {
+                emittedOutputs.set(toPath(state, name), name);
+                if (buildInfo) {
+                    setBuildInfo(state, buildInfo, projectPath, program!.getCompilerOptions());
+                    if (buildInfo.program?.dtsChangeTime !== existingBuildInfo?.program?.dtsChangeTime) {
                         resultFlags &= ~BuildResultFlags.DeclarationOutputUnchanged;
                     }
                 }
-
-                const path = toPath(state, name);
-                emittedOutputs.set(path, name);
-                if (buildInfo) setBuildInfo(state, buildInfo, projectPath, program!.getCompilerOptions());
                 writeFile(writeFileCallback ? { writeFile: writeFileCallback } : compilerHost, emitterDiagnostics, name, text, writeByteOrderMark);
             });
 
             finishEmit(
                 emitterDiagnostics,
                 emittedOutputs,
-                newestDeclarationFileContentChangedTime,
                 outputFiles.length ? outputFiles[0].name : getFirstProjectOutput(config, !host.useCaseSensitiveFileNames()),
                 resultFlags
             );
@@ -1045,7 +1031,6 @@ namespace ts {
         function finishEmit(
             emitterDiagnostics: DiagnosticCollection,
             emittedOutputs: ESMap<Path, string>,
-            newestDeclarationFileContentChangedTime: Date | undefined,
             oldestOutputFileName: string,
             resultFlags: BuildResultFlags
         ) {
@@ -1068,12 +1053,11 @@ namespace ts {
             }
 
             // Update time stamps for rest of the outputs
-            const anyDtsChange = !(resultFlags & BuildResultFlags.DeclarationOutputUnchanged);
-            newestDeclarationFileContentChangedTime = updateOutputTimestampsWorker(state, config, anyDtsChange, Diagnostics.Updating_unchanged_output_timestamps_of_project_0, newestDeclarationFileContentChangedTime, emittedOutputs);
+            updateOutputTimestampsWorker(state, config, Diagnostics.Updating_unchanged_output_timestamps_of_project_0, emittedOutputs);
             state.diagnostics.delete(projectPath);
             state.projectStatus.set(projectPath, {
                 type: UpToDateStatusType.UpToDate,
-                newestDeclarationFileContentChangedTime: newestDeclarationFileContentChangedTime || getDtsChangeTime(state, config.options, projectPath),
+                newestDeclarationFileContentChangedTime: getDtsChangeTime(state, config.options, projectPath),
                 oldestOutputFileName
             });
             afterProgramDone(state, program, config);
@@ -1124,19 +1108,24 @@ namespace ts {
             Debug.assert(!!outputFiles.length);
             const emitterDiagnostics = createDiagnosticCollection();
             const emittedOutputs = new Map<Path, string>();
+            let resultFlags = BuildResultFlags.DeclarationOutputUnchanged;
+            const existingBuildInfo = state.buildInfoCache.get(projectPath)!.buildInfo as BuildInfo;
             outputFiles.forEach(({ name, text, writeByteOrderMark, buildInfo }) => {
-                const path = toPath(state, name);
-                emittedOutputs.set(path, name);
-                if (buildInfo) setBuildInfo(state, buildInfo, projectPath, config.options);
+                emittedOutputs.set(toPath(state, name), name);
+                if (buildInfo) {
+                    setBuildInfo(state, buildInfo, projectPath, config.options);
+                    if (buildInfo.program?.dtsChangeTime !== existingBuildInfo.program?.dtsChangeTime) {
+                        resultFlags &= ~BuildResultFlags.DeclarationOutputUnchanged;
+                    }
+                }
                 writeFile(writeFileCallback ? { writeFile: writeFileCallback } : compilerHost, emitterDiagnostics, name, text, writeByteOrderMark);
             });
 
             const emitDiagnostics = finishEmit(
                 emitterDiagnostics,
                 emittedOutputs,
-                /*newestDeclarationFileContentChangedTime*/ undefined,
                 outputFiles[0].name,
-                BuildResultFlags.DeclarationOutputUnchanged
+                resultFlags
             );
             return { emitSkipped: false, diagnostics: emitDiagnostics };
         }
@@ -1718,13 +1707,24 @@ namespace ts {
         return actual;
     }
 
-    function updateOutputTimestampsWorker(state: SolutionBuilderState, proj: ParsedCommandLine, anyDtsChange: boolean, verboseMessage: DiagnosticMessage, newestDeclarationFileContentChangedTime?: Date, skipOutputs?: ESMap<Path, string>) {
-        if (proj.options.noEmit) return undefined;
-
+    function updateOutputTimestampsWorker(
+        state: SolutionBuilderState,
+        proj: ParsedCommandLine,
+        verboseMessage: DiagnosticMessage,
+        skipOutputs?: ESMap<Path, string>
+    ) {
+        if (proj.options.noEmit) return;
         const buildInfoPath = getTsBuildInfoEmitOutputFilePath(proj.options);
+        if (buildInfoPath) {
+            if (!skipOutputs?.has(toPath(state, buildInfoPath))) {
+                if (!!state.options.verbose) reportStatus(state, verboseMessage, proj.options.configFilePath!);
+                state.host.setModifiedTime(buildInfoPath, getCurrentTime(state.host));
+            }
+            return;
+        }
+
         const { host } = state;
         const outputs = getAllProjectOutputs(proj, !host.useCaseSensitiveFileNames());
-        const isOutFile = outFile(proj.options);
         if (!skipOutputs || outputs.length !== skipOutputs.size) {
             let reportVerbose = !!state.options.verbose;
             let now: Date | undefined;
@@ -1733,26 +1733,18 @@ namespace ts {
                     continue;
                 }
 
-                if (proj.options.composite && isOutFile && !anyDtsChange && isDeclarationFileName(file)) {
-                    newestDeclarationFileContentChangedTime = newer(newestDeclarationFileContentChangedTime, ts.getModifiedTime(host, file));
+                if (reportVerbose) {
+                    reportVerbose = false;
+                    reportStatus(state, verboseMessage, proj.options.configFilePath!);
                 }
 
-                if (!buildInfoPath || file === buildInfoPath) {
-                    if (reportVerbose) {
-                        reportVerbose = false;
-                        reportStatus(state, verboseMessage, proj.options.configFilePath!);
-                    }
-
-                    host.setModifiedTime(file, now ||= getCurrentTime(state.host));
-                }
+                host.setModifiedTime(file, now ||= getCurrentTime(state.host));
             }
         }
-
-        return newestDeclarationFileContentChangedTime;
     }
 
     function getDtsChangeTime(state: SolutionBuilderState, options: CompilerOptions, resolvedConfigPath: ResolvedConfigFilePath) {
-        if (!options.composite || outFile(options)) return undefined;
+        if (!options.composite) return undefined;
         const buildInfoPath = getTsBuildInfoEmitOutputFilePath(options)!;
         const buildInfo = getBuildInfo(state, buildInfoPath, resolvedConfigPath, /*modifiedTime*/ undefined);
         return buildInfo?.program?.dtsChangeTime ? new Date(buildInfo.program.dtsChangeTime) : undefined;
@@ -1762,10 +1754,10 @@ namespace ts {
         if (state.options.dry) {
             return reportStatus(state, Diagnostics.A_non_dry_build_would_update_timestamps_for_output_of_project_0, proj.options.configFilePath!);
         }
-        const priorNewestUpdateTime = updateOutputTimestampsWorker(state, proj, /*anyDtsChange*/ false, Diagnostics.Updating_output_timestamps_of_project_0);
+        updateOutputTimestampsWorker(state, proj, Diagnostics.Updating_output_timestamps_of_project_0);
         state.projectStatus.set(resolvedPath, {
             type: UpToDateStatusType.UpToDate,
-            newestDeclarationFileContentChangedTime: priorNewestUpdateTime || getDtsChangeTime(state, proj.options, resolvedPath),
+            newestDeclarationFileContentChangedTime: getDtsChangeTime(state, proj.options, resolvedPath),
             oldestOutputFileName: getFirstProjectOutput(proj, !state.host.useCaseSensitiveFileNames())
         });
     }

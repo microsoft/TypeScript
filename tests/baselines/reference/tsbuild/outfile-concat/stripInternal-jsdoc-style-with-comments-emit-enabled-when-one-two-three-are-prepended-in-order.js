@@ -167,13 +167,13 @@ Output::
 
 [[90m12:00:16 AM[0m] Building project '/src/first/tsconfig.json'...
 
-[[90m12:00:26 AM[0m] Project 'src/second/tsconfig.json' is out of date because output file 'src/2/second-output.tsbuildinfo' does not exist
+[[90m12:00:27 AM[0m] Project 'src/second/tsconfig.json' is out of date because output file 'src/2/second-output.tsbuildinfo' does not exist
 
-[[90m12:00:27 AM[0m] Building project '/src/second/tsconfig.json'...
+[[90m12:00:28 AM[0m] Building project '/src/second/tsconfig.json'...
 
-[[90m12:00:37 AM[0m] Project 'src/third/tsconfig.json' is out of date because output file 'src/third/thirdjs/output/third-output.tsbuildinfo' does not exist
+[[90m12:00:39 AM[0m] Project 'src/third/tsconfig.json' is out of date because output file 'src/third/thirdjs/output/third-output.tsbuildinfo' does not exist
 
-[[90m12:00:38 AM[0m] Building project '/src/third/tsconfig.json'...
+[[90m12:00:40 AM[0m] Building project '/src/third/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 
@@ -3011,7 +3011,7 @@ sourceFile:../second/second_part2.ts
 >>>//# sourceMappingURL=second-output.js.map
 
 //// [/src/2/second-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"../second","sourceFiles":["../second/second_part1.ts","../second/second_part2.ts"],"js":{"sections":[{"pos":0,"end":110,"kind":"prepend","data":"../first/bin/first-output.js","texts":[{"pos":0,"end":110,"kind":"text"}]},{"pos":110,"end":3545,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":172,"kind":"prepend","data":"../first/bin/first-output.d.ts","texts":[{"pos":0,"end":54,"kind":"internal"},{"pos":56,"end":172,"kind":"text"}]},{"pos":172,"end":249,"kind":"text"},{"pos":249,"end":429,"kind":"internal"},{"pos":431,"end":463,"kind":"text"},{"pos":463,"end":975,"kind":"internal"},{"pos":977,"end":980,"kind":"text"},{"pos":980,"end":1513,"kind":"internal"},{"pos":1515,"end":1563,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"../second","sourceFiles":["../second/second_part1.ts","../second/second_part2.ts"],"js":{"sections":[{"pos":0,"end":110,"kind":"prepend","data":"../first/bin/first-output.js","texts":[{"pos":0,"end":110,"kind":"text"}]},{"pos":110,"end":3545,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":172,"kind":"prepend","data":"../first/bin/first-output.d.ts","texts":[{"pos":0,"end":54,"kind":"internal"},{"pos":56,"end":172,"kind":"text"}]},{"pos":172,"end":249,"kind":"text"},{"pos":249,"end":429,"kind":"internal"},{"pos":431,"end":463,"kind":"text"},{"pos":463,"end":975,"kind":"internal"},{"pos":977,"end":980,"kind":"text"},{"pos":980,"end":1513,"kind":"internal"},{"pos":1515,"end":1563,"kind":"text"}]}},"program":{"options":{"composite":true,"outFile":"./second-output.js"},"outSignature":"31678065536-/**@internal*/ interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class normalC {\r\n    /**@internal*/ constructor();\r\n    /**@internal*/ prop: string;\r\n    /**@internal*/ method(): void;\r\n    /**@internal*/ get c(): number;\r\n    /**@internal*/ set c(val: number);\r\n}\r\ndeclare namespace normalN {\r\n    /**@internal*/ class C {\r\n    }\r\n    /**@internal*/ function foo(): void;\r\n    /**@internal*/ namespace someNamespace {\r\n        class C {\r\n        }\r\n    }\r\n    /**@internal*/ namespace someOther.something {\r\n        class someClass {\r\n        }\r\n    }\r\n    /**@internal*/ export import someImport = someNamespace.C;\r\n    /**@internal*/ type internalType = internalC;\r\n    /**@internal*/ const internalConst = 10;\r\n    /**@internal*/ enum internalEnum {\r\n        a = 0,\r\n        b = 1,\r\n        c = 2\r\n    }\r\n}\r\n/**@internal*/ declare class internalC {\r\n}\r\n/**@internal*/ declare function internalfoo(): void;\r\n/**@internal*/ declare namespace internalNamespace {\r\n    class someClass {\r\n    }\r\n}\r\n/**@internal*/ declare namespace internalOther.something {\r\n    class someClass {\r\n    }\r\n}\r\n/**@internal*/ import internalImport = internalNamespace.someClass;\r\n/**@internal*/ declare type internalType = internalC;\r\n/**@internal*/ declare const internalConst = 10;\r\n/**@internal*/ declare enum internalEnum {\r\n    a = 0,\r\n    b = 1,\r\n    c = 2\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\n","dtsChangeTime":29000},"version":"FakeTSVersion"}
 
 //// [/src/2/second-output.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -3312,8 +3312,16 @@ declare class C {
       ]
     }
   },
+  "program": {
+    "options": {
+      "composite": true,
+      "outFile": "./second-output.js"
+    },
+    "outSignature": "31678065536-/**@internal*/ interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class normalC {\r\n    /**@internal*/ constructor();\r\n    /**@internal*/ prop: string;\r\n    /**@internal*/ method(): void;\r\n    /**@internal*/ get c(): number;\r\n    /**@internal*/ set c(val: number);\r\n}\r\ndeclare namespace normalN {\r\n    /**@internal*/ class C {\r\n    }\r\n    /**@internal*/ function foo(): void;\r\n    /**@internal*/ namespace someNamespace {\r\n        class C {\r\n        }\r\n    }\r\n    /**@internal*/ namespace someOther.something {\r\n        class someClass {\r\n        }\r\n    }\r\n    /**@internal*/ export import someImport = someNamespace.C;\r\n    /**@internal*/ type internalType = internalC;\r\n    /**@internal*/ const internalConst = 10;\r\n    /**@internal*/ enum internalEnum {\r\n        a = 0,\r\n        b = 1,\r\n        c = 2\r\n    }\r\n}\r\n/**@internal*/ declare class internalC {\r\n}\r\n/**@internal*/ declare function internalfoo(): void;\r\n/**@internal*/ declare namespace internalNamespace {\r\n    class someClass {\r\n    }\r\n}\r\n/**@internal*/ declare namespace internalOther.something {\r\n    class someClass {\r\n    }\r\n}\r\n/**@internal*/ import internalImport = internalNamespace.someClass;\r\n/**@internal*/ declare type internalType = internalC;\r\n/**@internal*/ declare const internalConst = 10;\r\n/**@internal*/ declare enum internalEnum {\r\n    a = 0,\r\n    b = 1,\r\n    c = 2\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\n",
+    "dtsChangeTime": 29000
+  },
   "version": "FakeTSVersion",
-  "size": 769
+  "size": 2582
 }
 
 //// [/src/first/bin/first-output.d.ts]
@@ -3623,7 +3631,7 @@ sourceFile:../first_part3.ts
 >>>//# sourceMappingURL=first-output.js.map
 
 //// [/src/first/bin/first-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"..","sourceFiles":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"js":{"sections":[{"pos":0,"end":110,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":54,"kind":"internal"},{"pos":56,"end":172,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"..","sourceFiles":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"js":{"sections":[{"pos":0,"end":110,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":54,"kind":"internal"},{"pos":56,"end":172,"kind":"text"}]}},"program":{"options":{"composite":true,"outFile":"./first-output.js"},"outSignature":"-8362838664-/**@internal*/ interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\n","dtsChangeTime":17000},"version":"FakeTSVersion"}
 
 //// [/src/first/bin/first-output.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -3688,8 +3696,16 @@ declare function f(): string;
       ]
     }
   },
+  "program": {
+    "options": {
+      "composite": true,
+      "outFile": "./first-output.js"
+    },
+    "outSignature": "-8362838664-/**@internal*/ interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\n",
+    "dtsChangeTime": 17000
+  },
   "version": "FakeTSVersion",
-  "size": 290
+  "size": 603
 }
 
 //// [/src/third/thirdjs/output/third-output.d.ts]
@@ -5829,7 +5845,7 @@ sourceFile:../../third_part1.ts
 >>>//# sourceMappingURL=third-output.js.map
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"../..","sourceFiles":["../../third_part1.ts"],"js":{"sections":[{"pos":0,"end":3545,"kind":"prepend","data":"../../../2/second-output.js","texts":[{"pos":0,"end":3545,"kind":"text"}]},{"pos":3545,"end":3581,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":276,"kind":"prepend","data":"../../../2/second-output.d.ts","texts":[{"pos":0,"end":276,"kind":"text"}]},{"pos":276,"end":295,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"../..","sourceFiles":["../../third_part1.ts"],"js":{"sections":[{"pos":0,"end":3545,"kind":"prepend","data":"../../../2/second-output.js","texts":[{"pos":0,"end":3545,"kind":"text"}]},{"pos":3545,"end":3581,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":276,"kind":"prepend","data":"../../../2/second-output.d.ts","texts":[{"pos":0,"end":276,"kind":"text"}]},{"pos":276,"end":295,"kind":"text"}]}},"program":{"options":{"composite":true,"outFile":"./third-output.js"},"outSignature":"20880580153-declare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class normalC {\r\n}\r\ndeclare namespace normalN {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare var c: C;\r\n","dtsChangeTime":41000},"version":"FakeTSVersion"}
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -6034,8 +6050,16 @@ declare var c: C;
       ]
     }
   },
+  "program": {
+    "options": {
+      "composite": true,
+      "outFile": "./third-output.js"
+    },
+    "outSignature": "20880580153-declare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class normalC {\r\n}\r\ndeclare namespace normalN {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare var c: C;\r\n",
+    "dtsChangeTime": 41000
+  },
   "version": "FakeTSVersion",
-  "size": 464
+  "size": 918
 }
 
 
@@ -6060,38 +6084,35 @@ console.log(s);
 
 Output::
 /lib/tsc --b /src/third --verbose
-[[90m12:00:56 AM[0m] Projects in this build: 
+[[90m12:00:59 AM[0m] Projects in this build: 
     * src/first/tsconfig.json
     * src/second/tsconfig.json
     * src/third/tsconfig.json
 
-[[90m12:00:57 AM[0m] Project 'src/first/tsconfig.json' is out of date because oldest output 'src/first/bin/first-output.tsbuildinfo' is older than newest input 'src/first/first_PART1.ts'
+[[90m12:01:00 AM[0m] Project 'src/first/tsconfig.json' is out of date because oldest output 'src/first/bin/first-output.tsbuildinfo' is older than newest input 'src/first/first_PART1.ts'
 
-[[90m12:00:58 AM[0m] Building project '/src/first/tsconfig.json'...
+[[90m12:01:01 AM[0m] Building project '/src/first/tsconfig.json'...
 
-[[90m12:01:07 AM[0m] Project 'src/second/tsconfig.json' is out of date because output of its dependency 'src/first' has changed
+[[90m12:01:10 AM[0m] Project 'src/second/tsconfig.json' is out of date because output of its dependency 'src/first' has changed
 
-[[90m12:01:08 AM[0m] Updating output of project '/src/second/tsconfig.json'...
+[[90m12:01:11 AM[0m] Updating output of project '/src/second/tsconfig.json'...
 
-[[90m12:01:15 AM[0m] Project 'src/third/tsconfig.json' is out of date because output of its dependency 'src/second' has changed
+[[90m12:01:18 AM[0m] Project 'src/third/tsconfig.json' is out of date because output of its dependency 'src/second' has changed
 
-[[90m12:01:16 AM[0m] Updating output of project '/src/third/tsconfig.json'...
+[[90m12:01:19 AM[0m] Updating output of project '/src/third/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 
 getModifiedTime:: {
  "/src/first/bin/first-output.tsbuildinfo": 1,
  "/src/first/first_PART1.ts": 1,
- "/src/first/bin/first-output.d.ts": 1,
  "/src/2/second-output.tsbuildinfo": 1,
  "/src/second/second_part1.ts": 1,
  "/src/second/second_part2.ts": 1,
  "/src/second/tsconfig.json": 1,
- "/src/2/second-output.d.ts": 1,
  "/src/third/thirdjs/output/third-output.tsbuildinfo": 1,
  "/src/third/third_part1.ts": 1,
- "/src/third/tsconfig.json": 1,
- "/src/third/thirdjs/output/third-output.d.ts": 1
+ "/src/third/tsconfig.json": 1
 }
 
 setModifiedTime:: {}
@@ -7937,7 +7958,7 @@ sourceFile:../second/second_part2.ts
 >>>//# sourceMappingURL=second-output.js.map
 
 //// [/src/2/second-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"../second","sourceFiles":["../second/second_part1.ts","../second/second_part2.ts"],"js":{"sections":[{"pos":0,"end":127,"kind":"prepend","data":"../first/bin/first-output.js","texts":[{"pos":0,"end":127,"kind":"text"}]},{"pos":127,"end":3562,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":172,"kind":"prepend","data":"../first/bin/first-output.d.ts","texts":[{"pos":0,"end":54,"kind":"internal"},{"pos":56,"end":172,"kind":"text"}]},{"pos":172,"end":249,"kind":"text"},{"pos":249,"end":429,"kind":"internal"},{"pos":431,"end":463,"kind":"text"},{"pos":463,"end":975,"kind":"internal"},{"pos":977,"end":980,"kind":"text"},{"pos":980,"end":1513,"kind":"internal"},{"pos":1515,"end":1563,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"../second","sourceFiles":["../second/second_part1.ts","../second/second_part2.ts"],"js":{"sections":[{"pos":0,"end":127,"kind":"prepend","data":"../first/bin/first-output.js","texts":[{"pos":0,"end":127,"kind":"text"}]},{"pos":127,"end":3562,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":172,"kind":"prepend","data":"../first/bin/first-output.d.ts","texts":[{"pos":0,"end":54,"kind":"internal"},{"pos":56,"end":172,"kind":"text"}]},{"pos":172,"end":249,"kind":"text"},{"pos":249,"end":429,"kind":"internal"},{"pos":431,"end":463,"kind":"text"},{"pos":463,"end":975,"kind":"internal"},{"pos":977,"end":980,"kind":"text"},{"pos":980,"end":1513,"kind":"internal"},{"pos":1515,"end":1563,"kind":"text"}]}},"program":{"options":{"composite":true,"outFile":"./second-output.js"},"outSignature":"31678065536-/**@internal*/ interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class normalC {\r\n    /**@internal*/ constructor();\r\n    /**@internal*/ prop: string;\r\n    /**@internal*/ method(): void;\r\n    /**@internal*/ get c(): number;\r\n    /**@internal*/ set c(val: number);\r\n}\r\ndeclare namespace normalN {\r\n    /**@internal*/ class C {\r\n    }\r\n    /**@internal*/ function foo(): void;\r\n    /**@internal*/ namespace someNamespace {\r\n        class C {\r\n        }\r\n    }\r\n    /**@internal*/ namespace someOther.something {\r\n        class someClass {\r\n        }\r\n    }\r\n    /**@internal*/ export import someImport = someNamespace.C;\r\n    /**@internal*/ type internalType = internalC;\r\n    /**@internal*/ const internalConst = 10;\r\n    /**@internal*/ enum internalEnum {\r\n        a = 0,\r\n        b = 1,\r\n        c = 2\r\n    }\r\n}\r\n/**@internal*/ declare class internalC {\r\n}\r\n/**@internal*/ declare function internalfoo(): void;\r\n/**@internal*/ declare namespace internalNamespace {\r\n    class someClass {\r\n    }\r\n}\r\n/**@internal*/ declare namespace internalOther.something {\r\n    class someClass {\r\n    }\r\n}\r\n/**@internal*/ import internalImport = internalNamespace.someClass;\r\n/**@internal*/ declare type internalType = internalC;\r\n/**@internal*/ declare const internalConst = 10;\r\n/**@internal*/ declare enum internalEnum {\r\n    a = 0,\r\n    b = 1,\r\n    c = 2\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\n","dtsChangeTime":29000},"version":"FakeTSVersion"}
 
 //// [/src/2/second-output.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -8239,8 +8260,16 @@ declare class C {
       ]
     }
   },
+  "program": {
+    "options": {
+      "composite": true,
+      "outFile": "./second-output.js"
+    },
+    "outSignature": "31678065536-/**@internal*/ interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class normalC {\r\n    /**@internal*/ constructor();\r\n    /**@internal*/ prop: string;\r\n    /**@internal*/ method(): void;\r\n    /**@internal*/ get c(): number;\r\n    /**@internal*/ set c(val: number);\r\n}\r\ndeclare namespace normalN {\r\n    /**@internal*/ class C {\r\n    }\r\n    /**@internal*/ function foo(): void;\r\n    /**@internal*/ namespace someNamespace {\r\n        class C {\r\n        }\r\n    }\r\n    /**@internal*/ namespace someOther.something {\r\n        class someClass {\r\n        }\r\n    }\r\n    /**@internal*/ export import someImport = someNamespace.C;\r\n    /**@internal*/ type internalType = internalC;\r\n    /**@internal*/ const internalConst = 10;\r\n    /**@internal*/ enum internalEnum {\r\n        a = 0,\r\n        b = 1,\r\n        c = 2\r\n    }\r\n}\r\n/**@internal*/ declare class internalC {\r\n}\r\n/**@internal*/ declare function internalfoo(): void;\r\n/**@internal*/ declare namespace internalNamespace {\r\n    class someClass {\r\n    }\r\n}\r\n/**@internal*/ declare namespace internalOther.something {\r\n    class someClass {\r\n    }\r\n}\r\n/**@internal*/ import internalImport = internalNamespace.someClass;\r\n/**@internal*/ declare type internalType = internalC;\r\n/**@internal*/ declare const internalConst = 10;\r\n/**@internal*/ declare enum internalEnum {\r\n    a = 0,\r\n    b = 1,\r\n    c = 2\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\n",
+    "dtsChangeTime": 29000
+  },
   "version": "FakeTSVersion",
-  "size": 769
+  "size": 2582
 }
 
 //// [/src/first/bin/first-output.d.ts] file written with same contents
@@ -8432,7 +8461,7 @@ sourceFile:../first_part3.ts
 >>>//# sourceMappingURL=first-output.js.map
 
 //// [/src/first/bin/first-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"..","sourceFiles":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"js":{"sections":[{"pos":0,"end":127,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":54,"kind":"internal"},{"pos":56,"end":172,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"..","sourceFiles":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"js":{"sections":[{"pos":0,"end":127,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":54,"kind":"internal"},{"pos":56,"end":172,"kind":"text"}]}},"program":{"options":{"composite":true,"outFile":"./first-output.js"},"outSignature":"-8362838664-/**@internal*/ interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\n","dtsChangeTime":17000},"version":"FakeTSVersion"}
 
 //// [/src/first/bin/first-output.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -8498,8 +8527,16 @@ declare function f(): string;
       ]
     }
   },
+  "program": {
+    "options": {
+      "composite": true,
+      "outFile": "./first-output.js"
+    },
+    "outSignature": "-8362838664-/**@internal*/ interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\n",
+    "dtsChangeTime": 17000
+  },
   "version": "FakeTSVersion",
-  "size": 290
+  "size": 603
 }
 
 //// [/src/third/thirdjs/output/third-output.js]
@@ -10382,7 +10419,7 @@ sourceFile:../../third_part1.ts
 >>>//# sourceMappingURL=third-output.js.map
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"../..","sourceFiles":["../../third_part1.ts"],"js":{"sections":[{"pos":0,"end":3562,"kind":"prepend","data":"../../../2/second-output.js","texts":[{"pos":0,"end":3562,"kind":"text"}]},{"pos":3562,"end":3598,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":276,"kind":"prepend","data":"../../../2/second-output.d.ts","texts":[{"pos":0,"end":276,"kind":"text"}]},{"pos":276,"end":295,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"../..","sourceFiles":["../../third_part1.ts"],"js":{"sections":[{"pos":0,"end":3562,"kind":"prepend","data":"../../../2/second-output.js","texts":[{"pos":0,"end":3562,"kind":"text"}]},{"pos":3562,"end":3598,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":276,"kind":"prepend","data":"../../../2/second-output.d.ts","texts":[{"pos":0,"end":276,"kind":"text"}]},{"pos":276,"end":295,"kind":"text"}]}},"program":{"options":{"composite":true,"outFile":"./third-output.js"},"outSignature":"20880580153-declare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class normalC {\r\n}\r\ndeclare namespace normalN {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare var c: C;\r\n","dtsChangeTime":41000},"version":"FakeTSVersion"}
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -10588,7 +10625,15 @@ declare var c: C;
       ]
     }
   },
+  "program": {
+    "options": {
+      "composite": true,
+      "outFile": "./third-output.js"
+    },
+    "outSignature": "20880580153-declare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class normalC {\r\n}\r\ndeclare namespace normalN {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare var c: C;\r\n",
+    "dtsChangeTime": 41000
+  },
   "version": "FakeTSVersion",
-  "size": 464
+  "size": 918
 }
 
