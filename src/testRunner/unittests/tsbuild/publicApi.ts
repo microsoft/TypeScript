@@ -46,7 +46,7 @@ export function f22() { } // trailing`,
                 writtenFiles.add(path);
                 return originalWriteFile.call(sys, fileName, content, writeByteOrderMark);
             };
-            const { cb, getPrograms } = commandLineCallbacks(sys, /*originalReadCall*/ undefined, originalWriteFile);
+            const { cb, getPrograms } = commandLineCallbacks(sys, /*originalReadCall*/ undefined);
             const buildHost = createSolutionBuilderHost(
                 sys,
                     /*createProgram*/ undefined,
