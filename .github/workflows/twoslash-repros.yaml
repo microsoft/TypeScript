@@ -11,11 +11,16 @@ on:
   issues:
     types:
       - labeled
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      bisect_issue:
+        description: Triggers a bisect request on the given issue number instead of updating repros on all issues
+        required: false
+        type: string
 
 jobs:
   run:
-    if: ${{ !github.event.label }}
+    if: ${{ !github.event.label && !github.event.inputs.bisect_issue }}
     runs-on: ubuntu-latest
     steps:
     - name: Use node
@@ -25,7 +30,7 @@ jobs:
         github-token: ${{ secrets.TS_BOT_GITHUB_TOKEN }}
   
   bisect:
-    if: ${{ github.event.label.name == 'Bisect Repro' }}
+    if: ${{ github.event.label.name == 'Bisect Repro' || github.event.inputs.bisect_issue }}
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
@@ -37,4 +42,4 @@ jobs:
     - uses: microsoft/TypeScript-Twoslash-Repro-Action@master
       with: 
         github-token: ${{ secrets.TS_BOT_GITHUB_TOKEN }}
-        bisect: ${{ github.event.issue.number }}
+        bisect: ${{ github.event.issue.number || github.event.inputs.bisect_issue }}
