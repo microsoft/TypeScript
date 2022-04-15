@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts' />
 
 // @Filename: node_modules/foo/index.js
-////{}
+//// /*index*/{}
 
 // @Filename: a.ts
 ////import /*foo*/foo from /*fooModule*/"foo";
@@ -11,7 +11,7 @@ goTo.file("a.ts");
 verify.numberOfErrorsInCurrentFile(0);
 
 goTo.marker("fooModule");
-verify.goToDefinitionIs([]);
+verify.goToDefinitionIs(["index"]);
 verify.quickInfoIs("");
 
 goTo.marker("foo");

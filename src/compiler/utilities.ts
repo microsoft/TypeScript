@@ -933,6 +933,10 @@ namespace ts {
         }
     }
 
+    export function isAnyImportOrBareOrAccessedRequire(node: Node): node is AnyImportOrBareOrAccessedRequire {
+        return isAnyImportSyntax(node) || isVariableDeclarationInitializedToBareOrAccessedRequire(node);
+    }
+
     export function isLateVisibilityPaintedStatement(node: Node): node is LateVisibilityPaintedStatement {
         switch (node.kind) {
             case SyntaxKind.ImportDeclaration:
@@ -2558,14 +2562,14 @@ namespace ts {
         return decl.kind === SyntaxKind.FunctionDeclaration || isVariableDeclaration(decl) && decl.initializer && isFunctionLike(decl.initializer);
     }
 
-    export function tryGetModuleSpecifierFromDeclaration(node: AnyImportOrRequire): string | undefined {
+    export function tryGetModuleSpecifierFromDeclaration(node: AnyImportOrBareOrAccessedRequire): StringLiteralLike | undefined {
         switch (node.kind) {
             case SyntaxKind.VariableDeclaration:
-                return node.initializer.arguments[0].text;
+                return findAncestor(node.initializer, (node): node is RequireOrImportCall => isRequireCall(node, /*requireStringLiteralLikeArgument*/ true))?.arguments[0];
             case SyntaxKind.ImportDeclaration:
-                return tryCast(node.moduleSpecifier, isStringLiteralLike)?.text;
+                return tryCast(node.moduleSpecifier, isStringLiteralLike);
             case SyntaxKind.ImportEqualsDeclaration:
-                return tryCast(tryCast(node.moduleReference, isExternalModuleReference)?.expression, isStringLiteralLike)?.text;
+                return tryCast(tryCast(node.moduleReference, isExternalModuleReference)?.expression, isStringLiteralLike);
             default:
                 Debug.assertNever(node);
         }
@@ -3131,21 +3135,31 @@ namespace ts {
     // export = <EntityNameExpression>
     // export default <EntityNameExpression>
     // module.exports = <EntityNameExpression>
-    // {<Identifier>}
-    // {name: <EntityNameExpression>}
+    // module.exports.x = <EntityNameExpression>
+    // const x = require("...")
+    // const { x } = require("...")
+    // const x = require("...").y
+    // const { x } = require("...").y
     export function isAliasSymbolDeclaration(node: Node): boolean {
-        return node.kind === SyntaxKind.ImportEqualsDeclaration ||
+        if (node.kind === SyntaxKind.ImportEqualsDeclaration ||
             node.kind === SyntaxKind.NamespaceExportDeclaration ||
             node.kind === SyntaxKind.ImportClause && !!(node as ImportClause).name ||
             node.kind === SyntaxKind.NamespaceImport ||
             node.kind === SyntaxKind.NamespaceExport ||
             node.kind === SyntaxKind.ImportSpecifier ||
             node.kind === SyntaxKind.ExportSpecifier ||
-            node.kind === SyntaxKind.ExportAssignment && exportAssignmentIsAlias(node as ExportAssignment) ||
+            node.kind === SyntaxKind.ExportAssignment && exportAssignmentIsAlias(node as ExportAssignment)
+        ) {
+            return true;
+        }
+
+        return isInJSFile(node) && (
             isBinaryExpression(node) && getAssignmentDeclarationKind(node) === AssignmentDeclarationKind.ModuleExports && exportAssignmentIsAlias(node) ||
-            isPropertyAccessExpression(node) && isBinaryExpression(node.parent) && node.parent.left === node && node.parent.operatorToken.kind === SyntaxKind.EqualsToken && isAliasableExpression(node.parent.right) ||
-            node.kind === SyntaxKind.ShorthandPropertyAssignment ||
-            node.kind === SyntaxKind.PropertyAssignment && isAliasableExpression((node as PropertyAssignment).initializer);
+            isPropertyAccessExpression(node)
+                && isBinaryExpression(node.parent)
+                && node.parent.left === node
+                && node.parent.operatorToken.kind === SyntaxKind.EqualsToken
+                && isAliasableExpression(node.parent.right));
     }
 
     export function getAliasDeclarationFromName(node: EntityName): Declaration | undefined {
@@ -3156,6 +3170,7 @@ namespace ts {
             case SyntaxKind.ExportSpecifier:
             case SyntaxKind.ExportAssignment:
             case SyntaxKind.ImportEqualsDeclaration:
+            case SyntaxKind.NamespaceExport:
                 return node.parent as Declaration;
             case SyntaxKind.QualifiedName:
                 do {
@@ -5142,6 +5157,11 @@ namespace ts {
             (node.parent.kind === SyntaxKind.PropertyAccessExpression && (node.parent as PropertyAccessExpression).name === node);
     }
 
+    export function isRightSideOfAccessExpression(node: Node) {
+        return isPropertyAccessExpression(node.parent) && node.parent.name === node
+            || isElementAccessExpression(node.parent) && node.parent.argumentExpression === node;
+    }
+
     export function isRightSideOfQualifiedNameOrPropertyAccessOrJSDocMemberName(node: Node) {
         return isQualifiedName(node.parent) && node.parent.right === node
             || isPropertyAccessExpression(node.parent) && node.parent.name === node
@@ -5828,6 +5848,45 @@ namespace ts {
         }
         return expr;
     }
+
+    export function forEachNameInAccessChainWalkingLeft<T>(name: MemberName | StringLiteralLike, action: (name: MemberName | StringLiteralLike) => T | undefined): T | undefined {
+        if (isAccessExpression(name.parent) && isRightSideOfAccessExpression(name)) {
+            return walkAccessExpression(name.parent);
+        }
+
+        function walkAccessExpression(access: AccessExpression): T | undefined {
+            if (access.kind === SyntaxKind.PropertyAccessExpression) {
+                const res = action(access.name);
+                if (res !== undefined) {
+                    return res;
+                }
+            }
+            else if (access.kind === SyntaxKind.ElementAccessExpression) {
+                if (isIdentifier(access.argumentExpression) || isStringLiteralLike(access.argumentExpression)) {
+                    const res = action(access.argumentExpression);
+                    if (res !== undefined) {
+                        return res;
+                    }
+                }
+                else {
+                    // Chain interrupted by non-static-name access 'x[expr()].y.z'
+                    return undefined;
+                }
+            }
+
+            if (isAccessExpression(access.expression)) {
+                return walkAccessExpression(access.expression);
+            }
+            if (isIdentifier(access.expression)) {
+                // End of chain at Identifier 'x.y.z'
+                return action(access.expression);
+            }
+            // End of chain at non-Identifier 'x().y.z'
+            return undefined;
+        }
+    }
+
+
 
     export function getLeftmostExpression(node: Expression, stopAtCallExpressions: boolean) {
         while (true) {

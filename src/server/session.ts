@@ -1193,6 +1193,7 @@ namespace ts.server {
                     containerName: info.containerName,
                     kind: info.kind,
                     name: info.name,
+                    failedAliasResolution: info.failedAliasResolution,
                     ...info.unverified && { unverified: info.unverified },
                 };
             });
@@ -1226,6 +1227,159 @@ namespace ts.server {
                 definitions: definitions.map(Session.mapToOriginalLocation),
                 textSpan,
             };
+        }
+
+        private findSourceDefinition(args: protocol.FileLocationRequestArgs): readonly protocol.DefinitionInfo[] {
+            const { file, project } = this.getFileAndProject(args);
+            const position = this.getPositionInFile(args, file);
+            const unmappedDefinitions = project.getLanguageService().getDefinitionAtPosition(file, position);
+            let definitions: readonly DefinitionInfo[] = this.mapDefinitionInfoLocations(unmappedDefinitions || emptyArray, project).slice();
+            const needsJsResolution = this.projectService.serverMode === LanguageServiceMode.Semantic && (
+                !some(definitions, d => toNormalizedPath(d.fileName) !== file && !d.isAmbient) ||
+                some(definitions, d => !!d.failedAliasResolution));
+
+            if (needsJsResolution) {
+                const definitionSet = createSet<DefinitionInfo>(d => d.textSpan.start, documentSpansEqual);
+                definitions?.forEach(d => definitionSet.add(d));
+                const noDtsProject = project.getNoDtsResolutionProject([file]);
+                const ls = noDtsProject.getLanguageService();
+                const jsDefinitions = ls.getDefinitionAtPosition(file, position, /*searchOtherFilesOnly*/ true)
+                    ?.filter(d => toNormalizedPath(d.fileName) !== file);
+                if (some(jsDefinitions)) {
+                    for (const jsDefinition of jsDefinitions) {
+                        if (jsDefinition.unverified) {
+                            const refined = tryRefineDefinition(jsDefinition, project.getLanguageService().getProgram()!, ls.getProgram()!);
+                            if (some(refined)) {
+                                for (const def of refined) {
+                                    definitionSet.add(def);
+                                }
+                                continue;
+                            }
+                        }
+                        definitionSet.add(jsDefinition);
+                    }
+                }
+                else {
+                    const ambientCandidates = definitions.filter(d => toNormalizedPath(d.fileName) !== file && d.isAmbient);
+                    for (const candidate of some(ambientCandidates) ? ambientCandidates : getAmbientCandidatesByClimbingAccessChain()) {
+                        const fileNameToSearch = findImplementationFileFromDtsFileName(candidate.fileName, file, noDtsProject);
+                        if (!fileNameToSearch || !ensureRoot(noDtsProject, fileNameToSearch)) {
+                            continue;
+                        }
+                        const noDtsProgram = ls.getProgram()!;
+                        const fileToSearch = Debug.checkDefined(noDtsProgram.getSourceFile(fileNameToSearch));
+                        for (const match of searchForDeclaration(candidate.name, fileToSearch, noDtsProgram)) {
+                            definitionSet.add(match);
+                        }
+                    }
+                }
+                definitions = arrayFrom(definitionSet.values());
+            }
+
+            definitions = definitions.filter(d => !d.isAmbient && !d.failedAliasResolution);
+            return this.mapDefinitionInfo(definitions, project);
+
+            function findImplementationFileFromDtsFileName(fileName: string, resolveFromFile: string, auxiliaryProject: Project) {
+                const nodeModulesPathParts = getNodeModulePathParts(fileName);
+                if (nodeModulesPathParts && fileName.lastIndexOf(nodeModulesPathPart) === nodeModulesPathParts.topLevelNodeModulesIndex) {
+                    // Second check ensures the fileName only contains one `/node_modules/`. If there's more than one I give up.
+                    const packageDirectory = fileName.substring(0, nodeModulesPathParts.packageRootIndex);
+                    const packageJsonCache = project.getModuleResolutionCache()?.getPackageJsonInfoCache();
+                    const compilerOptions = project.getCompilationSettings();
+                    const packageJson = getPackageScopeForPath(project.toPath(packageDirectory + "/package.json"), packageJsonCache, project, compilerOptions);
+                    if (!packageJson) return undefined;
+                    // Use fake options instead of actual compiler options to avoid following export map if the project uses node12 or nodenext -
+                    // Mapping from an export map entry across packages is out of scope for now. Returned entrypoints will only be what can be
+                    // resolved from the package root under --moduleResolution node
+                    const entrypoints = getEntrypointsFromPackageJsonInfo(
+                        packageJson,
+                        { moduleResolution: ModuleResolutionKind.NodeJs },
+                        project,
+                        project.getModuleResolutionCache());
+                    // This substring is correct only because we checked for a single `/node_modules/` at the top.
+                    const packageNamePathPart = fileName.substring(
+                        nodeModulesPathParts.topLevelPackageNameIndex + 1,
+                        nodeModulesPathParts.packageRootIndex);
+                    const packageName = getPackageNameFromTypesPackageName(unmangleScopedPackageName(packageNamePathPart));
+                    const path = project.toPath(fileName);
+                    if (entrypoints && some(entrypoints, e => project.toPath(e) === path)) {
+                        // This file was the main entrypoint of a package. Try to resolve that same package name with
+                        // the auxiliary project that only resolves to implementation files.
+                        const [implementationResolution] = auxiliaryProject.resolveModuleNames([packageName], resolveFromFile);
+                        return implementationResolution?.resolvedFileName;
+                    }
+                    else {
+                        // It wasn't the main entrypoint but we are in node_modules. Try a subpath into the package.
+                        const pathToFileInPackage = fileName.substring(nodeModulesPathParts.packageRootIndex + 1);
+                        const specifier = `${packageName}/${removeFileExtension(pathToFileInPackage)}`;
+                        const [implementationResolution] = auxiliaryProject.resolveModuleNames([specifier], resolveFromFile);
+                        return implementationResolution?.resolvedFileName;
+                    }
+                }
+                // We're not in node_modules, and we only get to this function if non-dts module resolution failed.
+                // I'm not sure what else I can do here that isn't already covered by that module resolution.
+                return undefined;
+            }
+
+            // In 'foo.bar./**/baz', if we got not results on 'baz', see if we can get an ambient definition
+            // for 'bar' or 'foo' (in that order) so we can search for declarations of 'baz' later.
+            function getAmbientCandidatesByClimbingAccessChain(): readonly { name: string, fileName: string }[] {
+                const ls = project.getLanguageService();
+                const program = ls.getProgram()!;
+                const initialNode = getTouchingPropertyName(program.getSourceFile(file)!, position);
+                if ((isStringLiteralLike(initialNode) || isIdentifier(initialNode)) && isAccessExpression(initialNode.parent)) {
+                    return forEachNameInAccessChainWalkingLeft(initialNode, nameInChain => {
+                        if (nameInChain === initialNode) return undefined;
+                        const candidates = ls.getDefinitionAtPosition(file, nameInChain.getStart(), /*searchOtherFilesOnly*/ true)
+                            ?.filter(d => toNormalizedPath(d.fileName) !== file && d.isAmbient)
+                            .map(d => ({
+                                fileName: d.fileName,
+                                name: getTextOfIdentifierOrLiteral(initialNode)
+                            }));
+                        if (some(candidates)) {
+                            return candidates;
+                        }
+                    }) || emptyArray;
+                }
+                return emptyArray;
+            }
+
+            function tryRefineDefinition(definition: DefinitionInfo, program: Program, noDtsProgram: Program) {
+                const fileToSearch = noDtsProgram.getSourceFile(definition.fileName);
+                if (!fileToSearch) {
+                    return undefined;
+                }
+                const initialNode = getTouchingPropertyName(program.getSourceFile(file)!, position);
+                const symbol = program.getTypeChecker().getSymbolAtLocation(initialNode);
+                const importSpecifier = symbol && getDeclarationOfKind<ImportSpecifier>(symbol, SyntaxKind.ImportSpecifier);
+                if (!importSpecifier) return undefined;
+
+                const nameToSearch = importSpecifier.propertyName?.text || importSpecifier.name.text;
+                return searchForDeclaration(nameToSearch, fileToSearch, noDtsProgram);
+            }
+
+            function searchForDeclaration(declarationName: string, fileToSearch: SourceFile, noDtsProgram: Program) {
+                const matches = FindAllReferences.Core.getTopMostDeclarationNamesInFile(declarationName, fileToSearch);
+                return mapDefined(matches, match => {
+                    const symbol = noDtsProgram.getTypeChecker().getSymbolAtLocation(match);
+                    const decl = getDeclarationFromName(match);
+                    if (symbol && decl) {
+                        // I think the last argument to this is supposed to be the start node, but it doesn't seem important.
+                        // Callers internal to GoToDefinition already get confused about this.
+                        return GoToDefinition.createDefinitionInfo(decl, noDtsProgram.getTypeChecker(), symbol, decl, /*unverified*/ true);
+                    }
+                });
+            }
+
+            function ensureRoot(project: Project, fileName: string) {
+                const info = project.getScriptInfo(fileName);
+                if (!info) return false;
+                if (!project.containsScriptInfo(info)) {
+                    project.addRoot(info);
+                    project.updateGraph();
+                }
+                return true;
+            }
         }
 
         private getEmitOutput(args: protocol.EmitOutputRequestArgs): EmitOutput | protocol.EmitOutput {
@@ -2751,11 +2905,14 @@ namespace ts.server {
             [CommandNames.DefinitionFull]: (request: protocol.DefinitionRequest) => {
                 return this.requiredResponse(this.getDefinition(request.arguments, /*simplifiedResult*/ false));
             },
-            [CommandNames.DefinitionAndBoundSpan]: (request: protocol.DefinitionRequest) => {
+            [CommandNames.DefinitionAndBoundSpan]: (request: protocol.DefinitionAndBoundSpanRequest) => {
                 return this.requiredResponse(this.getDefinitionAndBoundSpan(request.arguments, /*simplifiedResult*/ true));
             },
-            [CommandNames.DefinitionAndBoundSpanFull]: (request: protocol.DefinitionRequest) => {
+            [CommandNames.DefinitionAndBoundSpanFull]: (request: protocol.DefinitionAndBoundSpanRequest) => {
                 return this.requiredResponse(this.getDefinitionAndBoundSpan(request.arguments, /*simplifiedResult*/ false));
+            },
+            [CommandNames.FindSourceDefinition]: (request: protocol.FindSourceDefinitionRequest) => {
+                return this.requiredResponse(this.findSourceDefinition(request.arguments));
             },
             [CommandNames.EmitOutput]: (request: protocol.EmitOutputRequest) => {
                 return this.requiredResponse(this.getEmitOutput(request.arguments));
