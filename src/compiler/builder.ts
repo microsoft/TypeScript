@@ -1105,7 +1105,8 @@ namespace ts {
 
         function getWriteFileUpdatingSignatureCallback(writeFile: WriteFileCallback | undefined): WriteFileCallback {
             return (fileName, text, writeByteOrderMark, onError, sourceFiles, data) => {
-                if (sourceFiles?.length === 1 && isDeclarationFileName(fileName)) {
+                if (isDeclarationFileName(fileName)) {
+                    Debug.assert(sourceFiles?.length === 1);
                     const file = sourceFiles[0];
                     const info = state.fileInfos.get(file.resolvedPath)!;
                     const signature = state.currentAffectedFilesSignatures?.get(file.resolvedPath) || info.signature;
