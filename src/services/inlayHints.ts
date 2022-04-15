@@ -3,7 +3,7 @@ namespace ts.InlayHints {
 
     const maxHintsLength = 30;
 
-    const undefinedTupleLabel = "undefined";
+    const undefinedTupleLabel = "(undefined)";
 
     const leadingParameterNameCommentRegexFactory = (name: string) => {
         return new RegExp(`^\\s?/\\*\\*?\\s?${name}\\s?\\*\\/\\s?$`);
@@ -66,81 +66,13 @@ namespace ts.InlayHints {
                 visitCallOrNewExpression(node);
             }
             else if (isElementAccessExpression(node)) {
-                const type = checker.getTypeAtLocation(node.expression);
-                if (!isModuleReferenceType(type) && isNumericLiteral(node.argumentExpression)) {
-                    const tupleIndex = parseInt(node.argumentExpression.getText());
-                    if (type.flags & TypeFlags.Union) {
-                        const labels = getTupleLabelsFromUnion(type as UnionType, tupleIndex);
-                        if (labels.length > 0) {
-                            addUnionTupleTypeHints(labels, node.argumentExpression.getStart());
-                        }
-                    }
-                    else if ((type as TupleTypeReference).target) {
-                        const labeledElementDeclarations = (type as TupleTypeReference).target.labeledElementDeclarations;
-                        if (labeledElementDeclarations) {
-                            const labelDecl = labeledElementDeclarations[tupleIndex];
-                            if (labelDecl) {
-                                Debug.assertNode(labelDecl.name, isIdentifier);
-                                addTupleLabelHints(idText(labelDecl.name), node.argumentExpression.getStart());
-                            }
-                            else {
-                                addTupleLabelHints(undefinedTupleLabel, node.argumentExpression.getStart());
-                            }
-                        }
-                    }
-                }
+                visitTupleElementAccessExpression(node);
             }
             else if (isArrayLiteralExpression(node)) {
-                let type = checker.getContextualType(node);
-                if (type && !isModuleReferenceType(type)) {
-                    if (type.flags & TypeFlags.Union) {
-                        const actualType = checker.getTypeAtLocation(node);
-                        type = getAssignableTypeFromUnion(actualType, type as UnionType);
-                    }
-                    if (type && (type as TupleTypeReference).target) {
-                        const labelDecls = (type as TupleTypeReference).target.labeledElementDeclarations;
-                        if (labelDecls) {
-                            for (let i = 0; i < node.elements.length; i++) {
-                                const labelDecl = labelDecls[i] as NamedTupleMember;
-                                if (labelDecl) {
-                                    Debug.assertNode(labelDecl.name, isIdentifier);
-                                    addTupleLabelHints(idText(labelDecl.name), node.elements[i].getStart());
-                                }
-                                else {
-                                    addTupleLabelHints(undefinedTupleLabel, node.elements[i].getStart());
-                                }
-                            }
-                        }
-                    }
-                }
+                visitTupleArrayLiteralExpression(node);
             }
             else if (isArrayBindingPattern(node)) {
-                const type = checker.getTypeAtLocation(node);
-                if (!isModuleReferenceType(type)) {
-                    const labeledElementDeclarations = (type as TupleTypeReference).target.labeledElementDeclarations;
-                    if (labeledElementDeclarations) {
-                        for (let i = 0; i < node.elements.length; i++) {
-                            const element = node.elements[i] as BindingElement;
-                            if (element.name.kind === SyntaxKind.Identifier) {
-                                if (element.dotDotDotToken) {
-                                    const type = checker.getTypeAtLocation(element) as TupleTypeReference;
-                                    addLabeledTupleVariableHints(
-                                        type.target.labeledElementDeclarations!.map((labelDecl: NamedTupleMember) => {
-                                            Debug.assertNode(labelDecl.name, isIdentifier);
-                                            return idText(labelDecl.name);
-                                        }),
-                                        element.getStart(),
-                                    );
-                                }
-                                else {
-                                    const labelDecl = labeledElementDeclarations[i] as NamedTupleMember;
-                                    Debug.assertNode(labelDecl.name, isIdentifier);
-                                    addTupleLabelHints(idText(labelDecl.name), element.getStart());
-                                }
-                            }
-                        }
-                    }
-                }
+                visitTupleArrayBindingPattern(node);
             }
             else {
                 if (preferences.includeInlayFunctionParameterTypeHints && isFunctionLikeDeclaration(node) && hasContextSensitiveParameters(node)) {
@@ -386,6 +318,111 @@ namespace ts.InlayHints {
             }
 
             addTypeHints(typeDisplayString, getTypeAnnotationPosition(decl));
+        }
+
+        function visitTupleElementAccessExpression(node: ElementAccessExpression) {
+            const tupleType = checker.getTypeAtLocation(node.expression);
+            if (isModuleReferenceType(tupleType) || !isNumericLiteral(node.argumentExpression)) {
+                return;
+            }
+
+            const tupleIndex = parseInt(node.argumentExpression.getText());
+            if (tupleType.flags & TypeFlags.Union) {
+                const tupleLabels = getTupleLabelsFromUnion(tupleType as UnionType, tupleIndex);
+                if (tupleLabels.length > 0) {
+                    addUnionTupleTypeHints(tupleLabels, node.argumentExpression.getStart());
+                }
+                return;
+            }
+            else if (!(tupleType as TupleTypeReference).target) {
+                return;
+            }
+
+            const labelDecls = (tupleType as TupleTypeReference).target.labeledElementDeclarations;
+            if (!labelDecls) {
+                return;
+            }
+
+            const labelDecl = labelDecls[tupleIndex];
+            if (labelDecl) {
+                Debug.assertNode(labelDecl.name, isIdentifier);
+                addTupleLabelHints(idText(labelDecl.name), node.argumentExpression.getStart());
+            }
+            else {
+                addTupleLabelHints(undefinedTupleLabel, node.argumentExpression.getStart());
+            }
+        }
+
+        function visitTupleArrayLiteralExpression(node: ArrayLiteralExpression) {
+            let tupleType = checker.getContextualType(node);
+            if (!tupleType || isModuleReferenceType(tupleType)) {
+                return;
+            }
+
+            if (tupleType.flags & TypeFlags.Union) {
+                const arrayType = checker.getTypeAtLocation(node);
+                tupleType = getAssignableTypeFromUnion(arrayType, tupleType as UnionType);
+            }
+
+            if (!tupleType || !(tupleType as TupleTypeReference).target) {
+                return;
+            }
+
+            const labelDecls = (tupleType as TupleTypeReference).target.labeledElementDeclarations;
+            if (!labelDecls) {
+                return;
+            }
+
+            for (let i = 0; i < node.elements.length; i++) {
+                const labelDecl = labelDecls[i] as NamedTupleMember;
+                if (labelDecl) {
+                    Debug.assertNode(labelDecl.name, isIdentifier);
+                    addTupleLabelHints(idText(labelDecl.name), node.elements[i].getStart());
+                }
+                else {
+                    addTupleLabelHints(undefinedTupleLabel, node.elements[i].getStart());
+                }
+            }
+        }
+
+        function visitTupleArrayBindingPattern(node: ArrayBindingPattern) {
+            const tupleType = checker.getTypeAtLocation(node);
+            if (isModuleReferenceType(tupleType)) {
+                return;
+            }
+
+            const labelDecls = (tupleType as TupleTypeReference).target.labeledElementDeclarations;
+            if (!labelDecls) {
+                return;
+            }
+
+            for (let i = 0; i < node.elements.length; i++) {
+                const bindingElement = node.elements[i] as BindingElement;
+                if (bindingElement.name.kind !== SyntaxKind.Identifier) {
+                    continue;
+                }
+
+                if (bindingElement.dotDotDotToken) {
+                    const spreadType = checker.getTypeAtLocation(bindingElement) as TupleTypeReference;
+                    const spreadTupleLabels = spreadType.target.labeledElementDeclarations!
+                        .map((labelDecl: NamedTupleMember) => {
+                            Debug.assertNode(labelDecl.name, isIdentifier);
+                            return idText(labelDecl.name);
+                        });
+
+                    addLabeledTupleVariableHints(spreadTupleLabels, bindingElement.getStart());
+                }
+                else {
+                    const labelDecl = labelDecls[i] as NamedTupleMember;
+                    if (labelDecl) {
+                        Debug.assertNode(labelDecl.name, isIdentifier);
+                        addTupleLabelHints(idText(labelDecl.name), node.elements[i].getStart());
+                    }
+                    else {
+                        addTupleLabelHints(undefinedTupleLabel, node.elements[i].getStart());
+                    }
+                }
+            }
         }
 
         function getTypeAnnotationPosition(decl: FunctionDeclaration | ArrowFunction | FunctionExpression | MethodDeclaration | GetAccessorDeclaration) {
