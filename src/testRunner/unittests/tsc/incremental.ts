@@ -90,7 +90,7 @@ namespace ts {
                     commandLineArgs: ["--incremental", "-p", "src"],
                     modifyFs,
                     edits: [
-                        noChangeRun,
+                        noChangeWithExportsDescripencyRun,
                         {
                             subScenario: "incremental-declaration-doesnt-change",
                             modifyFs: fixModifyFs
@@ -124,12 +124,12 @@ const a: string = 10;`, "utf-8"),
 
             function verifyNoEmitChanges(compilerOptions: CompilerOptions) {
                 const noChangeRunWithNoEmit: TestTscEdit = {
-                    ...noChangeRun,
+                    ...noChangeWithExportsDescripencyRun,
                     subScenario: "No Change run with noEmit",
                     commandLineArgs: ["--p", "src/project", "--noEmit"],
                 };
                 const noChangeRunWithEmit: TestTscEdit = {
-                    ...noChangeRun,
+                    ...noChangeWithExportsDescripencyRun,
                     subScenario: "No Change run with emit",
                     commandLineArgs: ["--p", "src/project"],
                 };
@@ -156,6 +156,7 @@ const a: string = 10;`, "utf-8"),
                         {
                             subScenario: "Fix error and emit",
                             modifyFs: fs => replaceText(fs, "/src/project/src/class.ts", "prop1", "prop"),
+                            descripencyExplaination: noChangeWithExportsDescripencyRun.descripencyExplaination,
                         },
                         noChangeRunWithEmit,
                         noChangeRunWithNoEmit,
@@ -164,6 +165,7 @@ const a: string = 10;`, "utf-8"),
                         {
                             subScenario: "Introduce error and emit",
                             modifyFs: fs => replaceText(fs, "/src/project/src/class.ts", "prop", "prop1"),
+                            descripencyExplaination: noChangeWithExportsDescripencyRun.descripencyExplaination,
                         },
                         noChangeRunWithEmit,
                         noChangeRunWithNoEmit,
@@ -173,6 +175,7 @@ const a: string = 10;`, "utf-8"),
                             subScenario: "Fix error and no emit",
                             commandLineArgs: ["--p", "src/project", "--noEmit"],
                             modifyFs: fs => replaceText(fs, "/src/project/src/class.ts", "prop1", "prop"),
+                            descripencyExplaination: noChangeWithExportsDescripencyRun.descripencyExplaination,
                         },
                         noChangeRunWithEmit,
                         noChangeRunWithNoEmit,
@@ -196,6 +199,7 @@ const a: string = 10;`, "utf-8"),
                         {
                             subScenario: "Fix error and no emit",
                             modifyFs: fs => replaceText(fs, "/src/project/src/class.ts", "prop1", "prop"),
+                            descripencyExplaination: noChangeWithExportsDescripencyRun.descripencyExplaination
                         },
                         noChangeRunWithEmit,
                     ],
@@ -252,7 +256,7 @@ const a: string = 10;`, "utf-8"),
             }),
             commandLineArgs: ["--p", "src/project"],
             edits: [
-                noChangeRun,
+                noChangeWithExportsDescripencyRun,
                 {
                     subScenario: "Modify main file",
                     modifyFs: fs => appendText(fs, `/src/project/src/main.ts`, `something();`),
@@ -352,11 +356,10 @@ declare global {
                 {
                     subScenario: "Add class3 to project1 and build it",
                     modifyFs: fs => fs.writeFileSync("/src/projects/project1/class3.ts", `class class3 {}`, "utf-8"),
-                    cleanBuildDiscrepancies: () => new Map<string, CleanBuildDescrepancy>([
-                        // Ts buildinfo will not be updated in incremental build so it will have semantic diagnostics cached from previous build
-                        // But in clean build because of global diagnostics, semantic diagnostics are not queried so not cached in tsbuildinfo
-                        ["/src/projects/project2/tsconfig.tsbuildinfo", CleanBuildDescrepancy.CleanFileTextDifferent]
-                    ]),
+                    descripencyExplaination: () => [
+                        "Ts buildinfo will not be updated in incremental build so it will have semantic diagnostics cached from previous build",
+                        "But in clean build because of global diagnostics, semantic diagnostics are not queried so not cached in tsbuildinfo",
+                    ],
                 },
                 {
                     subScenario: "Add output of class3",
@@ -372,11 +375,10 @@ declare global {
                 {
                     subScenario: "Delete output for class3",
                     modifyFs: fs => fs.unlinkSync("/src/projects/project1/class3.d.ts"),
-                    cleanBuildDiscrepancies: () => new Map<string, CleanBuildDescrepancy>([
-                        // Ts buildinfo willbe updated but will retain lib file errors from previous build and not others because they are emitted because of change which results in clearing their semantic diagnostics cache
-                        // But in clean build because of global diagnostics, semantic diagnostics are not queried so not cached in tsbuildinfo
-                        ["/src/projects/project2/tsconfig.tsbuildinfo", CleanBuildDescrepancy.CleanFileTextDifferent]
-                    ]),
+                    descripencyExplaination: () => [
+                        "Ts buildinfo willbe updated but will retain lib file errors from previous build and not others because they are emitted because of change which results in clearing their semantic diagnostics cache",
+                        "But in clean build because of global diagnostics, semantic diagnostics are not queried so not cached in tsbuildinfo",
+                    ],
                 },
                 {
                     subScenario: "Create output for class3",
