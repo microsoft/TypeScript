@@ -71,7 +71,7 @@ namespace ts.InlayHints {
                         const labelDecl = labeledElementDeclarations[parseInt(node.argumentExpression.getText())];
                         Debug.assertNode(labelDecl.name, isIdentifier);
                         result.push({
-                            text: `(${truncation(idText(labelDecl.name), maxHintsLength)})`,
+                            text: truncation(idText(labelDecl.name), maxHintsLength) + ":",
                             position: node.argumentExpression.getStart(),
                             kind: InlayHintKind.Parameter,
                             whitespaceAfter: true
@@ -88,11 +88,49 @@ namespace ts.InlayHints {
                             const labelDecl = labeledElementDeclarations[i] as NamedTupleMember;
                             Debug.assertNode(labelDecl.name, isIdentifier);
                             result.push({
-                                text: `(${truncation(idText(labelDecl.name), maxHintsLength)})`,
+                                text: truncation(idText(labelDecl.name), maxHintsLength) + ":",
                                 position: node.elements[i].getStart(),
                                 kind: InlayHintKind.Parameter,
                                 whitespaceAfter: true
                             });
+                        }
+                    }
+                }
+            }
+            else if (isArrayBindingPattern(node)) {
+                const type = checker.getTypeAtLocation(node);
+                if (!isModuleReferenceType(type)) {
+                    const labeledElementDeclarations = (type as TupleTypeReference).target.labeledElementDeclarations;
+                    if (labeledElementDeclarations) {
+                        for (let i = 0; i < node.elements.length; i++) {
+                            const element = node.elements[i] as BindingElement;
+                            if (element.name.kind === SyntaxKind.Identifier) {
+                                if (element.dotDotDotToken) {
+                                    const type = checker.getTypeAtLocation(element) as TupleTypeReference;
+                                    const labelsStr = type.target.labeledElementDeclarations!
+                                        .map((labelDecl: NamedTupleMember) => {
+                                            Debug.assertNode(labelDecl.name, isIdentifier);
+                                            return truncation(idText(labelDecl.name), maxHintsLength);
+                                        })
+                                        .join(", ");
+                                    result.push({
+                                        text: `[${labelsStr}]:`,
+                                        position: element.getStart(),
+                                        kind: InlayHintKind.Parameter,
+                                        whitespaceAfter: true
+                                    });
+                                }
+                                else {
+                                    const labelDecl = labeledElementDeclarations[i] as NamedTupleMember;
+                                    Debug.assertNode(labelDecl.name, isIdentifier);
+                                    result.push({
+                                        text: truncation(idText(labelDecl.name), maxHintsLength) + ":",
+                                        position: element.getStart(),
+                                        kind: InlayHintKind.Parameter,
+                                        whitespaceAfter: true
+                                    });
+                                }
+                            }
                         }
                     }
                 }
