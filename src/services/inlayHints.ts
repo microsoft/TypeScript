@@ -3,6 +3,8 @@ namespace ts.InlayHints {
 
     const maxHintsLength = 30;
 
+    const undefinedTupleLabel = "undefined";
+
     const leadingParameterNameCommentRegexFactory = (name: string) => {
         return new RegExp(`^\\s?/\\*\\*?\\s?${name}\\s?\\*\\/\\s?$`);
     };
@@ -65,34 +67,49 @@ namespace ts.InlayHints {
             }
             else if (isElementAccessExpression(node)) {
                 const type = checker.getTypeAtLocation(node.expression);
-                if (!isModuleReferenceType(type) && node.argumentExpression.kind === SyntaxKind.NumericLiteral) {
-                    const labeledElementDeclarations = (type as TupleTypeReference).target.labeledElementDeclarations;
-                    if (labeledElementDeclarations) {
-                        const labelDecl = labeledElementDeclarations[parseInt(node.argumentExpression.getText())];
-                        Debug.assertNode(labelDecl.name, isIdentifier);
-                        result.push({
-                            text: truncation(idText(labelDecl.name), maxHintsLength) + ":",
-                            position: node.argumentExpression.getStart(),
-                            kind: InlayHintKind.Parameter,
-                            whitespaceAfter: true
-                        });
+                if (!isModuleReferenceType(type) && isNumericLiteral(node.argumentExpression)) {
+                    const tupleIndex = parseInt(node.argumentExpression.getText());
+                    if (type.flags & TypeFlags.Union) {
+                        const labels = getTupleLabelsFromUnion(type as UnionType, tupleIndex);
+                        if (labels.length > 0) {
+                            addUnionTupleTypeHints(labels, node.argumentExpression.getStart());
+                        }
+                    }
+                    else if ((type as TupleTypeReference).target) {
+                        const labeledElementDeclarations = (type as TupleTypeReference).target.labeledElementDeclarations;
+                        if (labeledElementDeclarations) {
+                            const labelDecl = labeledElementDeclarations[tupleIndex];
+                            if (labelDecl) {
+                                Debug.assertNode(labelDecl.name, isIdentifier);
+                                addTupleLabelHints(idText(labelDecl.name), node.argumentExpression.getStart());
+                            }
+                            else {
+                                addTupleLabelHints(undefinedTupleLabel, node.argumentExpression.getStart());
+                            }
+                        }
                     }
                 }
             }
             else if (isArrayLiteralExpression(node)) {
-                const type = checker.getContextualType(node);
+                let type = checker.getContextualType(node);
                 if (type && !isModuleReferenceType(type)) {
-                    const labeledElementDeclarations = (type as TupleTypeReference).target.labeledElementDeclarations;
-                    if (labeledElementDeclarations) {
-                        for (let i = 0; i < node.elements.length; i++) {
-                            const labelDecl = labeledElementDeclarations[i] as NamedTupleMember;
-                            Debug.assertNode(labelDecl.name, isIdentifier);
-                            result.push({
-                                text: truncation(idText(labelDecl.name), maxHintsLength) + ":",
-                                position: node.elements[i].getStart(),
-                                kind: InlayHintKind.Parameter,
-                                whitespaceAfter: true
-                            });
+                    if (type.flags & TypeFlags.Union) {
+                        const actualType = checker.getTypeAtLocation(node);
+                        type = getAssignableTypeFromUnion(actualType, type as UnionType);
+                    }
+                    if (type && (type as TupleTypeReference).target) {
+                        const labelDecls = (type as TupleTypeReference).target.labeledElementDeclarations;
+                        if (labelDecls) {
+                            for (let i = 0; i < node.elements.length; i++) {
+                                const labelDecl = labelDecls[i] as NamedTupleMember;
+                                if (labelDecl) {
+                                    Debug.assertNode(labelDecl.name, isIdentifier);
+                                    addTupleLabelHints(idText(labelDecl.name), node.elements[i].getStart());
+                                }
+                                else {
+                                    addTupleLabelHints(undefinedTupleLabel, node.elements[i].getStart());
+                                }
+                            }
                         }
                     }
                 }
@@ -107,28 +124,18 @@ namespace ts.InlayHints {
                             if (element.name.kind === SyntaxKind.Identifier) {
                                 if (element.dotDotDotToken) {
                                     const type = checker.getTypeAtLocation(element) as TupleTypeReference;
-                                    const labelsStr = type.target.labeledElementDeclarations!
-                                        .map((labelDecl: NamedTupleMember) => {
+                                    addLabeledTupleVariableHints(
+                                        type.target.labeledElementDeclarations!.map((labelDecl: NamedTupleMember) => {
                                             Debug.assertNode(labelDecl.name, isIdentifier);
-                                            return truncation(idText(labelDecl.name), maxHintsLength);
-                                        })
-                                        .join(", ");
-                                    result.push({
-                                        text: `[${labelsStr}]:`,
-                                        position: element.getStart(),
-                                        kind: InlayHintKind.Parameter,
-                                        whitespaceAfter: true
-                                    });
+                                            return idText(labelDecl.name);
+                                        }),
+                                        element.getStart(),
+                                    );
                                 }
                                 else {
                                     const labelDecl = labeledElementDeclarations[i] as NamedTupleMember;
                                     Debug.assertNode(labelDecl.name, isIdentifier);
-                                    result.push({
-                                        text: truncation(idText(labelDecl.name), maxHintsLength) + ":",
-                                        position: element.getStart(),
-                                        kind: InlayHintKind.Parameter,
-                                        whitespaceAfter: true
-                                    });
+                                    addTupleLabelHints(idText(labelDecl.name), element.getStart());
                                 }
                             }
                         }
@@ -144,6 +151,36 @@ namespace ts.InlayHints {
                 }
             }
             return forEachChild(node, visitor);
+        }
+
+        function getAssignableTypeFromUnion(typeToAssign: Type, unionType: UnionType): Type | undefined {
+            for (const typeToCheck of unionType.types) {
+                if (checker.isTypeAssignableTo(typeToAssign, typeToCheck)) {
+                    return typeToCheck;
+                }
+            }
+            return undefined;
+        }
+
+        function getTupleLabelsFromUnion(unionType: UnionType, tupleIndex: number): string[] {
+            const labels: string[] = [];
+            for (const typeToCheck of unionType.types) {
+                const labeledElementDeclarations = (typeToCheck as TupleTypeReference).target.labeledElementDeclarations;
+                if (labeledElementDeclarations) {
+                    const labelDecl = labeledElementDeclarations[tupleIndex];
+                    if (labelDecl) {
+                        Debug.assertNode(labelDecl.name, isIdentifier);
+                        const label = idText(labelDecl.name);
+                        if (labels.indexOf(label) === -1) {
+                            labels.push(label);
+                        }
+                    }
+                    else if (labels.indexOf(undefinedTupleLabel) === -1) {
+                        labels.push(undefinedTupleLabel);
+                    }
+                }
+            }
+            return labels;
         }
 
         function isSignatureSupportingReturnAnnotation(node: Node): node is FunctionDeclaration | ArrowFunction | FunctionExpression | MethodDeclaration | GetAccessorDeclaration {
@@ -174,6 +211,33 @@ namespace ts.InlayHints {
                 position,
                 kind: InlayHintKind.Enum,
                 whitespaceBefore: true,
+            });
+        }
+
+        function addTupleLabelHints(tupleLabel: string, position: number) {
+            result.push({
+                text: truncation(tupleLabel, maxHintsLength) + ":",
+                position,
+                kind: InlayHintKind.Parameter, // TODO
+                whitespaceAfter: true
+            });
+        }
+
+        function addLabeledTupleVariableHints(tupleLabels: string[], position: number) {
+            result.push({
+                text: `[${tupleLabels.join(", ")}]:`,
+                position,
+                kind: InlayHintKind.Parameter, // TODO
+                whitespaceAfter: true
+            });
+        }
+
+        function addUnionTupleTypeHints(tupleLabels: string[], position: number) {
+            result.push({
+                text: tupleLabels.join(" | ") + ":",
+                position,
+                kind: InlayHintKind.Parameter, // TODO
+                whitespaceAfter: true
             });
         }
 
