@@ -7040,6 +7040,7 @@ declare namespace ts.server.protocol {
         Rename = "rename",
         Saveto = "saveto",
         SignatureHelp = "signatureHelp",
+        FindSourceDefinition = "findSourceDefinition",
         Status = "status",
         TypeDefinition = "typeDefinition",
         ProjectInfo = "projectInfo",
@@ -7658,6 +7659,9 @@ declare namespace ts.server.protocol {
     }
     interface DefinitionAndBoundSpanRequest extends FileLocationRequest {
         readonly command: CommandTypes.DefinitionAndBoundSpan;
+    }
+    interface FindSourceDefinitionRequest extends FileLocationRequest {
+        readonly command: CommandTypes.FindSourceDefinition;
     }
     interface DefinitionAndBoundSpanResponse extends Response {
         readonly body: DefinitionInfoAndBoundSpan;
@@ -9907,7 +9911,8 @@ declare namespace ts.server {
         Inferred = 0,
         Configured = 1,
         External = 2,
-        AutoImportProvider = 3
+        AutoImportProvider = 3,
+        Auxiliary = 4
     }
     function allRootFilesAreJsOrDts(project: Project): boolean;
     function allFilesAreJsOrDts(project: Project): boolean;
@@ -10642,6 +10647,7 @@ declare namespace ts.server {
         private getDefinition;
         private mapDefinitionInfoLocations;
         private getDefinitionAndBoundSpan;
+        private findSourceDefinition;
         private getEmitOutput;
         private mapJSDocTagInfo;
         private mapDisplayParts;

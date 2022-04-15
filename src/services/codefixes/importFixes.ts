@@ -453,7 +453,7 @@ namespace ts.codefix {
         // and it is up to the user to decide which one fits best.
         return firstDefined(existingImports, ({ declaration }): FixUseNamespaceImport | undefined => {
             const namespacePrefix = getNamespaceLikeImportText(declaration);
-            const moduleSpecifier = tryGetModuleSpecifierFromDeclaration(declaration);
+            const moduleSpecifier = tryGetModuleSpecifierFromDeclaration(declaration)?.text;
             if (namespacePrefix && moduleSpecifier) {
                 const moduleSymbol = getTargetModuleFromNamespaceLikeImport(declaration, checker);
                 if (moduleSymbol && moduleSymbol.exports!.has(escapeLeadingUnderscores(symbolName))) {
@@ -670,7 +670,7 @@ namespace ts.codefix {
         checker: TypeChecker,
         compilerOptions: CompilerOptions
     ): FixAddNewImport | undefined {
-        const moduleSpecifier = tryGetModuleSpecifierFromDeclaration(declaration);
+        const moduleSpecifier = tryGetModuleSpecifierFromDeclaration(declaration)?.text;
         if (moduleSpecifier) {
             const addAsTypeOnly = useRequire
                 ? AddAsTypeOnly.NotAllowed

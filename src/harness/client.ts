@@ -298,7 +298,7 @@ namespace ts.server {
         getDefinitionAndBoundSpan(fileName: string, position: number): DefinitionInfoAndBoundSpan {
             const args: protocol.FileLocationRequestArgs = this.createFileLocationRequestArgs(fileName, position);
 
-            const request = this.processRequest<protocol.DefinitionRequest>(CommandNames.DefinitionAndBoundSpan, args);
+            const request = this.processRequest<protocol.DefinitionAndBoundSpanRequest>(CommandNames.DefinitionAndBoundSpan, args);
             const response = this.processResponse<protocol.DefinitionInfoAndBoundSpanResponse>(request);
             const body = Debug.checkDefined(response.body); // TODO: GH#18217
 
@@ -329,6 +329,23 @@ namespace ts.server {
                 textSpan: this.decodeSpan(entry),
                 kind: ScriptElementKind.unknown,
                 name: ""
+            }));
+        }
+
+        getSourceDefinitionAndBoundSpan(fileName: string, position: number): DefinitionInfo[] {
+            const args: protocol.FileLocationRequestArgs = this.createFileLocationRequestArgs(fileName, position);
+            const request = this.processRequest<protocol.FindSourceDefinitionRequest>(CommandNames.FindSourceDefinition, args);
+            const response = this.processResponse<protocol.DefinitionResponse>(request);
+            const body = Debug.checkDefined(response.body); // TODO: GH#18217
+
+            return body.map(entry => ({
+                containerKind: ScriptElementKind.unknown,
+                containerName: "",
+                fileName: entry.file,
+                textSpan: this.decodeSpan(entry),
+                kind: ScriptElementKind.unknown,
+                name: "",
+                unverified: entry.unverified,
             }));
         }
 
