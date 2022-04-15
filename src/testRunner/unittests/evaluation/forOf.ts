@@ -69,6 +69,19 @@ describe("unittests:: evaluation:: forOfEvaluation", () => {
         assert.throws(() => result.main(), /cannot read property.*Symbol\(Symbol\.iterator\).*/i);
     });
 
+    it("es5 over undefined with Symbol with destructuring binding element", () => {
+        const result = evaluator.evaluateTypeScript(`
+        export function main() {
+            let x = undefined;
+
+            for (let [,] of x) {
+            }
+        }
+    `, { downlevelIteration: true, target: ts.ScriptTarget.ES5 });
+
+        assert.throws(() => result.main(), /cannot read property.*Symbol\(Symbol\.iterator\).*/i);
+    });
+
     it("es5 over object with no Symbol.iterator with no Symbol", () => {
         const result = evaluator.evaluateTypeScript(`
         Symbol = undefined;
