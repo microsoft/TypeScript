@@ -2589,7 +2589,7 @@ namespace ts.server.protocol {
         body?: SignatureHelpItems;
     }
 
-    export type InlayHintKind = "Type" | "Parameter" | "Enum";
+    export type InlayHintKind = "Type" | "Parameter" | "Enum" | "Tuple";
 
     export interface InlayHintsRequestArgs extends FileRequestArgs {
         /**
@@ -3467,6 +3467,10 @@ namespace ts.server.protocol {
         readonly includeInlayPropertyDeclarationTypeHints?: boolean;
         readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
         readonly includeInlayEnumMemberValueHints?: boolean;
+        readonly includeInlayTupleElementAccessLabelHints?: boolean;
+        readonly includeInlayTupleLiteralLabelHints?: boolean;
+        readonly includeInlayTupleBindingLabelHints?: boolean;
+        readonly includeInlayTupleBindingLabelHintsWhenVariableNameDoesntMatchLabel?: boolean;
     }
 
     export interface CompilerOptions {

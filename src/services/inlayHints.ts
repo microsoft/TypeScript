@@ -65,13 +65,13 @@ namespace ts.InlayHints {
             else if (shouldShowParameterNameHints(preferences) && (isCallExpression(node) || isNewExpression(node))) {
                 visitCallOrNewExpression(node);
             }
-            else if (isElementAccessExpression(node)) {
+            else if (preferences.includeInlayTupleElementAccessLabelHints && isElementAccessExpression(node)) {
                 visitTupleElementAccessExpression(node);
             }
-            else if (isArrayLiteralExpression(node)) {
+            else if (preferences.includeInlayTupleLiteralLabelHints && isArrayLiteralExpression(node)) {
                 visitTupleArrayLiteralExpression(node);
             }
-            else if (isArrayBindingPattern(node)) {
+            else if (preferences.includeInlayTupleBindingLabelHints && isArrayBindingPattern(node)) {
                 visitTupleArrayBindingPattern(node);
             }
             else {
@@ -416,7 +416,10 @@ namespace ts.InlayHints {
                     const labelDecl = labelDecls[i] as NamedTupleMember;
                     if (labelDecl) {
                         Debug.assertNode(labelDecl.name, isIdentifier);
-                        addTupleLabelHints(idText(labelDecl.name), node.elements[i].getStart());
+                        const label = idText(labelDecl.name);
+                        if (!preferences.includeInlayTupleBindingLabelHintsWhenVariableNameDoesntMatchLabel || label !== bindingElement.name.getText()) {
+                            addTupleLabelHints(label, node.elements[i].getStart());
+                        }
                     }
                     else {
                         addTupleLabelHints(undefinedTupleLabel, node.elements[i].getStart());
