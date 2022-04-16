@@ -396,6 +396,10 @@
         {
           "text": "text over tag",
           "kind": "text"
+        },
+        {
+          "text": "text after tag",
+          "kind": "text"
         }
       ],
       "tags": [

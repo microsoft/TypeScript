@@ -70,6 +70,14 @@
         {
           "text": "Base.prop",
           "kind": "text"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "SubClass.prop",
+          "kind": "text"
         }
       ],
       "tags": [
