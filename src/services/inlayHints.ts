@@ -104,7 +104,7 @@ namespace ts.InlayHints {
                         Debug.assertNode(labelDecl.name, isIdentifier);
                         const label = idText(labelDecl.name);
                         if (labels.indexOf(label) === -1) {
-                            labels.push(label);
+                            labels.push(truncation(label, maxHintsLength));
                         }
                     }
                     else if (labels.indexOf(undefinedTupleLabel) === -1) {
@@ -407,7 +407,7 @@ namespace ts.InlayHints {
                     const spreadTupleLabels = spreadType.target.labeledElementDeclarations!
                         .map((labelDecl: NamedTupleMember) => {
                             Debug.assertNode(labelDecl.name, isIdentifier);
-                            return idText(labelDecl.name);
+                            return truncation(idText(labelDecl.name), maxHintsLength);
                         });
 
                     addLabeledTupleVariableHints(spreadTupleLabels, bindingElement.getStart());
