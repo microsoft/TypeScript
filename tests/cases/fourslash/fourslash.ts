@@ -70,6 +70,7 @@ declare module ts {
         Type = "Type",
         Parameter = "Parameter",
         Enum = "Enum",
+        Tuple = "Tuple",
     }
 
     enum SemicolonPreference {
@@ -669,6 +670,10 @@ declare namespace FourSlashInterface {
         readonly includeInlayPropertyDeclarationTypeHints?: boolean;
         readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
         readonly includeInlayEnumMemberValueHints?: boolean;
+        readonly includeInlayTupleElementAccessLabelHints?: boolean;
+        readonly includeInlayTupleLiteralLabelHints?: boolean;
+        readonly includeInlayTupleBindingLabelHints?: boolean;
+        readonly includeInlayTupleBindingLabelHintsWhenVariableNameDoesntMatchLabel?: boolean;
     }
     interface CompletionsOptions {
         readonly marker?: ArrayOrSingle<string | Marker>;

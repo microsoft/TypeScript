@@ -4120,6 +4120,10 @@ declare namespace ts {
         readonly includeInlayPropertyDeclarationTypeHints?: boolean;
         readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
         readonly includeInlayEnumMemberValueHints?: boolean;
+        readonly includeInlayTupleElementAccessLabelHints?: boolean;
+        readonly includeInlayTupleLiteralLabelHints?: boolean;
+        readonly includeInlayTupleBindingLabelHints?: boolean;
+        readonly includeInlayTupleBindingLabelHintsWhenVariableNameDoesntMatchLabel?: boolean;
     }
     /** Represents a bigint literal value without requiring bigint support */
     export interface PseudoBigInt {
@@ -6067,7 +6071,8 @@ declare namespace ts {
     enum InlayHintKind {
         Type = "Type",
         Parameter = "Parameter",
-        Enum = "Enum"
+        Enum = "Enum",
+        Tuple = "Tuple"
     }
     interface InlayHint {
         text: string;
