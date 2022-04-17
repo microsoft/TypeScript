@@ -3,8 +3,6 @@ namespace ts.InlayHints {
 
     const maxHintsLength = 30;
 
-    const undefinedTupleLabel = "(undefined)";
-
     const leadingParameterNameCommentRegexFactory = (name: string) => {
         return new RegExp(`^\\s?/\\*\\*?\\s?${name}\\s?\\*\\/\\s?$`);
     };
@@ -106,9 +104,6 @@ namespace ts.InlayHints {
                         if (labels.indexOf(label) === -1) {
                             labels.push(truncation(label, maxHintsLength));
                         }
-                    }
-                    else if (labels.indexOf(undefinedTupleLabel) === -1) {
-                        labels.push(undefinedTupleLabel);
                     }
                 }
             }
@@ -348,9 +343,6 @@ namespace ts.InlayHints {
                 Debug.assertNode(labelDecl.name, isIdentifier);
                 addTupleLabelHints(idText(labelDecl.name), node.argumentExpression.getStart());
             }
-            else {
-                addTupleLabelHints(undefinedTupleLabel, node.argumentExpression.getStart());
-            }
         }
 
         function visitTupleArrayLiteralExpression(node: ArrayLiteralExpression) {
@@ -378,9 +370,6 @@ namespace ts.InlayHints {
                 if (labelDecl) {
                     Debug.assertNode(labelDecl.name, isIdentifier);
                     addTupleLabelHints(idText(labelDecl.name), node.elements[i].getStart());
-                }
-                else {
-                    addTupleLabelHints(undefinedTupleLabel, node.elements[i].getStart());
                 }
             }
         }
@@ -420,9 +409,6 @@ namespace ts.InlayHints {
                         if (!preferences.includeInlayTupleBindingLabelHintsWhenVariableNameDoesntMatchLabel || label !== bindingElement.name.getText()) {
                             addTupleLabelHints(label, node.elements[i].getStart());
                         }
-                    }
-                    else {
-                        addTupleLabelHints(undefinedTupleLabel, node.elements[i].getStart());
                     }
                 }
             }
