@@ -150,7 +150,7 @@ namespace ts.InlayHints {
             result.push({
                 text: truncation(tupleLabel, maxHintsLength) + ":",
                 position,
-                kind: InlayHintKind.Parameter, // TODO
+                kind: InlayHintKind.Tuple,
                 whitespaceAfter: true
             });
         }
@@ -159,7 +159,7 @@ namespace ts.InlayHints {
             result.push({
                 text: `[${tupleLabels.join(", ")}]:`,
                 position,
-                kind: InlayHintKind.Parameter, // TODO
+                kind: InlayHintKind.Tuple,
                 whitespaceAfter: true
             });
         }
@@ -168,7 +168,7 @@ namespace ts.InlayHints {
             result.push({
                 text: tupleLabels.join(" | ") + ":",
                 position,
-                kind: InlayHintKind.Parameter, // TODO
+                kind: InlayHintKind.Tuple,
                 whitespaceAfter: true
             });
         }
