@@ -14,7 +14,7 @@ namespace ts.server {
                 return cache.get(toFileName);
             },
             set(fromFileName, toFileName, preferences, options, modulePaths, moduleSpecifiers) {
-                ensureCache(fromFileName, preferences, options).set(toFileName, createInfo(modulePaths, moduleSpecifiers, /*isAutoImportable*/ true));
+                ensureCache(fromFileName, preferences, options).set(toFileName, createInfo(modulePaths, moduleSpecifiers, /*isBlockedByPackageJsonDependencies*/ false));
 
                 // If any module specifiers were generated based off paths in node_modules,
                 // a package.json file in that package was read and is an input to the cached.
@@ -43,7 +43,7 @@ namespace ts.server {
                     info.modulePaths = modulePaths;
                 }
                 else {
-                    cache.set(toFileName, createInfo(modulePaths, /*moduleSpecifiers*/ undefined, /*isAutoImportable*/ undefined));
+                    cache.set(toFileName, createInfo(modulePaths, /*moduleSpecifiers*/ undefined, /*isBlockedByPackageJsonDependencies*/ undefined));
                 }
             },
             setBlockedByPackageJsonDependencies(fromFileName, toFileName, preferences, options, isBlockedByPackageJsonDependencies) {
@@ -87,9 +87,9 @@ namespace ts.server {
         function createInfo(
             modulePaths: readonly ModulePath[] | undefined,
             moduleSpecifiers: readonly string[] | undefined,
-            isAutoImportable: boolean | undefined,
+            isBlockedByPackageJsonDependencies: boolean | undefined,
         ): ResolvedModuleSpecifierInfo {
-            return { modulePaths, moduleSpecifiers, isBlockedByPackageJsonDependencies: isAutoImportable };
+            return { modulePaths, moduleSpecifiers, isBlockedByPackageJsonDependencies };
         }
     }
 }
