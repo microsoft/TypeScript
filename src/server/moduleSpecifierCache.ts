@@ -46,14 +46,14 @@ namespace ts.server {
                     cache.set(toFileName, createInfo(modulePaths, /*moduleSpecifiers*/ undefined, /*isAutoImportable*/ undefined));
                 }
             },
-            setIsAutoImportable(fromFileName, toFileName, preferences, options, isAutoImportable) {
+            setBlockedByPackageJsonDependencies(fromFileName, toFileName, preferences, options, isBlockedByPackageJsonDependencies) {
                 const cache = ensureCache(fromFileName, preferences, options);
                 const info = cache.get(toFileName);
                 if (info) {
-                    info.isAutoImportable = isAutoImportable;
+                    info.isBlockedByPackageJsonDependencies = isBlockedByPackageJsonDependencies;
                 }
                 else {
-                    cache.set(toFileName, createInfo(/*modulePaths*/ undefined, /*moduleSpecifiers*/ undefined, isAutoImportable));
+                    cache.set(toFileName, createInfo(/*modulePaths*/ undefined, /*moduleSpecifiers*/ undefined, isBlockedByPackageJsonDependencies));
                 }
             },
             clear() {
@@ -89,7 +89,7 @@ namespace ts.server {
             moduleSpecifiers: readonly string[] | undefined,
             isAutoImportable: boolean | undefined,
         ): ResolvedModuleSpecifierInfo {
-            return { modulePaths, moduleSpecifiers, isAutoImportable };
+            return { modulePaths, moduleSpecifiers, isBlockedByPackageJsonDependencies: isAutoImportable };
         }
     }
 }

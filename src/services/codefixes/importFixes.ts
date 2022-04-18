@@ -629,19 +629,19 @@ namespace ts.codefix {
             const importedSymbolHasValueMeaning = !!(exportInfo.targetFlags & SymbolFlags.Value);
             const addAsTypeOnly = getAddAsTypeOnly(isValidTypeOnlyUseSite, /*isForNewImportDeclaration*/ true, exportInfo.symbol, exportInfo.targetFlags, checker, compilerOptions);
             computedWithoutCacheCount += computedWithoutCache ? 1 : 0;
-            return moduleSpecifiers?.map((moduleSpecifier): FixAddNewImport | FixAddJsdocTypeImport =>
+            return mapDefined(moduleSpecifiers, (moduleSpecifier): FixAddNewImport | FixAddJsdocTypeImport | undefined =>
+                pathContainsNodeModules(moduleSpecifier) ? undefined :
                 // `position` should only be undefined at a missing jsx namespace, in which case we shouldn't be looking for pure types.
-                !importedSymbolHasValueMeaning && isJs && position !== undefined
-                    ? { kind: ImportFixKind.JsdocTypeImport, moduleSpecifier, position, exportInfo, isReExport: i > 0 }
-                    : {
-                        kind: ImportFixKind.AddNew,
-                        moduleSpecifier,
-                        importKind: getImportKind(sourceFile, exportInfo.exportKind, compilerOptions),
-                        useRequire,
-                        addAsTypeOnly,
-                        exportInfo,
-                        isReExport: i > 0,
-                    }
+                !importedSymbolHasValueMeaning && isJs && position !== undefined ? { kind: ImportFixKind.JsdocTypeImport, moduleSpecifier, position, exportInfo, isReExport: i > 0 } :
+                {
+                    kind: ImportFixKind.AddNew,
+                    moduleSpecifier,
+                    importKind: getImportKind(sourceFile, exportInfo.exportKind, compilerOptions),
+                    useRequire,
+                    addAsTypeOnly,
+                    exportInfo,
+                    isReExport: i > 0,
+                }
             );
         });
 
