@@ -170,14 +170,14 @@ namespace ts.Completions {
     const enum GlobalsSearch { Continue, Success, Fail }
 
     interface ModuleSpecifierResolutioContext {
-        tryResolve: (exportInfo: readonly SymbolExportInfo[], isFromAmbientModule: boolean) => ModuleSpecifierResolutionResult | undefined;
+        tryResolve: (exportInfo: readonly SymbolExportInfo[], isFromAmbientModule: boolean) => ModuleSpecifierResolutionResult;
         resolutionLimitExceeded: () => boolean;
     }
 
-    interface ModuleSpecifierResolutionResult {
+    type ModuleSpecifierResolutionResult = "skipped" | "failed" | {
         exportInfo?: SymbolExportInfo;
         moduleSpecifier: string;
-    }
+    };
 
     function resolvingModuleSpecifiers<TReturn>(
         logPrefix: string,
@@ -190,6 +190,12 @@ namespace ts.Completions {
     ): TReturn {
         const start = timestamp();
         const packageJsonImportFilter = createPackageJsonImportFilter(sourceFile, preferences, host);
+        // Under `--moduleResolution nodenext`, we have to resolve module specifiers up front, because
+        // package.json exports can mean we *can't* resolve a module specifier (that doesn't include a
+        // relative path into node_modules), and we want to filter those completions out entirely.
+        // Import statement completions always need specifier resolution because the module specifier is
+        // part of their `insertText`, not the `codeActions` creating edits away from the cursor.
+        const needsFullResolution = isForImportStatementCompletion || moduleResolutionRespectsExports(getEmitModuleResolutionKind(program.getCompilerOptions()));
         let resolutionLimitExceeded = false;
         let ambientCount = 0;
         let resolvedCount = 0;
@@ -204,15 +210,15 @@ namespace ts.Completions {
         host.log?.(`${logPrefix}: ${timestamp() - start}`);
         return result;
 
-        function tryResolve(exportInfo: readonly SymbolExportInfo[], isFromAmbientModule: boolean): ModuleSpecifierResolutionResult | undefined {
+        function tryResolve(exportInfo: readonly SymbolExportInfo[], isFromAmbientModule: boolean): ModuleSpecifierResolutionResult {
             if (isFromAmbientModule) {
                 const result = codefix.getModuleSpecifierForBestExportInfo(exportInfo, sourceFile, program, host, preferences);
                 if (result) {
                     ambientCount++;
                 }
-                return result;
+                return result || "failed";
             }
-            const shouldResolveModuleSpecifier = isForImportStatementCompletion || preferences.allowIncompleteCompletions && resolvedCount < moduleSpecifierResolutionLimit;
+            const shouldResolveModuleSpecifier = needsFullResolution || preferences.allowIncompleteCompletions && resolvedCount < moduleSpecifierResolutionLimit;
             const shouldGetModuleSpecifierFromCache = !shouldResolveModuleSpecifier && preferences.allowIncompleteCompletions && cacheAttemptCount < moduleSpecifierResolutionCacheAttemptLimit;
             const result = (shouldResolveModuleSpecifier || shouldGetModuleSpecifierFromCache)
                 ? codefix.getModuleSpecifierForBestExportInfo(exportInfo, sourceFile, program, host, preferences, packageJsonImportFilter, shouldGetModuleSpecifierFromCache)
@@ -223,12 +229,12 @@ namespace ts.Completions {
             }
 
             resolvedCount += result?.computedWithoutCacheCount || 0;
-            resolvedFromCacheCount += exportInfo.length - resolvedCount;
+            resolvedFromCacheCount += exportInfo.length - (result?.computedWithoutCacheCount || 0);
             if (shouldGetModuleSpecifierFromCache) {
                 cacheAttemptCount++;
             }
 
-            return result;
+            return result || (needsFullResolution ? "failed" : "skipped");
         }
     }
 
@@ -375,7 +381,11 @@ namespace ts.Completions {
                     const info = exportMap.get(file.path, entry.data.exportMapKey);
 
                     const result = info && context.tryResolve(info, !isExternalModuleNameRelative(stripQuotes(origin.moduleSymbol.name)));
-                    if (!result) return entry;
+                    if (result === "skipped") return entry;
+                    if (!result || result === "failed") {
+                        host.log?.(`Unexpected failure resolving auto import for '${entry.name}' from '${entry.source}'`);
+                        return undefined;
+                    }
 
                     const newOrigin: SymbolOriginInfoResolvedExport = {
                         ...origin,
@@ -2698,14 +2708,34 @@ namespace ts.Completions {
                                 return;
                             }
 
-                            const defaultExportInfo = find(info, isImportableExportInfo);
-                            if (!defaultExportInfo) {
+                            // Do a relatively cheap check to bail early if all re-exports are non-importable
+                            // due to file location or package.json dependency filtering. For non-node12+
+                            // module resolution modes, getting past this point guarantees that we'll be
+                            // able to generate a suitable module specifier, so we can safely show a completion,
+                            // even if we defer computing the module specifier.
+                            const firstImportableExportInfo = find(info, isImportableExportInfo);
+                            if (!firstImportableExportInfo) {
                                 return;
                             }
 
-                            // If we don't need to resolve module specifiers, we can use any re-export that is importable at all
-                            // (We need to ensure that at least one is importable to show a completion.)
-                            const { exportInfo = defaultExportInfo, moduleSpecifier } = context.tryResolve(info, isFromAmbientModule) || {};
+                            // In node12+, module specifier resolution can fail due to modules being blocked
+                            // by package.json `exports`. If that happens, don't show a completion item.
+                            // N.B. in this resolution mode we always try to resolve module specifiers here,
+                            // because we have to know now if it's going to fail so we can omit the completion
+                            // from the list.
+                            const result = context.tryResolve(info, isFromAmbientModule) || {};
+                            if (result === "failed") return;
+
+                            // If we skipped resolving module specifiers, our selection of which ExportInfo
+                            // to use here is arbitrary, since the info shown in the completion list derived from
+                            // it should be identical regardless of which one is used. During the subsequent
+                            // `CompletionEntryDetails` request, we'll get all the ExportInfos again and pick
+                            // the best one based on the module specifier it produces.
+                            let exportInfo = firstImportableExportInfo, moduleSpecifier;
+                            if (result !== "skipped") {
+                                ({ exportInfo = firstImportableExportInfo, moduleSpecifier } = result);
+                            }
+
                             const isDefaultExport = exportInfo.exportKind === ExportKind.Default;
                             const symbol = isDefaultExport && getLocalSymbolForExportDefault(exportInfo.symbol) || exportInfo.symbol;
 
