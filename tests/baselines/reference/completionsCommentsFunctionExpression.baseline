@@ -6,6 +6,7 @@
       "name": "2"
     },
     "completionList": {
+      "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": false,
       "isNewIdentifierLocation": false,
@@ -3853,6 +3854,7 @@
       "name": "4"
     },
     "completionList": {
+      "flags": 0,
       "isGlobalCompletion": true,
       "isMemberCompletion": false,
       "isNewIdentifierLocation": false,
@@ -8575,6 +8577,7 @@
       "name": "15"
     },
     "completionList": {
+      "flags": 0,
       "isGlobalCompletion": true,
       "isMemberCompletion": false,
       "isNewIdentifierLocation": false,
@@ -12241,6 +12244,7 @@
       "name": "17"
     },
     "completionList": {
+      "flags": 0,
       "isGlobalCompletion": true,
       "isMemberCompletion": false,
       "isNewIdentifierLocation": false,
