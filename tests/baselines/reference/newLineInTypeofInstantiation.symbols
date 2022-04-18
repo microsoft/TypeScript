@@ -7,6 +7,6 @@ interface Example {
 >a : Symbol(a, Decl(newLineInTypeofInstantiation.ts, 1, 5))
   
     <T>(): void
->T : Symbol(T)
+>T : Symbol(T, Decl(newLineInTypeofInstantiation.ts, 3, 5))
 }
 
