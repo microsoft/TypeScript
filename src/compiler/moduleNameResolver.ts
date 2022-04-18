@@ -2213,17 +2213,13 @@ namespace ts {
                     // Even with all that, we still don't know if the root of the output file structure will be (relative to the package file)
                     // `.`, `./src` or any other deeper directory structure. (If project references are used, it's definitely `.` by fiat, so that should be pretty common.)
 
-                    const commonSourceDirGuesses: [base: string, outputDirs: string[]][] = [];
+                    const getCanonicalFileName = hostGetCanonicalFileName({ useCaseSensitiveFileNames });
+                    const commonSourceDirGuesses: string[] = [];
                     // A `rootDir` compiler option strongly indicates the root location
-                    if (state.compilerOptions.rootDir) {
-                        const baseLocation = toAbsolutePath(state.compilerOptions.configFilePath && getDirectoryPath(state.compilerOptions.configFilePath) || state.host.getCurrentDirectory?.() || scope.packageDirectory);
-                        const packageRoot = toAbsolutePath(combinePaths(baseLocation, state.compilerOptions.rootDir));
-                        commonSourceDirGuesses.push([packageRoot, getOutputDirectoriesForBaseDirectory(baseLocation)]);
-                    }
                     // A `composite` project is using project references and has it's common src dir set to `.`, so it shouldn't need to check any other locations
-                    else if (state.compilerOptions.composite && state.compilerOptions.configFilePath) {
-                        const baseLocation = toAbsolutePath(getDirectoryPath(state.compilerOptions.configFilePath));
-                        commonSourceDirGuesses.push([baseLocation, getOutputDirectoriesForBaseDirectory(baseLocation)]);
+                    if (state.compilerOptions.rootDir || (state.compilerOptions.composite && state.compilerOptions.configFilePath)) {
+                        const commonDir = toAbsolutePath(getCommonSourceDirectory(state.compilerOptions, () => [], state.host.getCurrentDirectory?.() || "", getCanonicalFileName));
+                        commonSourceDirGuesses.push(commonDir);
                     }
                     else if (state.requestContainingDirectory) {
                         // However without either of those set we're in the dark. Let's say you have
@@ -2239,28 +2235,25 @@ namespace ts {
                         // without more context.
                         // But we do have more context! Just a tiny bit more! We're resolving an import _for some other input file_! And that input file, too
                         // must be inside the common source directory! So we propagate that tidbit of info all the way to here via state.requestContainingDirectory
-                        let baseDir = state.compilerOptions.configFilePath ? toAbsolutePath(getDirectoryPath(state.compilerOptions.configFilePath)) : toAbsolutePath(state.host.getCurrentDirectory?.() || scope.packageDirectory);
-                        const containingDir = toAbsolutePath(state.requestContainingDirectory);
-                        if (startsWith(containingDir, baseDir)) {
-                            // And we can try every folder between that request folder and the config/package base directory
-                            // This technically can be wrong - we may load ./src/index.ts when ./src/sub/index.ts was right because we don't
-                            // know if only `./src/sub` files were loaded by the program; but this has the best chance to be right of just about anything
-                            // else we have. And, given that we're about to load `./src/index.ts` because we choose it as likely correct, there will then
-                            // be a file outside of `./src/sub` in the program (the file we resolved to), making us de-facto right. So this fallback lookup
-                            // logic may influence what files are pulled in by self-names, which in turn influences the output path shape, but it's all
-                            // internally consistent so the paths should be stable so long as we prefer the "most general" (meaning: top-most-level directory) possible results first.
-                            const outDirs = getOutputDirectoriesForBaseDirectory(baseDir);
-                            commonSourceDirGuesses.push([baseDir, outDirs]);
 
-                            let fragment = ensureTrailingDirectorySeparator(containingDir.slice(baseDir.length));
-                            while (fragment && fragment.length > 1) {
-                                const parts = getPathComponents(fragment);
-                                parts.shift(); // shift out root
-                                const dir = parts.shift()!;
-                                baseDir = combinePaths(baseDir, dir);
-                                commonSourceDirGuesses.push([baseDir, getOutputDirectoriesForBaseDirectory(baseDir)]);
-                                fragment = ensureTrailingDirectorySeparator(getPathFromPathComponents(parts));
-                            }
+                        const requestingFile = toAbsolutePath(combinePaths(state.requestContainingDirectory, "index.ts"));
+                        // And we can try every folder above the common folder for the request folder and the config/package base directory
+                        // This technically can be wrong - we may load ./src/index.ts when ./src/sub/index.ts was right because we don't
+                        // know if only `./src/sub` files were loaded by the program; but this has the best chance to be right of just about anything
+                        // else we have. And, given that we're about to load `./src/index.ts` because we choose it as likely correct, there will then
+                        // be a file outside of `./src/sub` in the program (the file we resolved to), making us de-facto right. So this fallback lookup
+                        // logic may influence what files are pulled in by self-names, which in turn influences the output path shape, but it's all
+                        // internally consistent so the paths should be stable so long as we prefer the "most general" (meaning: top-most-level directory) possible results first.
+                        const commonDir = toAbsolutePath(getCommonSourceDirectory(state.compilerOptions, () => [requestingFile, toAbsolutePath(packagePath)], state.host.getCurrentDirectory?.() || "", getCanonicalFileName));
+                        commonSourceDirGuesses.push(commonDir);
+
+                        let fragment = ensureTrailingDirectorySeparator(commonDir);
+                        while (fragment && fragment.length > 1) {
+                            const parts = getPathComponents(fragment);
+                            parts.pop(); // remove a directory
+                            const commonDir = getPathFromPathComponents(parts);
+                            commonSourceDirGuesses.unshift(commonDir);
+                            fragment = ensureTrailingDirectorySeparator(commonDir);
                         }
                     }
                     if (commonSourceDirGuesses.length > 1) {
@@ -2268,11 +2261,12 @@ namespace ts {
                             isImports
                                 ? Diagnostics.The_project_root_is_ambiguous_but_is_required_to_resolve_import_map_entry_0_in_file_1_Supply_the_rootDir_compiler_option_to_disambiguate
                                 : Diagnostics.The_project_root_is_ambiguous_but_is_required_to_resolve_export_map_entry_0_in_file_1_Supply_the_rootDir_compiler_option_to_disambiguate,
-                            entry,
+                            entry === "" ? "." : entry, // replace empty string with `.` - the reverse of the operation done when entries are built - so main entrypoint errors don't look weird
                             packagePath
                         ));
                     }
-                    for (const [commonSourceDirGuess, candidateDirectories] of commonSourceDirGuesses) {
+                    for (const commonSourceDirGuess of commonSourceDirGuesses) {
+                        const candidateDirectories = getOutputDirectoriesForBaseDirectory(commonSourceDirGuess);
                         for (const candidateDir of candidateDirectories) {
                             if (startsWith(finalPath, candidateDir)) {
                                 // The matched export is looking up something in either the out declaration or js dir, now map the written path back into the source dir and source extension

@@ -1372,8 +1372,7 @@ namespace ts {
         }
 
         function pullDiagnosticsFromCache(names: string[] | readonly FileReference[], containingFile: SourceFile) {
-            const cache = host.getModuleResolutionCache?.();
-            if (!cache) return; // Cache not exposed by host, no way to retrieve resolution diagnostics
+            if (!moduleResolutionCache) return;
             const containingFileName = getNormalizedAbsolutePath(containingFile.originalFileName, currentDirectory);
             const containingFileMode = !isString(containingFile) ? containingFile.impliedNodeFormat : undefined;
             const containingDir = getDirectoryPath(containingFileName);
@@ -1390,7 +1389,7 @@ namespace ts {
                 // When it is, how we extract diagnostics from the module name resolver will have the be refined - the current cache
                 // APIs wrapping the underlying resolver make it almost impossible to smuggle the diagnostics out in a generalized way
                 if (isExternalModuleNameRelative(name)) continue;
-                const diags = cache.getOrCreateCacheForModuleName(name, mode, redirectedReference).get(containingDir)?.resolutionDiagnostics;
+                const diags = moduleResolutionCache.getOrCreateCacheForModuleName(name, mode, redirectedReference).get(containingDir)?.resolutionDiagnostics;
                 addResolutionDiagnostics(diags);
             }
         }
