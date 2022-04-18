@@ -472,7 +472,7 @@ namespace ts {
 
         getSmartSelectionRange(fileName: string, position: number): SelectionRange;
 
-        getDefinitionAtPosition(fileName: string, position: number): readonly DefinitionInfo[] | undefined;
+        getDefinitionAtPosition(fileName: string, position: number, skipAlias?: boolean): readonly DefinitionInfo[] | undefined;
         getDefinitionAndBoundSpan(fileName: string, position: number): DefinitionInfoAndBoundSpan | undefined;
         getTypeDefinitionAtPosition(fileName: string, position: number): readonly DefinitionInfo[] | undefined;
         getImplementationAtPosition(fileName: string, position: number): readonly ImplementationLocation[] | undefined;

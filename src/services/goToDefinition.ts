@@ -1,6 +1,6 @@
 /* @internal */
 namespace ts.GoToDefinition {
-    export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile, position: number): readonly DefinitionInfo[] | undefined {
+    export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile, position: number, skipAlias = true): readonly DefinitionInfo[] | undefined {
         const resolvedRef = getReferenceAtPosition(sourceFile, position, program);
         const fileReferenceDefinition = resolvedRef && [getDefinitionInfoForFileReference(resolvedRef.reference.fileName, resolvedRef.fileName, resolvedRef.unverified)] || emptyArray;
         if (resolvedRef?.file) {
@@ -39,7 +39,7 @@ namespace ts.GoToDefinition {
             });
         }
 
-        const symbol = getSymbol(node, typeChecker);
+        const symbol = getSymbol(node, typeChecker, skipAlias);
 
         // Could not find a symbol e.g. node is string or number keyword,
         // or the symbol was an internal symbol and does not have a declaration e.g. undefined symbol
@@ -259,13 +259,13 @@ namespace ts.GoToDefinition {
         return mapDefined(checker.getIndexInfosAtLocation(node), info => info.declaration && createDefinitionFromSignatureDeclaration(checker, info.declaration));
     }
 
-    function getSymbol(node: Node, checker: TypeChecker): Symbol | undefined {
+    function getSymbol(node: Node, checker: TypeChecker, skipAlias = true): Symbol | undefined {
         const symbol = checker.getSymbolAtLocation(node);
         // If this is an alias, and the request came at the declaration location
         // get the aliased symbol instead. This allows for goto def on an import e.g.
         //   import {A, B} from "mod";
         // to jump to the implementation directly.
-        if (symbol?.declarations && symbol.flags & SymbolFlags.Alias && shouldSkipAlias(node, symbol.declarations[0])) {
+        if (symbol?.declarations && symbol.flags & SymbolFlags.Alias && shouldSkipAlias(node, symbol.declarations[0]) && skipAlias) {
             const aliased = checker.getAliasedSymbol(symbol);
             if (aliased.declarations) {
                 return aliased;

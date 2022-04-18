@@ -317,6 +317,7 @@ namespace ts.server {
             projects,
             defaultProject,
             initialLocation,
+            /*isForRename*/ true,
             (project, location, tryAddToTodo) => {
                 const projectOutputs = project.getLanguageService().findRenameLocations(location.fileName, location.pos, findInStrings, findInComments, providePrefixAndSuffixTextForRename);
                 if (projectOutputs) {
@@ -332,8 +333,8 @@ namespace ts.server {
         return outputs;
     }
 
-    function getDefinitionLocation(defaultProject: Project, initialLocation: DocumentPosition): DocumentPosition | undefined {
-        const infos = defaultProject.getLanguageService().getDefinitionAtPosition(initialLocation.fileName, initialLocation.pos);
+    function getDefinitionLocation(defaultProject: Project, initialLocation: DocumentPosition, isForRename: boolean): DocumentPosition | undefined {
+        const infos = defaultProject.getLanguageService().getDefinitionAtPosition(initialLocation.fileName, initialLocation.pos, !isForRename);
         const info = infos && firstOrUndefined(infos);
         return info && !info.isLocal ? { fileName: info.fileName, pos: info.textSpan.start } : undefined;
     }
@@ -350,6 +351,7 @@ namespace ts.server {
             projects,
             defaultProject,
             initialLocation,
+            /*isForRename*/ false,
             (project, location, getMappedLocation) => {
                 logger.info(`Finding references to ${location.fileName} position ${location.pos} in project ${project.getProjectName()}`);
                 const projectOutputs = project.getLanguageService().findReferences(location.fileName, location.pos);
@@ -417,7 +419,8 @@ namespace ts.server {
         projects: Projects,
         defaultProject: Project,
         initialLocation: TLocation,
-        cb: CombineProjectOutputCallback<TLocation>
+        isForRename: boolean,
+        cb: CombineProjectOutputCallback<TLocation>,
     ): void {
         const projectService = defaultProject.projectService;
         let toDo: ProjectAndLocation<TLocation>[] | undefined;
@@ -430,7 +433,7 @@ namespace ts.server {
 
         // After initial references are collected, go over every other project and see if it has a reference for the symbol definition.
         if (initialLocation) {
-            const defaultDefinition = getDefinitionLocation(defaultProject, initialLocation);
+            const defaultDefinition = getDefinitionLocation(defaultProject, initialLocation, isForRename);
             if (defaultDefinition) {
                 const getGeneratedDefinition = memoize(() => defaultProject.isSourceOfProjectReferenceRedirect(defaultDefinition.fileName) ?
                     defaultDefinition :
@@ -448,49 +451,6 @@ namespace ts.server {
                 });
             }
         }
-
-        while (toDo && toDo.length) {
-            const next = toDo.pop();
-            Debug.assertIsDefined(next);
-            toDo = callbackProjectAndLocation(next.project, next.location, projectService, toDo, seenProjects, cb);
-        }
-    }
-
-    function combineProjectOutputRenameWorker<TLocation extends DocumentPosition | undefined>(
-        projects: Projects,
-        defaultProject: Project,
-        initialLocation: TLocation,
-        cb: CombineProjectOutputCallback<TLocation>
-    ): void {
-        const projectService = defaultProject.projectService;
-        let toDo: ProjectAndLocation<TLocation>[] | undefined;
-        const seenProjects = new Set<string>();
-        forEachProjectInProjects(projects, initialLocation && initialLocation.fileName, (project, path) => {
-            // TLocation should be either `DocumentPosition` or `undefined`. Since `initialLocation` is `TLocation` this cast should be valid.
-            const location = (initialLocation ? { fileName: path, pos: initialLocation.pos } : undefined) as TLocation;
-            toDo = callbackProjectAndLocation(project, location, projectService, toDo, seenProjects, cb);
-        });
-
-        // After initial references are collected, go over every other project and see if it has a reference for the symbol definition.
-        // if (initialLocation) {
-        //     const defaultDefinition = getDefinitionLocation(defaultProject, initialLocation);
-        //     if (defaultDefinition) {
-        //         const getGeneratedDefinition = memoize(() => defaultProject.isSourceOfProjectReferenceRedirect(defaultDefinition.fileName) ?
-        //             defaultDefinition :
-        //             defaultProject.getLanguageService().getSourceMapper().tryGetGeneratedPosition(defaultDefinition));
-        //         const getSourceDefinition = memoize(() => defaultProject.isSourceOfProjectReferenceRedirect(defaultDefinition.fileName) ?
-        //             defaultDefinition :
-        //             defaultProject.getLanguageService().getSourceMapper().tryGetSourcePosition(defaultDefinition));
-        //         projectService.loadAncestorProjectTree(seenProjects);
-        //         projectService.forEachEnabledProject(project => {
-        //             if (!addToSeen(seenProjects, project)) return;
-        //             const definition = mapDefinitionInProject(defaultDefinition, project, getGeneratedDefinition, getSourceDefinition);
-        //             if (definition) {
-        //                 toDo = callbackProjectAndLocation<TLocation>(project, definition as TLocation, projectService, toDo, seenProjects, cb);
-        //             }
-        //         });
-        //     }
-        // }
 
         while (toDo && toDo.length) {
             const next = toDo.pop();

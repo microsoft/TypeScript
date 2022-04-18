@@ -11,12 +11,12 @@
 //// {}
 
 // @Filename: /src/index.ts
-//// import * as /*i*/lib from '../lib/index';
-//// lib.someExportedVariable;
+//// import { /*i*/someExportedVariable } from '../lib/index';
+//// someExportedVariable;
 
 // @Filename: /tsconfig.json
 //// {}
 
 goTo.file("/lib/index.ts");
 goTo.file("/src/index.ts");
-verify.baselineRename("i", {});
+verify.baselineRename("i", { providePrefixAndSuffixTextForRename: true });
