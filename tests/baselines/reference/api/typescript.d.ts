@@ -6071,7 +6071,8 @@ declare namespace ts {
     enum InlayHintKind {
         Type = "Type",
         Parameter = "Parameter",
-        Enum = "Enum"
+        Enum = "Enum",
+        Tuple = "Tuple"
     }
     interface InlayHint {
         text: string;

@@ -8980,7 +8980,7 @@ declare namespace ts.server.protocol {
     interface SignatureHelpResponse extends Response {
         body?: SignatureHelpItems;
     }
-    type InlayHintKind = "Type" | "Parameter" | "Enum";
+    type InlayHintKind = "Type" | "Parameter" | "Enum" | "Tuple";
     interface InlayHintsRequestArgs extends FileRequestArgs {
         /**
          * Start position of the span.
@@ -9702,6 +9702,10 @@ declare namespace ts.server.protocol {
         readonly includeInlayPropertyDeclarationTypeHints?: boolean;
         readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
         readonly includeInlayEnumMemberValueHints?: boolean;
+        readonly includeInlayTupleElementAccessLabelHints?: boolean;
+        readonly includeInlayTupleLiteralLabelHints?: boolean;
+        readonly includeInlayTupleBindingLabelHints?: boolean;
+        readonly includeInlayTupleBindingLabelHintsWhenVariableNameDoesntMatchLabel?: boolean;
     }
     interface CompilerOptions {
         allowJs?: boolean;
