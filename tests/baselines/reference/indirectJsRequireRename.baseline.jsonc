@@ -105,8 +105,7 @@
           "start": 0,
           "length": 43
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -114,8 +113,7 @@
           "length": 10
         },
         "fileName": "/bin/serverless.js",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -127,8 +125,7 @@
           "start": 0,
           "length": 66
         },
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       }
     ]
   }

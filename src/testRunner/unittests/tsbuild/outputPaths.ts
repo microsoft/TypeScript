@@ -1,18 +1,17 @@
 namespace ts {
     describe("unittests:: tsbuild - output file paths", () => {
-        const noChangeProject: TscIncremental = {
-            buildKind: BuildKind.NoChangeRun,
+        const noChangeProject: TestTscEdit = {
             modifyFs: noop,
             subScenario: "Normal build without change, that does not block emit on error to show files that get emitted",
             commandLineArgs: ["-p", "/src/tsconfig.json"],
         };
-        const incrementalScenarios: TscIncremental[] = [
+        const edits: TestTscEdit[] = [
             noChangeRun,
             noChangeProject,
         ];
 
-        function verify(input: Pick<VerifyTsBuildInput, "subScenario" | "fs" | "incrementalScenarios">, expectedOuptutNames: readonly string[]) {
-            verifyTscSerializedIncrementalEdits({
+        function verify(input: Pick<VerifyTscWithEditsInput, "subScenario" | "fs" | "edits">, expectedOuptutNames: readonly string[]) {
+            verifyTscWithEdits({
                 scenario: "outputPaths",
                 commandLineArgs: ["--b", "/src/tsconfig.json", "-v"],
                 ...input
@@ -42,7 +41,7 @@ namespace ts {
                     }
                 })
             }),
-            incrementalScenarios,
+            edits,
         }, ["/src/dist/index.js"]);
 
         verify({
@@ -56,7 +55,7 @@ namespace ts {
                     }
                 })
             }),
-            incrementalScenarios: [
+            edits: [
                 noChangeRun,
                 {
                     ...noChangeProject,
@@ -79,7 +78,7 @@ namespace ts {
                     }
                 })
             }),
-            incrementalScenarios,
+            edits,
         }, ["/src/dist/index.js"]);
 
         verify({
@@ -94,7 +93,7 @@ namespace ts {
                     }
                 })
             }),
-            incrementalScenarios,
+            edits,
         }, ["/src/dist/index.js"]);
 
         verify({
@@ -110,7 +109,7 @@ namespace ts {
                     }
                 })
             }),
-            incrementalScenarios,
+            edits,
         }, ["/src/dist/index.js", "/src/dist/index.d.ts"]);
     });
 }

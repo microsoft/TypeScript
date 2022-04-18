@@ -229,6 +229,8 @@ namespace ts.refactor {
     function doTypedefChange(changes: textChanges.ChangeTracker, file: SourceFile, name: string, info: ExtractInfo) {
         const { firstStatement, selection, typeParameters } = info;
 
+        setEmitFlags(selection, EmitFlags.NoComments | EmitFlags.NoNestedComments);
+
         const node = factory.createJSDocTypedefTag(
             factory.createIdentifier("typedef"),
             factory.createJSDocTypeExpression(selection),

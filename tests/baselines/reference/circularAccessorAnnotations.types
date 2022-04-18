@@ -35,14 +35,14 @@ declare const c3: {
 }
 
 type T1 = {
->T1 : T1
+>T1 : { readonly foo: any; }
 
     get foo(): T1["foo"];
 >foo : any
 }
 
 type T2 = {
->T2 : T2
+>T2 : { foo: any; }
 
     set foo(value: T2["foo"]);
 >foo : any
@@ -50,7 +50,7 @@ type T2 = {
 }
 
 type T3 = {
->T3 : T3
+>T3 : { foo: string; }
 
     get foo(): string;
 >foo : string

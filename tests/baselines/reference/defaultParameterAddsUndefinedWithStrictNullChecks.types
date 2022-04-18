@@ -1,6 +1,6 @@
 === tests/cases/compiler/defaultParameterAddsUndefinedWithStrictNullChecks.ts ===
 function f(addUndefined1 = "J", addUndefined2?: number) {
->f : (addUndefined1?: string, addUndefined2?: number | undefined) => number
+>f : (addUndefined1?: string, addUndefined2?: number) => number
 >addUndefined1 : string
 >"J" : "J"
 >addUndefined2 : number | undefined
@@ -117,7 +117,7 @@ function foo4(x: string | undefined = undefined, b: number) {
 }
 
 type OptionalNullableString = string | null | undefined;
->OptionalNullableString : OptionalNullableString
+>OptionalNullableString : string | null | undefined
 >null : null
 
 function allowsNull(val: OptionalNullableString = "") {

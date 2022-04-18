@@ -4,26 +4,37 @@ namespace ts.tscWatch {
         interface VerifyWatchInput {
             files: readonly TestFSWithWatch.FileOrFolderOrSymLink[];
             config: string;
-            expectedProgramFiles: readonly string[];
+            subScenario: string;
         }
-        function verifyWatch(
-            { files, config, expectedProgramFiles }: VerifyWatchInput,
-            alreadyBuilt: boolean
-        ) {
-            const sys = createWatchedSystem(files);
-            if (alreadyBuilt) {
-                const solutionBuilder = createSolutionBuilder(sys, [config], {});
-                solutionBuilder.build();
-                solutionBuilder.close();
-                sys.clearOutput();
-            }
-            const host = createWatchCompilerHostOfConfigFile({
+
+        function verifyWatch({ files, config, subScenario }: VerifyWatchInput, alreadyBuilt: boolean) {
+            const { sys, baseline, oldSnap, cb, getPrograms } = createBaseline(
+                createWatchedSystem(files),
+                alreadyBuilt ? sys => {
+                    const solutionBuilder = createSolutionBuilder(sys, [config], {});
+                    solutionBuilder.build();
+                    solutionBuilder.close();
+                    sys.clearOutput();
+                } : undefined
+            );
+            const host = createWatchCompilerHostOfConfigFileForBaseline({
                 configFileName: config,
-                system: sys
+                system: sys,
+                cb,
             });
             host.useSourceOfProjectReferenceRedirect = returnTrue;
             const watch = createWatchProgram(host);
-            checkProgramActualFiles(watch.getCurrentProgram().getProgram(), expectedProgramFiles);
+            runWatchBaseline({
+                scenario: "sourceOfProjectReferenceRedirect",
+                subScenario: `${subScenario}${alreadyBuilt ? " when solution is already built" : ""}`,
+                commandLineArgs: ["--w", "--p", config],
+                sys,
+                baseline,
+                oldSnap,
+                getPrograms,
+                changes: emptyArray,
+                watchOrSolution: watch
+            });
         }
 
         function verifyScenario(input: () => VerifyWatchInput) {
@@ -48,7 +59,7 @@ namespace ts.tscWatch {
                 return {
                     files: [{ path: libFile.path, content: libContent }, baseConfig, coreTs, coreConfig, animalTs, dogTs, indexTs, animalsConfig],
                     config: animalsConfig.path,
-                    expectedProgramFiles: [libFile.path, indexTs.path, dogTs.path, animalTs.path, coreTs.path]
+                    subScenario: "with simple project"
                 };
             });
         });
@@ -60,6 +71,7 @@ namespace ts.tscWatch {
                 bFoo: File;
                 bBar: File;
                 bSymlink: SymLink;
+                subScenario: string;
             }
             function verifySymlinkScenario(packages: () => Packages) {
                 describe("when preserveSymlinks is turned off", () => {
@@ -72,13 +84,13 @@ namespace ts.tscWatch {
 
             function verifySymlinkScenarioWorker(packages: () => Packages, extraOptions: CompilerOptions) {
                 verifyScenario(() => {
-                    const { bPackageJson, aTest, bFoo, bBar, bSymlink } = packages();
+                    const { bPackageJson, aTest, bFoo, bBar, bSymlink, subScenario } = packages();
                     const aConfig = config("A", extraOptions, ["../B"]);
                     const bConfig = config("B", extraOptions);
                     return {
                         files: [libFile, bPackageJson, aConfig, bConfig, aTest, bFoo, bBar, bSymlink],
                         config: aConfig.path,
-                        expectedProgramFiles: [libFile.path, aTest.path, bFoo.path, bBar.path]
+                        subScenario: `${subScenario}${extraOptions.preserveSymlinks ? " with preserveSymlinks" : ""}`
                     };
                 });
             }
@@ -126,7 +138,8 @@ bar();
                         bSymlink: {
                             path: `${projectRoot}/node_modules/${scope}b`,
                             symLink: `${projectRoot}/packages/B`
-                        }
+                        },
+                        subScenario: `when packageJson has types field${scope ? " with scoped package" : ""}`
                     }));
                 });
 
@@ -146,7 +159,8 @@ bar();
                         bSymlink: {
                             path: `${projectRoot}/node_modules/${scope}b`,
                             symLink: `${projectRoot}/packages/B`
-                        }
+                        },
+                        subScenario: `when referencing file from subFolder${scope ? " with scoped package" : ""}`
                     }));
                 });
             }

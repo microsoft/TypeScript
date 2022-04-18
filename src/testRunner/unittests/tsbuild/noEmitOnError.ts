@@ -8,18 +8,17 @@ namespace ts {
             projFs = undefined!;
         });
 
-        function verifyNoEmitOnError(subScenario: string, fixModifyFs: TscIncremental["modifyFs"], modifyFs?: TscIncremental["modifyFs"]) {
-            verifyTscSerializedIncrementalEdits({
+        function verifyNoEmitOnError(subScenario: string, fixModifyFs: TestTscEdit["modifyFs"], modifyFs?: TestTscEdit["modifyFs"]) {
+            verifyTscWithEdits({
                 scenario: "noEmitOnError",
                 subScenario,
                 fs: () => projFs,
                 modifyFs,
                 commandLineArgs: ["--b", "/src/tsconfig.json"],
-                incrementalScenarios: [
+                edits: [
                     noChangeRun,
                     {
                         subScenario: "Fix error",
-                        buildKind: BuildKind.IncrementalDtsChange,
                         modifyFs: fixModifyFs,
                     },
                     noChangeRun,

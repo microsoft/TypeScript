@@ -307,10 +307,13 @@ namespace ts.SignatureHelp {
         // for optional function condition.
         const nonNullableContextualType = contextualType.getNonNullableType();
 
-        const signatures = nonNullableContextualType.getCallSignatures();
-        if (signatures.length !== 1) return undefined;
+        const symbol = nonNullableContextualType.symbol;
+        if (symbol === undefined) return undefined;
 
-        const invocation: ContextualInvocation = { kind: InvocationKind.Contextual, signature: first(signatures), node: startingToken, symbol: chooseBetterSymbol(nonNullableContextualType.symbol) };
+        const signature = lastOrUndefined(nonNullableContextualType.getCallSignatures());
+        if (signature === undefined) return undefined;
+
+        const invocation: ContextualInvocation = { kind: InvocationKind.Contextual, signature, node: startingToken, symbol: chooseBetterSymbol(symbol) };
         return { isTypeParameterList: false, invocation, argumentsSpan, argumentIndex, argumentCount };
     }
 

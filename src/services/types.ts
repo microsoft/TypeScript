@@ -472,6 +472,9 @@ namespace ts {
 
         getSmartSelectionRange(fileName: string, position: number): SelectionRange;
 
+        /*@internal*/
+        // eslint-disable-next-line @typescript-eslint/unified-signatures
+        getDefinitionAtPosition(fileName: string, position: number, searchOtherFilesOnly: boolean): readonly DefinitionInfo[] | undefined;
         getDefinitionAtPosition(fileName: string, position: number): readonly DefinitionInfo[] | undefined;
         getDefinitionAndBoundSpan(fileName: string, position: number): DefinitionInfoAndBoundSpan | undefined;
         getTypeDefinitionAtPosition(fileName: string, position: number): readonly DefinitionInfo[] | undefined;
@@ -886,7 +889,6 @@ namespace ts {
 
     export interface ReferenceEntry extends DocumentSpan {
         isWriteAccess: boolean;
-        isDefinition: boolean;
         isInString?: true;
     }
 
@@ -1033,6 +1035,8 @@ namespace ts {
         containerName: string;
         unverified?: boolean;
         /* @internal */ isLocal?: boolean;
+        /* @internal */ isAmbient?: boolean;
+        /* @internal */ failedAliasResolution?: boolean;
     }
 
     export interface DefinitionInfoAndBoundSpan {
@@ -1046,7 +1050,11 @@ namespace ts {
 
     export interface ReferencedSymbol {
         definition: ReferencedSymbolDefinitionInfo;
-        references: ReferenceEntry[];
+        references: ReferencedSymbolEntry[];
+    }
+
+    export interface ReferencedSymbolEntry extends ReferenceEntry {
+        isDefinition?: boolean;
     }
 
     export enum SymbolDisplayPartKind {
@@ -1232,6 +1240,7 @@ namespace ts {
         hasAction?: true;
         source?: string;
         sourceDisplay?: SymbolDisplayPart[];
+        labelDetails?: CompletionEntryLabelDetails;
         isRecommended?: true;
         isFromUncheckedFile?: true;
         isPackageJsonImport?: true;
@@ -1245,6 +1254,11 @@ namespace ts {
          * is an auto-import.
          */
         data?: CompletionEntryData;
+    }
+
+    export interface CompletionEntryLabelDetails {
+        detail?: string;
+        description?: string;
     }
 
     export interface CompletionEntryDetails {
