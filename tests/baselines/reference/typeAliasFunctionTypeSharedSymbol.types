@@ -22,5 +22,5 @@ type ReturnTypeOf<V> = V extends (...args: any[])=>infer R ? R : never;
 >args : any[]
 
 type Crashes = number & Mixin;
->Crashes : Crashes
+>Crashes : number & { new (...args: any[]): Mixin<new (...args: any[]) => {}>.(Anonymous class); prototype: Mixin<any>.(Anonymous class); } & (new (...args: any[]) => {})
 

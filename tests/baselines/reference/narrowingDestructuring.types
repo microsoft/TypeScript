@@ -1,6 +1,6 @@
 === tests/cases/compiler/narrowingDestructuring.ts ===
 type X = { kind: "a", a: string } | { kind: "b", b: string }
->X : X
+>X : { kind: "a"; a: string; } | { kind: "b"; b: string; }
 >kind : "a"
 >a : string
 >kind : "b"
@@ -39,7 +39,7 @@ function func<T extends X>(value: T) {
 }
 
 type Z = { kind: "f", f: { a: number, b: string, c: number } }
->Z : Z
+>Z : { kind: "f"; f: {    a: number;    b: string;    c: number;}; } | { kind: "g"; g: {    a: string;    b: number;    c: string;}; }
 >kind : "f"
 >f : { a: number; b: string; c: number; }
 >a : number

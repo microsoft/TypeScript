@@ -1938,14 +1938,14 @@ namespace ts {
 
             resumeLexicalEnvironment();
 
-            const indexAfterLastPrologueStatement = factory.copyPrologue(body.statements, statements, /*ensureUseStrict*/ false, visitor);
-            const superStatementIndex = findSuperStatementIndex(body.statements, indexAfterLastPrologueStatement);
+            const prologueStatementCount = factory.copyPrologue(body.statements, statements, /*ensureUseStrict*/ false, visitor);
+            const superStatementIndex = findSuperStatementIndex(body.statements, prologueStatementCount);
 
             // If there was a super call, visit existing statements up to and including it
             if (superStatementIndex >= 0) {
                 addRange(
                     statements,
-                    visitNodes(body.statements, visitor, isStatement, indexAfterLastPrologueStatement, superStatementIndex + 1 - indexAfterLastPrologueStatement),
+                    visitNodes(body.statements, visitor, isStatement, prologueStatementCount, superStatementIndex + 1 - prologueStatementCount),
                 );
             }
 
@@ -1967,13 +1967,17 @@ namespace ts {
             if (superStatementIndex >= 0) {
                 addRange(statements, parameterPropertyAssignments);
             }
-            // Since there was no super() call, parameter properties are the first statements in the constructor
+            // Since there was no super() call, parameter properties are the first statements in the constructor after any prologue statements
             else {
-                statements = addRange(parameterPropertyAssignments, statements);
+                statements = [
+                    ...statements.slice(0, prologueStatementCount),
+                    ...parameterPropertyAssignments,
+                    ...statements.slice(prologueStatementCount),
+                ];
             }
 
-            // Add remaining statements from the body, skipping the super() call if it was found
-            addRange(statements, visitNodes(body.statements, visitor, isStatement, superStatementIndex + 1));
+            // Add remaining statements from the body, skipping the super() call if it was found and any (already added) prologue statements
+            addRange(statements, visitNodes(body.statements, visitor, isStatement, superStatementIndex + 1 + prologueStatementCount));
 
             // End the lexical environment.
             statements = factory.mergeLexicalEnvironment(statements, endLexicalEnvironment());

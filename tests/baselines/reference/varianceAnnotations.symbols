@@ -448,3 +448,35 @@ createMachine<{ type: "PLAY"; value: number } | { type: "RESET" }>(qq);  // Erro
 >type : Symbol(type, Decl(varianceAnnotations.ts, 159, 49))
 >qq : Symbol(qq, Decl(varianceAnnotations.ts, 157, 13))
 
+// Repros from #48618
+
+let Anon = class <out T> {
+>Anon : Symbol(Anon, Decl(varianceAnnotations.ts, 163, 3))
+>T : Symbol(T, Decl(varianceAnnotations.ts, 163, 18))
+
+    foo(): InstanceType<(typeof Anon<T>)> {
+>foo : Symbol(Anon.foo, Decl(varianceAnnotations.ts, 163, 26))
+>InstanceType : Symbol(InstanceType, Decl(lib.es5.d.ts, --, --))
+>Anon : Symbol(Anon, Decl(varianceAnnotations.ts, 163, 3))
+>T : Symbol(T, Decl(varianceAnnotations.ts, 163, 18))
+
+        return this;
+>this : Symbol(Anon, Decl(varianceAnnotations.ts, 163, 10))
+    }
+}
+
+let OuterC = class C<out T> {
+>OuterC : Symbol(OuterC, Decl(varianceAnnotations.ts, 169, 3))
+>C : Symbol(C, Decl(varianceAnnotations.ts, 169, 12))
+>T : Symbol(T, Decl(varianceAnnotations.ts, 169, 21))
+
+    foo(): C<T> {
+>foo : Symbol(C.foo, Decl(varianceAnnotations.ts, 169, 29))
+>C : Symbol(C, Decl(varianceAnnotations.ts, 169, 12))
+>T : Symbol(T, Decl(varianceAnnotations.ts, 169, 21))
+
+        return this;
+>this : Symbol(C, Decl(varianceAnnotations.ts, 169, 12))
+    }
+}
+

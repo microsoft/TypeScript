@@ -70,10 +70,10 @@ function f1(x: 0 | 1 | 2) {
 // Repro from #34021
 
 type Behavior = 'SLIDE' | 'SLIDE_OUT'
->Behavior : Behavior
+>Behavior : "SLIDE" | "SLIDE_OUT"
 
 type Direction = 'LEFT' | 'RIGHT' | 'TOP' | 'BOTTOM'
->Direction : Direction
+>Direction : "LEFT" | "RIGHT" | "TOP" | "BOTTOM"
 
 interface Transition {
   behavior: Behavior

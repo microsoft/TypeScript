@@ -261,19 +261,19 @@ function init2(foo: DeepOptional) {
 // Repro from #48289
 
 type Fish = { type: 'fish', hasFins: true }
->Fish : Fish
+>Fish : { type: 'fish'; hasFins: true; }
 >type : "fish"
 >hasFins : true
 >true : true
 
 type Dog = { type: 'dog', saysWoof: true }
->Dog : Dog
+>Dog : { type: 'dog'; saysWoof: true; }
 >type : "dog"
 >saysWoof : true
 >true : true
 
 type Pet = Fish | Dog;
->Pet : Pet
+>Pet : Fish | Dog
 
 function handleDogBroken<PetType extends Pet>(pet: PetType) {
 >handleDogBroken : <PetType extends Pet>(pet: PetType) => void

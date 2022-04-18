@@ -1,6 +1,6 @@
 === tests/cases/compiler/mapOnTupleTypes02.ts ===
 export type Point = [number, number];
->Point : Point
+>Point : [number, number]
 
 export function increment(point: Point) {
 >increment : (point: Point) => number[]

@@ -31,7 +31,7 @@ function Menu<MenuItemVariant extends ListItemVariant = ListItemVariant.OneLine>
 }
 
 type IListItemData = { variant: ListItemVariant.Avatar; } | { variant: ListItemVariant.OneLine; };
->IListItemData : IListItemData
+>IListItemData : { variant: ListItemVariant.Avatar; } | { variant: ListItemVariant.OneLine; }
 >variant : ListItemVariant.Avatar
 >ListItemVariant : any
 >variant : ListItemVariant.OneLine

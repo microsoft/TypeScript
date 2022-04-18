@@ -156,7 +156,7 @@ type NonReactStatics<
     };
 
 export type AnyStyledComponent = StyledComponent<any, any, any, any> | StyledComponent<any, any, any>;
->AnyStyledComponent : AnyStyledComponent
+>AnyStyledComponent : StyledComponent<any, any, any, any> | StyledComponent<any, any, any, never>
 
 export type StyledComponent<
 >StyledComponent : StyledComponent<C, T, O, A>

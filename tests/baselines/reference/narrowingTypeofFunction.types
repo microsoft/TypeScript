@@ -1,6 +1,6 @@
 === tests/cases/compiler/narrowingTypeofFunction.ts ===
 type Meta = { foo: string }
->Meta : Meta
+>Meta : { foo: string; }
 >foo : string
 
 interface F { (): string }

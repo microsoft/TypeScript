@@ -495,7 +495,7 @@ namespace ts {
         if (outFile(options) || options.outDir) return false;
 
         // File if emitted next to input needs to be ignored
-        if (fileExtensionIs(fileOrDirectoryPath, Extension.Dts)) {
+        if (isDeclarationFileName(fileOrDirectoryPath)) {
             // If its declaration directory: its not ignored if not excluded by config
             if (options.declarationDir) return false;
         }

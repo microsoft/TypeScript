@@ -1,6 +1,6 @@
 === tests/cases/conformance/controlFlow/dependentDestructuredVariables.ts ===
 type Action =
->Action : Action
+>Action : { kind: 'A'; payload: number; } | { kind: 'B'; payload: string; }
 
     | { kind: 'A', payload: number }
 >kind : "A"
@@ -107,7 +107,7 @@ function f12({ kind, payload }: Action) {
 }
 
 type Action2 =
->Action2 : Action2
+>Action2 : { kind: 'A'; payload: number | undefined; } | { kind: 'B'; payload: string | undefined; }
 
     | { kind: 'A', payload: number | undefined }
 >kind : "A"
@@ -265,7 +265,7 @@ function f23({ kind, payload }: Action2) {
 }
 
 type Foo =
->Foo : Foo
+>Foo : { kind: 'A'; isA: true; } | { kind: 'B'; isA: false; } | { kind: 'C'; isA: false; }
 
     | { kind: 'A', isA: true }
 >kind : "A"
@@ -324,7 +324,7 @@ function f30({ kind, isA }: Foo) {
 }
 
 type Args = ['A', number] | ['B', string]
->Args : Args
+>Args : ["A", number] | ["B", string]
 
 function f40(...[kind, data]: Args) {
 >f40 : (...[kind, data]: Args) => void
@@ -406,7 +406,7 @@ function unrefined1<T>(ab: AB<T>): void {
 // Repro from #38020
 
 type Action3 =
->Action3 : Action3
+>Action3 : { type: 'add'; payload: {    toAdd: number;}; } | { type: 'remove'; payload: {    toRemove: number;}; }
 
     | {type: 'add', payload: { toAdd: number } }
 >type : "add"
@@ -598,7 +598,7 @@ readFile('hello', (err, data) => {
 });
 
 type ReducerArgs = ["add", { a: number, b: number }] | ["concat", { firstArr: any[], secondArr: any[] }];
->ReducerArgs : ReducerArgs
+>ReducerArgs : ["add", { a: number; b: number; }] | ["concat", { firstArr: any[]; secondArr: any[]; }]
 >a : number
 >b : number
 >firstArr : any[]
@@ -680,7 +680,7 @@ reducer("concat", { firstArr: [1, 2], secondArr: [3, 4] });
 // repro from https://github.com/microsoft/TypeScript/pull/47190#issuecomment-1057603588
 
 type FooMethod = {
->FooMethod : FooMethod
+>FooMethod : { method(...args: [type: "str", cb: (e: string) => void] | [type: "num", cb: (e: number) => void]): void; }
 
   method(...args:
 >method : (...args: [type: "str", cb: (e: string) => void] | [type: "num", cb: (e: number) => void]) => void
@@ -724,7 +724,7 @@ let fooM: FooMethod = {
 };
 
 type FooAsyncMethod = {
->FooAsyncMethod : FooAsyncMethod
+>FooAsyncMethod : { method(...args: [type: "str", cb: (e: string) => void] | [type: "num", cb: (e: number) => void]): Promise<any>; }
 
   method(...args:
 >method : (...args: [type: "str", cb: (e: string) => void] | [type: "num", cb: (e: number) => void]) => Promise<any>
@@ -768,7 +768,7 @@ let fooAsyncM: FooAsyncMethod = {
 };
 
 type FooGenMethod = {
->FooGenMethod : FooGenMethod
+>FooGenMethod : { method(...args: [type: "str", cb: (e: string) => void] | [type: "num", cb: (e: number) => void]): Generator<any, any, any>; }
 
   method(...args:
 >method : (...args: [type: "str", cb: (e: string) => void] | [type: "num", cb: (e: number) => void]) => Generator<any, any, any>
@@ -812,7 +812,7 @@ let fooGenM: FooGenMethod = {
 };
 
 type FooAsyncGenMethod = {
->FooAsyncGenMethod : FooAsyncGenMethod
+>FooAsyncGenMethod : { method(...args: [type: "str", cb: (e: string) => void] | [type: "num", cb: (e: number) => void]): AsyncGenerator<any, any, any>; }
 
   method(...args:
 >method : (...args: [type: "str", cb: (e: string) => void] | [type: "num", cb: (e: number) => void]) => AsyncGenerator<any, any, any>
@@ -858,7 +858,7 @@ let fooAsyncGenM: FooAsyncGenMethod = {
 // Repro from #48345
 
 type Func = <T extends ["a", number] | ["b", string]>(...args: T) => void;
->Func : Func
+>Func : <T extends ["a", number] | ["b", string]>(...args: T) => void
 >args : T
 
 const f60: Func = (kind, payload) => {

@@ -1,6 +1,6 @@
 === /index.ts ===
 export type LocalInterface =
->LocalInterface : LocalInterface
+>LocalInterface : import("/node_modules/pkg/require").RequireInterface & import("/node_modules/pkg/import").ImportInterface
 
     & import("pkg", { assert: {"resolution-mode": "require"} }).RequireInterface
     & import("pkg", { assert: {"resolution-mode": "import"} }).ImportInterface;

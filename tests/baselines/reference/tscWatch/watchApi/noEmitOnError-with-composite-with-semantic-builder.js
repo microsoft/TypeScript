@@ -325,7 +325,7 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./main.ts","./other.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-10726455937-export const x = 10;","signature":"-6821242887-export declare const x = 10;\n"},"-13729955264-export const y = 10;"],"options":{"composite":true,"noEmitOnError":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3],"affectedFilesPendingEmit":[[2,1],[3,1]]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./main.ts","./other.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-10726455937-export const x = 10;","signature":"-6821242887-export declare const x = 10;\n"},"-13729955264-export const y = 10;"],"options":{"composite":true,"noEmitOnError":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3]},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -360,20 +360,10 @@ exitCode:: ExitStatus.undefined
       "../../../../a/lib/lib.d.ts",
       "./main.ts",
       "./other.ts"
-    ],
-    "affectedFilesPendingEmit": [
-      [
-        "./main.ts",
-        "Full"
-      ],
-      [
-        "./other.ts",
-        "Full"
-      ]
     ]
   },
   "version": "FakeTSVersion",
-  "size": 832
+  "size": 791
 }
 
 //// [/user/username/projects/myproject/main.js]
@@ -404,4 +394,4 @@ Output file text for /user/username/projects/myproject/main.js is same:: true
 Output file text for /user/username/projects/myproject/main.d.ts is same:: true
 Output file text for /user/username/projects/myproject/other.js is same:: true
 Output file text for /user/username/projects/myproject/other.d.ts is same:: true
-Output file text for /user/username/projects/myproject/tsconfig.tsbuildinfo is same:: false
+Output file text for /user/username/projects/myproject/tsconfig.tsbuildinfo is same:: true

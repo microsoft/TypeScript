@@ -236,7 +236,7 @@ namespace ts {
                 // It is fairly suspicious to have one path in two buckets - you'd expect dependencies to have similar configurations.
                 // If this occurs unexpectedly, the fix is likely to synchronize the project settings.
                 // Skip .d.ts files to reduce noise (should also cover most of node_modules).
-                const otherBucketKey = !fileExtensionIs(path, Extension.Dts) &&
+                const otherBucketKey = !isDeclarationFileName(path) &&
                     forEachEntry(buckets, (bucket, bucketKey) => bucketKey !== key && bucket.has(path) && bucketKey);
                 if (otherBucketKey) {
                     tracing.instant(tracing.Phase.Session, "documentRegistryBucketOverlap", { path, key1: otherBucketKey, key2: key });

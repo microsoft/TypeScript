@@ -325,3 +325,17 @@ tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotati
 !!! error TS2345:             Type '{ type: "PLAY"; value: number; } | { type: "RESET"; }' is not assignable to type '{ type: "PLAY"; value: number; }'.
 !!! error TS2345:               Type '{ type: "RESET"; }' is not assignable to type '{ type: "PLAY"; value: number; }'.
     
+    // Repros from #48618
+    
+    let Anon = class <out T> {
+        foo(): InstanceType<(typeof Anon<T>)> {
+            return this;
+        }
+    }
+    
+    let OuterC = class C<out T> {
+        foo(): C<T> {
+            return this;
+        }
+    }
+    

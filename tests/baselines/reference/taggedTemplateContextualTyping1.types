@@ -1,6 +1,6 @@
 === tests/cases/conformance/expressions/contextualTyping/taggedTemplateContextualTyping1.ts ===
 type FuncType = (x: <T>(p: T) => T) => typeof x;
->FuncType : FuncType
+>FuncType : (x: <T>(p: T) => T) => <T>(p: T) => T
 >x : <T>(p: T) => T
 >p : T
 >x : <T>(p: T) => T

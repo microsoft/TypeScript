@@ -346,3 +346,31 @@ createMachine<{ type: "PLAY"; value: number } | { type: "RESET" }>(qq);  // Erro
 >type : "RESET"
 >qq : ActionObject<{ type: "PLAY"; value: number; }>
 
+// Repros from #48618
+
+let Anon = class <out T> {
+>Anon : typeof Anon
+>class <out T> {    foo(): InstanceType<(typeof Anon<T>)> {        return this;    }} : typeof Anon
+
+    foo(): InstanceType<(typeof Anon<T>)> {
+>foo : () => InstanceType<(typeof Anon<T>)>
+>Anon : typeof Anon
+
+        return this;
+>this : this
+    }
+}
+
+let OuterC = class C<out T> {
+>OuterC : typeof C
+>class C<out T> {    foo(): C<T> {        return this;    }} : typeof C
+>C : typeof C
+
+    foo(): C<T> {
+>foo : () => C<T>
+
+        return this;
+>this : this
+    }
+}
+
