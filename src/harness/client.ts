@@ -479,13 +479,18 @@ namespace ts.server {
                 this.lastRenameEntry.inputs.position !== position ||
                 this.lastRenameEntry.inputs.findInStrings !== findInStrings ||
                 this.lastRenameEntry.inputs.findInComments !== findInComments) {
-                // User preferences have to be set through the `Configure` command
-                this.configure({ providePrefixAndSuffixTextForRename });
-                // Options argument is not used, so don't pass in options
-                this.getRenameInfo(fileName, position, /*options*/{}, findInStrings, findInComments);
-                // Restore previous user preferences
-                if (this.preferences) {
-                    this.configure(this.preferences);
+                if (providePrefixAndSuffixTextForRename !== undefined) {
+                    // User preferences have to be set through the `Configure` command
+                    this.configure({ providePrefixAndSuffixTextForRename });
+                    // Options argument is not used, so don't pass in options
+                    this.getRenameInfo(fileName, position, /*options*/{}, findInStrings, findInComments);
+                    // Restore previous user preferences
+                    if (this.preferences) {
+                        this.configure(this.preferences);
+                    }
+                }
+                else {
+                    this.getRenameInfo(fileName, position, /*options*/{}, findInStrings, findInComments);
                 }
             }
 

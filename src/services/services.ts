@@ -1835,18 +1835,6 @@ namespace ts {
             }
         }
 
-        // function findRenameDefinition(fileName: string, position: number): DocumentPosition | undefined {
-        //     const sourceFile = getValidSourceFile(fileName);
-        //     const node = getAdjustedRenameLocation(getTouchingPropertyName(sourceFile, position));
-        //     if (!Rename.nodeIsEligibleForRename(node)) return undefined;
-        //     if (false) {
-        //         // return something else
-        //     }
-        //     const infos = getDefinitionAtPosition(fileName, position);
-        //     const info = infos && firstOrUndefined(infos);
-        //     return info && !info.isLocal ? { fileName: info.fileName, pos: info.textSpan.start } : undefined;
-        // }
-
         function getReferencesAtPosition(fileName: string, position: number): ReferenceEntry[] | undefined {
             synchronizeHostData();
             return getReferencesWorker(getTouchingPropertyName(getValidSourceFile(fileName), position), position, { use: FindAllReferences.FindReferencesUse.References }, FindAllReferences.toReferenceEntry);
