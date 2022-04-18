@@ -86,14 +86,15 @@ namespace ts {
         return { fileName: resolved.path, packageId: resolved.packageId };
     }
 
-    function createResolvedModuleWithFailedLookupLocations(resolved: Resolved | undefined, isExternalLibraryImport: boolean | undefined, failedLookupLocations: string[], resultFromCache: ResolvedModuleWithFailedLookupLocations | undefined): ResolvedModuleWithFailedLookupLocations {
+    function createResolvedModuleWithFailedLookupLocations(resolved: Resolved | undefined, isExternalLibraryImport: boolean | undefined, failedLookupLocations: string[], diagnostics: Diagnostic[], resultFromCache: ResolvedModuleWithFailedLookupLocations | undefined): ResolvedModuleWithFailedLookupLocations {
         if (resultFromCache) {
             resultFromCache.failedLookupLocations.push(...failedLookupLocations);
             return resultFromCache;
         }
         return {
             resolvedModule: resolved && { resolvedFileName: resolved.path, originalPath: resolved.originalPath === true ? undefined : resolved.originalPath, extension: resolved.extension, isExternalLibraryImport, packageId: resolved.packageId },
-            failedLookupLocations
+            failedLookupLocations,
+            resolutionDiagnostics: diagnostics
         };
     }
 
@@ -356,7 +357,18 @@ namespace ts {
             features |= NodeResolutionFeatures.EsmMode;
         }
         const conditions = features & NodeResolutionFeatures.Exports ? features & NodeResolutionFeatures.EsmMode ? ["node", "import", "types"] : ["node", "require", "types"] : [];
-        const moduleResolutionState: ModuleResolutionState = { compilerOptions: options, host, traceEnabled, failedLookupLocations, packageJsonInfoCache: cache, features, conditions, requestContainingDirectory: containingDirectory };
+        const diagnostics: Diagnostic[] = [];
+        const moduleResolutionState: ModuleResolutionState = {
+            compilerOptions: options,
+            host,
+            traceEnabled,
+            failedLookupLocations,
+            packageJsonInfoCache: cache,
+            features,
+            conditions,
+            requestContainingDirectory: containingDirectory,
+            reportDiagnostic: diag => void diagnostics.push(diag),
+        };
         let resolved = primaryLookup();
         let primary = true;
         if (!resolved) {
@@ -376,7 +388,7 @@ namespace ts {
                 isExternalLibraryImport: pathContainsNodeModules(fileName),
             };
         }
-        result = { resolvedTypeReferenceDirective, failedLookupLocations };
+        result = { resolvedTypeReferenceDirective, failedLookupLocations, resolutionDiagnostics: diagnostics };
         perFolderCache?.set(typeReferenceDirectiveName, /*mode*/ resolutionMode, result);
         if (traceEnabled) traceResult(result);
         return result;
@@ -470,7 +482,8 @@ namespace ts {
             packageJsonInfoCache: cache?.getPackageJsonInfoCache(),
             conditions: emptyArray,
             features: NodeResolutionFeatures.None,
-            requestContainingDirectory: containingDirectory
+            requestContainingDirectory: containingDirectory,
+            reportDiagnostic: noop
         };
 
         return forEachAncestorDirectory(containingDirectory, ancestorDirectory => {
@@ -1320,6 +1333,7 @@ namespace ts {
             conditions.pop();
         }
 
+        const diagnostics: Diagnostic[] = [];
         const state: ModuleResolutionState = {
             compilerOptions,
             host,
@@ -1328,11 +1342,12 @@ namespace ts {
             packageJsonInfoCache: cache,
             features,
             conditions,
-            requestContainingDirectory: containingDirectory
+            requestContainingDirectory: containingDirectory,
+            reportDiagnostic: diag => void diagnostics.push(diag),
         };
 
         const result = forEach(extensions, ext => tryResolve(ext));
-        return createResolvedModuleWithFailedLookupLocations(result?.value?.resolved, result?.value?.isExternalLibraryImport, failedLookupLocations, state.resultFromCache);
+        return createResolvedModuleWithFailedLookupLocations(result?.value?.resolved, result?.value?.isExternalLibraryImport, failedLookupLocations, diagnostics, state.resultFromCache);
 
         function tryResolve(extensions: Extensions): SearchResult<{ resolved: Resolved, isExternalLibraryImport: boolean }> {
             const loader: ResolutionKindSpecificLoader = (extensions, candidate, onlyRecordFailures, state) => nodeLoadModuleByRelativeName(extensions, candidate, onlyRecordFailures, state, /*considerPackageJson*/ true);
@@ -1659,7 +1674,8 @@ namespace ts {
             packageJsonInfoCache: cache?.getPackageJsonInfoCache(),
             conditions: ["node", "require", "types"],
             features,
-            requestContainingDirectory: packageJsonInfo.packageDirectory
+            requestContainingDirectory: packageJsonInfo.packageDirectory,
+            reportDiagnostic: noop
         };
         const requireResolution = loadNodeModuleFromDirectoryWorker(
             extensions,
@@ -1770,6 +1786,7 @@ namespace ts {
             features: number;
             conditions: never[];
             requestContainingDirectory: string | undefined;
+            reportDiagnostic: DiagnosticReporter
         } = {
             host,
             compilerOptions: options,
@@ -1778,7 +1795,8 @@ namespace ts {
             packageJsonInfoCache,
             features: 0,
             conditions: [],
-            requestContainingDirectory: undefined
+            requestContainingDirectory: undefined,
+            reportDiagnostic: noop
         };
         const parts = getPathComponents(fileName);
         parts.pop();
@@ -2120,7 +2138,7 @@ namespace ts {
                     return toSearchResult(/*value*/ undefined);
                 }
                 const finalPath = toAbsolutePath(pattern ? resolvedTarget.replace(/\*/g, subpath) : resolvedTarget + subpath);
-                const inputLink = tryLoadInputFileForPath(finalPath);
+                const inputLink = tryLoadInputFileForPath(finalPath, subpath, combinePaths(scope.packageDirectory, "package.json"), isImports);
                 if (inputLink) return inputLink;
                 return toSearchResult(withPackageId(scope, loadJSOrExactTSFileName(extensions, finalPath, /*onlyRecordFailures*/ false, state)));
             }
@@ -2180,7 +2198,7 @@ namespace ts {
                     state.host.useCaseSensitiveFileNames();
             }
 
-            function tryLoadInputFileForPath(finalPath: string) {
+            function tryLoadInputFileForPath(finalPath: string, entry: string, packagePath: string, isImports: boolean) {
                 // Replace any references to outputs for files in the program with the input files to support package self-names used with outDir
                 // PROBLEM: We don't know how to calculate the output paths yet, because the "common source directory" we use as the base of the file structure
                 // we reproduce into the output directory is based on the set of input files, which we're still in the process of traversing and resolving!
@@ -2244,6 +2262,15 @@ namespace ts {
                                 fragment = ensureTrailingDirectorySeparator(getPathFromPathComponents(parts));
                             }
                         }
+                    }
+                    if (commonSourceDirGuesses.length > 1) {
+                        state.reportDiagnostic(createCompilerDiagnostic(
+                            isImports
+                                ? Diagnostics.The_project_root_is_ambiguous_but_is_required_to_resolve_import_map_entry_0_in_file_1_Supply_the_rootDir_compiler_option_to_disambiguate
+                                : Diagnostics.The_project_root_is_ambiguous_but_is_required_to_resolve_export_map_entry_0_in_file_1_Supply_the_rootDir_compiler_option_to_disambiguate,
+                            entry,
+                            packagePath
+                        ));
                     }
                     for (const [commonSourceDirGuess, candidateDirectories] of commonSourceDirGuesses) {
                         for (const candidateDir of candidateDirectories) {
@@ -2508,11 +2535,12 @@ namespace ts {
         const traceEnabled = isTraceEnabled(compilerOptions, host);
         const failedLookupLocations: string[] = [];
         const containingDirectory = getDirectoryPath(containingFile);
-        const state: ModuleResolutionState = { compilerOptions, host, traceEnabled, failedLookupLocations, packageJsonInfoCache: cache, features: NodeResolutionFeatures.None, conditions: [], requestContainingDirectory: containingDirectory };
+        const diagnostics: Diagnostic[] = [];
+        const state: ModuleResolutionState = { compilerOptions, host, traceEnabled, failedLookupLocations, packageJsonInfoCache: cache, features: NodeResolutionFeatures.None, conditions: [], requestContainingDirectory: containingDirectory, reportDiagnostic: diag => void diagnostics.push(diag) };
 
         const resolved = tryResolve(Extensions.TypeScript) || tryResolve(Extensions.JavaScript);
         // No originalPath because classic resolution doesn't resolve realPath
-        return createResolvedModuleWithFailedLookupLocations(resolved && resolved.value, /*isExternalLibraryImport*/ false, failedLookupLocations, state.resultFromCache);
+        return createResolvedModuleWithFailedLookupLocations(resolved && resolved.value, /*isExternalLibraryImport*/ false, failedLookupLocations, diagnostics, state.resultFromCache);
 
         function tryResolve(extensions: Extensions): SearchResult<Resolved> {
             const resolvedUsingSettings = tryLoadModuleUsingOptionalResolutionSettings(extensions, moduleName, containingDirectory, loadModuleFromFileNoPackageId, state);
@@ -2557,9 +2585,10 @@ namespace ts {
             trace(host, Diagnostics.Auto_discovery_for_typings_is_enabled_in_project_0_Running_extra_resolution_pass_for_module_1_using_cache_location_2, projectName, moduleName, globalCache);
         }
         const failedLookupLocations: string[] = [];
-        const state: ModuleResolutionState = { compilerOptions, host, traceEnabled, failedLookupLocations, packageJsonInfoCache, features: NodeResolutionFeatures.None, conditions: [], requestContainingDirectory: undefined };
+        const diagnostics: Diagnostic[] = [];
+        const state: ModuleResolutionState = { compilerOptions, host, traceEnabled, failedLookupLocations, packageJsonInfoCache, features: NodeResolutionFeatures.None, conditions: [], requestContainingDirectory: undefined, reportDiagnostic: diag => void diagnostics.push(diag) };
         const resolved = loadModuleFromImmediateNodeModulesDirectory(Extensions.DtsOnly, moduleName, globalCache, state, /*typesScopeOnly*/ false, /*cache*/ undefined, /*redirectedReference*/ undefined);
-        return createResolvedModuleWithFailedLookupLocations(resolved, /*isExternalLibraryImport*/ true, failedLookupLocations, state.resultFromCache);
+        return createResolvedModuleWithFailedLookupLocations(resolved, /*isExternalLibraryImport*/ true, failedLookupLocations, diagnostics, state.resultFromCache);
     }
 
     /**
