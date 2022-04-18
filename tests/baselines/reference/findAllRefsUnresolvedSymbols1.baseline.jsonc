@@ -64,8 +64,7 @@
           "length": 3
         },
         "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols1.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -73,8 +72,7 @@
           "length": 3
         },
         "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols1.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -82,8 +80,7 @@
           "length": 3
         },
         "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols1.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -155,8 +152,7 @@
           "length": 3
         },
         "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols1.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -164,8 +160,7 @@
           "length": 3
         },
         "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols1.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -173,8 +168,7 @@
           "length": 3
         },
         "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols1.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -246,8 +240,7 @@
           "length": 3
         },
         "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols1.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -255,8 +248,7 @@
           "length": 3
         },
         "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols1.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -264,8 +256,7 @@
           "length": 3
         },
         "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols1.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -300,8 +291,7 @@
           "length": 3
         },
         "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols1.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -309,8 +299,7 @@
           "length": 3
         },
         "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols1.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -318,8 +307,7 @@
           "length": 3
         },
         "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols1.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -354,8 +342,7 @@
           "length": 3
         },
         "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols1.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -363,8 +350,7 @@
           "length": 3
         },
         "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols1.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -372,8 +358,7 @@
           "length": 3
         },
         "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols1.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -408,8 +393,7 @@
           "length": 3
         },
         "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols1.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -417,8 +401,7 @@
           "length": 3
         },
         "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols1.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -426,8 +409,7 @@
           "length": 3
         },
         "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols1.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -507,8 +489,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols1.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -516,8 +497,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols1.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -597,8 +577,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols1.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -606,8 +585,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols1.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -642,8 +620,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols1.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -731,8 +708,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols1.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }

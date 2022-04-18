@@ -6,7 +6,7 @@ interface Map<K, V> {
 }
 
 export type ImmutableTypes = IImmutableMap<any>;
->ImmutableTypes : ImmutableTypes
+>ImmutableTypes : IImmutableMap<any>
 
 export type ImmutableModel<T> = { [K in keyof T]: T[K] extends ImmutableTypes ? T[K] : never };
 >ImmutableModel : ImmutableModel<T>
@@ -19,7 +19,7 @@ export interface IImmutableMap<T extends ImmutableModel<T>> extends Map<string, 
 }
 
 export type ImmutableTypes2 = IImmutableMap2<any>;
->ImmutableTypes2 : ImmutableTypes2
+>ImmutableTypes2 : IImmutableMap2<any>
 
 type isImmutableType<T> = [T] extends [ImmutableTypes2] ? T : never;
 >isImmutableType : isImmutableType<T>

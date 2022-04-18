@@ -4,9 +4,9 @@
 
 // @Filename: /a.js
 ////module.exports = 0;
-////[|export type [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}N|] = number;|]
+/////*1*/export type /*2*/N = number;
 
 // @Filename: /b.js
-////type T = import("./a").[|N|];
+////type T = import("./a")./*3*/N;
 
-verify.singleReferenceGroup("type N = number", "N");
+verify.baselineFindAllReferences('1', '2', '3');

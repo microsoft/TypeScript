@@ -225,7 +225,7 @@ namespace ts {
 
         /**
          * Returns a JSON-encoded value of the type:
-         * { fileName: string; highlights: { start: number; length: number, isDefinition: boolean }[] }[]
+         * { fileName: string; highlights: { start: number; length: number }[] }[]
          *
          * @param fileToSearch A JSON encoded string[] containing the file names that should be
          *  considered when searching.
@@ -554,7 +554,7 @@ namespace ts {
         }
     }
 
-    function simpleForwardCall(logger: Logger, actionDescription: string, action: () => {}, logPerformance: boolean): {} {
+    function simpleForwardCall(logger: Logger, actionDescription: string, action: () => unknown, logPerformance: boolean): unknown {
         let start: number | undefined;
         if (logPerformance) {
             logger.log(actionDescription);

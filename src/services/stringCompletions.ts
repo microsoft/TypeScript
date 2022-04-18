@@ -210,12 +210,13 @@ namespace ts.Completions.StringCompletions {
 
             case SyntaxKind.CallExpression:
             case SyntaxKind.NewExpression:
+            case SyntaxKind.JsxAttribute:
                 if (!isRequireCallArgument(node) && !isImportCall(parent)) {
-                    const argumentInfo = SignatureHelp.getArgumentInfoForCompletions(node, position, sourceFile);
+                    const argumentInfo = SignatureHelp.getArgumentInfoForCompletions(parent.kind === SyntaxKind.JsxAttribute ? parent.parent : node, position, sourceFile);
                     // Get string literal completions from specialized signatures of the target
                     // i.e. declare function f(a: 'A');
                     // f("/*completion position*/")
-                    return argumentInfo ? getStringLiteralCompletionsFromSignature(argumentInfo, typeChecker) : fromContextualType();
+                    return argumentInfo ? getStringLiteralCompletionsFromSignature(argumentInfo.invocation, node, argumentInfo, typeChecker) : fromContextualType();
                 }
                 // falls through (is `require("")` or `require(""` or `import("")`)
 
@@ -257,15 +258,21 @@ namespace ts.Completions.StringCompletions {
             type !== current && isLiteralTypeNode(type) && isStringLiteral(type.literal) ? type.literal.text : undefined);
     }
 
-    function getStringLiteralCompletionsFromSignature(argumentInfo: SignatureHelp.ArgumentInfoForCompletions, checker: TypeChecker): StringLiteralCompletionsFromTypes {
+    function getStringLiteralCompletionsFromSignature(call: CallLikeExpression, arg: StringLiteralLike, argumentInfo: SignatureHelp.ArgumentInfoForCompletions, checker: TypeChecker): StringLiteralCompletionsFromTypes {
         let isNewIdentifier = false;
-
         const uniques = new Map<string, true>();
         const candidates: Signature[] = [];
-        checker.getResolvedSignature(argumentInfo.invocation, candidates, argumentInfo.argumentCount);
+        const editingArgument = isJsxOpeningLikeElement(call) ? Debug.checkDefined(findAncestor(arg.parent, isJsxAttribute)) : arg;
+        checker.getResolvedSignatureForStringLiteralCompletions(call, editingArgument, candidates);
         const types = flatMap(candidates, candidate => {
             if (!signatureHasRestParameter(candidate) && argumentInfo.argumentCount > candidate.parameters.length) return;
-            const type = candidate.getTypeParameterAtPosition(argumentInfo.argumentIndex);
+            let type = candidate.getTypeParameterAtPosition(argumentInfo.argumentIndex);
+            if (isJsxOpeningLikeElement(call)) {
+                const propType = checker.getTypeOfPropertyOfType(type, (editingArgument as JsxAttribute).name.text);
+                if (propType) {
+                    type = propType;
+                }
+            }
             isNewIdentifier = isNewIdentifier || !!(type.flags & TypeFlags.String);
             return getStringLiteralTypes(type, uniques);
         });

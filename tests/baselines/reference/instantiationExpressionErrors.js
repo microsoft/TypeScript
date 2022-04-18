@@ -41,6 +41,11 @@ true;
 const x3 = f<true>;
 true;
 
+// Parsed as instantiation expression
+
+const x4 = f<true>
+if (true) {}
+
 
 //// [instantiationExpressionErrors.js]
 "use strict";
@@ -70,6 +75,9 @@ var x2 = f < true >
 // Parsed as instantiation expression
 var x3 = (f);
 true;
+// Parsed as instantiation expression
+var x4 = (f);
+if (true) { }
 
 
 //// [instantiationExpressionErrors.d.ts]
@@ -98,6 +106,10 @@ declare const b4: number;
 declare const x1: true;
 declare const x2: boolean;
 declare const x3: {
+    (): true;
+    g<U>(): U;
+};
+declare const x4: {
     (): true;
     g<U>(): U;
 };

@@ -453,7 +453,7 @@ namespace ts.codefix {
         // and it is up to the user to decide which one fits best.
         return firstDefined(existingImports, ({ declaration }): FixUseNamespaceImport | undefined => {
             const namespacePrefix = getNamespaceLikeImportText(declaration);
-            const moduleSpecifier = tryGetModuleSpecifierFromDeclaration(declaration);
+            const moduleSpecifier = tryGetModuleSpecifierFromDeclaration(declaration)?.text;
             if (namespacePrefix && moduleSpecifier) {
                 const moduleSymbol = getTargetModuleFromNamespaceLikeImport(declaration, checker);
                 if (moduleSymbol && moduleSymbol.exports!.has(escapeLeadingUnderscores(symbolName))) {
@@ -670,7 +670,7 @@ namespace ts.codefix {
         checker: TypeChecker,
         compilerOptions: CompilerOptions
     ): FixAddNewImport | undefined {
-        const moduleSpecifier = tryGetModuleSpecifierFromDeclaration(declaration);
+        const moduleSpecifier = tryGetModuleSpecifierFromDeclaration(declaration)?.text;
         if (moduleSpecifier) {
             const addAsTypeOnly = useRequire
                 ? AddAsTypeOnly.NotAllowed
@@ -847,9 +847,10 @@ namespace ts.codefix {
         const checker = program.getTypeChecker();
         const compilerOptions = program.getCompilerOptions();
         const symbolName = getSymbolName(sourceFile, checker, symbolToken, compilerOptions);
-        // "default" is a keyword and not a legal identifier for the import, so we don't expect it here
-        Debug.assert(symbolName !== InternalSymbolName.Default, "'default' isn't a legal identifier and couldn't occur here");
-
+        // "default" is a keyword and not a legal identifier for the import, but appears as an identifier.
+        if (symbolName === InternalSymbolName.Default) {
+            return undefined;
+        }
         const isValidTypeOnlyUseSite = isValidTypeOnlyAliasUseSite(symbolToken);
         const useRequire = shouldUseRequire(sourceFile, program);
         const exportInfo = getExportInfos(symbolName, isJSXTagName(symbolToken), getMeaningFromLocation(symbolToken), cancellationToken, sourceFile, program, useAutoImportProvider, host, preferences);

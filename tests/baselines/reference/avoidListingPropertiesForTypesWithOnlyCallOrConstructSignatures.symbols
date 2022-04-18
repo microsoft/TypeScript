@@ -1,0 +1,18 @@
+=== tests/cases/compiler/avoidListingPropertiesForTypesWithOnlyCallOrConstructSignatures.ts ===
+interface Dog {
+>Dog : Symbol(Dog, Decl(avoidListingPropertiesForTypesWithOnlyCallOrConstructSignatures.ts, 0, 0))
+
+    barkable: true
+>barkable : Symbol(Dog.barkable, Decl(avoidListingPropertiesForTypesWithOnlyCallOrConstructSignatures.ts, 0, 15))
+}
+
+declare function getRover(): Dog
+>getRover : Symbol(getRover, Decl(avoidListingPropertiesForTypesWithOnlyCallOrConstructSignatures.ts, 2, 1))
+>Dog : Symbol(Dog, Decl(avoidListingPropertiesForTypesWithOnlyCallOrConstructSignatures.ts, 0, 0))
+    
+export let x:Dog = getRover;
+>x : Symbol(x, Decl(avoidListingPropertiesForTypesWithOnlyCallOrConstructSignatures.ts, 6, 10))
+>Dog : Symbol(Dog, Decl(avoidListingPropertiesForTypesWithOnlyCallOrConstructSignatures.ts, 0, 0))
+>getRover : Symbol(getRover, Decl(avoidListingPropertiesForTypesWithOnlyCallOrConstructSignatures.ts, 2, 1))
+
+// export let x: Dog = getRover; 

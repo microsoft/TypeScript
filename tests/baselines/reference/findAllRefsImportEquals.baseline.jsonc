@@ -60,8 +60,7 @@
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/findAllRefsImportEquals.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -73,8 +72,7 @@
           "start": 30,
           "length": 19
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       }
     ]
   }

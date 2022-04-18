@@ -657,11 +657,15 @@ namespace ts {
                 const saveExceptionTarget = currentExceptionTarget;
                 const saveActiveLabelList = activeLabelList;
                 const saveHasExplicitReturn = hasExplicitReturn;
-                const isIIFE = containerFlags & ContainerFlags.IsFunctionExpression && !hasSyntacticModifier(node, ModifierFlags.Async) &&
-                    !(node as FunctionLikeDeclaration).asteriskToken && !!getImmediatelyInvokedFunctionExpression(node);
+                const isImmediatelyInvoked =
+                    (containerFlags & ContainerFlags.IsFunctionExpression &&
+                        !hasSyntacticModifier(node, ModifierFlags.Async) &&
+                        !(node as FunctionLikeDeclaration).asteriskToken &&
+                        !!getImmediatelyInvokedFunctionExpression(node)) ||
+                    node.kind === SyntaxKind.ClassStaticBlockDeclaration;
                 // A non-async, non-generator IIFE is considered part of the containing control flow. Return statements behave
                 // similarly to break statements that exit to a label just past the statement body.
-                if (!isIIFE) {
+                if (!isImmediatelyInvoked) {
                     currentFlow = initFlowNode({ flags: FlowFlags.Start });
                     if (containerFlags & (ContainerFlags.IsFunctionExpression | ContainerFlags.IsObjectLiteralOrClassExpressionMethodOrAccessor)) {
                         currentFlow.node = node as FunctionExpression | ArrowFunction | MethodDeclaration | GetAccessorDeclaration | SetAccessorDeclaration;
@@ -669,7 +673,7 @@ namespace ts {
                 }
                 // We create a return control flow graph for IIFEs and constructors. For constructors
                 // we use the return control flow graph in strict property initialization checks.
-                currentReturnTarget = isIIFE || node.kind === SyntaxKind.Constructor || node.kind === SyntaxKind.ClassStaticBlockDeclaration || (isInJSFile(node) && (node.kind === SyntaxKind.FunctionDeclaration || node.kind === SyntaxKind.FunctionExpression)) ? createBranchLabel() : undefined;
+                currentReturnTarget = isImmediatelyInvoked || node.kind === SyntaxKind.Constructor || (isInJSFile(node) && (node.kind === SyntaxKind.FunctionDeclaration || node.kind === SyntaxKind.FunctionExpression)) ? createBranchLabel() : undefined;
                 currentExceptionTarget = undefined;
                 currentBreakTarget = undefined;
                 currentContinueTarget = undefined;
@@ -695,7 +699,7 @@ namespace ts {
                         (node as FunctionLikeDeclaration | ClassStaticBlockDeclaration).returnFlowNode = currentFlow;
                     }
                 }
-                if (!isIIFE) {
+                if (!isImmediatelyInvoked) {
                     currentFlow = saveCurrentFlow;
                 }
                 currentBreakTarget = saveBreakTarget;
@@ -889,7 +893,7 @@ namespace ts {
             return isDottedName(expr)
                 || (isPropertyAccessExpression(expr) || isNonNullExpression(expr) || isParenthesizedExpression(expr)) && isNarrowableReference(expr.expression)
                 || isBinaryExpression(expr) && expr.operatorToken.kind === SyntaxKind.CommaToken && isNarrowableReference(expr.right)
-                || isElementAccessExpression(expr) && isStringOrNumericLiteralLike(expr.argumentExpression) && isNarrowableReference(expr.expression)
+                || isElementAccessExpression(expr) && (isStringOrNumericLiteralLike(expr.argumentExpression) || isEntityNameExpression(expr.argumentExpression)) && isNarrowableReference(expr.expression)
                 || isAssignmentExpression(expr) && isNarrowableReference(expr.left);
         }
 
@@ -1069,7 +1073,6 @@ namespace ts {
                 node = node.parent;
             }
             return !isStatementCondition(node) &&
-                !isLogicalAssignmentExpression(node.parent) &&
                 !isLogicalExpression(node.parent) &&
                 !(isOptionalChain(node.parent) && node.parent.expression === node);
         }
@@ -1815,6 +1818,7 @@ namespace ts {
                 case SyntaxKind.ModuleDeclaration:
                 case SyntaxKind.TypeAliasDeclaration:
                 case SyntaxKind.MappedType:
+                case SyntaxKind.IndexSignature:
                     return ContainerFlags.IsContainer | ContainerFlags.HasLocals;
 
                 case SyntaxKind.SourceFile:
@@ -1835,7 +1839,6 @@ namespace ts {
                 case SyntaxKind.JSDocFunctionType:
                 case SyntaxKind.FunctionType:
                 case SyntaxKind.ConstructSignature:
-                case SyntaxKind.IndexSignature:
                 case SyntaxKind.ConstructorType:
                 case SyntaxKind.ClassStaticBlockDeclaration:
                     return ContainerFlags.IsContainer | ContainerFlags.IsControlFlowContainer | ContainerFlags.HasLocals | ContainerFlags.IsFunctionLike;
@@ -3288,7 +3291,7 @@ namespace ts {
             }
 
             if (!isBindingPattern(node.name)) {
-                if (isInJSFile(node) && isVariableDeclarationInitializedToBareOrAccessedRequire(node) && !getJSDocTypeTag(node)) {
+                if (isInJSFile(node) && isVariableDeclarationInitializedToBareOrAccessedRequire(node) && !getJSDocTypeTag(node) && !(getCombinedModifierFlags(node) & ModifierFlags.Export)) {
                     declareSymbolAndAddToSymbolTable(node as Declaration, SymbolFlags.Alias, SymbolFlags.AliasExcludes);
                 }
                 else if (isBlockOrCatchScoped(node)) {

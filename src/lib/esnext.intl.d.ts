@@ -1,6 +1,6 @@
 declare namespace Intl {
-
-   interface DateTimeFormat {
-      formatRange(startName: Date, endNumber: Date): string;
-   }
+  interface NumberFormat {
+    formatRange(start: number | bigint, end: number | bigint): string;
+    formatRangeToParts(start: number | bigint, end: number | bigint): NumberFormatPart[];
+  }
 }

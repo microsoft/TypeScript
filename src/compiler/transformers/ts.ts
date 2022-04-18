@@ -373,6 +373,8 @@ namespace ts {
                 case SyntaxKind.ConstKeyword:
                 case SyntaxKind.DeclareKeyword:
                 case SyntaxKind.ReadonlyKeyword:
+                case SyntaxKind.InKeyword:
+                case SyntaxKind.OutKeyword:
                 // TypeScript accessibility and readonly modifiers are elided
                 // falls through
                 case SyntaxKind.ArrayType:
@@ -1936,14 +1938,14 @@ namespace ts {
 
             resumeLexicalEnvironment();
 
-            const indexAfterLastPrologueStatement = factory.copyPrologue(body.statements, statements, /*ensureUseStrict*/ false, visitor);
-            const superStatementIndex = findSuperStatementIndex(body.statements, indexAfterLastPrologueStatement);
+            const prologueStatementCount = factory.copyPrologue(body.statements, statements, /*ensureUseStrict*/ false, visitor);
+            const superStatementIndex = findSuperStatementIndex(body.statements, prologueStatementCount);
 
             // If there was a super call, visit existing statements up to and including it
             if (superStatementIndex >= 0) {
                 addRange(
                     statements,
-                    visitNodes(body.statements, visitor, isStatement, indexAfterLastPrologueStatement, superStatementIndex + 1 - indexAfterLastPrologueStatement),
+                    visitNodes(body.statements, visitor, isStatement, prologueStatementCount, superStatementIndex + 1 - prologueStatementCount),
                 );
             }
 
@@ -1965,13 +1967,17 @@ namespace ts {
             if (superStatementIndex >= 0) {
                 addRange(statements, parameterPropertyAssignments);
             }
-            // Since there was no super() call, parameter properties are the first statements in the constructor
+            // Since there was no super() call, parameter properties are the first statements in the constructor after any prologue statements
             else {
-                statements = addRange(parameterPropertyAssignments, statements);
+                statements = [
+                    ...statements.slice(0, prologueStatementCount),
+                    ...parameterPropertyAssignments,
+                    ...statements.slice(prologueStatementCount),
+                ];
             }
 
-            // Add remaining statements from the body, skipping the super() call if it was found
-            addRange(statements, visitNodes(body.statements, visitor, isStatement, superStatementIndex + 1));
+            // Add remaining statements from the body, skipping the super() call if it was found and any (already added) prologue statements
+            addRange(statements, visitNodes(body.statements, visitor, isStatement, superStatementIndex + 1 + prologueStatementCount));
 
             // End the lexical environment.
             statements = factory.mergeLexicalEnvironment(statements, endLexicalEnvironment());
@@ -2227,12 +2233,16 @@ namespace ts {
         }
 
         function visitVariableDeclaration(node: VariableDeclaration) {
-            return factory.updateVariableDeclaration(
+            const updated = factory.updateVariableDeclaration(
                 node,
                 visitNode(node.name, visitor, isBindingName),
                 /*exclamationToken*/ undefined,
                 /*type*/ undefined,
                 visitNode(node.initializer, visitor, isExpression));
+            if (node.type) {
+                setTypeNode(updated.name, node.type);
+            }
+            return updated;
         }
 
         function visitParenthesizedExpression(node: ParenthesizedExpression): Expression {
@@ -3351,6 +3361,10 @@ namespace ts {
             return substituteConstantValue(node);
         }
 
+        function safeMultiLineComment(value: string): string {
+            return value.replace(/\*\//g, "*_/");
+        }
+
         function substituteConstantValue(node: PropertyAccessExpression | ElementAccessExpression): LeftHandSideExpression {
             const constantValue = tryGetConstEnumValue(node);
             if (constantValue !== undefined) {
@@ -3360,13 +3374,9 @@ namespace ts {
                 const substitute = typeof constantValue === "string" ? factory.createStringLiteral(constantValue) : factory.createNumericLiteral(constantValue);
                 if (!compilerOptions.removeComments) {
                     const originalNode = getOriginalNode(node, isAccessExpression);
-                    const propertyName = isPropertyAccessExpression(originalNode)
-                        ? declarationNameToString(originalNode.name)
-                        : getTextOfNode(originalNode.argumentExpression);
 
-                    addSyntheticTrailingComment(substitute, SyntaxKind.MultiLineCommentTrivia, ` ${propertyName} `);
+                    addSyntheticTrailingComment(substitute, SyntaxKind.MultiLineCommentTrivia, ` ${safeMultiLineComment(getTextOfNode(originalNode))} `);
                 }
-
                 return substitute;
             }
 

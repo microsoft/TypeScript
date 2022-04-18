@@ -70,7 +70,7 @@ export function f22() { } // trailing`,
                 const baseFsPatch = inputFs.diff(/*base*/ undefined, { baseIsNotShadowRoot: true });
                 const patch = fs.diff(inputFs, { includeChangedFileWithSameContent: true });
                 return {
-                    file: `tsbuild/$publicAPI/${BuildKind.Initial}/${"build with custom transformers".split(" ").join("-")}.js`,
+                    file: `tsbuild/publicAPI/build-with-custom-transformers.js`,
                     text: `Input::
 ${baseFsPatch ? vfs.formatPatch(baseFsPatch) : ""}
 

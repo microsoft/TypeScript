@@ -836,7 +836,7 @@ namespace ts {
     }
 
     export function isJSDoc(node: Node): node is JSDoc {
-        return node.kind === SyntaxKind.JSDocComment;
+        return node.kind === SyntaxKind.JSDoc;
     }
 
     export function isJSDocTypeLiteral(node: Node): node is JSDocTypeLiteral {

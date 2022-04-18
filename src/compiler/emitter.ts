@@ -167,7 +167,7 @@ namespace ts {
     }
 
     function getOwnOutputFileNames(configFile: ParsedCommandLine, inputFileName: string, ignoreCase: boolean, addOutput: ReturnType<typeof createAddOutput>["addOutput"], getCommonSourceDirectory?: () => string) {
-        if (fileExtensionIs(inputFileName, Extension.Dts)) return;
+        if (isDeclarationFileName(inputFileName)) return;
         const js = getOutputJSFileName(inputFileName, configFile, ignoreCase, getCommonSourceDirectory);
         addOutput(js);
         if (fileExtensionIs(inputFileName, Extension.Json)) return;
@@ -219,7 +219,7 @@ namespace ts {
     export function getCommonSourceDirectoryOfConfig({ options, fileNames }: ParsedCommandLine, ignoreCase: boolean): string {
         return getCommonSourceDirectory(
             options,
-            () => filter(fileNames, file => !(options.noEmitForJsFiles && fileExtensionIsOneOf(file, supportedJSExtensionsFlat)) && !fileExtensionIs(file, Extension.Dts)),
+            () => filter(fileNames, file => !(options.noEmitForJsFiles && fileExtensionIsOneOf(file, supportedJSExtensionsFlat)) && !isDeclarationFileName(file)),
             getDirectoryPath(normalizeSlashes(Debug.checkDefined(options.configFilePath))),
             createGetCanonicalFileName(!ignoreCase)
         );
@@ -263,7 +263,7 @@ namespace ts {
 
         const getCommonSourceDirectory = memoize(() => getCommonSourceDirectoryOfConfig(configFile, ignoreCase));
         for (const inputFileName of configFile.fileNames) {
-            if (fileExtensionIs(inputFileName, Extension.Dts)) continue;
+            if (isDeclarationFileName(inputFileName)) continue;
             const jsFilePath = getOutputJSFileName(inputFileName, configFile, ignoreCase, getCommonSourceDirectory);
             if (jsFilePath) return jsFilePath;
             if (fileExtensionIs(inputFileName, Extension.Json)) continue;
@@ -909,6 +909,9 @@ namespace ts {
         let currentParenthesizerRule: ((node: Node) => Node) | undefined;
         const { enter: enterComment, exit: exitComment } = performance.createTimerIf(extendedDiagnostics, "commentTime", "beforeComment", "afterComment");
         const parenthesizer = factory.parenthesizer;
+        const typeArgumentParenthesizerRuleSelector: OrdinalParentheizerRuleSelector<Node> = {
+            select: index => index === 0 ? parenthesizer.parenthesizeLeadingTypeArgument : undefined
+        };
         const emitBinaryExpression = createEmitBinaryExpression();
 
         reset();
@@ -1596,7 +1599,7 @@ namespace ts {
                         return emitRestOrJSDocVariadicType(node as RestTypeNode | JSDocVariadicType);
                     case SyntaxKind.JSDocNamepathType:
                         return;
-                    case SyntaxKind.JSDocComment:
+                    case SyntaxKind.JSDoc:
                         return emitJSDoc(node as JSDoc);
                     case SyntaxKind.JSDocTypeLiteral:
                         return emitJSDocTypeLiteral(node as JSDocTypeLiteral);
@@ -2009,6 +2012,7 @@ namespace ts {
         //
 
         function emitTypeParameter(node: TypeParameterDeclaration) {
+            emitModifiers(node, node.modifiers);
             emit(node.name);
             if (node.constraint) {
                 writeSpace();
@@ -2240,7 +2244,7 @@ namespace ts {
         }
 
         function emitArrayType(node: ArrayTypeNode) {
-            emit(node.elementType, parenthesizer.parenthesizeElementTypeOfArrayType);
+            emit(node.elementType, parenthesizer.parenthesizeNonArrayTypeOfPostfixType);
             writePunctuation("[");
             writePunctuation("]");
         }
@@ -2253,7 +2257,7 @@ namespace ts {
         function emitTupleType(node: TupleTypeNode) {
             emitTokenWithComment(SyntaxKind.OpenBracketToken, node.pos, writePunctuation, node);
             const flags = getEmitFlags(node) & EmitFlags.SingleLine ? ListFormat.SingleLineTupleTypeElements : ListFormat.MultiLineTupleTypeElements;
-            emitList(node, node.elements, flags | ListFormat.NoSpaceIfEmpty);
+            emitList(node, node.elements, flags | ListFormat.NoSpaceIfEmpty, parenthesizer.parenthesizeElementTypeOfTupleType);
             emitTokenWithComment(SyntaxKind.CloseBracketToken, node.elements.end, writePunctuation, node);
         }
 
@@ -2267,24 +2271,24 @@ namespace ts {
         }
 
         function emitOptionalType(node: OptionalTypeNode) {
-            emit(node.type, parenthesizer.parenthesizeElementTypeOfArrayType);
+            emit(node.type, parenthesizer.parenthesizeTypeOfOptionalType);
             writePunctuation("?");
         }
 
         function emitUnionType(node: UnionTypeNode) {
-            emitList(node, node.types, ListFormat.UnionTypeConstituents, parenthesizer.parenthesizeMemberOfElementType);
+            emitList(node, node.types, ListFormat.UnionTypeConstituents, parenthesizer.parenthesizeConstituentTypeOfUnionType);
         }
 
         function emitIntersectionType(node: IntersectionTypeNode) {
-            emitList(node, node.types, ListFormat.IntersectionTypeConstituents, parenthesizer.parenthesizeMemberOfElementType);
+            emitList(node, node.types, ListFormat.IntersectionTypeConstituents, parenthesizer.parenthesizeConstituentTypeOfIntersectionType);
         }
 
         function emitConditionalType(node: ConditionalTypeNode) {
-            emit(node.checkType, parenthesizer.parenthesizeMemberOfConditionalType);
+            emit(node.checkType, parenthesizer.parenthesizeCheckTypeOfConditionalType);
             writeSpace();
             writeKeyword("extends");
             writeSpace();
-            emit(node.extendsType, parenthesizer.parenthesizeMemberOfConditionalType);
+            emit(node.extendsType, parenthesizer.parenthesizeExtendsTypeOfConditionalType);
             writeSpace();
             writePunctuation("?");
             writeSpace();
@@ -2314,11 +2318,15 @@ namespace ts {
         function emitTypeOperator(node: TypeOperatorNode) {
             writeTokenText(node.operator, writeKeyword);
             writeSpace();
-            emit(node.type, parenthesizer.parenthesizeMemberOfElementType);
+
+            const parenthesizerRule = node.operator === SyntaxKind.ReadonlyKeyword ?
+                parenthesizer.parenthesizeOperandOfReadonlyTypeOperator :
+                parenthesizer.parenthesizeOperandOfTypeOperator;
+            emit(node.type, parenthesizerRule);
         }
 
         function emitIndexedAccessType(node: IndexedAccessTypeNode) {
-            emit(node.objectType, parenthesizer.parenthesizeMemberOfElementType);
+            emit(node.objectType, parenthesizer.parenthesizeNonArrayTypeOfPostfixType);
             writePunctuation("[");
             emit(node.indexType);
             writePunctuation("]");
@@ -2369,6 +2377,7 @@ namespace ts {
                 writeLine();
                 decreaseIndent();
             }
+            emitList(node, node.members, ListFormat.PreserveLines);
             writePunctuation("}");
         }
 
@@ -2389,6 +2398,19 @@ namespace ts {
             writeKeyword("import");
             writePunctuation("(");
             emit(node.argument);
+            if (node.assertions) {
+                writePunctuation(",");
+                writeSpace();
+                writePunctuation("{");
+                writeSpace();
+                writeKeyword("assert");
+                writePunctuation(":");
+                writeSpace();
+                const elements = node.assertions.assertClause.elements;
+                emitList(node.assertions.assertClause, elements, ListFormat.ImportClauseEntries);
+                writeSpace();
+                writePunctuation("}");
+            }
             writePunctuation(")");
             if (node.qualifier) {
                 writePunctuation(".");
@@ -3105,7 +3127,7 @@ namespace ts {
             emit(node.name);
             emit(node.exclamationToken);
             emitTypeAnnotation(node.type);
-            emitInitializer(node.initializer, node.type ? node.type.end : node.name.end, node, parenthesizer.parenthesizeExpressionForDisallowedComma);
+            emitInitializer(node.initializer, node.type?.end ?? node.name.emitNode?.typeNode?.end ?? node.name.end, node, parenthesizer.parenthesizeExpressionForDisallowedComma);
         }
 
         function emitVariableDeclarationList(node: VariableDeclarationList) {
@@ -4241,7 +4263,7 @@ namespace ts {
         }
 
         function emitTypeArguments(parentNode: Node, typeArguments: NodeArray<TypeNode> | undefined) {
-            emitList(parentNode, typeArguments, ListFormat.TypeArguments, parenthesizer.parenthesizeMemberOfElementType);
+            emitList(parentNode, typeArguments, ListFormat.TypeArguments, typeArgumentParenthesizerRuleSelector);
         }
 
         function emitTypeParameters(parentNode: SignatureDeclaration | InterfaceDeclaration | TypeAliasDeclaration | ClassDeclaration | ClassExpression, typeParameters: NodeArray<TypeParameterDeclaration> | undefined) {
@@ -4309,15 +4331,15 @@ namespace ts {
             }
         }
 
-        function emitList(parentNode: Node | undefined, children: NodeArray<Node> | undefined, format: ListFormat, parenthesizerRule?: (node: Node) => Node, start?: number, count?: number) {
+        function emitList(parentNode: Node | undefined, children: NodeArray<Node> | undefined, format: ListFormat, parenthesizerRule?: ParenthesizerRuleOrSelector<Node>, start?: number, count?: number) {
             emitNodeList(emit, parentNode, children, format, parenthesizerRule, start, count);
         }
 
-        function emitExpressionList(parentNode: Node | undefined, children: NodeArray<Node> | undefined, format: ListFormat, parenthesizerRule?: (node: Expression) => Expression, start?: number, count?: number) {
+        function emitExpressionList(parentNode: Node | undefined, children: NodeArray<Node> | undefined, format: ListFormat, parenthesizerRule?: ParenthesizerRuleOrSelector<Expression>, start?: number, count?: number) {
             emitNodeList(emitExpression, parentNode, children, format, parenthesizerRule, start, count);
         }
 
-        function emitNodeList(emit: (node: Node, parenthesizerRule?: ((node: Node) => Node) | undefined) => void, parentNode: Node | undefined, children: NodeArray<Node> | undefined, format: ListFormat, parenthesizerRule: ((node: Node) => Node) | undefined, start = 0, count = children ? children.length - start : 0) {
+        function emitNodeList(emit: (node: Node, parenthesizerRule?: ((node: Node) => Node) | undefined) => void, parentNode: Node | undefined, children: NodeArray<Node> | undefined, format: ListFormat, parenthesizerRule: ParenthesizerRuleOrSelector<Node> | undefined, start = 0, count = children ? children.length - start : 0) {
             const isUndefined = children === undefined;
             if (isUndefined && format & ListFormat.OptionalIfUndefined) {
                 return;
@@ -4372,6 +4394,8 @@ namespace ts {
                 if (format & ListFormat.Indented) {
                     increaseIndent();
                 }
+
+                const emitListItem = getEmitListItem(emit, parenthesizerRule);
 
                 // Emit each child.
                 let previousSibling: Node | undefined;
@@ -4428,12 +4452,7 @@ namespace ts {
                     }
 
                     nextListElementPos = child.pos;
-                    if (emit.length === 1) {
-                        emit(child);
-                    }
-                    else {
-                        emit(child, parenthesizerRule);
-                    }
+                    emitListItem(child, emit, parenthesizerRule, i);
 
                     if (shouldDecreaseIndentAfterEmit) {
                         decreaseIndent();
@@ -5331,6 +5350,10 @@ namespace ts {
                 commentsDisabled = false;
             }
             emitTrailingCommentsOfNode(node, emitFlags, commentRange.pos, commentRange.end, savedContainerPos, savedContainerEnd, savedDeclarationListContainerEnd);
+            const typeNode = getTypeNode(node);
+            if (typeNode) {
+                emitTrailingCommentsOfNode(node, emitFlags, typeNode.pos, typeNode.end, savedContainerPos, savedContainerEnd, savedDeclarationListContainerEnd);
+            }
         }
 
         function emitLeadingCommentsOfNode(node: Node, emitFlags: EmitFlags, pos: number, end: number) {
@@ -5870,5 +5893,31 @@ namespace ts {
         Auto = 0x00000000,  // No preferred name
         CountMask = 0x0FFFFFFF,  // Temp variable counter
         _i = 0x10000000,  // Use/preference flag for '_i'
+    }
+
+    interface OrdinalParentheizerRuleSelector<T extends Node> {
+        select(index: number): ((node: T) => T) | undefined;
+    }
+
+    type ParenthesizerRule<T extends Node> = (node: T) => T;
+
+    type ParenthesizerRuleOrSelector<T extends Node> = OrdinalParentheizerRuleSelector<T> | ParenthesizerRule<T>;
+
+    function emitListItemNoParenthesizer(node: Node, emit: (node: Node, parenthesizerRule?: ((node: Node) => Node) | undefined) => void, _parenthesizerRule: ParenthesizerRuleOrSelector<Node> | undefined, _index: number) {
+        emit(node);
+    }
+
+    function emitListItemWithParenthesizerRuleSelector(node: Node, emit: (node: Node, parenthesizerRule?: ((node: Node) => Node) | undefined) => void, parenthesizerRuleSelector: OrdinalParentheizerRuleSelector<Node>, index: number) {
+        emit(node, parenthesizerRuleSelector.select(index));
+    }
+
+    function emitListItemWithParenthesizerRule(node: Node, emit: (node: Node, parenthesizerRule?: ((node: Node) => Node) | undefined) => void, parenthesizerRule: ParenthesizerRule<Node> | undefined, _index: number) {
+        emit(node, parenthesizerRule);
+    }
+
+    function getEmitListItem<T extends Node, R extends ParenthesizerRuleOrSelector<T> | undefined>(emit: (node: Node, parenthesizerRule?: ((node: Node) => Node) | undefined) => void, parenthesizerRule: R): (node: Node, emit: (node: Node, parenthesizerRule?: ((node: Node) => Node) | undefined) => void, parenthesizerRule: R, index: number) => void {
+        return emit.length === 1 ? emitListItemNoParenthesizer :
+            typeof parenthesizerRule === "object" ? emitListItemWithParenthesizerRuleSelector :
+            emitListItemWithParenthesizerRule;
     }
 }
