@@ -8,9 +8,13 @@ declare namespace Intl {
         fractionalSecondDigits?: 0 | 1 | 2 | 3 | undefined;
     }
 
+    interface DateTimeRangeFormatPart extends DateTimeFormatPart {
+        source: "startRange" | "endRange" | "shared"
+    }
+
     interface DateTimeFormat {
         formatRange(startDate: Date | number | bigint, endDate: Date | number | bigint): string;
-        formatRangeToParts(startDate: Date | number | bigint, endDate: Date | number | bigint): DateTimeFormatPart[];
+        formatRangeToParts(startDate: Date | number | bigint, endDate: Date | number | bigint): DateTimeRangeFormatPart[];
     }
 
     interface ResolvedDateTimeFormatOptions {
