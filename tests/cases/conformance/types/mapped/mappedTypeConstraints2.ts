@@ -1,5 +1,6 @@
 // @strict: true
 // @declaration: true
+// @target: es2017
 
 type Mapped1<K extends string> = { [P in K]: { a: P } };
 
@@ -26,3 +27,25 @@ type Foo<T extends string> = {
 };
 
 const get = <T extends string>(t: T, foo: Foo<T>): T => foo[`get${t}`];  // Type 'Foo<T>[`get${T}`]' is not assignable to type 'T'
+
+// Repro from #48626
+
+interface Bounds {
+    min: number;
+    max: number;
+}
+
+type NumericBoundsOf<T> = {
+    [K in keyof T as T[K] extends number | undefined ? K : never]: Bounds;
+}
+
+function validate<T extends object>(obj: T, bounds: NumericBoundsOf<T>) {
+    for (const [key, val] of Object.entries(obj)) {
+        const boundsForKey = bounds[key as keyof NumericBoundsOf<T>];
+        if (boundsForKey) {
+            const { min, max } = boundsForKey;
+            if (min > val || max < val) return false;
+        }
+    }
+    return true;
+}
