@@ -243,7 +243,6 @@ namespace ts {
         readonly configFileCache: ESMap<ResolvedConfigFilePath, ConfigFileCacheEntry>;
         /** Map from config file name to up-to-date status */
         readonly projectStatus: ESMap<ResolvedConfigFilePath, UpToDateStatus>;
-        readonly buildInfoChecked: ESMap<ResolvedConfigFilePath, true>;
         readonly extendedConfigCache: ESMap<string, ExtendedConfigCacheEntry>;
         readonly buildInfoCache: ESMap<ResolvedConfigFilePath, BuildInfoCacheEntry>;
 
@@ -329,7 +328,6 @@ namespace ts {
             resolvedConfigFilePaths: new Map(),
             configFileCache: new Map(),
             projectStatus: new Map(),
-            buildInfoChecked: new Map(),
             extendedConfigCache: new Map(),
             buildInfoCache: new Map(),
 
@@ -490,7 +488,6 @@ namespace ts {
         // Config file cache
         mutateMapSkippingNewValues(state.configFileCache, currentProjects, noopOnDelete);
         mutateMapSkippingNewValues(state.projectStatus, currentProjects, noopOnDelete);
-        mutateMapSkippingNewValues(state.buildInfoChecked, currentProjects, noopOnDelete);
         mutateMapSkippingNewValues(state.builderPrograms, currentProjects, noopOnDelete);
         mutateMapSkippingNewValues(state.diagnostics, currentProjects, noopOnDelete);
         mutateMapSkippingNewValues(state.projectPendingBuild, currentProjects, noopOnDelete);
@@ -1507,6 +1504,13 @@ namespace ts {
             const buildInfoCacheEntry = getBuildInfoCacheEntry(state, buildInfoPath, resolvedPath);
             buildInfoTime = buildInfoCacheEntry?.modifiedTime || ts.getModifiedTime(host, buildInfoPath);
             if (buildInfoTime === missingFileModifiedTime) {
+                if (!buildInfoCacheEntry) {
+                    state.buildInfoCache.set(resolvedPath, {
+                        path: toPath(state, buildInfoPath),
+                        buildInfo: false,
+                        modifiedTime: buildInfoTime
+                    });
+                }
                 return {
                     type: UpToDateStatusType.OutputMissing,
                     missingOutputFileName: buildInfoPath
@@ -1514,14 +1518,11 @@ namespace ts {
             }
 
             const buildInfo = Debug.checkDefined(getBuildInfo(state, buildInfoPath, resolvedPath, buildInfoTime));
-            if (!state.buildInfoChecked.has(resolvedPath)) {
-                state.buildInfoChecked.set(resolvedPath, true);
-                if (buildInfo && (buildInfo.bundle || buildInfo.program) && buildInfo.version !== version) {
-                    return {
-                        type: UpToDateStatusType.TsVersionOutputOfDate,
-                        version: buildInfo.version
-                    };
-                }
+            if ((buildInfo.bundle || buildInfo.program) && buildInfo.version !== version) {
+                return {
+                    type: UpToDateStatusType.TsVersionOutputOfDate,
+                    version: buildInfo.version
+                };
             }
 
             if (buildInfo.program) {
