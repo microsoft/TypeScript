@@ -36,7 +36,7 @@ namespace ts {
         return !!(program as Program | BuilderProgram).getCompilerOptions;
     }
     export function commandLineCallbacks(
-        sys: System & { writtenFiles: ReadonlyCollection<Path>; },
+        sys: TscCompileSystem | tscWatch.WatchedSystem,
         originalReadCall?: System["readFile"],
     ): CommandLineCallbacks {
         let programs: CommandLineProgram[] | undefined;
@@ -136,9 +136,13 @@ ${patch ? vfs.formatPatch(patch) : ""}`
         };
     }
 
-    export function createSolutionBuilderHostForBaseline(sys: TscCompileSystem, versionToWrite?: string) {
-        makeSystemReadyForBaseline(sys, versionToWrite);
-        const { cb } = commandLineCallbacks(sys);
+    export function createSolutionBuilderHostForBaseline(
+        sys: TscCompileSystem | tscWatch.WatchedSystem,
+        versionToWrite?: string,
+        originalRead?: (TscCompileSystem | tscWatch.WatchedSystem)["readFile"]
+    ) {
+        if (sys instanceof fakes.System) makeSystemReadyForBaseline(sys, versionToWrite);
+        const { cb } = commandLineCallbacks(sys, originalRead);
         const host = createSolutionBuilderHost(sys,
             /*createProgram*/ undefined,
             createDiagnosticReporter(sys, /*pretty*/ true),
