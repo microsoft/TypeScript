@@ -317,6 +317,9 @@ declare namespace FourSlashInterface {
         goToDefinition(startsAndEnds: { [startMarkerName: string]: ArrayOrSingle<string> }): void;
         /** Verifies goToDefinition for each `${markerName}Reference` -> `${markerName}Definition` */
         goToDefinitionForMarkers(...markerNames: string[]): void;
+        goToSourceDefinition(startMarkerNames: ArrayOrSingle<string>, fileResult: { file: string, unverified?: boolean }): void;
+        goToSourceDefinition(startMarkerNames: ArrayOrSingle<string>, endMarkerNames: ArrayOrSingle<string | { marker: string, unverified?: boolean }>): void;
+        goToSourceDefinition(startMarkerNames: ArrayOrSingle<string>, endMarkerNames: ArrayOrSingle<string>): void;
         goToType(startsAndEnds: { [startMarkerName: string]: ArrayOrSingle<string> }): void;
         goToType(startMarkerNames: ArrayOrSingle<string>, endMarkerNames: ArrayOrSingle<string>): void;
         verifyGetEmitOutputForCurrentFile(expected: string): void;

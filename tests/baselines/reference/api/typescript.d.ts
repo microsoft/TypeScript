@@ -5872,7 +5872,7 @@ declare namespace ts {
         getRenameInfo(fileName: string, position: number, options?: RenameInfoOptions): RenameInfo;
         findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, providePrefixAndSuffixTextForRename?: boolean): readonly RenameLocation[] | undefined;
         getSmartSelectionRange(fileName: string, position: number): SelectionRange;
-        getDefinitionAtPosition(fileName: string, position: number, skipAlias?: boolean): readonly DefinitionInfo[] | undefined;
+        getDefinitionAtPosition(fileName: string, position: number): readonly DefinitionInfo[] | undefined;
         getDefinitionAndBoundSpan(fileName: string, position: number): DefinitionInfoAndBoundSpan | undefined;
         getTypeDefinitionAtPosition(fileName: string, position: number): readonly DefinitionInfo[] | undefined;
         getImplementationAtPosition(fileName: string, position: number): readonly ImplementationLocation[] | undefined;

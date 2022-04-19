@@ -1768,9 +1768,9 @@ namespace ts {
         }
 
         /// Goto definition
-        function getDefinitionAtPosition(fileName: string, position: number, skipAlias = true): readonly DefinitionInfo[] | undefined {
+        function getDefinitionAtPosition(fileName: string, position: number, searchOtherFilesOnly?: boolean, skipAlias = true): readonly DefinitionInfo[] | undefined {
             synchronizeHostData();
-            return GoToDefinition.getDefinitionAtPosition(program, getValidSourceFile(fileName), position, skipAlias);
+            return GoToDefinition.getDefinitionAtPosition(program, getValidSourceFile(fileName), position, searchOtherFilesOnly, skipAlias);
         }
 
         function getDefinitionAndBoundSpan(fileName: string, position: number): DefinitionInfoAndBoundSpan | undefined {

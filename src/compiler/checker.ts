@@ -9206,7 +9206,7 @@ namespace ts {
                         }
                     }
                     const sourceTypes = some(constructorTypes, t => !!(t.flags & ~TypeFlags.Nullable)) ? constructorTypes : types; // TODO: GH#18217
-                    type = getUnionType(sourceTypes!, UnionReduction.Subtype);
+                    type = getUnionType(sourceTypes!);
                 }
             }
             const widened = getWidenedType(addOptionality(type, /*isProperty*/ false, definedInMethod && !definedInConstructor));
@@ -15737,11 +15737,14 @@ namespace ts {
                     return type[cache] = elementType;
                 }
             }
-            // If the object type is a mapped type { [P in K]: E }, where K is generic, instantiate E using a mapper
-            // that substitutes the index type for P. For example, for an index access { [P in K]: Box<T[P]> }[X], we
-            // construct the type Box<T[X]>.
-            if (isGenericMappedType(objectType) && !objectType.declaration.nameType) {
-                return type[cache] = mapType(substituteIndexedMappedType(objectType, type.indexType), t => getSimplifiedType(t, writing));
+            // If the object type is a mapped type { [P in K]: E }, where K is generic, or { [P in K as N]: E }, where
+            // K is generic and N is assignable to P, instantiate E using a mapper that substitutes the index type for P.
+            // For example, for an index access { [P in K]: Box<T[P]> }[X], we construct the type Box<T[X]>.
+            if (isGenericMappedType(objectType)) {
+                const nameType = getNameTypeFromMappedType(objectType);
+                if (!nameType || isTypeAssignableTo(nameType, getTypeParameterFromMappedType(objectType))) {
+                    return type[cache] = mapType(substituteIndexedMappedType(objectType, type.indexType), t => getSimplifiedType(t, writing));
+                }
             }
             return type[cache] = type;
         }
@@ -35405,7 +35408,7 @@ namespace ts {
                                         superCallStatement = statement;
                                         break;
                                     }
-                                    if (!isPrologueDirective(statement) && nodeImmediatelyReferencesSuperOrThis(statement)) {
+                                    if (nodeImmediatelyReferencesSuperOrThis(statement)) {
                                         break;
                                     }
                                 }
