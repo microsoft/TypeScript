@@ -246,7 +246,7 @@ namespace ts {
                     )
                 );
 
-                const host = createSolutionBuilderHost(system);
+                const host = createSolutionBuilderHostForBaseline(system);
                 const builder = createSolutionBuilder(host, [testsConfig.path], {});
                 baseline.push("Input::");
                 baselineState();
@@ -317,7 +317,7 @@ namespace ts {
                     )
                 );
 
-                const host = createSolutionBuilderHost(system);
+                const host = createSolutionBuilderHostForBaseline(system);
                 const builder = createSolutionBuilder(host, [testsConfig.path], { dry: false, force: false, verbose: false });
                 builder.build();
                 baselineState("Build of project");
