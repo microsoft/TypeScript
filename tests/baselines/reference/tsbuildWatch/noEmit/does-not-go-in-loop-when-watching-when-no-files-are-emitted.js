@@ -117,7 +117,7 @@ Output::
 >> Screen clear
 [[90m12:00:33 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:34 AM[0m] Project 'tsconfig.json' is out of date because output file 'b.js' does not exist
+[[90m12:00:34 AM[0m] Project 'tsconfig.json' is out of date because oldest output 'a.js' is older than newest input 'a.js'
 
 [[90m12:00:35 AM[0m] Building project '/user/username/projects/myproject/tsconfig.json'...
 
@@ -164,10 +164,7 @@ directoryExists:: {
  "/node_modules/@types": 1
 } 
 
-getModifiedTimes:: {
- "/user/username/projects/myproject/a.js": 1,
- "/user/username/projects/myproject/b.js": 1
-} 
+getModifiedTimes:: {} 
 
 setModifiedTimes:: {} 
 
@@ -190,7 +187,7 @@ Output::
 >> Screen clear
 [[90m12:00:40 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:41 AM[0m] Project 'tsconfig.json' is out of date because output file 'b.js' does not exist
+[[90m12:00:41 AM[0m] Project 'tsconfig.json' is out of date because oldest output 'a.js' is older than newest input 'a.js'
 
 [[90m12:00:42 AM[0m] Building project '/user/username/projects/myproject/tsconfig.json'...
 
@@ -242,9 +239,6 @@ directoryExists:: {
  "/node_modules/@types": 1
 } 
 
-getModifiedTimes:: {
- "/user/username/projects/myproject/a.js": 1,
- "/user/username/projects/myproject/b.js": 1
-} 
+getModifiedTimes:: {} 
 
 setModifiedTimes:: {} 

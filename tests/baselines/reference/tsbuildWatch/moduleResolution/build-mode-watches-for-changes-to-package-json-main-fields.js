@@ -110,7 +110,7 @@ File '/user/username/projects/myproject/packages/pkg2/build/const.ts' does not e
 File '/user/username/projects/myproject/packages/pkg2/build/const.tsx' does not exist.
 File '/user/username/projects/myproject/packages/pkg2/build/const.d.ts' exist - use it as a name resolution result.
 ======== Module name './const.js' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/build/const.d.ts'. ========
-[[90m12:01:15 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:16 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -349,11 +349,11 @@ setModifiedTimes:: {}
 
 Output::
 >> Screen clear
-[[90m12:01:19 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:20 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:20 AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because oldest output 'packages/pkg1/build/index.js' is older than newest input 'packages/pkg2/package.json'
+[[90m12:01:21 AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because oldest output 'packages/pkg1/build/index.js' is older than newest input 'packages/pkg2/package.json'
 
-[[90m12:01:21 AM[0m] Building project '/user/username/projects/myproject/packages/pkg1/tsconfig.json'...
+[[90m12:01:22 AM[0m] Building project '/user/username/projects/myproject/packages/pkg1/tsconfig.json'...
 
 ======== Resolving module 'pkg2' from '/user/username/projects/myproject/packages/pkg1/index.ts'. ========
 Module resolution kind is not specified, using 'NodeJs'.
@@ -385,7 +385,7 @@ Resolving real path for '/user/username/projects/myproject/node_modules/pkg2/bui
 [7m1[0m import type { TheNum } from 'pkg2'
 [7m [0m [91m              ~~~~~~[0m
 
-[[90m12:01:22 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:01:23 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -463,7 +463,6 @@ directoryExists:: {
 } 
 
 getModifiedTimes:: {
- "/user/username/projects/myproject/packages/pkg1/build/index.js": 1,
  "/user/username/projects/myproject/packages/pkg1/tsconfig.json": 1
 } 
 
@@ -486,11 +485,11 @@ setModifiedTimes:: {}
 
 Output::
 >> Screen clear
-[[90m12:01:26 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:27 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:27 AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because oldest output 'packages/pkg1/build/index.js' is older than newest input 'packages/pkg2/package.json'
+[[90m12:01:28 AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because oldest output 'packages/pkg1/build/index.js' is older than newest input 'packages/pkg2/package.json'
 
-[[90m12:01:28 AM[0m] Building project '/user/username/projects/myproject/packages/pkg1/tsconfig.json'...
+[[90m12:01:29 AM[0m] Building project '/user/username/projects/myproject/packages/pkg1/tsconfig.json'...
 
 ======== Resolving module 'pkg2' from '/user/username/projects/myproject/packages/pkg1/index.ts'. ========
 Module resolution kind is not specified, using 'NodeJs'.
@@ -529,7 +528,7 @@ File '/user/username/projects/myproject/packages/pkg2/build/const.ts' does not e
 File '/user/username/projects/myproject/packages/pkg2/build/const.tsx' does not exist.
 File '/user/username/projects/myproject/packages/pkg2/build/const.d.ts' exist - use it as a name resolution result.
 ======== Module name './const.js' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/build/const.d.ts'. ========
-[[90m12:01:32 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:34 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -617,8 +616,6 @@ directoryExists:: {
  "/node_modules/@types": 1
 } 
 
-getModifiedTimes:: {
- "/user/username/projects/myproject/packages/pkg1/build/index.js": 1
-} 
+getModifiedTimes:: {} 
 
 setModifiedTimes:: {} 

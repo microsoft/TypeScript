@@ -513,7 +513,7 @@ Output::
 
 [[90m12:01:23 AM[0m] Building project '/a/b/project2.tsconfig.json'...
 
-[[90m12:01:33 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:34 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -610,13 +610,13 @@ setModifiedTimes:: {}
 
 Output::
 >> Screen clear
-[[90m12:01:37 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:38 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:38 AM[0m] Project 'project1.tsconfig.json' is out of date because oldest output 'project1.tsconfig.tsbuildinfo' is older than newest input 'alpha.tsconfig.json'
+[[90m12:01:39 AM[0m] Project 'project1.tsconfig.json' is out of date because oldest output 'project1.tsconfig.tsbuildinfo' is older than newest input 'alpha.tsconfig.json'
 
-[[90m12:01:39 AM[0m] Building project '/a/b/project1.tsconfig.json'...
+[[90m12:01:40 AM[0m] Building project '/a/b/project1.tsconfig.json'...
 
-[[90m12:01:40 AM[0m] Updating unchanged output timestamps of project '/a/b/project1.tsconfig.json'...
+[[90m12:01:41 AM[0m] Updating unchanged output timestamps of project '/a/b/project1.tsconfig.json'...
 
 
 
@@ -688,13 +688,13 @@ getModifiedTimes:: {}
 setModifiedTimes:: {} 
 
 Output::
-[[90m12:01:42 AM[0m] Project 'project2.tsconfig.json' is out of date because oldest output 'commonFile1.js' is older than newest input 'alpha.tsconfig.json'
+[[90m12:01:43 AM[0m] Project 'project2.tsconfig.json' is out of date because oldest output 'commonFile1.js' is older than newest input 'alpha.tsconfig.json'
 
-[[90m12:01:43 AM[0m] Building project '/a/b/project2.tsconfig.json'...
+[[90m12:01:44 AM[0m] Building project '/a/b/project2.tsconfig.json'...
 
-[[90m12:01:44 AM[0m] Updating unchanged output timestamps of project '/a/b/project2.tsconfig.json'...
+[[90m12:01:45 AM[0m] Updating unchanged output timestamps of project '/a/b/project2.tsconfig.json'...
 
-[[90m12:01:46 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:47 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -749,11 +749,7 @@ directoryExists:: {
  "/node_modules/@types": 1
 } 
 
-getModifiedTimes:: {
- "/a/b/commonfile1.js": 1,
- "/a/b/commonfile2.js": 1,
- "/a/b/other.js": 1
-} 
+getModifiedTimes:: {} 
 
 setModifiedTimes:: {
  "/a/b/commonfile1.js": 1,

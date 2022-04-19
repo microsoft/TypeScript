@@ -226,9 +226,9 @@ setModifiedTimes:: {}
 /a/lib/tsc.js -w -p tsconfig.c.json
 Output::
 >> Screen clear
-[[90m12:00:55 AM[0m] Starting compilation in watch mode...
+[[90m12:00:56 AM[0m] Starting compilation in watch mode...
 
-[[90m12:00:59 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:00 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -355,7 +355,7 @@ export declare function gfoo(): void;
 
 
 //// [/user/username/projects/transitiveReferences/tsconfig.b.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./a.d.ts","./b.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-8728835846-export declare class A {\n}\n",{"version":"-23418138964-import {A} from '@ref/a';\r\nexport const b = new A();\r\nexport function gfoo() { }","signature":"4376023469-import { A } from '@ref/a';\nexport declare const b: A;\nexport declare function gfoo(): void;\n"}],"options":{"composite":true},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3],"dtsChangeTime":62000},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./a.d.ts","./b.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-8728835846-export declare class A {\n}\n",{"version":"-23418138964-import {A} from '@ref/a';\r\nexport const b = new A();\r\nexport function gfoo() { }","signature":"4376023469-import { A } from '@ref/a';\nexport declare const b: A;\nexport declare function gfoo(): void;\n"}],"options":{"composite":true},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3],"dtsChangeTime":63000},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/transitiveReferences/tsconfig.b.tsbuildinfo.readable.baseline.txt]
 {
@@ -403,7 +403,7 @@ export declare function gfoo(): void;
       "./a.d.ts",
       "./b.ts"
     ],
-    "dtsChangeTime": 62000
+    "dtsChangeTime": 63000
   },
   "version": "FakeTSVersion",
   "size": 954
@@ -436,9 +436,9 @@ setModifiedTimes:: {}
 
 Output::
 >> Screen clear
-[[90m12:01:16 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:17 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:20 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:21 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -540,9 +540,9 @@ setModifiedTimes:: {}
 
 Output::
 >> Screen clear
-[[90m12:01:28 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:29 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:32 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:33 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -653,9 +653,9 @@ setModifiedTimes:: {}
 
 Output::
 >> Screen clear
-[[90m12:01:36 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:37 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:40 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:41 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -766,9 +766,9 @@ setModifiedTimes:: {}
 
 Output::
 >> Screen clear
-[[90m12:01:44 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:45 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:45 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:46 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -877,9 +877,9 @@ setModifiedTimes:: {}
 
 Output::
 >> Screen clear
-[[90m12:01:49 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:50 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:50 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:51 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -975,14 +975,14 @@ setModifiedTimes:: {}
 
 Output::
 >> Screen clear
-[[90m12:01:52 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:53 AM[0m] File change detected. Starting incremental compilation...
 
 [96mtsconfig.c.json[0m:[93m1[0m:[93m100[0m - [91merror[0m[90m TS6053: [0mFile '/user/username/projects/transitiveReferences/tsconfig.b.json' not found.
 
 [7m1[0m {"files":["c.ts"],"compilerOptions":{"baseUrl":"./","paths":{"@ref/*":["./refs/*"]}},"references":[{"path":"tsconfig.b.json"}]}
 [7m [0m [91m                                                                                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
 
-[[90m12:01:59 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:02:00 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -1093,9 +1093,9 @@ setModifiedTimes:: {}
 
 Output::
 >> Screen clear
-[[90m12:02:02 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:02:03 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:02:06 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:02:07 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -1201,14 +1201,14 @@ setModifiedTimes:: {}
 
 Output::
 >> Screen clear
-[[90m12:02:08 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:02:09 AM[0m] File change detected. Starting incremental compilation...
 
 [96mtsconfig.b.json[0m:[93m10[0m:[93m21[0m - [91merror[0m[90m TS6053: [0mFile '/user/username/projects/transitiveReferences/tsconfig.a.json' not found.
 
 [7m10[0m     "references": [ { "path": "tsconfig.a.json" } ]
 [7m  [0m [91m                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
 
-[[90m12:02:12 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:02:13 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -1312,9 +1312,9 @@ setModifiedTimes:: {}
 
 Output::
 >> Screen clear
-[[90m12:02:15 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:02:16 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:02:16 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:02:17 AM[0m] Found 0 errors. Watching for file changes.
 
 
 

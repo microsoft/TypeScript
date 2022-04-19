@@ -245,6 +245,7 @@ namespace ts {
         readonly projectStatus: ESMap<ResolvedConfigFilePath, UpToDateStatus>;
         readonly extendedConfigCache: ESMap<string, ExtendedConfigCacheEntry>;
         readonly buildInfoCache: ESMap<ResolvedConfigFilePath, BuildInfoCacheEntry>;
+        readonly outputTimeStamps: ESMap<ResolvedConfigFilePath, ESMap<Path, Date>>;
 
         readonly builderPrograms: ESMap<ResolvedConfigFilePath, T>;
         readonly diagnostics: ESMap<ResolvedConfigFilePath, readonly Diagnostic[]>;
@@ -330,6 +331,7 @@ namespace ts {
             projectStatus: new Map(),
             extendedConfigCache: new Map(),
             buildInfoCache: new Map(),
+            outputTimeStamps: new Map(),
 
             builderPrograms: new Map(),
             diagnostics: new Map(),
@@ -493,6 +495,7 @@ namespace ts {
         mutateMapSkippingNewValues(state.projectPendingBuild, currentProjects, noopOnDelete);
         mutateMapSkippingNewValues(state.projectErrorsReported, currentProjects, noopOnDelete);
         mutateMapSkippingNewValues(state.buildInfoCache, currentProjects, noopOnDelete);
+        mutateMapSkippingNewValues(state.outputTimeStamps, currentProjects, noopOnDelete);
 
         // Remove watches for the program no longer in the solution
         if (state.watch) {
@@ -983,15 +986,23 @@ namespace ts {
             const existingBuildInfo = state.buildInfoCache.get(projectPath)?.buildInfo || undefined;
             const emitterDiagnostics = createDiagnosticCollection();
             const emittedOutputs = new Map<Path, string>();
+            const options = program.getCompilerOptions();
+            const isIncremental = isIncrementalCompilation(options);
+            let outputTimeStampMap: ESMap<Path, Date> | undefined;
+            let now: Date | undefined;
             outputFiles.forEach(({ name, text, writeByteOrderMark, buildInfo }) => {
+                const path = toPath(state, name);
                 emittedOutputs.set(toPath(state, name), name);
                 if (buildInfo) {
-                    setBuildInfo(state, buildInfo, projectPath, program!.getCompilerOptions());
+                    setBuildInfo(state, buildInfo, projectPath, options);
                     if (buildInfo.program?.dtsChangeTime !== existingBuildInfo?.program?.dtsChangeTime) {
                         resultFlags &= ~BuildResultFlags.DeclarationOutputUnchanged;
                     }
                 }
                 writeFile(writeFileCallback ? { writeFile: writeFileCallback } : compilerHost, emitterDiagnostics, name, text, writeByteOrderMark);
+                if (!isIncremental) {
+                    (outputTimeStampMap ||= getOutputTimeStampMap(state, projectPath)).set(path, now ||= getCurrentTime(state.host));
+                }
             });
 
             finishEmit(
@@ -1050,7 +1061,7 @@ namespace ts {
             }
 
             // Update time stamps for rest of the outputs
-            updateOutputTimestampsWorker(state, config, Diagnostics.Updating_unchanged_output_timestamps_of_project_0, emittedOutputs);
+            updateOutputTimestampsWorker(state, config, projectPath, Diagnostics.Updating_unchanged_output_timestamps_of_project_0, emittedOutputs);
             state.diagnostics.delete(projectPath);
             state.projectStatus.set(projectPath, {
                 type: UpToDateStatusType.UpToDate,
@@ -1402,6 +1413,12 @@ namespace ts {
         };
     }
 
+    function getOutputTimeStampMap(state: SolutionBuilderState, resolvedConfigFilePath: ResolvedConfigFilePath) {
+        let result = state.outputTimeStamps.get(resolvedConfigFilePath);
+        if (!result) state.outputTimeStamps.set(resolvedConfigFilePath, result = new Map());
+        return result;
+    }
+
     function setBuildInfo(state: SolutionBuilderState, buildInfo: BuildInfo, resolvedConfigPath: ResolvedConfigFilePath, options: CompilerOptions) {
         const buildInfoPath = getTsBuildInfoEmitOutputFilePath(options)!;
         const existing = getBuildInfoCacheEntry(state, buildInfoPath, resolvedConfigPath);
@@ -1573,9 +1590,12 @@ namespace ts {
         if (!buildInfoPath) {
             // Collect the expected outputs of this project
             const outputs = getAllProjectOutputs(project, !host.useCaseSensitiveFileNames());
+            const outputTimeStampMap = getOutputTimeStampMap(state, resolvedPath);
             for (const output of outputs) {
+                const path = toPath(state, output);
                 // Output is missing; can stop checking
-                const outputTime = ts.getModifiedTime(state.host, output);
+                let outputTime = outputTimeStampMap.get(path);
+                if (!outputTime) outputTimeStampMap.set(path, outputTime = ts.getModifiedTime(state.host, output));
                 if (outputTime === missingFileModifiedTime) {
                     return {
                         type: UpToDateStatusType.OutputMissing,
@@ -1711,37 +1731,46 @@ namespace ts {
     function updateOutputTimestampsWorker(
         state: SolutionBuilderState,
         proj: ParsedCommandLine,
+        projectPath: ResolvedConfigFilePath,
         verboseMessage: DiagnosticMessage,
         skipOutputs?: ESMap<Path, string>
     ) {
         if (proj.options.noEmit) return;
+        let now: Date | undefined;
         const buildInfoPath = getTsBuildInfoEmitOutputFilePath(proj.options);
         if (buildInfoPath) {
             if (!skipOutputs?.has(toPath(state, buildInfoPath))) {
                 if (!!state.options.verbose) reportStatus(state, verboseMessage, proj.options.configFilePath!);
-                state.host.setModifiedTime(buildInfoPath, getCurrentTime(state.host));
+                state.host.setModifiedTime(buildInfoPath, now = getCurrentTime(state.host));
+                getBuildInfoCacheEntry(state, buildInfoPath, projectPath)!.modifiedTime = now;
             }
+            state.outputTimeStamps.delete(projectPath);
             return;
         }
 
         const { host } = state;
         const outputs = getAllProjectOutputs(proj, !host.useCaseSensitiveFileNames());
+        const outputTimeStampMap = getOutputTimeStampMap(state, projectPath);
+        const modifiedOutputs = new Set<Path>();
         if (!skipOutputs || outputs.length !== skipOutputs.size) {
             let reportVerbose = !!state.options.verbose;
-            let now: Date | undefined;
             for (const file of outputs) {
-                if (skipOutputs && skipOutputs.has(toPath(state, file))) {
-                    continue;
-                }
-
+                const path = toPath(state, file);
+                if (skipOutputs?.has(path)) continue;
                 if (reportVerbose) {
                     reportVerbose = false;
                     reportStatus(state, verboseMessage, proj.options.configFilePath!);
                 }
-
                 host.setModifiedTime(file, now ||= getCurrentTime(state.host));
+                outputTimeStampMap.set(path, now);
+                modifiedOutputs.add(path);
             }
         }
+
+        // Clear out timestamps not in output list any more
+        outputTimeStampMap.forEach((_value, key) => {
+            if (!skipOutputs?.has(key) && !modifiedOutputs.has(key)) outputTimeStampMap.delete(key);
+        });
     }
 
     function getDtsChangeTime(state: SolutionBuilderState, options: CompilerOptions, resolvedConfigPath: ResolvedConfigFilePath) {
@@ -1755,7 +1784,7 @@ namespace ts {
         if (state.options.dry) {
             return reportStatus(state, Diagnostics.A_non_dry_build_would_update_timestamps_for_output_of_project_0, proj.options.configFilePath!);
         }
-        updateOutputTimestampsWorker(state, proj, Diagnostics.Updating_output_timestamps_of_project_0);
+        updateOutputTimestampsWorker(state, proj, resolvedPath, Diagnostics.Updating_output_timestamps_of_project_0);
         state.projectStatus.set(resolvedPath, {
             type: UpToDateStatusType.UpToDate,
             newestDeclarationFileContentChangedTime: getDtsChangeTime(state, proj.options, resolvedPath),
