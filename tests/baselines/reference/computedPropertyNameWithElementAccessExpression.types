@@ -10,7 +10,7 @@ enum Type {
 }
 
 type TypeMap = {
->TypeMap : TypeMap
+>TypeMap : { Foo: any; }
 
   [Type["Foo"]]: any
 >[Type["Foo"]] : any
