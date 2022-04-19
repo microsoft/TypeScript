@@ -9,8 +9,6 @@ export enum MyEnum {
 // @Filename: index.ts
 import { MyEnum as MyEnumFromModule } from "./enum";
 
-const x = MyEnumFromModule.a;
-
 enum MyEnum {
   a = MyEnumFromModule.a
 }
