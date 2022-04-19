@@ -558,6 +558,7 @@ namespace ts {
                 if (sourceMapFilePath) {
                     const sourceMap = sourceMapGenerator.toString();
                     writeFile(host, emitterDiagnostics, sourceMapFilePath, sourceMap, /*writeByteOrderMark*/ false, sourceFiles);
+                    if (printer.bundleFileInfo) printer.bundleFileInfo.mapHash = BuilderState.computeSignature(sourceMap, maybeBind(host, host.createHash));
                 }
             }
             else {
@@ -565,7 +566,9 @@ namespace ts {
             }
 
             // Write the output file
-            writeFile(host, emitterDiagnostics, jsFilePath, writer.getText(), !!compilerOptions.emitBOM, sourceFiles, { sourceMapUrlPos });
+            const text = writer.getText();
+            writeFile(host, emitterDiagnostics, jsFilePath, text, !!compilerOptions.emitBOM, sourceFiles, { sourceMapUrlPos });
+            if (printer.bundleFileInfo) printer.bundleFileInfo.hash = BuilderState.computeSignature(text, maybeBind(host, host.createHash));
 
             // Reset state
             writer.clear();
@@ -712,6 +715,7 @@ namespace ts {
         getNewLine(): string;
         createHash?(data: string): string;
         now?(): Date;
+        getBuildInfo?(fileName: string, configFilePath: string | undefined): BuildInfo | undefined;
     }
 
     function createSourceFilesFromBundleBuildInfo(bundle: BundleBuildInfo, buildInfoDirectory: string, host: EmitUsingBuildInfoHost): readonly SourceFile[] {
@@ -748,23 +752,38 @@ namespace ts {
         getCommandLine: (ref: ProjectReference) => ParsedCommandLine | undefined,
         customTransformers?: CustomTransformers
     ): EmitUsingBuildInfoResult {
+        const createHash = maybeBind(host, host.createHash);
         const { buildInfoPath, jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath } = getOutputPathsForBundle(config.options, /*forceDtsPaths*/ false);
-        const buildInfoText = host.readFile(Debug.checkDefined(buildInfoPath));
-        if (!buildInfoText) return buildInfoPath!;
+        let buildInfo: BuildInfo;
+        if (host.getBuildInfo) {
+            const hostBuildInfo = host.getBuildInfo(buildInfoPath!, config.options.configFilePath);
+            if (!hostBuildInfo) return buildInfoPath!;
+            buildInfo = hostBuildInfo;
+        }
+        else {
+            const buildInfoText = host.readFile(buildInfoPath!);
+            if (!buildInfoText) return buildInfoPath!;
+            buildInfo = getBuildInfo(buildInfoText);
+        }
+        if (!buildInfo.bundle || !buildInfo.bundle.js || (declarationFilePath && !buildInfo.bundle.dts)) return buildInfoPath!;
+
         const jsFileText = host.readFile(Debug.checkDefined(jsFilePath));
         if (!jsFileText) return jsFilePath!;
+        if (BuilderState.computeSignature(jsFileText, createHash) !== buildInfo.bundle.js.hash) return jsFilePath!;
         const sourceMapText = sourceMapFilePath && host.readFile(sourceMapFilePath);
         // error if no source map or for now if inline sourcemap
         if ((sourceMapFilePath && !sourceMapText) || config.options.inlineSourceMap) return sourceMapFilePath || "inline sourcemap decoding";
+        if (sourceMapFilePath && BuilderState.computeSignature(sourceMapText!, createHash) !== buildInfo.bundle.js.mapHash) return sourceMapFilePath;
+
         // read declaration text
         const declarationText = declarationFilePath && host.readFile(declarationFilePath);
         if (declarationFilePath && !declarationText) return declarationFilePath;
+        if (declarationFilePath && BuilderState.computeSignature(declarationText!, createHash) !== buildInfo.bundle.dts!.hash) return declarationFilePath;
         const declarationMapText = declarationMapPath && host.readFile(declarationMapPath);
         // error if no source map or for now if inline sourcemap
         if ((declarationMapPath && !declarationMapText) || config.options.inlineSourceMap) return declarationMapPath || "inline sourcemap decoding";
+        if (declarationMapPath && BuilderState.computeSignature(declarationMapText!, createHash) !== buildInfo.bundle.dts!.mapHash) return declarationMapPath;
 
-        const buildInfo = getBuildInfo(buildInfoText);
-        if (!buildInfo.bundle || !buildInfo.bundle.js || (declarationText && !buildInfo.bundle.dts)) return buildInfoPath!;
         const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(buildInfoPath!, host.getCurrentDirectory()));
         const ownPrependInput = createInputFiles(
             jsFileText,
@@ -812,7 +831,7 @@ namespace ts {
                         newBuildInfo.program = buildInfo.program;
                         if (newBuildInfo.program && changedDtsText !== undefined && config.options.composite) {
                             // Update the output signature
-                            newBuildInfo.program.outSignature = computeSignature(changedDtsText, changedDtsData, maybeBind(host, host.createHash));
+                            newBuildInfo.program.outSignature = computeSignature(changedDtsText, changedDtsData, createHash);
                             newBuildInfo.program.dtsChangeTime = getCurrentTime(host).getTime();
                         }
                         // Update sourceFileInfo
@@ -845,6 +864,7 @@ namespace ts {
             getSourceFileFromReference: returnUndefined,
             redirectTargetsMap: createMultiMap(),
             getFileIncludeReasons: notImplemented,
+            createHash,
         };
         emitFiles(
             notImplementedResolver,

@@ -1867,6 +1867,7 @@ namespace ts {
                 getSourceFileFromReference: (file, ref) => program.getSourceFileFromReference(file, ref),
                 redirectTargetsMap,
                 getFileIncludeReasons: program.getFileIncludeReasons,
+                createHash: maybeBind(host, host.createHash),
             };
         }
 

@@ -7095,6 +7095,7 @@ namespace ts {
         getProgramBuildInfo(): ProgramBuildInfo | undefined;
         getSourceFileFromReference: Program["getSourceFileFromReference"];
         readonly redirectTargetsMap: RedirectTargetsMap;
+        createHash?(data: string): string;
     }
 
     /* @internal */
@@ -8242,6 +8243,8 @@ namespace ts {
     /*@internal*/
     export interface BundleFileInfo {
         sections: BundleFileSection[];
+        hash?: string;
+        mapHash?: string;
         sources?: SourceFileInfo;
     }
 

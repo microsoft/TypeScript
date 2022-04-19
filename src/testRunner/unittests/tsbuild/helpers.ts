@@ -247,7 +247,22 @@ interface Symbol {
         };
         const version = buildInfo.version === ts.version ? fakes.version : buildInfo.version;
         const result: ReadableBuildInfo = {
-            bundle: buildInfo.bundle,
+            // Baseline fixed order for bundle
+            bundle: buildInfo.bundle && {
+                ...buildInfo.bundle,
+                js: buildInfo.bundle.js && {
+                    sections: buildInfo.bundle.js.sections,
+                    hash: buildInfo.bundle.js.hash,
+                    mapHash: buildInfo.bundle.js.mapHash,
+                    sources: buildInfo.bundle.js.sources,
+                },
+                dts: buildInfo.bundle.dts && {
+                    sections: buildInfo.bundle.dts.sections,
+                    hash: buildInfo.bundle.dts.hash,
+                    mapHash: buildInfo.bundle.dts.mapHash,
+                    sources: buildInfo.bundle.dts.sources,
+                },
+            },
             program,
             version,
             size: getBuildInfoText({ ...buildInfo, version }).length,
