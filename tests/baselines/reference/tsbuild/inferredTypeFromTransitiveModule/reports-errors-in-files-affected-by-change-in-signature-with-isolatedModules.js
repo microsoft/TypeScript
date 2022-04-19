@@ -264,7 +264,7 @@ Output::
 [[90m12:00:24 AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90m12:00:25 AM[0m] Project 'src/tsconfig.json' is out of date because oldest output 'src/obj/tsconfig.tsbuildinfo' is older than newest input 'src/bar.ts'
+[[90m12:00:25 AM[0m] Project 'src/tsconfig.json' is out of date because output 'src/obj/tsconfig.tsbuildinfo' is older than input 'src/bar.ts'
 
 [[90m12:00:26 AM[0m] Building project '/src/tsconfig.json'...
 
@@ -534,7 +534,7 @@ Output::
 [[90m12:00:42 AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90m12:00:43 AM[0m] Project 'src/tsconfig.json' is out of date because oldest output 'src/obj/tsconfig.tsbuildinfo' is older than newest input 'src/bar.ts'
+[[90m12:00:43 AM[0m] Project 'src/tsconfig.json' is out of date because output 'src/obj/tsconfig.tsbuildinfo' is older than input 'src/bar.ts'
 
 [[90m12:00:44 AM[0m] Building project '/src/tsconfig.json'...
 

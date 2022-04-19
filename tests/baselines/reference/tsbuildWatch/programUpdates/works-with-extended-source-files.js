@@ -227,7 +227,7 @@ Output::
 >> Screen clear
 [[90m12:00:59 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:00 AM[0m] Project 'project1.tsconfig.json' is out of date because oldest output 'project1.tsconfig.tsbuildinfo' is older than newest input 'alpha.tsconfig.json'
+[[90m12:01:00 AM[0m] Project 'project1.tsconfig.json' is out of date because output 'project1.tsconfig.tsbuildinfo' is older than input 'alpha.tsconfig.json'
 
 [[90m12:01:01 AM[0m] Building project '/a/b/project1.tsconfig.json'...
 
@@ -279,7 +279,7 @@ Change:: Build project 2
 Input::
 
 Output::
-[[90m12:01:04 AM[0m] Project 'project2.tsconfig.json' is out of date because oldest output 'project2.tsconfig.tsbuildinfo' is older than newest input 'alpha.tsconfig.json'
+[[90m12:01:04 AM[0m] Project 'project2.tsconfig.json' is out of date because output 'project2.tsconfig.tsbuildinfo' is older than input 'alpha.tsconfig.json'
 
 [[90m12:01:05 AM[0m] Building project '/a/b/project2.tsconfig.json'...
 
@@ -337,7 +337,7 @@ Output::
 >> Screen clear
 [[90m12:01:12 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:13 AM[0m] Project 'project2.tsconfig.json' is out of date because oldest output 'project2.tsconfig.tsbuildinfo' is older than newest input 'bravo.tsconfig.json'
+[[90m12:01:13 AM[0m] Project 'project2.tsconfig.json' is out of date because output 'project2.tsconfig.tsbuildinfo' is older than input 'bravo.tsconfig.json'
 
 [[90m12:01:14 AM[0m] Building project '/a/b/project2.tsconfig.json'...
 
@@ -395,7 +395,7 @@ Output::
 >> Screen clear
 [[90m12:01:21 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:22 AM[0m] Project 'project2.tsconfig.json' is out of date because oldest output 'commonFile1.js' is older than newest input 'project2.tsconfig.json'
+[[90m12:01:22 AM[0m] Project 'project2.tsconfig.json' is out of date because output 'commonFile1.js' is older than input 'project2.tsconfig.json'
 
 [[90m12:01:23 AM[0m] Building project '/a/b/project2.tsconfig.json'...
 
@@ -472,7 +472,7 @@ Output::
 >> Screen clear
 [[90m12:01:38 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:39 AM[0m] Project 'project1.tsconfig.json' is out of date because oldest output 'project1.tsconfig.tsbuildinfo' is older than newest input 'alpha.tsconfig.json'
+[[90m12:01:39 AM[0m] Project 'project1.tsconfig.json' is out of date because output 'project1.tsconfig.tsbuildinfo' is older than input 'alpha.tsconfig.json'
 
 [[90m12:01:40 AM[0m] Building project '/a/b/project1.tsconfig.json'...
 
@@ -524,7 +524,7 @@ Change:: Build project 2
 Input::
 
 Output::
-[[90m12:01:43 AM[0m] Project 'project2.tsconfig.json' is out of date because oldest output 'commonFile1.js' is older than newest input 'alpha.tsconfig.json'
+[[90m12:01:43 AM[0m] Project 'project2.tsconfig.json' is out of date because output 'commonFile1.js' is older than input 'alpha.tsconfig.json'
 
 [[90m12:01:44 AM[0m] Building project '/a/b/project2.tsconfig.json'...
 

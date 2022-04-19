@@ -269,7 +269,7 @@ Output::
 >> Screen clear
 [[90m12:01:14 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:15 AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because oldest output 'packages/pkg1/build/index.js' is older than newest input 'packages/pkg1/package.json'
+[[90m12:01:15 AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because output 'packages/pkg1/build/index.js' is older than input 'packages/pkg1/package.json'
 
 [[90m12:01:16 AM[0m] Building project '/user/username/projects/myproject/packages/pkg1/tsconfig.json'...
 
@@ -385,7 +385,7 @@ Output::
 >> Screen clear
 [[90m12:01:21 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:22 AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because oldest output 'packages/pkg1/build/index.js' is older than newest input 'packages/pkg1/package.json'
+[[90m12:01:22 AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because output 'packages/pkg1/build/index.js' is older than input 'packages/pkg1/package.json'
 
 [[90m12:01:23 AM[0m] Building project '/user/username/projects/myproject/packages/pkg1/tsconfig.json'...
 
@@ -491,7 +491,7 @@ Output::
 >> Screen clear
 [[90m12:01:32 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:33 AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because oldest output 'packages/pkg1/build/index.js' is older than newest input 'packages/pkg1/package.json'
+[[90m12:01:33 AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because output 'packages/pkg1/build/index.js' is older than input 'packages/pkg1/package.json'
 
 [[90m12:01:34 AM[0m] Building project '/user/username/projects/myproject/packages/pkg1/tsconfig.json'...
 
@@ -611,7 +611,7 @@ Output::
 >> Screen clear
 [[90m12:01:42 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:43 AM[0m] Project 'packages/pkg2/tsconfig.json' is out of date because oldest output 'packages/pkg2/build/tsconfig.tsbuildinfo' is older than newest input 'packages/pkg2/index.cts'
+[[90m12:01:43 AM[0m] Project 'packages/pkg2/tsconfig.json' is out of date because output 'packages/pkg2/build/tsconfig.tsbuildinfo' is older than input 'packages/pkg2/index.cts'
 
 [[90m12:01:44 AM[0m] Building project '/user/username/projects/myproject/packages/pkg2/tsconfig.json'...
 

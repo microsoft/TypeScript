@@ -223,25 +223,25 @@ Output::
 >> Screen clear
 [[90m12:01:13 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:14 AM[0m] Project 'pkg0/tsconfig.json' is out of date because oldest output 'pkg0/index.js' is older than newest input 'typings/xterm.d.ts'
+[[90m12:01:14 AM[0m] Project 'pkg0/tsconfig.json' is out of date because output 'pkg0/index.js' is older than input 'typings/xterm.d.ts'
 
 [[90m12:01:15 AM[0m] Building project '/user/username/projects/myproject/pkg0/tsconfig.json'...
 
 [[90m12:01:16 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg0/tsconfig.json'...
 
-[[90m12:01:18 AM[0m] Project 'pkg1/tsconfig.json' is out of date because oldest output 'pkg1/index.js' is older than newest input 'typings/xterm.d.ts'
+[[90m12:01:18 AM[0m] Project 'pkg1/tsconfig.json' is out of date because output 'pkg1/index.js' is older than input 'typings/xterm.d.ts'
 
 [[90m12:01:19 AM[0m] Building project '/user/username/projects/myproject/pkg1/tsconfig.json'...
 
 [[90m12:01:20 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg1/tsconfig.json'...
 
-[[90m12:01:22 AM[0m] Project 'pkg2/tsconfig.json' is out of date because oldest output 'pkg2/index.js' is older than newest input 'typings/xterm.d.ts'
+[[90m12:01:22 AM[0m] Project 'pkg2/tsconfig.json' is out of date because output 'pkg2/index.js' is older than input 'typings/xterm.d.ts'
 
 [[90m12:01:23 AM[0m] Building project '/user/username/projects/myproject/pkg2/tsconfig.json'...
 
 [[90m12:01:24 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg2/tsconfig.json'...
 
-[[90m12:01:26 AM[0m] Project 'pkg3/tsconfig.json' is out of date because oldest output 'pkg3/index.js' is older than newest input 'typings/xterm.d.ts'
+[[90m12:01:26 AM[0m] Project 'pkg3/tsconfig.json' is out of date because output 'pkg3/index.js' is older than input 'typings/xterm.d.ts'
 
 [[90m12:01:27 AM[0m] Building project '/user/username/projects/myproject/pkg3/tsconfig.json'...
 
@@ -405,19 +405,19 @@ Output::
 >> Screen clear
 [[90m12:01:39 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:40 AM[0m] Project 'pkg0/tsconfig.json' is out of date because oldest output 'pkg0/index.js' is older than newest input 'typings/xterm.d.ts'
+[[90m12:01:40 AM[0m] Project 'pkg0/tsconfig.json' is out of date because output 'pkg0/index.js' is older than input 'typings/xterm.d.ts'
 
 [[90m12:01:41 AM[0m] Building project '/user/username/projects/myproject/pkg0/tsconfig.json'...
 
 [[90m12:01:42 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg0/tsconfig.json'...
 
-[[90m12:01:44 AM[0m] Project 'pkg1/tsconfig.json' is out of date because oldest output 'pkg1/index.js' is older than newest input 'typings/xterm.d.ts'
+[[90m12:01:44 AM[0m] Project 'pkg1/tsconfig.json' is out of date because output 'pkg1/index.js' is older than input 'typings/xterm.d.ts'
 
 [[90m12:01:45 AM[0m] Building project '/user/username/projects/myproject/pkg1/tsconfig.json'...
 
 [[90m12:01:46 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg1/tsconfig.json'...
 
-[[90m12:01:48 AM[0m] Project 'pkg2/tsconfig.json' is out of date because oldest output 'pkg2/index.js' is older than newest input 'typings/xterm.d.ts'
+[[90m12:01:48 AM[0m] Project 'pkg2/tsconfig.json' is out of date because output 'pkg2/index.js' is older than input 'typings/xterm.d.ts'
 
 [[90m12:01:49 AM[0m] Building project '/user/username/projects/myproject/pkg2/tsconfig.json'...
 

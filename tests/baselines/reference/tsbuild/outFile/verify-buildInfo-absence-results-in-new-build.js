@@ -575,9 +575,9 @@ Output::
 
 [[90m12:00:47 AM[0m] Building project '/src/first/tsconfig.json'...
 
-[[90m12:00:57 AM[0m] Project 'src/second/tsconfig.json' is up to date because newest input 'src/second/second_part1.ts' is older than oldest output 'src/2/second-output.tsbuildinfo'
+[[90m12:00:57 AM[0m] Project 'src/second/tsconfig.json' is up to date because newest input 'src/second/second_part1.ts' is older than output 'src/2/second-output.tsbuildinfo'
 
-[[90m12:00:58 AM[0m] Project 'src/third/tsconfig.json' is out of date because oldest output 'src/third/thirdjs/output/third-output.tsbuildinfo' is older than newest input 'src/first'
+[[90m12:00:58 AM[0m] Project 'src/third/tsconfig.json' is out of date because output 'src/third/thirdjs/output/third-output.tsbuildinfo' is older than input 'src/first'
 
 [[90m12:00:59 AM[0m] Building project '/src/third/tsconfig.json'...
 

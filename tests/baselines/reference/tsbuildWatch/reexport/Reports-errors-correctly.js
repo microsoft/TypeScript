@@ -268,11 +268,11 @@ Output::
 >> Screen clear
 [[90m12:01:10 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:11 AM[0m] Project 'src/pure/tsconfig.json' is out of date because oldest output 'out/pure/tsconfig.tsbuildinfo' is older than newest input 'src/pure/session.ts'
+[[90m12:01:11 AM[0m] Project 'src/pure/tsconfig.json' is out of date because output 'out/pure/tsconfig.tsbuildinfo' is older than input 'src/pure/session.ts'
 
 [[90m12:01:12 AM[0m] Building project '/user/username/projects/reexport/src/pure/tsconfig.json'...
 
-[[90m12:01:33 AM[0m] Project 'src/main/tsconfig.json' is out of date because oldest output 'out/main/index.js' is older than newest input 'src/pure/tsconfig.json'
+[[90m12:01:33 AM[0m] Project 'src/main/tsconfig.json' is out of date because output 'out/main/index.js' is older than input 'src/pure/tsconfig.json'
 
 [[90m12:01:34 AM[0m] Building project '/user/username/projects/reexport/src/main/tsconfig.json'...
 
@@ -434,7 +434,7 @@ Output::
 >> Screen clear
 [[90m12:01:39 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:40 AM[0m] Project 'src/pure/tsconfig.json' is out of date because oldest output 'out/pure/tsconfig.tsbuildinfo' is older than newest input 'src/pure/session.ts'
+[[90m12:01:40 AM[0m] Project 'src/pure/tsconfig.json' is out of date because output 'out/pure/tsconfig.tsbuildinfo' is older than input 'src/pure/session.ts'
 
 [[90m12:01:41 AM[0m] Building project '/user/username/projects/reexport/src/pure/tsconfig.json'...
 

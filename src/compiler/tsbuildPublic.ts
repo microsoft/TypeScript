@@ -2230,7 +2230,7 @@ namespace ts {
             case UpToDateStatusType.OutOfDateWithSelf:
                 return reportStatus(
                     state,
-                    Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2,
+                    Diagnostics.Project_0_is_out_of_date_because_output_1_is_older_than_input_2,
                     relName(state, configFileName),
                     relName(state, status.outOfDateOutputFileName),
                     relName(state, status.newerInputFileName)
@@ -2238,7 +2238,7 @@ namespace ts {
             case UpToDateStatusType.OutOfDateWithUpstream:
                 return reportStatus(
                     state,
-                    Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2,
+                    Diagnostics.Project_0_is_out_of_date_because_output_1_is_older_than_input_2,
                     relName(state, configFileName),
                     relName(state, status.outOfDateOutputFileName),
                     relName(state, status.newerProjectName)
@@ -2261,7 +2261,7 @@ namespace ts {
                 if (status.newestInputFileTime !== undefined) {
                     return reportStatus(
                         state,
-                        Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2,
+                        Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_output_2,
                         relName(state, configFileName),
                         relName(state, status.newestInputFileName || ""),
                         relName(state, status.oldestOutputFileName || "")

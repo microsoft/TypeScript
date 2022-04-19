@@ -282,7 +282,7 @@ Output::
 >> Screen clear
 [[90m12:01:20 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:21 AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because oldest output 'packages/pkg1/build/index.js' is older than newest input 'packages/pkg2/package.json'
+[[90m12:01:21 AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because output 'packages/pkg1/build/index.js' is older than input 'packages/pkg2/package.json'
 
 [[90m12:01:22 AM[0m] Building project '/user/username/projects/myproject/packages/pkg1/tsconfig.json'...
 
@@ -374,7 +374,7 @@ Output::
 >> Screen clear
 [[90m12:01:27 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:28 AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because oldest output 'packages/pkg1/build/index.js' is older than newest input 'packages/pkg2/package.json'
+[[90m12:01:28 AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because output 'packages/pkg1/build/index.js' is older than input 'packages/pkg2/package.json'
 
 [[90m12:01:29 AM[0m] Building project '/user/username/projects/myproject/packages/pkg1/tsconfig.json'...
 

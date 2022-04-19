@@ -333,7 +333,7 @@ Output::
     * src/logic/tsconfig.json
     * src/tests/tsconfig.json
 
-[[90m12:00:28 AM[0m] Project 'src/core/tsconfig.json' is up to date because newest input 'src/core/anotherModule.ts' is older than oldest output 'src/core/tsconfig.tsbuildinfo'
+[[90m12:00:28 AM[0m] Project 'src/core/tsconfig.json' is up to date because newest input 'src/core/anotherModule.ts' is older than output 'src/core/tsconfig.tsbuildinfo'
 
 [[90m12:00:29 AM[0m] Project 'src/logic/tsconfig.json' is out of date because buildinfo file 'src/logic/tsconfig.tsbuildinfo' indicates that some of the changes are not emitted
 

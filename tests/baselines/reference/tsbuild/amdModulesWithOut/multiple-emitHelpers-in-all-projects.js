@@ -2141,7 +2141,7 @@ Output::
     * src/lib/tsconfig.json
     * src/app/tsconfig.json
 
-[[90m12:00:41 AM[0m] Project 'src/lib/tsconfig.json' is out of date because oldest output 'src/lib/module.tsbuildinfo' is older than newest input 'src/lib/file1.ts'
+[[90m12:00:41 AM[0m] Project 'src/lib/tsconfig.json' is out of date because output 'src/lib/module.tsbuildinfo' is older than input 'src/lib/file1.ts'
 
 [[90m12:00:42 AM[0m] Building project '/src/lib/tsconfig.json'...
 
@@ -3778,7 +3778,7 @@ Output::
     * src/lib/tsconfig.json
     * src/app/tsconfig.json
 
-[[90m12:01:04 AM[0m] Project 'src/lib/tsconfig.json' is out of date because oldest output 'src/lib/module.tsbuildinfo' is older than newest input 'src/lib/file1.ts'
+[[90m12:01:04 AM[0m] Project 'src/lib/tsconfig.json' is out of date because output 'src/lib/module.tsbuildinfo' is older than input 'src/lib/file1.ts'
 
 [[90m12:01:05 AM[0m] Building project '/src/lib/tsconfig.json'...
 

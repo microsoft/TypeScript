@@ -349,7 +349,7 @@ Output::
 >> Screen clear
 [[90m12:01:22 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:23 AM[0m] Project 'tsconfig.json' is out of date because oldest output 'dev-build/tsconfig.tsbuildinfo' is older than newest input 'src/main.ts'
+[[90m12:01:23 AM[0m] Project 'tsconfig.json' is out of date because output 'dev-build/tsconfig.tsbuildinfo' is older than input 'src/main.ts'
 
 [[90m12:01:24 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
@@ -651,7 +651,7 @@ Output::
 >> Screen clear
 [[90m12:02:00 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:02:01 AM[0m] Project 'tsconfig.json' is out of date because oldest output 'dev-build/tsconfig.tsbuildinfo' is older than newest input 'src/main.ts'
+[[90m12:02:01 AM[0m] Project 'tsconfig.json' is out of date because output 'dev-build/tsconfig.tsbuildinfo' is older than input 'src/main.ts'
 
 [[90m12:02:02 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 

@@ -239,7 +239,7 @@ Output::
 >> Screen clear
 [[90m12:01:10 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:11 AM[0m] Project 'tsconfig.json' is out of date because oldest output 'dev-build/shared/types/db.js' is older than newest input 'src/main.ts'
+[[90m12:01:11 AM[0m] Project 'tsconfig.json' is out of date because output 'dev-build/shared/types/db.js' is older than input 'src/main.ts'
 
 [[90m12:01:12 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
@@ -295,7 +295,7 @@ Output::
 >> Screen clear
 [[90m12:01:17 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:18 AM[0m] Project 'tsconfig.json' is out of date because oldest output 'dev-build/shared/types/db.js' is older than newest input 'src/main.ts'
+[[90m12:01:18 AM[0m] Project 'tsconfig.json' is out of date because output 'dev-build/shared/types/db.js' is older than input 'src/main.ts'
 
 [[90m12:01:19 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
@@ -352,7 +352,7 @@ Output::
 >> Screen clear
 [[90m12:01:24 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:25 AM[0m] Project 'tsconfig.json' is out of date because oldest output 'dev-build/shared/types/db.js' is older than newest input 'src/main.ts'
+[[90m12:01:25 AM[0m] Project 'tsconfig.json' is out of date because output 'dev-build/shared/types/db.js' is older than input 'src/main.ts'
 
 [[90m12:01:26 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
@@ -413,7 +413,7 @@ Output::
 >> Screen clear
 [[90m12:01:37 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:38 AM[0m] Project 'tsconfig.json' is out of date because oldest output 'dev-build/shared/types/db.js' is older than newest input 'src/main.ts'
+[[90m12:01:38 AM[0m] Project 'tsconfig.json' is out of date because output 'dev-build/shared/types/db.js' is older than input 'src/main.ts'
 
 [[90m12:01:39 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 

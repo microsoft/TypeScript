@@ -273,11 +273,11 @@ Output::
 >> Screen clear
 [[90m12:00:59 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:00 AM[0m] Project 'shared/tsconfig.json' is out of date because oldest output 'shared/tsconfig.tsbuildinfo' is older than newest input 'shared/index.ts'
+[[90m12:01:00 AM[0m] Project 'shared/tsconfig.json' is out of date because output 'shared/tsconfig.tsbuildinfo' is older than input 'shared/index.ts'
 
 [[90m12:01:01 AM[0m] Building project '/user/username/projects/myproject/shared/tsconfig.json'...
 
-[[90m12:01:16 AM[0m] Project 'webpack/tsconfig.json' is out of date because oldest output 'webpack/index.js' is older than newest input 'shared/tsconfig.json'
+[[90m12:01:16 AM[0m] Project 'webpack/tsconfig.json' is out of date because output 'webpack/index.js' is older than input 'shared/tsconfig.json'
 
 [[90m12:01:17 AM[0m] Building project '/user/username/projects/myproject/webpack/tsconfig.json'...
 

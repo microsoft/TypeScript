@@ -256,11 +256,11 @@ Output::
     * src/tests/tsconfig.json
     * src/tsconfig.json
 
-[[90m12:00:32 AM[0m] Project 'src/src/folder/tsconfig.json' is up to date because newest input 'src/src/folder/index.ts' is older than oldest output 'src/src/folder/tsconfig.tsbuildinfo'
+[[90m12:00:32 AM[0m] Project 'src/src/folder/tsconfig.json' is up to date because newest input 'src/src/folder/index.ts' is older than output 'src/src/folder/tsconfig.tsbuildinfo'
 
-[[90m12:00:33 AM[0m] Project 'src/src/folder2/tsconfig.json' is up to date because newest input 'src/src/folder2/index.ts' is older than oldest output 'src/src/folder2/tsconfig.tsbuildinfo'
+[[90m12:00:33 AM[0m] Project 'src/src/folder2/tsconfig.json' is up to date because newest input 'src/src/folder2/index.ts' is older than output 'src/src/folder2/tsconfig.tsbuildinfo'
 
-[[90m12:00:34 AM[0m] Project 'src/tests/tsconfig.json' is up to date because newest input 'src/tests/index.ts' is older than oldest output 'src/tests/tsconfig.tsbuildinfo'
+[[90m12:00:34 AM[0m] Project 'src/tests/tsconfig.json' is up to date because newest input 'src/tests/index.ts' is older than output 'src/tests/tsconfig.tsbuildinfo'
 
 exitCode:: ExitStatus.Success
 

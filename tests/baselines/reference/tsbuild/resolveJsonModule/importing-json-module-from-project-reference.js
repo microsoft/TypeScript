@@ -217,9 +217,9 @@ Output::
     * src/main/tsconfig.json
     * src/tsconfig.json
 
-[[90m12:00:21 AM[0m] Project 'src/strings/tsconfig.json' is up to date because newest input 'src/strings/foo.json' is older than oldest output 'src/strings/tsconfig.tsbuildinfo'
+[[90m12:00:21 AM[0m] Project 'src/strings/tsconfig.json' is up to date because newest input 'src/strings/foo.json' is older than output 'src/strings/tsconfig.tsbuildinfo'
 
-[[90m12:00:22 AM[0m] Project 'src/main/tsconfig.json' is up to date because newest input 'src/main/index.ts' is older than oldest output 'src/main/tsconfig.tsbuildinfo'
+[[90m12:00:22 AM[0m] Project 'src/main/tsconfig.json' is up to date because newest input 'src/main/index.ts' is older than output 'src/main/tsconfig.tsbuildinfo'
 
 exitCode:: ExitStatus.Success
 
