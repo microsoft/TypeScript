@@ -13,3 +13,17 @@ class A {
     console.log(this.exposedField);
   }
 }
+
+class B {
+  readonly #privateField: string;
+
+  constructor(arg: { key: string }, public exposedField: number) {
+    "prologue";
+    ({ key: this.#privateField } = arg);
+  }
+
+  log() {
+    console.log(this.#privateField);
+    console.log(this.exposedField);
+  }
+}
