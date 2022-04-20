@@ -14464,18 +14464,19 @@ namespace ts {
         }
 
         function compareTypesForSort(a: Type, b: Type) {
-            const sortA = getTypeSortId(a);
-            const sortB = getTypeSortId(b);
-            if (sortA !== undefined && sortB !== undefined) {
-                return compareStringsCaseSensitive(sortA, sortB) || compareValues(a.id, b.id);
-            }
-            if (sortA !== undefined) {
-                return Comparison.LessThan;
-            }
-            if (sortB !== undefined) {
-                return Comparison.GreaterThan;
-            }
+            // const sortA = getTypeSortId(a);
+            // const sortB = getTypeSortId(b);
+            // if (sortA !== undefined && sortB !== undefined) {
+            //     return compareStringsCaseSensitive(sortA, sortB) || compareValues(a.id, b.id);
+            // }
+            // if (sortA !== undefined) {
+            //     return Comparison.LessThan;
+            // }
+            // if (sortB !== undefined) {
+            //     return Comparison.GreaterThan;
+            // }
             return compareValues(a.id, b.id);
+            void getTypeSortId;
         }
 
         function createTypeSortId(regime: TypeSortRegime, text: string): TypeSortId {
