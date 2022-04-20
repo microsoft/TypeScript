@@ -1359,16 +1359,21 @@ namespace ts {
                     if (parameterPropertyDeclarationCount > 0) {
                         const parameterProperties = visitNodes(constructor.body.statements, visitor, isStatement, indexOfFirstStatementAfterSuperAndPrologue, parameterPropertyDeclarationCount);
 
-                        let superAndPrologueStatementCount = prologueStatementCount;
-                        // If a synthetic super() call was added, add them just after it
-                        if (needsSyntheticConstructor) {
-                            superAndPrologueStatementCount += 1;
+                        // If there was a super() call found, add parameter properties immediately after it
+                        if (superStatementIndex >= 0) {
+                            addRange(statements, parameterProperties);
                         }
-                        statements = [
-                            ...statements.slice(0, superAndPrologueStatementCount),
-                            ...parameterProperties,
-                            ...statements.slice(superAndPrologueStatementCount),
-                        ];
+                        else {
+                            // Add add parameter properties to the top of the constructor after the prologue
+                            let superAndPrologueStatementCount = prologueStatementCount;
+                            // If a synthetic super() call was added, need to account for that
+                            if (needsSyntheticConstructor) superAndPrologueStatementCount++;
+                            statements = [
+                                ...statements.slice(0, superAndPrologueStatementCount),
+                                ...parameterProperties,
+                                ...statements.slice(superAndPrologueStatementCount),
+                            ];
+                        }
 
                         indexOfFirstStatementAfterSuperAndPrologue += parameterPropertyDeclarationCount;
                     }
