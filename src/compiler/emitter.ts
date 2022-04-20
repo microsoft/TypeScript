@@ -1170,8 +1170,7 @@ namespace ts {
         }
 
         function getCurrentLineMap() {
-            Debug.assertIsDefined(currentSourceFile);
-            return currentLineMap || (currentLineMap = getLineStarts(currentSourceFile));
+            return currentLineMap || (currentLineMap = getLineStarts(Debug.checkDefined(currentSourceFile)));
         }
 
         function emit(node: Node, parenthesizerRule?: (node: Node) => Node): void;
