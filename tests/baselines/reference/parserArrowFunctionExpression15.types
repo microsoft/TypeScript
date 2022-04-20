@@ -1,0 +1,11 @@
+=== tests/cases/conformance/parser/ecmascript5/ArrowFunctionExpressions/parserArrowFunctionExpression15.ts ===
+false ? (param): string => param : null
+>false ? (param): string => param : any
+>false : false
+>(param) : any
+>param : any
+>string => param : (string: any) => any
+>string : any
+>param : any
+>null : null
+
