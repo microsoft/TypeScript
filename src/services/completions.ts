@@ -1199,18 +1199,19 @@ namespace ts.Completions {
     function createSnippetPrinter(
         printerOptions: PrinterOptions,
     ) {
+        let escapes: TextChange[] | undefined;
         const baseWriter = textChanges.createWriter(getNewLineCharacter(printerOptions));
         const printer = createPrinter(printerOptions, baseWriter);
         const writer: EmitTextWriter = {
             ...baseWriter,
-            write: s => baseWriter.write(escapeSnippetText(s)),
+            write: s => escapingWrite(s, () => baseWriter.write(s)),
             nonEscapingWrite: baseWriter.write,
-            writeLiteral: s => baseWriter.writeLiteral(escapeSnippetText(s)),
-            writeStringLiteral: s => baseWriter.writeStringLiteral(escapeSnippetText(s)),
-            writeSymbol: (s, symbol) => baseWriter.writeSymbol(escapeSnippetText(s), symbol),
-            writeParameter: s => baseWriter.writeParameter(escapeSnippetText(s)),
-            writeComment: s => baseWriter.writeComment(escapeSnippetText(s)),
-            writeProperty: s => baseWriter.writeProperty(escapeSnippetText(s)),
+            writeLiteral: s => escapingWrite(s, () => baseWriter.writeLiteral(s)),
+            writeStringLiteral: s => escapingWrite(s, () => baseWriter.writeStringLiteral(s)),
+            writeSymbol: (s, symbol) => escapingWrite(s, () => baseWriter.writeSymbol(s, symbol)),
+            writeParameter: s => escapingWrite(s, () => baseWriter.writeParameter(s)),
+            writeComment: s => escapingWrite(s, () => baseWriter.writeComment(s)),
+            writeProperty: s => escapingWrite(s, () => baseWriter.writeProperty(s)),
         };
 
         return {
@@ -1218,8 +1219,34 @@ namespace ts.Completions {
             printAndFormatSnippetList,
         };
 
+        // The formatter/scanner will have issues with snippet-escaped text,
+        // so instead of writing the escaped text directly to the writer,
+        // generate a set of changes that can be applied to the unescaped text
+        // to escape it post-formatting.
+        function escapingWrite(s: string, write: () => void) {
+            const escaped = escapeSnippetText(s);
+            if (escaped !== s) {
+                const start = baseWriter.getTextPos();
+                write();
+                const end = baseWriter.getTextPos();
+                escapes = append(escapes ||= [], { newText: escaped, span: { start, length: end - start } });
+            }
+            else {
+                write();
+            }
+        }
+
         /* Snippet-escaping version of `printer.printList`. */
         function printSnippetList(
+            format: ListFormat,
+            list: NodeArray<Node>,
+            sourceFile: SourceFile | undefined,
+        ): string {
+            const unescaped = printUnescapedSnippetList(format, list, sourceFile);
+            return escapes ? textChanges.applyChanges(unescaped, escapes) : unescaped;
+        }
+
+        function printUnescapedSnippetList(
             format: ListFormat,
             list: NodeArray<Node>,
             sourceFile: SourceFile | undefined,
@@ -1236,7 +1263,7 @@ namespace ts.Completions {
             formatContext: formatting.FormatContext,
         ): string {
             const syntheticFile = {
-                text: printSnippetList(
+                text: printUnescapedSnippetList(
                     format,
                     list,
                     sourceFile),
@@ -1256,7 +1283,11 @@ namespace ts.Completions {
                     /* delta */ 0,
                     { ...formatContext, options: formatOptions });
             });
-            return textChanges.applyChanges(syntheticFile.text, changes);
+
+            const allChanges = escapes
+                ? stableSort(concatenate(changes, escapes), (a, b) => compareTextSpans(a.span, b.span))
+                : changes;
+            return textChanges.applyChanges(syntheticFile.text, allChanges);
         }
     }
 
