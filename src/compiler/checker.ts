@@ -4129,7 +4129,7 @@ namespace ts {
             const result = new Type(checker, flags);
             typeCount++;
             result.id = typeCount;
-            result.sortId = undefined;
+            // result.sortId = undefined;
             tracing?.recordType(result);
             return result;
         }
