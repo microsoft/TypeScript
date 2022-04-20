@@ -569,7 +569,7 @@ let t2: `foo1` | '1foo' | 'foofoo' | `foo${string}` | 'foox' | 'xfoo';  // `foo$
 >t2 : "1foo" | "xfoo" | `foo${string}`
 
 let t3: `foo1` | '1foo' | 'foofoo' | `foo${string}` | 'foox' | 'xfoo' | `${number}foo`;  // `foo${string}` | xfoo' | `${number}foo`
->t3 : "xfoo" | `${number}foo` | `foo${string}`
+>t3 : "xfoo" | `foo${string}` | `${number}foo`
 
 var bb: `${number}`;
 >bb : `${number}`
