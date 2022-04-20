@@ -1625,7 +1625,7 @@ namespace ts {
         }
 
         const seenRefs = buildInfoPath ? new Set<ResolvedConfigFilePath>() : undefined;
-        const buildInfoCacheEntry = state.buildInfoCache.get(resolvedPath)!;
+        const buildInfoCacheEntry = state.buildInfoCache.get(resolvedPath);
         seenRefs?.add(resolvedPath);
 
         let pseudoUpToDate = false;
