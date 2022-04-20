@@ -4695,6 +4695,7 @@ namespace ts {
                 }
             }
 
+            const hasReturnColon = token() === SyntaxKind.ColonToken;
             const type = parseReturnType(SyntaxKind.ColonToken, /*isType*/ false);
             if (type && !allowAmbiguity && typeHasArrowFunctionBlockingParseError(type)) {
                 return undefined;
@@ -4744,13 +4745,13 @@ namespace ts {
             //     a() ? (b: number, c?: string): void => d() : e
             // is determined by isParenthesizedArrowFunctionExpression to unambiguously
             // be an arrow expression, so we allow a return type.
-            if (disallowReturnTypeInArrowFunction) {
+            if (disallowReturnTypeInArrowFunction && hasReturnColon) {
                 // However, if the arrow function we were able to parse is followed by another colon
                 // as in:
                 //     a ? (x): string => x : null
                 // Then allow the arrow function, and treat the second colon as terminating
                 // the conditional expression.
-                if (!(type && token() === SyntaxKind.ColonToken)) {
+                if (token() !== SyntaxKind.ColonToken) {
                     return undefined;
                 }
             }
