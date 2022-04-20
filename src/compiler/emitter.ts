@@ -4702,7 +4702,7 @@ namespace ts {
                             includeComments => getLinesBetweenPositionAndPrecedingNonWhitespaceCharacter(
                                 firstChild.pos,
                                 parentNode.pos,
-                                Debug.checkDefined(currentSourceFile),
+                                currentSourceFile!,
                                 includeComments));
                     }
                     return rangeStartPositionsAreOnSameLine(parentNode, firstChild, currentSourceFile) ? 0 : 1;
@@ -4729,7 +4729,7 @@ namespace ts {
                             includeComments => getLinesBetweenRangeEndAndRangeStart(
                                 previousNode,
                                 nextNode,
-                                Debug.checkDefined(currentSourceFile),
+                                currentSourceFile!,
                                 includeComments));
                     }
                     // If `preserveSourceNewlines` is `false` we do not intend to preserve the effective lines between the
@@ -4771,7 +4771,7 @@ namespace ts {
                             includeComments => getLinesBetweenPositionAndNextNonWhitespaceCharacter(
                                 end,
                                 parentNode.end,
-                                Debug.checkDefined(currentSourceFile),
+                                currentSourceFile!,
                                 includeComments));
                     }
                     return rangeEndPositionsAreOnSameLine(parentNode, lastChild, currentSourceFile) ? 0 : 1;
@@ -4858,7 +4858,7 @@ namespace ts {
                         includeComments => getLinesBetweenRangeEndAndRangeStart(
                             node1,
                             node2,
-                            Debug.checkDefined(currentSourceFile),
+                            currentSourceFile!,
                             includeComments));
                 }
                 return rangeEndIsOnSameLineAsRangeStart(node1, node2, currentSourceFile) ? 0 : 1;
