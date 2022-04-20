@@ -960,15 +960,7 @@ namespace ts {
         for (const name of getOwnKeys(options).sort(compareStringsCaseSensitive)) {
             const optionKey = name.toLowerCase();
             const optionInfo = optionsNameMap.get(optionKey);
-            const emitOption = !isOutFile ?
-                optionInfo?.affectsEmit || optionInfo?.affectsSemanticDiagnostics ||
-                // We need to store `strict`, even though it won't be examined directly, so that the
-                // flags it controls (e.g. `strictNullChecks`) will be retrieved correctly from the buildinfo
-                optionKey === "strict" ||
-                // We need to store these to determine whether `lib` files need to be rechecked.
-                optionKey === "skiplibcheck" || optionKey === "skipdefaultlibcheck" :
-                optionInfo?.affectsOutFileBuildInfo;
-            if (emitOption) {
+            if (isOutFile ? optionInfo?.affectsOutFileBuildInfo : optionInfo?.affectsMultiFileBuildInfo) {
                 (result ||= {})[name] = convertToReusableCompilerOptionValue(
                     optionInfo,
                     options[name] as CompilerOptionsValue,
