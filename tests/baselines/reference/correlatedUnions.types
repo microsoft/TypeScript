@@ -160,7 +160,7 @@ type Keys = keyof TypeMap;
 >Keys : keyof TypeMap
 
 type HandlerMap = { [P in Keys]: (x: TypeMap[P]) => void };
->HandlerMap : { foo: (x: string) => void; bar: (x: number) => void; }
+>HandlerMap : { bar: (x: number) => void; foo: (x: string) => void; }
 >x : TypeMap[P]
 
 const handlers: HandlerMap = {
@@ -615,12 +615,12 @@ function f3<K extends keyof ArgMap>(funcs: Funcs, key: K, arg: ArgMap[K]) {
 
 function f4<K extends keyof ArgMap>(x: Funcs[keyof ArgMap], y: Funcs[K]) {
 >f4 : <K extends keyof ArgMap>(x: Funcs[keyof ArgMap], y: Funcs[K]) => void
->x : Func<"b"> | Func<"a">
+>x : Func<"a"> | Func<"b">
 >y : Funcs[K]
 
     x = y;
 >x = y : Funcs[K]
->x : Func<"b"> | Func<"a">
+>x : Func<"a"> | Func<"b">
 >y : Funcs[K]
 }
 

@@ -233,7 +233,7 @@ declare let o1: {
     readonly y: 20;
 };
 declare let o2: {
-    readonly [x: string]: 1 | 2 | 3 | (() => void) | 4;
+    readonly [x: string]: 1 | 2 | 3 | 4 | (() => void);
     readonly a: 1;
     readonly b: 2;
     readonly c: 3;
@@ -298,12 +298,12 @@ declare let t1: "foo";
 declare let t2: "bar";
 declare let t3: "foo-bar";
 declare let t4: "(foo)-(bar)";
-declare function ff1(x: 'foo' | 'bar', y: 1 | 2): "foo-1" | "foo-2" | "bar-1" | "bar-2";
+declare function ff1(x: 'foo' | 'bar', y: 1 | 2): "bar-1" | "bar-2" | "foo-1" | "foo-2";
 declare function ff2<T extends string, U extends string>(x: T, y: U): `${T}-${U}`;
 declare const ts1: "foo-bar";
-declare const ts2: "foo-1" | "foo-0";
-declare const ts3: "top-left" | "top-right" | "bottom-left" | "bottom-right";
-declare function ff3(x: 'foo' | 'bar', y: object): `foo${string}` | `bar${string}`;
+declare const ts2: "foo-0" | "foo-1";
+declare const ts3: "bottom-left" | "bottom-right" | "top-left" | "top-right";
+declare function ff3(x: 'foo' | 'bar', y: object): `bar${string}` | `foo${string}`;
 declare type Action = "verify" | "write";
 declare type ContentMatch = "match" | "nonMatch";
 declare type Outcome = `${Action}_${ContentMatch}`;

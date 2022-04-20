@@ -1,7 +1,7 @@
 === tests/cases/compiler/expandoFunctionContextualTypes.ts ===
 interface MyComponentProps {
     color: "red" | "blue"
->color : "red" | "blue"
+>color : "blue" | "red"
 }
 
 interface StatelessComponent<P> {

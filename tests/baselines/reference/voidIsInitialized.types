@@ -9,7 +9,7 @@ const y: void = undefined;
 
 if(typeof x === "undefined") {
 >typeof x === "undefined" : boolean
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >x : void
 >"undefined" : "undefined"
 
@@ -19,7 +19,7 @@ if(typeof x === "undefined") {
 
 if(typeof y !== "undefined") {
 >typeof y !== "undefined" : boolean
->typeof y : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof y : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >y : void
 >"undefined" : "undefined"
 

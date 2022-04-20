@@ -9,12 +9,12 @@ const enum Choice { Unknown = "", Yes = "yes", No = "no" };
 >"no" : "no"
 
 type YesNo = Choice.Yes | Choice.No;
->YesNo : Choice.Yes | Choice.No
+>YesNo : Choice.No | Choice.Yes
 >Choice : any
 >Choice : any
 
 type NoYes = Choice.No | Choice.Yes;
->NoYes : Choice.Yes | Choice.No
+>NoYes : Choice.No | Choice.Yes
 >Choice : any
 >Choice : any
 
@@ -61,9 +61,9 @@ function f2(a: YesNo, b: UnknownYesNo, c: Choice) {
 >a : YesNo
 
     c = b;
->c = b : Choice.Yes | Choice.No
+>c = b : Choice.No | Choice.Yes
 >c : Choice
->b : Choice.Yes | Choice.No
+>b : Choice.No | Choice.Yes
 }
 
 function f3(a: Choice.Yes, b: YesNo) {
@@ -198,7 +198,7 @@ function assertNever(x: never): never {
 }
 
 function f10(x: YesNo) {
->f10 : (x: YesNo) => "true" | "false"
+>f10 : (x: YesNo) => "false" | "true"
 >x : YesNo
 
     switch (x) {
@@ -219,7 +219,7 @@ function f10(x: YesNo) {
 }
 
 function f11(x: YesNo) {
->f11 : (x: YesNo) => "true" | "false"
+>f11 : (x: YesNo) => "false" | "true"
 >x : YesNo
 
     switch (x) {
@@ -251,7 +251,7 @@ function f12(x: UnknownYesNo) {
 >x : UnknownYesNo
 
         x;
->x : Choice.Yes | Choice.No
+>x : Choice.No | Choice.Yes
     }
     else {
         x;
@@ -297,9 +297,9 @@ function f20(x: Item) {
 >x : Item
 
     switch (x.kind) {
->x.kind : Choice.Yes | Choice.No
+>x.kind : Choice.No | Choice.Yes
 >x : Item
->kind : Choice.Yes | Choice.No
+>kind : Choice.No | Choice.Yes
 
         case Choice.Yes: return x.a;
 >Choice.Yes : Choice.Yes
@@ -324,9 +324,9 @@ function f21(x: Item) {
 >x : Item
 
     switch (x.kind) {
->x.kind : Choice.Yes | Choice.No
+>x.kind : Choice.No | Choice.Yes
 >x : Item
->kind : Choice.Yes | Choice.No
+>kind : Choice.No | Choice.Yes
 
         case Choice.Yes: return x.a;
 >Choice.Yes : Choice.Yes

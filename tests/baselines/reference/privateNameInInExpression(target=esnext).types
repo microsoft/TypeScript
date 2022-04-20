@@ -127,7 +127,7 @@ class Foo {
 
         if (typeof u === 'object') {
 >typeof u === 'object' : boolean
->typeof u : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof u : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >u : unknown
 >'object' : "object"
 

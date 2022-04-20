@@ -10,7 +10,7 @@ class Foo {
 
         if (typeof v !== "string") {
 >typeof v !== "string" : boolean
->typeof v : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof v : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >v : any
 >"string" : "string"
 
@@ -43,7 +43,7 @@ class Foo2 {
 
         if (typeof v !== "string") {
 >typeof v !== "string" : boolean
->typeof v : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof v : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >v : any
 >"string" : "string"
 

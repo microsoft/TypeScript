@@ -40,7 +40,7 @@ function destructure<a, r>(
 
 var value = Math.random() > 0.5 ? 'hey!' : <Y>undefined;
 >value : string | Y
->Math.random() > 0.5 ? 'hey!' : <Y>undefined : Y | "hey!"
+>Math.random() > 0.5 ? 'hey!' : <Y>undefined : "hey!" | Y
 >Math.random() > 0.5 : boolean
 >Math.random() : number
 >Math.random : () => number

@@ -78,7 +78,7 @@ function f2(x: 0 | 1 | 2) {
 }
 
 type Falsy = false | 0 | "" | null | undefined;
->Falsy : false | "" | 0 | null | undefined
+>Falsy : false | 0 | "" | null | undefined
 >false : false
 >null : null
 
@@ -188,7 +188,7 @@ function f5(x: string | number | boolean) {
 >123 : 123
 
             x;
->x : "hello" | 123
+>x : 123 | "hello"
 
             break;
         default:

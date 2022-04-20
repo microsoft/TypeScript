@@ -27,12 +27,12 @@ declare const a6: false | undefined | null
 
 
 const aa1 = a1 ?? a2 ?? a3 ?? a4 ?? a5 ?? a6 ?? 'whatever'
->aa1 : boolean | "" | 0 | "literal" | 1 | "whatever"
->a1 ?? a2 ?? a3 ?? a4 ?? a5 ?? a6 ?? 'whatever' : boolean | "" | 0 | "literal" | 1 | "whatever"
->a1 ?? a2 ?? a3 ?? a4 ?? a5 ?? a6 : boolean | "" | 0 | "literal" | 1 | null | undefined
->a1 ?? a2 ?? a3 ?? a4 ?? a5 : true | "" | 0 | "literal" | 1 | null | undefined
->a1 ?? a2 ?? a3 ?? a4 : "" | 0 | "literal" | 1 | null | undefined
->a1 ?? a2 ?? a3 : "" | "literal" | 1 | null | undefined
+>aa1 : boolean | 0 | 1 | "" | "literal" | "whatever"
+>a1 ?? a2 ?? a3 ?? a4 ?? a5 ?? a6 ?? 'whatever' : boolean | 0 | 1 | "" | "literal" | "whatever"
+>a1 ?? a2 ?? a3 ?? a4 ?? a5 ?? a6 : boolean | 0 | 1 | "" | "literal" | null | undefined
+>a1 ?? a2 ?? a3 ?? a4 ?? a5 : true | 0 | 1 | "" | "literal" | null | undefined
+>a1 ?? a2 ?? a3 ?? a4 : 0 | 1 | "" | "literal" | null | undefined
+>a1 ?? a2 ?? a3 : 1 | "" | "literal" | null | undefined
 >a1 ?? a2 : "" | "literal" | null | undefined
 >a1 : "literal" | null | undefined
 >a2 : "" | null | undefined

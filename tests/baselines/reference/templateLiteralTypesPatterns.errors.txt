@@ -1,12 +1,12 @@
 tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(7,7): error TS2322: Type '"no slash"' is not assignable to type '`/${string}`'.
-tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(14,10): error TS2345: Argument of type '"example.com/noprotocol"' is not assignable to parameter of type '`http://${string}` | `https://${string}` | `ftp://${string}`'.
-tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(16,10): error TS2345: Argument of type '"gopher://example.com/protocol"' is not assignable to parameter of type '`http://${string}` | `https://${string}` | `ftp://${string}`'.
+tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(14,10): error TS2345: Argument of type '"example.com/noprotocol"' is not assignable to parameter of type '`ftp://${string}` | `http://${string}` | `https://${string}`'.
+tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(16,10): error TS2345: Argument of type '"gopher://example.com/protocol"' is not assignable to parameter of type '`ftp://${string}` | `http://${string}` | `https://${string}`'.
 tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(26,7): error TS2345: Argument of type '"other"' is not assignable to parameter of type '"false" | "true"'.
-tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(35,11): error TS2345: Argument of type '"0"' is not assignable to parameter of type '"undefined" | "null"'.
-tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(36,11): error TS2345: Argument of type '"false"' is not assignable to parameter of type '"undefined" | "null"'.
-tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(37,11): error TS2345: Argument of type '"NaN"' is not assignable to parameter of type '"undefined" | "null"'.
-tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(38,11): error TS2345: Argument of type '""' is not assignable to parameter of type '"undefined" | "null"'.
-tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(39,11): error TS2345: Argument of type '"other"' is not assignable to parameter of type '"undefined" | "null"'.
+tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(35,11): error TS2345: Argument of type '"0"' is not assignable to parameter of type '"null" | "undefined"'.
+tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(36,11): error TS2345: Argument of type '"false"' is not assignable to parameter of type '"null" | "undefined"'.
+tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(37,11): error TS2345: Argument of type '"NaN"' is not assignable to parameter of type '"null" | "undefined"'.
+tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(38,11): error TS2345: Argument of type '""' is not assignable to parameter of type '"null" | "undefined"'.
+tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(39,11): error TS2345: Argument of type '"other"' is not assignable to parameter of type '"null" | "undefined"'.
 tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(60,9): error TS2345: Argument of type '"?"' is not assignable to parameter of type '`${number}`'.
 tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(61,9): error TS2345: Argument of type '"NaN"' is not assignable to parameter of type '`${number}`'.
 tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(62,9): error TS2345: Argument of type '"Infinity"' is not assignable to parameter of type '`${number}`'.
@@ -75,11 +75,11 @@ tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(160,7): er
     // issues error - no protocol
     download("example.com/noprotocol");
              ~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '"example.com/noprotocol"' is not assignable to parameter of type '`http://${string}` | `https://${string}` | `ftp://${string}`'.
+!!! error TS2345: Argument of type '"example.com/noprotocol"' is not assignable to parameter of type '`ftp://${string}` | `http://${string}` | `https://${string}`'.
     // issues error, incorrect protocol
     download("gopher://example.com/protocol");
              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '"gopher://example.com/protocol"' is not assignable to parameter of type '`http://${string}` | `https://${string}` | `ftp://${string}`'.
+!!! error TS2345: Argument of type '"gopher://example.com/protocol"' is not assignable to parameter of type '`ftp://${string}` | `http://${string}` | `https://${string}`'.
     
     const q: RequiresLeadingSlash extends string ? true : false = true;
     
@@ -102,19 +102,19 @@ tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(160,7): er
     // not ok
     nullishes("0");
               ~~~
-!!! error TS2345: Argument of type '"0"' is not assignable to parameter of type '"undefined" | "null"'.
+!!! error TS2345: Argument of type '"0"' is not assignable to parameter of type '"null" | "undefined"'.
     nullishes("false");
               ~~~~~~~
-!!! error TS2345: Argument of type '"false"' is not assignable to parameter of type '"undefined" | "null"'.
+!!! error TS2345: Argument of type '"false"' is not assignable to parameter of type '"null" | "undefined"'.
     nullishes("NaN");
               ~~~~~
-!!! error TS2345: Argument of type '"NaN"' is not assignable to parameter of type '"undefined" | "null"'.
+!!! error TS2345: Argument of type '"NaN"' is not assignable to parameter of type '"null" | "undefined"'.
     nullishes("");
               ~~
-!!! error TS2345: Argument of type '""' is not assignable to parameter of type '"undefined" | "null"'.
+!!! error TS2345: Argument of type '""' is not assignable to parameter of type '"null" | "undefined"'.
     nullishes("other");
               ~~~~~~~
-!!! error TS2345: Argument of type '"other"' is not assignable to parameter of type '"undefined" | "null"'.
+!!! error TS2345: Argument of type '"other"' is not assignable to parameter of type '"null" | "undefined"'.
     
     declare function numbers(x: `${number}`): void;
     // the following should work

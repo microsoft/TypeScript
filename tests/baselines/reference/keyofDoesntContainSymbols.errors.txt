@@ -1,6 +1,6 @@
 tests/cases/compiler/keyofDoesntContainSymbols.ts(11,30): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
-tests/cases/compiler/keyofDoesntContainSymbols.ts(14,23): error TS2345: Argument of type 'unique symbol' is not assignable to parameter of type '"str" | "num"'.
-tests/cases/compiler/keyofDoesntContainSymbols.ts(17,23): error TS2345: Argument of type '0' is not assignable to parameter of type '"str" | "num"'.
+tests/cases/compiler/keyofDoesntContainSymbols.ts(14,23): error TS2345: Argument of type 'unique symbol' is not assignable to parameter of type '"num" | "str"'.
+tests/cases/compiler/keyofDoesntContainSymbols.ts(17,23): error TS2345: Argument of type '0' is not assignable to parameter of type '"num" | "str"'.
 
 
 ==== tests/cases/compiler/keyofDoesntContainSymbols.ts (3 errors) ====
@@ -21,12 +21,12 @@ tests/cases/compiler/keyofDoesntContainSymbols.ts(17,23): error TS2345: Argument
     // Argument of type '""' is not assignable to parameter of type 'number'.
     const valC = set(obj, sym, sym);
                           ~~~
-!!! error TS2345: Argument of type 'unique symbol' is not assignable to parameter of type '"str" | "num"'.
+!!! error TS2345: Argument of type 'unique symbol' is not assignable to parameter of type '"num" | "str"'.
     // Expect type error
     // Argument of type 'unique symbol' is not assignable to parameter of type "str" | "num"
     const valD = set(obj, num, num);
                           ~~~
-!!! error TS2345: Argument of type '0' is not assignable to parameter of type '"str" | "num"'.
+!!! error TS2345: Argument of type '0' is not assignable to parameter of type '"num" | "str"'.
     // Expect type error
     // Argument of type '0' is not assignable to parameter of type "str" | "num"
     type KeyofObj = keyof typeof obj;

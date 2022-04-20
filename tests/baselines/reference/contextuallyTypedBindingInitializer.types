@@ -64,11 +64,11 @@ function g({ prop = ["hello", 1234] }: Tuples) {}
 
 interface StringUnion {
     prop: "foo" | "bar";
->prop : "foo" | "bar"
+>prop : "bar" | "foo"
 }
 function h({ prop = "foo" }: StringUnion) {}
 >h : ({ prop }: StringUnion) => void
->prop : "foo" | "bar"
+>prop : "bar" | "foo"
 >"foo" : "foo"
 
 interface StringIdentity {

@@ -88,7 +88,7 @@ namespace n1 {
 
     export let e = fun3("Hello", "Hello", "World", "Foo");
 >e : string
->fun3("Hello", "Hello", "World", "Foo") : "Hello" | "World" | "Foo"
+>fun3("Hello", "Hello", "World", "Foo") : "Foo" | "Hello" | "World"
 >fun3 : <T>(...args: T[]) => T
 >"Hello" : "Hello"
 >"Hello" : "Hello"

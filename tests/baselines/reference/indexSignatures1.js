@@ -608,7 +608,7 @@ declare const obj12: {
     [sym]: 4;
 };
 declare const obj13: {
-    [x: string]: 0 | 2 | 1 | 3;
+    [x: string]: 0 | 1 | 2 | 3;
     [x: number]: 2 | 3;
     [x: symbol]: 4 | 5;
     x: 0;

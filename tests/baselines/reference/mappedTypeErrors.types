@@ -47,7 +47,7 @@ type T11 = Pick<Shape, "foo">;  // Error
 >T11 : { foo: unknown; }
 
 type T12 = Pick<Shape, "name" | "foo">;  // Error
->T12 : { name: string; foo: unknown; }
+>T12 : { foo: unknown; name: string; }
 
 type T13 = Pick<Shape, keyof Named>;
 >T13 : { name: string; }

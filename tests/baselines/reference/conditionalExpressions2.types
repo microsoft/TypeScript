@@ -29,7 +29,7 @@ var d = false ? false : true;
 
 var e = false ? "foo" : "bar";
 >e : string
->false ? "foo" : "bar" : "foo" | "bar"
+>false ? "foo" : "bar" : "bar" | "foo"
 >false : false
 >"foo" : "foo"
 >"bar" : "bar"

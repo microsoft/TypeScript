@@ -262,7 +262,7 @@ function assertNever(x: never): never {
 }
 
 function f10(x: YesNo) {
->f10 : (x: YesNo) => "true" | "false"
+>f10 : (x: YesNo) => "false" | "true"
 >x : YesNo
 
     switch (x) {
@@ -283,7 +283,7 @@ function f10(x: YesNo) {
 }
 
 function f11(x: YesNo) {
->f11 : (x: YesNo) => "true" | "false"
+>f11 : (x: YesNo) => "false" | "true"
 >x : YesNo
 
     switch (x) {

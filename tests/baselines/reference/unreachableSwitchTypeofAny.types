@@ -5,7 +5,7 @@ const unreachable = (x: any): number => {
 >x : any
 
     switch (typeof x) {
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >x : any
 
         case 'string': return 0

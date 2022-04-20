@@ -14,7 +14,7 @@ function compare<T extends Comparable<T>>(x: T, y: T): number {
 >x == null : boolean
 >x : T
 >null : null
->y == null ? 0 : -1 : 0 | -1
+>y == null ? 0 : -1 : -1 | 0
 >y == null : boolean
 >y : T
 >null : null

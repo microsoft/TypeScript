@@ -77,7 +77,7 @@ const valD = set(obj, num, num);
 // Expect type error
 // Argument of type '0' is not assignable to parameter of type "str" | "num"
 type KeyofObj = keyof typeof obj;
->KeyofObj : "str" | "num"
+>KeyofObj : "num" | "str"
 >obj : { num: number; str: string; 0: 0; [sym]: symbol; }
 
 // "str" | "num"

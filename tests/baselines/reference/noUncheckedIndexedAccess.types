@@ -76,7 +76,7 @@ const e7: boolean = strMap["foo" as "foo" | "baz"];
 >e7 : boolean
 >strMap["foo" as "foo" | "baz"] : boolean | undefined
 >strMap : { [s: string]: boolean; }
->"foo" as "foo" | "baz" : "foo" | "baz"
+>"foo" as "foo" | "baz" : "baz" | "foo"
 >"foo" : "foo"
 
 const e8: boolean = strMap[NumericEnum1.A];

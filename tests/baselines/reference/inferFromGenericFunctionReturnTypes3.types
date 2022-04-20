@@ -97,7 +97,7 @@ function wrappedBaz(): Wrap<'baz'> {
 
 interface FolderContentItem {
     type: 'folder' | 'file';
->type : "folder" | "file"
+>type : "file" | "folder"
 }
 
 let a: FolderContentItem[] = [];
@@ -312,7 +312,7 @@ let zz: Box<WinCondition> = box({ type: 'draw' });
 >'draw' : "draw"
 
 type WinType = 'win' | 'draw';
->WinType : "win" | "draw"
+>WinType : "draw" | "win"
 
 let yy: Box<WinType> = box('draw');
 >yy : Box<WinType>
@@ -400,7 +400,7 @@ type Player = {
 >age : number
 
     position: "STRIKER" | "GOALKEEPER",
->position : "STRIKER" | "GOALKEEPER"
+>position : "GOALKEEPER" | "STRIKER"
 
 };
  

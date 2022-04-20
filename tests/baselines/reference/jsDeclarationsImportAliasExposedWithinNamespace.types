@@ -54,7 +54,7 @@ function testFn(input) {
 
     if (typeof input === 'number') {
 >typeof input === 'number' : boolean
->typeof input : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof input : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >input : import("tests/cases/conformance/jsdoc/declarations/file2").testFnTypes.input
 >'number' : "number"
 

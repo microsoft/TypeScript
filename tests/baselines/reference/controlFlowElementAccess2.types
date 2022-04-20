@@ -10,7 +10,7 @@ declare const config: {
 
 if (typeof config['works'] !== 'boolean') {
 >typeof config['works'] !== 'boolean' : boolean
->typeof config['works'] : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof config['works'] : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >config['works'] : boolean | { prop: string; }
 >config : { [key: string]: boolean | { prop: string; }; }
 >'works' : "works"
@@ -36,7 +36,7 @@ if (typeof config['works'] !== 'boolean') {
 }
 if (typeof config.works !== 'boolean') {
 >typeof config.works !== 'boolean' : boolean
->typeof config.works : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof config.works : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >config.works : boolean | { prop: string; }
 >config : { [key: string]: boolean | { prop: string; }; }
 >works : boolean | { prop: string; }

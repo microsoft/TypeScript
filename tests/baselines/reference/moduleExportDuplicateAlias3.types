@@ -15,16 +15,16 @@ const result = apply.toFixed()
 === tests/cases/conformance/salsa/moduleExportAliasDuplicateAlias.js ===
 exports.apply = undefined;
 >exports.apply = undefined : undefined
->exports.apply : (() => void) | "ok" | 1 | undefined
+>exports.apply : 1 | "ok" | (() => void) | undefined
 >exports : typeof import("tests/cases/conformance/salsa/moduleExportAliasDuplicateAlias")
->apply : (() => void) | "ok" | 1 | undefined
+>apply : 1 | "ok" | (() => void) | undefined
 >undefined : undefined
 
 exports.apply = undefined;
 >exports.apply = undefined : undefined
->exports.apply : (() => void) | "ok" | 1 | undefined
+>exports.apply : 1 | "ok" | (() => void) | undefined
 >exports : typeof import("tests/cases/conformance/salsa/moduleExportAliasDuplicateAlias")
->apply : (() => void) | "ok" | 1 | undefined
+>apply : 1 | "ok" | (() => void) | undefined
 >undefined : undefined
 
 function a() { }
@@ -32,9 +32,9 @@ function a() { }
 
 exports.apply = a;
 >exports.apply = a : () => void
->exports.apply : (() => void) | "ok" | 1 | undefined
+>exports.apply : 1 | "ok" | (() => void) | undefined
 >exports : typeof import("tests/cases/conformance/salsa/moduleExportAliasDuplicateAlias")
->apply : (() => void) | "ok" | 1 | undefined
+>apply : 1 | "ok" | (() => void) | undefined
 >a : () => void
 
 exports.apply()
@@ -45,9 +45,9 @@ exports.apply()
 
 exports.apply = 'ok'
 >exports.apply = 'ok' : "ok"
->exports.apply : (() => void) | "ok" | 1 | undefined
+>exports.apply : 1 | "ok" | (() => void) | undefined
 >exports : typeof import("tests/cases/conformance/salsa/moduleExportAliasDuplicateAlias")
->apply : (() => void) | "ok" | 1 | undefined
+>apply : 1 | "ok" | (() => void) | undefined
 >'ok' : "ok"
 
 var OK = exports.apply.toUpperCase()
@@ -61,8 +61,8 @@ var OK = exports.apply.toUpperCase()
 
 exports.apply = 1
 >exports.apply = 1 : 1
->exports.apply : (() => void) | "ok" | 1 | undefined
+>exports.apply : 1 | "ok" | (() => void) | undefined
 >exports : typeof import("tests/cases/conformance/salsa/moduleExportAliasDuplicateAlias")
->apply : (() => void) | "ok" | 1 | undefined
+>apply : 1 | "ok" | (() => void) | undefined
 >1 : 1
 

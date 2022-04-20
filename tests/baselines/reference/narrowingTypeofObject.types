@@ -8,7 +8,7 @@ function test(x: number & { _foo: string }) {
 
     if (typeof x === 'object') {
 >typeof x === 'object' : boolean
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >x : number & { _foo: string; }
 >'object' : "object"
 
@@ -24,7 +24,7 @@ function f1(x: F & { foo: number }) {
 
     if (typeof x !== "object") {
 >typeof x !== "object" : boolean
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >x : F & { foo: number; }
 >"object" : "object"
 

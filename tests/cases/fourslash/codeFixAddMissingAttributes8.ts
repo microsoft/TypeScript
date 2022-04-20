@@ -16,5 +16,5 @@
 verify.codeFix({
     index: 0,
     description: ts.Diagnostics.Add_missing_attributes.message,
-    newRangeContent: `<A ad={"ad"} ac={"ac"} bd={"bd"} bc={"bc"}></A>`
+    newRangeContent: `<A ac={"ac"} ad={"ad"} bc={"bc"} bd={"bd"}></A>`
 });

@@ -6,7 +6,7 @@ catch (e) {
     const isString = typeof e === 'string';
 >isString : boolean
 >typeof e === 'string' : boolean
->typeof e : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof e : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >e : any
 >'string' : "string"
 
@@ -22,7 +22,7 @@ catch (e) {
 
     if (typeof e === 'string') {
 >typeof e === 'string' : boolean
->typeof e : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof e : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >e : any
 >'string' : "string"
 
@@ -41,7 +41,7 @@ catch (e) {
     const isString = typeof e === 'string';
 >isString : boolean
 >typeof e === 'string' : boolean
->typeof e : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof e : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >e : any
 >'string' : "string"
 
@@ -62,7 +62,7 @@ catch (e) {
 
     if (typeof e === 'string') {
 >typeof e === 'string' : boolean
->typeof e : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof e : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >e : any
 >'string' : "string"
 

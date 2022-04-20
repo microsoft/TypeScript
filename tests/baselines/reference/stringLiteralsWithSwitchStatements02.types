@@ -3,7 +3,7 @@ let x: "foo";
 >x : "foo"
 
 let y: "foo" | "bar";
->y : "foo" | "bar"
+>y : "bar" | "foo"
 
 let b: boolean;
 >b : boolean
@@ -13,20 +13,20 @@ b = x == y;
 >b : boolean
 >x == y : boolean
 >x : "foo"
->y : "foo" | "bar"
+>y : "bar" | "foo"
 
 b = "foo" == y
 >b = "foo" == y : boolean
 >b : boolean
 >"foo" == y : boolean
 >"foo" : "foo"
->y : "foo" | "bar"
+>y : "bar" | "foo"
 
 b = y == "foo";
 >b = y == "foo" : boolean
 >b : boolean
 >y == "foo" : boolean
->y : "foo" | "bar"
+>y : "bar" | "foo"
 >"foo" : "foo"
 
 b = "foo" == "bar";
@@ -41,20 +41,20 @@ b = x != y;
 >b : boolean
 >x != y : boolean
 >x : "foo"
->y : "foo" | "bar"
+>y : "bar" | "foo"
 
 b = "foo" != y
 >b = "foo" != y : boolean
 >b : boolean
 >"foo" != y : boolean
 >"foo" : "foo"
->y : "foo" | "bar"
+>y : "bar" | "foo"
 
 b = y != "foo";
 >b = y != "foo" : boolean
 >b : boolean
 >y != "foo" : boolean
->y : "foo" | "bar"
+>y : "bar" | "foo"
 >"foo" : "foo"
 
 b = "foo" != "bar";

@@ -21,7 +21,7 @@ function f1(s: string) {
 >"bar" : "bar"
 
         s;  // "foo" | "bar"
->s : "foo" | "bar"
+>s : "bar" | "foo"
     }
 }
 
@@ -39,13 +39,13 @@ function f2(s: string) {
 >"bar" : "bar"
 
             s;  // "foo" | "bar"
->s : "foo" | "bar"
+>s : "bar" | "foo"
 
         case "baz":
 >"baz" : "baz"
 
             s;  // "foo" | "bar" | "baz"
->s : "foo" | "bar" | "baz"
+>s : "bar" | "baz" | "foo"
 
             break;
         default:
@@ -55,11 +55,11 @@ function f2(s: string) {
 }
 
 function f3(s: string) {
->f3 : (s: string) => "foo" | "bar" | undefined
+>f3 : (s: string) => "bar" | "foo" | undefined
 >s : string
 
     return s === "foo" || s === "bar" ? s : undefined;  // "foo" | "bar" | undefined
->s === "foo" || s === "bar" ? s : undefined : "foo" | "bar" | undefined
+>s === "foo" || s === "bar" ? s : undefined : "bar" | "foo" | undefined
 >s === "foo" || s === "bar" : boolean
 >s === "foo" : boolean
 >s : string
@@ -67,7 +67,7 @@ function f3(s: string) {
 >s === "bar" : boolean
 >s : string
 >"bar" : "bar"
->s : "foo" | "bar"
+>s : "bar" | "foo"
 >undefined : undefined
 }
 
@@ -132,25 +132,25 @@ function f6(x: number, y: 1 | 2) {
 
 function f7(x: number | "foo" | "bar", y: 1 | 2 | string) {
 >f7 : (x: number | "foo" | "bar", y: 1 | 2 | string) => void
->x : number | "foo" | "bar"
+>x : number | "bar" | "foo"
 >y : string | 1 | 2
 
     if (x === y) {
 >x === y : boolean
->x : number | "foo" | "bar"
+>x : number | "bar" | "foo"
 >y : string | 1 | 2
 
         x;  // "foo" | "bar" | 1 | 2
->x : "foo" | "bar" | 1 | 2
+>x : 1 | 2 | "bar" | "foo"
     }
 }
 
 function f8(x: number | "foo" | "bar") {
 >f8 : (x: number | "foo" | "bar") => void
->x : number | "foo" | "bar"
+>x : number | "bar" | "foo"
 
     switch (x) {
->x : number | "foo" | "bar"
+>x : number | "bar" | "foo"
 
         case 1:
 >1 : 1

@@ -40,5 +40,5 @@ declare let f: (x: "foo") => "foo";
 declare let fResult: "foo";
 declare let g: (x: "foo") => "foo";
 declare let gResult: "foo";
-declare let h: (x: "foo" | "bar") => "foo" | "bar";
-declare let hResult: "foo" | "bar";
+declare let h: (x: "bar" | "foo") => "bar" | "foo";
+declare let hResult: "bar" | "foo";

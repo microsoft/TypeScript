@@ -301,8 +301,8 @@ function f2<T, U>(x: T, y: U) {
 >E : typeof E
 
     var r14 = true ? E.A : x;
->r14 : T | E
->true ? E.A : x : T | E
+>r14 : E | T
+>true ? E.A : x : E | T
 >true : true
 >E.A : E
 >E : typeof E
@@ -310,8 +310,8 @@ function f2<T, U>(x: T, y: U) {
 >x : T
 
     var r14 = true ? x : E.A;
->r14 : T | E
->true ? x : E.A : T | E
+>r14 : E | T
+>true ? x : E.A : E | T
 >true : true
 >x : T
 >E.A : E

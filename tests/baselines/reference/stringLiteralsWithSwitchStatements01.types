@@ -3,7 +3,7 @@ let x: "foo";
 >x : "foo"
 
 let y: "foo" | "bar"; 
->y : "foo" | "bar"
+>y : "bar" | "foo"
 
 switch (x) {
 >x : "foo"
@@ -17,10 +17,10 @@ switch (x) {
 
         break;
     case y:
->y : "foo" | "bar"
+>y : "bar" | "foo"
 
         y;
->y : "foo" | "bar"
+>y : "bar" | "foo"
 
         break;
 }

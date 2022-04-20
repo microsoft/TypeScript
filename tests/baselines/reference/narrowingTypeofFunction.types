@@ -11,7 +11,7 @@ function f1(a: (F & Meta) | string) {
 
     if (typeof a === "function") {
 >typeof a === "function" : boolean
->typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >a : string | (F & Meta)
 >"function" : "function"
 
@@ -30,7 +30,7 @@ function f2<T>(x: (T & F) | T & string) {
 
     if (typeof x === "function") {
 >typeof x === "function" : boolean
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >x : (T & F) | (T & string)
 >"function" : "function"
 
@@ -50,7 +50,7 @@ function f3(x: { _foo: number } & number) {
 
     if (typeof x === "function") {
 >typeof x === "function" : boolean
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >x : { _foo: number; } & number
 >"function" : "function"
 

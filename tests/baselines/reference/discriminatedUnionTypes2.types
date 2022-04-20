@@ -394,9 +394,9 @@ function foo2(x: RuntimeValue & ({ type: 'number' } | { type: 'string' })) {
 
     if (x.type === 'number') {
 >x.type === 'number' : boolean
->x.type : "string" | "number"
+>x.type : "number" | "string"
 >x : ({ type: "number"; value: number; } & { type: "number"; }) | ({ type: "string"; value: string; } & { type: "string"; })
->type : "string" | "number"
+>type : "number" | "string"
 >'number' : "number"
 
         x.value;  // number

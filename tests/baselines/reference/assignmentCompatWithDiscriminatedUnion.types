@@ -49,7 +49,7 @@ namespace Example2 {
     type T = { a: 0,     b: 1 | 4 }     // T0
 >T : { a: 0; b: 1 | 4; } | { a: 1; b: 2; } | { a: 2; b: 3 | 4; }
 >a : 0
->b : 4 | 1
+>b : 1 | 4
 
            | { a: 1,     b: 2 }         // T1
 >a : 1
@@ -57,7 +57,7 @@ namespace Example2 {
 
            | { a: 2,     b: 3 | 4 };    // T2
 >a : 2
->b : 4 | 3
+>b : 3 | 4
 
     declare let s: S;
 >s : S
@@ -85,7 +85,7 @@ namespace Example3 {
     type T = { a: 0,     b: 1 | 4 }     // T0
 >T : { a: 0; b: 1 | 4; } | { a: 1; b: 2 | 4; } | { a: 2; b: 3; }
 >a : 0
->b : 4 | 1
+>b : 1 | 4
 
            | { a: 1,     b: 2 | 4 }     // T1
 >a : 1
@@ -122,7 +122,7 @@ namespace Example4 {
     type T = { a: 0,     b: 1 | 4 }             // T0
 >T : { a: 0; b: 1 | 4; } | { a: 1; b: 2; } | { a: 2; b: 3 | 4; c: string; }
 >a : 0
->b : 4 | 1
+>b : 1 | 4
 
            | { a: 1,     b: 2 }                 // T1
 >a : 1
@@ -130,7 +130,7 @@ namespace Example4 {
 
            | { a: 2,     b: 3 | 4, c: string }; // T2
 >a : 2
->b : 4 | 3
+>b : 3 | 4
 >c : string
 
     declare let s: S;
@@ -155,7 +155,7 @@ namespace Example5 {
     //       3 discriminant properties with 3 types a piece
     //       is 27 possible combinations.
     type N = 0 | 1 | 2;
->N : 0 | 2 | 1
+>N : 0 | 1 | 2
 
     type S = { a: N, b: N, c: N };
 >S : { a: N; b: N; c: N; }
@@ -325,7 +325,7 @@ namespace GH12052 {
 >IAxis : ILinearAxis | ICategoricalAxis
 
     type IAxisType = "linear" | "categorical";
->IAxisType : "linear" | "categorical"
+>IAxisType : "categorical" | "linear"
 
     function getAxisType(): IAxisType {
 >getAxisType : () => IAxisType
@@ -359,9 +359,9 @@ namespace GH12052 {
 
     good.type = getAxisType();
 >good.type = getAxisType() : IAxisType
->good.type : "linear" | "categorical"
+>good.type : "categorical" | "linear"
 >good : IAxis
->type : "linear" | "categorical"
+>type : "categorical" | "linear"
 >getAxisType() : IAxisType
 >getAxisType : () => IAxisType
 }

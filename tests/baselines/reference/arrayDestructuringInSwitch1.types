@@ -1,6 +1,6 @@
 === tests/cases/compiler/arrayDestructuringInSwitch1.ts ===
 export type Expression = BooleanLogicExpression | 'true' | 'false';
->Expression : BooleanLogicExpression | "true" | "false"
+>Expression : "false" | "true" | BooleanLogicExpression
 
 export type BooleanLogicExpression = ['and', ...Expression[]] | ['not', Expression];
 >BooleanLogicExpression : ["and", ...Expression[]] | ["not", Expression]
@@ -60,7 +60,7 @@ export function evaluate(expression: Expression): boolean {
   } else {
     return expression === 'true';
 >expression === 'true' : boolean
->expression : "true" | "false"
+>expression : "false" | "true"
 >'true' : "true"
   }
 }

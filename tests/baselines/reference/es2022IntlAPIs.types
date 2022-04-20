@@ -12,7 +12,7 @@ const timezoneNames = ['short', 'long', 'shortOffset', 'longOffset', 'shortGener
 >'longGeneric' : "longGeneric"
 
 for (const zoneName of timezoneNames) {
->zoneName : "short" | "long" | "shortOffset" | "longOffset" | "shortGeneric" | "longGeneric"
+>zoneName : "long" | "longGeneric" | "longOffset" | "short" | "shortGeneric" | "shortOffset"
 >timezoneNames : readonly ["short", "long", "shortOffset", "longOffset", "shortGeneric", "longGeneric"]
 
   var formatter = new Intl.DateTimeFormat('en-US', {
@@ -22,15 +22,15 @@ for (const zoneName of timezoneNames) {
 >Intl : typeof Intl
 >DateTimeFormat : { (locales?: string | string[], options?: Intl.DateTimeFormatOptions): Intl.DateTimeFormat; new (locales?: string | string[], options?: Intl.DateTimeFormatOptions): Intl.DateTimeFormat; supportedLocalesOf(locales: string | string[], options?: Intl.DateTimeFormatOptions): string[]; readonly prototype: Intl.DateTimeFormat; }
 >'en-US' : "en-US"
->{    timeZone: 'America/Los_Angeles',    timeZoneName: zoneName,  } : { timeZone: string; timeZoneName: "short" | "long" | "shortOffset" | "longOffset" | "shortGeneric" | "longGeneric"; }
+>{    timeZone: 'America/Los_Angeles',    timeZoneName: zoneName,  } : { timeZone: string; timeZoneName: "long" | "longGeneric" | "longOffset" | "short" | "shortGeneric" | "shortOffset"; }
 
     timeZone: 'America/Los_Angeles',
 >timeZone : string
 >'America/Los_Angeles' : "America/Los_Angeles"
 
     timeZoneName: zoneName,
->timeZoneName : "short" | "long" | "shortOffset" | "longOffset" | "shortGeneric" | "longGeneric"
->zoneName : "short" | "long" | "shortOffset" | "longOffset" | "shortGeneric" | "longGeneric"
+>timeZoneName : "long" | "longGeneric" | "longOffset" | "short" | "shortGeneric" | "shortOffset"
+>zoneName : "long" | "longGeneric" | "longOffset" | "short" | "shortGeneric" | "shortOffset"
 
   });
 }

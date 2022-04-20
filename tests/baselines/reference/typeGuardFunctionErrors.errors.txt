@@ -51,7 +51,7 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(123,20
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(128,34): error TS1230: A type predicate cannot reference element 'p1' in a binding pattern.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(132,34): error TS1230: A type predicate cannot reference element 'p1' in a binding pattern.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(136,39): error TS1230: A type predicate cannot reference element 'p1' in a binding pattern.
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(152,68): error TS2344: Type 'T | "d"' does not satisfy the constraint 'Keys'.
+tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(152,68): error TS2344: Type '"d" | T' does not satisfy the constraint 'Keys'.
   Type '"d"' is not assignable to type 'Keys'.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(159,31): error TS2344: Type 'Bar' does not satisfy the constraint 'Foo'.
   Types of property ''a'' are incompatible.
@@ -322,7 +322,7 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(166,54
     // expected an error, since Keys doesn't have a 'd'
     declare function hasKey<T extends Keys>(x: KeySet<T>): x is KeySet<T|'d'>;
                                                                        ~~~~~
-!!! error TS2344: Type 'T | "d"' does not satisfy the constraint 'Keys'.
+!!! error TS2344: Type '"d" | T' does not satisfy the constraint 'Keys'.
 !!! error TS2344:   Type '"d"' is not assignable to type 'Keys'.
     
     type Foo = { 'a': string; }

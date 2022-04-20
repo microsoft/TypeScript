@@ -163,7 +163,7 @@ throw aModule;
 >aModule : typeof M
 
 throw typeof M;
->typeof M : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof M : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >M : typeof M
 
 var aClassInModule = new M.A();

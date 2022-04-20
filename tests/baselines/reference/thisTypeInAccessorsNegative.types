@@ -8,7 +8,7 @@ interface Foo {
 }
 interface Bar {
     wrong: "place" | "time" | "method" | "technique";
->wrong : "place" | "time" | "method" | "technique"
+>wrong : "method" | "place" | "technique" | "time"
 }
 const mismatch = {
 >mismatch : { n: number; x: number; }
@@ -30,9 +30,9 @@ const mismatch = {
 >this : Bar
 >n : number
 >this.wrong = "method" : "method"
->this.wrong : "place" | "time" | "method" | "technique"
+>this.wrong : "method" | "place" | "technique" | "time"
 >this : Bar
->wrong : "place" | "time" | "method" | "technique"
+>wrong : "method" | "place" | "technique" | "time"
 >"method" : "method"
 }
 const contextual: Foo = {

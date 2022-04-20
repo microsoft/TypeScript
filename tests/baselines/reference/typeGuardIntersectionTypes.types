@@ -134,7 +134,7 @@ function hasLegs(x: Beast): x is Legged { return x && typeof x.legs === 'number'
 >x && typeof x.legs === 'number' : boolean
 >x : Beast
 >typeof x.legs === 'number' : boolean
->typeof x.legs : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x.legs : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >x.legs : number | undefined
 >x : Beast
 >legs : number | undefined

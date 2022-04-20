@@ -18,7 +18,7 @@ export function removeClass (node:HTMLElement, className:string) {
 >_classNameRegexp(className) : any
 >_classNameRegexp : any
 >className : string
->function (everything, leftDelimiter, name, rightDelimiter) {		return leftDelimiter.length + rightDelimiter.length === 2 ? ' ' : '';	} : (everything: string, leftDelimiter: any, name: any, rightDelimiter: any) => " " | ""
+>function (everything, leftDelimiter, name, rightDelimiter) {		return leftDelimiter.length + rightDelimiter.length === 2 ? ' ' : '';	} : (everything: string, leftDelimiter: any, name: any, rightDelimiter: any) => "" | " "
 >everything : string
 >leftDelimiter : any
 >name : any

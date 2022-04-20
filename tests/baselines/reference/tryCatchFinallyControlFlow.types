@@ -629,21 +629,21 @@ function notallowed(arg: number) {
 >err : unknown
 
         state.tag;
->state.tag : "one" | "two" | "three"
+>state.tag : "one" | "three" | "two"
 >state : State
->tag : "one" | "two" | "three"
+>tag : "one" | "three" | "two"
 
         if (state.tag !== "one" && state.tag !== "two") {
 >state.tag !== "one" && state.tag !== "two" : boolean
 >state.tag !== "one" : boolean
->state.tag : "one" | "two" | "three"
+>state.tag : "one" | "three" | "two"
 >state : State
->tag : "one" | "two" | "three"
+>tag : "one" | "three" | "two"
 >"one" : "one"
 >state.tag !== "two" : boolean
->state.tag : "two" | "three"
+>state.tag : "three" | "two"
 >state : { tag: "two"; } | { tag: "three"; }
->tag : "two" | "three"
+>tag : "three" | "two"
 >"two" : "two"
 
             console.log(state.tag);

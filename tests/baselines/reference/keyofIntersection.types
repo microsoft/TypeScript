@@ -8,10 +8,10 @@ type B = { b: string };
 >b : string
 
 type T01 = keyof (A & B);  // "a" | "b"
->T01 : "b" | "a"
+>T01 : "a" | "b"
 
 type T02<T> = keyof (T & B);  // "b" | keyof T
->T02 : keyof T | "b"
+>T02 : "b" | keyof T
 
 type T03<U> = keyof (A & U);  // "a" | keyof U
 >T03 : "a" | keyof U
@@ -20,13 +20,13 @@ type T04<T, U> = keyof (T & U);  // keyof T | keyof U
 >T04 : keyof T | keyof U
 
 type T05 = T02<A>;  // "a" | "b"
->T05 : "b" | "a"
+>T05 : "a" | "b"
 
 type T06 = T03<B>;  // "a" | "b"
->T06 : "b" | "a"
+>T06 : "a" | "b"
 
 type T07 = T04<A, B>;  // "a" | "b"
->T07 : "b" | "a"
+>T07 : "a" | "b"
 
 // Repros from #22291
 

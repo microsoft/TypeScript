@@ -24,7 +24,7 @@ enum AlienAnimalTypes {
 };
 
 type AnimalTypes = TerrestrialAnimalTypes | AlienAnimalTypes;
->AnimalTypes : TerrestrialAnimalTypes | AlienAnimalTypes
+>AnimalTypes : AlienAnimalTypes | TerrestrialAnimalTypes
 
 interface TerrestrialCat {
   type: TerrestrialAnimalTypes.CAT;

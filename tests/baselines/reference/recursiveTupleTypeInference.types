@@ -2,7 +2,7 @@
 // Repro from #37475
 
 export type A = "number" | "null" | A[];
->A : "number" | "null" | A[]
+>A : "null" | "number" | A[]
 
 export type F<T> = null extends T
 >F : F<T>
@@ -24,9 +24,9 @@ interface K {
 
 const gK: { [key in keyof K]: A } = { b: ["number", "null"] };
 >gK : { b: A; }
->{ b: ["number", "null"] } : { b: ("number" | "null")[]; }
->b : ("number" | "null")[]
->["number", "null"] : ("number" | "null")[]
+>{ b: ["number", "null"] } : { b: ("null" | "number")[]; }
+>b : ("null" | "number")[]
+>["number", "null"] : ("null" | "number")[]
 >"number" : "number"
 >"null" : "null"
 

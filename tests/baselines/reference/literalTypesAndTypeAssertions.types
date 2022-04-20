@@ -52,7 +52,7 @@ let { c = "foo" } = { c: "bar" as "bar" };
 >"bar" : "bar"
 
 let { d = "foo" as "foo" } = { d: "bar" as "bar" };
->d : "foo" | "bar"
+>d : "bar" | "foo"
 >"foo" as "foo" : "foo"
 >"foo" : "foo"
 >{ d: "bar" as "bar" } : { d?: "bar"; }

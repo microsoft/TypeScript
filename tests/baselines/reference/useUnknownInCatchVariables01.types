@@ -25,7 +25,7 @@ catch (e) {
 
     if (typeof e === "string") {
 >typeof e === "string" : boolean
->typeof e : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof e : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >e : unknown
 >"string" : "string"
 
@@ -56,7 +56,7 @@ catch (e) {
     }
     if (typeof e === "number") {
 >typeof e === "number" : boolean
->typeof e : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof e : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >e : unknown
 >"number" : "number"
 

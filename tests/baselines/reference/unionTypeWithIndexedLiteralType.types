@@ -6,7 +6,7 @@ interface Idx { [index: string]: U; }
 >index : string
 
 type U = Idx | I | "lit";
->U : I | Idx | "lit"
+>U : "lit" | I | Idx
 
 const u: U = { x: "lit" };
 >u : U

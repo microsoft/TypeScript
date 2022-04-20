@@ -37,7 +37,7 @@ class Options {
 >Options : Options
 
     visible: "yes" | "no";
->visible : "yes" | "no"
+>visible : "no" | "yes"
 }
 
 type Dictionary<T> = { [x: string]: T };
@@ -58,10 +58,10 @@ type K00 = keyof any;  // string
 >K00 : string | number | symbol
 
 type K01 = keyof string;  // "toString" | "charAt" | ...
->K01 : number | "length" | "toString" | "concat" | "slice" | "indexOf" | "lastIndexOf" | "charAt" | "charCodeAt" | "localeCompare" | "match" | "replace" | "search" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "substr" | "valueOf"
+>K01 : number | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "length" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substr" | "substring" | "toLocaleLowerCase" | "toLocaleUpperCase" | "toLowerCase" | "toString" | "toUpperCase" | "trim" | "valueOf"
 
 type K02 = keyof number;  // "toString" | "toFixed" | "toExponential" | ...
->K02 : "toString" | "toLocaleString" | "toFixed" | "toExponential" | "toPrecision" | "valueOf"
+>K02 : "toExponential" | "toFixed" | "toLocaleString" | "toPrecision" | "toString" | "valueOf"
 
 type K03 = keyof boolean;  // "valueOf"
 >K03 : "valueOf"
@@ -98,7 +98,7 @@ type K14 = keyof Object;  // "constructor" | "toString" | ...
 >K14 : keyof Object
 
 type K15 = keyof E;  // "toString" | "toFixed" | "toExponential" | ...
->K15 : "toString" | "toLocaleString" | "toFixed" | "toExponential" | "toPrecision" | "valueOf"
+>K15 : "toExponential" | "toFixed" | "toLocaleString" | "toPrecision" | "toString" | "valueOf"
 
 type K16 = keyof [string, number];  // "0" | "1" | "length" | "toString" | ...
 >K16 : keyof [string, number]
@@ -107,7 +107,7 @@ type K17 = keyof (Shape | Item);  // "name"
 >K17 : "name"
 
 type K18 = keyof (Shape & Item);  // "name" | "width" | "height" | "visible" | "price"
->K18 : "name" | "width" | "height" | "visible" | "price"
+>K18 : "height" | "name" | "price" | "visible" | "width"
 
 type K19 = keyof NumericallyIndexed<Shape> // never
 >K19 : number
@@ -125,7 +125,7 @@ type NAME = "name";
 >NAME : "name"
 
 type WIDTH_OR_HEIGHT = "width" | "height";
->WIDTH_OR_HEIGHT : "width" | "height"
+>WIDTH_OR_HEIGHT : "height" | "width"
 
 type Q10 = Shape["name"];  // string
 >Q10 : string
@@ -166,7 +166,7 @@ type Q36 = [string, number]["1"];  // string
 >Q36 : number
 
 type Q40 = (Shape | Options)["visible"];  // boolean | "yes" | "no"
->Q40 : boolean | "yes" | "no"
+>Q40 : boolean | "no" | "yes"
 
 type Q41 = (Shape & Options)["visible"];  // true & "yes" | true & "no" | false & "yes" | false & "no"
 >Q41 : never
@@ -225,7 +225,7 @@ function f10(shape: Shape) {
 >getProperty(shape, cond ? "width" : "height") : number
 >getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
 >shape : Shape
->cond ? "width" : "height" : "width" | "height"
+>cond ? "width" : "height" : "height" | "width"
 >cond : boolean
 >"width" : "width"
 >"height" : "height"
@@ -251,7 +251,7 @@ function f10(shape: Shape) {
 >setProperty(shape, cond ? "width" : "height", 10) : void
 >setProperty : <T, K extends keyof T>(obj: T, key: K, value: T[K]) => void
 >shape : Shape
->cond ? "width" : "height" : "width" | "height"
+>cond ? "width" : "height" : "height" | "width"
 >cond : boolean
 >"width" : "width"
 >"height" : "height"
@@ -391,7 +391,7 @@ function f20(component: Component<Shape>) {
 >component.getProperty : <K extends keyof Shape>(key: K) => Shape[K]
 >component : Component<Shape>
 >getProperty : <K extends keyof Shape>(key: K) => Shape[K]
->cond ? "width" : "height" : "width" | "height"
+>cond ? "width" : "height" : "height" | "width"
 >cond : boolean
 >"width" : "width"
 >"height" : "height"
@@ -420,7 +420,7 @@ function f20(component: Component<Shape>) {
 >component.setProperty : <K extends keyof Shape>(key: K, value: Shape[K]) => void
 >component : Component<Shape>
 >setProperty : <K extends keyof Shape>(key: K, value: Shape[K]) => void
->cond ? "width" : "height" : "width" | "height"
+>cond ? "width" : "height" : "height" | "width"
 >cond : boolean
 >"width" : "width"
 >"height" : "height"
@@ -507,7 +507,7 @@ function f31<K extends keyof Shape>(key: K) {
 }
 
 function f32<K extends "width" | "height">(key: K) {
->f32 : <K extends "width" | "height">(key: K) => Shape[K]
+>f32 : <K extends "height" | "width">(key: K) => Shape[K]
 >key : K
 
     const shape: Shape = { name: "foo", width: 5, height: 10, visible: true };
@@ -1725,9 +1725,9 @@ function onChangeGenericFunction<T>(handler: Handler<T & {preset: number}>) {
 
     handler.onChange('preset')
 >handler.onChange('preset') : void
->handler.onChange : (name: keyof T | "preset") => void
+>handler.onChange : (name: "preset" | keyof T) => void
 >handler : Handler<T & { preset: number; }>
->onChange : (name: keyof T | "preset") => void
+>onChange : (name: "preset" | keyof T) => void
 >'preset' : "preset"
 }
 
@@ -2169,8 +2169,8 @@ const cf1 = <T extends { [P in K]: string; } & { cool: string; }, K extends keyo
 };
 
 const cf2 = <T extends { [P in K | "cool"]: string; }, K extends keyof T>(t: T, k: K) =>
->cf2 : <T extends { [P in K | "cool"]: string; }, K extends keyof T>(t: T, k: K) => void
-><T extends { [P in K | "cool"]: string; }, K extends keyof T>(t: T, k: K) =>{    const s: string = t[k];    t.cool;} : <T extends { [P in K | "cool"]: string; }, K extends keyof T>(t: T, k: K) => void
+>cf2 : <T extends { [P in "cool" | K]: string; }, K extends keyof T>(t: T, k: K) => void
+><T extends { [P in K | "cool"]: string; }, K extends keyof T>(t: T, k: K) =>{    const s: string = t[k];    t.cool;} : <T extends { [P in "cool" | K]: string; }, K extends keyof T>(t: T, k: K) => void
 >t : T
 >k : K
 {

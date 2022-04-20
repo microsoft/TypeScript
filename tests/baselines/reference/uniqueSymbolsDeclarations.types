@@ -705,7 +705,7 @@ N["s"] || "";
 
 // conditionals
 Math.random() * 2 ? s : "a";
->Math.random() * 2 ? s : "a" : unique symbol | "a"
+>Math.random() * 2 ? s : "a" : "a" | unique symbol
 >Math.random() * 2 : number
 >Math.random() : number
 >Math.random : () => number
@@ -716,7 +716,7 @@ Math.random() * 2 ? s : "a";
 >"a" : "a"
 
 Math.random() * 2 ? N.s : "a";
->Math.random() * 2 ? N.s : "a" : unique symbol | "a"
+>Math.random() * 2 ? N.s : "a" : "a" | unique symbol
 >Math.random() * 2 : number
 >Math.random() : number
 >Math.random : () => number
@@ -729,7 +729,7 @@ Math.random() * 2 ? N.s : "a";
 >"a" : "a"
 
 Math.random() * 2 ? N["s"] : "a";
->Math.random() * 2 ? N["s"] : "a" : unique symbol | "a"
+>Math.random() * 2 ? N["s"] : "a" : "a" | unique symbol
 >Math.random() * 2 : number
 >Math.random() : number
 >Math.random : () => number

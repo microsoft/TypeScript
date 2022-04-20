@@ -15,7 +15,7 @@ let abcOrXyz: "ABC" | "XYZ" = abc || xyz;
 
 let abcOrXyzOrNumber: "ABC" | "XYZ" | number = abcOrXyz || 100;
 >abcOrXyzOrNumber : number | "ABC" | "XYZ"
->abcOrXyz || 100 : "ABC" | "XYZ" | 100
+>abcOrXyz || 100 : 100 | "ABC" | "XYZ"
 >abcOrXyz : "ABC" | "XYZ"
 >100 : 100
 

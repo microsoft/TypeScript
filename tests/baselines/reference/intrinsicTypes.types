@@ -3,7 +3,7 @@ type TU1 = Uppercase<'hello'>;  // "HELLO"
 >TU1 : "HELLO"
 
 type TU2 = Uppercase<'foo' | 'bar'>;  // "FOO" | "BAR"
->TU2 : "FOO" | "BAR"
+>TU2 : "BAR" | "FOO"
 
 type TU3 = Uppercase<string>;  // string
 >TU3 : string
@@ -21,7 +21,7 @@ type TL1 = Lowercase<'HELLO'>;  // "hello"
 >TL1 : "hello"
 
 type TL2 = Lowercase<'FOO' | 'BAR'>;  // "foo" | "bar"
->TL2 : "foo" | "bar"
+>TL2 : "bar" | "foo"
 
 type TL3 = Lowercase<string>;  // string
 >TL3 : string
@@ -39,7 +39,7 @@ type TC1 = Capitalize<'hello'>;  // "Hello"
 >TC1 : "Hello"
 
 type TC2 = Capitalize<'foo' | 'bar'>;  // "Foo" | "Bar"
->TC2 : "Foo" | "Bar"
+>TC2 : "Bar" | "Foo"
 
 type TC3 = Capitalize<string>;  // string
 >TC3 : string
@@ -57,7 +57,7 @@ type TN1 = Uncapitalize<'Hello'>;  // "hello"
 >TN1 : "hello"
 
 type TN2 = Uncapitalize<'Foo' | 'Bar'>;  // "foo" | "bar"
->TN2 : "foo" | "bar"
+>TN2 : "bar" | "foo"
 
 type TN3 = Uncapitalize<string>;  // string
 >TN3 : string
@@ -127,12 +127,12 @@ function foo1<T extends string, U extends T>(s: string, x: Uppercase<T>, y: Uppe
 }
 
 function foo2<T extends 'foo' | 'bar'>(x: Uppercase<T>) {
->foo2 : <T extends "foo" | "bar">(x: Uppercase<T>) => void
+>foo2 : <T extends "bar" | "foo">(x: Uppercase<T>) => void
 >x : Uppercase<T>
 
     let s: 'FOO' | 'BAR' = x;
->s : "FOO" | "BAR"
->x : "FOO" | "BAR"
+>s : "BAR" | "FOO"
+>x : "BAR" | "FOO"
 }
 
 declare function foo3<T extends string>(x: Uppercase<T>): T;

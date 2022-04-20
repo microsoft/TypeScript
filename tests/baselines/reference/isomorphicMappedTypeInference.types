@@ -541,8 +541,8 @@ let x0 = f20({ foo: 42, bar: "hello" });
 >"hello" : "hello"
 
 let x1 = f21({ foo: 42, bar: "hello" });
->x1 : "foo" | "bar"
->f21({ foo: 42, bar: "hello" }) : "foo" | "bar"
+>x1 : "bar" | "foo"
+>f21({ foo: 42, bar: "hello" }) : "bar" | "foo"
 >f21 : <T, K extends keyof T>(obj: Pick<T, K>) => K
 >{ foo: 42, bar: "hello" } : { foo: number; bar: string; }
 >foo : number
@@ -601,11 +601,11 @@ const myAny: any = {};
 >{} : {}
 
 const o1 = getProps(myAny, ['foo', 'bar']);
->o1 : Pick<any, "foo" | "bar">
->getProps(myAny, ['foo', 'bar']) : Pick<any, "foo" | "bar">
+>o1 : Pick<any, "bar" | "foo">
+>getProps(myAny, ['foo', 'bar']) : Pick<any, "bar" | "foo">
 >getProps : <T, K extends keyof T>(obj: T, list: K[]) => Pick<T, K>
 >myAny : any
->['foo', 'bar'] : ("foo" | "bar")[]
+>['foo', 'bar'] : ("bar" | "foo")[]
 >'foo' : "foo"
 >'bar' : "bar"
 
@@ -613,10 +613,10 @@ const o2: { foo: any; bar: any } = getProps(myAny, ['foo', 'bar']);
 >o2 : { foo: any; bar: any; }
 >foo : any
 >bar : any
->getProps(myAny, ['foo', 'bar']) : Pick<any, "foo" | "bar">
+>getProps(myAny, ['foo', 'bar']) : Pick<any, "bar" | "foo">
 >getProps : <T, K extends keyof T>(obj: T, list: K[]) => Pick<T, K>
 >myAny : any
->['foo', 'bar'] : ("foo" | "bar")[]
+>['foo', 'bar'] : ("bar" | "foo")[]
 >'foo' : "foo"
 >'bar' : "bar"
 

@@ -54,8 +54,8 @@ class Bar {
 }
 
 let u = "FOO" as "FOO" | "BAR";
->u : "FOO" | "BAR"
->"FOO" as "FOO" | "BAR" : "FOO" | "BAR"
+>u : "BAR" | "FOO"
+>"FOO" as "FOO" | "BAR" : "BAR" | "FOO"
 >"FOO" : "FOO"
 
 class CFA {
@@ -64,7 +64,7 @@ class CFA {
     static {
         u = "BAR";
 >u = "BAR" : "BAR"
->u : "FOO" | "BAR"
+>u : "BAR" | "FOO"
 >"BAR" : "BAR"
 
         u;  // should be "BAR"

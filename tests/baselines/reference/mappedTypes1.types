@@ -71,7 +71,7 @@ type T43 = { [P in "a" | "b"]: void };
 >T43 : { a: void; b: void; }
 
 type T44 = { [P in "a" | "b" | "0" | "1"]: void };
->T44 : { a: void; b: void; 0: void; 1: void; }
+>T44 : { 0: void; 1: void; a: void; b: void; }
 
 type T47 = { [P in string | "a" | "b" | "0" | "1"]: void };
 >T47 : { [x: string]: void; }

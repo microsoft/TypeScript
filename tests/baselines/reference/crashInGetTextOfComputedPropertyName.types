@@ -25,7 +25,7 @@ const { [itemId]: itemOk1 } = items
 >items : { [id: string]: AB; }
 
 typeof itemOk1 // pass
->typeof itemOk1 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof itemOk1 : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >itemOk1 : AB
 
 // --- test on second level ---
@@ -49,7 +49,7 @@ const itemOk2 = objWithItems.items[itemId]
 >itemId : "some-id"
 
 typeof itemOk2 // pass
->typeof itemOk2 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof itemOk2 : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >itemOk2 : AB
 
 const {
@@ -64,7 +64,7 @@ const {
 
 // in order to re-produce the error, uncomment next line:
 typeof itemWithTSError // :(
->typeof itemWithTSError : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof itemWithTSError : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >itemWithTSError : AB
 
 // will result in:

@@ -7,7 +7,7 @@ function stringify1(anything: { toString(): string } | undefined): string {
     return typeof anything === "string" ? anything.toUpperCase() : "";
 >typeof anything === "string" ? anything.toUpperCase() : "" : string
 >typeof anything === "string" : boolean
->typeof anything : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof anything : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >anything : { toString(): string; } | undefined
 >"string" : "string"
 >anything.toUpperCase() : string
@@ -24,7 +24,7 @@ function stringify2(anything: {} | undefined): string {
     return typeof anything === "string" ? anything.toUpperCase() : "";
 >typeof anything === "string" ? anything.toUpperCase() : "" : string
 >typeof anything === "string" : boolean
->typeof anything : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof anything : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >anything : {} | undefined
 >"string" : "string"
 >anything.toUpperCase() : string
@@ -41,7 +41,7 @@ function stringify3(anything: unknown | undefined): string { // should simplify 
     return typeof anything === "string" ? anything.toUpperCase() : "";
 >typeof anything === "string" ? anything.toUpperCase() : "" : string
 >typeof anything === "string" : boolean
->typeof anything : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof anything : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >anything : unknown
 >"string" : "string"
 >anything.toUpperCase() : string
@@ -59,7 +59,7 @@ function stringify4(anything: { toString?(): string } | undefined): string {
     return typeof anything === "string" ? anything.toUpperCase() : "";
 >typeof anything === "string" ? anything.toUpperCase() : "" : string
 >typeof anything === "string" : boolean
->typeof anything : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof anything : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >anything : { toString?(): string; } | undefined
 >"string" : "string"
 >anything.toUpperCase() : string

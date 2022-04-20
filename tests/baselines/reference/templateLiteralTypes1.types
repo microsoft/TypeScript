@@ -30,10 +30,10 @@ type EventName<S extends string> = `${S}Changed`;
 >EventName : `${S}Changed`
 
 type EN1 = EventName<'Foo' | 'Bar' | 'Baz'>;
->EN1 : "FooChanged" | "BarChanged" | "BazChanged"
+>EN1 : "BarChanged" | "BazChanged" | "FooChanged"
 
 type Loc = `${'top' | 'middle' | 'bottom'}-${'left' | 'center' | 'right'}`;
->Loc : "top-left" | "top-center" | "top-right" | "middle-left" | "middle-center" | "middle-right" | "bottom-left" | "bottom-center" | "bottom-right"
+>Loc : "bottom-center" | "bottom-left" | "bottom-right" | "middle-center" | "middle-left" | "middle-right" | "top-center" | "top-left" | "top-right"
 
 // Primitive literal types can be spread into templates
 
@@ -41,7 +41,7 @@ type ToString<T extends string | number | boolean | bigint> = `${T}`;
 >ToString : `${T}`
 
 type TS1 = ToString<'abc' | 42 | true | -1234n>;
->TS1 : "abc" | "true" | "42" | "-1234"
+>TS1 : "-1234" | "42" | "abc" | "true"
 >true : true
 >-1234n : -1234n
 >1234n : 1234n
@@ -76,11 +76,11 @@ function test<T extends 'foo' | 'bar'>(name: `get${Capitalize<T>}`) {
 
     let s1: string = name;
 >s1 : string
->name : "getFoo" | "getBar"
+>name : "getBar" | "getFoo"
 
     let s2: 'getFoo' | 'getBar' = name;
->s2 : "getFoo" | "getBar"
->name : "getFoo" | "getBar"
+>s2 : "getBar" | "getFoo"
+>name : "getBar" | "getFoo"
 }
 
 function fa1<T>(x: T, y: { [P in keyof T]: T[P] }, z: { [P in keyof T & string as `p_${P}`]: T[P] }) {
@@ -197,7 +197,7 @@ type T27 = FirstTwoAndRest<'a'>;  // unknown
 >T27 : unknown
 
 type HexDigit = '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' |'8' | '9' | 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'a' | 'b' | 'c' | 'd' | 'e' | 'f';
->HexDigit : "0" | "4" | "1" | "2" | "a" | "b" | "3" | "5" | "6" | "7" | "8" | "9" | "A" | "B" | "C" | "D" | "E" | "F" | "c" | "d" | "e" | "f"
+>HexDigit : "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "A" | "B" | "C" | "D" | "E" | "F" | "a" | "b" | "c" | "d" | "e" | "f"
 
 type HexColor<S extends string> =
 >HexColor : HexColor<S>
@@ -504,7 +504,7 @@ type U100000 = U1 & U2 & U3 & U4 & U5;  // Error
 >U100000 : any
 
 type Digits = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
->Digits : 0 | 1 | 4 | 2 | 3 | 6 | 5 | 7 | 8 | 9
+>Digits : 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
 
 type D100000 = `${Digits}${Digits}${Digits}${Digits}${Digits}`;  // Error
 >D100000 : any
@@ -597,7 +597,7 @@ let make = getProp2(obj2, 'cars.1.make');  // 'Trabant'
 // Repro from #46480
 
 export type Spacing =
->Spacing : "0" | `${number}px` | `${number}rem` | "s1" | "s4" | "s2" | "s3" | "s6" | "s5" | "s7" | "s8" | "s18" | "s9" | "s10" | "s11" | "s12" | "s13" | "s14" | "s15" | "s16" | "s17" | "s19" | "s20"
+>Spacing : "0" | "s1" | "s10" | "s11" | "s12" | "s13" | "s14" | "s15" | "s16" | "s17" | "s18" | "s19" | "s2" | "s20" | "s3" | "s4" | "s5" | "s6" | "s7" | "s8" | "s9" | `${number}px` | `${number}rem`
 
     | `0`
     | `${number}px`

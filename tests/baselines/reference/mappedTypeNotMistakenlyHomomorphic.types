@@ -58,7 +58,7 @@ const gen2TypeB: Gen2<ABC.B> = { v:  "I am B", b: "" };
 
 // 'v' ???
 type K = keyof Gen2<ABC.A>;
->K : "v" | "a"
+>K : "a" | "v"
 >ABC : any
 
 // :(

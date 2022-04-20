@@ -164,7 +164,7 @@ function assertNever(x: never): never {
 }
 
 function f10(x: true | false) {
->f10 : (x: true | false) => "true" | "false"
+>f10 : (x: true | false) => "false" | "true"
 >x : boolean
 >true : true
 >false : false
@@ -183,7 +183,7 @@ function f10(x: true | false) {
 }
 
 function f11(x: true | false) {
->f11 : (x: true | false) => "true" | "false"
+>f11 : (x: true | false) => "false" | "true"
 >x : boolean
 >true : true
 >false : false

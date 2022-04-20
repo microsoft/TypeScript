@@ -5245,10 +5245,44 @@ namespace ts {
     /* @internal */
     export type TypeId = number;
 
+
+    /**
+     * Lexicographic sorting doesn't work well with numbers (1|a < 11|a is false), so we need to use a constant number of
+     * characters in the prefix for all regimes, hence the manually incrementing string enum
+     */
+    /* @internal */
+    export const enum TypeSortRegime {
+        Undefined           = "a",
+        Null                = "b",
+        String              = "c", // for historical reasons, `string | number | bigint | false | true | symbol` is the anticipated order, even though it's not even close to alphabetical
+        Number              = "d",
+        BigInt              = "e",
+        FalseLiteral        = "f",
+        TrueLiteral         = "g", // `false | true` is the anticpated order, usually before other literals, regardless of alphabetical order
+        // boolean itself doesn't need to be handled - it's pulled out as a special case in printback
+        Symbol              = "h",
+        Void                = "i",
+        NonPrimitive        = "j",
+        NumberLiteral       = "k",
+        EnumNumberLiteral   = "l",
+        BigIntLiteral       = "m",
+        StringLiteral       = "n",
+        EnumStringLiteral   = "o",
+        StringMapping       = "p",
+        PatternLiteral      = "q",
+        UniqueESSymbol      = "r",
+        Intrinsic           = "s", // other random intrinsics (most are explicitly placed - unknown and never aren't included in the explicit sort, since they either subsume the union or disappear from it)
+        // everything else, sorted essentially randomly by type id
+    }
+
+    /* @internal */
+    export type TypeSortId = `${TypeSortRegime}|${string}`;
+
     // Properties common to all types
     export interface Type {
         flags: TypeFlags;                // Flags
         /* @internal */ id: TypeId;      // Unique ID
+        /* @internal */ sortId?: TypeSortId | "none";  // Hopefully-unique sort id
         /* @internal */ checker: TypeChecker;
         symbol: Symbol;                  // Symbol associated with type (if any)
         pattern?: DestructuringPattern;  // Destructuring pattern represented by type (if any)

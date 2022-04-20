@@ -61,8 +61,8 @@ const x2 = f2("abc", fo, fs);  // "abc"
 >fs : (x: string) => void
 
 const x3 = f3("abc", fo, fx);  // "abc" | "def"
->x3 : "def" | "abc"
->f3("abc", fo, fx) : "def" | "abc"
+>x3 : "abc" | "def"
+>f3("abc", fo, fx) : "abc" | "def"
 >f3 : <T>(obj: T, f1: (x: T) => void, f2: (f: (x: T) => void) => void) => T
 >"abc" : "abc"
 >fo : (x: Object) => void

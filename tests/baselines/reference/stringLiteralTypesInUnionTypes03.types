@@ -1,9 +1,9 @@
 === tests/cases/conformance/types/stringLiteral/stringLiteralTypesInUnionTypes03.ts ===
 type T = number | "foo" | "bar";
->T : number | "foo" | "bar"
+>T : number | "bar" | "foo"
 
 var x: "foo" | "bar" | number;
->x : number | "foo" | "bar"
+>x : number | "bar" | "foo"
 
 var y: T = undefined;
 >y : T
@@ -11,7 +11,7 @@ var y: T = undefined;
 
 if (x === "foo") {
 >x === "foo" : boolean
->x : number | "foo" | "bar"
+>x : number | "bar" | "foo"
 >"foo" : "foo"
 
     let a = x;
@@ -49,11 +49,11 @@ else {
 
 x = y;
 >x = y : T
->x : number | "foo" | "bar"
+>x : number | "bar" | "foo"
 >y : T
 
 y = x;
->y = x : number | "foo" | "bar"
+>y = x : number | "bar" | "foo"
 >y : T
->x : number | "foo" | "bar"
+>x : number | "bar" | "foo"
 

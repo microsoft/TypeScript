@@ -528,7 +528,7 @@ function bar<T extends unknown[]>(callback: (this: 1, ...args: T) => void) {
 }
 
 function baz<T extends 1 | 2>(callback: (this: 1, ...args: T extends 1 ? [unknown] : [unknown, unknown]) => void) {
->baz : <T extends 2 | 1>(callback: (this: 1, ...args: T extends 1 ? [unknown] : [unknown, unknown]) => void) => void
+>baz : <T extends 1 | 2>(callback: (this: 1, ...args: T extends 1 ? [unknown] : [unknown, unknown]) => void) => void
 >callback : (this: 1, ...args: T extends 1 ? [unknown] : [unknown, unknown]) => void
 >this : 1
 >args : T extends 1 ? [unknown] : [unknown, unknown]

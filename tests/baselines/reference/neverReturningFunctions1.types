@@ -279,7 +279,7 @@ function f30(x: string | number | undefined) {
 
     if (typeof x === "string") {
 >typeof x === "string" : boolean
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >x : string | number | undefined
 >"string" : "string"
 
@@ -334,7 +334,7 @@ function f31(x: { a: string | number }) {
 
     if (typeof x.a === "string") {
 >typeof x.a === "string" : boolean
->typeof x.a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x.a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >x.a : string | number
 >x : { a: string | number; }
 >a : string | number

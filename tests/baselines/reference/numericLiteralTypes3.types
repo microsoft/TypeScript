@@ -6,10 +6,10 @@ type B = 2 | 3;
 >B : 2 | 3
 
 type C = 1 | 2 | 3;
->C : 2 | 3 | 1
+>C : 1 | 2 | 3
 
 type D = 0 | 1 | 2;
->D : 0 | 2 | 1
+>D : 0 | 1 | 2
 
 function f1(a: A, b: B, c: C, d: D) {
 >f1 : (a: A, b: B, c: C, d: D) => void

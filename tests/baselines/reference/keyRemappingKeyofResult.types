@@ -27,7 +27,7 @@ type Remapped = { [K in keyof Orig as {} extends Record<K, any> ? never : K]: an
 // no string index signature, right?
 
 type Oops = Exclude<keyof Remapped, never>
->Oops : unique symbol | "str"
+>Oops : "str" | unique symbol
 
 declare let x: Oops;
 >x : Oops

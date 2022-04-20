@@ -304,10 +304,10 @@ type A<T> = T extends `${infer U}.${infer V}` ? U | V : never
 >A : A<T>
 
 type B = A<`test.1024`>;  // "test" | "1024"
->B : "test" | "1024"
+>B : "1024" | "test"
 
 type C = A<`test.${number}`>;  // "test" | `${number}`
->C : `${number}` | "test"
+>C : "test" | `${number}`
 
 type D<T> = T extends `${infer U}.${number}` ? U : never
 >D : D<T>
@@ -322,7 +322,7 @@ type G<T> = T extends `${infer U}.${infer V}` ? U | V : never
 >G : G<T>
 
 type H = G<`test.hoge`>;  // "test" | "hoge"
->H : "test" | "hoge"
+>H : "hoge" | "test"
 
 type I = G<`test.${string}`>;  // string ("test" | string reduces to string)
 >I : string
@@ -366,10 +366,10 @@ const templated2: Templated = `${value2} abc` as const;
 // Repro from #43620
 
 type Prefixes = "foo" | "bar";
->Prefixes : "foo" | "bar"
+>Prefixes : "bar" | "foo"
 
 type AllPrefixData = "foo:baz" | "bar:baz";
->AllPrefixData : "foo:baz" | "bar:baz"
+>AllPrefixData : "bar:baz" | "foo:baz"
 
 type PrefixData<P extends Prefixes> = `${P}:baz`;
 >PrefixData : `${P}:baz`
@@ -389,11 +389,11 @@ type Schema = { a: { b: { c: number } } };
 
 declare function chain<F extends keyof Schema>(field: F | `${F}.${F}`): void;
 >chain : <F extends "a">(field: F | `${F}.${F}`) => void
->field : F | `${F}.${F}`
+>field : `${F}.${F}` | F
 
 chain("a");
 >chain("a") : void
->chain : <F extends "a">(field: F | `${F}.${F}`) => void
+>chain : <F extends "a">(field: `${F}.${F}` | F) => void
 >"a" : "a"
 
 // Repro from #46125

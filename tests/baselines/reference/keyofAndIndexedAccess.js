@@ -1432,4 +1432,4 @@ declare function ff2<V extends string, T extends string>(dd: DictDict<V, T>, k1:
 declare const cf1: <T extends { [P in K]: string; } & {
     cool: string;
 }, K extends keyof T>(t: T, k: K) => void;
-declare const cf2: <T extends { [P in K | "cool"]: string; }, K extends keyof T>(t: T, k: K) => void;
+declare const cf2: <T extends { [P in "cool" | K]: string; }, K extends keyof T>(t: T, k: K) => void;

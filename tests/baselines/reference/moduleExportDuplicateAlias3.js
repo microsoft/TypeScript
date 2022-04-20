@@ -32,7 +32,7 @@ var result = apply.toFixed();
 
 
 //// [moduleExportAliasDuplicateAlias.d.ts]
-export const apply: typeof a | "ok" | 1 | undefined;
+export const apply: 1 | "ok" | typeof a | undefined;
 export { a as apply };
 declare function a(): void;
 //// [test.d.ts]

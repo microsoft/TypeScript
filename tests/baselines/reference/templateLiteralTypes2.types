@@ -3,7 +3,7 @@ function ft1<T extends string>(s: string, n: number, u: 'foo' | 'bar' | 'baz', t
 >ft1 : <T extends string>(s: string, n: number, u: 'foo' | 'bar' | 'baz', t: T) => void
 >s : string
 >n : number
->u : "foo" | "bar" | "baz"
+>u : "bar" | "baz" | "foo"
 >t : T
 
     const c1 = `abc${s}`;  // `abc${string}`
@@ -19,7 +19,7 @@ function ft1<T extends string>(s: string, n: number, u: 'foo' | 'bar' | 'baz', t
     const c3 = `abc${u}`;  // "abcfoo" | "abcbar" | "abcbaz"
 >c3 : string
 >`abc${u}` : string
->u : "foo" | "bar" | "baz"
+>u : "bar" | "baz" | "foo"
 
     const c4 = `abc${t}`;  // `abc${T}
 >c4 : string
@@ -37,9 +37,9 @@ function ft1<T extends string>(s: string, n: number, u: 'foo' | 'bar' | 'baz', t
 >n : number
 
     const d3: `abc${'foo' | 'bar' | 'baz'}` = `abc${u}`;
->d3 : "abcfoo" | "abcbar" | "abcbaz"
->`abc${u}` : "abcfoo" | "abcbar" | "abcbaz"
->u : "foo" | "bar" | "baz"
+>d3 : "abcbar" | "abcbaz" | "abcfoo"
+>`abc${u}` : "abcbar" | "abcbaz" | "abcfoo"
+>u : "bar" | "baz" | "foo"
 
     const d4: `abc${T}` = `abc${t}`;
 >d4 : `abc${T}`
@@ -110,7 +110,7 @@ function ft11(s: string, cond: boolean) {
 >s : string
 
     const c2: `foo${string}` | `bar${string}` = c1;  // `foo${string}` | `bar${string}`
->c2 : `foo${string}` | `bar${string}`
+>c2 : `bar${string}` | `foo${string}`
 >c1 : string
 
     const c3 = cond ? c1 : c2;  // `foo${string}` | `bar${string}`
@@ -118,7 +118,7 @@ function ft11(s: string, cond: boolean) {
 >cond ? c1 : c2 : string
 >cond : boolean
 >c1 : string
->c2 : `foo${string}` | `bar${string}`
+>c2 : `bar${string}` | `foo${string}`
 
     const c4 = cond ? c3 : `baz${s}`;  // `foo${string}` | `bar${string}` | widening `baz${string}`
 >c4 : string
@@ -129,7 +129,7 @@ function ft11(s: string, cond: boolean) {
 >s : string
 
     const c5: `foo${string}` | `bar${string}` | `baz${string}` = c4; // `foo${string}` | `bar${string}` | `baz${string}`
->c5 : `foo${string}` | `bar${string}` | `baz${string}`
+>c5 : `bar${string}` | `baz${string}` | `foo${string}`
 >c4 : string
 
     let v1 = c1;  // string
@@ -137,8 +137,8 @@ function ft11(s: string, cond: boolean) {
 >c1 : string
 
     let v2 = c2;  // `foo${string}` | `bar${string}`
->v2 : `foo${string}` | `bar${string}`
->c2 : `foo${string}` | `bar${string}`
+>v2 : `bar${string}` | `foo${string}`
+>c2 : `bar${string}` | `foo${string}`
 
     let v3 = c3;  // `foo${string}` | `bar${string}`
 >v3 : string
@@ -149,8 +149,8 @@ function ft11(s: string, cond: boolean) {
 >c4 : string
 
     let v5 = c5;  // `foo${string}` | `bar${string}` | `baz${string}`
->v5 : `foo${string}` | `bar${string}` | `baz${string}`
->c5 : `foo${string}` | `bar${string}` | `baz${string}`
+>v5 : `bar${string}` | `baz${string}` | `foo${string}`
+>c5 : `bar${string}` | `baz${string}` | `foo${string}`
 }
 
 function ft12(s: string) {
@@ -244,10 +244,10 @@ function ft13(s: string, cond: boolean) {
 >s : string
 
     let y2 = nonWidening(cond ? 'a' : `foo${s}`);
->y2 : `foo${string}` | "a"
->nonWidening(cond ? 'a' : `foo${s}`) : `foo${string}` | "a"
+>y2 : "a" | `foo${string}`
+>nonWidening(cond ? 'a' : `foo${s}`) : "a" | `foo${string}`
 >nonWidening : <T extends string | number | symbol>(x: T) => T
->cond ? 'a' : `foo${s}` : `foo${string}` | "a"
+>cond ? 'a' : `foo${s}` : "a" | `foo${string}`
 >cond : boolean
 >'a' : "a"
 >`foo${s}` : `foo${string}`
@@ -402,12 +402,12 @@ const interpolatedStyle = { rotate: 12 };
 
 function C2(transform: "-moz-initial" | (string & {})) { return 12; }
 >C2 : (transform: "-moz-initial" | (string & {})) => number
->transform : (string & {}) | "-moz-initial"
+>transform : "-moz-initial" | (string & {})
 >12 : 12
 
 C2(`rotate(${interpolatedStyle.rotate}dig)`);
 >C2(`rotate(${interpolatedStyle.rotate}dig)`) : number
->C2 : (transform: (string & {}) | "-moz-initial") => number
+>C2 : (transform: "-moz-initial" | (string & {})) => number
 >`rotate(${interpolatedStyle.rotate}dig)` : `rotate(${number}dig)`
 >interpolatedStyle.rotate : number
 >interpolatedStyle : { rotate: number; }

@@ -54,7 +54,7 @@ declare type T2 = ObjectHasKey<{
 declare function f1<A extends string, B extends string>(a: A, b: B): {
     [P in A | B]: any;
 };
-declare function f2<A extends string>(a: A): { [P in A | "x"]: any; };
+declare function f2<A extends string>(a: A): { [P in "x" | A]: any; };
 declare function f3(x: 'a' | 'b'): {
     a: any;
     b: any;

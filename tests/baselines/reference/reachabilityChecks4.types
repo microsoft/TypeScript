@@ -73,7 +73,7 @@ type Behavior = 'SLIDE' | 'SLIDE_OUT'
 >Behavior : "SLIDE" | "SLIDE_OUT"
 
 type Direction = 'LEFT' | 'RIGHT' | 'TOP' | 'BOTTOM'
->Direction : "LEFT" | "RIGHT" | "TOP" | "BOTTOM"
+>Direction : "BOTTOM" | "LEFT" | "RIGHT" | "TOP"
 
 interface Transition {
   behavior: Behavior

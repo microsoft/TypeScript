@@ -10,7 +10,7 @@ function getHashLength(hash: Hash): number {
 
     if (typeof hash !== "string") {
 >typeof hash !== "string" : boolean
->typeof hash : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof hash : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >hash : Hash
 >"string" : "string"
 
@@ -32,7 +32,7 @@ function getHashLength2<T extends { __tag__: unknown}>(hash: string & T): number
 
     if (typeof hash !== "string") {
 >typeof hash !== "string" : boolean
->typeof hash : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof hash : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >hash : string & T
 >"string" : "string"
 

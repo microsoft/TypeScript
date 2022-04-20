@@ -710,7 +710,7 @@ type Record1 = {
 >move : [number, "left" | "right"]
 
   jump: [number, 'up' | 'down'];
->jump : [number, "up" | "down"]
+>jump : [number, "down" | "up"]
 
   stop: string;
 >stop : string

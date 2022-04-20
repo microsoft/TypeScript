@@ -3422,7 +3422,7 @@ define(function () {
     if (typeof window !== 'undefined' && window.screen) {
 >typeof window !== 'undefined' && window.screen : Screen
 >typeof window !== 'undefined' : boolean
->typeof window : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof window : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >window : Window & typeof globalThis
 >'undefined' : "undefined"
 >window.screen : Screen
@@ -3488,7 +3488,7 @@ define(function () {
     if (typeof module !== 'undefined' && module.exports) {
 >typeof module !== 'undefined' && module.exports : any
 >typeof module !== 'undefined' : boolean
->typeof module : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof module : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >module : any
 >'undefined' : "undefined"
 >module.exports : any
@@ -3508,7 +3508,7 @@ define(function () {
     } else if (typeof define === 'function' && define.amd) {
 >typeof define === 'function' && define.amd : any
 >typeof define === 'function' : boolean
->typeof define : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof define : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >define : any
 >'function' : "function"
 >define.amd : any
@@ -3520,7 +3520,7 @@ define(function () {
 
     } else if (typeof window !== 'undefined') {
 >typeof window !== 'undefined' : boolean
->typeof window : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof window : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >window : Window & typeof globalThis
 >'undefined' : "undefined"
 

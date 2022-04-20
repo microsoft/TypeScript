@@ -1412,7 +1412,7 @@ function f20(o: Thing | undefined) {
 
     if (typeof o?.foo === "number") {
 >typeof o?.foo === "number" : boolean
->typeof o?.foo : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof o?.foo : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >o?.foo : string | number | undefined
 >o : Thing | undefined
 >foo : string | number | undefined
@@ -1425,7 +1425,7 @@ function f20(o: Thing | undefined) {
     }
     if (typeof o?.["foo"] === "number") {
 >typeof o?.["foo"] === "number" : boolean
->typeof o?.["foo"] : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof o?.["foo"] : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >o?.["foo"] : string | number | undefined
 >o : Thing | undefined
 >"foo" : "foo"
@@ -1438,7 +1438,7 @@ function f20(o: Thing | undefined) {
     }
     if (typeof o?.bar() === "number") {
 >typeof o?.bar() === "number" : boolean
->typeof o?.bar() : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof o?.bar() : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >o?.bar() : number | undefined
 >o?.bar : (() => number) | undefined
 >o : Thing | undefined
@@ -1471,7 +1471,7 @@ function f21(o: Thing | null) {
 
     if (typeof o?.foo === "number") {
 >typeof o?.foo === "number" : boolean
->typeof o?.foo : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof o?.foo : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >o?.foo : string | number | undefined
 >o : Thing | null
 >foo : string | number | undefined
@@ -1484,7 +1484,7 @@ function f21(o: Thing | null) {
     }
     if (typeof o?.["foo"] === "number") {
 >typeof o?.["foo"] === "number" : boolean
->typeof o?.["foo"] : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof o?.["foo"] : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >o?.["foo"] : string | number | undefined
 >o : Thing | null
 >"foo" : "foo"
@@ -1497,7 +1497,7 @@ function f21(o: Thing | null) {
     }
     if (typeof o?.bar() === "number") {
 >typeof o?.bar() === "number" : boolean
->typeof o?.bar() : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof o?.bar() : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >o?.bar() : number | undefined
 >o?.bar : (() => number) | undefined
 >o : Thing | null
@@ -1529,7 +1529,7 @@ function f22(o: Thing | undefined) {
 
     if (typeof o?.foo === "number") {
 >typeof o?.foo === "number" : boolean
->typeof o?.foo : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof o?.foo : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >o?.foo : string | number | undefined
 >o : Thing | undefined
 >foo : string | number | undefined
@@ -1548,7 +1548,7 @@ function f22(o: Thing | undefined) {
     }
     if (typeof o?.foo !== "number") {
 >typeof o?.foo !== "number" : boolean
->typeof o?.foo : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof o?.foo : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >o?.foo : string | number | undefined
 >o : Thing | undefined
 >foo : string | number | undefined
@@ -1567,7 +1567,7 @@ function f22(o: Thing | undefined) {
     }
     if (typeof o?.foo == "number") {
 >typeof o?.foo == "number" : boolean
->typeof o?.foo : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof o?.foo : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >o?.foo : string | number | undefined
 >o : Thing | undefined
 >foo : string | number | undefined
@@ -1586,7 +1586,7 @@ function f22(o: Thing | undefined) {
     }
     if (typeof o?.foo != "number") {
 >typeof o?.foo != "number" : boolean
->typeof o?.foo : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof o?.foo : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >o?.foo : string | number | undefined
 >o : Thing | undefined
 >foo : string | number | undefined
@@ -1611,7 +1611,7 @@ function f23(o: Thing | undefined) {
 
     if (typeof o?.foo === "undefined") {
 >typeof o?.foo === "undefined" : boolean
->typeof o?.foo : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof o?.foo : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >o?.foo : string | number | undefined
 >o : Thing | undefined
 >foo : string | number | undefined
@@ -1630,7 +1630,7 @@ function f23(o: Thing | undefined) {
     }
     if (typeof o?.foo !== "undefined") {
 >typeof o?.foo !== "undefined" : boolean
->typeof o?.foo : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof o?.foo : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >o?.foo : string | number | undefined
 >o : Thing | undefined
 >foo : string | number | undefined
@@ -1649,7 +1649,7 @@ function f23(o: Thing | undefined) {
     }
     if (typeof o?.foo == "undefined") {
 >typeof o?.foo == "undefined" : boolean
->typeof o?.foo : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof o?.foo : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >o?.foo : string | number | undefined
 >o : Thing | undefined
 >foo : string | number | undefined
@@ -1668,7 +1668,7 @@ function f23(o: Thing | undefined) {
     }
     if (typeof o?.foo != "undefined") {
 >typeof o?.foo != "undefined" : boolean
->typeof o?.foo : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof o?.foo : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >o?.foo : string | number | undefined
 >o : Thing | undefined
 >foo : string | number | undefined
@@ -1744,7 +1744,7 @@ function f30(o: Thing | undefined) {
 >assert(typeof o?.foo === "number") : void
 >assert : (x: unknown) => asserts x
 >typeof o?.foo === "number" : boolean
->typeof o?.foo : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof o?.foo : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >o?.foo : string | number | undefined
 >o : Thing | undefined
 >foo : string | number | undefined
@@ -1825,7 +1825,7 @@ function f41(o: Thing | undefined) {
 >o : Thing | undefined
 
     switch (typeof o?.foo) {
->typeof o?.foo : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof o?.foo : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >o?.foo : string | number | undefined
 >o : Thing | undefined
 >foo : string | number | undefined
@@ -1886,9 +1886,9 @@ function getArea(shape?: Shape) {
 >shape : Shape | undefined
 
     switch (shape?.type) {
->shape?.type : "rectangle" | "circle" | undefined
+>shape?.type : "circle" | "rectangle" | undefined
 >shape : Shape | undefined
->type : "rectangle" | "circle" | undefined
+>type : "circle" | "rectangle" | undefined
 
         case 'circle':
 >'circle' : "circle"

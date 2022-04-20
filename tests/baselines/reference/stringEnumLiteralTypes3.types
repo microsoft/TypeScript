@@ -13,12 +13,12 @@ type Yes = Choice.Yes;
 >Choice : any
 
 type YesNo = Choice.Yes | Choice.No;
->YesNo : Choice.Yes | Choice.No
+>YesNo : Choice.No | Choice.Yes
 >Choice : any
 >Choice : any
 
 type NoYes = Choice.No | Choice.Yes;
->NoYes : Choice.Yes | Choice.No
+>NoYes : Choice.No | Choice.Yes
 >Choice : any
 >Choice : any
 
@@ -102,9 +102,9 @@ function f3(a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) {
 >b : YesNo
 
     c = c;
->c = c : Choice.Yes | Choice.No
+>c = c : Choice.No | Choice.Yes
 >c : UnknownYesNo
->c : Choice.Yes | Choice.No
+>c : Choice.No | Choice.Yes
 
     c = d;
 >c = d : Choice

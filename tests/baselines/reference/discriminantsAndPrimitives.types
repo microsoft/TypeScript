@@ -23,14 +23,14 @@ function f1(x: Foo | Bar | string) {
 
     if (typeof x !== 'string') {
 >typeof x !== 'string' : boolean
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >x : string | Foo | Bar
 >'string' : "string"
 
         switch(x.kind) {
->x.kind : "foo" | "bar"
+>x.kind : "bar" | "foo"
 >x : Foo | Bar
->kind : "foo" | "bar"
+>kind : "bar" | "foo"
 
             case 'foo':
 >'foo' : "foo"
@@ -49,14 +49,14 @@ function f2(x: Foo | Bar | string | undefined) {
 
     if (typeof x === "object") {
 >typeof x === "object" : boolean
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >x : string | Foo | Bar | undefined
 >"object" : "object"
 
         switch(x.kind) {
->x.kind : "foo" | "bar"
+>x.kind : "bar" | "foo"
 >x : Foo | Bar
->kind : "foo" | "bar"
+>kind : "bar" | "foo"
 
             case 'foo':
 >'foo' : "foo"
@@ -78,14 +78,14 @@ function f3(x: Foo | Bar | string | null) {
 >x && typeof x !== "string" : boolean | "" | null
 >x : string | Foo | Bar | null
 >typeof x !== "string" : boolean
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >x : string | Foo | Bar
 >"string" : "string"
 
         switch(x.kind) {
->x.kind : "foo" | "bar"
+>x.kind : "bar" | "foo"
 >x : Foo | Bar
->kind : "foo" | "bar"
+>kind : "bar" | "foo"
 
             case 'foo':
 >'foo' : "foo"
@@ -104,17 +104,17 @@ function f4(x: Foo | Bar | string | number | null) {
 >null : null
 
     if (x && typeof x === "object") {
->x && typeof x === "object" : boolean | "" | 0 | null
+>x && typeof x === "object" : boolean | 0 | "" | null
 >x : string | number | Foo | Bar | null
 >typeof x === "object" : boolean
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >x : string | number | Foo | Bar
 >"object" : "object"
 
         switch(x.kind) {
->x.kind : "foo" | "bar"
+>x.kind : "bar" | "foo"
 >x : Foo | Bar
->kind : "foo" | "bar"
+>kind : "bar" | "foo"
 
             case 'foo':
 >'foo' : "foo"

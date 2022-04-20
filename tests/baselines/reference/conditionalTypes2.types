@@ -69,7 +69,7 @@ function isFunction<T>(value: T): value is Extract<T, Function> {
 
     return typeof value === "function";
 >typeof value === "function" : boolean
->typeof value : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >value : T
 >"function" : "function"
 }
@@ -369,7 +369,7 @@ type T3 = MaybeTrue<{ b: boolean }>;  // "yes"
 // Repro from #28824
 
 type Union = 'a' | 'b';
->Union : "b" | "a"
+>Union : "a" | "b"
 
 type Product<A extends Union, B> = { f1: A, f2: B};
 >Product : Product<A, B>
@@ -381,7 +381,7 @@ type ProductUnion = Product<'a', 0> | Product<'b', 1>;
 
 // {a: "b"; b: "a"}
 type UnionComplement = {
->UnionComplement : { b: "a"; a: "b"; }
+>UnionComplement : { a: "b"; b: "a"; }
 
   [K in Union]: Exclude<Union, K>
 };
@@ -393,7 +393,7 @@ type UCB = UnionComplement['b'];
 
 // {a: "a"; b: "b"}
 type UnionComplementComplement = {
->UnionComplementComplement : { b: "b"; a: "a"; }
+>UnionComplementComplement : { a: "a"; b: "b"; }
 
   [K in Union]: Exclude<Union, Exclude<Union, K>>
 };
@@ -405,7 +405,7 @@ type UCCB = UnionComplementComplement['b'];
 
 // {a: Product<'b', 1>; b: Product<'a', 0>}
 type ProductComplement = {
->ProductComplement : { b: Product<"a", 0>; a: Product<"b", 1>; }
+>ProductComplement : { a: Product<"b", 1>; b: Product<"a", 0>; }
 
   [K in Union]: Exclude<ProductUnion, { f1: K }>
 >f1 : K
@@ -419,7 +419,7 @@ type PCB = ProductComplement['b'];
 
 // {a: Product<'a', 0>; b: Product<'b', 1>}
 type ProductComplementComplement = {
->ProductComplementComplement : { b: Product<"b", 1>; a: Product<"a", 0>; }
+>ProductComplementComplement : { a: Product<"a", 0>; b: Product<"b", 1>; }
 
   [K in Union]: Exclude<ProductUnion, Exclude<ProductUnion, { f1: K }>>
 >f1 : K

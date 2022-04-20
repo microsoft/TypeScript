@@ -4,7 +4,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
       Type '0 | 2' is not assignable to type '2'.
         Type '0' is not assignable to type '2'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithDiscriminatedUnion.ts(58,5): error TS2322: Type 'S' is not assignable to type 'T'.
-  Property 'c' is missing in type 'S' but required in type '{ a: 2; b: 4 | 3; c: string; }'.
+  Property 'c' is missing in type 'S' but required in type '{ a: 2; b: 3 | 4; c: string; }'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithDiscriminatedUnion.ts(82,5): error TS2322: Type 'S' is not assignable to type 'T'.
   Type 'S' is not assignable to type '{ a: N; b: N; c: 2; }'.
     Types of property 'c' are incompatible.
@@ -79,7 +79,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
         t = s;
         ~
 !!! error TS2322: Type 'S' is not assignable to type 'T'.
-!!! error TS2322:   Property 'c' is missing in type 'S' but required in type '{ a: 2; b: 4 | 3; c: string; }'.
+!!! error TS2322:   Property 'c' is missing in type 'S' but required in type '{ a: 2; b: 3 | 4; c: string; }'.
 !!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithDiscriminatedUnion.ts:52:36: 'c' is declared here.
     }
     

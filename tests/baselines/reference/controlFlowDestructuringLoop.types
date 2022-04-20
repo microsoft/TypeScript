@@ -16,7 +16,7 @@ function isNumVal(x: Val): x is NumVal {
 
     return typeof x.val === 'number';
 >typeof x.val === 'number' : boolean
->typeof x.val : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x.val : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >x.val : string | number
 >x : Val
 >val : string | number

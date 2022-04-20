@@ -6,7 +6,7 @@ function foo(x: unknown, b: boolean) {
 
     if (typeof x === 'object') {
 >typeof x === 'object' : boolean
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >x : unknown
 >'object' : "object"
 
@@ -19,7 +19,7 @@ function foo(x: unknown, b: boolean) {
     if (typeof x === 'object' && x) {
 >typeof x === 'object' && x : false | object | null
 >typeof x === 'object' : boolean
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >x : unknown
 >'object' : "object"
 >x : object | null
@@ -34,7 +34,7 @@ function foo(x: unknown, b: boolean) {
 >x && typeof x === 'object' : unknown
 >x : unknown
 >typeof x === 'object' : boolean
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >x : unknown
 >'object' : "object"
 
@@ -50,7 +50,7 @@ function foo(x: unknown, b: boolean) {
 >b : boolean
 >x : unknown
 >typeof x === 'object' : boolean
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >x : unknown
 >'object' : "object"
 
@@ -66,7 +66,7 @@ function foo(x: unknown, b: boolean) {
 >x : unknown
 >b : boolean
 >typeof x === 'object' : boolean
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >x : unknown
 >'object' : "object"
 
@@ -84,7 +84,7 @@ function foo(x: unknown, b: boolean) {
 >b : boolean
 >b : true
 >typeof x === 'object' : boolean
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >x : unknown
 >'object' : "object"
 
@@ -106,7 +106,7 @@ function foo(x: unknown, b: boolean) {
 >b : true
 >b : true
 >typeof x === 'object' : boolean
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >x : unknown
 >'object' : "object"
 
@@ -129,7 +129,7 @@ function f1(x: unknown): any {
 >x && typeof x === 'object' : unknown
 >x : unknown
 >typeof x === 'object' : boolean
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >x : unknown
 >'object' : "object"
 >x.hasOwnProperty('x') : boolean

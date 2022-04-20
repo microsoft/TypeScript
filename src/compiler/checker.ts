@@ -4129,6 +4129,7 @@ namespace ts {
             const result = new Type(checker, flags);
             typeCount++;
             result.id = typeCount;
+            result.sortId = undefined;
             tracing?.recordType(result);
             return result;
         }
@@ -14450,16 +14451,81 @@ namespace ts {
         }
 
         function containsType(types: readonly Type[], type: Type): boolean {
-            return binarySearch(types, type, getTypeId, compareValues) >= 0;
+            return binarySearch(types, type, identity, compareTypesForSort) >= 0;
         }
 
         function insertType(types: Type[], type: Type): boolean {
-            const index = binarySearch(types, type, getTypeId, compareValues);
+            const index = binarySearch(types, type, identity, compareTypesForSort);
             if (index < 0) {
                 types.splice(~index, 0, type);
                 return true;
             }
             return false;
+        }
+
+        function compareTypesForSort(a: Type, b: Type) {
+            const sortA = getTypeSortId(a);
+            const sortB = getTypeSortId(b);
+            if (sortA !== undefined && sortB !== undefined) {
+                return compareStringsCaseSensitive(sortA, sortB) || compareValues(a.id, b.id);
+            }
+            if (sortA !== undefined) {
+                return Comparison.LessThan;
+            }
+            if (sortB !== undefined) {
+                return Comparison.GreaterThan;
+            }
+            return compareValues(a.id, b.id);
+        }
+
+        function createTypeSortId(regime: TypeSortRegime, text: string): TypeSortId {
+            return `${regime}|${text}`;
+        }
+
+        function getTypeSortId(type: Type): TypeSortId | undefined {
+            if (type.sortId !== undefined) {
+                return type.sortId !== "none" ? type.sortId : undefined;
+            }
+            let result: TypeSortId | undefined;
+            if (type.flags & TypeFlags.Intrinsic) {
+                const intrinsicName = (type as IntrinsicType).intrinsicName;
+                result = createTypeSortId(
+                    intrinsicName === "undefined" ? TypeSortRegime.Undefined :
+                    intrinsicName === "null" ? TypeSortRegime.Null :
+                    intrinsicName === "string" ? TypeSortRegime.String :
+                    intrinsicName === "number" ? TypeSortRegime.Number :
+                    intrinsicName === "bigint" ? TypeSortRegime.BigInt :
+                    intrinsicName === "false" ? TypeSortRegime.FalseLiteral :
+                    intrinsicName === "true" ? TypeSortRegime.TrueLiteral :
+                    intrinsicName === "symbol" ? TypeSortRegime.Symbol :
+                    intrinsicName === "void" ? TypeSortRegime.Void :
+                    intrinsicName === "object" ? TypeSortRegime.NonPrimitive :
+                    TypeSortRegime.Intrinsic,
+                    intrinsicName
+                );
+            }
+            else if (type.flags & TypeFlags.TemplateLiteral) {
+                const texts = (type as TemplateLiteralType).texts;
+                result = createTypeSortId(TypeSortRegime.PatternLiteral, texts.join("{}"));
+            }
+            else if (type.flags & TypeFlags.StringMapping) {
+                result = createTypeSortId(TypeSortRegime.StringMapping, `${(type as StringMappingType).type.id}`);
+            }
+            else if (type.flags & TypeFlags.StringLiteral) {
+                result = createTypeSortId(type.symbol ? TypeSortRegime.EnumStringLiteral : TypeSortRegime.StringLiteral, (type as StringLiteralType).value);
+            }
+            else if (type.flags & TypeFlags.BigIntLiteral) {
+                result = createTypeSortId(TypeSortRegime.BigIntLiteral, (type as BigIntLiteralType).value.base10Value);
+            }
+            else if (type.flags & TypeFlags.NumberLiteral) {
+                const value = (type as NumberLiteralType).value;
+                result = createTypeSortId(type.symbol ? TypeSortRegime.EnumNumberLiteral : TypeSortRegime.NumberLiteral, isFinite(value) ? padLeft("" + value, 20, "0") : "" + value);
+            }
+            else if (type.flags & TypeFlags.ESSymbol) {
+                result = createTypeSortId(TypeSortRegime.UniqueESSymbol, "" + type.symbol.id);
+            }
+            type.sortId = result ?? "none";
+            return result;
         }
 
         function addTypeToUnion(typeSet: Type[], includes: TypeFlags, type: Type) {
@@ -14477,7 +14543,8 @@ namespace ts {
                 }
                 else {
                     const len = typeSet.length;
-                    const index = len && type.id > typeSet[len - 1].id ? ~len : binarySearch(typeSet, type, getTypeId, compareValues);
+                    const last = len && typeSet[len - 1];
+                    const index = last && compareTypesForSort(type, last) === Comparison.GreaterThan ? ~len : binarySearch(typeSet, type, identity, compareTypesForSort);
                     if (index < 0) {
                         typeSet.splice(~index, 0, type);
                     }
@@ -14641,7 +14708,7 @@ namespace ts {
                         includes & TypeFlags.Null || containsType(typeSet, unknownType) ? unknownType : nonNullUnknownType;
                 }
                 if (exactOptionalPropertyTypes && includes & TypeFlags.Undefined) {
-                    const missingIndex = binarySearch(typeSet, missingType, getTypeId, compareValues);
+                    const missingIndex = binarySearch(typeSet, missingType, identity, compareTypesForSort);
                     if (missingIndex >= 0 && containsType(typeSet, undefinedType)) {
                         orderedRemoveItemAt(typeSet, missingIndex);
                     }

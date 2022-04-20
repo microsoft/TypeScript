@@ -15,11 +15,11 @@ enum B { foo = "foo", bar = "bar" };
 >"bar" : "bar"
 
 type C = A | B.foo;
->C : A | B.foo
+>C : B.foo | A
 >B : any
 
 type D = A | "foo";
->D : A | "foo"
+>D : "foo" | A
 
 class List<T>
 >List : List<T>

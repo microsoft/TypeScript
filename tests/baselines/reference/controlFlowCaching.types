@@ -419,7 +419,7 @@ function f(dim, offsets, arr, acommon, centerAnchorLimit, g, has, lin) {
 >axisVector : any
 >{ x: isRtl ? -1 : 1, y: 0 } : { x: number; y: number; }
 >x : number
->isRtl ? -1 : 1 : 1 | -1
+>isRtl ? -1 : 1 : -1 | 1
 >isRtl : any
 >-1 : -1
 >1 : 1

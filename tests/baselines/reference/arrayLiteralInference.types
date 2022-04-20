@@ -62,7 +62,7 @@ export enum AppStyle {
 
 const appTypeStylesWithError: Map<AppType, Array<AppStyle>> = new Map([
 >appTypeStylesWithError : Map<AppType, AppStyle[]>
->new Map([    [AppType.Standard, [AppStyle.Standard, AppStyle.MiniApp]],    [AppType.Relationship, [AppStyle.Standard, AppStyle.Tree, AppStyle.TreeEntity]],    [AppType.AdvancedList, [AppStyle.Standard, AppStyle.MiniApp]]]) : Map<AppType.AdvancedList | AppType.Standard | AppType.Relationship, (AppStyle.Standard | AppStyle.MiniApp)[] | (AppStyle.Tree | AppStyle.TreeEntity | AppStyle.Standard)[]>
+>new Map([    [AppType.Standard, [AppStyle.Standard, AppStyle.MiniApp]],    [AppType.Relationship, [AppStyle.Standard, AppStyle.Tree, AppStyle.TreeEntity]],    [AppType.AdvancedList, [AppStyle.Standard, AppStyle.MiniApp]]]) : Map<AppType.AdvancedList | AppType.Relationship | AppType.Standard, (AppStyle.Standard | AppStyle.MiniApp)[] | (AppStyle.Tree | AppStyle.TreeEntity | AppStyle.Standard)[]>
 >Map : MapConstructor
 >[    [AppType.Standard, [AppStyle.Standard, AppStyle.MiniApp]],    [AppType.Relationship, [AppStyle.Standard, AppStyle.Tree, AppStyle.TreeEntity]],    [AppType.AdvancedList, [AppStyle.Standard, AppStyle.MiniApp]]] : ([AppType.Standard, (AppStyle.Standard | AppStyle.MiniApp)[]] | [AppType.Relationship, (AppStyle.Tree | AppStyle.TreeEntity | AppStyle.Standard)[]] | [AppType.AdvancedList, (AppStyle.Standard | AppStyle.MiniApp)[]])[]
 

@@ -185,8 +185,8 @@ function f3(shape: Shape) {
 >shape : Shape
 
     const x = pick(shape, "name", "location");  // { name: string, location: Point }
->x : Pick<Shape, "name" | "location">
->pick(shape, "name", "location") : Pick<Shape, "name" | "location">
+>x : Pick<Shape, "location" | "name">
+>pick(shape, "name", "location") : Pick<Shape, "location" | "name">
 >pick : <T, K extends keyof T>(obj: T, ...keys: K[]) => Pick<T, K>
 >shape : Shape
 >"name" : "name"
@@ -207,8 +207,8 @@ function f4() {
 >"bye" : "bye"
 
     const lengths = mapObject(rec, s => s.length);  // { foo: number, bar: number, baz: number }
->lengths : Record<"foo" | "bar" | "baz", number>
->mapObject(rec, s => s.length) : Record<"foo" | "bar" | "baz", number>
+>lengths : Record<"bar" | "baz" | "foo", number>
+>mapObject(rec, s => s.length) : Record<"bar" | "baz" | "foo", number>
 >mapObject : <K extends string, T, U>(obj: Record<K, T>, f: (x: T) => U) => Record<K, U>
 >rec : { foo: string; bar: string; baz: string; }
 >s => s.length : (s: string) => number

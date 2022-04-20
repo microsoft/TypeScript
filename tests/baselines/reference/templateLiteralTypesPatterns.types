@@ -17,24 +17,24 @@ type Protocol<T extends string, U extends string> = `${T}://${U}`;
 
 function download(hostSpec: Protocol<"http" | "https" | "ftp", string>) { }
 >download : (hostSpec: Protocol<"http" | "https" | "ftp", string>) => void
->hostSpec : `http://${string}` | `https://${string}` | `ftp://${string}`
+>hostSpec : `ftp://${string}` | `http://${string}` | `https://${string}`
 
 // ok, has protocol
 download("http://example.com/protocol");
 >download("http://example.com/protocol") : void
->download : (hostSpec: `http://${string}` | `https://${string}` | `ftp://${string}`) => void
+>download : (hostSpec: `ftp://${string}` | `http://${string}` | `https://${string}`) => void
 >"http://example.com/protocol" : "http://example.com/protocol"
 
 // issues error - no protocol
 download("example.com/noprotocol");
 >download("example.com/noprotocol") : void
->download : (hostSpec: `http://${string}` | `https://${string}` | `ftp://${string}`) => void
+>download : (hostSpec: `ftp://${string}` | `http://${string}` | `https://${string}`) => void
 >"example.com/noprotocol" : "example.com/noprotocol"
 
 // issues error, incorrect protocol
 download("gopher://example.com/protocol");
 >download("gopher://example.com/protocol") : void
->download : (hostSpec: `http://${string}` | `https://${string}` | `ftp://${string}`) => void
+>download : (hostSpec: `ftp://${string}` | `http://${string}` | `https://${string}`) => void
 >"gopher://example.com/protocol" : "gopher://example.com/protocol"
 
 const q: RequiresLeadingSlash extends string ? true : false = true;
@@ -70,44 +70,44 @@ type Pat<T extends string | null | undefined> = `${T}`
 
 declare function nullishes(x: Pat<null | undefined>): void;
 >nullishes : (x: Pat<null | undefined>) => void
->x : "undefined" | "null"
+>x : "null" | "undefined"
 >null : null
 
 // ok
 nullishes("null");
 >nullishes("null") : void
->nullishes : (x: "undefined" | "null") => void
+>nullishes : (x: "null" | "undefined") => void
 >"null" : "null"
 
 nullishes("undefined");
 >nullishes("undefined") : void
->nullishes : (x: "undefined" | "null") => void
+>nullishes : (x: "null" | "undefined") => void
 >"undefined" : "undefined"
 
 // not ok
 nullishes("0");
 >nullishes("0") : void
->nullishes : (x: "undefined" | "null") => void
+>nullishes : (x: "null" | "undefined") => void
 >"0" : "0"
 
 nullishes("false");
 >nullishes("false") : void
->nullishes : (x: "undefined" | "null") => void
+>nullishes : (x: "null" | "undefined") => void
 >"false" : "false"
 
 nullishes("NaN");
 >nullishes("NaN") : void
->nullishes : (x: "undefined" | "null") => void
+>nullishes : (x: "null" | "undefined") => void
 >"NaN" : "NaN"
 
 nullishes("");
 >nullishes("") : void
->nullishes : (x: "undefined" | "null") => void
+>nullishes : (x: "null" | "undefined") => void
 >"" : ""
 
 nullishes("other");
 >nullishes("other") : void
->nullishes : (x: "undefined" | "null") => void
+>nullishes : (x: "null" | "undefined") => void
 >"other" : "other"
 
 declare function numbers(x: `${number}`): void;
@@ -563,13 +563,13 @@ var aa: '0' & `${number}`;
 // Remove string literals from unions with matching template literals
 
 let t1: `foo${string}` | 'foo1' | '1foo';  // `foo${string}` | '1foo'
->t1 : `foo${string}` | "1foo"
+>t1 : "1foo" | `foo${string}`
 
 let t2: `foo1` | '1foo' | 'foofoo' | `foo${string}` | 'foox' | 'xfoo';  // `foo${string}` | '1foo' | 'xfoo'
->t2 : `foo${string}` | "1foo" | "xfoo"
+>t2 : "1foo" | "xfoo" | `foo${string}`
 
 let t3: `foo1` | '1foo' | 'foofoo' | `foo${string}` | 'foox' | 'xfoo' | `${number}foo`;  // `foo${string}` | xfoo' | `${number}foo`
->t3 : `foo${string}` | "xfoo" | `${number}foo`
+>t3 : "xfoo" | `${number}foo` | `foo${string}`
 
 var bb: `${number}`;
 >bb : `${number}`

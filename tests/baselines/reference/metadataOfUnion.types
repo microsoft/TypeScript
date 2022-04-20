@@ -15,7 +15,7 @@ class B {
 >PropDeco : (target: Object, propKey: string | symbol) => void
 
     x: "foo" | A;
->x : A | "foo"
+>x : "foo" | A
 
     @PropDeco
 >PropDeco : (target: Object, propKey: string | symbol) => void

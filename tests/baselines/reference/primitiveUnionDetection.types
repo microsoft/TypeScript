@@ -2,7 +2,7 @@
 // Repro from #46624
 
 type Kind = "one" | "two" | "three";
->Kind : "one" | "two" | "three"
+>Kind : "one" | "three" | "two"
 
 declare function getInterfaceFromString<T extends Kind>(options?: { type?: T } & { type?: Kind }): T;
 >getInterfaceFromString : <T extends Kind>(options?: {    type?: T;} & {    type?: Kind;}) => T

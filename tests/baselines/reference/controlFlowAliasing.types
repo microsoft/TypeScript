@@ -8,7 +8,7 @@ function f10(x: string | number) {
     const isString = typeof x === "string";
 >isString : boolean
 >typeof x === "string" : boolean
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >x : string | number
 >"string" : "string"
 
@@ -33,7 +33,7 @@ function f11(x: unknown) {
     const isString = typeof x === "string";
 >isString : boolean
 >typeof x === "string" : boolean
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >x : unknown
 >"string" : "string"
 
@@ -53,14 +53,14 @@ function f12(x: string | number | boolean) {
     const isString = typeof x === "string";
 >isString : boolean
 >typeof x === "string" : boolean
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >x : string | number | boolean
 >"string" : "string"
 
     const isNumber = typeof x === "number";
 >isNumber : boolean
 >typeof x === "number" : boolean
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >x : string | number | boolean
 >"number" : "number"
 
@@ -87,14 +87,14 @@ function f13(x: string | number | boolean) {
     const isString = typeof x === "string";
 >isString : boolean
 >typeof x === "string" : boolean
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >x : string | number | boolean
 >"string" : "string"
 
     const isNumber = typeof x === "number";
 >isNumber : boolean
 >typeof x === "number" : boolean
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >x : string | number | boolean
 >"number" : "number"
 
@@ -145,7 +145,7 @@ function f15(obj: { readonly x: string | number }) {
     const isString = typeof obj.x === 'string';
 >isString : boolean
 >typeof obj.x === 'string' : boolean
->typeof obj.x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof obj.x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >obj.x : string | number
 >obj : { readonly x: string | number; }
 >x : string | number
@@ -170,7 +170,7 @@ function f16(obj: { readonly x: string | number }) {
     const isString = typeof obj.x === 'string';
 >isString : boolean
 >typeof obj.x === 'string' : boolean
->typeof obj.x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof obj.x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >obj.x : string | number
 >obj : { readonly x: string | number; }
 >x : string | number
@@ -201,7 +201,7 @@ function f17(obj: readonly [string | number]) {
     const isString = typeof obj[0] === 'string';
 >isString : boolean
 >typeof obj[0] === 'string' : boolean
->typeof obj[0] : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof obj[0] : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >obj[0] : string | number
 >obj : readonly [string | number]
 >0 : 0
@@ -225,7 +225,7 @@ function f18(obj: readonly [string | number]) {
     const isString = typeof obj[0] === 'string';
 >isString : boolean
 >typeof obj[0] === 'string' : boolean
->typeof obj[0] : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof obj[0] : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >obj[0] : string | number
 >obj : readonly [string | number]
 >0 : 0
@@ -259,9 +259,9 @@ function f20(obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
     const isFoo = obj.kind === 'foo';
 >isFoo : boolean
 >obj.kind === 'foo' : boolean
->obj.kind : "foo" | "bar"
+>obj.kind : "bar" | "foo"
 >obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
->kind : "foo" | "bar"
+>kind : "bar" | "foo"
 >'foo' : "foo"
 
     if (isFoo) {
@@ -291,9 +291,9 @@ function f21(obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
     const isFoo: boolean = obj.kind === 'foo';
 >isFoo : boolean
 >obj.kind === 'foo' : boolean
->obj.kind : "foo" | "bar"
+>obj.kind : "bar" | "foo"
 >obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
->kind : "foo" | "bar"
+>kind : "bar" | "foo"
 >'foo' : "foo"
 
     if (isFoo) {
@@ -323,9 +323,9 @@ function f22(obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
     let isFoo = obj.kind === 'foo';
 >isFoo : boolean
 >obj.kind === 'foo' : boolean
->obj.kind : "foo" | "bar"
+>obj.kind : "bar" | "foo"
 >obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
->kind : "foo" | "bar"
+>kind : "bar" | "foo"
 >'foo' : "foo"
 
     if (isFoo) {
@@ -355,9 +355,9 @@ function f23(obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
     const isFoo = obj.kind === 'foo';
 >isFoo : boolean
 >obj.kind === 'foo' : boolean
->obj.kind : "foo" | "bar"
+>obj.kind : "bar" | "foo"
 >obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
->kind : "foo" | "bar"
+>kind : "bar" | "foo"
 >'foo' : "foo"
 
     obj = obj;
@@ -396,9 +396,9 @@ function f24(arg: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
     const isFoo = obj.kind === 'foo';
 >isFoo : boolean
 >obj.kind === 'foo' : boolean
->obj.kind : "foo" | "bar"
+>obj.kind : "bar" | "foo"
 >obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
->kind : "foo" | "bar"
+>kind : "bar" | "foo"
 >'foo' : "foo"
 
     if (isFoo) {
@@ -432,9 +432,9 @@ function f25(arg: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
     const isFoo = obj.kind === 'foo';
 >isFoo : boolean
 >obj.kind === 'foo' : boolean
->obj.kind : "foo" | "bar"
+>obj.kind : "bar" | "foo"
 >obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
->kind : "foo" | "bar"
+>kind : "bar" | "foo"
 >'foo' : "foo"
 
     if (isFoo) {
@@ -465,11 +465,11 @@ function f26(outer: { readonly obj: { kind: 'foo', foo: string } | { kind: 'bar'
     const isFoo = outer.obj.kind === 'foo';
 >isFoo : boolean
 >outer.obj.kind === 'foo' : boolean
->outer.obj.kind : "foo" | "bar"
+>outer.obj.kind : "bar" | "foo"
 >outer.obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
 >outer : { readonly obj: { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }; }
 >obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
->kind : "foo" | "bar"
+>kind : "bar" | "foo"
 >'foo' : "foo"
 
     if (isFoo) {
@@ -504,11 +504,11 @@ function f27(outer: { obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: nu
     const isFoo = outer.obj.kind === 'foo';
 >isFoo : boolean
 >outer.obj.kind === 'foo' : boolean
->outer.obj.kind : "foo" | "bar"
+>outer.obj.kind : "bar" | "foo"
 >outer.obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
 >outer : { obj: { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }; }
 >obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
->kind : "foo" | "bar"
+>kind : "bar" | "foo"
 >'foo' : "foo"
 
     if (isFoo) {
@@ -544,9 +544,9 @@ function f28(obj?: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) 
 >obj && obj.kind === 'foo' : boolean | undefined
 >obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; } | undefined
 >obj.kind === 'foo' : boolean
->obj.kind : "foo" | "bar"
+>obj.kind : "bar" | "foo"
 >obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
->kind : "foo" | "bar"
+>kind : "bar" | "foo"
 >'foo' : "foo"
 
     const isBar = obj && obj.kind === 'bar';
@@ -554,9 +554,9 @@ function f28(obj?: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) 
 >obj && obj.kind === 'bar' : boolean | undefined
 >obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; } | undefined
 >obj.kind === 'bar' : boolean
->obj.kind : "foo" | "bar"
+>obj.kind : "bar" | "foo"
 >obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
->kind : "foo" | "bar"
+>kind : "bar" | "foo"
 >'bar' : "bar"
 
     if (isFoo) {
@@ -588,14 +588,14 @@ function f30(obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
 >bar : number
 
     const kind = obj.kind;
->kind : "foo" | "bar"
->obj.kind : "foo" | "bar"
+>kind : "bar" | "foo"
+>obj.kind : "bar" | "foo"
 >obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
->kind : "foo" | "bar"
+>kind : "bar" | "foo"
 
     if (kind === 'foo') {
 >kind === 'foo' : boolean
->kind : "foo" | "bar"
+>kind : "bar" | "foo"
 >'foo' : "foo"
 
         obj.foo;
@@ -620,12 +620,12 @@ function f31(obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
 >bar : number
 
     const { kind } = obj;
->kind : "foo" | "bar"
+>kind : "bar" | "foo"
 >obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
 
     if (kind === 'foo') {
 >kind === 'foo' : boolean
->kind : "foo" | "bar"
+>kind : "bar" | "foo"
 >'foo' : "foo"
 
         obj.foo;
@@ -651,12 +651,12 @@ function f32(obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
 
     const { kind: k } = obj;
 >kind : any
->k : "foo" | "bar"
+>k : "bar" | "foo"
 >obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
 
     if (k === 'foo') {
 >k === 'foo' : boolean
->k : "foo" | "bar"
+>k : "bar" | "foo"
 >'foo' : "foo"
 
         obj.foo;
@@ -681,11 +681,11 @@ function f33(obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
 >bar : number
 
     const { kind } = obj;
->kind : "foo" | "bar"
+>kind : "bar" | "foo"
 >obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
 
     switch (kind) {
->kind : "foo" | "bar"
+>kind : "bar" | "foo"
 
         case 'foo': obj.foo; break;
 >'foo' : "foo"
@@ -711,7 +711,7 @@ class C10 {
         const thisX_isString = typeof this.x === 'string';
 >thisX_isString : boolean
 >typeof this.x === 'string' : boolean
->typeof this.x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof this.x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >this.x : string | number
 >this : this
 >x : string | number
@@ -720,7 +720,7 @@ class C10 {
         const xIsString = typeof x === 'string';
 >xIsString : boolean
 >typeof x === 'string' : boolean
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >x : string | number
 >'string' : "string"
 
@@ -756,7 +756,7 @@ class C11 {
         const thisX_isString = typeof this.x === 'string';
 >thisX_isString : boolean
 >typeof this.x === 'string' : boolean
->typeof this.x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof this.x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >this.x : string | number
 >this : this
 >x : string | number
@@ -765,7 +765,7 @@ class C11 {
         const xIsString = typeof x === 'string';
 >xIsString : boolean
 >typeof x === 'string' : boolean
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >x : string | number
 >'string' : "string"
 
@@ -817,13 +817,13 @@ function f40(obj: { kind: 'foo', foo?: string } | { kind: 'bar', bar?: number })
 >bar : number | undefined
 
     const { kind } = obj;
->kind : "foo" | "bar"
+>kind : "bar" | "foo"
 >obj : { kind: "foo"; foo?: string | undefined; } | { kind: "bar"; bar?: number | undefined; }
 
     const isFoo = kind == 'foo';
 >isFoo : boolean
 >kind == 'foo' : boolean
->kind : "foo" | "bar"
+>kind : "bar" | "foo"
 >'foo' : "foo"
 
     if (isFoo && obj.foo) {
@@ -856,9 +856,9 @@ function gg2(obj: Data) {
 
     if (obj.kind === 'str') {
 >obj.kind === 'str' : boolean
->obj.kind : "str" | "num"
+>obj.kind : "num" | "str"
 >obj : Data
->kind : "str" | "num"
+>kind : "num" | "str"
 >'str' : "str"
 
         let t: string = obj.payload;
@@ -878,12 +878,12 @@ function gg2(obj: Data) {
 
 function foo({ kind, payload }: Data) {
 >foo : ({ kind, payload }: Data) => void
->kind : "str" | "num"
+>kind : "num" | "str"
 >payload : string | number
 
     if (kind === 'str') {
 >kind === 'str' : boolean
->kind : "str" | "num"
+>kind : "num" | "str"
 >'str' : "str"
 
         let t: string = payload;
