@@ -207,6 +207,8 @@ namespace ts {
                 !(oldInfo = oldState!.fileInfos.get(sourceFilePath)) ||
                 // versions dont match
                 oldInfo.version !== info.version ||
+                // Implied formats dont match
+                oldInfo.impliedFormat !== info.impliedFormat ||
                 // Referenced files changed
                 !hasSameKeys(newReferences = referencedMap && referencedMap.getValues(sourceFilePath), oldReferencedMap && oldReferencedMap.getValues(sourceFilePath)) ||
                 // Referenced file was deleted in the new program
@@ -247,15 +249,6 @@ namespace ts {
             Debug.assert(!state.seenAffectedFiles || !state.seenAffectedFiles.size);
             state.seenAffectedFiles = state.seenAffectedFiles || new Set();
         }
-        if (useOldState) {
-            // Any time the interpretation of a source file changes, mark it as changed
-            forEachEntry(oldState!.fileInfos, (info, sourceFilePath) => {
-                if (state.fileInfos.has(sourceFilePath) && state.fileInfos.get(sourceFilePath)!.impliedFormat !== info.impliedFormat) {
-                    state.changedFilesSet.add(sourceFilePath);
-                }
-            });
-        }
-
         state.buildInfoEmitPending = !useOldState || state.changedFilesSet.size !== oldState!.changedFilesSet.size;
         return state;
     }

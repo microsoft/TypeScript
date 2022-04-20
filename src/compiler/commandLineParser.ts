@@ -341,6 +341,33 @@ namespace ts {
         defaultValueDescription: ScriptTarget.ES3,
     };
 
+    /*@internal*/
+    export const moduleOptionDeclaration: CommandLineOptionOfCustomType = {
+        name: "module",
+        shortName: "m",
+        type: new Map(getEntries({
+            none: ModuleKind.None,
+            commonjs: ModuleKind.CommonJS,
+            amd: ModuleKind.AMD,
+            system: ModuleKind.System,
+            umd: ModuleKind.UMD,
+            es6: ModuleKind.ES2015,
+            es2015: ModuleKind.ES2015,
+            es2020: ModuleKind.ES2020,
+            es2022: ModuleKind.ES2022,
+            esnext: ModuleKind.ESNext,
+            node12: ModuleKind.Node12,
+            nodenext: ModuleKind.NodeNext,
+        })),
+        affectsModuleResolution: true,
+        affectsEmit: true,
+        paramType: Diagnostics.KIND,
+        showInSimplifiedHelpView: true,
+        category: Diagnostics.Modules,
+        description: Diagnostics.Specify_what_module_code_is_generated,
+        defaultValueDescription: undefined,
+    };
+
     const commandOptionsWithoutBuild: CommandLineOption[] = [
         // CommandLine only options
         {
@@ -409,31 +436,7 @@ namespace ts {
 
         // Basic
         targetOptionDeclaration,
-        {
-            name: "module",
-            shortName: "m",
-            type: new Map(getEntries({
-                none: ModuleKind.None,
-                commonjs: ModuleKind.CommonJS,
-                amd: ModuleKind.AMD,
-                system: ModuleKind.System,
-                umd: ModuleKind.UMD,
-                es6: ModuleKind.ES2015,
-                es2015: ModuleKind.ES2015,
-                es2020: ModuleKind.ES2020,
-                es2022: ModuleKind.ES2022,
-                esnext: ModuleKind.ESNext,
-                node12: ModuleKind.Node12,
-                nodenext: ModuleKind.NodeNext,
-            })),
-            affectsModuleResolution: true,
-            affectsEmit: true,
-            paramType: Diagnostics.KIND,
-            showInSimplifiedHelpView: true,
-            category: Diagnostics.Modules,
-            description: Diagnostics.Specify_what_module_code_is_generated,
-            defaultValueDescription: undefined,
-        },
+        moduleOptionDeclaration,
         {
             name: "lib",
             type: "list",
@@ -2372,7 +2375,8 @@ namespace ts {
         }
     }
 
-    function getNameOfCompilerOptionValue(value: CompilerOptionsValue, customTypeMap: ESMap<string, string | number>): string | undefined {
+    /* @internal */
+    export function getNameOfCompilerOptionValue(value: CompilerOptionsValue, customTypeMap: ESMap<string, string | number>): string | undefined {
         // There is a typeMap associated with this command-line option so use it to map value back to its name
         return forEachEntry(customTypeMap, (mapValue, key) => {
             if (mapValue === value) {

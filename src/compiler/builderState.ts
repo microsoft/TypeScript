@@ -57,7 +57,7 @@ namespace ts {
             readonly version: string;
             signature: string | undefined;
             affectsGlobalScope: true | undefined;
-            impliedFormat: number | undefined;
+            impliedFormat: SourceFile["impliedNodeFormat"];
         }
 
         export interface ReadonlyManyToManyPathMap {
@@ -300,7 +300,12 @@ namespace ts {
                         }
                     }
                 }
-                fileInfos.set(sourceFile.resolvedPath, { version, signature: oldInfo && oldInfo.signature, affectsGlobalScope: isFileAffectingGlobalScope(sourceFile) || undefined, impliedFormat: sourceFile.impliedNodeFormat });
+                fileInfos.set(sourceFile.resolvedPath, {
+                    version,
+                    signature: oldInfo && oldInfo.signature,
+                    affectsGlobalScope: isFileAffectingGlobalScope(sourceFile) || undefined,
+                    impliedFormat: sourceFile.impliedNodeFormat
+                });
             }
 
             return {

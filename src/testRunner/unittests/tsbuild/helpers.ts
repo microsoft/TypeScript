@@ -199,10 +199,11 @@ interface Symbol {
     type ReadableProgramBuildInfoDiagnostic = string | [string, readonly ReusableDiagnostic[]];
     type ReadableProgramBuilderInfoFilePendingEmit = [string, "DtsOnly" | "Full"];
     type ReadableProgramBuildInfoEmitSignature = string | [string, string];
+    type ReadableFileInfo = Omit<BuilderState.FileInfo, "impliedFormat"> & { impliedFormat: string | undefined; };
     interface ReadableProgramBuildInfo {
         fileNames: readonly string[] | undefined;
         fileNamesList: readonly (readonly string[])[] | undefined;
-        fileInfos: MapLike<BuilderState.FileInfo> | undefined;
+        fileInfos: MapLike<ReadableFileInfo> | undefined;
         options: CompilerOptions | undefined;
         referencedMap?: MapLike<string[]>;
         exportedModulesMap?: MapLike<string[]>;
@@ -216,7 +217,7 @@ interface Symbol {
     type ReadableBuildInfo = Omit<BuildInfo, "program"> & { program: ReadableProgramBuildInfo | undefined; size: number; };
     function generateBuildInfoProgramBaseline(sys: System, buildInfoPath: string, buildInfo: BuildInfo) {
         const fileInfos: ReadableProgramBuildInfo["fileInfos"] = {};
-        buildInfo.program?.fileInfos?.forEach((fileInfo, index) => fileInfos[toFileName(index + 1 as ProgramBuildInfoFileId)] = toBuilderStateFileInfo(fileInfo));
+        buildInfo.program?.fileInfos?.forEach((fileInfo, index) => fileInfos[toFileName(index + 1 as ProgramBuildInfoFileId)] = toReadableFileInfo(fileInfo));
         const fileNamesList = buildInfo.program?.fileIdsList?.map(fileIdsListId => fileIdsListId.map(toFileName));
         const program: ReadableProgramBuildInfo | undefined = buildInfo.program && {
             fileNames: buildInfo.program.fileNames,
@@ -276,6 +277,14 @@ interface Symbol {
 
         function toFileNames(fileIdsListId: ProgramBuildInfoFileIdListId) {
             return fileNamesList![fileIdsListId - 1];
+        }
+
+        function toReadableFileInfo(fileInfo: ProgramBuildInfoFileInfo): ReadableFileInfo {
+            const info = toBuilderStateFileInfo(fileInfo);
+            return {
+                ...info,
+                impliedFormat: info.impliedFormat && getNameOfCompilerOptionValue(info.impliedFormat, moduleOptionDeclaration.type),
+            };
         }
 
         function toMapOfReferencedSet(referenceMap: ProgramBuildInfoReferencedMap | undefined): MapLike<string[]> | undefined {
@@ -490,7 +499,7 @@ interface Symbol {
     } {
         if (!text) return { buildInfo: text };
         const readableBuildInfo = JSON.parse(text) as ReadableBuildInfo;
-        let sanitizedFileInfos: MapLike<BuilderState.FileInfo> | undefined;
+        let sanitizedFileInfos: MapLike<ReadableFileInfo> | undefined;
         if (readableBuildInfo.program?.fileInfos) {
             sanitizedFileInfos = {};
             for (const id in readableBuildInfo.program.fileInfos) {

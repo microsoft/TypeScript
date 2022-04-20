@@ -214,17 +214,17 @@ export type { TheNum } from './const.cjs';
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true,
-        "impliedFormat": 1
+        "impliedFormat": "commonjs"
       },
       "../const.cts": {
         "version": "-11202312776-export type TheNum = 42;",
         "signature": "-9649133742-export declare type TheNum = 42;\n",
-        "impliedFormat": 1
+        "impliedFormat": "commonjs"
       },
       "../index.ts": {
         "version": "-9668872159-export type { TheNum } from './const.cjs';",
         "signature": "-9835135925-export type { TheNum } from './const.cjs';\n",
-        "impliedFormat": 99
+        "impliedFormat": "esnext"
       }
     },
     "options": {
@@ -698,17 +698,17 @@ exitCode:: ExitStatus.undefined
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true,
-        "impliedFormat": 1
+        "impliedFormat": "commonjs"
       },
       "../const.cts": {
         "version": "-11202312776-export type TheNum = 42;",
         "signature": "-9649133742-export declare type TheNum = 42;\n",
-        "impliedFormat": 1
+        "impliedFormat": "commonjs"
       },
       "../index.cts": {
         "version": "-9668872159-export type { TheNum } from './const.cjs';",
         "signature": "-9835135925-export type { TheNum } from './const.cjs';\n",
-        "impliedFormat": 1
+        "impliedFormat": "commonjs"
       }
     },
     "options": {
