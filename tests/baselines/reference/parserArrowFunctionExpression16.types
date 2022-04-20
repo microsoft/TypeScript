@@ -1,11 +1,13 @@
 === tests/cases/conformance/parser/ecmascript5/ArrowFunctionExpressions/parserArrowFunctionExpression16.ts ===
 true ? false ? (param): string => param : null : null
->true ? false ? (param): string => param : null : null : (param: any) => string
+>true ? false ? (param): string => param : null : any
 >true : true
->false ? (param): string => param : null : (param: any) => string
+>false ? (param): string => param : any
 >false : false
->(param): string => param : (param: any) => string
+>(param) : any
 >param : any
+>string => param : (string: any) => any
+>string : any
 >param : any
 >null : null
 >null : null

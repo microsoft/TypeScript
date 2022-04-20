@@ -4452,7 +4452,7 @@ namespace ts {
         }
 
         function tryParseParenthesizedArrowFunctionExpression(disallowReturnTypeInArrowFunction: boolean): Expression | undefined {
-            const triState = isParenthesizedArrowFunctionExpression();
+            const triState = isParenthesizedArrowFunctionExpression(disallowReturnTypeInArrowFunction);
             if (triState === Tristate.False) {
                 // It's definitely not a parenthesized arrow function expression.
                 return undefined;
@@ -4463,7 +4463,7 @@ namespace ts {
             // it out, but don't allow any ambiguity, and return 'undefined' if this could be an
             // expression instead.
             return triState === Tristate.True ?
-                parseParenthesizedArrowFunctionExpression(/*allowAmbiguity*/ true, /*disallowReturnTypeInArrowFunction*/ false) :
+                parseParenthesizedArrowFunctionExpression(/*allowAmbiguity*/ true, disallowReturnTypeInArrowFunction) :
                 tryParse(() => parsePossibleParenthesizedArrowFunctionExpression(disallowReturnTypeInArrowFunction));
         }
 
@@ -4471,9 +4471,9 @@ namespace ts {
         //  False       -> There *cannot* be a parenthesized arrow function here.
         //  Unknown     -> There *might* be a parenthesized arrow function here.
         //                 Speculatively look ahead to be sure, and rollback if not.
-        function isParenthesizedArrowFunctionExpression(): Tristate {
+        function isParenthesizedArrowFunctionExpression(disallowReturnTypeInArrowFunction: boolean): Tristate {
             if (token() === SyntaxKind.OpenParenToken || token() === SyntaxKind.LessThanToken || token() === SyntaxKind.AsyncKeyword) {
-                return lookAhead(isParenthesizedArrowFunctionExpressionWorker);
+                return lookAhead(() => isParenthesizedArrowFunctionExpressionWorker(disallowReturnTypeInArrowFunction));
             }
 
             if (token() === SyntaxKind.EqualsGreaterThanToken) {
@@ -4486,7 +4486,7 @@ namespace ts {
             return Tristate.False;
         }
 
-        function isParenthesizedArrowFunctionExpressionWorker() {
+        function isParenthesizedArrowFunctionExpressionWorker(disallowReturnTypeInArrowFunction: boolean) {
             if (token() === SyntaxKind.AsyncKeyword) {
                 nextToken();
                 if (scanner.hasPrecedingLineBreak()) {
@@ -4508,8 +4508,13 @@ namespace ts {
                     // but this is probably what the user intended.
                     const third = nextToken();
                     switch (third) {
-                        case SyntaxKind.EqualsGreaterThanToken:
                         case SyntaxKind.ColonToken:
+                            if (disallowReturnTypeInArrowFunction) {
+                                // "a ? () : ..."
+                                return Tristate.False;
+                            }
+                            return Tristate.True;
+                        case SyntaxKind.EqualsGreaterThanToken:
                         case SyntaxKind.OpenBraceToken:
                             return Tristate.True;
                         default:
@@ -4695,7 +4700,19 @@ namespace ts {
                 }
             }
 
-            const hasReturnColon = token() === SyntaxKind.ColonToken;
+            // Given:
+            //     x ? y => ({ y }) : z => ({ z })
+            // We try to parse the body of the first arrow function by looking at:
+            //     ({ y }) : z => ({ z })
+            // This is a valid arrow function with "z" as the return type.
+            //
+            // But, if we're in the true side of a conditional expression, this colon
+            // terminates the expression, so we cannot allow a return type, even if we aren't
+            // certain whether or not the preceding text was parsed as a parameter list.
+            if (disallowReturnTypeInArrowFunction && token() === SyntaxKind.ColonToken) {
+                return undefined;
+            }
+
             const type = parseReturnType(SyntaxKind.ColonToken, /*isType*/ false);
             if (type && !allowAmbiguity && typeHasArrowFunctionBlockingParseError(type)) {
                 return undefined;
@@ -4730,31 +4747,6 @@ namespace ts {
             const body = (lastToken === SyntaxKind.EqualsGreaterThanToken || lastToken === SyntaxKind.OpenBraceToken)
                 ? parseArrowFunctionExpressionBody(some(modifiers, isAsyncModifier), disallowReturnTypeInArrowFunction)
                 : parseIdentifier();
-
-            // Given:
-            //     x ? y => ({ y }) : z => ({ z })
-            // We try to parse the body of the first arrow function by looking at:
-            //     ({ y }) : z => ({ z })
-            // This is a valid arrow function with "z" as the return type.
-            //
-            // But, if we're in the true side of a conditional expression, this colon
-            // terminates the expression, so we cannot allow a return type if we aren't
-            // certain whether or not the preceding text was parsed as a parameter list.
-            //
-            // For example,
-            //     a() ? (b: number, c?: string): void => d() : e
-            // is determined by isParenthesizedArrowFunctionExpression to unambiguously
-            // be an arrow expression, so we allow a return type.
-            if (disallowReturnTypeInArrowFunction && hasReturnColon) {
-                // However, if the arrow function we were able to parse is followed by another colon
-                // as in:
-                //     a ? (x): string => x : null
-                // Then allow the arrow function, and treat the second colon as terminating
-                // the conditional expression.
-                if (token() !== SyntaxKind.ColonToken) {
-                    return undefined;
-                }
-            }
 
             const node = factory.createArrowFunction(modifiers, typeParameters, parameters, type, equalsGreaterThanToken, body);
             return withJSDoc(finishNode(node, pos), hasJSDoc);

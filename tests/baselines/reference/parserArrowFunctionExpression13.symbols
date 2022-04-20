@@ -1,4 +1,4 @@
 === tests/cases/conformance/parser/ecmascript5/ArrowFunctionExpressions/parserArrowFunctionExpression13.ts ===
 a ? () => a() : (): any => null;
-No type information for this code.
-No type information for this code.
+>any : Symbol(any, Decl(parserArrowFunctionExpression13.ts, 0, 19))
+
