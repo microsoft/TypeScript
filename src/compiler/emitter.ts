@@ -831,7 +831,7 @@ namespace ts {
                         newBuildInfo.program = buildInfo.program;
                         if (newBuildInfo.program && changedDtsText !== undefined && config.options.composite) {
                             // Update the output signature
-                            newBuildInfo.program.outSignature = computeSignature(changedDtsText, changedDtsData, createHash);
+                            (newBuildInfo.program as ProgramBundleEmitBuildInfo).outSignature = computeSignature(changedDtsText, changedDtsData, createHash);
                             newBuildInfo.program.dtsChangeTime = getCurrentTime(host).getTime();
                         }
                         // Update sourceFileInfo

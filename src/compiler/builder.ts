@@ -787,9 +787,9 @@ namespace ts {
      * ProgramBuildInfoFileInfo is string if FileInfo.version === FileInfo.signature && !FileInfo.affectsGlobalScope otherwise encoded FileInfo
      */
     export type ProgramBuildInfoFileInfo = string | ProgramBuildInfoBuilderStateFileInfo;
-    export interface ProgramBuildInfo {
-        fileNames: readonly string[] | undefined;
-        fileInfos: readonly ProgramBuildInfoFileInfo[] | undefined;
+    export interface ProgramMultiFileEmitBuildInfo {
+        fileNames: readonly string[];
+        fileInfos: readonly ProgramBuildInfoFileInfo[];
         options: CompilerOptions | undefined;
         fileIdsList?: readonly (readonly ProgramBuildInfoFileId[])[];
         referencedMap?: ProgramBuildInfoReferencedMap;
@@ -798,9 +798,16 @@ namespace ts {
         affectedFilesPendingEmit?: ProgramBuilderInfoFilePendingEmit[];
         changeFileSet?: readonly ProgramBuildInfoFileId[];
         emitSignatures?: readonly ProgramBuildInfoEmitSignature[];
+        dtsChangeTime?: number;
+    }
+
+    export interface ProgramBundleEmitBuildInfo {
+        options: CompilerOptions | undefined;
         outSignature?: string;
         dtsChangeTime?: number;
     }
+
+    export type ProgramBuildInfo = ProgramMultiFileEmitBuildInfo | ProgramBundleEmitBuildInfo;
 
     /**
      * Gets the program information to be emitted in buildInfo so that we can use it to create new program
@@ -810,108 +817,115 @@ namespace ts {
         if (outFilePath && !state.compilerOptions.composite) return;
         const currentDirectory = Debug.checkDefined(state.program).getCurrentDirectory();
         const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(getTsBuildInfoEmitOutputFilePath(state.compilerOptions)!, currentDirectory));
-        const fileNames: string[] | undefined = !outFilePath ? [] : undefined;
+        state.dtsChangeTime = state.hasChangedEmitSignature ? getCurrentTime(host).getTime() : state.dtsChangeTime;
+        if (outFilePath) {
+            const result: ProgramBundleEmitBuildInfo = {
+                options: convertToProgramBuildInfoCompilerOptions(state.compilerOptions, "affectsBundleEmitBuildInfo"),
+                outSignature: state.outSignature,
+                dtsChangeTime: state.dtsChangeTime,
+            };
+            return result;
+        }
+
+        const fileNames: string[] = [];
         const fileNameToFileId = new Map<string, ProgramBuildInfoFileId>();
         let fileIdsList: (readonly ProgramBuildInfoFileId[])[] | undefined;
         let fileNamesToFileIdListId: ESMap<string, ProgramBuildInfoFileIdListId> | undefined;
         let emitSignatures: ProgramBuildInfoEmitSignature[] | undefined;
-        let fileInfos: ProgramBuildInfoFileInfo[] | undefined;
+        const fileInfos = arrayFrom(state.fileInfos.entries(), ([key, value]): ProgramBuildInfoFileInfo => {
+            // Ensure fileId
+            const fileId = toFileId(key);
+            Debug.assert(fileNames[fileId - 1] === relativeToBuildInfo(key));
+            const signature = state.currentAffectedFilesSignatures && state.currentAffectedFilesSignatures.get(key);
+            const actualSignature = signature ?? value.signature;
+            if (state.compilerOptions.composite) {
+                const file = state.program!.getSourceFileByPath(key)!;
+                if (!isJsonSourceFile(file) && sourceFileMayBeEmitted(file, state.program!)) {
+                    const emitSignature = state.emitSignatures?.get(key);
+                    if (emitSignature !== actualSignature) {
+                        (emitSignatures ||= []).push(emitSignature === undefined ? fileId : [fileId, emitSignature]);
+                    }
+                }
+            }
+            return value.version === actualSignature ?
+                value.affectsGlobalScope || value.impliedFormat ?
+                    // If file version is same as signature, dont serialize signature
+                    { version: value.version, signature: undefined, affectsGlobalScope: value.affectsGlobalScope, impliedFormat: value.impliedFormat } :
+                    // If file info only contains version and signature and both are same we can just write string
+                    value.version :
+                actualSignature !== undefined ? // If signature is not same as version, encode signature in the fileInfo
+                    signature === undefined ?
+                        // If we havent computed signature, use fileInfo as is
+                        value :
+                        // Serialize fileInfo with new updated signature
+                        { version: value.version, signature, affectsGlobalScope: value.affectsGlobalScope, impliedFormat: value.impliedFormat } :
+                    // Signature of the FileInfo is undefined, serialize it as false
+                    { version: value.version, signature: false, affectsGlobalScope: value.affectsGlobalScope, impliedFormat: value.impliedFormat };
+        });
+
         let referencedMap: ProgramBuildInfoReferencedMap | undefined;
+        if (state.referencedMap) {
+            referencedMap = arrayFrom(state.referencedMap.keys()).sort(compareStringsCaseSensitive).map(key => [
+                toFileId(key),
+                toFileIdListId(state.referencedMap!.getValues(key)!)
+            ]);
+        }
+
         let exportedModulesMap: ProgramBuildInfoReferencedMap | undefined;
-        let semanticDiagnosticsPerFile: ProgramBuildInfoDiagnostic[] | undefined;
-        let affectedFilesPendingEmit: ProgramBuilderInfoFilePendingEmit[] | undefined;
-        let changeFileSet: ProgramBuildInfoFileId[] | undefined;
-        if (!outFilePath) {
-            fileInfos = arrayFrom(state.fileInfos.entries(), ([key, value]): ProgramBuildInfoFileInfo => {
-                // Ensure fileId
-                const fileId = toFileId(key);
-                Debug.assert(fileNames![fileId - 1] === relativeToBuildInfo(key));
-                const signature = state.currentAffectedFilesSignatures && state.currentAffectedFilesSignatures.get(key);
-                const actualSignature = signature ?? value.signature;
-                if (state.compilerOptions.composite) {
-                    const file = state.program!.getSourceFileByPath(key)!;
-                    if (!isJsonSourceFile(file) && sourceFileMayBeEmitted(file, state.program!)) {
-                        const emitSignature = state.emitSignatures?.get(key);
-                        if (emitSignature !== actualSignature) {
-                            (emitSignatures ||= []).push(emitSignature === undefined ? fileId : [fileId, emitSignature]);
-                        }
+        if (state.exportedModulesMap) {
+            exportedModulesMap = mapDefined(arrayFrom(state.exportedModulesMap.keys()).sort(compareStringsCaseSensitive), key => {
+                if (state.currentAffectedFilesExportedModulesMap) {
+                    if (state.currentAffectedFilesExportedModulesMap.deletedKeys()?.has(key)) {
+                        return undefined;
+                    }
+
+                    const newValue = state.currentAffectedFilesExportedModulesMap.getValues(key);
+                    if (newValue) {
+                        return [toFileId(key), toFileIdListId(newValue)];
                     }
                 }
-                return value.version === actualSignature ?
-                    value.affectsGlobalScope || value.impliedFormat ?
-                        // If file version is same as signature, dont serialize signature
-                        { version: value.version, signature: undefined, affectsGlobalScope: value.affectsGlobalScope, impliedFormat: value.impliedFormat } :
-                        // If file info only contains version and signature and both are same we can just write string
-                        value.version :
-                    actualSignature !== undefined ? // If signature is not same as version, encode signature in the fileInfo
-                        signature === undefined ?
-                            // If we havent computed signature, use fileInfo as is
-                            value :
-                            // Serialize fileInfo with new updated signature
-                            { version: value.version, signature, affectsGlobalScope: value.affectsGlobalScope, impliedFormat: value.impliedFormat } :
-                        // Signature of the FileInfo is undefined, serialize it as false
-                        { version: value.version, signature: false, affectsGlobalScope: value.affectsGlobalScope, impliedFormat: value.impliedFormat };
+
+                // Not in temporary cache, use existing value
+                return [toFileId(key), toFileIdListId(state.exportedModulesMap!.getValues(key)!)];
             });
+        }
 
-            if (state.referencedMap) {
-                referencedMap = arrayFrom(state.referencedMap.keys()).sort(compareStringsCaseSensitive).map(key => [
-                    toFileId(key),
-                    toFileIdListId(state.referencedMap!.getValues(key)!)
-                ]);
+        let semanticDiagnosticsPerFile: ProgramBuildInfoDiagnostic[] | undefined;
+        if (state.semanticDiagnosticsPerFile) {
+            for (const key of arrayFrom(state.semanticDiagnosticsPerFile.keys()).sort(compareStringsCaseSensitive)) {
+                const value = state.semanticDiagnosticsPerFile.get(key)!;
+                (semanticDiagnosticsPerFile ||= []).push(
+                    value.length ?
+                        [
+                            toFileId(key),
+                            convertToReusableDiagnostics(value, relativeToBuildInfo)
+                        ] :
+                        toFileId(key)
+                );
             }
+        }
 
-            if (state.exportedModulesMap) {
-                exportedModulesMap = mapDefined(arrayFrom(state.exportedModulesMap.keys()).sort(compareStringsCaseSensitive), key => {
-                    if (state.currentAffectedFilesExportedModulesMap) {
-                        if (state.currentAffectedFilesExportedModulesMap.deletedKeys()?.has(key)) {
-                            return undefined;
-                        }
-
-                        const newValue = state.currentAffectedFilesExportedModulesMap.getValues(key);
-                        if (newValue) {
-                            return [toFileId(key), toFileIdListId(newValue)];
-                        }
-                    }
-
-                    // Not in temporary cache, use existing value
-                    return [toFileId(key), toFileIdListId(state.exportedModulesMap!.getValues(key)!)];
-                });
-            }
-
-            if (state.semanticDiagnosticsPerFile) {
-                for (const key of arrayFrom(state.semanticDiagnosticsPerFile.keys()).sort(compareStringsCaseSensitive)) {
-                    const value = state.semanticDiagnosticsPerFile.get(key)!;
-                    (semanticDiagnosticsPerFile ||= []).push(
-                        value.length ?
-                            [
-                                toFileId(key),
-                                convertToReusableDiagnostics(value, relativeToBuildInfo)
-                            ] :
-                            toFileId(key)
-                    );
-                }
-            }
-
-            if (state.affectedFilesPendingEmit) {
-                const seenFiles = new Set<Path>();
-                for (const path of state.affectedFilesPendingEmit.slice(state.affectedFilesPendingEmitIndex).sort(compareStringsCaseSensitive)) {
-                    if (tryAddToSet(seenFiles, path)) {
-                        (affectedFilesPendingEmit ||= []).push([toFileId(path), state.affectedFilesPendingEmitKind!.get(path)!]);
-                    }
-                }
-            }
-
-            if (state.changedFilesSet.size) {
-                for (const path of arrayFrom(state.changedFilesSet.keys()).sort(compareStringsCaseSensitive)) {
-                    (changeFileSet ||= []).push(toFileId(path));
+        let affectedFilesPendingEmit: ProgramBuilderInfoFilePendingEmit[] | undefined;
+        if (state.affectedFilesPendingEmit) {
+            const seenFiles = new Set<Path>();
+            for (const path of state.affectedFilesPendingEmit.slice(state.affectedFilesPendingEmitIndex).sort(compareStringsCaseSensitive)) {
+                if (tryAddToSet(seenFiles, path)) {
+                    (affectedFilesPendingEmit ||= []).push([toFileId(path), state.affectedFilesPendingEmitKind!.get(path)!]);
                 }
             }
         }
 
-        return {
+        let changeFileSet: ProgramBuildInfoFileId[] | undefined;
+        if (state.changedFilesSet.size) {
+            for (const path of arrayFrom(state.changedFilesSet.keys()).sort(compareStringsCaseSensitive)) {
+                (changeFileSet ||= []).push(toFileId(path));
+            }
+        }
+
+        const result: ProgramMultiFileEmitBuildInfo = {
             fileNames,
             fileInfos,
-            options: convertToProgramBuildInfoCompilerOptions(state.compilerOptions, relativeToBuildInfoEnsuringAbsolutePath),
+            options: convertToProgramBuildInfoCompilerOptions(state.compilerOptions, "affectsMultiFileEmitBuildInfo"),
             fileIdsList,
             referencedMap,
             exportedModulesMap,
@@ -919,9 +933,9 @@ namespace ts {
             affectedFilesPendingEmit,
             changeFileSet,
             emitSignatures,
-            outSignature: state.outSignature,
-            dtsChangeTime: state.dtsChangeTime = state.hasChangedEmitSignature ? getCurrentTime(host).getTime() : state.dtsChangeTime,
+            dtsChangeTime: state.dtsChangeTime,
         };
+        return result;
 
         function relativeToBuildInfoEnsuringAbsolutePath(path: string) {
             return relativeToBuildInfo(getNormalizedAbsolutePath(path, currentDirectory));
@@ -934,8 +948,8 @@ namespace ts {
         function toFileId(path: Path): ProgramBuildInfoFileId {
             let fileId = fileNameToFileId.get(path);
             if (fileId === undefined) {
-                fileNames!.push(relativeToBuildInfo(path));
-                fileNameToFileId.set(path, fileId = fileNames!.length as ProgramBuildInfoFileId);
+                fileNames.push(relativeToBuildInfo(path));
+                fileNameToFileId.set(path, fileId = fileNames.length as ProgramBuildInfoFileId);
             }
             return fileId;
         }
@@ -950,25 +964,22 @@ namespace ts {
             }
             return fileIdListId;
         }
-    }
 
-    function convertToProgramBuildInfoCompilerOptions(options: CompilerOptions, relativeToBuildInfo: (path: string) => string) {
-        let result: CompilerOptions | undefined;
-        const { optionsNameMap } = getOptionsNameMap();
-        const isOutFile = outFile(options);
-
-        for (const name of getOwnKeys(options).sort(compareStringsCaseSensitive)) {
-            const optionKey = name.toLowerCase();
-            const optionInfo = optionsNameMap.get(optionKey);
-            if (isOutFile ? optionInfo?.affectsOutFileBuildInfo : optionInfo?.affectsMultiFileBuildInfo) {
-                (result ||= {})[name] = convertToReusableCompilerOptionValue(
-                    optionInfo,
-                    options[name] as CompilerOptionsValue,
-                    relativeToBuildInfo
-                );
+        function convertToProgramBuildInfoCompilerOptions(options: CompilerOptions, optionKey: "affectsBundleEmitBuildInfo" | "affectsMultiFileEmitBuildInfo") {
+            let result: CompilerOptions | undefined;
+            const { optionsNameMap } = getOptionsNameMap();
+            for (const name of getOwnKeys(options).sort(compareStringsCaseSensitive)) {
+                const optionInfo = optionsNameMap.get(name.toLowerCase());
+                if (optionInfo?.[optionKey]) {
+                    (result ||= {})[name] = convertToReusableCompilerOptionValue(
+                        optionInfo,
+                        options[name] as CompilerOptionsValue,
+                        relativeToBuildInfoEnsuringAbsolutePath
+                    );
+                }
             }
+            return result;
         }
-        return result;
     }
 
     function convertToReusableCompilerOptionValue(option: CommandLineOption | undefined, value: CompilerOptionsValue, relativeToBuildInfo: (path: string) => string) {
@@ -1404,10 +1415,11 @@ namespace ts {
                 { version: fileInfo.version, signature: fileInfo.signature === false ? undefined : fileInfo.version, affectsGlobalScope: fileInfo.affectsGlobalScope, impliedFormat: fileInfo.impliedFormat };
     }
 
-    export function createBuildProgramUsingProgramBuildInfo(program: ProgramBuildInfo, buildInfoPath: string, host: ReadBuildProgramHost): EmitAndSemanticDiagnosticsBuilderProgram {
+    export function createBuilderProgramUsingProgramBuildInfo(programFromBuildInfo: ProgramBuildInfo, buildInfoPath: string, host: ReadBuildProgramHost): EmitAndSemanticDiagnosticsBuilderProgram {
         const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(buildInfoPath, host.getCurrentDirectory()));
         const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());
 
+        const program = programFromBuildInfo as ProgramMultiFileEmitBuildInfo & ProgramBundleEmitBuildInfo;
         const filePaths = program.fileNames?.map(toPath);
         const filePathsSetList = program.fileIdsList?.map(fileIds => new Set(fileIds.map(toFilePath)));
         const fileInfos = new Map<Path, BuilderState.FileInfo>();
@@ -1471,7 +1483,7 @@ namespace ts {
         }
 
         function toFilePath(fileId: ProgramBuildInfoFileId) {
-            return filePaths![fileId - 1];
+            return filePaths[fileId - 1];
         }
 
         function toFilePathsSet(fileIdsListId: ProgramBuildInfoFileIdListId) {

@@ -199,52 +199,55 @@ interface Symbol {
     type ReadableProgramBuildInfoDiagnostic = string | [string, readonly ReusableDiagnostic[]];
     type ReadableProgramBuilderInfoFilePendingEmit = [string, "DtsOnly" | "Full"];
     type ReadableProgramBuildInfoEmitSignature = string | [string, string];
-    type ReadableFileInfo = Omit<BuilderState.FileInfo, "impliedFormat"> & { impliedFormat: string | undefined; };
-    interface ReadableProgramBuildInfo {
-        fileNames: readonly string[] | undefined;
+    type ReadableProgramBuildInfoFileInfo = Omit<BuilderState.FileInfo, "impliedFormat"> & { impliedFormat: string | undefined; };
+    type ReadableProgramMultiFileEmitBuildInfo = Omit<ProgramMultiFileEmitBuildInfo,
+        "fileIdsList" | "fileInfos" |
+        "referencedMap" | "exportedModulesMap" | "semanticDiagnosticsPerFile" |
+        "affectedFilesPendingEmit" | "changeFileSet" | "emitSignatures"
+    > & {
         fileNamesList: readonly (readonly string[])[] | undefined;
-        fileInfos: MapLike<ReadableFileInfo> | undefined;
-        options: CompilerOptions | undefined;
+        fileInfos: MapLike<ReadableProgramBuildInfoFileInfo>;
         referencedMap?: MapLike<string[]>;
         exportedModulesMap?: MapLike<string[]>;
         semanticDiagnosticsPerFile?: readonly ReadableProgramBuildInfoDiagnostic[];
         affectedFilesPendingEmit?: readonly ReadableProgramBuilderInfoFilePendingEmit[];
         changeFileSet?: readonly string[];
         emitSignatures?: readonly ReadableProgramBuildInfoEmitSignature[];
-        outSignature?: string;
-        dtsChangeTime?: number;
-    }
+    };
+
+    type ReadableProgramBuildInfo = ReadableProgramMultiFileEmitBuildInfo & ProgramBundleEmitBuildInfo;
     type ReadableBuildInfo = Omit<BuildInfo, "program"> & { program: ReadableProgramBuildInfo | undefined; size: number; };
     function generateBuildInfoProgramBaseline(sys: System, buildInfoPath: string, buildInfo: BuildInfo) {
         const fileInfos: ReadableProgramBuildInfo["fileInfos"] = {};
-        buildInfo.program?.fileInfos?.forEach((fileInfo, index) => fileInfos[toFileName(index + 1 as ProgramBuildInfoFileId)] = toReadableFileInfo(fileInfo));
-        const fileNamesList = buildInfo.program?.fileIdsList?.map(fileIdsListId => fileIdsListId.map(toFileName));
-        const program: ReadableProgramBuildInfo | undefined = buildInfo.program && {
-            fileNames: buildInfo.program.fileNames,
+        const buildInfoProgram = buildInfo.program as (ProgramMultiFileEmitBuildInfo & ProgramBundleEmitBuildInfo) | undefined;
+        buildInfoProgram?.fileInfos?.forEach((fileInfo, index) => fileInfos[toFileName(index + 1 as ProgramBuildInfoFileId)] = toReadableFileInfo(fileInfo));
+        const fileNamesList = buildInfoProgram?.fileIdsList?.map(fileIdsListId => fileIdsListId.map(toFileName));
+        const program: ReadableProgramBuildInfo | undefined = buildInfoProgram && {
+            fileNames: buildInfoProgram.fileNames,
             fileNamesList,
-            fileInfos: buildInfo.program.fileInfos ? fileInfos : undefined,
-            options: buildInfo.program.options,
-            referencedMap: toMapOfReferencedSet(buildInfo.program.referencedMap),
-            exportedModulesMap: toMapOfReferencedSet(buildInfo.program.exportedModulesMap),
-            semanticDiagnosticsPerFile: buildInfo.program.semanticDiagnosticsPerFile?.map(d =>
+            fileInfos: buildInfoProgram.fileInfos ? fileInfos : undefined!,
+            options: buildInfoProgram.options,
+            referencedMap: toMapOfReferencedSet(buildInfoProgram.referencedMap),
+            exportedModulesMap: toMapOfReferencedSet(buildInfoProgram.exportedModulesMap),
+            semanticDiagnosticsPerFile: buildInfoProgram.semanticDiagnosticsPerFile?.map(d =>
                 isNumber(d) ?
                     toFileName(d) :
                     [toFileName(d[0]), d[1]]
             ),
-            affectedFilesPendingEmit: buildInfo.program.affectedFilesPendingEmit?.map(([fileId, emitKind]) => [
+            affectedFilesPendingEmit: buildInfoProgram.affectedFilesPendingEmit?.map(([fileId, emitKind]) => [
                 toFileName(fileId),
                 emitKind === BuilderFileEmit.DtsOnly ? "DtsOnly" :
                     emitKind === BuilderFileEmit.Full ? "Full" :
                         Debug.assertNever(emitKind)
             ]),
-            changeFileSet: buildInfo.program.changeFileSet?.map(toFileName),
-            emitSignatures: buildInfo.program.emitSignatures?.map(s =>
+            changeFileSet: buildInfoProgram.changeFileSet?.map(toFileName),
+            emitSignatures: buildInfoProgram.emitSignatures?.map(s =>
                 isNumber(s) ?
                     toFileName(s) :
                     [toFileName(s[0]), s[1]]
             ),
-            outSignature: buildInfo.program.outSignature,
-            dtsChangeTime: buildInfo.program.dtsChangeTime,
+            outSignature: buildInfoProgram.outSignature,
+            dtsChangeTime: buildInfoProgram.dtsChangeTime,
         };
         const version = buildInfo.version === ts.version ? fakes.version : buildInfo.version;
         const result: ReadableBuildInfo = {
@@ -272,14 +275,14 @@ interface Symbol {
         sys.writeFile(`${buildInfoPath}.readable.baseline.txt`, JSON.stringify(result, /*replacer*/ undefined, 2));
 
         function toFileName(fileId: ProgramBuildInfoFileId) {
-            return buildInfo.program!.fileNames![fileId - 1];
+            return buildInfoProgram!.fileNames[fileId - 1];
         }
 
         function toFileNames(fileIdsListId: ProgramBuildInfoFileIdListId) {
             return fileNamesList![fileIdsListId - 1];
         }
 
-        function toReadableFileInfo(fileInfo: ProgramBuildInfoFileInfo): ReadableFileInfo {
+        function toReadableFileInfo(fileInfo: ProgramBuildInfoFileInfo): ReadableProgramBuildInfoFileInfo {
             const info = toBuilderStateFileInfo(fileInfo);
             return {
                 ...info,
@@ -499,7 +502,7 @@ interface Symbol {
     } {
         if (!text) return { buildInfo: text };
         const readableBuildInfo = JSON.parse(text) as ReadableBuildInfo;
-        let sanitizedFileInfos: MapLike<ReadableFileInfo> | undefined;
+        let sanitizedFileInfos: MapLike<ReadableProgramBuildInfoFileInfo> | undefined;
         if (readableBuildInfo.program?.fileInfos) {
             sanitizedFileInfos = {};
             for (const id in readableBuildInfo.program.fileInfos) {

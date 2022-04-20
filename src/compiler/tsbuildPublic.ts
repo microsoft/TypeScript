@@ -1543,8 +1543,8 @@ namespace ts {
             }
 
             if (buildInfo.program) {
-                if (buildInfo.program.changeFileSet?.length ||
-                    (!project.options.noEmit && buildInfo.program.affectedFilesPendingEmit?.length)) {
+                if ((buildInfo.program as ProgramMultiFileEmitBuildInfo).changeFileSet?.length ||
+                    (!project.options.noEmit && (buildInfo.program as ProgramMultiFileEmitBuildInfo).affectedFilesPendingEmit?.length)) {
                     return {
                         type: UpToDateStatusType.OutOfDateBuildInfo,
                         buildInfoFile: buildInfoPath
