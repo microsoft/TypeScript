@@ -4695,24 +4695,6 @@ namespace ts {
                 }
             }
 
-            // Given:
-            //     x ? y => ({ y }) : z => ({ z })
-            // We try to parse the body of the first arrow function by looking at:
-            //     ({ y }) : z => ({ z })
-            // This is a valid arrow function with "z" as the return type.
-            //
-            // But, if we're in the true side of a conditional expression, this colon
-            // terminates the expression, so we cannot allow a return type if we aren't
-            // certain whether or not the preceding text was parsed as a parameter list.
-            //
-            // For example,
-            //     a() ? (b: number, c?: string): void => d() : e
-            // is determined by isParenthesizedArrowFunctionExpression to unambiguously
-            // be an arrow expression, so we allow a return type.
-            // if (disallowReturnTypeInArrowFunction && token() === SyntaxKind.ColonToken) {
-            //     return undefined;
-            // }
-
             const type = parseReturnType(SyntaxKind.ColonToken, /*isType*/ false);
             if (type && !allowAmbiguity && typeHasArrowFunctionBlockingParseError(type)) {
                 return undefined;
@@ -4748,11 +4730,26 @@ namespace ts {
                 ? parseArrowFunctionExpressionBody(some(modifiers, isAsyncModifier), disallowReturnTypeInArrowFunction)
                 : parseIdentifier();
 
+            // Given:
+            //     x ? y => ({ y }) : z => ({ z })
+            // We try to parse the body of the first arrow function by looking at:
+            //     ({ y }) : z => ({ z })
+            // This is a valid arrow function with "z" as the return type.
+            //
+            // But, if we're in the true side of a conditional expression, this colon
+            // terminates the expression, so we cannot allow a return type if we aren't
+            // certain whether or not the preceding text was parsed as a parameter list.
+            //
+            // For example,
+            //     a() ? (b: number, c?: string): void => d() : e
+            // is determined by isParenthesizedArrowFunctionExpression to unambiguously
+            // be an arrow expression, so we allow a return type.
             if (disallowReturnTypeInArrowFunction) {
-                // If we are currently parsing a conditional expression, and were able to parse
-                // a return type before the body, and there's another colon after the body, allow
-                // parsing of this arrow function so that the following colon terminates the
-                // true side of the conditional.
+                // However, if the arrow function we were able to parse is followed by another colon
+                // as in:
+                //     a ? (x): string => x : null
+                // Then allow the arrow function, and treat the second colon as terminating
+                // the conditional expression.
                 if (!(type && token() === SyntaxKind.ColonToken)) {
                     return undefined;
                 }
