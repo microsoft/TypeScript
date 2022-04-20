@@ -96,13 +96,10 @@ namespace ts.server {
         return [seconds, nanoseconds];
     }
 
-    // TODO: Maybe should leave as ServerHost cast below and declare fs: System
-    // TODO: host is probably still a better name
-    function startWebSession(options: StartSessionOptions, logger: Logger, cancellationToken: ServerCancellationToken, _fs_TODO: ServerHost) {
+    function startWebSession(options: StartSessionOptions, logger: Logger, cancellationToken: ServerCancellationToken, fshost: ServerHost) {
         class WorkerSession extends server.WorkerSession {
             constructor() {
-                // TODO: Not really sure this is the way to do it
-                super(sys as ServerHost, { writeMessage }, options, logger, cancellationToken, hrtime);
+                super(sys as ServerHost, fshost, { writeMessage }, options, logger, cancellationToken, hrtime);
             }
 
             exit() {

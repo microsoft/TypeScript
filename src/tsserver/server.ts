@@ -30,14 +30,15 @@ namespace ts.server {
         unknownServerMode?: string;
         startSession: (option: StartSessionOptions, logger: Logger, cancellationToken: ServerCancellationToken, fs: ServerHost) => void;
     }
-    function start({ args, logger, cancellationToken, serverMode, unknownServerMode, startSession: startServer }: StartInput, platform: string, fs: ServerHost) {
+    function start({ args, logger, cancellationToken, serverMode, unknownServerMode, startSession: startServer }: StartInput, platform: string) {
         const syntaxOnly = hasArgument("--syntaxOnly");
+        const vfs = hasArgument("--vfs");
 
         logger.info(`Starting TS Server`);
         logger.info(`Version: ${version}`);
         logger.info(`Arguments: ${args.join(" ")}`);
         logger.info(`Platform: ${platform} NodeVersion: ${getNodeMajorVersion()} CaseSensitive: ${sys.useCaseSensitiveFileNames}`);
-        logger.info(`ServerMode: ${serverMode} syntaxOnly: ${syntaxOnly} hasUnknownServerMode: ${unknownServerMode}`);
+        logger.info(`ServerMode: ${serverMode} syntaxOnly: ${syntaxOnly} hasUnknownServerMode: ${unknownServerMode} vfs: ${vfs}`);
 
         setStackTraceLimit();
 
@@ -57,6 +58,7 @@ namespace ts.server {
         console.warn = (...args) => logger.msg(args.length === 1 ? args[0] : args.join(", "), Msg.Err);
         console.error = (...args) => logger.msg(args.length === 1 ? args[0] : args.join(", "), Msg.Err);
 
+        const fshost = vfs ? TestFSWithWatch.createVirtualServerHost([]) : sys as ServerHost;
         startServer(
             {
                 globalPlugins: findArgumentStringArray("--globalPlugins"),
@@ -71,23 +73,21 @@ namespace ts.server {
             },
             logger,
             cancellationToken,
-            fs
+            fshost
         );
     }
 
     setStackTraceLimit();
-    // TODO: Not sure this is right
-    const fs = findArgument("vfs") ? TestFSWithWatch.createVirtualServerHost([]) : sys as ServerHost;
     // Cannot check process var directory in webworker so has to be typeof check here
     if (typeof process !== "undefined") {
-        start(initializeNodeSystem(), require("os").platform(), fs);
+        start(initializeNodeSystem(), require("os").platform());
     }
     else {
         // Get args from first message
         const listener = (e: any) => {
             removeEventListener("message", listener);
             const args = e.data;
-            start(initializeWebSystem(args), "web", fs);
+            start(initializeWebSystem(args), "web");
         };
         addEventListener("message", listener);
     }

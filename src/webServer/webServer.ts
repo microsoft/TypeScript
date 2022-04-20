@@ -178,10 +178,10 @@ namespace ts.server {
         serverMode: SessionOptions["serverMode"];
     }
     export class WorkerSession extends Session<{}> {
-        constructor(host: ServerHost, private webHost: HostWithWriteMessage, options: StartSessionOptions, logger: Logger, cancellationToken: ServerCancellationToken, hrtime: SessionOptions["hrtime"]) {
+        constructor(host: ServerHost, fshost: ServerHost, private webHost: HostWithWriteMessage, options: StartSessionOptions, logger: Logger, cancellationToken: ServerCancellationToken, hrtime: SessionOptions["hrtime"]) {
             super({
                 host,
-                fshost: undefined, // TODO: Provide this? Check Sheetal's comments.
+                fshost,
                 cancellationToken,
                 ...options,
                 typingsInstaller: nullTypingsInstaller,

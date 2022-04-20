@@ -337,7 +337,7 @@ namespace ts.TestFSWithWatch {
             }
 
             if (options && options.invokeFileDeleteCreateAsPartInsteadOfChange) {
-                this.removeFileOrFolder(currentEntry, false);
+                this.removeFileOrFolder(currentEntry, /*isRemoveableLeafFolder*/ false);
                 this.ensureFileOrFolder({ path: filePath, content });
             }
             else {
@@ -363,7 +363,7 @@ namespace ts.TestFSWithWatch {
             Debug.assert(!!file);
 
             // Only remove the file
-            this.removeFileOrFolder(file, false, /*isRenaming*/ true);
+            this.removeFileOrFolder(file, /*isRemoveableLeafFolder*/ false, /*isRenaming*/ true);
 
             // Add updated folder with new folder name
             const newFullPath = getNormalizedAbsolutePath(newFileName, this.currentDirectory);
@@ -383,7 +383,7 @@ namespace ts.TestFSWithWatch {
             Debug.assert(!!folder);
 
             // Only remove the folder
-            this.removeFileOrFolder(folder, false, /*isRenaming*/ true);
+            this.removeFileOrFolder(folder, /*isRemoveableLeafFolder*/ false, /*isRenaming*/ true);
 
             // Add updated folder with new folder name
             const newFullPath = getNormalizedAbsolutePath(newFolderName, this.currentDirectory);
@@ -514,11 +514,11 @@ namespace ts.TestFSWithWatch {
                         this.deleteFolder(fsEntry.fullPath, recursive);
                     }
                     else {
-                        this.removeFileOrFolder(fsEntry, false);
+                        this.removeFileOrFolder(fsEntry, /*isRemoveableLeafFolder*/ false);
                     }
                 });
             }
-            this.removeFileOrFolder(currentEntry, false);
+            this.removeFileOrFolder(currentEntry, /*isRemoveableLeafFolder*/ false);
         }
 
         private watchFileWorker(fileName: string, cb: FileWatcherCallback, pollingInterval: PollingInterval) {

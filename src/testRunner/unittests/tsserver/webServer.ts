@@ -4,6 +4,7 @@ namespace ts.projectSystem {
             constructor(host: server.ServerHost, webHost: server.HostWithWriteMessage, options: Partial<server.StartSessionOptions>, logger: server.Logger) {
                 super(
                     host,
+                    host,
                     webHost,
                     {
                         globalPlugins: undefined,
