@@ -5651,6 +5651,7 @@ namespace ts {
         }
 
         function forEachLeadingCommentWithoutDetachedComments(cb: (commentPos: number, commentEnd: number, kind: SyntaxKind, hasTrailingNewLine: boolean, rangePos: number) => void) {
+            if (!currentSourceFile) return;
             // get the leading comments from detachedPos
             const pos = last(detachedCommentsInfo!).detachedCommentEndPos;
             if (detachedCommentsInfo!.length - 1) {
@@ -5660,7 +5661,6 @@ namespace ts {
                 detachedCommentsInfo = undefined;
             }
 
-            Debug.assertIsDefined(currentSourceFile);
             forEachLeadingCommentRange(currentSourceFile.text, pos, cb, /*state*/ pos);
         }
 
