@@ -57,14 +57,13 @@ ${file.fileContent}`;
             // TODO: probably some other watcher tests, not sure what
             const host = TestFSWithWatch.createVirtualServerHost([], { executingFilePath: "/a/tsc.js" });
             const session = createVirtualFilesystemSession(host, host);
-            const created = [app, file1, file2, file3, config, lib];
+            const files = [app, file1, file2, file3, config, lib];
             session.executeCommandSeq<protocol.UpdateFileSystemRequest>({
                 command: protocol.CommandTypes.UpdateFileSystem,
                 arguments:{
                     fileSystem: "memfs",
-                    created,
-                    deleted: [], // string[];
-                    updated: [], //FileSystemRequestArgs[];
+                    files,
+                    deleted: [],
                 }
             });
             session.executeCommandSeq<protocol.OpenRequest>({
@@ -89,10 +88,10 @@ ${file.fileContent}`;
             verifyProjectVersion(project, 2);
 
             // Verify Texts
-            verifyFileSystem(host, created);
-            verifyText(service, file1.file, file1.fileContent!);
+            verifyFileSystem(host, files);
+            verifyText(service, file1.file, file1.fileContent);
             verifyText(service, commonFile2.path, commonFile2.content);
-            verifyText(service, app.file, app.fileContent!);
+            verifyText(service, app.file, app.fileContent);
             verifyText(service, file3.file, fileContentWithComment(file3));
             assert.equal(fakehost.fsWatches.size, 0);
             assert.equal(fakehost.fsWatchesRecursive.size, 2);
@@ -102,19 +101,18 @@ ${file.fileContent}`;
                 command: protocol.CommandTypes.UpdateFileSystem,
                 arguments:{
                     fileSystem: "memfs",
-                    created: [],
-                    deleted: [], // string[];
-                    updated: [], //FileSystemRequestArgs[];
+                    files: [],
+                    deleted: [],
                 }
             });
             // no change when not deleting file
             verifyProjectVersion(project, 2);
 
             // Verify Texts
-            verifyFileSystem(host, created);
-            verifyText(service, file1.file, file1.fileContent!);
+            verifyFileSystem(host, files);
+            verifyText(service, file1.file, file1.fileContent);
             verifyText(service, commonFile2.path, commonFile2.content);
-            verifyText(service, app.file, app.fileContent!);
+            verifyText(service, app.file, app.fileContent);
             verifyText(service, file3.file, fileContentWithComment(file3));
             assert.equal(fakehost.fsWatches.size, 0);
             assert.equal(fakehost.fsWatchesRecursive.size, 2);
@@ -124,9 +122,8 @@ ${file.fileContent}`;
                 command: protocol.CommandTypes.UpdateFileSystem,
                 arguments:{
                     fileSystem: "memfs",
-                    created: [],
-                    deleted: [file1.file], // string[];
-                    updated: [], //FileSystemRequestArgs[];
+                    files: [],
+                    deleted: [file1.file],
                 }
             });
             verifyProjectVersion(project, 3);
@@ -134,7 +131,7 @@ ${file.fileContent}`;
             // Verify Texts
             verifyFileSystem(host, [app, file2, file3, config, lib]);
             verifyText(service, commonFile2.path, commonFile2.content);
-            verifyText(service, app.file, app.fileContent!);
+            verifyText(service, app.file, app.fileContent);
             verifyText(service, file3.file, fileContentWithComment(file3));
             assert.equal(fakehost.fsWatches.size, 0);
             assert.equal(fakehost.fsWatchesRecursive.size, 2);
@@ -151,7 +148,7 @@ ${file.fileContent}`;
             // Verify Texts
             verifyFileSystem(host, [app, file2, file3, config, lib]);
             verifyText(service, commonFile2.path, commonFile2.content);
-            verifyText(service, app.file, app.fileContent!);
+            verifyText(service, app.file, app.fileContent);
             verifyText(service, file3.file, fileContentWithComment(file3));
             assert.equal(fakehost.fsWatches.size, 0);
             assert.equal(fakehost.fsWatchesRecursive.size, 2);

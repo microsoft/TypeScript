@@ -3,7 +3,7 @@
     "compilerOptions": {
         "outFile": "../../built/local/vfs.js",
         "types": [
-            "node", "mocha", "chai"
+            "node"
         ],
         "lib": [
             "es6",
@@ -11,9 +11,7 @@
         ]
     },
     "references": [
-        { "path": "../compiler" },
-        { "path": "../jsTyping" },
-        { "path": "../services" }
+        { "path": "../compiler" }
     ],
 
     "files": [

@@ -77,7 +77,7 @@ namespace ts.server {
 
     setStackTraceLimit();
     // TODO: Not sure this is right
-    const fs = findArgument("vfs") ? TestFSWithWatch.createVirtualServerHost([]) : ts.sys as ServerHost
+    const fs = findArgument("vfs") ? TestFSWithWatch.createVirtualServerHost([]) : sys as ServerHost;
     // Cannot check process var directory in webworker so has to be typeof check here
     if (typeof process !== "undefined") {
         start(initializeNodeSystem(), require("os").platform(), fs);

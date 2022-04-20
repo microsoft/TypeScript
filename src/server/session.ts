@@ -689,8 +689,7 @@ namespace ts.server {
         private suppressDiagnosticEvents?: boolean;
         private eventHandler: ProjectServiceEventHandler | undefined;
         private readonly noGetErrOnBackgroundUpdate?: boolean;
-        // TODO: Also need to do this in all of project too
-        private fshost: ServerHost | undefined
+        private fshost: ServerHost | undefined;
 
         constructor(opts: SessionOptions) {
             this.host = opts.host;
@@ -2903,11 +2902,7 @@ namespace ts.server {
             },
             [CommandNames.UpdateFileSystem]: (request: protocol.UpdateFileSystemRequest) => {
                 this.changeSeq++;
-                this.projectService.updateFileSystem(
-                    request.arguments.created && arrayIterator(request.arguments.created),
-                    request.arguments.updated && arrayIterator(request.arguments.updated),
-                    request.arguments.deleted,
-                );
+                this.projectService.updateFileSystem(request.arguments.files, request.arguments.deleted);
                 return this.requiredResponse(/*response*/ true);
             },
             [CommandNames.Exit]: () => {

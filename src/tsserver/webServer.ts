@@ -98,7 +98,7 @@ namespace ts.server {
 
     // TODO: Maybe should leave as ServerHost cast below and declare fs: System
     // TODO: host is probably still a better name
-    function startWebSession(options: StartSessionOptions, logger: Logger, cancellationToken: ServerCancellationToken, fs: ServerHost) {
+    function startWebSession(options: StartSessionOptions, logger: Logger, cancellationToken: ServerCancellationToken, _fs_TODO: ServerHost) {
         class WorkerSession extends server.WorkerSession {
             constructor() {
                 // TODO: Not really sure this is the way to do it

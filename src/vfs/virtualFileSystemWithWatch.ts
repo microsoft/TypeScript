@@ -337,7 +337,7 @@ namespace ts.TestFSWithWatch {
             }
 
             if (options && options.invokeFileDeleteCreateAsPartInsteadOfChange) {
-                this.removeFileOrFolder(currentEntry, returnFalse);
+                this.removeFileOrFolder(currentEntry, false);
                 this.ensureFileOrFolder({ path: filePath, content });
             }
             else {
@@ -363,7 +363,7 @@ namespace ts.TestFSWithWatch {
             Debug.assert(!!file);
 
             // Only remove the file
-            this.removeFileOrFolder(file, returnFalse, /*isRenaming*/ true);
+            this.removeFileOrFolder(file, false, /*isRenaming*/ true);
 
             // Add updated folder with new folder name
             const newFullPath = getNormalizedAbsolutePath(newFileName, this.currentDirectory);
@@ -383,7 +383,7 @@ namespace ts.TestFSWithWatch {
             Debug.assert(!!folder);
 
             // Only remove the folder
-            this.removeFileOrFolder(folder, returnFalse, /*isRenaming*/ true);
+            this.removeFileOrFolder(folder, false, /*isRenaming*/ true);
 
             // Add updated folder with new folder name
             const newFullPath = getNormalizedAbsolutePath(newFolderName, this.currentDirectory);
@@ -474,7 +474,7 @@ namespace ts.TestFSWithWatch {
             this.invokeFileAndFsWatches(folder.fullPath, FileWatcherEventKind.Changed);
         }
 
-        private removeFileOrFolder(fileOrDirectory: FsFile | FsFolder | FsSymLink, isRemovableLeafFolder: (folder: FsFolder) => boolean, isRenaming = false) {
+        private removeFileOrFolder(fileOrDirectory: FsFile | FsFolder | FsSymLink, isRemovableLeafFolder: boolean, isRenaming = false) {
             const basePath = getDirectoryPath(fileOrDirectory.path);
             const baseFolder = this.fs.get(basePath) as FsFolder;
             if (basePath !== fileOrDirectory.path) {
@@ -491,16 +491,16 @@ namespace ts.TestFSWithWatch {
             this.invokeFileAndFsWatches(baseFolder.fullPath, FileWatcherEventKind.Changed);
             if (basePath !== fileOrDirectory.path &&
                 baseFolder.entries.length === 0 &&
-                isRemovableLeafFolder(baseFolder)) {
+                isRemovableLeafFolder) {
                 this.removeFileOrFolder(baseFolder, isRemovableLeafFolder);
             }
         }
 
-        deleteFile(filePath: string) {
+        deleteFile(filePath: string, deleteEmptyParentFolders = false) {
             const path = this.toFullPath(filePath);
             const currentEntry = this.fs.get(path) as FsFile;
             Debug.assert(isFsFile(currentEntry));
-            this.removeFileOrFolder(currentEntry, returnFalse);
+            this.removeFileOrFolder(currentEntry, deleteEmptyParentFolders);
         }
 
         deleteFolder(folderPath: string, recursive?: boolean) {
@@ -514,11 +514,11 @@ namespace ts.TestFSWithWatch {
                         this.deleteFolder(fsEntry.fullPath, recursive);
                     }
                     else {
-                        this.removeFileOrFolder(fsEntry, returnFalse);
+                        this.removeFileOrFolder(fsEntry, false);
                     }
                 });
             }
-            this.removeFileOrFolder(currentEntry, returnFalse);
+            this.removeFileOrFolder(currentEntry, false);
         }
 
         private watchFileWorker(fileName: string, cb: FileWatcherCallback, pollingInterval: PollingInterval) {

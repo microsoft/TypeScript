@@ -459,7 +459,7 @@ namespace ts.server {
         }
 
         readDirectory(path: string, extensions?: readonly string[], exclude?: readonly string[], include?: readonly string[], depth?: number): string[] {
-            return this.directoryStructureHost.readDirectory!(path, extensions, exclude, include, depth) 
+            return this.directoryStructureHost.readDirectory!(path, extensions, exclude, include, depth);
         }
 
         readFile(fileName: string): string | undefined {

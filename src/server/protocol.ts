@@ -1849,25 +1849,22 @@ namespace ts.server.protocol {
     export interface UpdateFileSystemRequestArgs {
         /** For now, only 'memfs', initially for exclusive in-memory operation, but it could be other in-memory names later */
         fileSystem: string;
-        /** List of newly created or newly available files. */
-        created: FileSystemRequestArgs[];
+        /** List of newly created or updated files. */
+        files: FileSystemRequestArgs[];
         /** Names of just-deleted files. */
         deleted: string[];
-        /** List of updated files. */
-        updated: FileSystemRequestArgs[];
     }
 
-    export interface FileSystemRequestArgs extends FileRequestArgs {
+    export interface FileSystemRequestArgs {
+        /**
+         * The file for the request (absolute pathname required).
+         */
+        file: string;
         /**
          * Used to replace the content that would be on disk.
          * Then the known content will be used upon opening instead of the disk copy
          */
-        fileContent?: string;
-        /**
-         * Used to specify the script kind of the file explicitly. It could be one of the following:
-         *      "TS", "JS", "TSX", "JSX"
-         */
-        scriptKindName?: ScriptKindName;
+        fileContent: string;
     }
 
     /**

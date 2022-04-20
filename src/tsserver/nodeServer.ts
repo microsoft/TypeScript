@@ -680,7 +680,7 @@ namespace ts.server {
                     this.event(body, eventName);
                 };
 
-                const host = fs // sys as ServerHost;
+                const host = fs; // sys as ServerHost;
 
                 const typingsInstaller = disableAutomaticTypingAcquisition
                     ? undefined
@@ -688,6 +688,7 @@ namespace ts.server {
 
                 super({
                     host,
+                    fshost: host,
                     cancellationToken,
                     ...options,
                     typingsInstaller: typingsInstaller || nullTypingsInstaller,

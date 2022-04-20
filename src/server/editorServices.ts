@@ -839,7 +839,7 @@ namespace ts.server {
             if (this.host.realpath) {
                 this.realpathToScriptInfos = createMultiMap();
             }
-            const fshost = this.fshost || this.host
+            const fshost = this.fshost || this.host;
             this.currentDirectory = toNormalizedPath(fshost.getCurrentDirectory());
             this.toCanonicalFileName = createGetCanonicalFileName(fshost.useCaseSensitiveFileNames);
             this.globalCacheLocationDirectoryPath = this.typingsInstaller.globalTypingsCacheLocation
@@ -1959,7 +1959,7 @@ namespace ts.server {
 
         /** Get a filename if the language service exceeds the maximum allowed program size; otherwise returns undefined. */
         private getFilenameForExceededTotalSizeLimitForNonTsFiles<T>(name: string, options: CompilerOptions | undefined, fileNames: T[], propertyReader: FilePropertyReader<T>): string | undefined {
-            const fshost = this.fshost || this.host
+            const fshost = this.fshost || this.host;
             if (options && options.disableSizeLimit || !fshost.getFileSize) {
                 return;
             }
@@ -3700,40 +3700,23 @@ namespace ts.server {
         }
 
         /* @internal */
-        updateFileSystem(createdFiles: Iterator<protocol.FileSystemRequestArgs> | undefined, updatedFiles?: Iterator<protocol.FileSystemRequestArgs>, deletedFiles?: string[]) {
+        updateFileSystem(updatedFiles: protocol.FileSystemRequestArgs[] | undefined, deletedFiles?: string[]) {
             Debug.assert(this.fshost);
             const fs = this.fshost as TestFSWithWatch.VirtualServerHost;
-            if (createdFiles) {
-                let it;
-                while (!(it = createdFiles.next()).done) {
-                    const document = it.value;
-                    if (document.fileContent) {
-                        if (!fs.directoryExists(getDirectoryPath(document.file))) {
-                            fs.createDirectory(getDirectoryPath(document.file), /*recursive*/ true);
-                        }
-                        fs.writeFile(document.file, document.fileContent);
-                    }
-                }
-            }
-
             if (updatedFiles) {
-                let it;
-                while (!(it = updatedFiles.next()).done) {
-                    if (it.value.fileContent) {
-                        if (fs.fileExists(it.value.file)) {
-                            fs.modifyFile(it.value.file, it.value.fileContent);
-                        }
-                        else {
-                            fs.createDirectory(getDirectoryPath(it.value.file), /*recursive*/ true);
-                            fs.writeFile(it.value.file, it.value.fileContent);
-                        }
+                for (const { file, fileContent } of updatedFiles) {
+                    if (fs.fileExists(file)) {
+                        fs.modifyFile(file, fileContent);
+                    }
+                    else {
+                        fs.ensureFileOrFolder({ path: getDirectoryPath(file) });
+                        fs.writeFile(file, fileContent);
                     }
                 }
             }
             if (deletedFiles) {
-                // TODO: Probably want to delete empty parent folders while they are empty too
                 for (const file of deletedFiles) {
-                    fs.deleteFile(file);
+                    fs.deleteFile(file, /*deleteEmptyParentFolders*/ true);
                 }
             }
         }
