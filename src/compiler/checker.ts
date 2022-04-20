@@ -29013,10 +29013,17 @@ namespace ts {
                 prop = getPropertyOfType(apparentType, right.escapedText);
             }
             // In `Foo.Bar.Baz`, 'Foo' is not referenced if 'Bar' is a const enum or a module containing only const enums.
+            // `Foo` is also not referenced in `enum FooCopy { Bar = Foo.Bar }`, because the enum member value gets inlined
+            // here even if `Foo` is not a const enum.
+            //
             // The exceptions are:
             //   1. if 'isolatedModules' is enabled, because the const enum value will not be inlined, and
             //   2. if 'preserveConstEnums' is enabled and the expression is itself an export, e.g. `export = Foo.Bar.Baz`.
-            if (isIdentifier(left) && parentSymbol && (compilerOptions.isolatedModules || !(prop && isConstEnumOrConstEnumOnlyModule(prop)) || shouldPreserveConstEnums(compilerOptions) && isExportOrExportExpression(node))) {
+            if (isIdentifier(left) && parentSymbol && (
+                compilerOptions.isolatedModules ||
+                !(prop && (isConstEnumOrConstEnumOnlyModule(prop) || prop.flags & SymbolFlags.EnumMember && node.parent.kind === SyntaxKind.EnumMember)) ||
+                shouldPreserveConstEnums(compilerOptions) && isExportOrExportExpression(node)
+            )) {
                 markAliasReferenced(parentSymbol, node);
             }
 
@@ -40291,7 +40298,7 @@ namespace ts {
 
         function isConstantMemberAccess(node: Expression): node is AccessExpression {
             const type = getTypeOfExpression(node);
-            if(type === errorType) {
+            if (type === errorType) {
                 return false;
             }
 
@@ -42042,15 +42049,20 @@ namespace ts {
                         return propertyDeclaration;
                     }
                 }
-                else if (isMetaProperty(parent)) {
-                    const parentType = getTypeOfNode(parent);
-                    const propertyDeclaration = getPropertyOfType(parentType, (node as Identifier).escapedText);
-                    if (propertyDeclaration) {
-                        return propertyDeclaration;
-                    }
-                    if (parent.keywordToken === SyntaxKind.NewKeyword) {
+                else if (isMetaProperty(parent) && parent.name === node) {
+                    if (parent.keywordToken === SyntaxKind.NewKeyword && idText(node as Identifier) === "target") {
+                        // `target` in `new.target`
                         return checkNewTargetMetaProperty(parent).symbol;
                     }
+                    // The `meta` in `import.meta` could be given `getTypeOfNode(parent).symbol` (the `ImportMeta` interface symbol), but
+                    // we have a fake expression type made for other reasons already, whose transient `meta`
+                    // member should more exactly be the kind of (declarationless) symbol we want.
+                    // (See #44364 and #45031 for relevant implementation PRs)
+                    if (parent.keywordToken === SyntaxKind.ImportKeyword && idText(node as Identifier) === "meta") {
+                        return getGlobalImportMetaExpressionType().members!.get("meta" as __String);
+                    }
+                    // no other meta properties are valid syntax, thus no others should have symbols
+                    return undefined;
                 }
             }
 
