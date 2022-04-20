@@ -4369,7 +4369,7 @@ namespace ts {
             }
 
             // It wasn't an assignment or a lambda.  This is a conditional expression:
-            return parseConditionalExpressionRest(expr, pos);
+            return parseConditionalExpressionRest(expr, pos, disallowReturnTypeInArrowFunction);
         }
 
         function isYieldExpression(): boolean {
@@ -4783,7 +4783,7 @@ namespace ts {
             return node;
         }
 
-        function parseConditionalExpressionRest(leftOperand: Expression, pos: number): Expression {
+        function parseConditionalExpressionRest(leftOperand: Expression, pos: number, disallowReturnTypeInArrowFunction: boolean): Expression {
             // Note: we are passed in an expression which was produced from parseBinaryExpressionOrHigher.
             const questionToken = parseOptionalToken(SyntaxKind.QuestionToken);
             if (!questionToken) {
@@ -4800,7 +4800,7 @@ namespace ts {
                     doOutsideOfContext(disallowInAndDecoratorContext, () => parseAssignmentExpressionOrHigher(/*disallowReturnTypeInArrowFunction*/ true)),
                     colonToken = parseExpectedToken(SyntaxKind.ColonToken),
                     nodeIsPresent(colonToken)
-                        ? parseAssignmentExpressionOrHigher(/*disallowReturnTypeInArrowFunction*/ true)
+                        ? parseAssignmentExpressionOrHigher(disallowReturnTypeInArrowFunction) // inherit disallowReturnTypeInArrowFunction in false side
                         : createMissingNode(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ false, Diagnostics._0_expected, tokenToString(SyntaxKind.ColonToken))
                 ),
                 pos

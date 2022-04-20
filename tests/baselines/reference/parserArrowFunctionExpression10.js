@@ -3,5 +3,4 @@ a ? (b) : c => (d) : e => f
 
 
 //// [parserArrowFunctionExpression10.js]
-a ? (b) : function (c) { return (d); };
-(function (e) { return f; });
+a ? (b) : function (c) { return function (d) { return f; }; };
