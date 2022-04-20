@@ -10,26 +10,7 @@ namespace ts {
             outputFiles.push({ name: fileName, writeByteOrderMark, text });
         }
     }
-
-    export interface ReusableBuilderState {
-        /**
-         * Information of the file eg. its version, signature etc
-         */
-        fileInfos: ReadonlyESMap<Path, BuilderState.FileInfo>;
-        /**
-         * Contains the map of ReferencedSet=Referenced files of the file if module emit is enabled
-         * Otherwise undefined
-         * Thus non undefined value indicates, module emit
-         */
-        readonly referencedMap?: BuilderState.ReadonlyManyToManyPathMap | undefined;
-        /**
-         * Contains the map of exported modules ReferencedSet=exported module files from the file if module emit is enabled
-         * Otherwise undefined
-         */
-        readonly exportedModulesMap?: BuilderState.ReadonlyManyToManyPathMap | undefined;
-    }
-
-    export interface BuilderState extends ReusableBuilderState {
+    export interface BuilderState {
         /**
          * Information of the file eg. its version, signature etc
          */
@@ -52,13 +33,13 @@ namespace ts {
          * true if file version is used as signature
          * This helps in delaying the calculation of the d.ts hash as version for the file till reasonable time
          */
-        useFileVersionAsSignature: boolean;
+        useFileVersionAsSignature?: boolean;
         /**
          * Map of files that have already called update signature.
          * That means hence forth these files are assumed to have
          * no change in their signature for this version of the program
          */
-        hasCalledUpdateShapeSignature: Set<Path>;
+        hasCalledUpdateShapeSignature?: Set<Path>;
         /**
          * Cache of all files excluding default library file for the current program
          */
@@ -68,7 +49,6 @@ namespace ts {
          */
         allFileNames?: readonly string[];
     }
-
     export namespace BuilderState {
         /**
          * Information about the source file: Its version and optional signature from last emit
@@ -287,18 +267,17 @@ namespace ts {
         /**
          * Returns true if oldState is reusable, that is the emitKind = module/non module has not changed
          */
-        export function canReuseOldState(newReferencedMap: ReadonlyManyToManyPathMap | undefined, oldState: Readonly<ReusableBuilderState> | undefined) {
+        export function canReuseOldState(newReferencedMap: ReadonlyManyToManyPathMap | undefined, oldState: BuilderState | undefined) {
             return oldState && !oldState.referencedMap === !newReferencedMap;
         }
 
         /**
          * Creates the state of file references and signature for the new program from oldState if it is safe
          */
-        export function create(newProgram: Program, getCanonicalFileName: GetCanonicalFileName, oldState?: Readonly<ReusableBuilderState>, disableUseFileVersionAsSignature?: boolean): BuilderState {
+        export function create(newProgram: Program, getCanonicalFileName: GetCanonicalFileName, oldState?: Readonly<BuilderState>, disableUseFileVersionAsSignature?: boolean): BuilderState {
             const fileInfos = new Map<Path, FileInfo>();
             const referencedMap = newProgram.getCompilerOptions().module !== ModuleKind.None ? createManyToManyPathMap() : undefined;
             const exportedModulesMap = referencedMap ? createManyToManyPathMap() : undefined;
-            const hasCalledUpdateShapeSignature = new Set<Path>();
             const useOldState = canReuseOldState(referencedMap, oldState);
 
             // Ensure source files have parent pointers set
@@ -328,7 +307,6 @@ namespace ts {
                 fileInfos,
                 referencedMap,
                 exportedModulesMap,
-                hasCalledUpdateShapeSignature,
                 useFileVersionAsSignature: !disableUseFileVersionAsSignature && !useOldState
             };
         }
@@ -350,7 +328,7 @@ namespace ts {
                 fileInfos: new Map(state.fileInfos),
                 referencedMap: state.referencedMap?.clone(),
                 exportedModulesMap: state.exportedModulesMap?.clone(),
-                hasCalledUpdateShapeSignature: new Set(state.hasCalledUpdateShapeSignature),
+                hasCalledUpdateShapeSignature: state.hasCalledUpdateShapeSignature && new Set(state.hasCalledUpdateShapeSignature),
                 useFileVersionAsSignature: state.useFileVersionAsSignature,
             };
         }
@@ -391,18 +369,18 @@ namespace ts {
 
         export function updateSignatureOfFile(state: BuilderState, signature: string | undefined, path: Path) {
             state.fileInfos.get(path)!.signature = signature;
-            state.hasCalledUpdateShapeSignature.add(path);
+            (state.hasCalledUpdateShapeSignature ||= new Set()).add(path);
         }
 
         /**
          * Returns if the shape of the signature has changed since last emit
          */
-        export function updateShapeSignature(state: Readonly<BuilderState>, programOfThisState: Program, sourceFile: SourceFile, cacheToUpdateSignature: ESMap<Path, string>, cancellationToken: CancellationToken | undefined, computeHash: ComputeHash, exportedModulesMapCache?: ManyToManyPathMap, useFileVersionAsSignature: boolean = state.useFileVersionAsSignature) {
+        export function updateShapeSignature(state: Readonly<BuilderState>, programOfThisState: Program, sourceFile: SourceFile, cacheToUpdateSignature: ESMap<Path, string>, cancellationToken: CancellationToken | undefined, computeHash: ComputeHash, exportedModulesMapCache?: ManyToManyPathMap, useFileVersionAsSignature = state.useFileVersionAsSignature) {
             Debug.assert(!!sourceFile);
             Debug.assert(!exportedModulesMapCache || !!state.exportedModulesMap, "Compute visible to outside map only if visibleToOutsideReferencedMap present in the state");
 
             // If we have cached the result for this file, that means hence forth we should assume file shape is uptodate
-            if (state.hasCalledUpdateShapeSignature.has(sourceFile.resolvedPath) || cacheToUpdateSignature.has(sourceFile.resolvedPath)) {
+            if (state.hasCalledUpdateShapeSignature?.has(sourceFile.resolvedPath) || cacheToUpdateSignature.has(sourceFile.resolvedPath)) {
                 return false;
             }
 

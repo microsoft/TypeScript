@@ -20,15 +20,15 @@ namespace ts {
 
     export type ReusableDiagnosticMessageChain = DiagnosticMessageChain;
 
-    export interface ReusableBuilderProgramState extends ReusableBuilderState {
+    export interface ReusableBuilderProgramState extends BuilderState {
         /**
          * Cache of bind and check diagnostics for files with their Path being the key
          */
-        semanticDiagnosticsPerFile?: ReadonlyESMap<Path, readonly ReusableDiagnostic[] | readonly Diagnostic[]> | undefined;
+        semanticDiagnosticsPerFile?: ESMap<Path, readonly ReusableDiagnostic[] | readonly Diagnostic[]> | undefined;
         /**
          * The map has key by source file's path that has been changed
          */
-        changedFilesSet: ReadonlySet<Path>;
+        changedFilesSet: Set<Path>;
         /**
          * Set of affected files being iterated
          */
@@ -41,11 +41,11 @@ namespace ts {
          * Map of file signatures, with key being file path, calculated while getting current changed file's affected files
          * These will be committed whenever the iteration through affected files of current changed file is complete
          */
-        currentAffectedFilesSignatures?: ReadonlyESMap<Path, string> | undefined;
+        currentAffectedFilesSignatures?: ESMap<Path, string> | undefined;
         /**
          * Newly computed visible to outside referencedSet
          */
-        currentAffectedFilesExportedModulesMap?: BuilderState.ReadonlyManyToManyPathMap | undefined;
+        currentAffectedFilesExportedModulesMap?: BuilderState.ManyToManyPathMap | undefined;
         /**
          * True if the semantic diagnostics were copied from the old state
          */
@@ -65,7 +65,7 @@ namespace ts {
         /**
          * Files pending to be emitted kind.
          */
-        affectedFilesPendingEmitKind?: ReadonlyESMap<Path, BuilderFileEmit> | undefined;
+        affectedFilesPendingEmitKind?: ESMap<Path, BuilderFileEmit> | undefined;
         /**
          * Current index to retrieve pending affected file
          */
@@ -74,11 +74,18 @@ namespace ts {
          * true if semantic diagnostics are ReusableDiagnostic instead of Diagnostic
          */
         hasReusableDiagnostic?: true;
-
-        emitSignatures?: ReadonlyESMap<Path, string>;
+        /**
+         * Hash of d.ts emitted for the file, use to track when emit of d.ts changes
+         */
+        emitSignatures?: ESMap<Path, string>;
+        /**
+         * Hash of d.ts emit with --out
+         */
         outSignature?: string;
+        /**
+         * Time when d.ts was modified
+         */
         dtsChangeTime: number | undefined;
-        hasChangedEmitSignature?: boolean;
     }
 
     export const enum BuilderFileEmit {
@@ -90,38 +97,15 @@ namespace ts {
      * State to store the changed files, affected files and cache semantic diagnostics
      */
     // TODO: GH#18217 Properties of this interface are frequently asserted to be defined.
-    export interface BuilderProgramState extends BuilderState {
+    export interface BuilderProgramState extends BuilderState, ReusableBuilderProgramState {
         /**
          * Cache of bind and check diagnostics for files with their Path being the key
          */
         semanticDiagnosticsPerFile: ESMap<Path, readonly Diagnostic[]> | undefined;
         /**
-         * The map has key by source file's path that has been changed
-         */
-        changedFilesSet: Set<Path>;
-        /**
-         * Set of affected files being iterated
-         */
-        affectedFiles: readonly SourceFile[] | undefined;
-        /**
          * Current index to retrieve affected file from
          */
         affectedFilesIndex: number | undefined;
-        /**
-         * Current changed file for iterating over affected files
-         */
-        currentChangedFilePath: Path | undefined;
-        /**
-         * Map of file signatures, with key being file path, calculated while getting current changed file's affected files
-         * These will be committed whenever the iteration through affected files of current changed file is complete
-         */
-        currentAffectedFilesSignatures: ESMap<Path, string> | undefined;
-        /**
-         * Newly computed visible to outside referencedSet
-         * We need to store the updates separately in case the in-progress build is cancelled
-         * and we need to roll back.
-         */
-        currentAffectedFilesExportedModulesMap: BuilderState.ManyToManyPathMap | undefined;
         /**
          * Already seen affected files
          */
@@ -131,33 +115,13 @@ namespace ts {
          */
         cleanedDiagnosticsOfLibFiles?: boolean;
         /**
-         * True if the semantic diagnostics were copied from the old state
+         * Records if change in dts emit was detected
          */
-        semanticDiagnosticsFromOldState?: Set<Path>;
-        /**
-         * program corresponding to this state
-         */
-        program: Program | undefined;
-        /**
-         * compilerOptions for the program
-         */
-        compilerOptions: CompilerOptions;
-        emitSignatures?: ESMap<Path, string>;
-        outSignature?: string;
-        dtsChangeTime: number | undefined;
-        hasChangedEmitSignature?: boolean;
+         hasChangedEmitSignature?: boolean;
         /**
          * Files pending to be emitted
          */
         affectedFilesPendingEmit: Path[] | undefined;
-        /**
-         * Files pending to be emitted kind.
-         */
-        affectedFilesPendingEmitKind: ESMap<Path, BuilderFileEmit> | undefined;
-        /**
-         * Current index to retrieve pending affected file
-         */
-        affectedFilesPendingEmitIndex: number | undefined;
         /**
          * true if build info is emitted
          */
@@ -196,7 +160,7 @@ namespace ts {
             state.outSignature = oldState?.outSignature;
         }
         state.changedFilesSet = new Set();
-        state.dtsChangeTime = oldState?.dtsChangeTime;
+        state.dtsChangeTime = compilerOptions.composite ? oldState?.dtsChangeTime : undefined;
 
         const useOldState = BuilderState.canReuseOldState(state.referencedMap, oldState);
         const oldCompilerOptions = useOldState ? oldState!.compilerOptions : undefined;
@@ -507,7 +471,7 @@ namespace ts {
             );
             return;
         }
-        Debug.assert(state.hasCalledUpdateShapeSignature.has(affectedFile.resolvedPath) || state.currentAffectedFilesSignatures?.has(affectedFile.resolvedPath), `Signature not updated for affected file: ${affectedFile.fileName}`);
+        Debug.assert(state.hasCalledUpdateShapeSignature?.has(affectedFile.resolvedPath) || state.currentAffectedFilesSignatures?.has(affectedFile.resolvedPath), `Signature not updated for affected file: ${affectedFile.fileName}`);
         if (state.compilerOptions.assumeChangesOnlyAffectDirectDependencies) return;
         handleDtsMayChangeOfReferencingExportOfAffectedFile(state, affectedFile, cancellationToken, computeHash, host);
     }
@@ -844,7 +808,7 @@ namespace ts {
     /**
      * Gets the program information to be emitted in buildInfo so that we can use it to create new program
      */
-    function getProgramBuildInfo(state: ReusableBuilderProgramState, getCanonicalFileName: GetCanonicalFileName, host: BuilderProgramHost): ProgramBuildInfo | undefined {
+    function getProgramBuildInfo(state: BuilderProgramState, getCanonicalFileName: GetCanonicalFileName, host: BuilderProgramHost): ProgramBuildInfo | undefined {
         const outFilePath = outFile(state.compilerOptions);
         if (outFilePath && !state.compilerOptions.composite) return;
         const currentDirectory = Debug.checkDefined(state.program).getCurrentDirectory();
@@ -924,9 +888,7 @@ namespace ts {
                         value.length ?
                             [
                                 toFileId(key),
-                                state.hasReusableDiagnostic ?
-                                    value as readonly ReusableDiagnostic[] :
-                                    convertToReusableDiagnostics(value as readonly Diagnostic[], relativeToBuildInfo)
+                                convertToReusableDiagnostics(value, relativeToBuildInfo)
                             ] :
                             toFileId(key)
                     );
@@ -1541,7 +1503,7 @@ namespace ts {
         }
     }
 
-    export function createRedirectedBuilderProgram(getState: () => { program: Program | undefined; compilerOptions: CompilerOptions; }, configFileParsingDiagnostics: readonly Diagnostic[]): BuilderProgram {
+    export function createRedirectedBuilderProgram(getState: () => { program?: Program | undefined; compilerOptions: CompilerOptions; }, configFileParsingDiagnostics: readonly Diagnostic[]): BuilderProgram {
         return {
             getState: notImplemented,
             backupState: noop,
