@@ -4452,7 +4452,7 @@ namespace ts {
         }
 
         function tryParseParenthesizedArrowFunctionExpression(disallowReturnTypeInArrowFunction: boolean): Expression | undefined {
-            const triState = isParenthesizedArrowFunctionExpression(disallowReturnTypeInArrowFunction);
+            const triState = isParenthesizedArrowFunctionExpression();
             if (triState === Tristate.False) {
                 // It's definitely not a parenthesized arrow function expression.
                 return undefined;
@@ -4471,9 +4471,9 @@ namespace ts {
         //  False       -> There *cannot* be a parenthesized arrow function here.
         //  Unknown     -> There *might* be a parenthesized arrow function here.
         //                 Speculatively look ahead to be sure, and rollback if not.
-        function isParenthesizedArrowFunctionExpression(disallowReturnTypeInArrowFunction: boolean): Tristate {
+        function isParenthesizedArrowFunctionExpression(): Tristate {
             if (token() === SyntaxKind.OpenParenToken || token() === SyntaxKind.LessThanToken || token() === SyntaxKind.AsyncKeyword) {
-                return lookAhead(() => isParenthesizedArrowFunctionExpressionWorker(disallowReturnTypeInArrowFunction));
+                return lookAhead(isParenthesizedArrowFunctionExpressionWorker);
             }
 
             if (token() === SyntaxKind.EqualsGreaterThanToken) {
@@ -4486,7 +4486,7 @@ namespace ts {
             return Tristate.False;
         }
 
-        function isParenthesizedArrowFunctionExpressionWorker(disallowReturnTypeInArrowFunction: boolean) {
+        function isParenthesizedArrowFunctionExpressionWorker() {
             if (token() === SyntaxKind.AsyncKeyword) {
                 nextToken();
                 if (scanner.hasPrecedingLineBreak()) {
@@ -4508,13 +4508,8 @@ namespace ts {
                     // but this is probably what the user intended.
                     const third = nextToken();
                     switch (third) {
-                        case SyntaxKind.ColonToken:
-                            if (disallowReturnTypeInArrowFunction) {
-                                // "a ? () : ..."
-                                return Tristate.False;
-                            }
-                            return Tristate.True;
                         case SyntaxKind.EqualsGreaterThanToken:
+                        case SyntaxKind.ColonToken:
                         case SyntaxKind.OpenBraceToken:
                             return Tristate.True;
                         default:
