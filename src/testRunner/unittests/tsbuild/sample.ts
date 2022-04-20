@@ -13,7 +13,7 @@ namespace ts {
 
         function getTsBuildProjectFile(project: string, file: string): tscWatch.File {
             return {
-                path: TestFSWithWatch.getTsBuildProjectFilePath(project, file),
+                path: VirtualFS.getTsBuildProjectFilePath(project, file),
                 content: projFs.readFileSync(`/src/${project}/${file}`, "utf8")!
             };
         }
@@ -233,8 +233,8 @@ namespace ts {
                 const testsConfig = getTsBuildProjectFile("tests", "tsconfig.json");
                 const testsIndex = getTsBuildProjectFile("tests", "index.ts");
                 const baseline: string[] = [];
-                let oldSnap: ReturnType<TestFSWithWatch.TestServerHost["snap"]> | undefined;
-                const system = TestFSWithWatch.changeToHostTrackingWrittenFiles(
+                let oldSnap: ReturnType<VirtualFS.TestServerHost["snap"]> | undefined;
+                const system = VirtualFS.changeToHostTrackingWrittenFiles(
                     fakes.patchHostForBuildInfoReadWrite(
                         tscWatch.createWatchedSystem([
                             coreConfig, coreIndex, coreDecl, coreAnotherModule,
@@ -304,8 +304,8 @@ namespace ts {
                 const testsConfig = getTsBuildProjectFile("tests", "tsconfig.json");
                 const testsIndex = getTsBuildProjectFile("tests", "index.ts");
                 const baseline: string[] = [];
-                let oldSnap: ReturnType<TestFSWithWatch.TestServerHost["snap"]> | undefined;
-                const system = TestFSWithWatch.changeToHostTrackingWrittenFiles(
+                let oldSnap: ReturnType<VirtualFS.TestServerHost["snap"]> | undefined;
+                const system = VirtualFS.changeToHostTrackingWrittenFiles(
                     fakes.patchHostForBuildInfoReadWrite(
                         tscWatch.createWatchedSystem([
                             coreConfig, coreIndex, coreDecl, coreAnotherModule,

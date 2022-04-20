@@ -110,7 +110,7 @@ ${appendDts}`
         describe("when dependency project is not open", () => {
             describe("Of usageTs", () => {
                 it("with initial file open, without specifying project file", () => {
-                    const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
+                    const host = VirtualFS.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
                     const session = createSession(host);
@@ -146,7 +146,7 @@ ${appendDts}`
                     assert.deepEqual(actualEmitOutput, expectedEmitOutput(expectedFiles), "Emit output");
                 });
                 it("with initial file open, with specifying project file", () => {
-                    const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
+                    const host = VirtualFS.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
                     const session = createSession(host);
@@ -182,7 +182,7 @@ ${appendDts}`
                     assert.deepEqual(actualEmitOutput, expectedEmitOutput(expectedFiles), "Emit output");
                 });
                 it("with local change to dependency, without specifying project file", () => {
-                    const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
+                    const host = VirtualFS.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
                     const session = createSession(host);
@@ -225,7 +225,7 @@ ${appendDts}`
                     assert.deepEqual(actualEmitOutput, expectedEmitOutput(expectedFiles), "Emit output");
                 });
                 it("with local change to dependency, with specifying project file", () => {
-                    const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
+                    const host = VirtualFS.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
                     const session = createSession(host);
@@ -268,7 +268,7 @@ ${appendDts}`
                     assert.deepEqual(actualEmitOutput, expectedEmitOutput(expectedFiles), "Emit output");
                 });
                 it("with local change to usage, without specifying project file", () => {
-                    const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
+                    const host = VirtualFS.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
                     const session = createSession(host);
@@ -322,7 +322,7 @@ ${appendDts}`
                     assert.deepEqual(actualEmitOutput, expectedEmitOutput(expectedFiles), "Emit output");
                 });
                 it("with local change to usage, with specifying project file", () => {
-                    const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
+                    const host = VirtualFS.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
                     const session = createSession(host);
@@ -376,7 +376,7 @@ ${appendDts}`
                     assert.deepEqual(actualEmitOutput, expectedEmitOutput(expectedFiles), "Emit output");
                 });
                 it("with change to dependency, without specifying project file", () => {
-                    const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
+                    const host = VirtualFS.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
                     const session = createSession(host);
@@ -419,7 +419,7 @@ ${appendDts}`
                     assert.deepEqual(actualEmitOutput, expectedEmitOutput(expectedFiles), "Emit output");
                 });
                 it("with change to dependency, with specifying project file", () => {
-                    const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
+                    const host = VirtualFS.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
                     const session = createSession(host);
@@ -462,7 +462,7 @@ ${appendDts}`
                     assert.deepEqual(actualEmitOutput, expectedEmitOutput(expectedFiles), "Emit output");
                 });
                 it("with change to usage, without specifying project file", () => {
-                    const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
+                    const host = VirtualFS.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
                     const session = createSession(host);
@@ -516,7 +516,7 @@ ${appendDts}`
                     assert.deepEqual(actualEmitOutput, expectedEmitOutput(expectedFiles), "Emit output");
                 });
                 it("with change to usage, with specifying project file", () => {
-                    const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
+                    const host = VirtualFS.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
                     const session = createSession(host);
@@ -573,7 +573,7 @@ ${appendDts}`
 
             describe("Of dependencyTs in usage project", () => {
                 it("with initial file open, without specifying project file", () => {
-                    const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
+                    const host = VirtualFS.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
                     const session = createSession(host);
@@ -604,7 +604,7 @@ ${appendDts}`
                     assert.deepEqual(actualEmitOutput, noEmitOutput(), "Emit output");
                 });
                 it("with initial file open, with specifying project file", () => {
-                    const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
+                    const host = VirtualFS.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
                     const session = createSession(host);
@@ -635,7 +635,7 @@ ${appendDts}`
                     assert.deepEqual(actualEmitOutput, noEmitOutput(), "Emit output");
                 });
                 it("with local change to dependency, without specifying project file", () => {
-                    const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
+                    const host = VirtualFS.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
                     const session = createSession(host);
@@ -673,7 +673,7 @@ ${appendDts}`
                     assert.deepEqual(actualEmitOutput, noEmitOutput(), "Emit output");
                 });
                 it("with local change to dependency, with specifying project file", () => {
-                    const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
+                    const host = VirtualFS.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
                     const session = createSession(host);
@@ -711,7 +711,7 @@ ${appendDts}`
                     assert.deepEqual(actualEmitOutput, noEmitOutput(), "Emit output");
                 });
                 it("with local change to usage, without specifying project file", () => {
-                    const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
+                    const host = VirtualFS.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
                     const session = createSession(host);
@@ -760,7 +760,7 @@ ${appendDts}`
                     assert.deepEqual(actualEmitOutput, noEmitOutput(), "Emit output");
                 });
                 it("with local change to usage, with specifying project file", () => {
-                    const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
+                    const host = VirtualFS.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
                     const session = createSession(host);
@@ -809,7 +809,7 @@ ${appendDts}`
                     assert.deepEqual(actualEmitOutput, noEmitOutput(), "Emit output");
                 });
                 it("with change to dependency, without specifying project file", () => {
-                    const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
+                    const host = VirtualFS.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
                     const session = createSession(host);
@@ -847,7 +847,7 @@ ${appendDts}`
                     assert.deepEqual(actualEmitOutput, noEmitOutput(), "Emit output");
                 });
                 it("with change to dependency, with specifying project file", () => {
-                    const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
+                    const host = VirtualFS.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
                     const session = createSession(host);
@@ -885,7 +885,7 @@ ${appendDts}`
                     assert.deepEqual(actualEmitOutput, noEmitOutput(), "Emit output");
                 });
                 it("with change to usage, without specifying project file", () => {
-                    const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
+                    const host = VirtualFS.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
                     const session = createSession(host);
@@ -934,7 +934,7 @@ ${appendDts}`
                     assert.deepEqual(actualEmitOutput, noEmitOutput(), "Emit output");
                 });
                 it("with change to usage, with specifying project file", () => {
-                    const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
+                    const host = VirtualFS.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
                     const session = createSession(host);
@@ -988,7 +988,7 @@ ${appendDts}`
         describe("when the depedency file is open", () => {
             describe("Of usageTs", () => {
                 it("with initial file open, without specifying project file", () => {
-                    const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
+                    const host = VirtualFS.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
                     const session = createSession(host);
@@ -1024,7 +1024,7 @@ ${appendDts}`
                     assert.deepEqual(actualEmitOutput, expectedEmitOutput(expectedFiles), "Emit output");
                 });
                 it("with initial file open, with specifying project file", () => {
-                    const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
+                    const host = VirtualFS.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
                     const session = createSession(host);
@@ -1060,7 +1060,7 @@ ${appendDts}`
                     assert.deepEqual(actualEmitOutput, expectedEmitOutput(expectedFiles), "Emit output");
                 });
                 it("with local change to dependency, without specifying project file", () => {
-                    const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
+                    const host = VirtualFS.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
                     const session = createSession(host);
@@ -1114,7 +1114,7 @@ ${appendDts}`
                     assert.deepEqual(actualEmitOutput, expectedEmitOutput(expectedFiles), "Emit output");
                 });
                 it("with local change to dependency, with specifying project file", () => {
-                    const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
+                    const host = VirtualFS.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
                     const session = createSession(host);
@@ -1168,7 +1168,7 @@ ${appendDts}`
                     assert.deepEqual(actualEmitOutput, expectedEmitOutput(expectedFiles), "Emit output");
                 });
                 it("with local change to usage, without specifying project file", () => {
-                    const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
+                    const host = VirtualFS.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
                     const session = createSession(host);
@@ -1222,7 +1222,7 @@ ${appendDts}`
                     assert.deepEqual(actualEmitOutput, expectedEmitOutput(expectedFiles), "Emit output");
                 });
                 it("with local change to usage, with specifying project file", () => {
-                    const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
+                    const host = VirtualFS.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
                     const session = createSession(host);
@@ -1276,7 +1276,7 @@ ${appendDts}`
                     assert.deepEqual(actualEmitOutput, expectedEmitOutput(expectedFiles), "Emit output");
                 });
                 it("with change to dependency, without specifying project file", () => {
-                    const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
+                    const host = VirtualFS.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
                     const session = createSession(host);
@@ -1330,7 +1330,7 @@ ${appendDts}`
                     assert.deepEqual(actualEmitOutput, expectedEmitOutput(expectedFiles), "Emit output");
                 });
                 it("with change to dependency, with specifying project file", () => {
-                    const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
+                    const host = VirtualFS.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
                     const session = createSession(host);
@@ -1384,7 +1384,7 @@ ${appendDts}`
                     assert.deepEqual(actualEmitOutput, expectedEmitOutput(expectedFiles), "Emit output");
                 });
                 it("with change to usage, without specifying project file", () => {
-                    const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
+                    const host = VirtualFS.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
                     const session = createSession(host);
@@ -1438,7 +1438,7 @@ ${appendDts}`
                     assert.deepEqual(actualEmitOutput, expectedEmitOutput(expectedFiles), "Emit output");
                 });
                 it("with change to usage, with specifying project file", () => {
-                    const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
+                    const host = VirtualFS.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
                     const session = createSession(host);
@@ -1495,7 +1495,7 @@ ${appendDts}`
 
             describe("Of dependencyTs in usage project", () => {
                 it("with initial file open, with specifying project file", () => {
-                    const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
+                    const host = VirtualFS.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
                     const session = createSession(host);
@@ -1526,7 +1526,7 @@ ${appendDts}`
                     assert.deepEqual(actualEmitOutput, noEmitOutput(), "Emit output");
                 });
                 it("with local change to dependency, with specifying project file", () => {
-                    const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
+                    const host = VirtualFS.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
                     const session = createSession(host);
@@ -1575,7 +1575,7 @@ ${appendDts}`
                     assert.deepEqual(actualEmitOutput, noEmitOutput(), "Emit output");
                 });
                 it("with local change to usage, with specifying project file", () => {
-                    const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
+                    const host = VirtualFS.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
                     const session = createSession(host);
@@ -1624,7 +1624,7 @@ ${appendDts}`
                     assert.deepEqual(actualEmitOutput, noEmitOutput(), "Emit output");
                 });
                 it("with change to dependency, with specifying project file", () => {
-                    const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
+                    const host = VirtualFS.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
                     const session = createSession(host);
@@ -1673,7 +1673,7 @@ ${appendDts}`
                     assert.deepEqual(actualEmitOutput, noEmitOutput(), "Emit output");
                 });
                 it("with change to usage, with specifying project file", () => {
-                    const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
+                    const host = VirtualFS.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
                     const session = createSession(host);
@@ -1725,7 +1725,7 @@ ${appendDts}`
 
             describe("Of dependencyTs", () => {
                 it("with initial file open, without specifying project file", () => {
-                    const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
+                    const host = VirtualFS.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
                     const session = createSession(host);
@@ -1762,7 +1762,7 @@ ${appendDts}`
                     assert.deepEqual(actualEmitOutput, expectedEmitOutput(expectedFiles), "Emit output");
                 });
                 it("with initial file open, with specifying project file", () => {
-                    const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
+                    const host = VirtualFS.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
                     const session = createSession(host);
@@ -1798,7 +1798,7 @@ ${appendDts}`
                     assert.deepEqual(actualEmitOutput, expectedEmitOutput(expectedFiles), "Emit output");
                 });
                 it("with local change to dependency, without specifying project file", () => {
-                    const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
+                    const host = VirtualFS.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
                     const session = createSession(host);
@@ -1853,7 +1853,7 @@ ${appendDts}`
                     assert.deepEqual(actualEmitOutput, expectedEmitOutput(expectedFiles), "Emit output");
                 });
                 it("with local change to dependency, with specifying project file", () => {
-                    const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
+                    const host = VirtualFS.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
                     const session = createSession(host);
@@ -1907,7 +1907,7 @@ ${appendDts}`
                     assert.deepEqual(actualEmitOutput, expectedEmitOutput(expectedFiles), "Emit output");
                 });
                 it("with local change to usage, without specifying project file", () => {
-                    const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
+                    const host = VirtualFS.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
                     const session = createSession(host);
@@ -1962,7 +1962,7 @@ ${appendDts}`
                     assert.deepEqual(actualEmitOutput, expectedEmitOutput(expectedFiles), "Emit output");
                 });
                 it("with local change to usage, with specifying project file", () => {
-                    const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
+                    const host = VirtualFS.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
                     const session = createSession(host);
@@ -2016,7 +2016,7 @@ ${appendDts}`
                     assert.deepEqual(actualEmitOutput, expectedEmitOutput(expectedFiles), "Emit output");
                 });
                 it("with change to dependency, without specifying project file", () => {
-                    const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
+                    const host = VirtualFS.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
                     const session = createSession(host);
@@ -2071,7 +2071,7 @@ ${appendDts}`
                     assert.deepEqual(actualEmitOutput, expectedEmitOutput(expectedFiles), "Emit output");
                 });
                 it("with change to dependency, with specifying project file", () => {
-                    const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
+                    const host = VirtualFS.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
                     const session = createSession(host);
@@ -2125,7 +2125,7 @@ ${appendDts}`
                     assert.deepEqual(actualEmitOutput, expectedEmitOutput(expectedFiles), "Emit output");
                 });
                 it("with change to usage, without specifying project file", () => {
-                    const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
+                    const host = VirtualFS.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
                     const session = createSession(host);
@@ -2180,7 +2180,7 @@ ${appendDts}`
                     assert.deepEqual(actualEmitOutput, expectedEmitOutput(expectedFiles), "Emit output");
                 });
                 it("with change to usage, with specifying project file", () => {
-                    const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(
+                    const host = VirtualFS.changeToHostTrackingWrittenFiles(
                         createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile])
                     );
                     const session = createSession(host);

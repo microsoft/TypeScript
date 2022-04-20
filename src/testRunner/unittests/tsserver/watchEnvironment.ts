@@ -1,5 +1,5 @@
 namespace ts.projectSystem {
-    import Tsc_WatchDirectory = TestFSWithWatch.Tsc_WatchDirectory;
+    import Tsc_WatchDirectory = VirtualFS.Tsc_WatchDirectory;
     describe("unittests:: tsserver:: watchEnvironment:: tsserverProjectSystem watchDirectories implementation", () => {
         function verifyCompletionListWithNewFileInSubFolder(tscWatchDirectory: Tsc_WatchDirectory) {
             const projectFolder = "/a/username/project";

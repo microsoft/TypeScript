@@ -149,7 +149,7 @@ namespace ts.projectSystem {
         });
     });
 
-    function assertUsageError(files: readonly TestFSWithWatch.File[], openFile: TestFSWithWatch.File, diagnostic: DiagnosticMessage) {
+    function assertUsageError(files: readonly VirtualFS.File[], openFile: VirtualFS.File, diagnostic: DiagnosticMessage) {
         const host = createServerHost(files);
         const session = createSession(host);
         openFilesForSession([openFile], session);

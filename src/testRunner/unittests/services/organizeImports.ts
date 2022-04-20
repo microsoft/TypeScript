@@ -1002,15 +1002,15 @@ export * from "lib";
                     libFile);
             });
 
-            function testOrganizeExports(testName: string, testFile: TestFSWithWatch.File, ...otherFiles: TestFSWithWatch.File[]) {
+            function testOrganizeExports(testName: string, testFile: VirtualFS.File, ...otherFiles: VirtualFS.File[]) {
                 testOrganizeImports(`${testName}.exports`, /*skipDestructiveCodeActions*/ true, testFile, ...otherFiles);
             }
 
-            function testOrganizeImports(testName: string, skipDestructiveCodeActions: boolean, testFile: TestFSWithWatch.File, ...otherFiles: TestFSWithWatch.File[]) {
+            function testOrganizeImports(testName: string, skipDestructiveCodeActions: boolean, testFile: VirtualFS.File, ...otherFiles: VirtualFS.File[]) {
                 it(testName, () => runBaseline(`organizeImports/${testName}.ts`, skipDestructiveCodeActions, testFile, ...otherFiles));
             }
 
-            function runBaseline(baselinePath: string, skipDestructiveCodeActions: boolean, testFile: TestFSWithWatch.File, ...otherFiles: TestFSWithWatch.File[]) {
+            function runBaseline(baselinePath: string, skipDestructiveCodeActions: boolean, testFile: VirtualFS.File, ...otherFiles: VirtualFS.File[]) {
                 const { path: testPath, content: testContent } = testFile;
                 const languageService = makeLanguageService(testFile, ...otherFiles);
                 const changes = languageService.organizeImports({ skipDestructiveCodeActions, type: "file", fileName: testPath }, testFormatSettings, emptyOptions);
@@ -1026,7 +1026,7 @@ export * from "lib";
                 ].join(newLineCharacter));
             }
 
-            function makeLanguageService(...files: TestFSWithWatch.File[]) {
+            function makeLanguageService(...files: VirtualFS.File[]) {
                 const host = projectSystem.createServerHost(files);
                 const projectService = projectSystem.createProjectService(host, { useSingleInferredProject: true });
                 projectService.setCompilerOptionsForInferredProjects({ jsx: files.some(f => f.path.endsWith("x")) ? JsxEmit.React : JsxEmit.None });

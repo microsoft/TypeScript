@@ -3,7 +3,7 @@ namespace ts.tscWatch {
         function change(caption: string, content: string): TscWatchCompileChange {
             return {
                 caption,
-                change: sys => sys.writeFile(`${TestFSWithWatch.tsbuildProjectsLocation}/noEmitOnError/src/main.ts`, content),
+                change: sys => sys.writeFile(`${VirtualFS.tsbuildProjectsLocation}/noEmitOnError/src/main.ts`, content),
                 // build project
                 timeouts: checkSingleTimeoutQueueLengthAndRunAndVerifyNoTimeout,
             };
@@ -11,7 +11,7 @@ namespace ts.tscWatch {
 
         const noChange: TscWatchCompileChange = {
             caption: "No change",
-            change: sys => sys.writeFile(`${TestFSWithWatch.tsbuildProjectsLocation}/noEmitOnError/src/main.ts`, sys.readFile(`${TestFSWithWatch.tsbuildProjectsLocation}/noEmitOnError/src/main.ts`)!),
+            change: sys => sys.writeFile(`${VirtualFS.tsbuildProjectsLocation}/noEmitOnError/src/main.ts`, sys.readFile(`${VirtualFS.tsbuildProjectsLocation}/noEmitOnError/src/main.ts`)!),
             // build project
             timeouts: checkSingleTimeoutQueueLengthAndRunAndVerifyNoTimeout,
         };
@@ -22,10 +22,10 @@ namespace ts.tscWatch {
             sys: () => createWatchedSystem(
                 [
                     ...["tsconfig.json", "shared/types/db.ts", "src/main.ts", "src/other.ts"]
-                        .map(f => TestFSWithWatch.getTsBuildProjectFile("noEmitOnError", f)),
+                        .map(f => VirtualFS.getTsBuildProjectFile("noEmitOnError", f)),
                     { path: libFile.path, content: libContent }
                 ],
-                { currentDirectory: `${TestFSWithWatch.tsbuildProjectsLocation}/noEmitOnError` }
+                { currentDirectory: `${VirtualFS.tsbuildProjectsLocation}/noEmitOnError` }
             ),
             changes: [
                 noChange,

@@ -98,7 +98,7 @@ namespace ts {
         }
     }
 
-    export const libContent = `${TestFSWithWatch.libFile.content}
+    export const libContent = `${VirtualFS.libFile.content}
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };`;
 
@@ -447,7 +447,7 @@ interface Symbol {
                 if (!incremental) return;
                 const incrementalMap = new Map(getEntries(incremental));
                 const cleanMap = new Map(getEntries(clean!));
-                assert.equal(incrementalMap.size, cleanMap.size, `Incremental and clean size of map should match:: ${message}, Incremental keys: ${arrayFrom(incrementalMap.keys())} Clean: ${arrayFrom(cleanMap.keys())}${TestFSWithWatch.getDiffInKeys(incrementalMap, arrayFrom(cleanMap.keys()))}`);
+                assert.equal(incrementalMap.size, cleanMap.size, `Incremental and clean size of map should match:: ${message}, Incremental keys: ${arrayFrom(incrementalMap.keys())} Clean: ${arrayFrom(cleanMap.keys())}${VirtualFS.getDiffInKeys(incrementalMap, arrayFrom(cleanMap.keys()))}`);
                 cleanMap.forEach((cleanValue, key) => {
                     assert.isTrue(incrementalMap.has(key), `Expected to contain ${key} in incremental map:: ${message}, Incremental keys: ${arrayFrom(incrementalMap.keys())}`);
                     verifyValue(key, incrementalMap.get(key)!, cleanValue);

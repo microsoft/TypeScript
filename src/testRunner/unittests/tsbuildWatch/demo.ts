@@ -1,6 +1,6 @@
 namespace ts.tscWatch {
     describe("unittests:: tsbuildWatch:: watchMode:: with demo project", () => {
-        const projectLocation = `${TestFSWithWatch.tsbuildProjectsLocation}/demo`;
+        const projectLocation = `${VirtualFS.tsbuildProjectsLocation}/demo`;
         let coreFiles: File[];
         let animalFiles: File[];
         let zooFiles: File[];
@@ -84,7 +84,7 @@ ${coreFiles[1].content}`),
         }
 
         function projectFile(fileName: string): File {
-            return TestFSWithWatch.getTsBuildProjectFile("demo", fileName);
+            return VirtualFS.getTsBuildProjectFile("demo", fileName);
         }
     });
 }

@@ -204,7 +204,7 @@ namespace ts.tscWatch {
         function createWatch<T extends BuilderProgram>(
             baseline: string[],
             config: File,
-            sys: TestFSWithWatch.TestServerHostTrackingWrittenFiles,
+            sys: VirtualFS.TestServerHostTrackingWrittenFiles,
             createProgram: CreateProgram<T>,
             optionsToExtend?: CompilerOptions,
         ) {
@@ -246,9 +246,9 @@ namespace ts.tscWatch {
         function applyChangeForBuilderTest(
             baseline: string[],
             emitBaseline: string[],
-            sys: TestFSWithWatch.TestServerHostTrackingWrittenFiles,
-            emitSys: TestFSWithWatch.TestServerHostTrackingWrittenFiles,
-            change: (sys: TestFSWithWatch.TestServerHostTrackingWrittenFiles) => void,
+            sys: VirtualFS.TestServerHostTrackingWrittenFiles,
+            emitSys: VirtualFS.TestServerHostTrackingWrittenFiles,
+            change: (sys: VirtualFS.TestServerHostTrackingWrittenFiles) => void,
             caption: string
         ) {
             // Change file
@@ -260,8 +260,8 @@ namespace ts.tscWatch {
             baseline: string[],
             emitBaseline: string[],
             config: File,
-            sys: TestFSWithWatch.TestServerHostTrackingWrittenFiles,
-            emitSys: TestFSWithWatch.TestServerHostTrackingWrittenFiles,
+            sys: VirtualFS.TestServerHostTrackingWrittenFiles,
+            emitSys: VirtualFS.TestServerHostTrackingWrittenFiles,
             createProgram: CreateProgram<T>,
             optionsToExtend?: CompilerOptions) {
             createWatch(baseline, config, sys, createProgram, optionsToExtend);

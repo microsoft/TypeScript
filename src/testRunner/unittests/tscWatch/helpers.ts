@@ -1,18 +1,18 @@
 namespace ts.tscWatch {
     export const projects = `/user/username/projects`;
     export const projectRoot = `${projects}/myproject`;
-    export import WatchedSystem = TestFSWithWatch.TestServerHost;
-    export type File = TestFSWithWatch.File;
-    export type SymLink = TestFSWithWatch.SymLink;
-    export import libFile = TestFSWithWatch.libFile;
-    export import createWatchedSystem = TestFSWithWatch.createWatchedSystem;
-    export import checkArray = TestFSWithWatch.checkArray;
-    export import checkWatchedFiles = TestFSWithWatch.checkWatchedFiles;
-    export import checkWatchedFilesDetailed = TestFSWithWatch.checkWatchedFilesDetailed;
-    export import checkWatchedDirectories = TestFSWithWatch.checkWatchedDirectories;
-    export import checkWatchedDirectoriesDetailed = TestFSWithWatch.checkWatchedDirectoriesDetailed;
-    export import checkOutputContains = TestFSWithWatch.checkOutputContains;
-    export import checkOutputDoesNotContain = TestFSWithWatch.checkOutputDoesNotContain;
+    export import WatchedSystem = VirtualFS.TestServerHost;
+    export type File = VirtualFS.File;
+    export type SymLink = VirtualFS.SymLink;
+    export import libFile = VirtualFS.libFile;
+    export import createWatchedSystem = VirtualFS.createWatchedSystem;
+    export import checkArray = VirtualFS.checkArray;
+    export import checkWatchedFiles = VirtualFS.checkWatchedFiles;
+    export import checkWatchedFilesDetailed = VirtualFS.checkWatchedFilesDetailed;
+    export import checkWatchedDirectories = VirtualFS.checkWatchedDirectories;
+    export import checkWatchedDirectoriesDetailed = VirtualFS.checkWatchedDirectoriesDetailed;
+    export import checkOutputContains = VirtualFS.checkOutputContains;
+    export import checkOutputDoesNotContain = VirtualFS.checkOutputDoesNotContain;
 
     export const commonFile1: File = {
         path: "/a/b/commonFile1.ts",
@@ -102,9 +102,9 @@ namespace ts.tscWatch {
     export type WatchOrSolution<T extends BuilderProgram> = void | SolutionBuilder<T> | WatchOfConfigFile<T> | WatchOfFilesAndCompilerOptions<T>;
     export interface TscWatchCompileChange<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram> {
         caption: string;
-        change: (sys: TestFSWithWatch.TestServerHostTrackingWrittenFiles) => void;
+        change: (sys: VirtualFS.TestServerHostTrackingWrittenFiles) => void;
         timeouts: (
-            sys: TestFSWithWatch.TestServerHostTrackingWrittenFiles,
+            sys: VirtualFS.TestServerHostTrackingWrittenFiles,
             programs: readonly CommandLineProgram[],
             watchOrSolution: WatchOrSolution<T>
         ) => void;
@@ -164,7 +164,7 @@ namespace ts.tscWatch {
 
     export interface BaselineBase {
         baseline: string[];
-        sys: TestFSWithWatch.TestServerHostTrackingWrittenFiles;
+        sys: VirtualFS.TestServerHostTrackingWrittenFiles;
         oldSnap: SystemSnap;
     }
 
@@ -174,7 +174,7 @@ namespace ts.tscWatch {
     export function createBaseline(system: WatchedSystem, modifySystem?: (sys: WatchedSystem) => void): Baseline {
         const initialSys = fakes.patchHostForBuildInfoReadWrite(system);
         modifySystem?.(initialSys);
-        const sys = TestFSWithWatch.changeToHostTrackingWrittenFiles(initialSys);
+        const sys = VirtualFS.changeToHostTrackingWrittenFiles(initialSys);
         const baseline: string[] = [];
         baseline.push("Input::");
         sys.diff(baseline);
@@ -246,7 +246,7 @@ namespace ts.tscWatch {
     }
 
     export interface RunWatchBaseline<T extends BuilderProgram> extends BaselineBase, TscWatchCompileBase<T> {
-        sys: TestFSWithWatch.TestServerHostTrackingWrittenFiles;
+        sys: VirtualFS.TestServerHostTrackingWrittenFiles;
         getPrograms: () => readonly CommandLineProgram[];
         watchOrSolution: WatchOrSolution<T>;
     }
@@ -419,12 +419,12 @@ namespace ts.tscWatch {
         assert.equal(host.getOutput().length, 0, JSON.stringify(host.getOutput(), /*replacer*/ undefined, " "));
     }
 
-    export function createSystemWithSolutionBuild(solutionRoots: readonly string[], files: readonly TestFSWithWatch.FileOrFolderOrSymLink[], params?: TestFSWithWatch.TestServerHostCreationParameters) {
+    export function createSystemWithSolutionBuild(solutionRoots: readonly string[], files: readonly VirtualFS.FileOrFolderOrSymLink[], params?: VirtualFS.TestServerHostCreationParameters) {
         const sys = createWatchedSystem(files, params);
         const originalReadFile = sys.readFile;
         const originalWrite = sys.write;
         const originalWriteFile = sys.writeFile;
-        const solutionBuilder = createSolutionBuilder(TestFSWithWatch.changeToHostTrackingWrittenFiles(
+        const solutionBuilder = createSolutionBuilder(VirtualFS.changeToHostTrackingWrittenFiles(
             fakes.patchHostForBuildInfoReadWrite(sys)
         ), solutionRoots, {});
         solutionBuilder.build();

@@ -3702,7 +3702,7 @@ namespace ts.server {
         /* @internal */
         updateFileSystem(updatedFiles: protocol.FileSystemRequestArgs[] | undefined, deletedFiles?: string[]) {
             Debug.assert(this.fshost);
-            const fs = this.fshost as TestFSWithWatch.VirtualServerHost;
+            const fs = this.fshost as VirtualFS.VirtualServerHost;
             if (updatedFiles) {
                 for (const { file, fileContent } of updatedFiles) {
                     if (fs.fileExists(file)) {

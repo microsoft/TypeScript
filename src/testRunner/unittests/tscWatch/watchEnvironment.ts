@@ -1,5 +1,5 @@
 namespace ts.tscWatch {
-    import Tsc_WatchDirectory = TestFSWithWatch.Tsc_WatchDirectory;
+    import Tsc_WatchDirectory = VirtualFS.Tsc_WatchDirectory;
     describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different polling/non polling options", () => {
         const scenario = "watchEnvironment";
         verifyTscWatch({
@@ -13,7 +13,7 @@ namespace ts.tscWatch {
                     content: "var z = 10;"
                 };
                 const environmentVariables = new Map<string, string>();
-                environmentVariables.set("TSC_WATCHFILE", TestFSWithWatch.Tsc_WatchFile.DynamicPolling);
+                environmentVariables.set("TSC_WATCHFILE", VirtualFS.Tsc_WatchFile.DynamicPolling);
                 return createWatchedSystem([file1, libFile], { environmentVariables });
             },
             changes: [

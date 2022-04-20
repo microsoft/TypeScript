@@ -66,11 +66,11 @@ namespace ts.projectSystem {
             }
 
             function verifyCalledOnEachEntry(callback: CalledMaps, expectedKeys: ESMap<string, number>) {
-                TestFSWithWatch.checkMap<true | CalledWithFiveArgs>(callback, calledMaps[callback], expectedKeys);
+                VirtualFS.checkMap<true | CalledWithFiveArgs>(callback, calledMaps[callback], expectedKeys);
             }
 
             function verifyCalledOnEachEntryNTimes(callback: CalledMaps, expectedKeys: readonly string[], nTimes: number) {
-                TestFSWithWatch.checkMap<true | CalledWithFiveArgs>(callback, calledMaps[callback], expectedKeys, nTimes);
+                VirtualFS.checkMap<true | CalledWithFiveArgs>(callback, calledMaps[callback], expectedKeys, nTimes);
             }
 
             function verifyNoHostCalls() {

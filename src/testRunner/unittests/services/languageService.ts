@@ -144,7 +144,7 @@ export function Component(x: Config): any;`
 
         describe("detects program upto date when new file is added to the referenced project", () => {
             function setup(useSourceOfProjectReferenceRedirect: (() => boolean) | undefined) {
-                const config1: TestFSWithWatch.File = {
+                const config1: VirtualFS.File = {
                     path: `${tscWatch.projectRoot}/projects/project1/tsconfig.json`,
                     content: JSON.stringify({
                         compilerOptions: {
@@ -154,15 +154,15 @@ export function Component(x: Config): any;`
                         exclude: ["temp"]
                     })
                 };
-                const class1: TestFSWithWatch.File = {
+                const class1: VirtualFS.File = {
                     path: `${tscWatch.projectRoot}/projects/project1/class1.ts`,
                     content: `class class1 {}`
                 };
-                const class1Dts: TestFSWithWatch.File = {
+                const class1Dts: VirtualFS.File = {
                     path: `${tscWatch.projectRoot}/projects/project1/class1.d.ts`,
                     content: `declare class class1 {}`
                 };
-                const config2: TestFSWithWatch.File = {
+                const config2: VirtualFS.File = {
                     path: `${tscWatch.projectRoot}/projects/project2/tsconfig.json`,
                     content: JSON.stringify({
                         compilerOptions: {
@@ -174,7 +174,7 @@ export function Component(x: Config): any;`
                         ]
                     })
                 };
-                const class2: TestFSWithWatch.File = {
+                const class2: VirtualFS.File = {
                     path: `${tscWatch.projectRoot}/projects/project2/class2.ts`,
                     content: `class class2 {}`
                 };

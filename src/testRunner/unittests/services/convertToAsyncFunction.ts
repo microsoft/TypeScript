@@ -1,5 +1,5 @@
 namespace ts {
-    const libFile: TestFSWithWatch.File = {
+    const libFile: VirtualFS.File = {
         path: "/a/lib/lib.d.ts",
         content: `/// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -262,7 +262,7 @@ interface String { charAt: any; }
 interface Array<T> {}`
     };
 
-    const moduleFile: TestFSWithWatch.File = {
+    const moduleFile: VirtualFS.File = {
         path: "/module.ts",
         content:
 `export function fn(res: any): any {
@@ -393,7 +393,7 @@ interface Array<T> {}`
             }
         }
 
-        function makeLanguageService(file: TestFSWithWatch.File, includeLib?: boolean, includeModule?: boolean) {
+        function makeLanguageService(file: VirtualFS.File, includeLib?: boolean, includeModule?: boolean) {
             const files = [file];
             if (includeLib) {
                 files.push(libFile); // libFile is expensive to parse repeatedly - only test when required

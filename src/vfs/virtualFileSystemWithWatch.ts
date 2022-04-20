@@ -1,5 +1,5 @@
 /* @internal */
-namespace ts.TestFSWithWatch {
+namespace ts.VirtualFS {
     export interface VirtualServerHostCreationParameters {
         useCaseSensitiveFileNames?: boolean;
         executingFilePath: string;

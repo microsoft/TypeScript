@@ -1,5 +1,5 @@
 namespace ts.projectSystem {
-    export function createHostWithSolutionBuild(files: readonly TestFSWithWatch.FileOrFolderOrSymLink[], rootNames: readonly string[]) {
+    export function createHostWithSolutionBuild(files: readonly VirtualFS.FileOrFolderOrSymLink[], rootNames: readonly string[]) {
         const host = createServerHost(files);
         // ts build should succeed
         tscWatch.ensureErrorFreeBuild(host, rootNames);
@@ -10,8 +10,8 @@ namespace ts.projectSystem {
         describe("with container project", () => {
             function getProjectFiles(project: string): [File, File] {
                 return [
-                    TestFSWithWatch.getTsBuildProjectFile(project, "tsconfig.json"),
-                    TestFSWithWatch.getTsBuildProjectFile(project, "index.ts"),
+                    VirtualFS.getTsBuildProjectFile(project, "tsconfig.json"),
+                    VirtualFS.getTsBuildProjectFile(project, "index.ts"),
                 ];
             }
 
@@ -19,7 +19,7 @@ namespace ts.projectSystem {
             const containerLib = getProjectFiles("container/lib");
             const containerExec = getProjectFiles("container/exec");
             const containerCompositeExec = getProjectFiles("container/compositeExec");
-            const containerConfig = TestFSWithWatch.getTsBuildProjectFile(project, "tsconfig.json");
+            const containerConfig = VirtualFS.getTsBuildProjectFile(project, "tsconfig.json");
             const files = [libFile, ...containerLib, ...containerExec, ...containerCompositeExec, containerConfig];
 
             it("does not error on container only project", () => {
@@ -29,7 +29,7 @@ namespace ts.projectSystem {
                 const session = createSession(host, { logger: createLoggerWithInMemoryLogs() });
                 const service = session.getProjectService();
                 service.openExternalProjects([{
-                    projectFileName: TestFSWithWatch.getTsBuildProjectFilePath(project, project),
+                    projectFileName: VirtualFS.getTsBuildProjectFilePath(project, project),
                     rootFiles: files.map(f => ({ fileName: f.path })),
                     options: {}
                 }]);

@@ -8333,24 +8333,21 @@ declare namespace ts.server.protocol {
     interface UpdateFileSystemRequestArgs {
         /** For now, only 'memfs', initially for exclusive in-memory operation, but it could be other in-memory names later */
         fileSystem: string;
-        /** List of newly created or newly available files. */
-        created: FileSystemRequestArgs[];
+        /** List of newly created or updated files. */
+        files: FileSystemRequestArgs[];
         /** Names of just-deleted files. */
         deleted: string[];
-        /** List of updated files. */
-        updated: FileSystemRequestArgs[];
     }
-    interface FileSystemRequestArgs extends FileRequestArgs {
+    interface FileSystemRequestArgs {
+        /**
+         * The file for the request (absolute pathname required).
+         */
+        file: string;
         /**
          * Used to replace the content that would be on disk.
          * Then the known content will be used upon opening instead of the disk copy
          */
-        fileContent?: string;
-        /**
-         * Used to specify the script kind of the file explicitly. It could be one of the following:
-         *      "TS", "JS", "TSX", "JSX"
-         */
-        scriptKindName?: ScriptKindName;
+        fileContent: string;
     }
     /**
      * External projects have a typeAcquisition option so they need to be added separately to compiler options for inferred projects.
@@ -10013,7 +10010,7 @@ declare namespace ts.server {
         private readonly cancellationToken;
         isNonTsProject(): boolean;
         isJsOnlyProject(): boolean;
-        static resolveModule(moduleName: string, initialDir: string, host: ServerHost, log: (message: string) => void, logErrors?: (message: string) => void): {} | undefined;
+        static resolveModule(moduleName: string, initialDir: string, host: ServerHost, fshost: ServerHost, log: (message: string) => void, logErrors?: (message: string) => void): {} | undefined;
         isKnownTypesPackageName(name: string): boolean;
         installPackage(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult>;
         private get typingsCache();
@@ -10327,6 +10324,7 @@ declare namespace ts.server {
     }
     export interface ProjectServiceOptions {
         host: ServerHost;
+        fshost: ServerHost | undefined;
         logger: Logger;
         cancellationToken: HostCancellationToken;
         useSingleInferredProject: boolean;
@@ -10398,6 +10396,7 @@ declare namespace ts.server {
         readonly currentDirectory: NormalizedPath;
         readonly toCanonicalFileName: (f: string) => string;
         readonly host: ServerHost;
+        readonly fshost: ServerHost | undefined;
         readonly logger: Logger;
         readonly cancellationToken: HostCancellationToken;
         readonly useSingleInferredProject: boolean;
@@ -10600,6 +10599,7 @@ declare namespace ts.server {
     }
     interface SessionOptions {
         host: ServerHost;
+        fshost: ServerHost | undefined;
         cancellationToken: ServerCancellationToken;
         useSingleInferredProject: boolean;
         useInferredProjectPerProjectRoot: boolean;
@@ -10641,6 +10641,7 @@ declare namespace ts.server {
         private suppressDiagnosticEvents?;
         private eventHandler;
         private readonly noGetErrOnBackgroundUpdate?;
+        private fshost;
         constructor(opts: SessionOptions);
         private sendRequestCompletedEvent;
         private addPerformanceData;

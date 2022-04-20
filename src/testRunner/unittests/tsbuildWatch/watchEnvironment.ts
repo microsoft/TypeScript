@@ -7,13 +7,13 @@ namespace ts.tscWatch {
         describe("when watchFile is single watcher per file", () => {
             verifyWatchFileOnMultipleProjects(
                 /*singleWatchPerFile*/ true,
-                arrayToMap(["TSC_WATCHFILE"], identity, () => TestFSWithWatch.Tsc_WatchFile.SingleFileWatcherPerName)
+                arrayToMap(["TSC_WATCHFILE"], identity, () => VirtualFS.Tsc_WatchFile.SingleFileWatcherPerName)
             );
         });
 
         function verifyWatchFileOnMultipleProjects(singleWatchPerFile: boolean, environmentVariables?: ESMap<string, string>) {
             it("watchFile on same file multiple times because file is part of multiple projects", () => {
-                const project = `${TestFSWithWatch.tsbuildProjectsLocation}/myproject`;
+                const project = `${VirtualFS.tsbuildProjectsLocation}/myproject`;
                 let maxPkgs = 4;
                 const configPath = `${project}/tsconfig.json`;
                 const typing: File = {
@@ -105,7 +105,7 @@ namespace ts.tscWatch {
                         }
                     ];
                 }
-                function writePkgReferences(system: TestFSWithWatch.TestServerHost) {
+                function writePkgReferences(system: VirtualFS.TestServerHost) {
                     system.writeFile(configPath, JSON.stringify({
                         files: [],
                         include: [],

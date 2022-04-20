@@ -17,20 +17,20 @@ namespace ts.tscWatch {
                         "src/main/tsconfig.json", "src/main/index.ts",
                         "src/pure/tsconfig.json", "src/pure/index.ts", "src/pure/session.ts"
                     ]
-                        .map(f => TestFSWithWatch.getTsBuildProjectFile("reexport", f)),
+                        .map(f => VirtualFS.getTsBuildProjectFile("reexport", f)),
                     { path: libFile.path, content: libContent }
                 ],
-                { currentDirectory: `${TestFSWithWatch.tsbuildProjectsLocation}/reexport` }
+                { currentDirectory: `${VirtualFS.tsbuildProjectsLocation}/reexport` }
             ),
             changes: [
                 {
                     caption: "Introduce error",
-                    change: sys => replaceFileText(sys, `${TestFSWithWatch.tsbuildProjectsLocation}/reexport/src/pure/session.ts`, "// ", ""),
+                    change: sys => replaceFileText(sys, `${VirtualFS.tsbuildProjectsLocation}/reexport/src/pure/session.ts`, "// ", ""),
                     timeouts: build,
                 },
                 {
                     caption: "Fix error",
-                    change: sys => replaceFileText(sys, `${TestFSWithWatch.tsbuildProjectsLocation}/reexport/src/pure/session.ts`, "bar: ", "// bar: "),
+                    change: sys => replaceFileText(sys, `${VirtualFS.tsbuildProjectsLocation}/reexport/src/pure/session.ts`, "bar: ", "// bar: "),
                     timeouts: build
                 }
             ]

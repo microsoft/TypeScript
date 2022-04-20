@@ -58,7 +58,7 @@ namespace ts.server {
         console.warn = (...args) => logger.msg(args.length === 1 ? args[0] : args.join(", "), Msg.Err);
         console.error = (...args) => logger.msg(args.length === 1 ? args[0] : args.join(", "), Msg.Err);
 
-        const fshost = vfs ? TestFSWithWatch.createVirtualServerHost([]) : sys as ServerHost;
+        const fshost = vfs ? VirtualFS.createVirtualServerHost([]) : sys as ServerHost;
         startServer(
             {
                 globalPlugins: findArgumentStringArray("--globalPlugins"),

@@ -41,12 +41,12 @@ interface Array<T> { length: number; [n: number]: T; }`
 ${file.fileContent}`;
         }
         // TODO: This is almost certainly in harness/virtualFileSystemHost.ts, or should be.
-        function verifyFileSystem(host: TestFSWithWatch.VirtualServerHost | undefined, files: protocol.FileSystemRequestArgs[]) {
+        function verifyFileSystem(host: VirtualFS.VirtualServerHost | undefined, files: protocol.FileSystemRequestArgs[]) {
             // 1. make sure that everything in files is there
             assert.isDefined(host);
-            const fs = (host as any).fs as ESMap<string, TestFSWithWatch.FSEntry>;
+            const fs = (host as any).fs as ESMap<string, VirtualFS.FSEntry>;
             // console.log(Array.from(fs.values() as any as Iterable<ts.TestFSWithWatch.FSEntry>).filter(ts.TestFSWithWatch.isFsFile))
-            assert.equal(Array.from(fs.values() as any as Iterable<TestFSWithWatch.FSEntry>).filter(TestFSWithWatch.isFsFile).length, files.length);
+            assert.equal(Array.from(fs.values() as any as Iterable<VirtualFS.FSEntry>).filter(VirtualFS.isFsFile).length, files.length);
             for (const { file, fileContent } of files) {
                 assert(host?.fileExists(file));
                 assert.equal(host!.readFile(file), fileContent);
@@ -55,7 +55,7 @@ ${file.fileContent}`;
         }
         it("with updateFileSystem request", () => {
             // TODO: probably some other watcher tests, not sure what
-            const host = TestFSWithWatch.createVirtualServerHost([], { executingFilePath: "/a/tsc.js" });
+            const host = VirtualFS.createVirtualServerHost([], { executingFilePath: "/a/tsc.js" });
             const session = createVirtualFilesystemSession(host, host);
             const files = [app, file1, file2, file3, config, lib];
             session.executeCommandSeq<protocol.UpdateFileSystemRequest>({
@@ -72,7 +72,7 @@ ${file.fileContent}`;
             });
             const service = session.getProjectService(); // session -> service -> project
             const project = service.configuredProjects.get(config.file)!;
-            const fakehost = (session as any).host as TestFSWithWatch.VirtualServerHost;
+            const fakehost = (session as any).host as VirtualFS.VirtualServerHost;
             assert.isDefined(project);
             assert.equal(fakehost.fsWatches.size, 0);
             assert.equal(fakehost.fsWatchesRecursive.size, 2);

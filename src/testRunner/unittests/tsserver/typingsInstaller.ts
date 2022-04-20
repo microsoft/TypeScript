@@ -1169,13 +1169,13 @@ namespace ts.projectSystem {
         });
 
         it("should redo resolution that resolved to '.js' file after typings are installed", () => {
-            const file: TestFSWithWatch.File = {
+            const file: VirtualFS.File = {
                 path: `${tscWatch.projects}/a/b/app.js`,
                 content: `
                 import * as commander from "commander";`
             };
             const cachePath = `${tscWatch.projects}/a/cache`;
-            const commanderJS: TestFSWithWatch.File = {
+            const commanderJS: VirtualFS.File = {
                 path: `${tscWatch.projects}/node_modules/commander/index.js`,
                 content: "module.exports = 0",
             };
@@ -1189,7 +1189,7 @@ namespace ts.projectSystem {
                 }
                 installWorker(_requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction) {
                     const installedTypings = typeNames.map(name => `@types/${name}`);
-                    const typingFiles = typeNames.map((name): TestFSWithWatch.File => ({ path: typePath(name), content: "" }));
+                    const typingFiles = typeNames.map((name): VirtualFS.File => ({ path: typePath(name), content: "" }));
                     executeCommand(this, host, installedTypings, typingFiles, cb);
                 }
             })();
@@ -2031,14 +2031,14 @@ namespace ts.projectSystem {
         });
 
         it("should handle node core modules", () => {
-            const file: TestFSWithWatch.File = {
+            const file: VirtualFS.File = {
                 path: "/a/b/app.js",
                 content: `// @ts-check
 
 const net = require("net");
 const stream = require("stream");`
             };
-            const nodeTyping: TestFSWithWatch.File = {
+            const nodeTyping: VirtualFS.File = {
                 path: `${globalTypingsCacheLocation}/node_modules/node/index.d.ts`,
                 content: `
 declare module "net" {

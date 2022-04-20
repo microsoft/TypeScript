@@ -2,13 +2,13 @@ namespace ts {
     describe("unittests:: tsc:: declarationEmit::", () => {
         interface VerifyDeclarationEmitInput {
             subScenario: string;
-            files: TestFSWithWatch.FileOrFolderOrSymLink[];
+            files: VirtualFS.FileOrFolderOrSymLink[];
             rootProject: string;
             changeCaseFileTestPath: (path: string) => boolean;
         }
 
-        function changeCaseFile(file: TestFSWithWatch.FileOrFolderOrSymLink, testPath: (path: string) => boolean, replacePath: (path: string) => string): TestFSWithWatch.FileOrFolderOrSymLink {
-            return !TestFSWithWatch.isSymLink(file) || !testPath(file.symLink) ?
+        function changeCaseFile(file: VirtualFS.FileOrFolderOrSymLink, testPath: (path: string) => boolean, replacePath: (path: string) => string): VirtualFS.FileOrFolderOrSymLink {
+            return !VirtualFS.isSymLink(file) || !testPath(file.symLink) ?
                 testPath(file.path) ? { ...file, path: replacePath(file.path) } : file :
                 { path: testPath(file.path) ? replacePath(file.path) : file.path, symLink: replacePath(file.symLink) };
         }

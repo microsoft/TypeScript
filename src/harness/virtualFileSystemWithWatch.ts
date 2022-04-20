@@ -1,4 +1,4 @@
-namespace ts.TestFSWithWatch {
+namespace ts.VirtualFS {
     export const libFile: File = {
         path: "/a/lib/lib.d.ts",
         content: `/// <reference no-default-lib="true"/>

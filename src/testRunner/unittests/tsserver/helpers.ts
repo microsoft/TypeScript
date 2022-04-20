@@ -3,17 +3,17 @@ namespace ts.projectSystem {
     export import protocol = server.protocol;
     export import CommandNames = server.CommandNames;
 
-    export import TestServerHost = TestFSWithWatch.TestServerHost;
-    export type File = TestFSWithWatch.File;
-    export type SymLink = TestFSWithWatch.SymLink;
-    export type Folder = TestFSWithWatch.Folder;
-    export import createServerHost = TestFSWithWatch.createServerHost;
-    export import checkArray = TestFSWithWatch.checkArray;
-    export import libFile = TestFSWithWatch.libFile;
-    export import checkWatchedFiles = TestFSWithWatch.checkWatchedFiles;
-    export import checkWatchedFilesDetailed = TestFSWithWatch.checkWatchedFilesDetailed;
-    export import checkWatchedDirectories = TestFSWithWatch.checkWatchedDirectories;
-    export import checkWatchedDirectoriesDetailed = TestFSWithWatch.checkWatchedDirectoriesDetailed;
+    export import TestServerHost = VirtualFS.TestServerHost;
+    export type File = VirtualFS.File;
+    export type SymLink = VirtualFS.SymLink;
+    export type Folder = VirtualFS.Folder;
+    export import createServerHost = VirtualFS.createServerHost;
+    export import checkArray = VirtualFS.checkArray;
+    export import libFile = VirtualFS.libFile;
+    export import checkWatchedFiles = VirtualFS.checkWatchedFiles;
+    export import checkWatchedFilesDetailed = VirtualFS.checkWatchedFilesDetailed;
+    export import checkWatchedDirectories = VirtualFS.checkWatchedDirectories;
+    export import checkWatchedDirectoriesDetailed = VirtualFS.checkWatchedDirectoriesDetailed;
 
     export import commonFile1 = tscWatch.commonFile1;
     export import commonFile2 = tscWatch.commonFile2;
@@ -138,7 +138,7 @@ namespace ts.projectSystem {
             installTypingHost: server.ServerHost,
             readonly typesRegistry = new Map<string, MapLike<string>>(),
             log?: TI.Log) {
-            super(installTypingHost, globalTypingsCacheLocation, TestFSWithWatch.safeList.path, customTypesMap.path, throttleLimit, log);
+            super(installTypingHost, globalTypingsCacheLocation, VirtualFS.safeList.path, customTypesMap.path, throttleLimit, log);
         }
 
         protected postExecActions: PostExecAction[] = [];
@@ -414,7 +414,7 @@ namespace ts.projectSystem {
         }
     }
 
-    export function createVirtualFilesystemSession(host: server.ServerHost, fshost: TestFSWithWatch.VirtualServerHost | undefined, opts: Partial<TestSessionOptions> = {}) {
+    export function createVirtualFilesystemSession(host: server.ServerHost, fshost: VirtualFS.VirtualServerHost | undefined, opts: Partial<TestSessionOptions> = {}) {
         if (opts.typingsInstaller === undefined) {
             opts.typingsInstaller = new TestTypingsInstaller("/a/data/", /*throttleLimit*/ 5, host);
         }

@@ -921,9 +921,9 @@ namespace ts {
         });
     });
 
-    type File = TestFSWithWatch.File;
-    import createTestSystem = TestFSWithWatch.createWatchedSystem;
-    import libFile = TestFSWithWatch.libFile;
+    type File = VirtualFS.File;
+    import createTestSystem = VirtualFS.createWatchedSystem;
+    import libFile = VirtualFS.libFile;
 
     describe("unittests:: Reuse program structure:: isProgramUptoDate", () => {
         function getWhetherProgramIsUptoDate(

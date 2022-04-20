@@ -1,14 +1,14 @@
 namespace ts.projectSystem {
     describe("unittests:: tsserver:: projects with references: invoking when references are already built", () => {
         it("on sample project", () => {
-            const coreConfig = TestFSWithWatch.getTsBuildProjectFile("sample1", "core/tsconfig.json");
-            const coreIndex = TestFSWithWatch.getTsBuildProjectFile("sample1", "core/index.ts");
-            const coreAnotherModule = TestFSWithWatch.getTsBuildProjectFile("sample1", "core/anotherModule.ts");
-            const coreSomeDecl = TestFSWithWatch.getTsBuildProjectFile("sample1", "core/some_decl.d.ts");
-            const logicConfig = TestFSWithWatch.getTsBuildProjectFile("sample1", "logic/tsconfig.json");
-            const logicIndex = TestFSWithWatch.getTsBuildProjectFile("sample1", "logic/index.ts");
-            const testsConfig = TestFSWithWatch.getTsBuildProjectFile("sample1", "tests/tsconfig.json");
-            const testsIndex = TestFSWithWatch.getTsBuildProjectFile("sample1", "tests/index.ts");
+            const coreConfig = VirtualFS.getTsBuildProjectFile("sample1", "core/tsconfig.json");
+            const coreIndex = VirtualFS.getTsBuildProjectFile("sample1", "core/index.ts");
+            const coreAnotherModule = VirtualFS.getTsBuildProjectFile("sample1", "core/anotherModule.ts");
+            const coreSomeDecl = VirtualFS.getTsBuildProjectFile("sample1", "core/some_decl.d.ts");
+            const logicConfig = VirtualFS.getTsBuildProjectFile("sample1", "logic/tsconfig.json");
+            const logicIndex = VirtualFS.getTsBuildProjectFile("sample1", "logic/index.ts");
+            const testsConfig = VirtualFS.getTsBuildProjectFile("sample1", "tests/tsconfig.json");
+            const testsIndex = VirtualFS.getTsBuildProjectFile("sample1", "tests/index.ts");
             const host = createServerHost([libFile, coreConfig, coreIndex, coreAnotherModule, coreSomeDecl, logicConfig, logicIndex, testsConfig, testsIndex]);
             const service = createProjectService(host);
             service.openClientFile(testsIndex.path);
@@ -16,9 +16,9 @@ namespace ts.projectSystem {
             checkWatchedFilesDetailed(host, [coreConfig, coreIndex, coreAnotherModule, logicConfig, logicIndex, testsConfig, libFile].map(f => f.path.toLowerCase()), 1);
             checkWatchedDirectoriesDetailed(host, emptyArray, 1, /*recursive*/ false);
             checkWatchedDirectoriesDetailed(host, [
-                TestFSWithWatch.getTsBuildProjectFilePath("sample1", "core"),
-                TestFSWithWatch.getTsBuildProjectFilePath("sample1", "logic"),
-                ...getTypeRootsFromLocation(TestFSWithWatch.getTsBuildProjectFilePath("sample1", "tests"))
+                VirtualFS.getTsBuildProjectFilePath("sample1", "core"),
+                VirtualFS.getTsBuildProjectFilePath("sample1", "logic"),
+                ...getTypeRootsFromLocation(VirtualFS.getTsBuildProjectFilePath("sample1", "tests"))
             ], 1, /*recursive*/ true);
 
             // local edit in ts file
