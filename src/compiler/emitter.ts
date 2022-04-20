@@ -2881,7 +2881,7 @@ namespace ts {
             emitExpression(node.expression, parenthesizer.parenthesizeExpressionOfExpressionStatement);
             // Emit semicolon in non json files
             // or if json file that created synthesized expression(eg.define expression statement when --out and amd code generation)
-            if (currentSourceFile && !isJsonSourceFile(currentSourceFile) || nodeIsSynthesized(node.expression)) {
+            if (!currentSourceFile || !isJsonSourceFile(currentSourceFile) || nodeIsSynthesized(node.expression)) {
                 writeTrailingSemicolon();
             }
         }
@@ -5542,8 +5542,7 @@ namespace ts {
         }
 
         function emitLeadingComment(commentPos: number, commentEnd: number, kind: SyntaxKind, hasTrailingNewLine: boolean, rangePos: number) {
-            Debug.assertIsDefined(currentSourceFile);
-            if (!shouldWriteComment(currentSourceFile.text, commentPos)) return;
+            if (!currentSourceFile || !shouldWriteComment(currentSourceFile.text, commentPos)) return;
             if (!hasWrittenComment) {
                 emitNewLineBeforeLeadingCommentOfPosition(getCurrentLineMap(), writer, rangePos, commentPos);
                 hasWrittenComment = true;
@@ -5575,8 +5574,7 @@ namespace ts {
         }
 
         function emitTrailingComment(commentPos: number, commentEnd: number, _kind: SyntaxKind, hasTrailingNewLine: boolean) {
-            Debug.assertIsDefined(currentSourceFile);
-            if (!shouldWriteComment(currentSourceFile.text, commentPos)) return;
+            if (!currentSourceFile || !shouldWriteComment(currentSourceFile.text, commentPos)) return;
             // trailing comments are emitted at space/*trailing comment1 */space/*trailing comment2*/
             if (!writer.isAtStartOfLine()) {
                 writer.writeSpace(" ");
@@ -5601,7 +5599,7 @@ namespace ts {
         }
 
         function emitTrailingCommentOfPositionNoNewline(commentPos: number, commentEnd: number, kind: SyntaxKind) {
-            Debug.assertIsDefined(currentSourceFile);
+            if (!currentSourceFile) return;
             // trailing comments of a position are emitted at /*trailing comment1 */space/*trailing comment*/space
 
             emitPos(commentPos);
@@ -5614,7 +5612,7 @@ namespace ts {
         }
 
         function emitTrailingCommentOfPosition(commentPos: number, commentEnd: number, _kind: SyntaxKind, hasTrailingNewLine: boolean) {
-            Debug.assertIsDefined(currentSourceFile);
+            if(!currentSourceFile) return;
             // trailing comments of a position are emitted at /*trailing comment1 */space/*trailing comment*/space
 
             emitPos(commentPos);
@@ -5667,8 +5665,7 @@ namespace ts {
         }
 
         function emitDetachedCommentsAndUpdateCommentsInfo(range: TextRange) {
-            Debug.assertIsDefined(currentSourceFile);
-            const currentDetachedCommentInfo = emitDetachedComments(currentSourceFile.text, getCurrentLineMap(), writer, emitComment, range, newLine, commentsDisabled);
+            const currentDetachedCommentInfo = currentSourceFile && emitDetachedComments(currentSourceFile.text, getCurrentLineMap(), writer, emitComment, range, newLine, commentsDisabled);
             if (currentDetachedCommentInfo) {
                 if (detachedCommentsInfo) {
                     detachedCommentsInfo.push(currentDetachedCommentInfo);
@@ -5680,8 +5677,7 @@ namespace ts {
         }
 
         function emitComment(text: string, lineMap: number[], writer: EmitTextWriter, commentPos: number, commentEnd: number, newLine: string) {
-            Debug.assertIsDefined(currentSourceFile);
-            if (!shouldWriteComment(currentSourceFile.text, commentPos)) return;
+            if (!currentSourceFile || !shouldWriteComment(currentSourceFile.text, commentPos)) return;
             emitPos(commentPos);
             writeCommentRange(text, lineMap, writer, commentPos, commentEnd, newLine);
             emitPos(commentEnd);
@@ -5693,8 +5689,7 @@ namespace ts {
          * @return true if the comment is a triple-slash comment else false
          */
         function isTripleSlashComment(commentPos: number, commentEnd: number) {
-            Debug.assertIsDefined(currentSourceFile);
-            return isRecognizedTripleSlashComment(currentSourceFile.text, commentPos, commentEnd);
+            return !!currentSourceFile && isRecognizedTripleSlashComment(currentSourceFile.text, commentPos, commentEnd);
         }
 
         // Source Maps
