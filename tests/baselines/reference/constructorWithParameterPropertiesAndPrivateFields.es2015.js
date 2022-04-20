@@ -45,8 +45,8 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
 var _A_privateField, _B_privateField;
 class A {
     constructor(arg, exposedField) {
-        this.exposedField = exposedField;
         var _a;
+        this.exposedField = exposedField;
         _A_privateField.set(this, void 0);
         (_a = this, { key: ({ set value(_b) { __classPrivateFieldSet(_a, _A_privateField, _b, "f"); } }).value } = arg);
     }
@@ -58,9 +58,9 @@ class A {
 _A_privateField = new WeakMap();
 class B {
     constructor(arg, exposedField) {
-        this.exposedField = exposedField;
         "prologue";
         var _a;
+        this.exposedField = exposedField;
         _B_privateField.set(this, void 0);
         (_a = this, { key: ({ set value(_b) { __classPrivateFieldSet(_a, _B_privateField, _b, "f"); } }).value } = arg);
     }
