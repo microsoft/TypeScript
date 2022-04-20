@@ -1081,13 +1081,14 @@ interface Array<T> { length: number; [n: number]: T; }`
             baseline.push("");
         }
 
-        serializeWatches(baseline: string[]) {
+        serializeWatches(baseline: string[] = []) {
             serializeMultiMap(baseline, "WatchedFiles", this.watchedFiles, ({ fileName, pollingInterval }) => ({ fileName, pollingInterval }));
             baseline.push("");
             serializeMultiMap(baseline, "FsWatches", this.fsWatches, serializeTestFsWatcher);
             baseline.push("");
             serializeMultiMap(baseline, "FsWatchesRecursive", this.fsWatchesRecursive, serializeTestFsWatcher);
             baseline.push("");
+            return baseline;
         }
 
         realpath(s: string): string {

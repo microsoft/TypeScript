@@ -818,4 +818,35 @@ namespace ts.projectSystem {
             verifyFileNames("/User/userName/Projects/İ", "/user/username/projects/İ");
         });
     });
+
+    describe("unittests:: tsserver:: watchEnvironment:: watchFile is single watcher per file", () => {
+        function verifyWatchFile(scenario: string, environmentVariables?: ESMap<string, string>) {
+            it(scenario, () => {
+                const config: File = {
+                    path: `${tscWatch.projectRoot}/tsconfig.json`,
+                    content: JSON.stringify({
+                        compilerOptions: {
+                            composite: true,
+                            resolveJsonModule: true,
+                        },
+                    })
+                };
+                const index: File = {
+                    path: `${tscWatch.projectRoot}/index.ts`,
+                    content: `import * as tsconfig from "./tsconfig.json";`
+                };
+                const host = createServerHost([config, index, libFile], { environmentVariables });
+                const session = createSession(host, { logger: createLoggerWithInMemoryLogs() });
+                openFilesForSession([index], session);
+                host.serializeWatches().forEach(b => session.logger.info(b));
+                baselineTsserverLogs("watchEnvironment", scenario, session);
+            });
+        }
+
+        verifyWatchFile("when watchFile can create multiple watchers per file");
+        verifyWatchFile(
+            "when watchFile is single watcher per file",
+            arrayToMap(["TSC_WATCHFILE"], identity, () => TestFSWithWatch.Tsc_WatchFile.SingleFileWatcherPerName)
+        );
+    });
 }
