@@ -1146,7 +1146,7 @@ namespace ts {
                         [
                             ...existingPrologue,
                             ...prologue,
-                            ...(superStatementIndex <= existingPrologue.length ? emptyArray : visitNodes(constructor.body.statements, visitor, isStatement, existingPrologue.length, superStatementIndex)),
+                            ...(superStatementIndex <= existingPrologue.length ? emptyArray : visitNodes(constructor.body.statements, visitor, isStatement, existingPrologue.length, superStatementIndex - existingPrologue.length)),
                             ...statements
                         ]
                     ),

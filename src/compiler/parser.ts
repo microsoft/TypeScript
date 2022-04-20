@@ -3189,7 +3189,8 @@ namespace ts {
             const pos = getNodePos();
             parseExpected(SyntaxKind.TypeOfKeyword);
             const entityName = parseEntityName(/*allowReservedWords*/ true, /*allowPrivateIdentifiers*/ true);
-            const typeArguments = tryParseTypeArguments();
+            // Make sure we perform ASI to prevent parsing the next line's type arguments as part of an instantiation expression.
+            const typeArguments = !scanner.hasPrecedingLineBreak() ? tryParseTypeArguments() : undefined;
             return finishNode(factory.createTypeQueryNode(entityName, typeArguments), pos);
         }
 
