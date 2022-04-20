@@ -1294,7 +1294,7 @@ namespace ts {
             resumeLexicalEnvironment();
 
             const needsSyntheticConstructor = !constructor && isDerivedClass;
-            let indexOfFirstStatementAfterSuper = 0;
+            let indexOfFirstStatementAfterSuperAndPrologue = 0;
             let prologueStatementCount = 0;
             let superStatementIndex = -1;
             let statements: Statement[] = [];
@@ -1305,12 +1305,15 @@ namespace ts {
 
                 // If there was a super call, visit existing statements up to and including it
                 if (superStatementIndex >= 0) {
-                    indexOfFirstStatementAfterSuper = superStatementIndex + 1;
+                    indexOfFirstStatementAfterSuperAndPrologue = superStatementIndex + 1;
                     statements = [
                         ...statements.slice(0, prologueStatementCount),
-                        ...visitNodes(constructor.body.statements, visitor, isStatement, prologueStatementCount, indexOfFirstStatementAfterSuper - prologueStatementCount),
+                        ...visitNodes(constructor.body.statements, visitor, isStatement, prologueStatementCount, indexOfFirstStatementAfterSuperAndPrologue - prologueStatementCount),
                         ...statements.slice(prologueStatementCount),
                     ];
+                }
+                else if (prologueStatementCount >= 0) {
+                    indexOfFirstStatementAfterSuperAndPrologue = prologueStatementCount;
                 }
             }
 
@@ -1354,7 +1357,7 @@ namespace ts {
                         }
                     }
                     if (parameterPropertyDeclarationCount > 0) {
-                        const parameterProperties = visitNodes(constructor.body.statements, visitor, isStatement, indexOfFirstStatementAfterSuper, parameterPropertyDeclarationCount);
+                        const parameterProperties = visitNodes(constructor.body.statements, visitor, isStatement, indexOfFirstStatementAfterSuperAndPrologue, parameterPropertyDeclarationCount);
 
                         // If there was a super() call found, add parameter properties immediately after it
                         if (superStatementIndex >= 0) {
@@ -1373,7 +1376,7 @@ namespace ts {
                             statements = [...parameterProperties, ...statements];
                         }
 
-                        indexOfFirstStatementAfterSuper += parameterPropertyDeclarationCount;
+                        indexOfFirstStatementAfterSuperAndPrologue += parameterPropertyDeclarationCount;
                     }
                 }
             }
@@ -1385,7 +1388,7 @@ namespace ts {
 
             // Add existing statements after the initial prologues and super call
             if (constructor) {
-                addRange(statements, visitNodes(constructor.body!.statements, visitBodyStatement, isStatement, indexOfFirstStatementAfterSuper + prologueStatementCount));
+                addRange(statements, visitNodes(constructor.body!.statements, visitBodyStatement, isStatement, indexOfFirstStatementAfterSuperAndPrologue));
             }
 
             statements = factory.mergeLexicalEnvironment(statements, endLexicalEnvironment());
