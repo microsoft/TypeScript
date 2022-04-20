@@ -28,7 +28,7 @@ namespace ts {
         /**
          * The map has key by source file's path that has been changed
          */
-        changedFilesSet: Set<Path>;
+        changedFilesSet?: Set<Path>;
         /**
          * Set of affected files being iterated
          */
@@ -103,6 +103,10 @@ namespace ts {
          */
         semanticDiagnosticsPerFile: ESMap<Path, readonly Diagnostic[]> | undefined;
         /**
+         * The map has key by source file's path that has been changed
+         */
+        changedFilesSet: Set<Path>;
+        /**
          * Current index to retrieve affected file from
          */
         affectedFilesIndex: number | undefined;
@@ -168,9 +172,8 @@ namespace ts {
             !compilerOptionsAffectSemanticDiagnostics(compilerOptions, oldCompilerOptions!);
         const canCopyEmitSignatures = compilerOptions.composite &&
             oldState?.emitSignatures &&
-            oldCompilerOptions &&
             !outFilePath &&
-            !compilerOptionsAffectDeclarationPath(compilerOptions, oldCompilerOptions);
+            !compilerOptionsAffectDeclarationPath(compilerOptions, oldCompilerOptions!);
         if (useOldState) {
             // Verify the sanity of old state
             if (!oldState!.currentChangedFilePath) {
@@ -179,11 +182,11 @@ namespace ts {
             }
             const changedFilesSet = oldState!.changedFilesSet;
             if (canCopySemanticDiagnostics) {
-                Debug.assert(!changedFilesSet.size || !forEachKey(changedFilesSet, path => oldState!.semanticDiagnosticsPerFile!.has(path)), "Semantic diagnostics shouldnt be available for changed files");
+                Debug.assert(!changedFilesSet?.size || !forEachKey(changedFilesSet, path => oldState!.semanticDiagnosticsPerFile!.has(path)), "Semantic diagnostics shouldnt be available for changed files");
             }
 
             // Copy old state's changed files set
-            changedFilesSet.forEach(value => state.changedFilesSet.add(value));
+            changedFilesSet?.forEach(value => state.changedFilesSet.add(value));
             if (!outFilePath && oldState!.affectedFilesPendingEmit) {
                 state.affectedFilesPendingEmit = oldState!.affectedFilesPendingEmit.slice();
                 state.affectedFilesPendingEmitKind = oldState!.affectedFilesPendingEmitKind && new Map(oldState!.affectedFilesPendingEmitKind);
@@ -249,7 +252,8 @@ namespace ts {
             Debug.assert(!state.seenAffectedFiles || !state.seenAffectedFiles.size);
             state.seenAffectedFiles = state.seenAffectedFiles || new Set();
         }
-        state.buildInfoEmitPending = !useOldState || state.changedFilesSet.size !== oldState!.changedFilesSet.size;
+        // Since old states change files set is copied, any additional change means we would need to emit build info
+        state.buildInfoEmitPending = !useOldState || state.changedFilesSet.size !== (oldState!.changedFilesSet?.size || 0);
         return state;
     }
 
