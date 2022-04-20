@@ -245,7 +245,6 @@ namespace ts {
         readonly projectStatus: ESMap<ResolvedConfigFilePath, UpToDateStatus>;
         readonly extendedConfigCache: ESMap<string, ExtendedConfigCacheEntry>;
         readonly buildInfoCache: ESMap<ResolvedConfigFilePath, BuildInfoCacheEntry>;
-        readonly outputTimeStamps: ESMap<ResolvedConfigFilePath, ESMap<Path, Date>>;
 
         readonly builderPrograms: ESMap<ResolvedConfigFilePath, T>;
         readonly diagnostics: ESMap<ResolvedConfigFilePath, readonly Diagnostic[]>;
@@ -274,6 +273,7 @@ namespace ts {
         readonly allWatchedExtendedConfigFiles: ESMap<Path, SharedExtendedConfigFileWatcher<ResolvedConfigFilePath>>;
         readonly allWatchedPackageJsonFiles: ESMap<ResolvedConfigFilePath, ESMap<Path, FileWatcher>>;
         readonly filesWatched: ESMap<Path, FileWatcherWithModifiedTime | Date>;
+        readonly outputTimeStamps: ESMap<ResolvedConfigFilePath, ESMap<Path, Date>>;
 
         readonly lastCachedPackageJsonLookups: ESMap<ResolvedConfigFilePath, readonly (readonly [Path, object | boolean])[] | undefined>;
 
@@ -1000,8 +1000,8 @@ namespace ts {
                     }
                 }
                 writeFile(writeFileCallback ? { writeFile: writeFileCallback } : compilerHost, emitterDiagnostics, name, text, writeByteOrderMark);
-                if (!isIncremental) {
-                    (outputTimeStampMap ||= getOutputTimeStampMap(state, projectPath)).set(path, now ||= getCurrentTime(state.host));
+                if (!isIncremental && state.watch) {
+                    (outputTimeStampMap ||= getOutputTimeStampMap(state, projectPath)!).set(path, now ||= getCurrentTime(state.host));
                 }
             });
 
@@ -1414,6 +1414,7 @@ namespace ts {
     }
 
     function getOutputTimeStampMap(state: SolutionBuilderState, resolvedConfigFilePath: ResolvedConfigFilePath) {
+        if (!state.watch) return undefined;
         let result = state.outputTimeStamps.get(resolvedConfigFilePath);
         if (!result) state.outputTimeStamps.set(resolvedConfigFilePath, result = new Map());
         return result;
@@ -1594,8 +1595,12 @@ namespace ts {
             for (const output of outputs) {
                 const path = toPath(state, output);
                 // Output is missing; can stop checking
-                let outputTime = outputTimeStampMap.get(path);
-                if (!outputTime) outputTimeStampMap.set(path, outputTime = ts.getModifiedTime(state.host, output));
+                let outputTime = outputTimeStampMap?.get(path);
+                if (!outputTime) {
+                    outputTime = ts.getModifiedTime(state.host, output);
+                    outputTimeStampMap?.set(path, outputTime);
+                }
+
                 if (outputTime === missingFileModifiedTime) {
                     return {
                         type: UpToDateStatusType.OutputMissing,
@@ -1751,7 +1756,7 @@ namespace ts {
         const { host } = state;
         const outputs = getAllProjectOutputs(proj, !host.useCaseSensitiveFileNames());
         const outputTimeStampMap = getOutputTimeStampMap(state, projectPath);
-        const modifiedOutputs = new Set<Path>();
+        const modifiedOutputs = outputTimeStampMap ? new Set<Path>() : undefined;
         if (!skipOutputs || outputs.length !== skipOutputs.size) {
             let reportVerbose = !!state.options.verbose;
             for (const file of outputs) {
@@ -1762,14 +1767,16 @@ namespace ts {
                     reportStatus(state, verboseMessage, proj.options.configFilePath!);
                 }
                 host.setModifiedTime(file, now ||= getCurrentTime(state.host));
-                outputTimeStampMap.set(path, now);
-                modifiedOutputs.add(path);
+                if (outputTimeStampMap) {
+                    outputTimeStampMap.set(path, now);
+                    modifiedOutputs!.add(path);
+                }
             }
         }
 
         // Clear out timestamps not in output list any more
-        outputTimeStampMap.forEach((_value, key) => {
-            if (!skipOutputs?.has(key) && !modifiedOutputs.has(key)) outputTimeStampMap.delete(key);
+        outputTimeStampMap?.forEach((_value, key) => {
+            if (!skipOutputs?.has(key) && !modifiedOutputs!.has(key)) outputTimeStampMap.delete(key);
         });
     }
 
