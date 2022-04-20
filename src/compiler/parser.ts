@@ -4709,9 +4709,9 @@ namespace ts {
             //     a() ? (b: number, c?: string): void => d() : e
             // is determined by isParenthesizedArrowFunctionExpression to unambiguously
             // be an arrow expression, so we allow a return type.
-            if (disallowReturnTypeInArrowFunction && token() === SyntaxKind.ColonToken) {
-                return undefined;
-            }
+            // if (disallowReturnTypeInArrowFunction && token() === SyntaxKind.ColonToken) {
+            //     return undefined;
+            // }
 
             const type = parseReturnType(SyntaxKind.ColonToken, /*isType*/ false);
             if (type && !allowAmbiguity && typeHasArrowFunctionBlockingParseError(type)) {
@@ -4747,6 +4747,16 @@ namespace ts {
             const body = (lastToken === SyntaxKind.EqualsGreaterThanToken || lastToken === SyntaxKind.OpenBraceToken)
                 ? parseArrowFunctionExpressionBody(some(modifiers, isAsyncModifier), disallowReturnTypeInArrowFunction)
                 : parseIdentifier();
+
+            if (disallowReturnTypeInArrowFunction) {
+                // If we are currently parsing a conditional expression, and were able to parse
+                // a return type before the body, and there's another colon after the body, allow
+                // parsing of this arrow function so that the following colon terminates the
+                // true side of the conditional.
+                if (!(type && token() === SyntaxKind.ColonToken)) {
+                    return undefined;
+                }
+            }
 
             const node = factory.createArrowFunction(modifiers, typeParameters, parameters, type, equalsGreaterThanToken, body);
             return withJSDoc(finishNode(node, pos), hasJSDoc);

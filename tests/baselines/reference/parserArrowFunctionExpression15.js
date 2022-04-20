@@ -3,5 +3,4 @@ false ? (param): string => param : null
 
 
 //// [parserArrowFunctionExpression15.js]
-false ? (param) : function (string) { return param; };
-null;
+false ? function (param) { return param; } : null;
