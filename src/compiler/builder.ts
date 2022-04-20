@@ -966,8 +966,7 @@ namespace ts {
                 // flags it controls (e.g. `strictNullChecks`) will be retrieved correctly from the buildinfo
                 optionKey === "strict" ||
                 // We need to store these to determine whether `lib` files need to be rechecked.
-                optionKey === "skiplibcheck" || optionKey === "skipdefaultlibcheck" ||
-                optionKey === "noemit" :
+                optionKey === "skiplibcheck" || optionKey === "skipdefaultlibcheck" :
                 optionInfo?.affectsOutFileBuildInfo;
             if (emitOption) {
                 (result ||= {})[name] = convertToReusableCompilerOptionValue(

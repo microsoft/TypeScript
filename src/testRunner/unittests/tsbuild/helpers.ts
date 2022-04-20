@@ -516,7 +516,8 @@ interface Symbol {
                     fileNames: undefined,
                     fileNamesList: undefined,
                     fileInfos: sanitizedFileInfos,
-                    options: sanatizeCompilerOptions(readableBuildInfo.program.options),
+                    // Ignore noEmit since that shouldnt be reason to emit the tsbuild info and presence of it in the buildinfo file does not matter
+                    options: { ...readableBuildInfo.program.options, noEmit: undefined },
                     exportedModulesMap: undefined,
                     affectedFilesPendingEmit: undefined,
                     dtsChangeTime: readableBuildInfo.program.dtsChangeTime ? "FakeTime" : undefined,
@@ -525,16 +526,6 @@ interface Symbol {
             },  /*replacer*/ undefined, 2),
             readableBuildInfo,
         };
-    }
-
-    function sanatizeCompilerOptions(options: CompilerOptions | undefined) {
-        if (!options) return options;
-        let result: CompilerOptions | undefined;
-        for (const name of getOwnKeys(options).sort(compareStringsCaseSensitive)) {
-            // Ignore noEmit since that shouldnt be reason to emit the tsbuild info and presence of it in the buildinfo file does not matter
-            if (name.toLowerCase() !== "noemit") (result ||= {})[name] = options[name];
-        }
-        return result;
     }
 
     export enum CleanBuildDescrepancy {

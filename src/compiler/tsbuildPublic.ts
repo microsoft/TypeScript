@@ -1544,7 +1544,7 @@ namespace ts {
 
             if (buildInfo.program) {
                 if (buildInfo.program.changeFileSet?.length ||
-                    (!buildInfo.program.options?.noEmit && buildInfo.program.affectedFilesPendingEmit?.length)) {
+                    (!project.options.noEmit && buildInfo.program.affectedFilesPendingEmit?.length)) {
                     return {
                         type: UpToDateStatusType.OutOfDateBuildInfo,
                         buildInfoFile: buildInfoPath
