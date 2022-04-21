@@ -354,6 +354,10 @@ export class Verify extends VerifyNegatable {
         this.state.verifyTypeOfSymbolAtLocation(range, symbol, expected);
     }
 
+    public typeAtLocation(range: FourSlash.Range, expected: string) {
+        this.state.verifyTypeAtLocation(range, expected);
+    }
+
     public baselineFindAllReferences(...markerNames: string[]) {
         this.state.verifyBaselineFindAllReferences(...markerNames);
     }
