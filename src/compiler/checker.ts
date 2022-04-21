@@ -27986,6 +27986,7 @@ namespace ts {
                         }
                     }
                     else {
+                        error(attributeDecl.expression, Diagnostics.Spread_types_may_only_be_created_from_object_types);
                         typeToIntersect = typeToIntersect ? getIntersectionType([typeToIntersect, exprType]) : exprType;
                     }
                 }
