@@ -1251,6 +1251,7 @@ namespace ts.Completions {
             list: NodeArray<Node>,
             sourceFile: SourceFile | undefined,
         ): string {
+            escapes = undefined;
             writer.clear();
             printer.writeList(format, list, sourceFile, writer);
             return writer.getText();
