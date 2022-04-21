@@ -262,7 +262,7 @@ namespace ts {
             return newValue;
         };
         if (originalWriteFile) {
-            host.writeFile = (fileName, data, writeByteOrderMark, onError, sourceFiles) => {
+            host.writeFile = (fileName, data, ...rest) => {
                 const key = toPath(fileName);
                 fileExistsCache.delete(key);
 
@@ -277,7 +277,7 @@ namespace ts {
                         sourceFileCache.delete(key);
                     }
                 }
-                originalWriteFile.call(host, fileName, data, writeByteOrderMark, onError, sourceFiles);
+                originalWriteFile.call(host, fileName, data, ...rest);
             };
         }
 
@@ -1340,6 +1340,7 @@ namespace ts {
             useCaseSensitiveFileNames: () => host.useCaseSensitiveFileNames(),
             getFileIncludeReasons: () => fileReasons,
             structureIsReused,
+            writeFile,
         };
 
         onProgramCreateComplete();
@@ -1894,8 +1895,7 @@ namespace ts {
                 getProjectReferenceRedirect,
                 isSourceOfProjectReferenceRedirect,
                 getSymlinkCache,
-                writeFile: writeFileCallback || (
-                    (fileName, data, writeByteOrderMark, onError, sourceFiles) => host.writeFile(fileName, data, writeByteOrderMark, onError, sourceFiles)),
+                writeFile: writeFileCallback || writeFile,
                 isEmitBlocked,
                 readFile: f => host.readFile(f),
                 fileExists: f => {
@@ -1912,6 +1912,17 @@ namespace ts {
                 redirectTargetsMap,
                 getFileIncludeReasons: program.getFileIncludeReasons,
             };
+        }
+
+        function writeFile(
+            fileName: string,
+            text: string,
+            writeByteOrderMark: boolean,
+            onError?: (message: string) => void,
+            sourceFiles?: readonly SourceFile[],
+            data?: WriteFileCallbackData
+        ) {
+            host.writeFile(fileName, text, writeByteOrderMark, onError, sourceFiles, data);
         }
 
         function emitBuildInfo(writeFileCallback?: WriteFileCallback): EmitResult {

@@ -82,7 +82,7 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /user/username/projects/myproject/project1/node_modules/file/index.d.ts (used version)
-/user/username/projects/myproject/project1/index.ts (used version)
+/user/username/projects/myproject/project1/index.ts (computed .d.ts during emit)
 /user/username/projects/myproject/node_modules/@types/foo/index.d.ts (used version)
 /user/username/projects/myproject/node_modules/@types/bar/index.d.ts (used version)
 
@@ -104,7 +104,7 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /user/username/projects/myproject/project2/file.d.ts (used version)
-/user/username/projects/myproject/project2/index.ts (used version)
+/user/username/projects/myproject/project2/index.ts (computed .d.ts during emit)
 /user/username/projects/myproject/node_modules/@types/foo/index.d.ts (used version)
 
 WatchedFiles::
@@ -144,7 +144,7 @@ export {};
 
 
 //// [/user/username/projects/myproject/project1/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./node_modules/file/index.d.ts","./index.ts","../node_modules/@types/foo/index.d.ts","../node_modules/@types/bar/index.d.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-12737086933-export const foo = 10;","-4708082513-import { foo } from \"file\";","-12737086933-export const foo = 10;","-12042713060-export const bar = 10;"],"options":{"composite":true},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[[3,1]],"semanticDiagnosticsPerFile":[1,5,4,3,2]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./node_modules/file/index.d.ts","./index.ts","../node_modules/@types/foo/index.d.ts","../node_modules/@types/bar/index.d.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-12737086933-export const foo = 10;",{"version":"-4708082513-import { foo } from \"file\";","signature":"-3531856636-export {};\n"},"-12737086933-export const foo = 10;","-12042713060-export const bar = 10;"],"options":{"composite":true},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,5,4,3,2]},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/project1/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -173,7 +173,7 @@ export {};
       },
       "./index.ts": {
         "version": "-4708082513-import { foo } from \"file\";",
-        "signature": "-4708082513-import { foo } from \"file\";"
+        "signature": "-3531856636-export {};\n"
       },
       "../node_modules/@types/foo/index.d.ts": {
         "version": "-12737086933-export const foo = 10;",
@@ -192,11 +192,7 @@ export {};
         "./node_modules/file/index.d.ts"
       ]
     },
-    "exportedModulesMap": {
-      "./index.ts": [
-        "./node_modules/file/index.d.ts"
-      ]
-    },
+    "exportedModulesMap": {},
     "semanticDiagnosticsPerFile": [
       "../../../../../a/lib/lib.d.ts",
       "../node_modules/@types/bar/index.d.ts",
@@ -206,7 +202,7 @@ export {};
     ]
   },
   "version": "FakeTSVersion",
-  "size": 925
+  "size": 971
 }
 
 //// [/user/username/projects/myproject/project2/index.js]
@@ -219,7 +215,7 @@ export {};
 
 
 //// [/user/username/projects/myproject/project2/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./file.d.ts","./index.ts","../node_modules/@types/foo/index.d.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-12737086933-export const foo = 10;","-4708082513-import { foo } from \"file\";","-12737086933-export const foo = 10;"],"options":{"composite":true},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[[3,1]],"semanticDiagnosticsPerFile":[1,4,2,3]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./file.d.ts","./index.ts","../node_modules/@types/foo/index.d.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-12737086933-export const foo = 10;",{"version":"-4708082513-import { foo } from \"file\";","signature":"-3531856636-export {};\n"},"-12737086933-export const foo = 10;"],"options":{"composite":true},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,4,2,3]},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/project2/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -247,7 +243,7 @@ export {};
       },
       "./index.ts": {
         "version": "-4708082513-import { foo } from \"file\";",
-        "signature": "-4708082513-import { foo } from \"file\";"
+        "signature": "-3531856636-export {};\n"
       },
       "../node_modules/@types/foo/index.d.ts": {
         "version": "-12737086933-export const foo = 10;",
@@ -262,11 +258,7 @@ export {};
         "./file.d.ts"
       ]
     },
-    "exportedModulesMap": {
-      "./index.ts": [
-        "./file.d.ts"
-      ]
-    },
+    "exportedModulesMap": {},
     "semanticDiagnosticsPerFile": [
       "../../../../../a/lib/lib.d.ts",
       "../node_modules/@types/foo/index.d.ts",
@@ -275,7 +267,7 @@ export {};
     ]
   },
   "version": "FakeTSVersion",
-  "size": 826
+  "size": 872
 }
 
 

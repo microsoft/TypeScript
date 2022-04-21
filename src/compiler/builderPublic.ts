@@ -20,6 +20,11 @@ namespace ts {
          */
         /*@internal*/
         disableUseFileVersionAsSignature?: boolean;
+        /**
+         * Store the list of files that update signature during the emit
+         */
+        /*@internal*/
+        storeFilesChangingSignatureDuringEmit?: boolean;
     }
 
     /**
