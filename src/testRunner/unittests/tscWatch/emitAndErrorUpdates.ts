@@ -14,7 +14,6 @@ namespace ts.tscWatch {
             lib,
             configFile,
             changes,
-            baselineIncremental
         }: VerifyEmitAndErrorUpdatesWorker) {
             verifyTscWatch({
                 scenario: "emitAndErrorUpdates",
@@ -25,18 +24,7 @@ namespace ts.tscWatch {
                     { currentDirectory: currentDirectory || projectRoot }
                 ),
                 changes,
-                baselineIncremental
-            });
-            verifyTscWatch({
-                scenario: "emitAndErrorUpdates",
-                subScenario: `incremental/${subScenario}`,
-                commandLineArgs: ["--w", "--i"],
-                sys: () => createWatchedSystem(
-                    [...files(), configFile(), lib?.() || libFile],
-                    { currentDirectory: currentDirectory || projectRoot }
-                ),
-                changes,
-                baselineIncremental
+                baselineIncremental: true
             });
         }
 
@@ -54,7 +42,6 @@ namespace ts.tscWatch {
             lib?: () => File;
             changes: TscWatchCompileChange[];
             configFile?: () => File;
-            baselineIncremental?: boolean
         }
         function verifyEmitAndErrorUpdates(input: VerifyEmitAndErrorUpdates) {
             verifyEmitAndErrorUpdatesWorker({
@@ -374,7 +361,6 @@ const a: string = 10;`),
 const a: string = "hello";`),
                     noChange,
                 ],
-                baselineIncremental: true
             });
         });
     });
