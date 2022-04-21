@@ -42,24 +42,69 @@ export default hello.hello
 }
 
 //// [/src/tsconfig_withInclude.json]
-
+{
+  "compilerOptions": {
+    "composite": true,
+    "moduleResolution": "node",
+    "module": "commonjs",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "outDir": "dist",
+    "skipDefaultLibCheck": true
+  },
+  "include": [
+    "src/**/*"
+  ]
+}
 
 //// [/src/tsconfig_withIncludeAndFiles.json]
-
+{
+  "compilerOptions": {
+    "composite": true,
+    "moduleResolution": "node",
+    "module": "commonjs",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "outDir": "dist",
+    "skipDefaultLibCheck": true
+  },
+  "files": [
+    "src/hello.json"
+  ],
+  "include": [
+    "src/**/*"
+  ]
+}
 
 //// [/src/tsconfig_withIncludeOfJson.json]
-
+{
+  "compilerOptions": {
+    "composite": true,
+    "moduleResolution": "node",
+    "module": "commonjs",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "outDir": "dist",
+    "skipDefaultLibCheck": true
+  },
+  "include": [
+    "src/**/*", "src/**/*.json"
+  ]
+}
 
 
 
 Output::
 /lib/tsc --b src/tsconfig_withFiles.json --verbose --explainFiles
-[[90m12:01:00 AM[0m] Projects in this build: 
+[[90m12:00:07 AM[0m] Projects in this build: 
     * src/tsconfig_withFiles.json
 
-[[90m12:01:00 AM[0m] Project 'src/tsconfig_withFiles.json' is out of date because output file 'src/dist/src/index.js' does not exist
+[[90m12:00:08 AM[0m] Project 'src/tsconfig_withFiles.json' is out of date because output file 'src/dist/src/index.js' does not exist
 
-[[90m12:01:00 AM[0m] Building project '/src/tsconfig_withFiles.json'...
+[[90m12:00:09 AM[0m] Building project '/src/tsconfig_withFiles.json'...
 
 lib/lib.d.ts
   Default library for target 'es3'
@@ -159,10 +204,10 @@ Input::
 
 Output::
 /lib/tsc --b src/tsconfig_withFiles.json --verbose --explainFiles
-[[90m12:04:00 AM[0m] Projects in this build: 
+[[90m12:00:18 AM[0m] Projects in this build: 
     * src/tsconfig_withFiles.json
 
-[[90m12:04:00 AM[0m] Project 'src/tsconfig_withFiles.json' is up to date because newest input 'src/src/index.ts' is older than oldest output 'src/dist/src/index.js'
+[[90m12:00:19 AM[0m] Project 'src/tsconfig_withFiles.json' is up to date because newest input 'src/src/index.ts' is older than oldest output 'src/dist/src/hello.json'
 
 exitCode:: ExitStatus.Success
 

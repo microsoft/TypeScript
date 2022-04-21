@@ -63,6 +63,14 @@ export const m = mod;
 
 
 //// [/src/tests/index.ts]
+import * as c from '../core/index';
+import * as logic from '../logic/index';
+
+c.leftPad("", 10);
+logic.getSecondsInDay();
+
+import * as mod from '../core/anotherModule';
+export const m = mod;
 
 
 //// [/src/tests/tsconfig.json]
@@ -81,26 +89,39 @@ export const m = mod;
 }
 
 //// [/src/ui/index.ts]
+import * as logic from '../logic';
+
+export function run() {
+    console.log(logic.getSecondsInDay());
+}
 
 
 //// [/src/ui/tsconfig.json]
+{
+    "compilerOptions": {
+        "skipDefaultLibCheck": true
+    },
+    "references": [
+        { "path": "../logic/index" }
+    ]
+}
 
 
 
 
 Output::
 /lib/tsc --build /src/logic2/tsconfig.json
-[[90m12:00:00 AM[0m] Projects in this build: 
+[[90m12:00:06 AM[0m] Projects in this build: 
     * src/core/tsconfig.json
     * src/logic/tsconfig.json
 
-[[90m12:00:00 AM[0m] Project 'src/core/tsconfig.json' is out of date because output file 'src/core/anotherModule.js' does not exist
+[[90m12:00:07 AM[0m] Project 'src/core/tsconfig.json' is out of date because output file 'src/core/anotherModule.js' does not exist
 
-[[90m12:00:00 AM[0m] Building project '/src/core/tsconfig.json'...
+[[90m12:00:08 AM[0m] Building project '/src/core/tsconfig.json'...
 
-[[90m12:00:00 AM[0m] Project 'src/logic/tsconfig.json' is out of date because output file 'src/logic/index.js' does not exist
+[[90m12:00:17 AM[0m] Project 'src/logic/tsconfig.json' is out of date because output file 'src/logic/index.js' does not exist
 
-[[90m12:00:00 AM[0m] Building project '/src/logic/tsconfig.json'...
+[[90m12:00:18 AM[0m] Building project '/src/logic/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 

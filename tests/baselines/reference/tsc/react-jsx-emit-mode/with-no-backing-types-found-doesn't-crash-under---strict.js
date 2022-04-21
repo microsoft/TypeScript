@@ -29,7 +29,7 @@ declare global {
 }
 
 //// [/src/project/node_modules/react/jsx-runtime.js]
-
+export {}
 
 //// [/src/project/src/index.tsx]
 export const App = () => <div propA={true}></div>;

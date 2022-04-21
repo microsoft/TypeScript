@@ -72,12 +72,12 @@ export { default as bar } from './bar';
 
 Output::
 /lib/tsc --b /src --verbose
-[[90m12:01:00 AM[0m] Projects in this build: 
+[[90m12:00:07 AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90m12:01:00 AM[0m] Project 'src/tsconfig.json' is out of date because output file 'src/obj/bar.js' does not exist
+[[90m12:00:08 AM[0m] Project 'src/tsconfig.json' is out of date because output file 'src/obj/bar.js' does not exist
 
-[[90m12:01:00 AM[0m] Building project '/src/tsconfig.json'...
+[[90m12:00:09 AM[0m] Building project '/src/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 
@@ -257,14 +257,14 @@ export default foo()(function foobar(): void {
 
 Output::
 /lib/tsc --b /src --verbose
-[[90m12:04:00 AM[0m] Projects in this build: 
+[[90m12:00:22 AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90m12:04:00 AM[0m] Project 'src/tsconfig.json' is out of date because oldest output 'src/obj/bar.js' is older than newest input 'src/bar.ts'
+[[90m12:00:23 AM[0m] Project 'src/tsconfig.json' is out of date because oldest output 'src/obj/bar.js' is older than newest input 'src/bar.ts'
 
-[[90m12:04:00 AM[0m] Building project '/src/tsconfig.json'...
+[[90m12:00:24 AM[0m] Building project '/src/tsconfig.json'...
 
-[[90m12:04:00 AM[0m] Updating unchanged output timestamps of project '/src/tsconfig.json'...
+[[90m12:00:31 AM[0m] Updating unchanged output timestamps of project '/src/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 
@@ -393,14 +393,14 @@ export default foo()(function foobar(param: string): void {
 
 Output::
 /lib/tsc --b /src --verbose
-[[90m12:07:00 AM[0m] Projects in this build: 
+[[90m12:00:38 AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90m12:07:00 AM[0m] Project 'src/tsconfig.json' is out of date because oldest output 'src/obj/bar.js' is older than newest input 'src/bar.ts'
+[[90m12:00:39 AM[0m] Project 'src/tsconfig.json' is out of date because oldest output 'src/obj/bar.js' is older than newest input 'src/bar.ts'
 
-[[90m12:07:00 AM[0m] Building project '/src/tsconfig.json'...
+[[90m12:00:40 AM[0m] Building project '/src/tsconfig.json'...
 
-[[90m12:07:00 AM[0m] Updating unchanged output timestamps of project '/src/tsconfig.json'...
+[[90m12:00:47 AM[0m] Updating unchanged output timestamps of project '/src/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 

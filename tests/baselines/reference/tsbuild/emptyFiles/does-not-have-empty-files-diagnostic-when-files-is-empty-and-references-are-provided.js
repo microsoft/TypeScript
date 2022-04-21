@@ -30,6 +30,16 @@ export function multiply(a: number, b: number) { return a * b; }
 
 
 //// [/src/no-references/tsconfig.json]
+{
+    "references": [],
+    "files": [],
+    "compilerOptions": {
+        "composite": true,
+        "declaration": true,
+        "forceConsistentCasingInFileNames": true,
+        "skipDefaultLibCheck": true
+    }
+}
 
 
 //// [/src/with-references/tsconfig.json]

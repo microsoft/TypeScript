@@ -360,7 +360,7 @@ interface Array<T> { length: number; [n: number]: T; }`
         DynamicPolling = "RecursiveDirectoryUsingDynamicPriorityPolling"
     }
 
-    const timeIncrements = 1000;
+    export const timeIncrements = 1000;
     export interface TestServerHostOptions {
         useCaseSensitiveFileNames: boolean;
         executingFilePath: string;

@@ -214,7 +214,7 @@ ${patch ? vfs.formatPatch(patch) : ""}`
                 describe(input.subScenario, () => {
                     verifyTscBaseline(() => verifier({
                         ...input,
-                        fs: () => getFsWithTime(input.fs()).fs.makeReadonly()
+                        fs: () => input.fs().makeReadonly()
                     }));
                 });
             });

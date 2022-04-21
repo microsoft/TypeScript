@@ -145,23 +145,23 @@ export function createZoo(): Array<Dog> {
 
 Output::
 /lib/tsc --b /src/tsconfig.json --verbose
-[[90m12:00:00 AM[0m] Projects in this build: 
+[[90m12:00:06 AM[0m] Projects in this build: 
     * src/core/tsconfig.json
     * src/animals/tsconfig.json
     * src/zoo/tsconfig.json
     * src/tsconfig.json
 
-[[90m12:00:00 AM[0m] Project 'src/core/tsconfig.json' is out of date because output file 'src/lib/core/utilities.js' does not exist
+[[90m12:00:07 AM[0m] Project 'src/core/tsconfig.json' is out of date because output file 'src/lib/core/utilities.js' does not exist
 
-[[90m12:00:00 AM[0m] Building project '/src/core/tsconfig.json'...
+[[90m12:00:08 AM[0m] Building project '/src/core/tsconfig.json'...
 
-[[90m12:00:00 AM[0m] Project 'src/animals/tsconfig.json' is out of date because output file 'src/lib/animals/animal.js' does not exist
+[[90m12:00:15 AM[0m] Project 'src/animals/tsconfig.json' is out of date because output file 'src/lib/animals/animal.js' does not exist
 
-[[90m12:00:00 AM[0m] Building project '/src/animals/tsconfig.json'...
+[[90m12:00:16 AM[0m] Building project '/src/animals/tsconfig.json'...
 
-[[90m12:00:00 AM[0m] Project 'src/zoo/tsconfig.json' is out of date because output file 'src/lib/zoo/zoo.js' does not exist
+[[90m12:00:26 AM[0m] Project 'src/zoo/tsconfig.json' is out of date because output file 'src/lib/zoo/zoo.js' does not exist
 
-[[90m12:00:00 AM[0m] Building project '/src/zoo/tsconfig.json'...
+[[90m12:00:27 AM[0m] Building project '/src/zoo/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 

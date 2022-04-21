@@ -19,7 +19,7 @@ declare const console: { log(msg: any): void; };
 export declare type Nominal<T, Name extends string> = MyNominal<T, Name>;
 
 //// [/src/solution/src/common/tsconfig.json]
-
+{"extends":"../../tsconfig.base.json","compilerOptions":{"composite":true},"include":["./nominal.ts"]}
 
 //// [/src/solution/src/common/types.d.ts]
 declare type MyNominal<T, Name extends string> = T & {
@@ -31,7 +31,7 @@ import { Nominal } from '../common/nominal';
 export type MyNominal = Nominal<string, 'MyNominal'>;
 
 //// [/src/solution/src/subProject/tsconfig.json]
-
+{"extends":"../../tsconfig.base.json","compilerOptions":{"composite":true},"references":[{"path":"../common"}],"include":["./index.ts"]}
 
 //// [/src/solution/src/subProject2/index.ts]
 import { MyNominal } from '../subProject/index';
@@ -43,10 +43,10 @@ export function getVar(): keyof typeof variable {
 }
 
 //// [/src/solution/src/subProject2/tsconfig.json]
-
+{"extends":"../../tsconfig.base.json","compilerOptions":{"composite":true},"references":[{"path":"../subProject"}],"include":["./index.ts"]}
 
 //// [/src/solution/src/tsconfig.json]
-
+{"compilerOptions":{"composite":true},"references":[{"path":"./subProject"},{"path":"./subProject2"}],"include":[]}
 
 //// [/src/solution/tsconfig.base.json]
 {"compilerOptions":{"rootDir":"./","outDir":"lib"}}
@@ -58,12 +58,12 @@ export function getVar(): keyof typeof variable {
 
 Output::
 /lib/tsc --b /src/solution/tsconfig.json --verbose
-[[90m12:00:00 AM[0m] Projects in this build: 
+[[90m12:00:21 AM[0m] Projects in this build: 
     * src/solution/tsconfig.json
 
-[[90m12:00:00 AM[0m] Project 'src/solution/tsconfig.json' is out of date because output file 'src/solution/lib/src/common/nominal.js' does not exist
+[[90m12:00:22 AM[0m] Project 'src/solution/tsconfig.json' is out of date because output file 'src/solution/lib/src/common/nominal.js' does not exist
 
-[[90m12:00:00 AM[0m] Building project '/src/solution/tsconfig.json'...
+[[90m12:00:23 AM[0m] Building project '/src/solution/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 
