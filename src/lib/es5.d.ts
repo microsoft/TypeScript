@@ -52,13 +52,13 @@ declare function decodeURIComponent(encodedURIComponent: string): string;
 
 /**
  * Encodes a text string as a valid Uniform Resource Identifier (URI)
- * @param uri A value representing an encoded URI.
+ * @param uri A value representing an unencoded URI.
  */
 declare function encodeURI(uri: string): string;
 
 /**
  * Encodes a text string as a valid component of a Uniform Resource Identifier (URI).
- * @param uriComponent A value representing an encoded URI component.
+ * @param uriComponent A value representing an unencoded URI component.
  */
 declare function encodeURIComponent(uriComponent: string | number | boolean): string;
 
