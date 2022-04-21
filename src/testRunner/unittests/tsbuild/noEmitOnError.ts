@@ -40,9 +40,9 @@ const a = {
 const a = {
     lastName: 'sdsd'
 };`, "utf-8"),
-                    descripencyExplaination: noChangeWithExportsDescripencyRun.descripencyExplaination,
+                    discrepancyExplanation: noChangeWithExportsDiscrepancyRun.discrepancyExplanation,
                 },
-                noChangeWithExportsDescripencyRun,
+                noChangeWithExportsDiscrepancyRun,
             ],
             baselinePrograms: true,
         });
@@ -74,7 +74,7 @@ const a: string = "hello";`, "utf-8"),
 const a: string = 10;`, "utf-8"),
             commandLineArgs: ["--b", "/src/tsconfig.json", "--incremental"],
             edits: [
-                noChangeWithExportsDescripencyRun,
+                noChangeWithExportsDiscrepancyRun,
                 {
                     subScenario: "Fix error",
                     modifyFs: fs => fs.writeFileSync("/src/src/main.ts", `import { A } from "../shared/types/db";
