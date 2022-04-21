@@ -464,5 +464,40 @@ declare global {
                 fs.writeFileSync("/lib/lib.esnext.d.ts", libContent);
             }
         });
+
+        verifyTscWithEdits({
+            scenario: "incremental",
+            subScenario: "change to type that gets used as global through export in another file",
+            commandLineArgs: ["-p", `src/project`],
+            fs: () => loadProjectFromFiles({
+                "/src/project/tsconfig.json": JSON.stringify({ compilerOptions: { composite: true }, }),
+                "/src/project/class1.ts": `const a: MagicNumber = 1;
+console.log(a);`,
+                "/src/project/constants.ts": "export default 1;",
+                "/src/project/types.d.ts": `type MagicNumber = typeof import('./constants').default`,
+            }),
+            edits: [{
+                subScenario: "Modify imports used in global file",
+                modifyFs: fs => fs.writeFileSync("/src/project/constants.ts", "export default 2;"),
+            }],
+        });
+
+        verifyTscWithEdits({
+            scenario: "incremental",
+            subScenario: "change to type that gets used as global through export in another file through indirect import",
+            commandLineArgs: ["-p", `src/project`],
+            fs: () => loadProjectFromFiles({
+                "/src/project/tsconfig.json": JSON.stringify({ compilerOptions: { composite: true }, }),
+                "/src/project/class1.ts": `const a: MagicNumber = 1;
+console.log(a);`,
+                "/src/project/constants.ts": "export default 1;",
+                "/src/project/reexport.ts": `export { default as ConstantNumber } from "./constants"`,
+                "/src/project/types.d.ts": `type MagicNumber = typeof import('./reexport').ConstantNumber`,
+            }),
+            edits: [{
+                subScenario: "Modify imports used in global file",
+                modifyFs: fs => fs.writeFileSync("/src/project/constants.ts", "export default 2;"),
+            }],
+        });
     });
 }

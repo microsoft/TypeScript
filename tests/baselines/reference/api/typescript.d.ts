@@ -2172,7 +2172,9 @@ declare namespace ts {
     export type ResolvedConfigFileName = string & {
         _isResolvedConfigFileName: never;
     };
-    export type WriteFileCallback = (fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void, sourceFiles?: readonly SourceFile[]) => void;
+    export interface WriteFileCallbackData {
+    }
+    export type WriteFileCallback = (fileName: string, text: string, writeByteOrderMark: boolean, onError?: (message: string) => void, sourceFiles?: readonly SourceFile[], data?: WriteFileCallbackData) => void;
     export class OperationCanceledException {
     }
     export interface CancellationToken {

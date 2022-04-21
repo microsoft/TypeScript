@@ -104,3 +104,70 @@ const get = <T extends string>(t: T, foo: Foo<T>): T => foo[`get${t}`];  // Type
 >foo : Symbol(foo, Decl(mappedTypeConstraints2.ts, 24, 36))
 >t : Symbol(t, Decl(mappedTypeConstraints2.ts, 24, 31))
 
+// Repro from #48626
+
+interface Bounds {
+>Bounds : Symbol(Bounds, Decl(mappedTypeConstraints2.ts, 24, 71))
+
+    min: number;
+>min : Symbol(Bounds.min, Decl(mappedTypeConstraints2.ts, 28, 18))
+
+    max: number;
+>max : Symbol(Bounds.max, Decl(mappedTypeConstraints2.ts, 29, 16))
+}
+
+type NumericBoundsOf<T> = {
+>NumericBoundsOf : Symbol(NumericBoundsOf, Decl(mappedTypeConstraints2.ts, 31, 1))
+>T : Symbol(T, Decl(mappedTypeConstraints2.ts, 33, 21))
+
+    [K in keyof T as T[K] extends number | undefined ? K : never]: Bounds;
+>K : Symbol(K, Decl(mappedTypeConstraints2.ts, 34, 5))
+>T : Symbol(T, Decl(mappedTypeConstraints2.ts, 33, 21))
+>T : Symbol(T, Decl(mappedTypeConstraints2.ts, 33, 21))
+>K : Symbol(K, Decl(mappedTypeConstraints2.ts, 34, 5))
+>K : Symbol(K, Decl(mappedTypeConstraints2.ts, 34, 5))
+>Bounds : Symbol(Bounds, Decl(mappedTypeConstraints2.ts, 24, 71))
+}
+
+function validate<T extends object>(obj: T, bounds: NumericBoundsOf<T>) {
+>validate : Symbol(validate, Decl(mappedTypeConstraints2.ts, 35, 1))
+>T : Symbol(T, Decl(mappedTypeConstraints2.ts, 37, 18))
+>obj : Symbol(obj, Decl(mappedTypeConstraints2.ts, 37, 36))
+>T : Symbol(T, Decl(mappedTypeConstraints2.ts, 37, 18))
+>bounds : Symbol(bounds, Decl(mappedTypeConstraints2.ts, 37, 43))
+>NumericBoundsOf : Symbol(NumericBoundsOf, Decl(mappedTypeConstraints2.ts, 31, 1))
+>T : Symbol(T, Decl(mappedTypeConstraints2.ts, 37, 18))
+
+    for (const [key, val] of Object.entries(obj)) {
+>key : Symbol(key, Decl(mappedTypeConstraints2.ts, 38, 16))
+>val : Symbol(val, Decl(mappedTypeConstraints2.ts, 38, 20))
+>Object.entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+>obj : Symbol(obj, Decl(mappedTypeConstraints2.ts, 37, 36))
+
+        const boundsForKey = bounds[key as keyof NumericBoundsOf<T>];
+>boundsForKey : Symbol(boundsForKey, Decl(mappedTypeConstraints2.ts, 39, 13))
+>bounds : Symbol(bounds, Decl(mappedTypeConstraints2.ts, 37, 43))
+>key : Symbol(key, Decl(mappedTypeConstraints2.ts, 38, 16))
+>NumericBoundsOf : Symbol(NumericBoundsOf, Decl(mappedTypeConstraints2.ts, 31, 1))
+>T : Symbol(T, Decl(mappedTypeConstraints2.ts, 37, 18))
+
+        if (boundsForKey) {
+>boundsForKey : Symbol(boundsForKey, Decl(mappedTypeConstraints2.ts, 39, 13))
+
+            const { min, max } = boundsForKey;
+>min : Symbol(min, Decl(mappedTypeConstraints2.ts, 41, 19))
+>max : Symbol(max, Decl(mappedTypeConstraints2.ts, 41, 24))
+>boundsForKey : Symbol(boundsForKey, Decl(mappedTypeConstraints2.ts, 39, 13))
+
+            if (min > val || max < val) return false;
+>min : Symbol(min, Decl(mappedTypeConstraints2.ts, 41, 19))
+>val : Symbol(val, Decl(mappedTypeConstraints2.ts, 38, 20))
+>max : Symbol(max, Decl(mappedTypeConstraints2.ts, 41, 24))
+>val : Symbol(val, Decl(mappedTypeConstraints2.ts, 38, 20))
+        }
+    }
+    return true;
+}
+

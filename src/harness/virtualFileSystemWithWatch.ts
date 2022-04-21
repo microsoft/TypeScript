@@ -396,6 +396,7 @@ interface Array<T> { length: number; [n: number]: T; }`
         private readonly currentDirectory: string;
         public require: ((initialPath: string, moduleName: string) => RequireResult) | undefined;
         public defaultWatchFileKind?: () => WatchFileKind | undefined;
+        public storeFilesChangingSignatureDuringEmit = true;
         watchFile: HostWatchFile;
         watchDirectory: HostWatchDirectory;
         constructor(

@@ -173,8 +173,8 @@ Program files::
 No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
-/user/username/projects/myproject/file1.ts (used version)
-/user/username/projects/myproject/src/file2.ts (used version)
+/user/username/projects/myproject/file1.ts (computed .d.ts during emit)
+/user/username/projects/myproject/src/file2.ts (computed .d.ts during emit)
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:

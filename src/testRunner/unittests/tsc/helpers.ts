@@ -3,6 +3,7 @@ namespace ts {
         writtenFiles: Set<Path>;
         baseLine(): { file: string; text: string; };
         disableUseFileVersionAsSignature?: boolean;
+        storeFilesChangingSignatureDuringEmit?: boolean;
     };
 
     export const noChangeRun: TestTscEdit = {
@@ -84,6 +85,7 @@ namespace ts {
         // Create system
         const sys = new fakes.System(fs, { executingFilePath: "/lib/tsc", env: environmentVariables }) as TscCompileSystem;
         if (input.disableUseFileVersionAsSignature) sys.disableUseFileVersionAsSignature = true;
+        sys.storeFilesChangingSignatureDuringEmit = true;
         sys.write(`${sys.getExecutingFilePath()} ${commandLineArgs.join(" ")}\n`);
         sys.exit = exitCode => sys.exitCode = exitCode;
         worker(sys);

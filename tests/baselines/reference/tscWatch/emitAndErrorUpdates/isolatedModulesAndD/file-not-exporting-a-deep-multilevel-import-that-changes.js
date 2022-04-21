@@ -96,11 +96,11 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
-/user/username/projects/myproject/a.ts (used version)
-/user/username/projects/myproject/b.ts (used version)
-/user/username/projects/myproject/c.ts (used version)
-/user/username/projects/myproject/d.ts (used version)
-/user/username/projects/myproject/e.ts (used version)
+/user/username/projects/myproject/a.ts (computed .d.ts during emit)
+/user/username/projects/myproject/b.ts (computed .d.ts during emit)
+/user/username/projects/myproject/c.ts (computed .d.ts during emit)
+/user/username/projects/myproject/d.ts (computed .d.ts during emit)
+/user/username/projects/myproject/e.ts (computed .d.ts during emit)
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
@@ -241,10 +241,10 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/a.ts (computed .d.ts)
-/user/username/projects/myproject/b.ts (used version)
-/user/username/projects/myproject/c.ts (used version)
-/user/username/projects/myproject/d.ts (used version)
-/user/username/projects/myproject/e.ts (used version)
+/user/username/projects/myproject/b.ts (computed .d.ts during emit)
+/user/username/projects/myproject/c.ts (computed .d.ts during emit)
+/user/username/projects/myproject/d.ts (computed .d.ts during emit)
+/user/username/projects/myproject/e.ts (computed .d.ts during emit)
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
@@ -347,10 +347,10 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/a.ts (computed .d.ts)
-/user/username/projects/myproject/b.ts (used version)
-/user/username/projects/myproject/c.ts (used version)
-/user/username/projects/myproject/d.ts (used version)
-/user/username/projects/myproject/e.ts (used version)
+/user/username/projects/myproject/b.ts (computed .d.ts during emit)
+/user/username/projects/myproject/c.ts (computed .d.ts during emit)
+/user/username/projects/myproject/d.ts (computed .d.ts during emit)
+/user/username/projects/myproject/e.ts (computed .d.ts during emit)
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
@@ -437,10 +437,10 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/a.ts (computed .d.ts)
-/user/username/projects/myproject/b.ts (used version)
-/user/username/projects/myproject/c.ts (used version)
-/user/username/projects/myproject/d.ts (used version)
-/user/username/projects/myproject/e.ts (used version)
+/user/username/projects/myproject/b.ts (computed .d.ts during emit)
+/user/username/projects/myproject/c.ts (computed .d.ts during emit)
+/user/username/projects/myproject/d.ts (computed .d.ts during emit)
+/user/username/projects/myproject/e.ts (computed .d.ts during emit)
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
