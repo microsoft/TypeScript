@@ -948,7 +948,7 @@ namespace ts {
             Debug.assertIsDefined(program);
             Debug.assert(step === BuildStep.Emit);
             // Before emitting lets backup state, so we can revert it back if there are declaration errors to handle emit and declaration errors correctly
-            program.backupState();
+            program.backupEmitState();
             let declDiagnostics: Diagnostic[] | undefined;
             const reportDeclarationDiagnostics = (d: Diagnostic) => (declDiagnostics || (declDiagnostics = [])).push(d);
             const outputFiles: OutputFile[] = [];
@@ -964,7 +964,7 @@ namespace ts {
             );
             // Don't emit .d.ts if there are decl file errors
             if (declDiagnostics) {
-                program.restoreState();
+                program.restoreEmitState();
                 ({ buildResult, step } = buildErrors(
                     state,
                     projectPath,

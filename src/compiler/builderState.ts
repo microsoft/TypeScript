@@ -61,7 +61,6 @@ namespace ts {
         }
 
         export interface ReadonlyManyToManyPathMap {
-            clone(): ManyToManyPathMap;
             forEach(action: (v: ReadonlySet<Path>, k: Path) => void): void;
             getKeys(v: Path): ReadonlySet<Path> | undefined;
             getValues(k: Path): ReadonlySet<Path> | undefined;
@@ -85,7 +84,6 @@ namespace ts {
         export function createManyToManyPathMap(): ManyToManyPathMap {
             function create(forward: ESMap<Path, ReadonlySet<Path>>, reverse: ESMap<Path, Set<Path>>, deleted: Set<Path> | undefined): ManyToManyPathMap {
                 const map: ManyToManyPathMap = {
-                    clone: () => create(new Map(forward), new Map(reverse), deleted && new Set(deleted)),
                     forEach: fn => forward.forEach(fn),
                     getKeys: v => reverse.get(v),
                     getValues: k => forward.get(k),
@@ -322,20 +320,6 @@ namespace ts {
         export function releaseCache(state: BuilderState) {
             state.allFilesExcludingDefaultLibraryFile = undefined;
             state.allFileNames = undefined;
-        }
-
-        /**
-         * Creates a clone of the state
-         */
-        export function clone(state: Readonly<BuilderState>): BuilderState {
-            // Dont need to backup allFiles info since its cache anyway
-            return {
-                fileInfos: new Map(state.fileInfos),
-                referencedMap: state.referencedMap?.clone(),
-                exportedModulesMap: state.exportedModulesMap?.clone(),
-                hasCalledUpdateShapeSignature: state.hasCalledUpdateShapeSignature && new Set(state.hasCalledUpdateShapeSignature),
-                useFileVersionAsSignature: state.useFileVersionAsSignature,
-            };
         }
 
         /**
