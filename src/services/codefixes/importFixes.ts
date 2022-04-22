@@ -83,7 +83,7 @@ namespace ts.codefix {
             const symbol = checker.getMergedSymbol(skipAlias(exportedSymbol, checker));
             const exportInfo = getAllReExportingModules(sourceFile, symbol, moduleSymbol, symbolName, /*isJsxTagName*/ false, host, program, preferences, useAutoImportProvider);
             const useRequire = shouldUseRequire(sourceFile, program);
-            const fix = getImportFixForSymbol(sourceFile, exportInfo, moduleSymbol, symbolName, program, /*position*/ undefined, !!isValidTypeOnlyUseSite, useRequire, host, preferences);
+            const fix = getImportFixForSymbol(sourceFile, exportInfo, moduleSymbol, program, /*useNamespaceInfo*/ undefined, !!isValidTypeOnlyUseSite, useRequire, host, preferences);
             if (fix) {
                 addImport({ fixes: [fix], symbolName, errorIdentifierText: undefined });
             }
@@ -310,7 +310,7 @@ namespace ts.codefix {
             : getAllReExportingModules(sourceFile, targetSymbol, moduleSymbol, symbolName, isJsxTagName, host, program, preferences, /*useAutoImportProvider*/ true);
         const useRequire = shouldUseRequire(sourceFile, program);
         const isValidTypeOnlyUseSite = isValidTypeOnlyAliasUseSite(getTokenAtPosition(sourceFile, position));
-        const fix = Debug.checkDefined(getImportFixForSymbol(sourceFile, exportInfos, moduleSymbol, symbolName, program, position, isValidTypeOnlyUseSite, useRequire, host, preferences));
+        const fix = Debug.checkDefined(getImportFixForSymbol(sourceFile, exportInfos, moduleSymbol, program, { symbolName, position }, isValidTypeOnlyUseSite, useRequire, host, preferences));
         return {
             moduleSpecifier: fix.moduleSpecifier,
             codeAction: codeFixActionToCodeAction(codeActionForFix(
@@ -331,10 +331,10 @@ namespace ts.codefix {
         return fix && codeFixActionToCodeAction(codeActionForFix({ host, formatContext, preferences }, sourceFile, symbolName, fix, includeSymbolNameInDescription, QuotePreference.Double, compilerOptions));
     }
 
-    function getImportFixForSymbol(sourceFile: SourceFile, exportInfos: readonly SymbolExportInfo[], moduleSymbol: Symbol, symbolName: string, program: Program, position: number | undefined, isValidTypeOnlyUseSite: boolean, useRequire: boolean, host: LanguageServiceHost, preferences: UserPreferences) {
+    function getImportFixForSymbol(sourceFile: SourceFile, exportInfos: readonly SymbolExportInfo[], moduleSymbol: Symbol, program: Program, useNamespaceInfo: { position: number, symbolName: string } | undefined, isValidTypeOnlyUseSite: boolean, useRequire: boolean, host: LanguageServiceHost, preferences: UserPreferences) {
         Debug.assert(exportInfos.some(info => info.moduleSymbol === moduleSymbol || info.symbol.parent === moduleSymbol), "Some exportInfo should match the specified moduleSymbol");
         const packageJsonImportFilter = createPackageJsonImportFilter(sourceFile, preferences, host);
-        return getBestFix(getImportFixes(exportInfos, symbolName, position, isValidTypeOnlyUseSite, useRequire, program, sourceFile, host, preferences), sourceFile, program, packageJsonImportFilter, host);
+        return getBestFix(getImportFixes(exportInfos, useNamespaceInfo, isValidTypeOnlyUseSite, useRequire, program, sourceFile, host, preferences).fixes, sourceFile, program, packageJsonImportFilter, host);
     }
 
     function codeFixActionToCodeAction({ description, changes, commands }: CodeFixAction): CodeAction {
@@ -396,6 +396,9 @@ namespace ts.codefix {
 
     export function getModuleSpecifierForBestExportInfo(
         exportInfo: readonly SymbolExportInfo[],
+        symbolName: string,
+        position: number,
+        isValidTypeOnlyUseSite: boolean,
         importingFile: SourceFile,
         program: Program,
         host: LanguageServiceHost,
@@ -403,13 +406,13 @@ namespace ts.codefix {
         packageJsonImportFilter?: PackageJsonImportFilter,
         fromCacheOnly?: boolean,
     ): { exportInfo?: SymbolExportInfo, moduleSpecifier: string, computedWithoutCacheCount: number } | undefined {
-        const { fixes, computedWithoutCacheCount } = getNewImportFixes(
+        const { fixes, computedWithoutCacheCount } = getImportFixes(
+            exportInfo,
+            { symbolName, position },
+            isValidTypeOnlyUseSite,
+            /*useRequire*/ false,
             program,
             importingFile,
-            /*position*/ undefined,
-            /*isValidTypeOnlyUseSite*/ false,
-            /*useRequire*/ false,
-            exportInfo,
             host,
             preferences,
             fromCacheOnly);
@@ -419,23 +422,46 @@ namespace ts.codefix {
 
     function getImportFixes(
         exportInfos: readonly SymbolExportInfo[],
-        symbolName: string,
+        useNamespaceInfo: {
+            symbolName: string,
+            position: number,
+        } | undefined,
         /** undefined only for missing JSX namespace */
-        position: number | undefined,
         isValidTypeOnlyUseSite: boolean,
         useRequire: boolean,
         program: Program,
         sourceFile: SourceFile,
         host: LanguageServiceHost,
         preferences: UserPreferences,
-    ): readonly ImportFixWithModuleSpecifier[] {
+        fromCacheOnly?: boolean,
+    ): { computedWithoutCacheCount: number, fixes: readonly ImportFixWithModuleSpecifier[] } {
         const checker = program.getTypeChecker();
         const existingImports = flatMap(exportInfos, info => getExistingImportDeclarations(info, checker, sourceFile, program.getCompilerOptions()));
-        const useNamespace = position === undefined ? undefined : tryUseExistingNamespaceImport(existingImports, symbolName, position, checker);
+        const useNamespace = useNamespaceInfo && tryUseExistingNamespaceImport(existingImports, useNamespaceInfo.symbolName, useNamespaceInfo.position, checker);
         const addToExisting = tryAddToExistingImport(existingImports, isValidTypeOnlyUseSite, checker, program.getCompilerOptions());
-        // Don't bother providing an action to add a new import if we can add to an existing one.
-        const addImport = addToExisting ? [addToExisting] : getFixesForAddImport(exportInfos, existingImports, program, sourceFile, position, isValidTypeOnlyUseSite, useRequire, host, preferences);
-        return [...(useNamespace ? [useNamespace] : emptyArray), ...addImport];
+        if (addToExisting) {
+            // Don't bother providing an action to add a new import if we can add to an existing one.
+            return {
+                computedWithoutCacheCount: 0,
+                fixes: [...(useNamespace ? [useNamespace] : emptyArray), addToExisting],
+            };
+        }
+
+        const { fixes, computedWithoutCacheCount = 0 } = getFixesForAddImport(
+            exportInfos,
+            existingImports,
+            program,
+            sourceFile,
+            useNamespaceInfo?.position,
+            isValidTypeOnlyUseSite,
+            useRequire,
+            host,
+            preferences,
+            fromCacheOnly);
+        return {
+            computedWithoutCacheCount,
+            fixes: [...(useNamespace ? [useNamespace] : emptyArray), ...fixes],
+        };
     }
 
     function tryUseExistingNamespaceImport(existingImports: readonly FixAddToExistingImportInfo[], symbolName: string, position: number, checker: TypeChecker): FixUseNamespaceImport | undefined {
@@ -658,9 +684,10 @@ namespace ts.codefix {
         useRequire: boolean,
         host: LanguageServiceHost,
         preferences: UserPreferences,
-    ): readonly (FixAddNewImport | FixAddJsdocTypeImport)[] {
+        fromCacheOnly?: boolean,
+    ): { computedWithoutCacheCount?: number, fixes: readonly (FixAddNewImport | FixAddJsdocTypeImport)[] } {
         const existingDeclaration = firstDefined(existingImports, info => newImportInfoFromExistingSpecifier(info, isValidTypeOnlyUseSite, useRequire, program.getTypeChecker(), program.getCompilerOptions()));
-        return existingDeclaration ? [existingDeclaration] : getNewImportFixes(program, sourceFile, position, isValidTypeOnlyUseSite, useRequire, exportInfos, host, preferences).fixes;
+        return existingDeclaration ? { fixes: [existingDeclaration] } : getNewImportFixes(program, sourceFile, position, isValidTypeOnlyUseSite, useRequire, exportInfos, host, preferences, fromCacheOnly);
     }
 
     function newImportInfoFromExistingSpecifier(
@@ -782,7 +809,8 @@ namespace ts.codefix {
         const symbolName = umdSymbol.name;
         const exportInfo: readonly SymbolExportInfo[] = [{ symbol: umdSymbol, moduleSymbol: symbol, moduleFileName: undefined, exportKind: ExportKind.UMD, targetFlags: symbol.flags, isFromPackageJson: false }];
         const useRequire = shouldUseRequire(sourceFile, program);
-        const fixes = getImportFixes(exportInfo, symbolName, isIdentifier(token) ? token.getStart(sourceFile) : undefined, /*isValidTypeOnlyUseSite*/ false, useRequire, program, sourceFile, host, preferences);
+        const position = isIdentifier(token) ? token.getStart(sourceFile) : undefined;
+        const fixes = getImportFixes(exportInfo, position ? { position, symbolName } : undefined, /*isValidTypeOnlyUseSite*/ false, useRequire, program, sourceFile, host, preferences).fixes;
         return { fixes, symbolName, errorIdentifierText: tryCast(token, isIdentifier)?.text };
     }
     function getUmdSymbol(token: Node, checker: TypeChecker): Symbol | undefined {
@@ -855,7 +883,7 @@ namespace ts.codefix {
         const useRequire = shouldUseRequire(sourceFile, program);
         const exportInfo = getExportInfos(symbolName, isJSXTagName(symbolToken), getMeaningFromLocation(symbolToken), cancellationToken, sourceFile, program, useAutoImportProvider, host, preferences);
         const fixes = arrayFrom(flatMapIterator(exportInfo.entries(), ([_, exportInfos]) =>
-            getImportFixes(exportInfos, symbolName, symbolToken.getStart(sourceFile), isValidTypeOnlyUseSite, useRequire, program, sourceFile, host, preferences)));
+            getImportFixes(exportInfos, { symbolName, position: symbolToken.getStart(sourceFile) }, isValidTypeOnlyUseSite, useRequire, program, sourceFile, host, preferences).fixes));
         return { fixes, symbolName, errorIdentifierText: symbolToken.text };
     }
 
