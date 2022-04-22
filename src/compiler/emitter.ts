@@ -4879,22 +4879,27 @@ namespace ts {
             return node;
         }
 
-        function getTextOfNode(node: Node, includeTrivia?: boolean): string {
+        function getTextOfNode(node: Identifier | PrivateIdentifier | LiteralExpression, includeTrivia?: boolean): string {
             if (isGeneratedIdentifier(node)) {
                 return generateName(node);
             }
-            else if ((isIdentifier(node) || isPrivateIdentifier(node)) && (nodeIsSynthesized(node) || !node.parent || !currentSourceFile || (node.parent && currentSourceFile && getSourceFileOfNode(node) !== getOriginalNode(currentSourceFile)))) {
-                return idText(node);
+            if (isStringLiteral(node) && node.textSourceNode) {
+                return getTextOfNode(node.textSourceNode, includeTrivia);
             }
-            else if (node.kind === SyntaxKind.StringLiteral && (node as StringLiteral).textSourceNode) {
-                return getTextOfNode((node as StringLiteral).textSourceNode!, includeTrivia);
+            const sourceFile = currentSourceFile; // const needed for control flow
+            const canUseSourceFile = !!sourceFile && !!node.parent && !nodeIsSynthesized(node);
+            if (isMemberName(node)) {
+                if (!canUseSourceFile || getSourceFileOfNode(node) !== getOriginalNode(sourceFile)) {
+                    return idText(node);
+                }
             }
-            else if (isLiteralExpression(node) && (nodeIsSynthesized(node) || !node.parent)) {
-                return node.text;
+            else {
+                Debug.assertNode(node, isLiteralExpression); // not strictly necessary
+                if (!canUseSourceFile) {
+                    return node.text;
+                }
             }
-
-            Debug.assertIsDefined(currentSourceFile);
-            return getSourceTextOfNodeFromSourceFile(currentSourceFile, node, includeTrivia);
+            return getSourceTextOfNodeFromSourceFile(sourceFile, node, includeTrivia);
         }
 
         function getLiteralTextOfNode(node: LiteralLikeNode, neverAsciiEscape: boolean | undefined, jsxAttributeEscape: boolean): string {
@@ -5239,7 +5244,7 @@ namespace ts {
             switch (node.kind) {
                 case SyntaxKind.Identifier:
                     return makeUniqueName(
-                        getTextOfNode(node),
+                        getTextOfNode(node as Identifier),
                         isUniqueName,
                         !!(flags! & GeneratedIdentifierFlags.Optimistic),
                         !!(flags! & GeneratedIdentifierFlags.ReservedInNestedScopes)
