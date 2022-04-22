@@ -499,6 +499,7 @@ interface Symbol {
         modifyFs: (fs: vfs.FileSystem) => void;
         subScenario: string;
         commandLineArgs?: readonly string[];
+        /** An array of lines to be printed in order when a discrepancy is detected */
         discrepancyExplanation?: () => readonly string[];
     }
 
