@@ -806,6 +806,8 @@ namespace ts {
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.FunctionExpression:
                     return getAdjustedLocationForFunction(node as FunctionDeclaration | FunctionExpression);
+                case SyntaxKind.Constructor:
+                    return node;
             }
         }
         if (isNamedDeclaration(node)) {
