@@ -30501,6 +30501,7 @@ namespace ts {
             // decorators are applied to a declaration by the emitter, and not to an expression.
             const isSingleNonGenericCandidate = candidates.length === 1 && !candidates[0].typeParameters;
             let argCheckMode = !isDecorator && !isSingleNonGenericCandidate && some(args, isContextSensitive) ? CheckMode.SkipContextSensitive : CheckMode.Normal;
+            argCheckMode |= checkMode & CheckMode.IsForStringLiteralArgumentCompletions;
 
             // The following variables are captured and modified by calls to chooseOverload.
             // If overload resolution or type argument inference fails, we want to report the
@@ -30726,7 +30727,7 @@ namespace ts {
                         // If one or more context sensitive arguments were excluded, we start including
                         // them now (and keeping do so for any subsequent candidates) and perform a second
                         // round of type inference and applicability checking for this particular candidate.
-                        argCheckMode = CheckMode.Normal;
+                        argCheckMode = checkMode & CheckMode.IsForStringLiteralArgumentCompletions;
                         if (inferenceContext) {
                             const typeArgumentTypes = inferTypeArguments(node, candidate, args, argCheckMode, inferenceContext);
                             checkCandidate = getSignatureInstantiation(candidate, typeArgumentTypes, isInJSFile(candidate.declaration), inferenceContext && inferenceContext.inferredTypeParameters);
