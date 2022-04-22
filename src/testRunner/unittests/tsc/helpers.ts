@@ -10,7 +10,15 @@ namespace ts {
         subScenario: "no-change-run",
         modifyFs: noop
     };
+    export const noChangeWithExportsDiscrepancyRun: TestTscEdit = {
+        ...noChangeRun,
+        discrepancyExplanation: () => [
+            "Incremental build did not emit and has .ts as signature so exports has all imported modules/referenced files",
+            "Clean build always uses d.ts for signature for testing thus does not contain non exported modules/referenced files that arent needed"
+        ]
+    };
     export const noChangeOnlyRuns = [noChangeRun];
+    export const noChangeWithExportsDiscrepancyOnlyRuns = [noChangeWithExportsDiscrepancyRun];
 
     export interface TestTscCompile extends TestTscCompileLikeBase {
         baselineSourceMap?: boolean;
@@ -29,23 +37,22 @@ namespace ts {
         return !!(program as Program | BuilderProgram).getCompilerOptions;
     }
     export function commandLineCallbacks(
-        sys: System & { writtenFiles: ReadonlyCollection<Path>; },
+        sys: TscCompileSystem | tscWatch.WatchedSystem,
         originalReadCall?: System["readFile"],
-        originalWriteFile?: System["writeFile"],
     ): CommandLineCallbacks {
         let programs: CommandLineProgram[] | undefined;
 
         return {
             cb: program => {
                 if (isAnyProgram(program)) {
-                    baselineBuildInfo(program.getCompilerOptions(), sys, originalReadCall, originalWriteFile);
+                    baselineBuildInfo(program.getCompilerOptions(), sys, originalReadCall);
                     (programs || (programs = [])).push(isBuilderProgram(program) ?
                         [program.getProgram(), program] :
                         [program]
                     );
                 }
                 else {
-                    baselineBuildInfo(program.options, sys, originalReadCall, originalWriteFile);
+                    baselineBuildInfo(program.options, sys, originalReadCall);
                 }
             },
             getPrograms: () => {
@@ -122,16 +129,22 @@ ${patch ? vfs.formatPatch(patch) : ""}`
         const originalWriteFile = sys.writeFile;
         sys.writeFile = (fileName, content, writeByteOrderMark) => {
             const path = toPathWithSystem(sys, fileName);
-            assert.isFalse(writtenFiles.has(path));
+            // When buildinfo is same for two projects,
+            // it gives error and doesnt write buildinfo but because buildInfo is written for one project,
+            // readable baseline will be written two times for those two projects with same contents and is ok
+            Debug.assert(!writtenFiles.has(path) || endsWith(path, "baseline.txt"));
             writtenFiles.add(path);
             return originalWriteFile.call(sys, fileName, content, writeByteOrderMark);
         };
-        return originalWriteFile;
     }
 
-    export function createSolutionBuilderHostForBaseline(sys: TscCompileSystem, versionToWrite?: string) {
-        makeSystemReadyForBaseline(sys, versionToWrite);
-        const { cb } = commandLineCallbacks(sys);
+    export function createSolutionBuilderHostForBaseline(
+        sys: TscCompileSystem | tscWatch.WatchedSystem,
+        versionToWrite?: string,
+        originalRead?: (TscCompileSystem | tscWatch.WatchedSystem)["readFile"]
+    ) {
+        if (sys instanceof fakes.System) makeSystemReadyForBaseline(sys, versionToWrite);
+        const { cb } = commandLineCallbacks(sys, originalRead);
         const host = createSolutionBuilderHost(sys,
             /*createProgram*/ undefined,
             createDiagnosticReporter(sys, /*pretty*/ true),
@@ -155,7 +168,7 @@ ${patch ? vfs.formatPatch(patch) : ""}`
         });
 
         function commandLineCompile(sys: TscCompileSystem) {
-            const originalWriteFile = makeSystemReadyForBaseline(sys);
+            makeSystemReadyForBaseline(sys);
             actualReadFileMap = {};
             const originalReadFile = sys.readFile;
             sys.readFile = path => {
@@ -166,7 +179,7 @@ ${patch ? vfs.formatPatch(patch) : ""}`
                 return originalReadFile.call(sys, path);
             };
 
-            const result = commandLineCallbacks(sys, originalReadFile, originalWriteFile);
+            const result = commandLineCallbacks(sys, originalReadFile);
             executeCommandLine(
                 sys,
                 result.cb,
