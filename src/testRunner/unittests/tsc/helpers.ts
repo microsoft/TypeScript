@@ -10,15 +10,15 @@ namespace ts {
         subScenario: "no-change-run",
         modifyFs: noop
     };
-    export const noChangeWithExportsDescripencyRun: TestTscEdit = {
+    export const noChangeWithExportsDiscrepancyRun: TestTscEdit = {
         ...noChangeRun,
-        descripencyExplaination: () => [
-            "Incremental build does not change and has .ts as signature so exports has all imported modules/referenced files",
+        discrepancyExplanation: () => [
+            "Incremental build did not emit and has .ts as signature so exports has all imported modules/referenced files",
             "Clean build always uses d.ts for signature for testing thus does not contain non exported modules/referenced files that arent needed"
         ]
     };
     export const noChangeOnlyRuns = [noChangeRun];
-    export const noChangeWithExportsDescripencyOnlyRuns = [noChangeWithExportsDescripencyRun];
+    export const noChangeWithExportsDiscrepancyOnlyRuns = [noChangeWithExportsDiscrepancyRun];
 
     export interface TestTscCompile extends TestTscCompileLikeBase {
         baselineSourceMap?: boolean;

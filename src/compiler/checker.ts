@@ -27986,6 +27986,7 @@ namespace ts {
                         }
                     }
                     else {
+                        error(attributeDecl.expression, Diagnostics.Spread_types_may_only_be_created_from_object_types);
                         typeToIntersect = typeToIntersect ? getIntersectionType([typeToIntersect, exprType]) : exprType;
                     }
                 }
@@ -30500,6 +30501,7 @@ namespace ts {
             // decorators are applied to a declaration by the emitter, and not to an expression.
             const isSingleNonGenericCandidate = candidates.length === 1 && !candidates[0].typeParameters;
             let argCheckMode = !isDecorator && !isSingleNonGenericCandidate && some(args, isContextSensitive) ? CheckMode.SkipContextSensitive : CheckMode.Normal;
+            argCheckMode |= checkMode & CheckMode.IsForStringLiteralArgumentCompletions;
 
             // The following variables are captured and modified by calls to chooseOverload.
             // If overload resolution or type argument inference fails, we want to report the
@@ -30725,7 +30727,7 @@ namespace ts {
                         // If one or more context sensitive arguments were excluded, we start including
                         // them now (and keeping do so for any subsequent candidates) and perform a second
                         // round of type inference and applicability checking for this particular candidate.
-                        argCheckMode = CheckMode.Normal;
+                        argCheckMode = checkMode & CheckMode.IsForStringLiteralArgumentCompletions;
                         if (inferenceContext) {
                             const typeArgumentTypes = inferTypeArguments(node, candidate, args, argCheckMode, inferenceContext);
                             checkCandidate = getSignatureInstantiation(candidate, typeArgumentTypes, isInJSFile(candidate.declaration), inferenceContext && inferenceContext.inferredTypeParameters);
@@ -41982,15 +41984,20 @@ namespace ts {
                         return propertyDeclaration;
                     }
                 }
-                else if (isMetaProperty(parent)) {
-                    const parentType = getTypeOfNode(parent);
-                    const propertyDeclaration = getPropertyOfType(parentType, (node as Identifier).escapedText);
-                    if (propertyDeclaration) {
-                        return propertyDeclaration;
-                    }
-                    if (parent.keywordToken === SyntaxKind.NewKeyword) {
+                else if (isMetaProperty(parent) && parent.name === node) {
+                    if (parent.keywordToken === SyntaxKind.NewKeyword && idText(node as Identifier) === "target") {
+                        // `target` in `new.target`
                         return checkNewTargetMetaProperty(parent).symbol;
                     }
+                    // The `meta` in `import.meta` could be given `getTypeOfNode(parent).symbol` (the `ImportMeta` interface symbol), but
+                    // we have a fake expression type made for other reasons already, whose transient `meta`
+                    // member should more exactly be the kind of (declarationless) symbol we want.
+                    // (See #44364 and #45031 for relevant implementation PRs)
+                    if (parent.keywordToken === SyntaxKind.ImportKeyword && idText(node as Identifier) === "meta") {
+                        return getGlobalImportMetaExpressionType().members!.get("meta" as __String);
+                    }
+                    // no other meta properties are valid syntax, thus no others should have symbols
+                    return undefined;
                 }
             }
 

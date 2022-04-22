@@ -1,5 +1,5 @@
 0:: No Change run with noEmit
-Incremental build does not change and has .ts as signature so exports has all imported modules/referenced files
+Incremental build did not emit and has .ts as signature so exports has all imported modules/referenced files
 Clean build always uses d.ts for signature for testing thus does not contain non exported modules/referenced files that arent needed
 Incremental and clean size of maps do not match:: exportedModulesMap:: File:: /src/project/tsconfig.tsbuildinfo.readable.baseline.txt
 Incremental: {
@@ -19,7 +19,7 @@ Clean: {
   ]
 }
 1:: No Change run with noEmit
-Incremental build does not change and has .ts as signature so exports has all imported modules/referenced files
+Incremental build did not emit and has .ts as signature so exports has all imported modules/referenced files
 Clean build always uses d.ts for signature for testing thus does not contain non exported modules/referenced files that arent needed
 Incremental and clean size of maps do not match:: exportedModulesMap:: File:: /src/project/tsconfig.tsbuildinfo.readable.baseline.txt
 Incremental: {
@@ -39,7 +39,7 @@ Clean: {
   ]
 }
 3:: Fix error and emit
-Incremental build does not change and has .ts as signature so exports has all imported modules/referenced files
+Incremental build did not emit and has .ts as signature so exports has all imported modules/referenced files
 Clean build always uses d.ts for signature for testing thus does not contain non exported modules/referenced files that arent needed
 Incremental and clean size of maps do not match:: exportedModulesMap:: File:: /src/project/tsconfig.tsbuildinfo.readable.baseline.txt
 Incremental: {
@@ -59,7 +59,7 @@ Clean: {
   ]
 }
 4:: No Change run with emit
-Incremental build does not change and has .ts as signature so exports has all imported modules/referenced files
+Incremental build did not emit and has .ts as signature so exports has all imported modules/referenced files
 Clean build always uses d.ts for signature for testing thus does not contain non exported modules/referenced files that arent needed
 Incremental and clean size of maps do not match:: exportedModulesMap:: File:: /src/project/tsconfig.tsbuildinfo.readable.baseline.txt
 Incremental: {
@@ -79,7 +79,7 @@ Clean: {
   ]
 }
 5:: No Change run with noEmit
-Incremental build does not change and has .ts as signature so exports has all imported modules/referenced files
+Incremental build did not emit and has .ts as signature so exports has all imported modules/referenced files
 Clean build always uses d.ts for signature for testing thus does not contain non exported modules/referenced files that arent needed
 Incremental and clean size of maps do not match:: exportedModulesMap:: File:: /src/project/tsconfig.tsbuildinfo.readable.baseline.txt
 Incremental: {
@@ -99,7 +99,7 @@ Clean: {
   ]
 }
 6:: No Change run with noEmit
-Incremental build does not change and has .ts as signature so exports has all imported modules/referenced files
+Incremental build did not emit and has .ts as signature so exports has all imported modules/referenced files
 Clean build always uses d.ts for signature for testing thus does not contain non exported modules/referenced files that arent needed
 Incremental and clean size of maps do not match:: exportedModulesMap:: File:: /src/project/tsconfig.tsbuildinfo.readable.baseline.txt
 Incremental: {
@@ -119,7 +119,7 @@ Clean: {
   ]
 }
 7:: No Change run with emit
-Incremental build does not change and has .ts as signature so exports has all imported modules/referenced files
+Incremental build did not emit and has .ts as signature so exports has all imported modules/referenced files
 Clean build always uses d.ts for signature for testing thus does not contain non exported modules/referenced files that arent needed
 Incremental and clean size of maps do not match:: exportedModulesMap:: File:: /src/project/tsconfig.tsbuildinfo.readable.baseline.txt
 Incremental: {
@@ -139,7 +139,7 @@ Clean: {
   ]
 }
 8:: Introduce error and emit
-Incremental build does not change and has .ts as signature so exports has all imported modules/referenced files
+Incremental build did not emit and has .ts as signature so exports has all imported modules/referenced files
 Clean build always uses d.ts for signature for testing thus does not contain non exported modules/referenced files that arent needed
 Incremental and clean size of maps do not match:: exportedModulesMap:: File:: /src/project/tsconfig.tsbuildinfo.readable.baseline.txt
 Incremental: {
@@ -159,7 +159,7 @@ Clean: {
   ]
 }
 9:: No Change run with emit
-Incremental build does not change and has .ts as signature so exports has all imported modules/referenced files
+Incremental build did not emit and has .ts as signature so exports has all imported modules/referenced files
 Clean build always uses d.ts for signature for testing thus does not contain non exported modules/referenced files that arent needed
 Incremental and clean size of maps do not match:: exportedModulesMap:: File:: /src/project/tsconfig.tsbuildinfo.readable.baseline.txt
 Incremental: {
@@ -179,7 +179,7 @@ Clean: {
   ]
 }
 10:: No Change run with noEmit
-Incremental build does not change and has .ts as signature so exports has all imported modules/referenced files
+Incremental build did not emit and has .ts as signature so exports has all imported modules/referenced files
 Clean build always uses d.ts for signature for testing thus does not contain non exported modules/referenced files that arent needed
 Incremental and clean size of maps do not match:: exportedModulesMap:: File:: /src/project/tsconfig.tsbuildinfo.readable.baseline.txt
 Incremental: {
@@ -199,7 +199,7 @@ Clean: {
   ]
 }
 11:: No Change run with noEmit
-Incremental build does not change and has .ts as signature so exports has all imported modules/referenced files
+Incremental build did not emit and has .ts as signature so exports has all imported modules/referenced files
 Clean build always uses d.ts for signature for testing thus does not contain non exported modules/referenced files that arent needed
 Incremental and clean size of maps do not match:: exportedModulesMap:: File:: /src/project/tsconfig.tsbuildinfo.readable.baseline.txt
 Incremental: {
@@ -219,7 +219,7 @@ Clean: {
   ]
 }
 12:: No Change run with emit
-Incremental build does not change and has .ts as signature so exports has all imported modules/referenced files
+Incremental build did not emit and has .ts as signature so exports has all imported modules/referenced files
 Clean build always uses d.ts for signature for testing thus does not contain non exported modules/referenced files that arent needed
 Incremental and clean size of maps do not match:: exportedModulesMap:: File:: /src/project/tsconfig.tsbuildinfo.readable.baseline.txt
 Incremental: {
@@ -239,7 +239,7 @@ Clean: {
   ]
 }
 13:: Fix error and no emit
-Incremental build does not change and has .ts as signature so exports has all imported modules/referenced files
+Incremental build did not emit and has .ts as signature so exports has all imported modules/referenced files
 Clean build always uses d.ts for signature for testing thus does not contain non exported modules/referenced files that arent needed
 Incremental and clean size of maps do not match:: exportedModulesMap:: File:: /src/project/tsconfig.tsbuildinfo.readable.baseline.txt
 Incremental: {
@@ -259,7 +259,7 @@ Clean: {
   ]
 }
 14:: No Change run with emit
-Incremental build does not change and has .ts as signature so exports has all imported modules/referenced files
+Incremental build did not emit and has .ts as signature so exports has all imported modules/referenced files
 Clean build always uses d.ts for signature for testing thus does not contain non exported modules/referenced files that arent needed
 Incremental and clean size of maps do not match:: exportedModulesMap:: File:: /src/project/tsconfig.tsbuildinfo.readable.baseline.txt
 Incremental: {
@@ -279,7 +279,7 @@ Clean: {
   ]
 }
 15:: No Change run with noEmit
-Incremental build does not change and has .ts as signature so exports has all imported modules/referenced files
+Incremental build did not emit and has .ts as signature so exports has all imported modules/referenced files
 Clean build always uses d.ts for signature for testing thus does not contain non exported modules/referenced files that arent needed
 Incremental and clean size of maps do not match:: exportedModulesMap:: File:: /src/project/tsconfig.tsbuildinfo.readable.baseline.txt
 Incremental: {
@@ -299,7 +299,7 @@ Clean: {
   ]
 }
 16:: No Change run with noEmit
-Incremental build does not change and has .ts as signature so exports has all imported modules/referenced files
+Incremental build did not emit and has .ts as signature so exports has all imported modules/referenced files
 Clean build always uses d.ts for signature for testing thus does not contain non exported modules/referenced files that arent needed
 Incremental and clean size of maps do not match:: exportedModulesMap:: File:: /src/project/tsconfig.tsbuildinfo.readable.baseline.txt
 Incremental: {
@@ -319,7 +319,7 @@ Clean: {
   ]
 }
 17:: No Change run with emit
-Incremental build does not change and has .ts as signature so exports has all imported modules/referenced files
+Incremental build did not emit and has .ts as signature so exports has all imported modules/referenced files
 Clean build always uses d.ts for signature for testing thus does not contain non exported modules/referenced files that arent needed
 Incremental and clean size of maps do not match:: exportedModulesMap:: File:: /src/project/tsconfig.tsbuildinfo.readable.baseline.txt
 Incremental: {

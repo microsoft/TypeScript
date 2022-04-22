@@ -1,5 +1,5 @@
 0:: No Change run with noEmit
-Incremental build does not change and has .ts as signature so exports has all imported modules/referenced files
+Incremental build did not emit and has .ts as signature so exports has all imported modules/referenced files
 Clean build always uses d.ts for signature for testing thus does not contain non exported modules/referenced files that arent needed
 Clean build will not have dtsChangeTime as there was no emit and emitSignatures as undefined for files
 Incremental will store the past dtsChangeTime and emitSignatures
@@ -148,7 +148,7 @@ IncrementalBuild:
   "version": "FakeTSVersion"
 }
 1:: No Change run with noEmit
-Incremental build does not change and has .ts as signature so exports has all imported modules/referenced files
+Incremental build did not emit and has .ts as signature so exports has all imported modules/referenced files
 Clean build always uses d.ts for signature for testing thus does not contain non exported modules/referenced files that arent needed
 Clean build will not have dtsChangeTime as there was no emit and emitSignatures as undefined for files
 Incremental will store the past dtsChangeTime and emitSignatures
@@ -297,7 +297,7 @@ IncrementalBuild:
   "version": "FakeTSVersion"
 }
 2:: Introduce error but still noEmit
-Incremental build does not change and has .ts as signature so exports has all imported modules/referenced files
+Incremental build did not emit and has .ts as signature so exports has all imported modules/referenced files
 Clean build always uses d.ts for signature for testing thus does not contain non exported modules/referenced files that arent needed
 Clean build will not have dtsChangeTime as there was no emit and emitSignatures as undefined for files
 Incremental will store the past dtsChangeTime and emitSignatures
@@ -565,7 +565,7 @@ Clean: {
   ]
 }
 5:: No Change run with noEmit
-Incremental build does not change and has .ts as signature so exports has all imported modules/referenced files
+Incremental build did not emit and has .ts as signature so exports has all imported modules/referenced files
 Clean build always uses d.ts for signature for testing thus does not contain non exported modules/referenced files that arent needed
 Clean build will not have dtsChangeTime as there was no emit and emitSignatures as undefined for files
 Incremental will store the past dtsChangeTime and emitSignatures
@@ -714,7 +714,7 @@ IncrementalBuild:
   "version": "FakeTSVersion"
 }
 6:: No Change run with noEmit
-Incremental build does not change and has .ts as signature so exports has all imported modules/referenced files
+Incremental build did not emit and has .ts as signature so exports has all imported modules/referenced files
 Clean build always uses d.ts for signature for testing thus does not contain non exported modules/referenced files that arent needed
 Clean build will not have dtsChangeTime as there was no emit and emitSignatures as undefined for files
 Incremental will store the past dtsChangeTime and emitSignatures
@@ -863,7 +863,7 @@ IncrementalBuild:
   "version": "FakeTSVersion"
 }
 10:: No Change run with noEmit
-Incremental build does not change and has .ts as signature so exports has all imported modules/referenced files
+Incremental build did not emit and has .ts as signature so exports has all imported modules/referenced files
 Clean build always uses d.ts for signature for testing thus does not contain non exported modules/referenced files that arent needed
 Clean build will not have dtsChangeTime as there was no emit and emitSignatures as undefined for files
 Incremental will store the past dtsChangeTime and emitSignatures
@@ -1100,7 +1100,7 @@ IncrementalBuild:
   "version": "FakeTSVersion"
 }
 11:: No Change run with noEmit
-Incremental build does not change and has .ts as signature so exports has all imported modules/referenced files
+Incremental build did not emit and has .ts as signature so exports has all imported modules/referenced files
 Clean build always uses d.ts for signature for testing thus does not contain non exported modules/referenced files that arent needed
 Clean build will not have dtsChangeTime as there was no emit and emitSignatures as undefined for files
 Incremental will store the past dtsChangeTime and emitSignatures
@@ -1337,7 +1337,7 @@ IncrementalBuild:
   "version": "FakeTSVersion"
 }
 13:: Fix error and no emit
-Incremental build does not change and has .ts as signature so exports has all imported modules/referenced files
+Incremental build did not emit and has .ts as signature so exports has all imported modules/referenced files
 Clean build always uses d.ts for signature for testing thus does not contain non exported modules/referenced files that arent needed
 Clean build will not have dtsChangeTime as there was no emit and emitSignatures as undefined for files
 Incremental will store the past dtsChangeTime and emitSignatures
@@ -1517,7 +1517,7 @@ Clean: {
   ]
 }
 15:: No Change run with noEmit
-Incremental build does not change and has .ts as signature so exports has all imported modules/referenced files
+Incremental build did not emit and has .ts as signature so exports has all imported modules/referenced files
 Clean build always uses d.ts for signature for testing thus does not contain non exported modules/referenced files that arent needed
 Clean build will not have dtsChangeTime as there was no emit and emitSignatures as undefined for files
 Incremental will store the past dtsChangeTime and emitSignatures
@@ -1666,7 +1666,7 @@ IncrementalBuild:
   "version": "FakeTSVersion"
 }
 16:: No Change run with noEmit
-Incremental build does not change and has .ts as signature so exports has all imported modules/referenced files
+Incremental build did not emit and has .ts as signature so exports has all imported modules/referenced files
 Clean build always uses d.ts for signature for testing thus does not contain non exported modules/referenced files that arent needed
 Clean build will not have dtsChangeTime as there was no emit and emitSignatures as undefined for files
 Incremental will store the past dtsChangeTime and emitSignatures

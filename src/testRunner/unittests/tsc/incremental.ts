@@ -90,7 +90,7 @@ namespace ts {
                     commandLineArgs: ["--incremental", "-p", "src"],
                     modifyFs,
                     edits: [
-                        noChangeWithExportsDescripencyRun,
+                        noChangeWithExportsDiscrepancyRun,
                         {
                             subScenario: "incremental-declaration-doesnt-change",
                             modifyFs: fixModifyFs
@@ -123,25 +123,29 @@ const a: string = 10;`, "utf-8"),
             verifyNoEmitChanges({ composite: true });
 
             function verifyNoEmitChanges(compilerOptions: CompilerOptions) {
-                const descripencyExplaination = () => [
-                    ...noChangeWithExportsDescripencyRun.descripencyExplaination!(),
+                const discrepancyExplanation = () => [
+                    ...noChangeWithExportsDiscrepancyRun.discrepancyExplanation!(),
                     "Clean build will not have dtsChangeTime as there was no emit and emitSignatures as undefined for files",
                     "Incremental will store the past dtsChangeTime and emitSignatures",
                 ];
+                const discrepancyIfNoDtsEmit = getEmitDeclarations(compilerOptions) ?
+                    undefined :
+                    noChangeWithExportsDiscrepancyRun.discrepancyExplanation;
                 const noChangeRunWithNoEmit: TestTscEdit = {
                     ...noChangeRun,
                     subScenario: "No Change run with noEmit",
                     commandLineArgs: ["--p", "src/project", "--noEmit"],
-                    descripencyExplaination: compilerOptions.composite ?
-                        descripencyExplaination :
+                    discrepancyExplanation: compilerOptions.composite ?
+                        discrepancyExplanation :
                         !compilerOptions.declaration ?
-                            noChangeWithExportsDescripencyRun.descripencyExplaination :
+                            noChangeWithExportsDiscrepancyRun.discrepancyExplanation :
                             undefined,
                 };
                 const noChangeRunWithEmit: TestTscEdit = {
-                    ...(getEmitDeclarations(compilerOptions) ? noChangeRun : noChangeWithExportsDescripencyRun),
+                    ...noChangeRun,
                     subScenario: "No Change run with emit",
                     commandLineArgs: ["--p", "src/project"],
+                    discrepancyExplanation: discrepancyIfNoDtsEmit,
                 };
                 let optionsString = "";
                 for (const key in compilerOptions) {
@@ -162,16 +166,16 @@ const a: string = 10;`, "utf-8"),
                             subScenario: "Introduce error but still noEmit",
                             commandLineArgs: ["--p", "src/project", "--noEmit"],
                             modifyFs: fs => replaceText(fs, "/src/project/src/class.ts", "prop", "prop1"),
-                            descripencyExplaination: compilerOptions.composite ?
-                                descripencyExplaination :
+                            discrepancyExplanation: compilerOptions.composite ?
+                                discrepancyExplanation :
                                 compilerOptions.declaration ?
-                                    noChangeWithExportsDescripencyRun.descripencyExplaination :
+                                    noChangeWithExportsDiscrepancyRun.discrepancyExplanation :
                                     undefined,
                         },
                         {
                             subScenario: "Fix error and emit",
                             modifyFs: fs => replaceText(fs, "/src/project/src/class.ts", "prop1", "prop"),
-                            descripencyExplaination: getEmitDeclarations(compilerOptions) ? undefined : noChangeWithExportsDescripencyRun.descripencyExplaination,
+                            discrepancyExplanation: discrepancyIfNoDtsEmit,
                         },
                         noChangeRunWithEmit,
                         noChangeRunWithNoEmit,
@@ -180,7 +184,7 @@ const a: string = 10;`, "utf-8"),
                         {
                             subScenario: "Introduce error and emit",
                             modifyFs: fs => replaceText(fs, "/src/project/src/class.ts", "prop", "prop1"),
-                            descripencyExplaination: getEmitDeclarations(compilerOptions) ? undefined : noChangeWithExportsDescripencyRun.descripencyExplaination,
+                            discrepancyExplanation: discrepancyIfNoDtsEmit,
                         },
                         noChangeRunWithEmit,
                         noChangeRunWithNoEmit,
@@ -190,9 +194,9 @@ const a: string = 10;`, "utf-8"),
                             subScenario: "Fix error and no emit",
                             commandLineArgs: ["--p", "src/project", "--noEmit"],
                             modifyFs: fs => replaceText(fs, "/src/project/src/class.ts", "prop1", "prop"),
-                            descripencyExplaination: compilerOptions.composite ?
-                                descripencyExplaination :
-                                noChangeWithExportsDescripencyRun.descripencyExplaination,
+                            discrepancyExplanation: compilerOptions.composite ?
+                                discrepancyExplanation :
+                                noChangeWithExportsDiscrepancyRun.discrepancyExplanation,
                         },
                         noChangeRunWithEmit,
                         noChangeRunWithNoEmit,
@@ -216,9 +220,9 @@ const a: string = 10;`, "utf-8"),
                         {
                             subScenario: "Fix error and no emit",
                             modifyFs: fs => replaceText(fs, "/src/project/src/class.ts", "prop1", "prop"),
-                            descripencyExplaination: compilerOptions.composite ?
-                                descripencyExplaination :
-                                noChangeWithExportsDescripencyRun.descripencyExplaination,
+                            discrepancyExplanation: compilerOptions.composite ?
+                                discrepancyExplanation :
+                                noChangeWithExportsDiscrepancyRun.discrepancyExplanation,
                         },
                         noChangeRunWithEmit,
                     ],
@@ -375,7 +379,7 @@ declare global {
                 {
                     subScenario: "Add class3 to project1 and build it",
                     modifyFs: fs => fs.writeFileSync("/src/projects/project1/class3.ts", `class class3 {}`, "utf-8"),
-                    descripencyExplaination: () => [
+                    discrepancyExplanation: () => [
                         "Ts buildinfo will not be updated in incremental build so it will have semantic diagnostics cached from previous build",
                         "But in clean build because of global diagnostics, semantic diagnostics are not queried so not cached in tsbuildinfo",
                     ],
@@ -394,8 +398,8 @@ declare global {
                 {
                     subScenario: "Delete output for class3",
                     modifyFs: fs => fs.unlinkSync("/src/projects/project1/class3.d.ts"),
-                    descripencyExplaination: () => [
-                        "Ts buildinfo willbe updated but will retain lib file errors from previous build and not others because they are emitted because of change which results in clearing their semantic diagnostics cache",
+                    discrepancyExplanation: () => [
+                        "Ts buildinfo will be updated but will retain lib file errors from previous build and not others because they are emitted because of change which results in clearing their semantic diagnostics cache",
                         "But in clean build because of global diagnostics, semantic diagnostics are not queried so not cached in tsbuildinfo",
                     ],
                 },

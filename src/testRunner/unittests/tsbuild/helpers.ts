@@ -329,7 +329,7 @@ interface Symbol {
         const text = baselineRecorder.lines.join("\r\n");
         sys.writeFile(`${buildInfoPath}.baseline.txt`, text);
     }
-    interface VerifyTscEditDescripanciesInput {
+    interface VerifyTscEditDiscrepanciesInput {
         index: number;
         scenario: TestTscCompile["scenario"];
         subScenario: TestTscCompile["subScenario"];
@@ -339,13 +339,13 @@ interface Symbol {
         editFs: TestTscEdit["modifyFs"];
         baseFs: vfs.FileSystem;
         newSys: TscCompileSystem;
-        descripencyExplaination: TestTscEdit["descripencyExplaination"];
+        discrepancyExplanation: TestTscEdit["discrepancyExplanation"];
     }
-    function verifyTscEditDescripancies({
+    function verifyTscEditDiscrepancies({
         index, scenario, subScenario, commandLineArgs,
-        descripencyExplaination, baselines,
+        discrepancyExplanation, baselines,
         modifyFs, editFs, baseFs, newSys
-    }: VerifyTscEditDescripanciesInput): string[] | undefined {
+    }: VerifyTscEditDiscrepanciesInput): string[] | undefined {
         const sys = testTscCompile({
             scenario,
             subScenario,
@@ -431,11 +431,11 @@ interface Symbol {
                 }
             }
         }
-        if (!headerAdded && descripencyExplaination) addBaseline("*** Supplied descripency explaination but didnt file any difference");
+        if (!headerAdded && discrepancyExplanation) addBaseline("*** Supplied discrepancy explanation but didnt file any difference");
         return baselines;
 
         function verifyTextEqual(incrementalText: string | undefined, cleanText: string | undefined, message: string) {
-            if (incrementalText !== cleanText) writeIncorretness(incrementalText, cleanText, message);
+            if (incrementalText !== cleanText) writeNotEqual(incrementalText, cleanText, message);
         }
 
         function verifyMapLike<T>(incremental: MapLike<T> | undefined, clean: MapLike<T> | undefined, verifyValue: (key: string, incrementalValue: T, cleanValue: T) => string[] | undefined, message: string) {
@@ -474,10 +474,10 @@ interface Symbol {
             else {
                 if (actual !== undefined) return;
             }
-            writeIncorretness(actual, expected, message);
+            writeNotEqual(actual, expected, message);
         }
 
-        function writeIncorretness<T>(actual: T | undefined, expected: T | undefined, message: string) {
+        function writeNotEqual<T>(actual: T | undefined, expected: T | undefined, message: string) {
             addBaseline(
                 message,
                 "CleanBuild:",
@@ -489,7 +489,7 @@ interface Symbol {
 
         function addBaseline(...text: string[]) {
             if (!baselines || !headerAdded) {
-                (baselines ||= []).push(`${index}:: ${subScenario}`, ...(descripencyExplaination?.()|| ["*** Needs explaination"]));
+                (baselines ||= []).push(`${index}:: ${subScenario}`, ...(discrepancyExplanation?.()|| ["*** Needs explanation"]));
                 headerAdded = true;
             }
             baselines.push(...text);
@@ -540,7 +540,8 @@ interface Symbol {
         modifyFs: (fs: vfs.FileSystem) => void;
         subScenario: string;
         commandLineArgs?: readonly string[];
-        descripencyExplaination?: () => readonly string[];
+        /** An array of lines to be printed in order when a discrepancy is detected */
+        discrepancyExplanation?: () => readonly string[];
     }
 
     export interface VerifyTscWithEditsInput extends TestTscCompile {
@@ -610,7 +611,7 @@ interface Symbol {
             it("tsc invocation after edit and clean build correctness", () => {
                 let baselines: string[] | undefined;
                 for (let index = 0; index < edits.length; index++) {
-                    baselines = verifyTscEditDescripancies({
+                    baselines = verifyTscEditDiscrepancies({
                         index,
                         scenario,
                         subScenario: edits[index].subScenario,
@@ -618,7 +619,7 @@ interface Symbol {
                         baseFs,
                         newSys: editsSys[index],
                         commandLineArgs: edits[index].commandLineArgs || commandLineArgs,
-                        descripencyExplaination: edits[index].descripencyExplaination,
+                        discrepancyExplanation: edits[index].discrepancyExplanation,
                         editFs: fs => {
                             for (let i = 0; i <= index; i++) {
                                 edits[i].modifyFs(fs);
