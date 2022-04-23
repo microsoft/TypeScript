@@ -26998,7 +26998,7 @@ namespace ts {
                 const inferenceContext = getInferenceContext(node);
                 // If no inferences have been made, nothing is gained from instantiating as type parameters
                 // would just be replaced with their defaults similar to the apparent type.
-                if (inferenceContext && some(inferenceContext.inferences, hasInferenceCandidates)) {
+                if (inferenceContext && (contextualType.flags & TypeFlags.Conditional || some(inferenceContext.inferences, hasInferenceCandidates))) {
                     // For contextual signatures we incorporate all inferences made so far, e.g. from return
                     // types as well as arguments to the left in a function call.
                     if (contextFlags && contextFlags & ContextFlags.Signature) {
