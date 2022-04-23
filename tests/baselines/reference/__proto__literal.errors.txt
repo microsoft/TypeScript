@@ -1,4 +1,4 @@
-tests/cases/compiler/__proto__literal.ts(10,28): error TS2300: Duplicate identifier '__proto_\u005f'.
+tests/cases/compiler/__proto__literal.ts(10,28): error TS1117: An object literal cannot have multiple properties with the same name.
 tests/cases/compiler/__proto__literal.ts(20,13): error TS2322: Type '1' is not assignable to type 'object | null'.
 
 
@@ -14,7 +14,7 @@ tests/cases/compiler/__proto__literal.ts(20,13): error TS2322: Type '1' is not a
     // Duplicate
     const y1 = { __proto__: o, __proto_\u005f: o }
                                ~~~~~~~~~~~~~~
-!!! error TS2300: Duplicate identifier '__proto_\u005f'.
+!!! error TS1117: An object literal cannot have multiple properties with the same name.
     
     // Spread order
     const z1 = { ...({a: ''}), __proto__: o }

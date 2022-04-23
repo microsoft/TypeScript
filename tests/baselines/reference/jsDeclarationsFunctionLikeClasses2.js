@@ -152,7 +152,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.res = exports.origin = void 0;
 var source_1 = require("./source");
 exports.origin = new source_1.Point2D(0, 0);
-exports.res = source_1.Point2D(2, 3).dot(exports.origin);
+exports.res = (0, source_1.Point2D)(2, 3).dot(exports.origin);
 
 
 //// [source.d.ts]
