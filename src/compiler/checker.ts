@@ -17183,7 +17183,12 @@ namespace ts {
             if (flags & TypeFlags.IndexedAccess) {
                 const newAliasSymbol = aliasSymbol || type.aliasSymbol;
                 const newAliasTypeArguments = aliasSymbol ? aliasTypeArguments : instantiateTypes(type.aliasTypeArguments, mapper);
-                return getIndexedAccessType(instantiateType((type as IndexedAccessType).objectType, mapper), instantiateType((type as IndexedAccessType).indexType, mapper), (type as IndexedAccessType).accessFlags, /*accessNode*/ undefined, newAliasSymbol, newAliasTypeArguments);
+                const instantiatedIndexType = instantiateType((type as IndexedAccessType).indexType, mapper);
+                const objectType = (type as IndexedAccessType).objectType;
+                if (!(getObjectFlags(objectType) & ObjectFlags.Anonymous) || instantiatedIndexType.flags & TypeFlags.Instantiable) {
+                    return getIndexedAccessType(instantiateType(objectType, mapper), instantiatedIndexType, (type as IndexedAccessType).accessFlags, /*accessNode*/ undefined, newAliasSymbol, newAliasTypeArguments);
+                }
+                return instantiateType(getIndexedAccessType(objectType, instantiatedIndexType, (type as IndexedAccessType).accessFlags, /*accessNode*/ undefined, newAliasSymbol, newAliasTypeArguments), mapper);
             }
             if (flags & TypeFlags.Conditional) {
                 return getConditionalTypeInstantiation(type as ConditionalType, combineTypeMappers((type as ConditionalType).mapper, mapper), aliasSymbol, aliasTypeArguments);
