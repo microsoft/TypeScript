@@ -833,6 +833,7 @@ namespace ts {
         const keyofConstraintType = keyofStringsOnly ? stringType : stringNumberSymbolType;
         const numberOrBigIntType = getUnionType([numberType, bigintType]);
         const templateConstraintType = getUnionType([stringType, numberType, booleanType, bigintType, nullType, undefinedType]) as UnionType;
+        const numericStringType = getTemplateLiteralType(["", ""], [numberType]);  // The `${number}` type
 
         const restrictiveMapper: TypeMapper = makeFunctionTypeMapper(t => t.flags & TypeFlags.TypeParameter ? getRestrictiveTypeParameter(t as TypeParameter) : t);
         const permissiveMapper: TypeMapper = makeFunctionTypeMapper(t => t.flags & TypeFlags.TypeParameter ? wildcardType : t);
@@ -12273,7 +12274,7 @@ namespace ts {
             const typeVariable = getHomomorphicTypeVariable(type);
             if (typeVariable && !type.declaration.nameType) {
                 const constraint = getConstraintOfTypeParameter(typeVariable);
-                if (constraint && (isArrayType(constraint) || isTupleType(constraint))) {
+                if (constraint && isArrayOrTupleType(constraint)) {
                     return instantiateType(type, prependTypeMapping(typeVariable, constraint, type.mapper));
                 }
             }
@@ -12654,10 +12655,10 @@ namespace ts {
 
         function isApplicableIndexType(source: Type, target: Type): boolean {
             // A 'string' index signature applies to types assignable to 'string' or 'number', and a 'number' index
-            // signature applies to types assignable to 'number' and numeric string literal types.
+            // signature applies to types assignable to 'number', `${number}` and numeric string literal types.
             return isTypeAssignableTo(source, target) ||
                 target === stringType && isTypeAssignableTo(source, numberType) ||
-                target === numberType && !!(source.flags & TypeFlags.StringLiteral) && isNumericLiteralName((source as StringLiteralType).value);
+                target === numberType && (source === numericStringType || !!(source.flags & TypeFlags.StringLiteral) && isNumericLiteralName((source as StringLiteralType).value));
         }
 
         function getIndexInfosOfStructuredType(type: Type): readonly IndexInfo[] {
@@ -13778,6 +13779,20 @@ namespace ts {
                         constraints = append(constraints, constraint);
                     }
                 }
+                // Given a homomorphic mapped type { [K in keyof T]: XXX }, where T is constrained to an array or tuple type, in the
+                // template type XXX, K has an added constraint of number | `${number}`.
+                else if (type.flags & TypeFlags.TypeParameter && parent.kind === SyntaxKind.MappedType && node === (parent as MappedTypeNode).type) {
+                    const mappedType = getTypeFromTypeNode(parent as TypeNode) as MappedType;
+                    if (getTypeParameterFromMappedType(mappedType) === getActualTypeVariable(type)) {
+                        const typeParameter = getHomomorphicTypeVariable(mappedType);
+                        if (typeParameter) {
+                            const constraint = getConstraintOfTypeParameter(typeParameter);
+                            if (constraint && everyType(constraint, isArrayOrTupleType)) {
+                                constraints = append(constraints, getUnionType([numberType, numericStringType]));
+                            }
+                        }
+                    }
+                }
                 node = parent;
             }
             return constraints ? getSubstitutionType(type, getIntersectionType(append(constraints, type))) : type;
@@ -14817,7 +14832,7 @@ namespace ts {
                 i--;
                 const t = types[i];
                 const remove =
-                    t.flags & TypeFlags.String && includes & TypeFlags.StringLiteral ||
+                    t.flags & TypeFlags.String && includes & (TypeFlags.StringLiteral | TypeFlags.TemplateLiteral | TypeFlags.StringMapping) ||
                     t.flags & TypeFlags.Number && includes & TypeFlags.NumberLiteral ||
                     t.flags & TypeFlags.BigInt && includes & TypeFlags.BigIntLiteral ||
                     t.flags & TypeFlags.ESSymbol && includes & TypeFlags.UniqueESSymbol;
@@ -14978,7 +14993,7 @@ namespace ts {
             if (!strictNullChecks && includes & TypeFlags.Nullable) {
                 return includes & TypeFlags.Undefined ? undefinedType : nullType;
             }
-            if (includes & TypeFlags.String && includes & TypeFlags.StringLiteral ||
+            if (includes & TypeFlags.String && includes & (TypeFlags.StringLiteral | TypeFlags.TemplateLiteral | TypeFlags.StringMapping) ||
                 includes & TypeFlags.Number && includes & TypeFlags.NumberLiteral ||
                 includes & TypeFlags.BigInt && includes & TypeFlags.BigIntLiteral ||
                 includes & TypeFlags.ESSymbol && includes & TypeFlags.UniqueESSymbol) {
@@ -16996,7 +17011,7 @@ namespace ts {
                             if (!type.declaration.nameType) {
                                 let constraint;
                                 if (isArrayType(t) || t.flags & TypeFlags.Any && findResolutionCycleStartIndex(typeVariable, TypeSystemPropertyName.ImmediateBaseConstraint) < 0 &&
-                                    (constraint = getConstraintOfTypeParameter(typeVariable)) && everyType(constraint, or(isArrayType, isTupleType))) {
+                                    (constraint = getConstraintOfTypeParameter(typeVariable)) && everyType(constraint, isArrayOrTupleType)) {
                                     return instantiateMappedArrayType(t, type, prependTypeMapping(typeVariable, t, mapper));
                                 }
                                 if (isGenericTupleType(t)) {
@@ -18565,7 +18580,7 @@ namespace ts {
                         }
                         return false;
                     }
-                    return isTupleType(target) || isArrayType(target);
+                    return isArrayOrTupleType(target);
                 }
                 if (isReadonlyArrayType(source) && isMutableArrayOrTuple(target)) {
                     if (reportErrors) {
@@ -18700,7 +18715,7 @@ namespace ts {
                     // recursive intersections that are structurally similar but not exactly identical. See #37854.
                     if (result && !inPropertyCheck && (
                         target.flags & TypeFlags.Intersection && (isPerformingExcessPropertyChecks || isPerformingCommonPropertyChecks) ||
-                        isNonGenericObjectType(target) && !isArrayType(target) && !isTupleType(target) && source.flags & TypeFlags.Intersection && getApparentType(source).flags & TypeFlags.StructuredType && !some((source as IntersectionType).types, t => !!(getObjectFlags(t) & ObjectFlags.NonInferrableType)))) {
+                        isNonGenericObjectType(target) && !isArrayOrTupleType(target) && source.flags & TypeFlags.Intersection && getApparentType(source).flags & TypeFlags.StructuredType && !some((source as IntersectionType).types, t => !!(getObjectFlags(t) & ObjectFlags.NonInferrableType)))) {
                         inPropertyCheck = true;
                         result &= recursiveTypeRelatedTo(source, target, reportErrors, IntersectionState.PropertyCheck, recursionFlags);
                         inPropertyCheck = false;
@@ -19708,7 +19723,7 @@ namespace ts {
                             return varianceResult;
                         }
                     }
-                    else if (isReadonlyArrayType(target) ? isArrayType(source) || isTupleType(source) : isArrayType(target) && isTupleType(source) && !source.target.readonly) {
+                    else if (isReadonlyArrayType(target) ? isArrayOrTupleType(source) : isArrayType(target) && isTupleType(source) && !source.target.readonly) {
                         if (relation !== identityRelation) {
                             return isRelatedTo(getIndexTypeOfType(source, numberType) || anyType, getIndexTypeOfType(target, numberType) || anyType, RecursionFlags.Both, reportErrors);
                         }
@@ -20093,7 +20108,7 @@ namespace ts {
                 }
                 let result = Ternary.True;
                 if (isTupleType(target)) {
-                    if (isArrayType(source) || isTupleType(source)) {
+                    if (isArrayOrTupleType(source)) {
                         if (!target.target.readonly && (isReadonlyArrayType(source) || isTupleType(source) && source.target.readonly)) {
                             return Ternary.False;
                         }
@@ -21098,6 +21113,10 @@ namespace ts {
             return !!(getObjectFlags(type) & ObjectFlags.Reference) && (type as TypeReference).target === globalReadonlyArrayType;
         }
 
+        function isArrayOrTupleType(type: Type): type is TypeReference {
+            return isArrayType(type) || isTupleType(type);
+        }
+
         function isMutableArrayOrTuple(type: Type): boolean {
             return isArrayType(type) && !isReadonlyArrayType(type) || isTupleType(type) && !type.target.readonly;
         }
@@ -21598,7 +21617,7 @@ namespace ts {
                 else if (type.flags & TypeFlags.Intersection) {
                     result = getIntersectionType(sameMap((type as IntersectionType).types, getWidenedType));
                 }
-                else if (isArrayType(type) || isTupleType(type)) {
+                else if (isArrayOrTupleType(type)) {
                     result = createTypeReference(type.target, sameMap(getTypeArguments(type), getWidenedType));
                 }
                 if (result && context === undefined) {
@@ -21635,7 +21654,7 @@ namespace ts {
                         }
                     }
                 }
-                if (isArrayType(type) || isTupleType(type)) {
+                if (isArrayOrTupleType(type)) {
                     for (const t of getTypeArguments(type)) {
                         if (reportWideningErrorsInType(t)) {
                             errorReported = true;
@@ -22714,7 +22733,7 @@ namespace ts {
                 }
                 // Infer from the members of source and target only if the two types are possibly related
                 if (!typesDefinitelyUnrelated(source, target)) {
-                    if (isArrayType(source) || isTupleType(source)) {
+                    if (isArrayOrTupleType(source)) {
                         if (isTupleType(target)) {
                             const sourceArity = getTypeReferenceArity(source);
                             const targetArity = getTypeReferenceArity(target);
