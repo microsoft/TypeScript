@@ -1,6 +1,6 @@
 === /a.ts ===
 export type A = {};
->A : A
+>A : {}
 
 === /b.ts ===
 export type { A } from './a'; // should not error, but would without `type`

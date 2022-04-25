@@ -1,6 +1,6 @@
 === tests/cases/conformance/controlFlow/controlFlowOptionalChain2.ts ===
 type A = {
->A : A
+>A : { type: 'A'; name: string; }
 
   type: 'A';
 >type : "A"
@@ -10,7 +10,7 @@ type A = {
 }
 
 type B = {
->B : B
+>B : { type: 'B'; }
 
   type: 'B';
 >type : "B"
@@ -70,18 +70,18 @@ function funcThree(arg: A | B | null) {
 }
 
 type U = { kind: undefined, u: 'u' }
->U : U
+>U : { kind: undefined; u: 'u'; }
 >kind : undefined
 >u : "u"
 
 type N = { kind: null, n: 'n' }
->N : N
+>N : { kind: null; n: 'n'; }
 >kind : null
 >null : null
 >n : "n"
 
 type X = { kind: 'X', x: 'x' }
->X : X
+>X : { kind: 'X'; x: 'x'; }
 >kind : "X"
 >x : "x"
 

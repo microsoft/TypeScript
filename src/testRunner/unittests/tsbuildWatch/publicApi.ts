@@ -40,17 +40,8 @@ export enum e2 { }
 export function f22() { } // trailing`
         };
         const commandLineArgs = ["--b", "--w"];
-        const { sys, baseline, oldSnap } = createBaseline(createWatchedSystem([libFile, solution, sharedConfig, sharedIndex, webpackConfig, webpackIndex], { currentDirectory: projectRoot }));
-        const { cb, getPrograms } = commandLineCallbacks(sys);
-        const buildHost = createSolutionBuilderWithWatchHost(
-            sys,
-            /*createProgram*/ undefined,
-            createDiagnosticReporter(sys, /*pretty*/ true),
-            createBuilderStatusReporter(sys, /*pretty*/ true),
-            createWatchStatusReporter(sys, /*pretty*/ true)
-        );
-        buildHost.afterProgramEmitAndDiagnostics = cb;
-        buildHost.afterEmitBundle = cb;
+        const { sys, baseline, oldSnap, cb, getPrograms } = createBaseline(createWatchedSystem([libFile, solution, sharedConfig, sharedIndex, webpackConfig, webpackIndex], { currentDirectory: projectRoot }));
+        const buildHost = createSolutionBuilderWithWatchHostForBaseline(sys, cb);
         buildHost.getCustomTransformers = getCustomTransformers;
         const builder = createSolutionBuilderWithWatch(buildHost, [solution.path], { verbose: true });
         builder.build();

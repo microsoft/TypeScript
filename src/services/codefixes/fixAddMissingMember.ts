@@ -169,7 +169,7 @@ namespace ts.codefix {
             const param = signature.parameters[argIndex].valueDeclaration;
             if (!(param && isParameter(param) && isIdentifier(param.name))) return undefined;
 
-            const properties = arrayFrom(checker.getUnmatchedProperties(checker.getTypeAtLocation(parent), checker.getTypeAtLocation(param), /* requireOptionalProperties */ false, /* matchDiscriminantProperties */ false));
+            const properties = arrayFrom(checker.getUnmatchedProperties(checker.getTypeAtLocation(parent), checker.getParameterType(signature, argIndex), /* requireOptionalProperties */ false, /* matchDiscriminantProperties */ false));
             if (!length(properties)) return undefined;
             return { kind: InfoKind.ObjectLiteral, token: param.name, properties, parentDeclaration: parent };
         }

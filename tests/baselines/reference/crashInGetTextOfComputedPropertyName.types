@@ -7,7 +7,7 @@ export interface B { type: 'b' }
 >type : "b"
 
 export type AB = A | B
->AB : AB
+>AB : A | B
 
 const itemId = 'some-id'
 >itemId : "some-id"

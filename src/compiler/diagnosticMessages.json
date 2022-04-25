@@ -2743,6 +2743,10 @@
         "category": "Error",
         "code": 2636
     },
+    "Variance annotations are only supported in type aliases for object, function, constructor, and mapped types.": {
+        "category": "Error",
+        "code": 2637
+    },
 
     "Cannot augment module '{0}' with value exports because it resolves to a non-module entity.": {
         "category": "Error",
@@ -3432,6 +3436,10 @@
     "Import assertion values must be string literal expressions.": {
         "category": "Error",
         "code": 2837
+    },
+    "All declarations of '{0}' must have identical constraints.": {
+        "category": "Error",
+        "code": 2838
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {

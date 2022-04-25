@@ -28,12 +28,11 @@ namespace ts.tscWatch {
             { subScenario, files, optionsToExtend, modifyFs }: VerifyIncrementalWatchEmitInput,
             incremental: boolean
         ) {
-            const { sys, baseline, oldSnap } = createBaseline(createWatchedSystem(files(), { currentDirectory: project }));
+            const { sys, baseline, oldSnap, cb, getPrograms } = createBaseline(createWatchedSystem(files(), { currentDirectory: project }));
             if (incremental) sys.exit = exitCode => sys.exitCode = exitCode;
             const argsToPass = [incremental ? "-i" : "-w", ...(optionsToExtend || emptyArray)];
             baseline.push(`${sys.getExecutingFilePath()} ${argsToPass.join(" ")}`);
             let oldPrograms: readonly CommandLineProgram[] = emptyArray;
-            const { cb, getPrograms } = commandLineCallbacks(sys);
             build(oldSnap);
 
             if (modifyFs) {

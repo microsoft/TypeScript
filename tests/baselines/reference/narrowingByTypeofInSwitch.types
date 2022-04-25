@@ -97,7 +97,7 @@ function assertBooleanOrObject(x: boolean | object) {
 }
 
 type Basic = number | boolean | string | symbol | object | Function | undefined;
->Basic : Basic
+>Basic : string | number | boolean | symbol | object | Function | undefined
 
 function testUnion(x: Basic) {
 >testUnion : (x: Basic) => void
@@ -431,11 +431,11 @@ function testExtendsImplicitDefault<T extends Basic>(x: T) {
 }
 
 type L = (x: number) => string;
->L : L
+>L : (x: number) => string
 >x : number
 
 type R = { x: string, y: number }
->R : R
+>R : { x: string; y: number; }
 >x : string
 >y : number
 

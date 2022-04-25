@@ -172,7 +172,7 @@ export namespace DiagnosticSeverity {
 }
 
 export type DiagnosticSeverity = 1 | 2 | 3 | 4;
->DiagnosticSeverity : DiagnosticSeverity
+>DiagnosticSeverity : 1 | 2 | 3 | 4
 
 export interface Diagnostic {
 	severity?: DiagnosticSeverity;
@@ -294,7 +294,7 @@ declare function box<T>(value: T): Box<T>;
 >value : T
 
 type WinCondition =
->WinCondition : WinCondition
+>WinCondition : { type: 'win'; player: string; } | { type: 'draw'; }
 
     | { type: 'win', player: string }
 >type : "win"
@@ -312,7 +312,7 @@ let zz: Box<WinCondition> = box({ type: 'draw' });
 >'draw' : "draw"
 
 type WinType = 'win' | 'draw';
->WinType : WinType
+>WinType : "win" | "draw"
 
 let yy: Box<WinType> = box('draw');
 >yy : Box<WinType>
@@ -391,7 +391,7 @@ const a3: I[] = ['a', 'b'].map(name => {
 // Repro from https://www.memsql.com/blog/porting-30k-lines-of-code-from-flow-to-typescript/
 	
 type Player = {
->Player : Player
+>Player : { name: string; age: number; position: "STRIKER" | "GOALKEEPER"; }
 
     name: string;
 >name : string
@@ -405,7 +405,7 @@ type Player = {
 };
  
 type F = () => Promise<Array<Player>>;
->F : F
+>F : () => Promise<Array<Player>>
  
 const f1: F = () => {
 >f1 : F
@@ -477,7 +477,7 @@ enum State { A, B }
 >B : State.B
 
 type Foo = { state: State }
->Foo : Foo
+>Foo : { state: State; }
 >state : State
 
 declare function bar<T>(f: () => T[]): T[];

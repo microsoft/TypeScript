@@ -1,6 +1,6 @@
 /// <reference path="fourslash.ts"/>
 
-////enum E { [|{| "isWriteAccess": true, "isDefinition": true |}A|], B }
-////const e: E.[|A|] = E.[|A|];
+////enum E { /*1*/A, B }
+////const e: E./*2*/A = E./*3*/A;
 
-verify.singleReferenceGroup("(enum member) E.A = 0");
+verify.baselineFindAllReferences('1', '2', '3');

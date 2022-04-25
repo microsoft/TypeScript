@@ -104,8 +104,8 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
-/user/username/projects/myproject/packages/pkg2/const.ts (used version)
-/user/username/projects/myproject/packages/pkg2/index.ts (used version)
+/user/username/projects/myproject/packages/pkg2/const.ts (computed .d.ts during emit)
+/user/username/projects/myproject/packages/pkg2/index.ts (computed .d.ts during emit)
 
 Program root files: ["/user/username/projects/myproject/packages/pkg1/index.ts"]
 Program options: {"outDir":"/user/username/projects/myproject/packages/pkg1/build","traceResolution":true,"configFilePath":"/user/username/projects/myproject/packages/pkg1/tsconfig.json"}
@@ -155,7 +155,7 @@ export type { TheNum } from 'const';
 
 
 //// [/user/username/projects/myproject/packages/pkg2/build/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../../../a/lib/lib.d.ts","../const.ts","../index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-11202312776-export type TheNum = 42;","-10837689162-export type { TheNum } from 'const';"],"options":{"composite":true,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../../../a/lib/lib.d.ts","../const.ts","../index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-11202312776-export type TheNum = 42;","signature":"-9649133742-export declare type TheNum = 42;\n"},{"version":"-10837689162-export type { TheNum } from 'const';","signature":"-9751391360-export type { TheNum } from 'const';\n"}],"options":{"composite":true,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3]},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/packages/pkg2/build/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -178,11 +178,11 @@ export type { TheNum } from 'const';
       },
       "../const.ts": {
         "version": "-11202312776-export type TheNum = 42;",
-        "signature": "-11202312776-export type TheNum = 42;"
+        "signature": "-9649133742-export declare type TheNum = 42;\n"
       },
       "../index.ts": {
         "version": "-10837689162-export type { TheNum } from 'const';",
-        "signature": "-10837689162-export type { TheNum } from 'const';"
+        "signature": "-9751391360-export type { TheNum } from 'const';\n"
       }
     },
     "options": {
@@ -206,7 +206,7 @@ export type { TheNum } from 'const';
     ]
   },
   "version": "FakeTSVersion",
-  "size": 777
+  "size": 927
 }
 
 //// [/user/username/projects/myproject/packages/pkg1/build/index.js]

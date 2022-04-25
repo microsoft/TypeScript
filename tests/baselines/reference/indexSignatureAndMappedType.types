@@ -56,7 +56,7 @@ function f3<T, U, K extends string>(x: { [key: string]: T }, y: Record<K, U>) {
 // Repro from #14548
 
 type Dictionary = {
->Dictionary : Dictionary
+>Dictionary : { [key: string]: string; }
 
     [key: string]: string;
 >key : string

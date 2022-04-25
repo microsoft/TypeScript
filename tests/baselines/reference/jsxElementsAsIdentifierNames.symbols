@@ -1,0 +1,31 @@
+=== tests/cases/compiler/a.tsx ===
+declare const React: any;
+>React : Symbol(React, Decl(a.tsx, 0, 13))
+
+declare module JSX {
+>JSX : Symbol(JSX, Decl(a.tsx, 0, 25))
+
+    interface IntrinsicElements {
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(a.tsx, 1, 20))
+
+        ["package"]: any;
+>["package"] : Symbol(IntrinsicElements["package"], Decl(a.tsx, 2, 33))
+>"package" : Symbol(IntrinsicElements["package"], Decl(a.tsx, 2, 33))
+    }
+}
+
+function A() {
+>A : Symbol(A, Decl(a.tsx, 5, 1))
+
+    return <package />
+>package : Symbol(JSX.IntrinsicElements["package"], Decl(a.tsx, 2, 33))
+}
+
+function B() {
+>B : Symbol(B, Decl(a.tsx, 9, 1))
+
+    return <package></package>
+>package : Symbol(JSX.IntrinsicElements["package"], Decl(a.tsx, 2, 33))
+>package : Symbol(JSX.IntrinsicElements["package"], Decl(a.tsx, 2, 33))
+}
+

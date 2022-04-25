@@ -1,7 +1,11 @@
 tests/cases/conformance/es2020/es2020IntlAPIs.ts(45,1): error TS2554: Expected 1-2 arguments, but got 0.
+tests/cases/conformance/es2020/es2020IntlAPIs.ts(48,1): error TS2554: Expected 2 arguments, but got 0.
+tests/cases/conformance/es2020/es2020IntlAPIs.ts(49,1): error TS2554: Expected 2 arguments, but got 1.
+tests/cases/conformance/es2020/es2020IntlAPIs.ts(50,29): error TS2345: Argument of type '{}' is not assignable to parameter of type 'DisplayNamesOptions'.
+  Property 'type' is missing in type '{}' but required in type 'DisplayNamesOptions'.
 
 
-==== tests/cases/conformance/es2020/es2020IntlAPIs.ts (1 errors) ====
+==== tests/cases/conformance/es2020/es2020IntlAPIs.ts (4 errors) ====
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl#Locale_identification_and_negotiation
     const count = 26254.39;
     const date = new Date("2012-05-24");
@@ -51,3 +55,25 @@ tests/cases/conformance/es2020/es2020IntlAPIs.ts(45,1): error TS2554: Expected 1
 !!! error TS2554: Expected 1-2 arguments, but got 0.
 !!! related TS6210 /.ts/lib.es2020.intl.d.ts:311:14: An argument for 'tag' was not provided.
     new Intl.Locale(new Intl.Locale('en-US'));
+    
+    new Intl.DisplayNames(); // TypeError: invalid_argument
+    ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2554: Expected 2 arguments, but got 0.
+!!! related TS6210 /.ts/lib.es2020.intl.d.ts:390:13: An argument for 'locales' was not provided.
+    new Intl.DisplayNames('en'); // TypeError: invalid_argument
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2554: Expected 2 arguments, but got 1.
+!!! related TS6210 /.ts/lib.es2020.intl.d.ts:390:39: An argument for 'options' was not provided.
+    new Intl.DisplayNames('en', {}); // TypeError: invalid_argument
+                                ~~
+!!! error TS2345: Argument of type '{}' is not assignable to parameter of type 'DisplayNamesOptions'.
+!!! error TS2345:   Property 'type' is missing in type '{}' but required in type 'DisplayNamesOptions'.
+!!! related TS2728 /.ts/lib.es2020.intl.d.ts:333:9: 'type' is declared here.
+    console.log((new Intl.DisplayNames(undefined, {type: 'language'})).of('en-GB')); // "British English"
+    
+    const localesArg = ["es-ES", new Intl.Locale("en-US")];
+    console.log((new Intl.DisplayNames(localesArg, {type: 'language'})).resolvedOptions().locale); // "es-ES"
+    console.log(Intl.DisplayNames.supportedLocalesOf(localesArg)); // ["es-ES", "en-US"]
+    console.log(Intl.DisplayNames.supportedLocalesOf()); // []
+    console.log(Intl.DisplayNames.supportedLocalesOf(localesArg, {})); // ["es-ES", "en-US"]
+    

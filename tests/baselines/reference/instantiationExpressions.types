@@ -409,14 +409,14 @@ type BoxFunc<T> = typeof makeBox<T>;  // (value: T) => { value: T }
 >makeBox : <T>(value: T) => { value: T; }
 
 type StringBoxFunc = BoxFunc<string>;  // (value: string) => { value: string }
->StringBoxFunc : StringBoxFunc
+>StringBoxFunc : (value: string) => { value: string; }
 
 type Box<T> = ReturnType<typeof makeBox<T>>;  // { value: T }
 >Box : { value: T; }
 >makeBox : <T>(value: T) => { value: T; }
 
 type StringBox = Box<string>;  // { value: string }
->StringBox : StringBox
+>StringBox : { value: string; }
 
 type A<U> = InstanceType<typeof Array<U>>;  // U[]
 >A : U[]

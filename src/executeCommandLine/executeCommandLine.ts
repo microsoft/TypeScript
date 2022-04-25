@@ -649,7 +649,7 @@ namespace ts {
         return false;
     }
 
-    export type ExecuteCommandLineCallbacks = (program: Program | EmitAndSemanticDiagnosticsBuilderProgram | ParsedCommandLine) => void;
+    export type ExecuteCommandLineCallbacks = (program: Program | BuilderProgram | ParsedCommandLine) => void;
     export function executeCommandLine(
         system: System,
         cb: ExecuteCommandLineCallbacks,
