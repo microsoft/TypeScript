@@ -17185,7 +17185,7 @@ namespace ts {
                 const newAliasTypeArguments = aliasSymbol ? aliasTypeArguments : instantiateTypes(type.aliasTypeArguments, mapper);
                 const instantiatedIndexType = instantiateType((type as IndexedAccessType).indexType, mapper);
                 const objectType = (type as IndexedAccessType).objectType;
-                if (!(getObjectFlags(objectType) & ObjectFlags.Anonymous) || instantiatedIndexType.flags & TypeFlags.Instantiable) {
+                if (!(getObjectFlags(objectType) & ObjectFlags.Anonymous) || maybeTypeOfKind(instantiatedIndexType, TypeFlags.Instantiable)) {
                     return getIndexedAccessType(instantiateType(objectType, mapper), instantiatedIndexType, (type as IndexedAccessType).accessFlags, /*accessNode*/ undefined, newAliasSymbol, newAliasTypeArguments);
                 }
                 return instantiateType(getIndexedAccessType(objectType, instantiatedIndexType, (type as IndexedAccessType).accessFlags, /*accessNode*/ undefined, newAliasSymbol, newAliasTypeArguments), mapper);

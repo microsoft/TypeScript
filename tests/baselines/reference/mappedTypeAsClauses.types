@@ -275,7 +275,7 @@ type TS4<T> = keyof { [P in keyof T as NameMap[P & keyof NameMap]]: string };
 >TS4 : keyof { [P in keyof T as NameMap[P & keyof NameMap]]: string; }
 
 type TS5<T> = keyof { [P in keyof T & keyof NameMap as NameMap[P]]: string };
->TS5 : "x" | "y" | "z"
+>TS5 : NameMap[keyof T & "a"] | NameMap[keyof T & "b"] | NameMap[keyof T & "c"]
 
 type TS6<T, U, V> = keyof { [ K in keyof T as V & (K extends U ? K : never)]: string };
 >TS6 : keyof { [K in keyof T as V & (K extends U ? K : never)]: string; }
