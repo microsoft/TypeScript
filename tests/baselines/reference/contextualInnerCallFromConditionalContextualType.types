@@ -1,0 +1,89 @@
+=== tests/cases/compiler/contextualInnerCallFromConditionalContextualType.ts ===
+interface EventObject { type: string; }
+>type : string
+
+interface TypegenDisabled { "@@xstate/typegen": false; }
+>"@@xstate/typegen" : false
+>false : false
+
+interface TypegenEnabled { "@@xstate/typegen": true; }
+>"@@xstate/typegen" : true
+>true : true
+
+type TypegenConstraint = TypegenEnabled | TypegenDisabled;
+>TypegenConstraint : TypegenDisabled | TypegenEnabled
+
+interface ActionObject<TEvent extends EventObject> {
+  type: string;
+>type : string
+
+  _TE?: TEvent;
+>_TE : TEvent | undefined
+}
+
+declare function assign<TEvent extends EventObject>(
+>assign : <TEvent extends EventObject>(assignment: (ev: TEvent) => void) => ActionObject<TEvent>
+
+  assignment: (ev: TEvent) => void
+>assignment : (ev: TEvent) => void
+>ev : TEvent
+
+): ActionObject<TEvent>;
+
+declare function createMachine<
+>createMachine : <TTypesMeta extends TypegenConstraint = TypegenDisabled>(config: {    types?: TTypesMeta;}, action?: TTypesMeta extends TypegenEnabled ? {    action: ActionObject<{        type: "WITH_TYPEGEN";    }>;} : {    action: ActionObject<{        type: "WITHOUT_TYPEGEN";    }>;}) => void
+
+  TTypesMeta extends TypegenConstraint = TypegenDisabled
+>(
+  config: {
+>config : { types?: TTypesMeta | undefined; }
+
+    types?: TTypesMeta;
+>types : TTypesMeta | undefined
+
+  },
+  action?: TTypesMeta extends TypegenEnabled
+>action : (TTypesMeta extends TypegenEnabled ? { action: ActionObject<{    type: "WITH_TYPEGEN";}>; } : { action: ActionObject<{    type: "WITHOUT_TYPEGEN";}>; }) | undefined
+
+    ? { action: ActionObject<{ type: "WITH_TYPEGEN" }> }
+>action : ActionObject<{ type: "WITH_TYPEGEN"; }>
+>type : "WITH_TYPEGEN"
+
+    : { action: ActionObject<{ type: "WITHOUT_TYPEGEN" }> }
+>action : ActionObject<{ type: "WITHOUT_TYPEGEN"; }>
+>type : "WITHOUT_TYPEGEN"
+
+): void;
+
+createMachine(
+>createMachine(  {    types: {} as TypegenEnabled,  },  {    action: assign((event) => {      event.type // should be 'WITH_TYPEGEN'    }),  }) : void
+>createMachine : <TTypesMeta extends TypegenConstraint = TypegenDisabled>(config: { types?: TTypesMeta | undefined; }, action?: (TTypesMeta extends TypegenEnabled ? { action: ActionObject<{ type: "WITH_TYPEGEN"; }>; } : { action: ActionObject<{ type: "WITHOUT_TYPEGEN"; }>; }) | undefined) => void
+  {
+>{    types: {} as TypegenEnabled,  } : { types: TypegenEnabled; }
+
+    types: {} as TypegenEnabled,
+>types : TypegenEnabled
+>{} as TypegenEnabled : TypegenEnabled
+>{} : {}
+
+  },
+  {
+>{    action: assign((event) => {      event.type // should be 'WITH_TYPEGEN'    }),  } : { action: ActionObject<{ type: "WITH_TYPEGEN"; }>; }
+
+    action: assign((event) => {
+>action : ActionObject<{ type: "WITH_TYPEGEN"; }>
+>assign((event) => {      event.type // should be 'WITH_TYPEGEN'    }) : ActionObject<{ type: "WITH_TYPEGEN"; }>
+>assign : <TEvent extends EventObject>(assignment: (ev: TEvent) => void) => ActionObject<TEvent>
+>(event) => {      event.type // should be 'WITH_TYPEGEN'    } : (event: { type: "WITH_TYPEGEN"; }) => void
+>event : { type: "WITH_TYPEGEN"; }
+
+      event.type // should be 'WITH_TYPEGEN'
+>event.type : "WITH_TYPEGEN"
+>event : { type: "WITH_TYPEGEN"; }
+>type : "WITH_TYPEGEN"
+
+    }),
+  }
+);
+
+

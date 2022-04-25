@@ -1,0 +1,103 @@
+=== tests/cases/compiler/contextualInnerCallFromConditionalContextualType.ts ===
+interface EventObject { type: string; }
+>EventObject : Symbol(EventObject, Decl(contextualInnerCallFromConditionalContextualType.ts, 0, 0))
+>type : Symbol(EventObject.type, Decl(contextualInnerCallFromConditionalContextualType.ts, 0, 23))
+
+interface TypegenDisabled { "@@xstate/typegen": false; }
+>TypegenDisabled : Symbol(TypegenDisabled, Decl(contextualInnerCallFromConditionalContextualType.ts, 0, 39))
+>"@@xstate/typegen" : Symbol(TypegenDisabled["@@xstate/typegen"], Decl(contextualInnerCallFromConditionalContextualType.ts, 1, 27))
+
+interface TypegenEnabled { "@@xstate/typegen": true; }
+>TypegenEnabled : Symbol(TypegenEnabled, Decl(contextualInnerCallFromConditionalContextualType.ts, 1, 56))
+>"@@xstate/typegen" : Symbol(TypegenEnabled["@@xstate/typegen"], Decl(contextualInnerCallFromConditionalContextualType.ts, 2, 26))
+
+type TypegenConstraint = TypegenEnabled | TypegenDisabled;
+>TypegenConstraint : Symbol(TypegenConstraint, Decl(contextualInnerCallFromConditionalContextualType.ts, 2, 54))
+>TypegenEnabled : Symbol(TypegenEnabled, Decl(contextualInnerCallFromConditionalContextualType.ts, 1, 56))
+>TypegenDisabled : Symbol(TypegenDisabled, Decl(contextualInnerCallFromConditionalContextualType.ts, 0, 39))
+
+interface ActionObject<TEvent extends EventObject> {
+>ActionObject : Symbol(ActionObject, Decl(contextualInnerCallFromConditionalContextualType.ts, 4, 58))
+>TEvent : Symbol(TEvent, Decl(contextualInnerCallFromConditionalContextualType.ts, 6, 23))
+>EventObject : Symbol(EventObject, Decl(contextualInnerCallFromConditionalContextualType.ts, 0, 0))
+
+  type: string;
+>type : Symbol(ActionObject.type, Decl(contextualInnerCallFromConditionalContextualType.ts, 6, 52))
+
+  _TE?: TEvent;
+>_TE : Symbol(ActionObject._TE, Decl(contextualInnerCallFromConditionalContextualType.ts, 7, 15))
+>TEvent : Symbol(TEvent, Decl(contextualInnerCallFromConditionalContextualType.ts, 6, 23))
+}
+
+declare function assign<TEvent extends EventObject>(
+>assign : Symbol(assign, Decl(contextualInnerCallFromConditionalContextualType.ts, 9, 1))
+>TEvent : Symbol(TEvent, Decl(contextualInnerCallFromConditionalContextualType.ts, 11, 24))
+>EventObject : Symbol(EventObject, Decl(contextualInnerCallFromConditionalContextualType.ts, 0, 0))
+
+  assignment: (ev: TEvent) => void
+>assignment : Symbol(assignment, Decl(contextualInnerCallFromConditionalContextualType.ts, 11, 52))
+>ev : Symbol(ev, Decl(contextualInnerCallFromConditionalContextualType.ts, 12, 15))
+>TEvent : Symbol(TEvent, Decl(contextualInnerCallFromConditionalContextualType.ts, 11, 24))
+
+): ActionObject<TEvent>;
+>ActionObject : Symbol(ActionObject, Decl(contextualInnerCallFromConditionalContextualType.ts, 4, 58))
+>TEvent : Symbol(TEvent, Decl(contextualInnerCallFromConditionalContextualType.ts, 11, 24))
+
+declare function createMachine<
+>createMachine : Symbol(createMachine, Decl(contextualInnerCallFromConditionalContextualType.ts, 13, 24))
+
+  TTypesMeta extends TypegenConstraint = TypegenDisabled
+>TTypesMeta : Symbol(TTypesMeta, Decl(contextualInnerCallFromConditionalContextualType.ts, 15, 31))
+>TypegenConstraint : Symbol(TypegenConstraint, Decl(contextualInnerCallFromConditionalContextualType.ts, 2, 54))
+>TypegenDisabled : Symbol(TypegenDisabled, Decl(contextualInnerCallFromConditionalContextualType.ts, 0, 39))
+
+>(
+  config: {
+>config : Symbol(config, Decl(contextualInnerCallFromConditionalContextualType.ts, 17, 2))
+
+    types?: TTypesMeta;
+>types : Symbol(types, Decl(contextualInnerCallFromConditionalContextualType.ts, 18, 11))
+>TTypesMeta : Symbol(TTypesMeta, Decl(contextualInnerCallFromConditionalContextualType.ts, 15, 31))
+
+  },
+  action?: TTypesMeta extends TypegenEnabled
+>action : Symbol(action, Decl(contextualInnerCallFromConditionalContextualType.ts, 20, 4))
+>TTypesMeta : Symbol(TTypesMeta, Decl(contextualInnerCallFromConditionalContextualType.ts, 15, 31))
+>TypegenEnabled : Symbol(TypegenEnabled, Decl(contextualInnerCallFromConditionalContextualType.ts, 1, 56))
+
+    ? { action: ActionObject<{ type: "WITH_TYPEGEN" }> }
+>action : Symbol(action, Decl(contextualInnerCallFromConditionalContextualType.ts, 22, 7))
+>ActionObject : Symbol(ActionObject, Decl(contextualInnerCallFromConditionalContextualType.ts, 4, 58))
+>type : Symbol(type, Decl(contextualInnerCallFromConditionalContextualType.ts, 22, 30))
+
+    : { action: ActionObject<{ type: "WITHOUT_TYPEGEN" }> }
+>action : Symbol(action, Decl(contextualInnerCallFromConditionalContextualType.ts, 23, 7))
+>ActionObject : Symbol(ActionObject, Decl(contextualInnerCallFromConditionalContextualType.ts, 4, 58))
+>type : Symbol(type, Decl(contextualInnerCallFromConditionalContextualType.ts, 23, 30))
+
+): void;
+
+createMachine(
+>createMachine : Symbol(createMachine, Decl(contextualInnerCallFromConditionalContextualType.ts, 13, 24))
+  {
+    types: {} as TypegenEnabled,
+>types : Symbol(types, Decl(contextualInnerCallFromConditionalContextualType.ts, 27, 3))
+>TypegenEnabled : Symbol(TypegenEnabled, Decl(contextualInnerCallFromConditionalContextualType.ts, 1, 56))
+
+  },
+  {
+    action: assign((event) => {
+>action : Symbol(action, Decl(contextualInnerCallFromConditionalContextualType.ts, 30, 3))
+>assign : Symbol(assign, Decl(contextualInnerCallFromConditionalContextualType.ts, 9, 1))
+>event : Symbol(event, Decl(contextualInnerCallFromConditionalContextualType.ts, 31, 20))
+
+      event.type // should be 'WITH_TYPEGEN'
+>event.type : Symbol(type, Decl(contextualInnerCallFromConditionalContextualType.ts, 22, 30))
+>event : Symbol(event, Decl(contextualInnerCallFromConditionalContextualType.ts, 31, 20))
+>type : Symbol(type, Decl(contextualInnerCallFromConditionalContextualType.ts, 22, 30))
+
+    }),
+  }
+);
+
+

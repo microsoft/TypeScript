@@ -27001,7 +27001,7 @@ namespace ts {
                 if (inferenceContext && some(inferenceContext.inferences, hasInferenceCandidates)) {
                     // For contextual signatures we incorporate all inferences made so far, e.g. from return
                     // types as well as arguments to the left in a function call.
-                    if (contextFlags && contextFlags & ContextFlags.Signature) {
+                    if (contextFlags && contextFlags & ContextFlags.Signature || maybeTypeOfKind(contextualType, TypeFlags.Conditional)) {
                         return instantiateInstantiableTypes(contextualType, inferenceContext.nonFixingMapper);
                     }
                     // For other purposes (e.g. determining whether to produce literal types) we only
