@@ -90,7 +90,7 @@ namespace ts {
                     commandLineArgs: ["--incremental", "-p", "src"],
                     modifyFs,
                     edits: [
-                        noChangeRun,
+                        noChangeWithExportsDiscrepancyRun,
                         {
                             subScenario: "incremental-declaration-doesnt-change",
                             modifyFs: fixModifyFs
@@ -123,15 +123,20 @@ const a: string = 10;`, "utf-8"),
             verifyNoEmitChanges({ composite: true });
 
             function verifyNoEmitChanges(compilerOptions: CompilerOptions) {
+                const discrepancyIfNoDtsEmit = getEmitDeclarations(compilerOptions) ?
+                    undefined :
+                    noChangeWithExportsDiscrepancyRun.discrepancyExplanation;
                 const noChangeRunWithNoEmit: TestTscEdit = {
                     ...noChangeRun,
                     subScenario: "No Change run with noEmit",
                     commandLineArgs: ["--p", "src/project", "--noEmit"],
+                    discrepancyExplanation: discrepancyIfNoDtsEmit,
                 };
                 const noChangeRunWithEmit: TestTscEdit = {
                     ...noChangeRun,
                     subScenario: "No Change run with emit",
                     commandLineArgs: ["--p", "src/project"],
+                    discrepancyExplanation: discrepancyIfNoDtsEmit,
                 };
                 let optionsString = "";
                 for (const key in compilerOptions) {
@@ -152,10 +157,12 @@ const a: string = 10;`, "utf-8"),
                             subScenario: "Introduce error but still noEmit",
                             commandLineArgs: ["--p", "src/project", "--noEmit"],
                             modifyFs: fs => replaceText(fs, "/src/project/src/class.ts", "prop", "prop1"),
+                            discrepancyExplanation: getEmitDeclarations(compilerOptions) ? noChangeWithExportsDiscrepancyRun.discrepancyExplanation : undefined,
                         },
                         {
                             subScenario: "Fix error and emit",
                             modifyFs: fs => replaceText(fs, "/src/project/src/class.ts", "prop1", "prop"),
+                            discrepancyExplanation: discrepancyIfNoDtsEmit
                         },
                         noChangeRunWithEmit,
                         noChangeRunWithNoEmit,
@@ -164,6 +171,7 @@ const a: string = 10;`, "utf-8"),
                         {
                             subScenario: "Introduce error and emit",
                             modifyFs: fs => replaceText(fs, "/src/project/src/class.ts", "prop", "prop1"),
+                            discrepancyExplanation: discrepancyIfNoDtsEmit
                         },
                         noChangeRunWithEmit,
                         noChangeRunWithNoEmit,
@@ -173,6 +181,7 @@ const a: string = 10;`, "utf-8"),
                             subScenario: "Fix error and no emit",
                             commandLineArgs: ["--p", "src/project", "--noEmit"],
                             modifyFs: fs => replaceText(fs, "/src/project/src/class.ts", "prop1", "prop"),
+                            discrepancyExplanation: noChangeWithExportsDiscrepancyRun.discrepancyExplanation,
                         },
                         noChangeRunWithEmit,
                         noChangeRunWithNoEmit,
@@ -196,6 +205,7 @@ const a: string = 10;`, "utf-8"),
                         {
                             subScenario: "Fix error and no emit",
                             modifyFs: fs => replaceText(fs, "/src/project/src/class.ts", "prop1", "prop"),
+                            discrepancyExplanation: noChangeWithExportsDiscrepancyRun.discrepancyExplanation
                         },
                         noChangeRunWithEmit,
                     ],
@@ -352,11 +362,10 @@ declare global {
                 {
                     subScenario: "Add class3 to project1 and build it",
                     modifyFs: fs => fs.writeFileSync("/src/projects/project1/class3.ts", `class class3 {}`, "utf-8"),
-                    cleanBuildDiscrepancies: () => new Map<string, CleanBuildDescrepancy>([
-                        // Ts buildinfo will not be updated in incremental build so it will have semantic diagnostics cached from previous build
-                        // But in clean build because of global diagnostics, semantic diagnostics are not queried so not cached in tsbuildinfo
-                        ["/src/projects/project2/tsconfig.tsbuildinfo", CleanBuildDescrepancy.CleanFileTextDifferent]
-                    ]),
+                    discrepancyExplanation: () => [
+                        "Ts buildinfo will not be updated in incremental build so it will have semantic diagnostics cached from previous build",
+                        "But in clean build because of global diagnostics, semantic diagnostics are not queried so not cached in tsbuildinfo",
+                    ],
                 },
                 {
                     subScenario: "Add output of class3",
@@ -372,11 +381,10 @@ declare global {
                 {
                     subScenario: "Delete output for class3",
                     modifyFs: fs => fs.unlinkSync("/src/projects/project1/class3.d.ts"),
-                    cleanBuildDiscrepancies: () => new Map<string, CleanBuildDescrepancy>([
-                        // Ts buildinfo willbe updated but will retain lib file errors from previous build and not others because they are emitted because of change which results in clearing their semantic diagnostics cache
-                        // But in clean build because of global diagnostics, semantic diagnostics are not queried so not cached in tsbuildinfo
-                        ["/src/projects/project2/tsconfig.tsbuildinfo", CleanBuildDescrepancy.CleanFileTextDifferent]
-                    ]),
+                    discrepancyExplanation: () => [
+                        "Ts buildinfo will be updated but will retain lib file errors from previous build and not others because they are emitted because of change which results in clearing their semantic diagnostics cache",
+                        "But in clean build because of global diagnostics, semantic diagnostics are not queried so not cached in tsbuildinfo",
+                    ],
                 },
                 {
                     subScenario: "Create output for class3",
@@ -463,6 +471,41 @@ declare global {
             modifyFs: (fs) => {
                 fs.writeFileSync("/lib/lib.esnext.d.ts", libContent);
             }
+        });
+
+        verifyTscWithEdits({
+            scenario: "incremental",
+            subScenario: "change to type that gets used as global through export in another file",
+            commandLineArgs: ["-p", `src/project`],
+            fs: () => loadProjectFromFiles({
+                "/src/project/tsconfig.json": JSON.stringify({ compilerOptions: { composite: true }, }),
+                "/src/project/class1.ts": `const a: MagicNumber = 1;
+console.log(a);`,
+                "/src/project/constants.ts": "export default 1;",
+                "/src/project/types.d.ts": `type MagicNumber = typeof import('./constants').default`,
+            }),
+            edits: [{
+                subScenario: "Modify imports used in global file",
+                modifyFs: fs => fs.writeFileSync("/src/project/constants.ts", "export default 2;"),
+            }],
+        });
+
+        verifyTscWithEdits({
+            scenario: "incremental",
+            subScenario: "change to type that gets used as global through export in another file through indirect import",
+            commandLineArgs: ["-p", `src/project`],
+            fs: () => loadProjectFromFiles({
+                "/src/project/tsconfig.json": JSON.stringify({ compilerOptions: { composite: true }, }),
+                "/src/project/class1.ts": `const a: MagicNumber = 1;
+console.log(a);`,
+                "/src/project/constants.ts": "export default 1;",
+                "/src/project/reexport.ts": `export { default as ConstantNumber } from "./constants"`,
+                "/src/project/types.d.ts": `type MagicNumber = typeof import('./reexport').ConstantNumber`,
+            }),
+            edits: [{
+                subScenario: "Modify imports used in global file",
+                modifyFs: fs => fs.writeFileSync("/src/project/constants.ts", "export default 2;"),
+            }],
         });
     });
 }

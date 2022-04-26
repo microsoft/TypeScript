@@ -47,33 +47,84 @@ declare const dts: any;
 }
 
 //// [/src/logic/index.ts]
+import * as c from '../core/index';
+export function getSecondsInDay() {
+    return c.multiply(10, 15);
+}
+import * as mod from '../core/anotherModule';
+export const m = mod;
 
 
 //// [/src/logic/tsconfig.json]
+{
+    "compilerOptions": {
+        "composite": true,
+        "declaration": true,
+        "sourceMap": true,
+        "forceConsistentCasingInFileNames": true,
+        "skipDefaultLibCheck": true
+    },
+    "references": [
+        { "path": "../core" }
+    ]
+}
 
 
 //// [/src/tests/index.ts]
+import * as c from '../core/index';
+import * as logic from '../logic/index';
+
+c.leftPad("", 10);
+logic.getSecondsInDay();
+
+import * as mod from '../core/anotherModule';
+export const m = mod;
 
 
 //// [/src/tests/tsconfig.json]
-
+{
+    "references": [
+        { "path": "../core" },
+        { "path": "../logic" }
+    ],
+    "files": ["index.ts"],
+    "compilerOptions": {
+        "composite": true,
+        "declaration": true,
+        "forceConsistentCasingInFileNames": true,
+        "skipDefaultLibCheck": true
+    }
+}
 
 //// [/src/ui/index.ts]
+import * as logic from '../logic';
+
+export function run() {
+    console.log(logic.getSecondsInDay());
+}
 
 
 //// [/src/ui/tsconfig.json]
+{
+    "compilerOptions": {
+        "skipDefaultLibCheck": true
+    },
+    "references": [
+        { "path": "../logic/index" }
+    ]
+}
 
 
 
 
 Output::
 /lib/tsc --b /src/core --verbose
-[[90m12:01:00 AM[0m] Projects in this build: 
+[[90m12:00:10 AM[0m] Projects in this build: 
     * src/core/tsconfig.json
 
-[[90m12:01:00 AM[0m] Project 'src/core/tsconfig.json' is out of date because output file 'src/core/anotherModule.js' does not exist
+[[90m12:00:11 AM[0m] Project 'src/core/tsconfig.json' is out of date because output file 'src/core/anotherModule.js' does not exist
 
-[[90m12:01:00 AM[0m] Building project '/src/core/tsconfig.json'...
+[[90m12:00:12 AM[0m] Building project '/src/core/tsconfig.json'...
 
 TSFILE: /src/core/anotherModule.js
 TSFILE: /src/core/index.js
@@ -168,12 +219,12 @@ Input::
 
 Output::
 /lib/tsc --b /src/core --verbose
-[[90m12:04:00 AM[0m] Projects in this build: 
+[[90m12:00:18 AM[0m] Projects in this build: 
     * src/core/tsconfig.json
 
-[[90m12:04:00 AM[0m] Project 'src/core/tsconfig.json' is out of date because oldest output 'src/core/anotherModule.js' is older than newest input 'src/core/tsconfig.json'
+[[90m12:00:19 AM[0m] Project 'src/core/tsconfig.json' is out of date because oldest output 'src/core/anotherModule.js' is older than newest input 'src/core/tsconfig.json'
 
-[[90m12:04:00 AM[0m] Building project '/src/core/tsconfig.json'...
+[[90m12:00:20 AM[0m] Building project '/src/core/tsconfig.json'...
 
 TSFILE: /src/core/anotherModule.js
 TSFILE: /src/core/index.js

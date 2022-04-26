@@ -656,10 +656,10 @@ namespace ts {
         AllowNumericSeparator = 1 << 3
     }
 
-    export function getLiteralText(node: LiteralLikeNode, sourceFile: SourceFile, flags: GetLiteralTextFlags) {
+    export function getLiteralText(node: LiteralLikeNode, sourceFile: SourceFile | undefined, flags: GetLiteralTextFlags) {
         // If we don't need to downlevel and we can reach the original source text using
         // the node's parent reference, then simply get the text as it was originally written.
-        if (canUseOriginalText(node, flags)) {
+        if (sourceFile && canUseOriginalText(node, flags)) {
             return getSourceTextOfNodeFromSourceFile(sourceFile, node);
         }
 
@@ -4459,10 +4459,10 @@ namespace ts {
         return combinePaths(newDirPath, sourceFilePath);
     }
 
-    export function writeFile(host: { writeFile: WriteFileCallback; }, diagnostics: DiagnosticCollection, fileName: string, data: string, writeByteOrderMark: boolean, sourceFiles?: readonly SourceFile[]) {
-        host.writeFile(fileName, data, writeByteOrderMark, hostErrorMessage => {
+    export function writeFile(host: { writeFile: WriteFileCallback; }, diagnostics: DiagnosticCollection, fileName: string, text: string, writeByteOrderMark: boolean, sourceFiles?: readonly SourceFile[], data?: WriteFileCallbackData) {
+        host.writeFile(fileName, text, writeByteOrderMark, hostErrorMessage => {
             diagnostics.add(createCompilerDiagnostic(Diagnostics.Could_not_write_file_0_Colon_1, fileName, hostErrorMessage));
-        }, sourceFiles);
+        }, sourceFiles, data);
     }
 
     function ensureDirectoriesExist(

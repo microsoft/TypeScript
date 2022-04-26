@@ -20,7 +20,7 @@ on:
 
 jobs:
   run:
-    if: ${{ !github.event.label && !github.event.inputs.bisect_issue }}
+    if: ${{ github.repository == 'microsoft/TypeScript' && !github.event.label && !github.event.inputs.bisect_issue }}
     runs-on: ubuntu-latest
     steps:
     - name: Use node

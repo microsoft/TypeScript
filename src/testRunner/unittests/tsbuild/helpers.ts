@@ -78,26 +78,6 @@ namespace ts {
         };
     }
 
-    export function getTime() {
-        let currentTime = 100;
-        return { tick, time, touch };
-
-        function tick() {
-            currentTime += 60_000;
-        }
-
-        function time() {
-            return currentTime;
-        }
-
-        function touch(fs: vfs.FileSystem, path: string) {
-            if (!fs.statSync(path).isFile()) {
-                throw new Error(`File ${path} does not exist`);
-            }
-            fs.utimesSync(path, new Date(time()), new Date(time()));
-        }
-    }
-
     export const libContent = `${TestFSWithWatch.libFile.content}
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };`;
@@ -152,26 +132,6 @@ interface Symbol {
         fs.mkdirSync("/lib");
         fs.writeFileSync("/lib/lib.d.ts", libContentToAppend ? `${libContent}${libContentToAppend}` : libContent);
         fs.makeReadonly();
-    }
-
-    /**
-     * Gets the FS mountuing existing fs's /src and /lib folder
-     */
-    export function getFsWithTime(baseFs: vfs.FileSystem) {
-        const { time, tick } = getTime();
-        const host = new fakes.System(baseFs) as any as vfs.FileSystemResolverHost;
-        host.getWorkspaceRoot = notImplemented;
-        const resolver = vfs.createResolver(host);
-        const fs = new vfs.FileSystem(/*ignoreCase*/ true, {
-            files: {
-                ["/src"]: new vfs.Mount("/src", resolver),
-                ["/lib"]: new vfs.Mount("/lib", resolver)
-            },
-            cwd: "/",
-            meta: { defaultLibLocation: "/lib" },
-            time
-        });
-        return { fs, time, tick };
     }
 
     export function verifyOutputsPresent(fs: vfs.FileSystem, outputs: readonly string[]) {
@@ -249,7 +209,7 @@ interface Symbol {
         affectedFilesPendingEmit?: readonly ReadableProgramBuilderInfoFilePendingEmit[];
     }
     type ReadableBuildInfo = Omit<BuildInfo, "program"> & { program: ReadableProgramBuildInfo | undefined; size: number; };
-    function generateBuildInfoProgramBaseline(sys: System, originalWriteFile: System["writeFile"], buildInfoPath: string, buildInfo: BuildInfo) {
+    function generateBuildInfoProgramBaseline(sys: System, buildInfoPath: string, buildInfo: BuildInfo) {
         const fileInfos: ReadableProgramBuildInfo["fileInfos"] = {};
         buildInfo.program?.fileInfos.forEach((fileInfo, index) => fileInfos[toFileName(index + 1 as ProgramBuildInfoFileId)] = toBuilderStateFileInfo(fileInfo));
         const fileNamesList = buildInfo.program?.fileIdsList?.map(fileIdsListId => fileIdsListId.map(toFileName));
@@ -280,7 +240,7 @@ interface Symbol {
             size: getBuildInfoText({ ...buildInfo, version }).length,
         };
         // For now its just JSON.stringify
-        originalWriteFile.call(sys, `${buildInfoPath}.readable.baseline.txt`, JSON.stringify(result, /*replacer*/ undefined, 2));
+        sys.writeFile(`${buildInfoPath}.readable.baseline.txt`, JSON.stringify(result, /*replacer*/ undefined, 2));
 
         function toFileName(fileId: ProgramBuildInfoFileId) {
             return buildInfo.program!.fileNames[fileId - 1];
@@ -306,16 +266,15 @@ interface Symbol {
 
     export function baselineBuildInfo(
         options: CompilerOptions,
-        sys: System & { writtenFiles: ReadonlyCollection<Path>; },
+        sys: TscCompileSystem | tscWatch.WatchedSystem,
         originalReadCall?: System["readFile"],
-        originalWriteFile?: System["writeFile"],
     ) {
         const buildInfoPath = getTsBuildInfoEmitOutputFilePath(options);
-        if (!buildInfoPath || !sys.writtenFiles.has(toPathWithSystem(sys, buildInfoPath))) return;
+        if (!buildInfoPath || !sys.writtenFiles!.has(toPathWithSystem(sys, buildInfoPath))) return;
         if (!sys.fileExists(buildInfoPath)) return;
 
         const buildInfo = getBuildInfo((originalReadCall || sys.readFile).call(sys, buildInfoPath, "utf8")!);
-        generateBuildInfoProgramBaseline(sys, originalWriteFile || sys.writeFile, buildInfoPath, buildInfo);
+        generateBuildInfoProgramBaseline(sys, buildInfoPath, buildInfo);
 
         if (!outFile(options)) return;
         const { jsFilePath, declarationFilePath } = getOutputPathsForBundle(options, /*forceDts*/ false);
@@ -328,136 +287,173 @@ interface Symbol {
         generateBundleFileSectionInfo(sys, originalReadCall || sys.readFile, baselineRecorder, bundle.dts, declarationFilePath);
         baselineRecorder.Close();
         const text = baselineRecorder.lines.join("\r\n");
-        (originalWriteFile || sys.writeFile).call(sys, `${buildInfoPath}.baseline.txt`, text);
+        sys.writeFile(`${buildInfoPath}.baseline.txt`, text);
     }
-
-    interface VerifyTscEditCorrectnessInput {
+    interface VerifyTscEditDiscrepanciesInput {
+        index: number;
         scenario: TestTscCompile["scenario"];
+        subScenario: TestTscCompile["subScenario"];
+        baselines: string[] | undefined;
         commandLineArgs: TestTscCompile["commandLineArgs"];
         modifyFs: TestTscCompile["modifyFs"];
         editFs: TestTscEdit["modifyFs"];
-        tick: () => void;
         baseFs: vfs.FileSystem;
         newSys: TscCompileSystem;
-        cleanBuildDiscrepancies: TestTscEdit["cleanBuildDiscrepancies"];
+        discrepancyExplanation: TestTscEdit["discrepancyExplanation"];
     }
-    /** Verify that emit is same as clean build vs building after edit */
-    function verifyTscEditCorrectness(input: () => VerifyTscEditCorrectnessInput, index: number, subScenario: TestTscCompile["subScenario"]) {
-        it(`Verify emit output file text is same when built clean for incremental edit scenario at:: ${index} ${subScenario}`, () => {
-            const {
-                scenario, commandLineArgs, cleanBuildDiscrepancies,
-                modifyFs, editFs,
-                tick, baseFs, newSys
-            } = input();
-            const sys = testTscCompile({
-                scenario,
-                subScenario,
-                fs: () => baseFs.makeReadonly(),
-                commandLineArgs,
-                modifyFs: fs => {
-                    tick();
-                    if (modifyFs) modifyFs(fs);
-                    editFs(fs);
-                },
-                disableUseFileVersionAsSignature: true,
-            });
-            const discrepancies = cleanBuildDiscrepancies?.();
-            for (const outputFile of arrayFrom(sys.writtenFiles.keys())) {
-                const cleanBuildText = sys.readFile(outputFile);
-                const incrementalBuildText = newSys.readFile(outputFile);
-                const descrepancyInClean = discrepancies?.get(outputFile);
-                if (isBuildInfoFile(outputFile)) {
-                    // Check only presence and absence and not text as we will do that for readable baseline
-                    assert.isTrue(sys.fileExists(`${outputFile}.readable.baseline.txt`), `Readable baseline should be present in clean build:: File:: ${outputFile}`);
-                    assert.isTrue(newSys.fileExists(`${outputFile}.readable.baseline.txt`), `Readable baseline should be present in incremental build:: File:: ${outputFile}`);
-                    if (descrepancyInClean === undefined) {
-                        verifyPresenceAbsence(incrementalBuildText, cleanBuildText, `Incremental and clean tsbuildinfo file presence should match:: File:: ${outputFile}`);
-                    }
-                    else {
-                        verifyTextEqual(incrementalBuildText, cleanBuildText, descrepancyInClean, `File: ${outputFile}`);
-                    }
-                }
-                else if (!fileExtensionIs(outputFile, ".tsbuildinfo.readable.baseline.txt")) {
-                    verifyTextEqual(incrementalBuildText, cleanBuildText, descrepancyInClean, `File: ${outputFile}`);
-                }
-                else if (incrementalBuildText !== cleanBuildText) {
-                    // Verify build info without affectedFilesPendingEmit
-                    const { buildInfo: incrementalBuildInfo, readableBuildInfo: incrementalReadableBuildInfo } = getBuildInfoForIncrementalCorrectnessCheck(incrementalBuildText);
-                    const { buildInfo: cleanBuildInfo, readableBuildInfo: cleanReadableBuildInfo } = getBuildInfoForIncrementalCorrectnessCheck(cleanBuildText);
-                    verifyTextEqual(incrementalBuildInfo, cleanBuildInfo, descrepancyInClean, `TsBuild info text without affectedFilesPendingEmit ${subScenario}:: ${outputFile}::\nIncremental buildInfoText:: ${incrementalBuildText}\nClean buildInfoText:: ${cleanBuildText}`);
-                    if (descrepancyInClean === undefined) {
-                        // Verify file info sigantures
-                        verifyMapLike(
-                            incrementalReadableBuildInfo?.program?.fileInfos,
-                            cleanReadableBuildInfo?.program?.fileInfos,
-                            (key, incrementalFileInfo, cleanFileInfo) => {
-                                if (incrementalFileInfo.signature !== cleanFileInfo.signature && incrementalFileInfo.signature !== incrementalFileInfo.version) {
-                                    assert.fail(`Incremental signature should either be dts signature or file version for File:: ${key}:: Incremental:: ${JSON.stringify(incrementalFileInfo)}, Clean:: ${JSON.stringify(cleanFileInfo)}}`);
-                                }
-                            },
-                            `FileInfos:: File:: ${outputFile}`
-                        );
-                        // Verify exportedModulesMap
-                        verifyMapLike(
-                            incrementalReadableBuildInfo?.program?.exportedModulesMap,
-                            cleanReadableBuildInfo?.program?.exportedModulesMap,
-                            (key, incrementalReferenceSet, cleanReferenceSet) => {
-                                if (!arrayIsEqualTo(incrementalReferenceSet, cleanReferenceSet) && !arrayIsEqualTo(incrementalReferenceSet, incrementalReadableBuildInfo!.program!.referencedMap![key])) {
-                                    assert.fail(`Incremental Reference set should either be from dts or files reference map for File:: ${key}:: Incremental:: ${JSON.stringify(incrementalReferenceSet)}, Clean:: ${JSON.stringify(cleanReferenceSet)}, referenceMap:: ${JSON.stringify(incrementalReadableBuildInfo!.program!.referencedMap![key])}}`);
-                                }
-                            },
-                            `exportedModulesMap:: File:: ${outputFile}`
-                        );
-                        // Verify that incrementally pending affected file emit are in clean build since clean build can contain more files compared to incremental depending of noEmitOnError option
-                        if (incrementalReadableBuildInfo?.program?.affectedFilesPendingEmit) {
-                            assert.isDefined(cleanReadableBuildInfo?.program?.affectedFilesPendingEmit, `Incremental build contains affectedFilesPendingEmit, clean build should also have it: ${outputFile}::\nIncremental buildInfoText:: ${incrementalBuildText}\nClean buildInfoText:: ${cleanBuildText}`);
-                            let expectedIndex = 0;
-                            incrementalReadableBuildInfo.program.affectedFilesPendingEmit.forEach(([actualFile]) => {
-                                expectedIndex = findIndex(cleanReadableBuildInfo!.program!.affectedFilesPendingEmit!, ([expectedFile]) => actualFile === expectedFile, expectedIndex);
-                                assert.notEqual(expectedIndex, -1, `Incremental build contains ${actualFile} file as pending emit, clean build should also have it: ${outputFile}::\nIncremental buildInfoText:: ${incrementalBuildText}\nClean buildInfoText:: ${cleanBuildText}`);
-                                expectedIndex++;
-                            });
-                        }
-                    }
-                }
-            }
-
-            function verifyTextEqual(incrementalText: string | undefined, cleanText: string | undefined, descrepancyInClean: CleanBuildDescrepancy | undefined, message: string) {
-                if (descrepancyInClean === undefined) {
-                    assert.equal(incrementalText, cleanText, message);
-                    return;
-                }
-                switch (descrepancyInClean) {
-                    case CleanBuildDescrepancy.CleanFileTextDifferent:
-                        assert.isDefined(incrementalText, `Incremental file should be present:: ${message}`);
-                        assert.isDefined(cleanText, `Clean file should be present present:: ${message}`);
-                        assert.notEqual(incrementalText, cleanText, message);
-                        return;
-                    case CleanBuildDescrepancy.CleanFilePresent:
-                        assert.isUndefined(incrementalText, `Incremental file should be absent:: ${message}`);
-                        assert.isDefined(cleanText, `Clean file should be present:: ${message}`);
-                        return;
-                    default:
-                        Debug.assertNever(descrepancyInClean);
-                }
-            }
-
-            function verifyMapLike<T>(incremental: MapLike<T> | undefined, clean: MapLike<T> | undefined, verifyValue: (key: string, incrementalValue: T, cleanValue: T) => void, message: string) {
-                verifyPresenceAbsence(incremental, clean, `Incremental and clean presence should match:: ${message}`);
-                if (!incremental) return;
-                const incrementalMap = new Map(getEntries(incremental));
-                const cleanMap = new Map(getEntries(clean!));
-                assert.equal(incrementalMap.size, cleanMap.size, `Incremental and clean size of map should match:: ${message}, Incremental keys: ${arrayFrom(incrementalMap.keys())} Clean: ${arrayFrom(cleanMap.keys())}${TestFSWithWatch.getDiffInKeys(incrementalMap, arrayFrom(cleanMap.keys()))}`);
-                cleanMap.forEach((cleanValue, key) => {
-                    assert.isTrue(incrementalMap.has(key), `Expected to contain ${key} in incremental map:: ${message}, Incremental keys: ${arrayFrom(incrementalMap.keys())}`);
-                    verifyValue(key, incrementalMap.get(key)!, cleanValue);
-                });
-            }
+    function verifyTscEditDiscrepancies({
+        index, scenario, subScenario, commandLineArgs,
+        discrepancyExplanation, baselines,
+        modifyFs, editFs, baseFs, newSys
+    }: VerifyTscEditDiscrepanciesInput): string[] | undefined {
+        const sys = testTscCompile({
+            scenario,
+            subScenario,
+            fs: () => baseFs.makeReadonly(),
+            commandLineArgs,
+            modifyFs: fs => {
+                if (modifyFs) modifyFs(fs);
+                editFs(fs);
+            },
+            disableUseFileVersionAsSignature: true,
         });
-    }
+        let headerAdded = false;
+        for (const outputFile of arrayFrom(sys.writtenFiles.keys())) {
+            const cleanBuildText = sys.readFile(outputFile);
+            const incrementalBuildText = newSys.readFile(outputFile);
+            if (isBuildInfoFile(outputFile)) {
+                // Check only presence and absence and not text as we will do that for readable baseline
+                if (!sys.fileExists(`${outputFile}.readable.baseline.txt`)) addBaseline(`Readable baseline not present in clean build:: File:: ${outputFile}`);
+                if (!newSys.fileExists(`${outputFile}.readable.baseline.txt`)) addBaseline(`Readable baseline not present in incremental build:: File:: ${outputFile}`);
+                verifyPresenceAbsence(incrementalBuildText, cleanBuildText, `Incremental and clean tsbuildinfo file presence differs:: File:: ${outputFile}`);
+            }
+            else if (!fileExtensionIs(outputFile, ".tsbuildinfo.readable.baseline.txt")) {
+                verifyTextEqual(incrementalBuildText, cleanBuildText, `File: ${outputFile}`);
+            }
+            else if (incrementalBuildText !== cleanBuildText) {
+                // Verify build info without affectedFilesPendingEmit
+                const { buildInfo: incrementalBuildInfo, readableBuildInfo: incrementalReadableBuildInfo } = getBuildInfoForIncrementalCorrectnessCheck(incrementalBuildText);
+                const { buildInfo: cleanBuildInfo, readableBuildInfo: cleanReadableBuildInfo } = getBuildInfoForIncrementalCorrectnessCheck(cleanBuildText);
+                verifyTextEqual(incrementalBuildInfo, cleanBuildInfo, `TsBuild info text without affectedFilesPendingEmit:: ${outputFile}::`);
+                // Verify file info sigantures
+                verifyMapLike(
+                    incrementalReadableBuildInfo?.program?.fileInfos,
+                    cleanReadableBuildInfo?.program?.fileInfos,
+                    (key, incrementalFileInfo, cleanFileInfo) => {
+                        if (incrementalFileInfo.signature !== cleanFileInfo.signature && incrementalFileInfo.signature !== incrementalFileInfo.version) {
+                            return [
+                                `Incremental signature is neither dts signature nor file version for File:: ${key}`,
+                                `Incremental:: ${JSON.stringify(incrementalFileInfo, /*replacer*/ undefined, 2)}`,
+                                `Clean:: ${JSON.stringify(cleanFileInfo, /*replacer*/ undefined, 2)}`
+                            ];
+                        }
+                    },
+                    `FileInfos:: File:: ${outputFile}`
+                );
+                // Verify exportedModulesMap
+                verifyMapLike(
+                    incrementalReadableBuildInfo?.program?.exportedModulesMap,
+                    cleanReadableBuildInfo?.program?.exportedModulesMap,
+                    (key, incrementalReferenceSet, cleanReferenceSet) => {
+                        if (!arrayIsEqualTo(incrementalReferenceSet, cleanReferenceSet) && !arrayIsEqualTo(incrementalReferenceSet, incrementalReadableBuildInfo!.program!.referencedMap![key])) {
+                            return [
+                                `Incremental Reference set is neither from dts nor files reference map for File:: ${key}::`,
+                                `Incremental:: ${JSON.stringify(incrementalReferenceSet, /*replacer*/ undefined, 2)}`,
+                                `Clean:: ${JSON.stringify(cleanReferenceSet, /*replacer*/ undefined, 2)}`,
+                                `IncrementalReferenceMap:: ${JSON.stringify(incrementalReadableBuildInfo!.program!.referencedMap![key], /*replacer*/ undefined, 2)}`,
+                                `CleanReferenceMap:: ${JSON.stringify(cleanReadableBuildInfo!.program!.referencedMap![key], /*replacer*/ undefined, 2)}`,
+                            ];
+                        }
+                    },
+                    `exportedModulesMap:: File:: ${outputFile}`
+                );
+                // Verify that incrementally pending affected file emit are in clean build since clean build can contain more files compared to incremental depending of noEmitOnError option
+                if (incrementalReadableBuildInfo?.program?.affectedFilesPendingEmit) {
+                    if (cleanReadableBuildInfo?.program?.affectedFilesPendingEmit === undefined) {
+                        addBaseline(
+                            `Incremental build contains affectedFilesPendingEmit, clean build does not have it: ${outputFile}::`,
+                            `Incremental buildInfoText:: ${incrementalBuildText}`,
+                            `Clean buildInfoText:: ${cleanBuildText}`
+                        );
+                    }
+                    let expectedIndex = 0;
+                    incrementalReadableBuildInfo.program.affectedFilesPendingEmit.forEach(([actualFile]) => {
+                        expectedIndex = findIndex(cleanReadableBuildInfo!.program!.affectedFilesPendingEmit!, ([expectedFile]) => actualFile === expectedFile, expectedIndex);
+                        if (expectedIndex === -1) {
+                            addBaseline(
+                                `Incremental build contains ${actualFile} file as pending emit, clean build does not have it: ${outputFile}::`,
+                                `Incremental buildInfoText:: ${incrementalBuildText}`,
+                                `Clean buildInfoText:: ${cleanBuildText}`
+                            );
+                        }
+                        expectedIndex++;
+                    });
+                }
+            }
+        }
+        if (!headerAdded && discrepancyExplanation) addBaseline("*** Supplied discrepancy explanation but didnt file any difference");
+        return baselines;
 
-    function verifyPresenceAbsence<T>(actual: T | undefined, expected: T | undefined, message: string) {
-        (expected !== undefined ? assert.isDefined : assert.isUndefined)(actual, message);
+        function verifyTextEqual(incrementalText: string | undefined, cleanText: string | undefined, message: string) {
+            if (incrementalText !== cleanText) writeNotEqual(incrementalText, cleanText, message);
+        }
+
+        function verifyMapLike<T>(incremental: MapLike<T> | undefined, clean: MapLike<T> | undefined, verifyValue: (key: string, incrementalValue: T, cleanValue: T) => string[] | undefined, message: string) {
+            verifyPresenceAbsence(incremental, clean, `Incremental and clean do not match:: ${message}`);
+            if (!incremental || !clean) return;
+            const incrementalMap = new Map(getEntries(incremental));
+            const cleanMap = new Map(getEntries(clean));
+            if (incrementalMap.size !== cleanMap.size) {
+                addBaseline(
+                    `Incremental and clean size of maps do not match:: ${message}`,
+                    `Incremental: ${JSON.stringify(incremental, /*replacer*/ undefined, 2)}`,
+                    `Clean: ${JSON.stringify(clean, /*replacer*/ undefined, 2)}`,
+                );
+                return;
+            }
+            cleanMap.forEach((cleanValue, key) => {
+                const incrementalValue = incrementalMap.get(key);
+                if (!incrementalValue) {
+                    addBaseline(
+                        `Incremental does not contain ${key} which is present in clean:: ${message}`,
+                        `Incremental: ${JSON.stringify(incremental, /*replacer*/ undefined, 2)}`,
+                        `Clean: ${JSON.stringify(clean, /*replacer*/ undefined, 2)}`,
+                    );
+                }
+                else {
+                    const result = verifyValue(key, incrementalMap.get(key)!, cleanValue);
+                    if (result) addBaseline(...result);
+                }
+            });
+        }
+
+        function verifyPresenceAbsence<T>(actual: T | undefined, expected: T | undefined, message: string) {
+            if (expected === undefined) {
+                if (actual === undefined) return;
+            }
+            else {
+                if (actual !== undefined) return;
+            }
+            writeNotEqual(actual, expected, message);
+        }
+
+        function writeNotEqual<T>(actual: T | undefined, expected: T | undefined, message: string) {
+            addBaseline(
+                message,
+                "CleanBuild:",
+                isString(expected) ? expected : JSON.stringify(expected),
+                "IncrementalBuild:",
+                isString(actual) ? actual : JSON.stringify(actual),
+            );
+        }
+
+        function addBaseline(...text: string[]) {
+            if (!baselines || !headerAdded) {
+                (baselines ||= []).push(`${index}:: ${subScenario}`, ...(discrepancyExplanation?.()|| ["*** Needs explanation"]));
+                headerAdded = true;
+            }
+            baselines.push(...text);
+        }
     }
 
     function getBuildInfoForIncrementalCorrectnessCheck(text: string | undefined): {
@@ -467,7 +463,7 @@ interface Symbol {
         if (!text) return { buildInfo: text };
         const readableBuildInfo = JSON.parse(text) as ReadableBuildInfo;
         let sanitizedFileInfos: MapLike<BuilderState.FileInfo> | undefined;
-        if (readableBuildInfo.program) {
+        if (readableBuildInfo.program?.fileInfos) {
             sanitizedFileInfos = {};
             for (const id in readableBuildInfo.program.fileInfos) {
                 if (hasProperty(readableBuildInfo.program.fileInfos, id)) {
@@ -503,51 +499,35 @@ interface Symbol {
         modifyFs: (fs: vfs.FileSystem) => void;
         subScenario: string;
         commandLineArgs?: readonly string[];
-        cleanBuildDiscrepancies?: () => ESMap<string, CleanBuildDescrepancy>;
+        /** An array of lines to be printed in order when a discrepancy is detected */
+        discrepancyExplanation?: () => readonly string[];
     }
 
-    export interface VerifyTscWithEditsInput extends VerifyTscWithEditsWorkerInput {
-        baselineIncremental?: boolean;
-    }
-    export interface VerifyTscWithEditsWorkerInput extends TestTscCompile {
+    export interface VerifyTscWithEditsInput extends TestTscCompile {
         edits: TestTscEdit[];
     }
 
     /**
      * Verify non watch tsc invokcation after each edit
      */
-    export function verifyTscWithEdits(input: VerifyTscWithEditsInput) {
-        verifyTscWithEditsWorker(input);
-        if (input.baselineIncremental) {
-            verifyTscWithEditsWorker({
-                ...input,
-                subScenario: `${input.subScenario} with incremental`,
-                commandLineArgs: [...input.commandLineArgs, "--incremental"],
-            });
-        }
-    }
-    function verifyTscWithEditsWorker({
+    export function verifyTscWithEdits({
         subScenario, fs, scenario, commandLineArgs,
         baselineSourceMap, modifyFs, baselineReadFileCalls, baselinePrograms,
         edits
-    }: VerifyTscWithEditsWorkerInput) {
+    }: VerifyTscWithEditsInput) {
         describe(`tsc ${commandLineArgs.join(" ")} ${scenario}:: ${subScenario} serializedEdits`, () => {
-            let tick: () => void;
             let sys: TscCompileSystem;
             let baseFs: vfs.FileSystem;
             let editsSys: TscCompileSystem[];
             before(() => {
                 Debug.assert(!!edits.length, `${scenario}/${subScenario}:: No incremental scenarios, you probably want to use verifyTsc instead.`);
-                ({ fs: baseFs, tick } = getFsWithTime(fs()));
+                baseFs = fs().makeReadonly();
                 sys = testTscCompile({
                     scenario,
                     subScenario,
-                    fs: () => baseFs.makeReadonly(),
+                    fs: () => baseFs,
                     commandLineArgs,
-                    modifyFs: fs => {
-                        if (modifyFs) modifyFs(fs);
-                        tick();
-                    },
+                    modifyFs,
                     baselineSourceMap,
                     baselineReadFileCalls,
                     baselinePrograms
@@ -556,18 +536,13 @@ interface Symbol {
                     { modifyFs, subScenario: editScenario, commandLineArgs: editCommandLineArgs },
                     index
                 ) => {
-                    tick();
                     (editsSys || (editsSys = [])).push(testTscCompile({
                         scenario,
                         subScenario: editScenario || subScenario,
                         diffWithInitial: true,
                         fs: () => index === 0 ? sys.vfs : editsSys[index - 1].vfs,
                         commandLineArgs: editCommandLineArgs || commandLineArgs,
-                        modifyFs: fs => {
-                            tick();
-                            modifyFs(fs);
-                            tick();
-                        },
+                        modifyFs,
                         baselineSourceMap,
                         baselineReadFileCalls,
                         baselinePrograms
@@ -577,39 +552,45 @@ interface Symbol {
             after(() => {
                 baseFs = undefined!;
                 sys = undefined!;
-                tick = undefined!;
                 editsSys = undefined!;
             });
-            describe("tsc invocation after edit", () => {
-                verifyTscBaseline(() => ({
-                    baseLine: () => {
-                        const { file, text } = sys.baseLine();
-                        const texts: string[] = [text];
-                        editsSys.forEach((sys, index) => {
-                            const incrementalScenario = edits[index];
-                            texts.push("");
-                            texts.push(`Change:: ${incrementalScenario.subScenario}`);
-                            texts.push(sys.baseLine().text);
-                        });
-                        return { file, text: texts.join("\r\n") };
-                    }
-                }));
-            });
-            describe("tsc invocation after edit and clean build correctness", () => {
-                edits.forEach(({ commandLineArgs: editCommandLineArgs, subScenario, cleanBuildDiscrepancies }, index) => verifyTscEditCorrectness(() => ({
-                    scenario,
-                    baseFs,
-                    newSys: editsSys[index],
-                    commandLineArgs: editCommandLineArgs || commandLineArgs,
-                    cleanBuildDiscrepancies,
-                    editFs: fs => {
-                        for (let i = 0; i <= index; i++) {
-                            edits[i].modifyFs(fs);
-                        }
-                    },
-                    modifyFs,
-                    tick
-                }), index, subScenario));
+            verifyTscBaseline(() => ({
+                baseLine: () => {
+                    const { file, text } = sys.baseLine();
+                    const texts: string[] = [text];
+                    editsSys.forEach((sys, index) => {
+                        const incrementalScenario = edits[index];
+                        texts.push("");
+                        texts.push(`Change:: ${incrementalScenario.subScenario}`);
+                        texts.push(sys.baseLine().text);
+                    });
+                    return { file, text: texts.join("\r\n") };
+                }
+            }));
+            it("tsc invocation after edit and clean build correctness", () => {
+                let baselines: string[] | undefined;
+                for (let index = 0; index < edits.length; index++) {
+                    baselines = verifyTscEditDiscrepancies({
+                        index,
+                        scenario,
+                        subScenario: edits[index].subScenario,
+                        baselines,
+                        baseFs,
+                        newSys: editsSys[index],
+                        commandLineArgs: edits[index].commandLineArgs || commandLineArgs,
+                        discrepancyExplanation: edits[index].discrepancyExplanation,
+                        editFs: fs => {
+                            for (let i = 0; i <= index; i++) {
+                                edits[i].modifyFs(fs);
+                            }
+                        },
+                        modifyFs
+                    });
+                }
+                Harness.Baseline.runBaseline(
+                    `${isBuild(commandLineArgs) ? "tsbuild" : "tsc"}/${scenario}/${subScenario.split(" ").join("-")}-discrepancies.js`,
+                    baselines ? baselines.join("\r\n") : null // eslint-disable-line no-null/no-null
+                );
             });
         });
     }

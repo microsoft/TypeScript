@@ -170,7 +170,7 @@ namespace ts.Completions {
     const enum GlobalsSearch { Continue, Success, Fail }
 
     interface ModuleSpecifierResolutioContext {
-        tryResolve: (exportInfo: readonly SymbolExportInfo[], isFromAmbientModule: boolean) => ModuleSpecifierResolutionResult;
+        tryResolve: (exportInfo: readonly SymbolExportInfo[], symbolName: string, isFromAmbientModule: boolean) => ModuleSpecifierResolutionResult;
         resolvedAny: () => boolean;
         skippedAny: () => boolean;
         resolvedBeyondLimit: () => boolean;
@@ -186,8 +186,10 @@ namespace ts.Completions {
         host: LanguageServiceHost,
         program: Program,
         sourceFile: SourceFile,
+        position: number,
         preferences: UserPreferences,
         isForImportStatementCompletion: boolean,
+        isValidTypeOnlyUseSite: boolean,
         cb: (context: ModuleSpecifierResolutioContext) => TReturn,
     ): TReturn {
         const start = timestamp();
@@ -217,9 +219,9 @@ namespace ts.Completions {
         host.log?.(`${logPrefix}: ${timestamp() - start}`);
         return result;
 
-        function tryResolve(exportInfo: readonly SymbolExportInfo[], isFromAmbientModule: boolean): ModuleSpecifierResolutionResult {
+        function tryResolve(exportInfo: readonly SymbolExportInfo[], symbolName: string, isFromAmbientModule: boolean): ModuleSpecifierResolutionResult {
             if (isFromAmbientModule) {
-                const result = codefix.getModuleSpecifierForBestExportInfo(exportInfo, sourceFile, program, host, preferences);
+                const result = codefix.getModuleSpecifierForBestExportInfo(exportInfo, symbolName, position, isValidTypeOnlyUseSite, sourceFile, program, host, preferences);
                 if (result) {
                     ambientCount++;
                 }
@@ -228,7 +230,7 @@ namespace ts.Completions {
             const shouldResolveModuleSpecifier = needsFullResolution || preferences.allowIncompleteCompletions && resolvedCount < moduleSpecifierResolutionLimit;
             const shouldGetModuleSpecifierFromCache = !shouldResolveModuleSpecifier && preferences.allowIncompleteCompletions && cacheAttemptCount < moduleSpecifierResolutionCacheAttemptLimit;
             const result = (shouldResolveModuleSpecifier || shouldGetModuleSpecifierFromCache)
-                ? codefix.getModuleSpecifierForBestExportInfo(exportInfo, sourceFile, program, host, preferences, packageJsonImportFilter, shouldGetModuleSpecifierFromCache)
+                ? codefix.getModuleSpecifierForBestExportInfo(exportInfo, symbolName, position, isValidTypeOnlyUseSite, sourceFile, program, host, preferences, packageJsonImportFilter, shouldGetModuleSpecifierFromCache)
                 : undefined;
 
             if (!shouldResolveModuleSpecifier && !shouldGetModuleSpecifierFromCache || shouldGetModuleSpecifierFromCache && !result) {
@@ -371,8 +373,10 @@ namespace ts.Completions {
             host,
             program,
             file,
+            location.getStart(),
             preferences,
             /*isForImportStatementCompletion*/ false,
+            isValidTypeOnlyAliasUseSite(location),
             context => {
                 const entries = mapDefined(previousResponse.entries, entry => {
                     if (!entry.hasAction || !entry.source || !entry.data || completionEntryDataIsResolved(entry.data)) {
@@ -387,7 +391,7 @@ namespace ts.Completions {
                     const { origin } = Debug.checkDefined(getAutoImportSymbolFromCompletionEntryData(entry.name, entry.data, program, host));
                     const info = exportMap.get(file.path, entry.data.exportMapKey);
 
-                    const result = info && context.tryResolve(info, !isExternalModuleNameRelative(stripQuotes(origin.moduleSymbol.name)));
+                    const result = info && context.tryResolve(info, entry.name, !isExternalModuleNameRelative(stripQuotes(origin.moduleSymbol.name)));
                     if (result === "skipped") return entry;
                     if (!result || result === "failed") {
                         host.log?.(`Unexpected failure resolving auto import for '${entry.name}' from '${entry.source}'`);
@@ -1218,18 +1222,19 @@ namespace ts.Completions {
     function createSnippetPrinter(
         printerOptions: PrinterOptions,
     ) {
+        let escapes: TextChange[] | undefined;
         const baseWriter = textChanges.createWriter(getNewLineCharacter(printerOptions));
         const printer = createPrinter(printerOptions, baseWriter);
         const writer: EmitTextWriter = {
             ...baseWriter,
-            write: s => baseWriter.write(escapeSnippetText(s)),
+            write: s => escapingWrite(s, () => baseWriter.write(s)),
             nonEscapingWrite: baseWriter.write,
-            writeLiteral: s => baseWriter.writeLiteral(escapeSnippetText(s)),
-            writeStringLiteral: s => baseWriter.writeStringLiteral(escapeSnippetText(s)),
-            writeSymbol: (s, symbol) => baseWriter.writeSymbol(escapeSnippetText(s), symbol),
-            writeParameter: s => baseWriter.writeParameter(escapeSnippetText(s)),
-            writeComment: s => baseWriter.writeComment(escapeSnippetText(s)),
-            writeProperty: s => baseWriter.writeProperty(escapeSnippetText(s)),
+            writeLiteral: s => escapingWrite(s, () => baseWriter.writeLiteral(s)),
+            writeStringLiteral: s => escapingWrite(s, () => baseWriter.writeStringLiteral(s)),
+            writeSymbol: (s, symbol) => escapingWrite(s, () => baseWriter.writeSymbol(s, symbol)),
+            writeParameter: s => escapingWrite(s, () => baseWriter.writeParameter(s)),
+            writeComment: s => escapingWrite(s, () => baseWriter.writeComment(s)),
+            writeProperty: s => escapingWrite(s, () => baseWriter.writeProperty(s)),
         };
 
         return {
@@ -1237,12 +1242,39 @@ namespace ts.Completions {
             printAndFormatSnippetList,
         };
 
+        // The formatter/scanner will have issues with snippet-escaped text,
+        // so instead of writing the escaped text directly to the writer,
+        // generate a set of changes that can be applied to the unescaped text
+        // to escape it post-formatting.
+        function escapingWrite(s: string, write: () => void) {
+            const escaped = escapeSnippetText(s);
+            if (escaped !== s) {
+                const start = baseWriter.getTextPos();
+                write();
+                const end = baseWriter.getTextPos();
+                escapes = append(escapes ||= [], { newText: escaped, span: { start, length: end - start } });
+            }
+            else {
+                write();
+            }
+        }
+
         /* Snippet-escaping version of `printer.printList`. */
         function printSnippetList(
             format: ListFormat,
             list: NodeArray<Node>,
             sourceFile: SourceFile | undefined,
         ): string {
+            const unescaped = printUnescapedSnippetList(format, list, sourceFile);
+            return escapes ? textChanges.applyChanges(unescaped, escapes) : unescaped;
+        }
+
+        function printUnescapedSnippetList(
+            format: ListFormat,
+            list: NodeArray<Node>,
+            sourceFile: SourceFile | undefined,
+        ): string {
+            escapes = undefined;
             writer.clear();
             printer.writeList(format, list, sourceFile, writer);
             return writer.getText();
@@ -1255,7 +1287,7 @@ namespace ts.Completions {
             formatContext: formatting.FormatContext,
         ): string {
             const syntheticFile = {
-                text: printSnippetList(
+                text: printUnescapedSnippetList(
                     format,
                     list,
                     sourceFile),
@@ -1275,7 +1307,11 @@ namespace ts.Completions {
                     /* delta */ 0,
                     { ...formatContext, options: formatOptions });
             });
-            return textChanges.applyChanges(syntheticFile.text, changes);
+
+            const allChanges = escapes
+                ? stableSort(concatenate(changes, escapes), (a, b) => compareTextSpans(a.span, b.span))
+                : changes;
+            return textChanges.applyChanges(syntheticFile.text, allChanges);
         }
     }
 
@@ -2419,7 +2455,7 @@ namespace ts.Completions {
                             moduleSymbol,
                             symbol: firstAccessibleSymbol,
                             targetFlags: skipAlias(firstAccessibleSymbol, typeChecker).flags,
-                        }], sourceFile, program, host, preferences) || {};
+                        }], firstAccessibleSymbol.name, position, isValidTypeOnlyAliasUseSite(location), sourceFile, program, host, preferences) || {};
 
                         if (moduleSpecifier) {
                             const origin: SymbolOriginInfoResolvedExport = {
@@ -2699,8 +2735,10 @@ namespace ts.Completions {
                 host,
                 program,
                 sourceFile,
+                position,
                 preferences,
                 !!importCompletionNode,
+                isValidTypeOnlyAliasUseSite(location),
                 context => {
                     exportInfo.search(
                         sourceFile.path,
@@ -2737,7 +2775,7 @@ namespace ts.Completions {
                             // N.B. in this resolution mode we always try to resolve module specifiers here,
                             // because we have to know now if it's going to fail so we can omit the completion
                             // from the list.
-                            const result = context.tryResolve(info, isFromAmbientModule) || {};
+                            const result = context.tryResolve(info, symbolName, isFromAmbientModule) || {};
                             if (result === "failed") return;
 
                             // If we skipped resolving module specifiers, our selection of which ExportInfo
