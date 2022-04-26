@@ -16,10 +16,10 @@ interface Thing2 {
 }
 
 type Thing3 = Thing1 & Thing2;
->Thing3 : Thing3
+>Thing3 : Thing1 & Thing2
 
 type Thing4 = Thing3 & string[];
->Thing4 : Thing4
+>Thing4 : Thing1 & Thing2 & string[]
 
 function f1(t: Thing3) {
 >f1 : (t: Thing3) => void

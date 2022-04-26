@@ -5,7 +5,7 @@ namespace JSX {
 }
 
 type DiscriminatorTrue = {
->DiscriminatorTrue : DiscriminatorTrue
+>DiscriminatorTrue : { disc: true; cb: (x: string) => void; }
 
     disc: true;
 >disc : true
@@ -17,7 +17,7 @@ type DiscriminatorTrue = {
 }
 
 type DiscriminatorFalse = {
->DiscriminatorFalse : DiscriminatorFalse
+>DiscriminatorFalse : { disc?: false | undefined; cb: (x: number) => void; }
 
     disc?: false;
 >disc : false | undefined
@@ -29,7 +29,7 @@ type DiscriminatorFalse = {
 }
 
 type Props = DiscriminatorTrue | DiscriminatorFalse;
->Props : Props
+>Props : DiscriminatorTrue | DiscriminatorFalse
 
 declare function Comp(props: DiscriminatorTrue | DiscriminatorFalse): JSX.Element;
 >Comp : (props: DiscriminatorTrue | DiscriminatorFalse) => JSX.Element

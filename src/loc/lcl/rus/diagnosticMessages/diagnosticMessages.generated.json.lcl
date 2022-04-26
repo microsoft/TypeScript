@@ -1511,6 +1511,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";All_declarations_of_0_must_have_identical_constraints_2838" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[All declarations of '{0}' must have identical constraints.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Все объявления "{0}" должны иметь одинаковые ограничения.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";All_declarations_of_0_must_have_identical_modifiers_2687" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[All declarations of '{0}' must have identical modifiers.]]></Val>
@@ -8183,6 +8192,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";List_of_file_name_suffixes_to_search_when_resolving_a_module_6931" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[List of file name suffixes to search when resolving a module.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Список суффиксов имен файлов для поиска при разрешении модуля.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";List_of_folders_to_include_type_definitions_from_6161" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[List of folders to include type definitions from.]]></Val>
@@ -13712,6 +13730,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";This_type_parameter_probably_needs_an_extends_object_constraint_2208" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[This type parameter probably needs an `extends object` constraint.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Возможно, для этого параметра типа требуется ограничение "extends object".]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Top_level_await_expressions_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_o_1378" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', or 'nodenext', and the 'target' option is set to 'es2017' or higher.]]></Val>
@@ -15070,6 +15097,15 @@
           <Val><![CDATA[Variadic element at position {0} in source does not match element at position {1} in target.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Элемент с переменным числом аргументов в позиции {0} в источнике не соответствует элементу в позиции {1} в целевом объекте.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Variance_annotations_are_only_supported_in_type_aliases_for_object_function_constructor_and_mapped_t_2637" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Variance annotations are only supported in type aliases for object, function, constructor, and mapped types.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Заметки вариантности поддерживаются только в псевдонимах типов для объектов, функций, конструкторов и сопоставленных типов.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

@@ -14,12 +14,12 @@ const d = 'd';
 // Type narrowing
 
 type A = { [a]: number; };
->A : A
+>A : { a: number; }
 >[a] : number
 >a : "a"
 
 type B = { [b]: string; };
->B : B
+>B : { b: string; }
 >[b] : string
 >b : "b"
 

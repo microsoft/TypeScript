@@ -55,6 +55,7 @@ interface Array<T> { length: number; [n: number]: T; }
     // "typeRoots": [],                                  /* Specify multiple folders that act like './node_modules/@types'. */
     // "types": [],                                      /* Specify type package names to be included without being referenced in a source file. */
     // "allowUmdGlobalAccess": true,                     /* Allow accessing UMD globals from modules. */
+    // "moduleSuffixes": [],                             /* List of file name suffixes to search when resolving a module. */
     // "resolveJsonModule": true,                        /* Enable importing .json files. */
     // "noResolve": true,                                /* Disallow 'import's, 'require's or '<reference>'s from expanding the number of files TypeScript should add to a project. */
 
@@ -172,8 +173,8 @@ Program files::
 No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
-/user/username/projects/myproject/file1.ts (used version)
-/user/username/projects/myproject/src/file2.ts (used version)
+/user/username/projects/myproject/file1.ts (computed .d.ts during emit)
+/user/username/projects/myproject/src/file2.ts (computed .d.ts during emit)
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:

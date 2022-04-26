@@ -232,8 +232,7 @@
           "start": 28,
           "length": 26
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -241,8 +240,7 @@
           "length": 11
         },
         "fileName": "/tests/cases/fourslash/findAllRefsParameterPropertyDeclaration2.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       }
     ]
   },
@@ -303,8 +301,7 @@
           "length": 11
         },
         "fileName": "/tests/cases/fourslash/findAllRefsParameterPropertyDeclaration2.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -388,8 +385,7 @@
           "start": 28,
           "length": 26
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -397,8 +393,7 @@
           "length": 11
         },
         "fileName": "/tests/cases/fourslash/findAllRefsParameterPropertyDeclaration2.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       }
     ]
   },
@@ -459,8 +454,7 @@
           "length": 11
         },
         "fileName": "/tests/cases/fourslash/findAllRefsParameterPropertyDeclaration2.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }

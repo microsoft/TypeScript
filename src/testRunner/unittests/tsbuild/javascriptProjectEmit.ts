@@ -88,7 +88,7 @@ namespace ts {
             commandLineArgs: ["-b", "/src"]
         });
 
-        verifyTscSerializedIncrementalEdits({
+        verifyTscWithEdits({
             scenario: "javascriptProjectEmit",
             subScenario: `modifies outfile js projects and concatenates them correctly`,
             fs: () => loadProjectFromFiles({
@@ -176,8 +176,8 @@ namespace ts {
                     }`,
             }, symbolLibContent),
             commandLineArgs: ["-b", "/src"],
-            incrementalScenarios: [{
-                buildKind: BuildKind.IncrementalDtsUnchanged,
+            edits: [{
+                subScenario: "incremental-declaration-doesnt-change",
                 modifyFs: fs => replaceText(fs, "/src/sub-project/index.js", "null", "undefined")
             }]
         });

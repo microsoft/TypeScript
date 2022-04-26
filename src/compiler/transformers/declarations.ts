@@ -1163,6 +1163,9 @@ namespace ts {
         }
 
         function transformTopLevelDeclaration(input: LateVisibilityPaintedStatement) {
+            if (lateMarkedStatements) {
+                while (orderedRemoveItem(lateMarkedStatements, input));
+            }
             if (shouldStripInternal(input)) return;
             switch (input.kind) {
                 case SyntaxKind.ImportEqualsDeclaration: {

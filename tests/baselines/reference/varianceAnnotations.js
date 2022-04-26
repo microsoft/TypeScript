@@ -160,6 +160,20 @@ declare const qq: ActionObject<{ type: "PLAY"; value: number }>;
 
 createMachine<{ type: "PLAY"; value: number } | { type: "RESET" }>(qq);  // Error
 
+// Repros from #48618
+
+let Anon = class <out T> {
+    foo(): InstanceType<(typeof Anon<T>)> {
+        return this;
+    }
+}
+
+let OuterC = class C<out T> {
+    foo(): C<T> {
+        return this;
+    }
+}
+
 
 //// [varianceAnnotations.js]
 "use strict";
@@ -186,6 +200,23 @@ var notString = pu; // Error
 var machine = createMachine({});
 interpret(machine);
 createMachine(qq); // Error
+// Repros from #48618
+var Anon = /** @class */ (function () {
+    function class_1() {
+    }
+    class_1.prototype.foo = function () {
+        return this;
+    };
+    return class_1;
+}());
+var OuterC = /** @class */ (function () {
+    function C() {
+    }
+    C.prototype.foo = function () {
+        return this;
+    };
+    return C;
+}());
 
 
 //// [varianceAnnotations.d.ts]
@@ -293,3 +324,13 @@ declare const qq: ActionObject<{
     type: "PLAY";
     value: number;
 }>;
+declare let Anon: {
+    new <out T>(): {
+        foo(): any;
+    };
+};
+declare let OuterC: {
+    new <out T>(): {
+        foo(): any;
+    };
+};

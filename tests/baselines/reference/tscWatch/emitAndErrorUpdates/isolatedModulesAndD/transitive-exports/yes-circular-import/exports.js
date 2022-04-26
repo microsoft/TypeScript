@@ -89,13 +89,13 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
-/user/username/projects/myproject/lib1/tools/tools.interface.ts (used version)
-/user/username/projects/myproject/lib1/tools/public.ts (used version)
-/user/username/projects/myproject/lib1/public.ts (used version)
-/user/username/projects/myproject/lib2/data2.ts (used version)
-/user/username/projects/myproject/lib2/data.ts (used version)
-/user/username/projects/myproject/lib2/public.ts (used version)
-/user/username/projects/myproject/app.ts (used version)
+/user/username/projects/myproject/lib1/tools/tools.interface.ts (computed .d.ts during emit)
+/user/username/projects/myproject/lib1/tools/public.ts (computed .d.ts during emit)
+/user/username/projects/myproject/lib1/public.ts (computed .d.ts during emit)
+/user/username/projects/myproject/lib2/data2.ts (computed .d.ts during emit)
+/user/username/projects/myproject/lib2/data.ts (computed .d.ts during emit)
+/user/username/projects/myproject/lib2/public.ts (computed .d.ts during emit)
+/user/username/projects/myproject/app.ts (computed .d.ts during emit)
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
@@ -322,12 +322,12 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/lib1/tools/tools.interface.ts (computed .d.ts)
-/user/username/projects/myproject/lib1/tools/public.ts (used version)
-/user/username/projects/myproject/lib1/public.ts (used version)
-/user/username/projects/myproject/lib2/data.ts (used version)
-/user/username/projects/myproject/lib2/data2.ts (used version)
-/user/username/projects/myproject/lib2/public.ts (used version)
-/user/username/projects/myproject/app.ts (used version)
+/user/username/projects/myproject/lib1/tools/public.ts (computed .d.ts during emit)
+/user/username/projects/myproject/lib1/public.ts (computed .d.ts during emit)
+/user/username/projects/myproject/lib2/data.ts (computed .d.ts during emit)
+/user/username/projects/myproject/lib2/public.ts (computed .d.ts during emit)
+/user/username/projects/myproject/app.ts (computed .d.ts during emit)
+/user/username/projects/myproject/lib2/data2.ts (computed .d.ts during emit)
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
@@ -412,12 +412,12 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/lib1/tools/tools.interface.ts (computed .d.ts)
-/user/username/projects/myproject/lib1/tools/public.ts (used version)
-/user/username/projects/myproject/lib1/public.ts (used version)
-/user/username/projects/myproject/lib2/data.ts (used version)
-/user/username/projects/myproject/lib2/data2.ts (used version)
-/user/username/projects/myproject/lib2/public.ts (used version)
-/user/username/projects/myproject/app.ts (used version)
+/user/username/projects/myproject/lib1/tools/public.ts (computed .d.ts during emit)
+/user/username/projects/myproject/lib1/public.ts (computed .d.ts during emit)
+/user/username/projects/myproject/lib2/data.ts (computed .d.ts during emit)
+/user/username/projects/myproject/lib2/public.ts (computed .d.ts during emit)
+/user/username/projects/myproject/app.ts (computed .d.ts during emit)
+/user/username/projects/myproject/lib2/data2.ts (computed .d.ts during emit)
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
@@ -508,12 +508,12 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/lib1/tools/tools.interface.ts (computed .d.ts)
-/user/username/projects/myproject/lib1/tools/public.ts (used version)
-/user/username/projects/myproject/lib1/public.ts (used version)
-/user/username/projects/myproject/lib2/data.ts (used version)
-/user/username/projects/myproject/lib2/data2.ts (used version)
-/user/username/projects/myproject/lib2/public.ts (used version)
-/user/username/projects/myproject/app.ts (used version)
+/user/username/projects/myproject/lib1/tools/public.ts (computed .d.ts during emit)
+/user/username/projects/myproject/lib1/public.ts (computed .d.ts during emit)
+/user/username/projects/myproject/lib2/data.ts (computed .d.ts during emit)
+/user/username/projects/myproject/lib2/public.ts (computed .d.ts during emit)
+/user/username/projects/myproject/app.ts (computed .d.ts during emit)
+/user/username/projects/myproject/lib2/data2.ts (computed .d.ts during emit)
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:

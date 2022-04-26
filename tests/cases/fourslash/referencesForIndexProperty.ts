@@ -3,13 +3,12 @@
 // References a class property using string index access
 
 ////class Foo {
-////    [|[|{| "isDefinition": true, "contextRangeIndex": 0 |}property|]: number;|]
-////    [|[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 2 |}method|](): void { }|]
+////    /*1*/property: number;
+////    /*2*/method(): void { }
 ////}
 ////
 ////var f: Foo;
-////f["[|property|]"];
-////f["[|method|]"];
+////f["/*3*/property"];
+////f["/*4*/method"];
 
-verify.singleReferenceGroup("(property) Foo.property: number", "property");
-verify.singleReferenceGroup("(method) Foo.method(): void", "method");
+verify.baselineFindAllReferences('1', '2', '3', '4');

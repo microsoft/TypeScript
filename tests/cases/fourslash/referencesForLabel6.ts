@@ -2,10 +2,9 @@
 
 // References to labels with close names
 
-////[|[|{| "contextRangeIndex": 0 |}labela|]: while (true) {
-////[|[|{| "contextRangeIndex": 2 |}labelb|]:     while (false) { [|break [|{| "contextRangeIndex": 4 |}labelb|];|] }|]
+/////*1*/labela: while (true) {
+/////*2*/labelb:     while (false) { /*3*/break /*4*/labelb; }
 ////            break labelc;
-////}|]
+////}
 
-verify.singleReferenceGroup("labela", "labela");
-verify.singleReferenceGroup("labelb", "labelb");
+verify.baselineFindAllReferences('1', '2', '3', '4');

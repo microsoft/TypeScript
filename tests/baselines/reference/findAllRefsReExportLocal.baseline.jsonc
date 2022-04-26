@@ -829,8 +829,7 @@
           "start": 0,
           "length": 6
         },
-        "isWriteAccess": false,
-        "isDefinition": true
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -842,8 +841,7 @@
           "start": 7,
           "length": 13
         },
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -855,8 +853,7 @@
           "start": 21,
           "length": 18
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   },
@@ -945,8 +942,7 @@
           "start": 0,
           "length": 27
         },
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -954,8 +950,7 @@
           "length": 1
         },
         "fileName": "/b.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   },
@@ -1044,8 +1039,7 @@
           "start": 21,
           "length": 18
         },
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       }
     ]
   },
@@ -1134,8 +1128,7 @@
           "start": 0,
           "length": 27
         },
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -1143,8 +1136,7 @@
           "length": 1
         },
         "fileName": "/b.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -1629,8 +1621,7 @@
           "start": 0,
           "length": 27
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -1638,8 +1629,7 @@
           "length": 1
         },
         "fileName": "/b.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   },
@@ -1696,8 +1686,7 @@
           "start": 0,
           "length": 6
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -1709,8 +1698,7 @@
           "start": 7,
           "length": 13
         },
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -1722,8 +1710,7 @@
           "start": 21,
           "length": 18
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   },
@@ -1812,8 +1799,7 @@
           "start": 21,
           "length": 18
         },
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       }
     ]
   },
@@ -1902,8 +1888,7 @@
           "start": 0,
           "length": 27
         },
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -1911,8 +1896,7 @@
           "length": 1
         },
         "fileName": "/b.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -2415,8 +2399,7 @@
           "start": 0,
           "length": 27
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -2424,8 +2407,7 @@
           "length": 1
         },
         "fileName": "/b.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   },
@@ -2514,8 +2496,7 @@
           "start": 21,
           "length": 18
         },
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       }
     ]
   }

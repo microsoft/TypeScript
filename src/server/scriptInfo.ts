@@ -501,7 +501,7 @@ namespace ts.server {
                 case 0:
                     return Errors.ThrowNoProject();
                 case 1:
-                    return ensureNotAutoImportProvider(this.containingProjects[0]);
+                    return ensurePrimaryProjectKind(this.containingProjects[0]);
                 default:
                     // If this file belongs to multiple projects, below is the order in which default project is used
                     // - for open script info, its default configured project during opening is default if info is part of it
@@ -536,7 +536,7 @@ namespace ts.server {
                             firstInferredProject = project;
                         }
                     }
-                    return ensureNotAutoImportProvider(defaultConfiguredProject ||
+                    return ensurePrimaryProjectKind(defaultConfiguredProject ||
                         firstNonSourceOfProjectReferenceRedirect ||
                         firstConfiguredProject ||
                         firstExternalProject ||
@@ -622,8 +622,10 @@ namespace ts.server {
         }
 
         /*@internal*/
-        isContainedByAutoImportProvider() {
-            return some(this.containingProjects, p => p.projectKind === ProjectKind.AutoImportProvider);
+        isContainedByBackgroundProject() {
+            return some(
+                this.containingProjects,
+                p => p.projectKind === ProjectKind.AutoImportProvider || p.projectKind === ProjectKind.Auxiliary);
         }
 
         /**
@@ -669,8 +671,13 @@ namespace ts.server {
         }
     }
 
-    function ensureNotAutoImportProvider(project: Project | undefined) {
-        if (!project || project.projectKind === ProjectKind.AutoImportProvider) {
+    /**
+     * Throws an error if `project` is an AutoImportProvider or AuxiliaryProject,
+     * which are used in the background by other Projects and should never be
+     * reported as the default project for a ScriptInfo.
+     */
+    function ensurePrimaryProjectKind(project: Project | undefined) {
+        if (!project || project.projectKind === ProjectKind.AutoImportProvider || project.projectKind === ProjectKind.Auxiliary) {
             return Errors.ThrowNoProject();
         }
         return project;

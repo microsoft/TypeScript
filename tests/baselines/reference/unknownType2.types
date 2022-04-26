@@ -9,7 +9,7 @@ type isTrue<T extends true> = T;
 >true : true
 
 type SomeResponse = 'yes' | 'no' | 'idk';
->SomeResponse : SomeResponse
+>SomeResponse : "yes" | "no" | "idk"
 
 let validate: (x: unknown) => SomeResponse = x => (x === 'yes' || x === 'no') ? x : 'idk'; // No error
 >validate : (x: unknown) => SomeResponse

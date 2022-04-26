@@ -169,6 +169,7 @@
         "unittests/tscWatch/watchEnvironment.ts",
         "unittests/tsserver/applyChangesToOpenFiles.ts",
         "unittests/tsserver/autoImportProvider.ts",
+        "unittests/tsserver/auxiliaryProject.ts",
         "unittests/tsserver/cachingFileSystemInformation.ts",
         "unittests/tsserver/cancellationToken.ts",
         "unittests/tsserver/compileOnSave.ts",

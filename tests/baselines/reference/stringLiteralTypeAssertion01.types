@@ -1,9 +1,9 @@
 === tests/cases/conformance/types/stringLiteral/stringLiteralTypeAssertion01.ts ===
 type S = "a" | "b";
->S : S
+>S : "a" | "b"
 
 type T = S[] | S;
->T : T
+>T : S | S[]
 
 var s: S;
 >s : S

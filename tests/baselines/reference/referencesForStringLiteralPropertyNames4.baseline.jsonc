@@ -157,8 +157,7 @@
           "start": 10,
           "length": 17
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -166,8 +165,7 @@
           "length": 12
         },
         "fileName": "/tests/cases/fourslash/referencesForStringLiteralPropertyNames4.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -175,8 +173,7 @@
           "length": 12
         },
         "fileName": "/tests/cases/fourslash/referencesForStringLiteralPropertyNames4.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       }
     ]
   }

@@ -2,10 +2,10 @@
 
 // References to a label outside function bounderies
 
-////[|[|{| "contextRangeIndex": 0 |}label|]: function foo(label) {
+/////*1*/label: function foo(label) {
 ////    while (true) {
-////        [|break [|{| "contextRangeIndex": 2 |}label|];|]
+////        /*2*/break /*3*/label;
 ////    }
-////}|]
+////}
 
-verify.singleReferenceGroup("label", "label");
+verify.baselineFindAllReferences('1', '2', '3');

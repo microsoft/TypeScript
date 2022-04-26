@@ -35,8 +35,7 @@
           "length": 4
         },
         "fileName": "/tests/cases/fourslash/foo.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -44,8 +43,7 @@
           "length": 4
         },
         "fileName": "/tests/cases/fourslash/foo.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -53,8 +51,7 @@
           "length": 4
         },
         "fileName": "/tests/cases/fourslash/baz.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
