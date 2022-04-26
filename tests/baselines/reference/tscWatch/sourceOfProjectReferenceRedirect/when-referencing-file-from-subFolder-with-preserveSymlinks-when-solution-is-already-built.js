@@ -60,7 +60,47 @@ export declare function bar(): void;
 
 
 //// [/user/username/projects/myproject/packages/B/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","./src/foo.ts","./src/bar/foo.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"4646078106-export function foo() { }","1045484683-export function bar() { }"],"options":{"composite":true,"outDir":"./lib","rootDir":"./src"},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,3,2]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","./src/foo.ts","./src/bar/foo.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"4646078106-export function foo() { }","signature":"-5677608893-export declare function foo(): void;\n"},{"version":"1045484683-export function bar() { }","signature":"-2904461644-export declare function bar(): void;\n"}],"options":{"composite":true,"outDir":"./lib","rootDir":"./src"},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,3,2]},"version":"FakeTSVersion"}
+
+//// [/user/username/projects/myproject/packages/B/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "program": {
+    "fileNames": [
+      "../../../../../../a/lib/lib.d.ts",
+      "./src/foo.ts",
+      "./src/bar/foo.ts"
+    ],
+    "fileInfos": {
+      "../../../../../../a/lib/lib.d.ts": {
+        "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+        "affectsGlobalScope": true
+      },
+      "./src/foo.ts": {
+        "version": "4646078106-export function foo() { }",
+        "signature": "-5677608893-export declare function foo(): void;\n"
+      },
+      "./src/bar/foo.ts": {
+        "version": "1045484683-export function bar() { }",
+        "signature": "-2904461644-export declare function bar(): void;\n"
+      }
+    },
+    "options": {
+      "composite": true,
+      "outDir": "./lib",
+      "rootDir": "./src"
+    },
+    "referencedMap": {},
+    "exportedModulesMap": {},
+    "semanticDiagnosticsPerFile": [
+      "../../../../../../a/lib/lib.d.ts",
+      "./src/bar/foo.ts",
+      "./src/foo.ts"
+    ]
+  },
+  "version": "FakeTSVersion",
+  "size": 911
+}
 
 //// [/user/username/projects/myproject/packages/A/lib/test.js]
 "use strict";
@@ -76,15 +116,72 @@ export {};
 
 
 //// [/user/username/projects/myproject/packages/A/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../../node_modules/b/lib/foo.d.ts","../../node_modules/b/lib/bar/foo.d.ts","./src/test.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-5677608893-export declare function foo(): void;\n","-2904461644-export declare function bar(): void;\n","14700910833-import { foo } from 'b/lib/foo';\nimport { bar } from 'b/lib/bar/foo';\nfoo();\nbar();\n"],"options":{"composite":true,"outDir":"./lib","rootDir":"./src"},"fileIdsList":[[2,3]],"referencedMap":[[4,1]],"exportedModulesMap":[[4,1]],"semanticDiagnosticsPerFile":[1,3,2,4]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../../node_modules/b/lib/foo.d.ts","../../node_modules/b/lib/bar/foo.d.ts","./src/test.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-5677608893-export declare function foo(): void;\n","-2904461644-export declare function bar(): void;\n",{"version":"14700910833-import { foo } from 'b/lib/foo';\nimport { bar } from 'b/lib/bar/foo';\nfoo();\nbar();\n","signature":"-3531856636-export {};\n"}],"options":{"composite":true,"outDir":"./lib","rootDir":"./src"},"fileIdsList":[[2,3]],"referencedMap":[[4,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,3,2,4]},"version":"FakeTSVersion"}
+
+//// [/user/username/projects/myproject/packages/A/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "program": {
+    "fileNames": [
+      "../../../../../../a/lib/lib.d.ts",
+      "../../node_modules/b/lib/foo.d.ts",
+      "../../node_modules/b/lib/bar/foo.d.ts",
+      "./src/test.ts"
+    ],
+    "fileNamesList": [
+      [
+        "../../node_modules/b/lib/foo.d.ts",
+        "../../node_modules/b/lib/bar/foo.d.ts"
+      ]
+    ],
+    "fileInfos": {
+      "../../../../../../a/lib/lib.d.ts": {
+        "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+        "affectsGlobalScope": true
+      },
+      "../../node_modules/b/lib/foo.d.ts": {
+        "version": "-5677608893-export declare function foo(): void;\n",
+        "signature": "-5677608893-export declare function foo(): void;\n"
+      },
+      "../../node_modules/b/lib/bar/foo.d.ts": {
+        "version": "-2904461644-export declare function bar(): void;\n",
+        "signature": "-2904461644-export declare function bar(): void;\n"
+      },
+      "./src/test.ts": {
+        "version": "14700910833-import { foo } from 'b/lib/foo';\nimport { bar } from 'b/lib/bar/foo';\nfoo();\nbar();\n",
+        "signature": "-3531856636-export {};\n"
+      }
+    },
+    "options": {
+      "composite": true,
+      "outDir": "./lib",
+      "rootDir": "./src"
+    },
+    "referencedMap": {
+      "./src/test.ts": [
+        "../../node_modules/b/lib/foo.d.ts",
+        "../../node_modules/b/lib/bar/foo.d.ts"
+      ]
+    },
+    "exportedModulesMap": {},
+    "semanticDiagnosticsPerFile": [
+      "../../../../../../a/lib/lib.d.ts",
+      "../../node_modules/b/lib/bar/foo.d.ts",
+      "../../node_modules/b/lib/foo.d.ts",
+      "./src/test.ts"
+    ]
+  },
+  "version": "FakeTSVersion",
+  "size": 1026
+}
 
 
 /a/lib/tsc.js --w --p /user/username/projects/myproject/packages/A/tsconfig.json
 Output::
 >> Screen clear
-[[90m12:01:10 AM[0m] Starting compilation in watch mode...
+[[90m12:01:14 AM[0m] Starting compilation in watch mode...
 
-[[90m12:01:20 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:24 AM[0m] Found 0 errors. Watching for file changes.
 
 
 

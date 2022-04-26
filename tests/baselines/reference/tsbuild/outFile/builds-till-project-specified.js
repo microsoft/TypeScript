@@ -15,13 +15,27 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 //// [/src/first/first_PART1.ts]
+interface TheFirst {
+    none: any;
+}
+
+const s = "Hello, world";
+
+interface NoJsForHereEither {
+    none: any;
+}
+
+console.log(s);
 
 
 //// [/src/first/first_part2.ts]
+console.log(f());
 
 
 //// [/src/first/first_part3.ts]
-
+function f() {
+    return "JS does hoists";
+}
 
 //// [/src/first/tsconfig.json]
 {
@@ -86,6 +100,8 @@ class C {
 
 
 //// [/src/third/third_part1.ts]
+var c = new C();
+c.doSomething();
 
 
 //// [/src/third/tsconfig.json]

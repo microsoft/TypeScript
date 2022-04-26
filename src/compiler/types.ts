@@ -3856,12 +3856,16 @@ namespace ts {
      */
     export type ResolvedConfigFileName = string & { _isResolvedConfigFileName: never };
 
+    export interface WriteFileCallbackData {
+        /*@internal*/ sourceMapUrlPos?: number;
+    }
     export type WriteFileCallback = (
         fileName: string,
-        data: string,
+        text: string,
         writeByteOrderMark: boolean,
         onError?: (message: string) => void,
         sourceFiles?: readonly SourceFile[],
+        data?: WriteFileCallbackData,
     ) => void;
 
     export class OperationCanceledException { }
@@ -4067,6 +4071,8 @@ namespace ts {
          * This implementation handles file exists to be true if file is source of project reference redirect when program is created using useSourceOfProjectReferenceRedirect
          */
         /*@internal*/ fileExists(fileName: string): boolean;
+        /** Call compilerHost.writeFile on host program was created with */
+        /*@internal*/ writeFile: WriteFileCallback;
     }
 
     /*@internal*/
@@ -4668,8 +4674,10 @@ namespace ts {
     export type AnyImportOrRequire = AnyImportSyntax | VariableDeclarationInitializedTo<RequireOrImportCall>;
 
     /* @internal */
-    export type AnyImportOrRequireStatement = AnyImportSyntax | RequireVariableStatement;
+    export type AnyImportOrBareOrAccessedRequire = AnyImportSyntax | VariableDeclarationInitializedTo<RequireOrImportCall | AccessExpression>;
 
+    /* @internal */
+    export type AnyImportOrRequireStatement = AnyImportSyntax | RequireVariableStatement;
 
     /* @internal */
     export type AnyImportOrReExport = AnyImportSyntax | ExportDeclaration;
@@ -6178,6 +6186,8 @@ namespace ts {
         assumeChangesOnlyAffectDirectDependencies?: boolean;
         noLib?: boolean;
         noResolve?: boolean;
+        /*@internal*/
+        noDtsResolution?: boolean;
         noUncheckedIndexedAccess?: boolean;
         out?: string;
         outDir?: string;
@@ -6778,6 +6788,7 @@ namespace ts {
 
         // For testing:
         /*@internal*/ disableUseFileVersionAsSignature?: boolean;
+        /*@internal*/ storeFilesChangingSignatureDuringEmit?: boolean;
     }
 
     /** true if --out otherwise source file name */

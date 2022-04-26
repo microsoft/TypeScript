@@ -6,7 +6,7 @@ tests/cases/conformance/types/literal/templateLiteralTypes1.ts(165,15): error TS
 tests/cases/conformance/types/literal/templateLiteralTypes1.ts(197,16): error TS2590: Expression produces a union type that is too complex to represent.
 tests/cases/conformance/types/literal/templateLiteralTypes1.ts(201,16): error TS2590: Expression produces a union type that is too complex to represent.
 tests/cases/conformance/types/literal/templateLiteralTypes1.ts(205,16): error TS2590: Expression produces a union type that is too complex to represent.
-tests/cases/conformance/types/literal/templateLiteralTypes1.ts(251,7): error TS2590: Expression produces a union type that is too complex to represent.
+tests/cases/conformance/types/literal/templateLiteralTypes1.ts(252,7): error TS2590: Expression produces a union type that is too complex to represent.
 
 
 ==== tests/cases/conformance/types/literal/templateLiteralTypes1.ts (7 errors) ====
@@ -242,6 +242,7 @@ tests/cases/conformance/types/literal/templateLiteralTypes1.ts(251,7): error TS2
     // Repro from #40970
     
     type PathKeys<T> =
+        unknown extends T ? never :
         T extends readonly any[] ? Extract<keyof T, `${number}`> | SubKeys<T, Extract<keyof T, `${number}`>> :
         T extends object ? Extract<keyof T, string> | SubKeys<T, Extract<keyof T, string>> :
         never;

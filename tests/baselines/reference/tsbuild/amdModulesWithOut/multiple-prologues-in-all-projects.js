@@ -74,17 +74,17 @@ const globalConst = 10;
 
 Output::
 /lib/tsc --b /src/app --verbose
-[[90m12:01:00 AM[0m] Projects in this build: 
+[[90m12:00:13 AM[0m] Projects in this build: 
     * src/lib/tsconfig.json
     * src/app/tsconfig.json
 
-[[90m12:01:00 AM[0m] Project 'src/lib/tsconfig.json' is out of date because output file 'src/lib/module.js' does not exist
+[[90m12:00:14 AM[0m] Project 'src/lib/tsconfig.json' is out of date because output file 'src/lib/module.js' does not exist
 
-[[90m12:01:00 AM[0m] Building project '/src/lib/tsconfig.json'...
+[[90m12:00:15 AM[0m] Building project '/src/lib/tsconfig.json'...
 
-[[90m12:01:00 AM[0m] Project 'src/app/tsconfig.json' is out of date because output file 'src/app/module.js' does not exist
+[[90m12:00:23 AM[0m] Project 'src/app/tsconfig.json' is out of date because output file 'src/app/module.js' does not exist
 
-[[90m12:01:00 AM[0m] Building project '/src/app/tsconfig.json'...
+[[90m12:00:24 AM[0m] Building project '/src/app/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 
@@ -1222,19 +1222,19 @@ export const x = 10;console.log(x);
 
 Output::
 /lib/tsc --b /src/app --verbose
-[[90m12:04:00 AM[0m] Projects in this build: 
+[[90m12:00:37 AM[0m] Projects in this build: 
     * src/lib/tsconfig.json
     * src/app/tsconfig.json
 
-[[90m12:04:00 AM[0m] Project 'src/lib/tsconfig.json' is out of date because oldest output 'src/lib/module.js' is older than newest input 'src/lib/file1.ts'
+[[90m12:00:38 AM[0m] Project 'src/lib/tsconfig.json' is out of date because oldest output 'src/lib/module.js' is older than newest input 'src/lib/file1.ts'
 
-[[90m12:04:00 AM[0m] Building project '/src/lib/tsconfig.json'...
+[[90m12:00:39 AM[0m] Building project '/src/lib/tsconfig.json'...
 
-[[90m12:04:00 AM[0m] Project 'src/app/tsconfig.json' is out of date because output of its dependency 'src/lib' has changed
+[[90m12:00:47 AM[0m] Project 'src/app/tsconfig.json' is out of date because output of its dependency 'src/lib' has changed
 
-[[90m12:04:00 AM[0m] Updating output of project '/src/app/tsconfig.json'...
+[[90m12:00:48 AM[0m] Updating output of project '/src/app/tsconfig.json'...
 
-[[90m12:04:00 AM[0m] Updating unchanged output timestamps of project '/src/app/tsconfig.json'...
+[[90m12:00:53 AM[0m] Updating unchanged output timestamps of project '/src/app/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 
@@ -2111,19 +2111,19 @@ export const x = 10;console.log(x);
 
 Output::
 /lib/tsc --b /src/app --verbose
-[[90m12:07:00 AM[0m] Projects in this build: 
+[[90m12:01:02 AM[0m] Projects in this build: 
     * src/lib/tsconfig.json
     * src/app/tsconfig.json
 
-[[90m12:07:00 AM[0m] Project 'src/lib/tsconfig.json' is out of date because oldest output 'src/lib/module.js' is older than newest input 'src/lib/file1.ts'
+[[90m12:01:03 AM[0m] Project 'src/lib/tsconfig.json' is out of date because oldest output 'src/lib/module.js' is older than newest input 'src/lib/file1.ts'
 
-[[90m12:07:00 AM[0m] Building project '/src/lib/tsconfig.json'...
+[[90m12:01:04 AM[0m] Building project '/src/lib/tsconfig.json'...
 
-[[90m12:07:00 AM[0m] Project 'src/app/tsconfig.json' is out of date because output of its dependency 'src/lib' has changed
+[[90m12:01:12 AM[0m] Project 'src/app/tsconfig.json' is out of date because output of its dependency 'src/lib' has changed
 
-[[90m12:07:00 AM[0m] Updating output of project '/src/app/tsconfig.json'...
+[[90m12:01:13 AM[0m] Updating output of project '/src/app/tsconfig.json'...
 
-[[90m12:07:00 AM[0m] Updating unchanged output timestamps of project '/src/app/tsconfig.json'...
+[[90m12:01:19 AM[0m] Updating unchanged output timestamps of project '/src/app/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 
