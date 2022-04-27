@@ -1166,11 +1166,20 @@ namespace ts {
             !isIncrementalCompilation(config.options);
     }
 
-    function getNextInvalidatedProject<T extends BuilderProgram>(
+    interface InvalidateProjectCreateInfo {
+        kind: InvalidatedProjectKind;
+        status: UpToDateStatus;
+        project: ResolvedConfigFileName;
+        projectPath: ResolvedConfigFilePath;
+        projectIndex: number;
+        config: ParsedCommandLine;
+    }
+
+    function getNextInvalidatedProjectCreateInfo<T extends BuilderProgram>(
         state: SolutionBuilderState<T>,
         buildOrder: AnyBuildOrder,
         reportQueue: boolean
-    ): InvalidatedProject<T> | undefined {
+    ): InvalidateProjectCreateInfo | undefined {
         if (!state.projectPendingBuild.size) return undefined;
         if (isCircularBuildOrder(buildOrder)) return undefined;
 
@@ -1209,9 +1218,9 @@ namespace ts {
             }
 
             const status = getUpToDateStatus(state, config, projectPath);
-            verboseReportProjectStatus(state, project, status);
             if (!options.force) {
                 if (status.type === UpToDateStatusType.UpToDate) {
+                    verboseReportProjectStatus(state, project, status);
                     reportAndStoreErrors(state, projectPath, getConfigFileParsingDiagnostics(config));
                     projectPendingBuild.delete(projectPath);
                     // Up to date, skip
@@ -1224,17 +1233,19 @@ namespace ts {
 
                 if (status.type === UpToDateStatusType.UpToDateWithUpstreamTypes) {
                     reportAndStoreErrors(state, projectPath, getConfigFileParsingDiagnostics(config));
-                    return createUpdateOutputFileStampsProject(
-                        state,
+                    return {
+                        kind: InvalidatedProjectKind.UpdateOutputFileStamps,
+                        status,
                         project,
                         projectPath,
-                        config,
-                        buildOrder
-                    );
+                        projectIndex,
+                        config
+                    };
                 }
             }
 
             if (status.type === UpToDateStatusType.UpstreamBlocked) {
+                verboseReportProjectStatus(state, project, status);
                 reportAndStoreErrors(state, projectPath, getConfigFileParsingDiagnostics(config));
                 projectPendingBuild.delete(projectPath);
                 if (options.verbose) {
@@ -1251,26 +1262,53 @@ namespace ts {
             }
 
             if (status.type === UpToDateStatusType.ContainerOnly) {
+                verboseReportProjectStatus(state, project, status);
                 reportAndStoreErrors(state, projectPath, getConfigFileParsingDiagnostics(config));
                 projectPendingBuild.delete(projectPath);
                 // Do nothing
                 continue;
             }
 
-            return createBuildOrUpdateInvalidedProject(
-                needsBuild(state, status, config) ?
+            return {
+                kind: needsBuild(state, status, config) ?
                     InvalidatedProjectKind.Build :
                     InvalidatedProjectKind.UpdateBundle,
-                state,
+                status,
                 project,
                 projectPath,
                 projectIndex,
                 config,
-                buildOrder,
-            );
+            };
         }
 
         return undefined;
+    }
+
+    function getNextInvalidatedProject<T extends BuilderProgram>(
+        state: SolutionBuilderState<T>,
+        buildOrder: AnyBuildOrder,
+        reportQueue: boolean
+    ): InvalidatedProject<T> | undefined {
+        const info = getNextInvalidatedProjectCreateInfo(state, buildOrder, reportQueue);
+        if (!info) return info;
+        verboseReportProjectStatus(state, info.project, info.status);
+        return info.kind !== InvalidatedProjectKind.UpdateOutputFileStamps ?
+            createBuildOrUpdateInvalidedProject(
+                info.kind,
+                state,
+                info.project,
+                info.projectPath,
+                info.projectIndex,
+                info.config,
+                buildOrder as BuildOrder,
+            ) :
+            createUpdateOutputFileStampsProject(
+                state,
+                info.project,
+                info.projectPath,
+                info.config,
+                buildOrder as BuildOrder
+            );
     }
 
     function listEmittedFile({ write }: SolutionBuilderState, proj: ParsedCommandLine, file: string) {
@@ -1783,12 +1821,26 @@ namespace ts {
         const invalidatedProject = getNextInvalidatedProject(state, buildOrder, /*reportQueue*/ false);
         if (invalidatedProject) {
             invalidatedProject.done();
-            if (state.projectPendingBuild.size) {
-                // Schedule next project for build
-                if (!state.timerToBuildInvalidatedProject) {
+            while (state.projectPendingBuild.size) {
+                // If already scheduled, skip
+                if (state.timerToBuildInvalidatedProject) return;
+                // Before scheduling check if the next project needs build
+                const info = getNextInvalidatedProjectCreateInfo(state, buildOrder, /*reportQueue*/ false);
+                if (!info) break; // Nothing to build any more
+                if (info.kind !== InvalidatedProjectKind.UpdateOutputFileStamps) {
+                    // Schedule next project for build
                     scheduleBuildInvalidatedProject(state);
+                    return;
                 }
-                return;
+                // Updating the timstamps - do it right away
+                verboseReportProjectStatus(state, info.project, info.status);
+                createUpdateOutputFileStampsProject(
+                    state,
+                    info.project,
+                    info.projectPath,
+                    info.config,
+                    buildOrder as BuildOrder
+                ).done();
             }
         }
         disableCache(state);

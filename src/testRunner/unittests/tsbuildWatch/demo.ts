@@ -49,8 +49,7 @@ namespace ts.tscWatch {
                     timeouts: sys => {
                         sys.checkTimeoutQueueLengthAndRun(1); // build core
                         sys.checkTimeoutQueueLengthAndRun(1); // build animals
-                        sys.checkTimeoutQueueLengthAndRun(1); // build zoo
-                        sys.checkTimeoutQueueLengthAndRun(1); // build solution
+                        sys.checkTimeoutQueueLengthAndRun(1); // build zoo and solution
                         sys.checkTimeoutQueueLength(0);
                     },
                 }

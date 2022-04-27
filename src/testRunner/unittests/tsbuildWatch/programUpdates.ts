@@ -104,8 +104,8 @@ namespace ts.tscWatch {
             };
 
             function verifyProjectChanges(subScenario: string, allFilesGetter: () => readonly File[]) {
-                const buildLogicOrUpdateTimeStamps: TscWatchCompileChange = {
-                    caption: "Build logic or update time stamps",
+                const buildLogic: TscWatchCompileChange = {
+                    caption: "Build logic",
                     change: noop,
                     timeouts: checkSingleTimeoutQueueLengthAndRun, // Builds logic or updates timestamps
                 };
@@ -121,11 +121,11 @@ namespace ts.tscWatch {
                     changes: [
                         changeCore(() => `${core[1].content}
 export class someClass { }`, "Make change to core"),
-                        buildLogicOrUpdateTimeStamps,
+                        buildLogic,
                         buildTests,
                         // Another change requeues and builds it
                         changeCore(() => core[1].content, "Revert core file"),
-                        buildLogicOrUpdateTimeStamps,
+                        buildLogic,
                         buildTests,
                         {
                             caption: "Make two changes",
@@ -140,7 +140,7 @@ export class someClass2 { }`);
                             },
                             timeouts: checkSingleTimeoutQueueLengthAndRun, // Builds core
                         },
-                        buildLogicOrUpdateTimeStamps,
+                        buildLogic,
                         buildTests,
                     ]
                 });
@@ -156,8 +156,6 @@ export class someClass2 { }`);
                     changes: [
                         changeCore(() => `${core[1].content}
 function foo() { }`, "Make local change to core"),
-                        buildLogicOrUpdateTimeStamps,
-                        buildTests
                     ]
                 });
 
@@ -174,11 +172,11 @@ function foo() { }`, "Make local change to core"),
                     ),
                     changes: [
                         changeNewFile(newFile.content),
-                        buildLogicOrUpdateTimeStamps,
+                        buildLogic,
                         buildTests,
                         changeNewFile(`${newFile.content}
 export class someClass2 { }`),
-                        buildLogicOrUpdateTimeStamps,
+                        buildLogic,
                         buildTests
                     ]
                 });
@@ -488,8 +486,8 @@ let x: string = 10;`),
                     change: sys => sys.writeFile(logic[1].path, `${logic[1].content}
 function someFn() { }`),
                     timeouts: sys => {
-                        sys.checkTimeoutQueueLengthAndRun(1); // build logic
-                        sys.checkTimeoutQueueLengthAndRun(1); // build tests
+                        sys.checkTimeoutQueueLengthAndRun(1); // build logic and updates tests
+                        sys.checkTimeoutQueueLength(0);
                     },
                 },
                 {

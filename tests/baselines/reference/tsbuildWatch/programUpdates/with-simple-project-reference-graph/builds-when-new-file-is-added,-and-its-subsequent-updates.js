@@ -594,7 +594,7 @@ export declare const newFileConst = 30;
 //# sourceMappingURL=newfile.d.ts.map
 
 
-Change:: Build logic or update time stamps
+Change:: Build logic
 
 Input::
 
@@ -837,7 +837,7 @@ export declare class someClass2 {
 //# sourceMappingURL=newfile.d.ts.map
 
 
-Change:: Build logic or update time stamps
+Change:: Build logic
 
 Input::
 

@@ -600,7 +600,7 @@ export declare class someClass {
 }
 
 
-Change:: Build logic or update time stamps
+Change:: Build logic
 
 Input::
 
@@ -982,7 +982,7 @@ export declare function multiply(a: number, b: number): number;
 }
 
 
-Change:: Build logic or update time stamps
+Change:: Build logic
 
 Input::
 
@@ -1382,7 +1382,7 @@ export declare class someClass2 {
 }
 
 
-Change:: Build logic or update time stamps
+Change:: Build logic
 
 Input::
 

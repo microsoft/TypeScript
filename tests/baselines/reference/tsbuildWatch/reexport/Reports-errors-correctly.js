@@ -430,11 +430,11 @@ export interface Session {
 
 Output::
 >> Screen clear
-[[90m12:01:35 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:34 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:36 AM[0m] Project 'src/pure/tsconfig.json' is out of date because oldest output 'out/pure/index.js' is older than newest input 'src/pure/session.ts'
+[[90m12:01:35 AM[0m] Project 'src/pure/tsconfig.json' is out of date because oldest output 'out/pure/index.js' is older than newest input 'src/pure/session.ts'
 
-[[90m12:01:37 AM[0m] Building project '/user/username/projects/reexport/src/pure/tsconfig.json'...
+[[90m12:01:36 AM[0m] Building project '/user/username/projects/reexport/src/pure/tsconfig.json'...
 
 [[90m12:01:56 AM[0m] Failed to parse file 'src/main/tsconfig.json': Semantic errors.
 
