@@ -3369,6 +3369,10 @@
         "category": "Error",
         "code": 2809
     },
+    "Expected 1 argument, but got 0. 'new Promise()' needs a JSDoc hint to produce a 'resolve' that can be called without arguments.": {
+        "category": "Error",
+        "code": 2810
+    },
     "Initializer for property '{0}'": {
         "category": "Error",
         "code": 2811
