@@ -1176,7 +1176,20 @@ namespace ts {
         argumentCount: number;
     }
 
+    // Do not change existing values, as they exist in telemetry.
+    export const enum CompletionInfoFlags {
+        None = 0,
+        MayIncludeAutoImports = 1 << 0,
+        IsImportStatementCompletion = 1 << 1,
+        IsContinuation = 1 << 2,
+        ResolvedModuleSpecifiers = 1 << 3,
+        ResolvedModuleSpecifiersBeyondLimit = 1 << 4,
+        MayIncludeMethodSnippets = 1 << 5,
+    }
+
     export interface CompletionInfo {
+        /** For performance telemetry. */
+        flags?: CompletionInfoFlags;
         /** Not true for all global completions. This will be true if the enclosing scope matches a few syntax kinds. See `isSnippetScope`. */
         isGlobalCompletion: boolean;
         isMemberCompletion: boolean;

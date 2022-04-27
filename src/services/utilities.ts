@@ -1928,6 +1928,14 @@ namespace ts {
         };
     }
 
+    export function moduleResolutionRespectsExports(moduleResolution: ModuleResolutionKind): boolean {
+        return moduleResolution >= ModuleResolutionKind.Node12 && moduleResolution <= ModuleResolutionKind.NodeNext;
+    }
+
+    export function moduleResolutionUsesNodeModules(moduleResolution: ModuleResolutionKind): boolean {
+        return moduleResolution === ModuleResolutionKind.NodeJs || moduleResolution >= ModuleResolutionKind.Node12 && moduleResolution <= ModuleResolutionKind.NodeNext;
+    }
+
     export function makeImportIfNecessary(defaultImport: Identifier | undefined, namedImports: readonly ImportSpecifier[] | undefined, moduleSpecifier: string, quotePreference: QuotePreference): ImportDeclaration | undefined {
         return defaultImport || namedImports && namedImports.length ? makeImport(defaultImport, namedImports, moduleSpecifier, quotePreference) : undefined;
     }
