@@ -3,7 +3,7 @@ namespace ts.codefix {
     const fixName = "addVoidToPromise";
     const fixId = "addVoidToPromise";
     const errorCodes = [
-        Diagnostics.Expected_0_arguments_but_got_1_TypeScript_may_need_a_JSDoc_hint_that_the_call_to_new_Promise_produces_a_Promise_void.code,
+        Diagnostics.Expected_1_argument_but_got_0_new_Promise_needs_a_JSDoc_hint_to_produce_a_resolve_that_can_be_called_without_arguments.code,
         Diagnostics.Expected_0_arguments_but_got_1_Did_you_forget_to_include_void_in_your_type_argument_to_Promise.code
     ];
     registerCodeFix({

@@ -3369,7 +3369,7 @@
         "category": "Error",
         "code": 2809
     },
-    "Expected {0} arguments, but got {1}. TypeScript may need a JSDoc hint that the call to 'new Promise()' produces a 'Promise<void>'": {
+    "Expected 1 argument, but got 0. 'new Promise()' needs a JSDoc hint to produce a 'resolve' that can be called without arguments.": {
         "category": "Error",
         "code": 2810
     },
