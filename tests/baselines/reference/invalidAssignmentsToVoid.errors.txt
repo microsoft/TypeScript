@@ -7,6 +7,7 @@ tests/cases/conformance/types/primitives/void/invalidAssignmentsToVoid.ts(10,1):
 tests/cases/conformance/types/primitives/void/invalidAssignmentsToVoid.ts(14,1): error TS2322: Type 'I' is not assignable to type 'void'.
 tests/cases/conformance/types/primitives/void/invalidAssignmentsToVoid.ts(17,1): error TS2322: Type 'typeof M' is not assignable to type 'void'.
 tests/cases/conformance/types/primitives/void/invalidAssignmentsToVoid.ts(20,5): error TS2322: Type 'T' is not assignable to type 'void'.
+  Type 'unknown' is not assignable to type 'void'.
 tests/cases/conformance/types/primitives/void/invalidAssignmentsToVoid.ts(22,5): error TS2322: Type '<T>(a: T) => void' is not assignable to type 'void'.
 
 
@@ -49,6 +50,7 @@ tests/cases/conformance/types/primitives/void/invalidAssignmentsToVoid.ts(22,5):
         x = a;
         ~
 !!! error TS2322: Type 'T' is not assignable to type 'void'.
+!!! error TS2322:   Type 'unknown' is not assignable to type 'void'.
     }
     x = f;
         ~

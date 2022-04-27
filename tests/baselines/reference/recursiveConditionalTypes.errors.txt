@@ -3,6 +3,7 @@ tests/cases/compiler/recursiveConditionalTypes.ts(20,5): error TS2322: Type '__A
   Type 'T' is not assignable to type 'U'.
     'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
 tests/cases/compiler/recursiveConditionalTypes.ts(21,5): error TS2322: Type 'T' is not assignable to type '__Awaited<T>'.
+  Type 'unknown' is not assignable to type '__Awaited<T>'.
 tests/cases/compiler/recursiveConditionalTypes.ts(22,5): error TS2322: Type '__Awaited<T>' is not assignable to type 'T'.
   'T' could be instantiated with an arbitrary type which could be unrelated to '__Awaited<T>'.
 tests/cases/compiler/recursiveConditionalTypes.ts(35,11): error TS2589: Type instantiation is excessively deep and possibly infinite.
@@ -56,6 +57,7 @@ tests/cases/compiler/recursiveConditionalTypes.ts(169,5): error TS2322: Type 'nu
         ta = tx;  // Error
         ~~
 !!! error TS2322: Type 'T' is not assignable to type '__Awaited<T>'.
+!!! error TS2322:   Type 'unknown' is not assignable to type '__Awaited<T>'.
         tx = ta;  // Error
         ~~
 !!! error TS2322: Type '__Awaited<T>' is not assignable to type 'T'.

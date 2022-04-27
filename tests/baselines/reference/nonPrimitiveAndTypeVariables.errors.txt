@@ -1,5 +1,7 @@
 tests/cases/conformance/types/nonPrimitive/nonPrimitiveAndTypeVariables.ts(10,9): error TS2322: Type 'T' is not assignable to type 'object'.
+  Type 'unknown' is not assignable to type 'object'.
 tests/cases/conformance/types/nonPrimitive/nonPrimitiveAndTypeVariables.ts(11,9): error TS2322: Type 'T' is not assignable to type 'object | U'.
+  Type 'unknown' is not assignable to type 'object | U'.
 
 
 ==== tests/cases/conformance/types/nonPrimitive/nonPrimitiveAndTypeVariables.ts (2 errors) ====
@@ -15,8 +17,10 @@ tests/cases/conformance/types/nonPrimitive/nonPrimitiveAndTypeVariables.ts(11,9)
         let a: object = x;  // Error
             ~
 !!! error TS2322: Type 'T' is not assignable to type 'object'.
+!!! error TS2322:   Type 'unknown' is not assignable to type 'object'.
         let b: U | object = x;  // Error
             ~
 !!! error TS2322: Type 'T' is not assignable to type 'object | U'.
+!!! error TS2322:   Type 'unknown' is not assignable to type 'object | U'.
     }
     

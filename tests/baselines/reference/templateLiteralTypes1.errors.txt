@@ -1,4 +1,5 @@
 tests/cases/conformance/types/literal/templateLiteralTypes1.ts(40,5): error TS2322: Type 'T' is not assignable to type '{ [P in keyof T & string as `p_${P}`]: T[P]; }'.
+  Type 'unknown' is not assignable to type '{ [P in keyof T & string as `p_${P}`]: T[P]; }'.
 tests/cases/conformance/types/literal/templateLiteralTypes1.ts(45,5): error TS2322: Type '{ [P in B as `p_${P}`]: T; }' is not assignable to type '{ [Q in A as `p_${Q}`]: U; }'.
   Type 'A' is not assignable to type 'B'.
     'A' is assignable to the constraint of type 'B', but 'B' could be instantiated with a different subtype of constraint 'string'.
@@ -52,6 +53,7 @@ tests/cases/conformance/types/literal/templateLiteralTypes1.ts(251,7): error TS2
         z = x;  // Error
         ~
 !!! error TS2322: Type 'T' is not assignable to type '{ [P in keyof T & string as `p_${P}`]: T[P]; }'.
+!!! error TS2322:   Type 'unknown' is not assignable to type '{ [P in keyof T & string as `p_${P}`]: T[P]; }'.
     }
     
     function fa2<T, U extends T, A extends string, B extends A>(x: { [P in B as `p_${P}`]: T }, y: { [Q in A as `p_${Q}`]: U }) {
