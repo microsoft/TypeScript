@@ -145,8 +145,6 @@ namespace ts {
         // Testing only
         /*@internal*/ getUpToDateStatusOfProject(project: string): UpToDateStatus;
         /*@internal*/ invalidateProject(configFilePath: ResolvedConfigFilePath, reloadLevel?: ConfigFileProgramReloadLevel): void;
-        /*@internal*/ buildNextInvalidatedProject(): void;
-        /*@internal*/ getAllParsedConfigs(): readonly ParsedCommandLine[];
         /*@internal*/ close(): void;
     }
 
@@ -250,7 +248,6 @@ namespace ts {
         allProjectBuildPending: boolean;
         needsSummary: boolean;
         watchAllProjectsPending: boolean;
-        currentInvalidatedProject: InvalidatedProject<T> | undefined;
 
         // Watch state
         readonly watch: boolean;
@@ -332,7 +329,6 @@ namespace ts {
             allProjectBuildPending: true,
             needsSummary: true,
             watchAllProjectsPending: watch,
-            currentInvalidatedProject: undefined,
 
             // Watch state
             watch,
@@ -684,7 +680,6 @@ namespace ts {
         projectPath: ResolvedConfigFilePath
     ) {
         state.projectPendingBuild.delete(projectPath);
-        state.currentInvalidatedProject = undefined;
         return state.diagnostics.has(projectPath) ?
             ExitStatus.DiagnosticsPresent_OutputsSkipped :
             ExitStatus.Success;
@@ -1178,12 +1173,6 @@ namespace ts {
     ): InvalidatedProject<T> | undefined {
         if (!state.projectPendingBuild.size) return undefined;
         if (isCircularBuildOrder(buildOrder)) return undefined;
-        if (state.currentInvalidatedProject) {
-            // Only if same buildOrder the currentInvalidated project can be sent again
-            return arrayIsEqualTo(state.currentInvalidatedProject.buildOrder, buildOrder) ?
-                state.currentInvalidatedProject :
-                undefined;
-        }
 
         const { options, projectPendingBuild } = state;
         for (let projectIndex = 0; projectIndex < buildOrder.length; projectIndex++) {
@@ -1796,7 +1785,7 @@ namespace ts {
             invalidatedProject.done();
             if (state.projectPendingBuild.size) {
                 // Schedule next project for build
-                if (state.watch && !state.timerToBuildInvalidatedProject) {
+                if (!state.timerToBuildInvalidatedProject) {
                     scheduleBuildInvalidatedProject(state);
                 }
                 return;
@@ -1961,11 +1950,6 @@ namespace ts {
                 return getUpToDateStatus(state, parseConfigFile(state, configFileName, configFilePath), configFilePath);
             },
             invalidateProject: (configFilePath, reloadLevel) => invalidateProject(state, configFilePath, reloadLevel || ConfigFileProgramReloadLevel.None),
-            buildNextInvalidatedProject: () => buildNextInvalidatedProject(state),
-            getAllParsedConfigs: () => arrayFrom(mapDefinedIterator(
-                state.configFileCache.values(),
-                config => isParsedCommandLine(config) ? config : undefined
-            )),
             close: () => stopWatching(state),
         };
     }
