@@ -11,11 +11,12 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    if: github.repository == 'microsoft/TypeScript'
 
     steps:
     - uses: actions/checkout@v2
     - name: Use node version 14
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v3
       with:
         node-version: 14
         registry-url: https://registry.npmjs.org/

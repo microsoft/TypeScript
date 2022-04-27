@@ -170,7 +170,7 @@ namespace ts.Completions {
     const enum GlobalsSearch { Continue, Success, Fail }
 
     interface ModuleSpecifierResolutioContext {
-        tryResolve: (exportInfo: readonly SymbolExportInfo[], isFromAmbientModule: boolean) => ModuleSpecifierResolutionResult | undefined;
+        tryResolve: (exportInfo: readonly SymbolExportInfo[], symbolName: string, isFromAmbientModule: boolean) => ModuleSpecifierResolutionResult | undefined;
         resolutionLimitExceeded: () => boolean;
     }
 
@@ -184,8 +184,10 @@ namespace ts.Completions {
         host: LanguageServiceHost,
         program: Program,
         sourceFile: SourceFile,
+        position: number,
         preferences: UserPreferences,
         isForImportStatementCompletion: boolean,
+        isValidTypeOnlyUseSite: boolean,
         cb: (context: ModuleSpecifierResolutioContext) => TReturn,
     ): TReturn {
         const start = timestamp();
@@ -204,9 +206,9 @@ namespace ts.Completions {
         host.log?.(`${logPrefix}: ${timestamp() - start}`);
         return result;
 
-        function tryResolve(exportInfo: readonly SymbolExportInfo[], isFromAmbientModule: boolean): ModuleSpecifierResolutionResult | undefined {
+        function tryResolve(exportInfo: readonly SymbolExportInfo[], symbolName: string, isFromAmbientModule: boolean): ModuleSpecifierResolutionResult | undefined {
             if (isFromAmbientModule) {
-                const result = codefix.getModuleSpecifierForBestExportInfo(exportInfo, sourceFile, program, host, preferences);
+                const result = codefix.getModuleSpecifierForBestExportInfo(exportInfo, symbolName, position, isValidTypeOnlyUseSite, sourceFile, program, host, preferences);
                 if (result) {
                     ambientCount++;
                 }
@@ -215,7 +217,7 @@ namespace ts.Completions {
             const shouldResolveModuleSpecifier = isForImportStatementCompletion || preferences.allowIncompleteCompletions && resolvedCount < moduleSpecifierResolutionLimit;
             const shouldGetModuleSpecifierFromCache = !shouldResolveModuleSpecifier && preferences.allowIncompleteCompletions && cacheAttemptCount < moduleSpecifierResolutionCacheAttemptLimit;
             const result = (shouldResolveModuleSpecifier || shouldGetModuleSpecifierFromCache)
-                ? codefix.getModuleSpecifierForBestExportInfo(exportInfo, sourceFile, program, host, preferences, packageJsonImportFilter, shouldGetModuleSpecifierFromCache)
+                ? codefix.getModuleSpecifierForBestExportInfo(exportInfo, symbolName, position, isValidTypeOnlyUseSite, sourceFile, program, host, preferences, packageJsonImportFilter, shouldGetModuleSpecifierFromCache)
                 : undefined;
 
             if (!shouldResolveModuleSpecifier && !shouldGetModuleSpecifierFromCache || shouldGetModuleSpecifierFromCache && !result) {
@@ -358,8 +360,10 @@ namespace ts.Completions {
             host,
             program,
             file,
+            location.getStart(),
             preferences,
             /*isForImportStatementCompletion*/ false,
+            isValidTypeOnlyAliasUseSite(location),
             context => {
                 const entries = mapDefined(previousResponse.entries, entry => {
                     if (!entry.hasAction || !entry.source || !entry.data || completionEntryDataIsResolved(entry.data)) {
@@ -374,7 +378,7 @@ namespace ts.Completions {
                     const { origin } = Debug.checkDefined(getAutoImportSymbolFromCompletionEntryData(entry.name, entry.data, program, host));
                     const info = exportMap.get(file.path, entry.data.exportMapKey);
 
-                    const result = info && context.tryResolve(info, !isExternalModuleNameRelative(stripQuotes(origin.moduleSymbol.name)));
+                    const result = info && context.tryResolve(info, entry.name, !isExternalModuleNameRelative(stripQuotes(origin.moduleSymbol.name)));
                     if (!result) return entry;
 
                     const newOrigin: SymbolOriginInfoResolvedExport = {
@@ -2428,7 +2432,7 @@ namespace ts.Completions {
                             moduleSymbol,
                             symbol: firstAccessibleSymbol,
                             targetFlags: skipAlias(firstAccessibleSymbol, typeChecker).flags,
-                        }], sourceFile, program, host, preferences) || {};
+                        }], firstAccessibleSymbol.name, position, isValidTypeOnlyAliasUseSite(location), sourceFile, program, host, preferences) || {};
 
                         if (moduleSpecifier) {
                             const origin: SymbolOriginInfoResolvedExport = {
@@ -2707,8 +2711,10 @@ namespace ts.Completions {
                 host,
                 program,
                 sourceFile,
+                position,
                 preferences,
                 !!importCompletionNode,
+                isValidTypeOnlyAliasUseSite(location),
                 context => {
                     exportInfo.search(
                         sourceFile.path,
@@ -2737,7 +2743,7 @@ namespace ts.Completions {
 
                             // If we don't need to resolve module specifiers, we can use any re-export that is importable at all
                             // (We need to ensure that at least one is importable to show a completion.)
-                            const { exportInfo = defaultExportInfo, moduleSpecifier } = context.tryResolve(info, isFromAmbientModule) || {};
+                            const { exportInfo = defaultExportInfo, moduleSpecifier } = context.tryResolve(info, symbolName, isFromAmbientModule) || {};
                             const isDefaultExport = exportInfo.exportKind === ExportKind.Default;
                             const symbol = isDefaultExport && getLocalSymbolForExportDefault(exportInfo.symbol) || exportInfo.symbol;
 

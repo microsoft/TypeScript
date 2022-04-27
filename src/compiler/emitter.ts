@@ -1204,7 +1204,7 @@ namespace ts {
         }
 
         function getCurrentLineMap() {
-            return currentLineMap || (currentLineMap = getLineStarts(currentSourceFile!));
+            return currentLineMap || (currentLineMap = getLineStarts(Debug.checkDefined(currentSourceFile)));
         }
 
         function emit(node: Node, parenthesizerRule?: (node: Node) => Node): void;
@@ -1849,7 +1849,7 @@ namespace ts {
             const numNodes = bundle ? bundle.sourceFiles.length + numPrepends : 1;
             for (let i = 0; i < numNodes; i++) {
                 const currentNode = bundle ? i < numPrepends ? bundle.prepends[i] : bundle.sourceFiles[i - numPrepends] : node;
-                const sourceFile = isSourceFile(currentNode) ? currentNode : isUnparsedSource(currentNode) ? undefined : currentSourceFile!;
+                const sourceFile = isSourceFile(currentNode) ? currentNode : isUnparsedSource(currentNode) ? undefined : currentSourceFile;
                 const shouldSkip = printerOptions.noEmitHelpers || (!!sourceFile && hasRecordedExternalHelpers(sourceFile));
                 const shouldBundle = (isSourceFile(currentNode) || isUnparsedSource(currentNode)) && !isOwnFileEmit;
                 const helpers = isUnparsedSource(currentNode) ? currentNode.helpers : getSortedEmitHelpers(currentNode);
@@ -2499,7 +2499,7 @@ namespace ts {
             }
 
             const preferNewLine = node.multiLine ? ListFormat.PreferNewLine : ListFormat.None;
-            const allowTrailingComma = currentSourceFile!.languageVersion >= ScriptTarget.ES5 && !isJsonSourceFile(currentSourceFile!) ? ListFormat.AllowTrailingComma : ListFormat.None;
+            const allowTrailingComma = currentSourceFile && currentSourceFile.languageVersion >= ScriptTarget.ES5 && !isJsonSourceFile(currentSourceFile) ? ListFormat.AllowTrailingComma : ListFormat.None;
             emitList(node, node.properties, ListFormat.ObjectLiteralExpressionProperties | allowTrailingComma | preferNewLine);
 
             if (indentedFlag) {
@@ -2914,7 +2914,7 @@ namespace ts {
             emitExpression(node.expression, parenthesizer.parenthesizeExpressionOfExpressionStatement);
             // Emit semicolon in non json files
             // or if json file that created synthesized expression(eg.define expression statement when --out and amd code generation)
-            if (!isJsonSourceFile(currentSourceFile!) || nodeIsSynthesized(node.expression)) {
+            if (!currentSourceFile || !isJsonSourceFile(currentSourceFile) || nodeIsSynthesized(node.expression)) {
                 writeTrailingSemicolon();
             }
         }
@@ -3241,7 +3241,7 @@ namespace ts {
                 return false;
             }
 
-            if (!nodeIsSynthesized(body) && !rangeIsOnSingleLine(body, currentSourceFile!)) {
+            if (!nodeIsSynthesized(body) && currentSourceFile && !rangeIsOnSingleLine(body, currentSourceFile)) {
                 return false;
             }
 
@@ -3272,12 +3272,7 @@ namespace ts {
                 ? emitBlockFunctionBodyOnSingleLine
                 : emitBlockFunctionBodyWorker;
 
-            if (emitBodyWithDetachedComments) {
-                emitBodyWithDetachedComments(body, body.statements, emitBlockFunctionBody);
-            }
-            else {
-                emitBlockFunctionBody(body);
-            }
+            emitBodyWithDetachedComments(body, body.statements, emitBlockFunctionBody);
 
             decreaseIndent();
             writeToken(SyntaxKind.CloseBraceToken, body.statements.end, writePunctuation, body);
@@ -3735,9 +3730,10 @@ namespace ts {
                 statements.length === 1 &&
                 (
                     // treat synthesized nodes as located on the same line for emit purposes
+                    !currentSourceFile ||
                     nodeIsSynthesized(parentNode) ||
                     nodeIsSynthesized(statements[0]) ||
-                    rangeStartPositionsAreOnSameLine(parentNode, statements[0], currentSourceFile!)
+                    rangeStartPositionsAreOnSameLine(parentNode, statements[0], currentSourceFile)
                 );
 
             let format = ListFormat.CaseOrDefaultClauseStatements;
@@ -3992,16 +3988,14 @@ namespace ts {
         function emitSourceFile(node: SourceFile) {
             writeLine();
             const statements = node.statements;
-            if (emitBodyWithDetachedComments) {
-                // Emit detached comment if there are no prologue directives or if the first node is synthesized.
-                // The synthesized node will have no leading comment so some comments may be missed.
-                const shouldEmitDetachedComment = statements.length === 0 ||
-                    !isPrologueDirective(statements[0]) ||
-                    nodeIsSynthesized(statements[0]);
-                if (shouldEmitDetachedComment) {
-                    emitBodyWithDetachedComments(node, statements, emitSourceFileWorker);
-                    return;
-                }
+            // Emit detached comment if there are no prologue directives or if the first node is synthesized.
+            // The synthesized node will have no leading comment so some comments may be missed.
+            const shouldEmitDetachedComment = statements.length === 0 ||
+                !isPrologueDirective(statements[0]) ||
+                nodeIsSynthesized(statements[0]);
+            if (shouldEmitDetachedComment) {
+                emitBodyWithDetachedComments(node, statements, emitSourceFileWorker);
+                return;
             }
             emitSourceFileWorker(node);
         }
@@ -4403,7 +4397,7 @@ namespace ts {
 
             if (isEmpty) {
                 // Write a line terminator if the parent node was multi-line
-                if (format & ListFormat.MultiLine && !(preserveSourceNewlines && (!parentNode || rangeIsOnSingleLine(parentNode, currentSourceFile!)))) {
+                if (format & ListFormat.MultiLine && !(preserveSourceNewlines && (!parentNode || currentSourceFile && rangeIsOnSingleLine(parentNode, currentSourceFile)))) {
                     writeLine();
                 }
                 else if (format & ListFormat.SpaceBetweenBraces && !(format & ListFormat.NoSpaceIfEmpty)) {
@@ -4707,7 +4701,7 @@ namespace ts {
 
                 const firstChild = children[0];
                 if (firstChild === undefined) {
-                    return !parentNode || rangeIsOnSingleLine(parentNode, currentSourceFile!) ? 0 : 1;
+                    return !parentNode || currentSourceFile && rangeIsOnSingleLine(parentNode, currentSourceFile) ? 0 : 1;
                 }
                 if (firstChild.pos === nextListElementPos) {
                     // If this child starts at the beginning of a list item in a parent list, its leading
@@ -4731,7 +4725,7 @@ namespace ts {
                     // JsxText will be written with its leading whitespace, so don't add more manually.
                     return 0;
                 }
-                if (parentNode &&
+                if (currentSourceFile && parentNode &&
                     !positionIsSynthesized(parentNode.pos) &&
                     !nodeIsSynthesized(firstChild) &&
                     (!firstChild.parent || getOriginalNode(firstChild.parent) === getOriginalNode(parentNode))
@@ -4744,7 +4738,7 @@ namespace ts {
                                 currentSourceFile!,
                                 includeComments));
                     }
-                    return rangeStartPositionsAreOnSameLine(parentNode, firstChild, currentSourceFile!) ? 0 : 1;
+                    return rangeStartPositionsAreOnSameLine(parentNode, firstChild, currentSourceFile) ? 0 : 1;
                 }
                 if (synthesizedNodeStartsOnNewLine(firstChild, format)) {
                     return 1;
@@ -4762,7 +4756,7 @@ namespace ts {
                     // JsxText will be written with its leading whitespace, so don't add more manually.
                     return 0;
                 }
-                else if (!nodeIsSynthesized(previousNode) && !nodeIsSynthesized(nextNode)) {
+                else if (currentSourceFile && !nodeIsSynthesized(previousNode) && !nodeIsSynthesized(nextNode)) {
                     if (preserveSourceNewlines && siblingNodePositionsAreComparable(previousNode, nextNode)) {
                         return getEffectiveLines(
                             includeComments => getLinesBetweenRangeEndAndRangeStart(
@@ -4777,7 +4771,7 @@ namespace ts {
                     // expensive than checking with `preserveSourceNewlines` as above, but the goal is not to preserve the
                     // effective source lines between two sibling nodes.
                     else if (!preserveSourceNewlines && originalNodesHaveSameParent(previousNode, nextNode)) {
-                        return rangeEndIsOnSameLineAsRangeStart(previousNode, nextNode, currentSourceFile!) ? 0 : 1;
+                        return rangeEndIsOnSameLineAsRangeStart(previousNode, nextNode, currentSourceFile) ? 0 : 1;
                     }
                     // If the two nodes are not comparable, add a line terminator based on the format that can indicate
                     // whether new lines are preferred or not.
@@ -4801,9 +4795,9 @@ namespace ts {
 
                 const lastChild = lastOrUndefined(children);
                 if (lastChild === undefined) {
-                    return !parentNode || rangeIsOnSingleLine(parentNode, currentSourceFile!) ? 0 : 1;
+                    return !parentNode || currentSourceFile && rangeIsOnSingleLine(parentNode, currentSourceFile) ? 0 : 1;
                 }
-                if (parentNode && !positionIsSynthesized(parentNode.pos) && !nodeIsSynthesized(lastChild) && (!lastChild.parent || lastChild.parent === parentNode)) {
+                if (currentSourceFile && parentNode && !positionIsSynthesized(parentNode.pos) && !nodeIsSynthesized(lastChild) && (!lastChild.parent || lastChild.parent === parentNode)) {
                     if (preserveSourceNewlines) {
                         const end = isNodeArray(children) && !positionIsSynthesized(children.end) ? children.end : lastChild.end;
                         return getEffectiveLines(
@@ -4813,7 +4807,7 @@ namespace ts {
                                 currentSourceFile!,
                                 includeComments));
                     }
-                    return rangeEndPositionsAreOnSameLine(parentNode, lastChild, currentSourceFile!) ? 0 : 1;
+                    return rangeEndPositionsAreOnSameLine(parentNode, lastChild, currentSourceFile) ? 0 : 1;
                 }
                 if (synthesizedNodeStartsOnNewLine(lastChild, format)) {
                     return 1;
@@ -4891,7 +4885,7 @@ namespace ts {
                 return 1;
             }
 
-            if (!nodeIsSynthesized(parent) && !nodeIsSynthesized(node1) && !nodeIsSynthesized(node2)) {
+            if (currentSourceFile && !nodeIsSynthesized(parent) && !nodeIsSynthesized(node1) && !nodeIsSynthesized(node2)) {
                 if (preserveSourceNewlines) {
                     return getEffectiveLines(
                         includeComments => getLinesBetweenRangeEndAndRangeStart(
@@ -4900,7 +4894,7 @@ namespace ts {
                             currentSourceFile!,
                             includeComments));
                 }
-                return rangeEndIsOnSameLineAsRangeStart(node1, node2, currentSourceFile!) ? 0 : 1;
+                return rangeEndIsOnSameLineAsRangeStart(node1, node2, currentSourceFile) ? 0 : 1;
             }
 
             return 0;
@@ -4908,7 +4902,7 @@ namespace ts {
 
         function isEmptyBlock(block: BlockLike) {
             return block.statements.length === 0
-                && rangeEndIsOnSameLineAsRangeStart(block, block, currentSourceFile!);
+                && (!currentSourceFile || rangeEndIsOnSameLineAsRangeStart(block, block, currentSourceFile));
         }
 
         function skipSynthesizedParentheses(node: Node) {
@@ -4919,21 +4913,27 @@ namespace ts {
             return node;
         }
 
-        function getTextOfNode(node: Node, includeTrivia?: boolean): string {
+        function getTextOfNode(node: Identifier | PrivateIdentifier | LiteralExpression, includeTrivia?: boolean): string {
             if (isGeneratedIdentifier(node)) {
                 return generateName(node);
             }
-            else if ((isIdentifier(node) || isPrivateIdentifier(node)) && (nodeIsSynthesized(node) || !node.parent || !currentSourceFile || (node.parent && currentSourceFile && getSourceFileOfNode(node) !== getOriginalNode(currentSourceFile)))) {
-                return idText(node);
+            if (isStringLiteral(node) && node.textSourceNode) {
+                return getTextOfNode(node.textSourceNode, includeTrivia);
             }
-            else if (node.kind === SyntaxKind.StringLiteral && (node as StringLiteral).textSourceNode) {
-                return getTextOfNode((node as StringLiteral).textSourceNode!, includeTrivia);
+            const sourceFile = currentSourceFile; // const needed for control flow
+            const canUseSourceFile = !!sourceFile && !!node.parent && !nodeIsSynthesized(node);
+            if (isMemberName(node)) {
+                if (!canUseSourceFile || getSourceFileOfNode(node) !== getOriginalNode(sourceFile)) {
+                    return idText(node);
+                }
             }
-            else if (isLiteralExpression(node) && (nodeIsSynthesized(node) || !node.parent)) {
-                return node.text;
+            else {
+                Debug.assertNode(node, isLiteralExpression); // not strictly necessary
+                if (!canUseSourceFile) {
+                    return node.text;
+                }
             }
-
-            return getSourceTextOfNodeFromSourceFile(currentSourceFile!, node, includeTrivia);
+            return getSourceTextOfNodeFromSourceFile(sourceFile, node, includeTrivia);
         }
 
         function getLiteralTextOfNode(node: LiteralLikeNode, neverAsciiEscape: boolean | undefined, jsxAttributeEscape: boolean): string {
@@ -4955,7 +4955,7 @@ namespace ts {
                 | (printerOptions.terminateUnterminatedLiterals ? GetLiteralTextFlags.TerminateUnterminatedLiterals : 0)
                 | (printerOptions.target && printerOptions.target === ScriptTarget.ESNext ? GetLiteralTextFlags.AllowNumericSeparator : 0);
 
-            return getLiteralText(node, currentSourceFile!, flags);
+            return getLiteralText(node, currentSourceFile, flags);
         }
 
         /**
@@ -5278,7 +5278,7 @@ namespace ts {
             switch (node.kind) {
                 case SyntaxKind.Identifier:
                     return makeUniqueName(
-                        getTextOfNode(node),
+                        getTextOfNode(node as Identifier),
                         isUniqueName,
                         !!(flags! & GeneratedIdentifierFlags.Optimistic),
                         !!(flags! & GeneratedIdentifierFlags.ReservedInNestedScopes)
@@ -5580,7 +5580,7 @@ namespace ts {
         }
 
         function emitLeadingComment(commentPos: number, commentEnd: number, kind: SyntaxKind, hasTrailingNewLine: boolean, rangePos: number) {
-            if (!shouldWriteComment(currentSourceFile!.text, commentPos)) return;
+            if (!currentSourceFile || !shouldWriteComment(currentSourceFile.text, commentPos)) return;
             if (!hasWrittenComment) {
                 emitNewLineBeforeLeadingCommentOfPosition(getCurrentLineMap(), writer, rangePos, commentPos);
                 hasWrittenComment = true;
@@ -5588,7 +5588,7 @@ namespace ts {
 
             // Leading comments are emitted at /*leading comment1 */space/*leading comment*/space
             emitPos(commentPos);
-            writeCommentRange(currentSourceFile!.text, getCurrentLineMap(), writer, commentPos, commentEnd, newLine);
+            writeCommentRange(currentSourceFile.text, getCurrentLineMap(), writer, commentPos, commentEnd, newLine);
             emitPos(commentEnd);
 
             if (hasTrailingNewLine) {
@@ -5612,14 +5612,14 @@ namespace ts {
         }
 
         function emitTrailingComment(commentPos: number, commentEnd: number, _kind: SyntaxKind, hasTrailingNewLine: boolean) {
-            if (!shouldWriteComment(currentSourceFile!.text, commentPos)) return;
+            if (!currentSourceFile || !shouldWriteComment(currentSourceFile.text, commentPos)) return;
             // trailing comments are emitted at space/*trailing comment1 */space/*trailing comment2*/
             if (!writer.isAtStartOfLine()) {
                 writer.writeSpace(" ");
             }
 
             emitPos(commentPos);
-            writeCommentRange(currentSourceFile!.text, getCurrentLineMap(), writer, commentPos, commentEnd, newLine);
+            writeCommentRange(currentSourceFile.text, getCurrentLineMap(), writer, commentPos, commentEnd, newLine);
             emitPos(commentEnd);
 
             if (hasTrailingNewLine) {
@@ -5637,10 +5637,11 @@ namespace ts {
         }
 
         function emitTrailingCommentOfPositionNoNewline(commentPos: number, commentEnd: number, kind: SyntaxKind) {
+            if (!currentSourceFile) return;
             // trailing comments of a position are emitted at /*trailing comment1 */space/*trailing comment*/space
 
             emitPos(commentPos);
-            writeCommentRange(currentSourceFile!.text, getCurrentLineMap(), writer, commentPos, commentEnd, newLine);
+            writeCommentRange(currentSourceFile.text, getCurrentLineMap(), writer, commentPos, commentEnd, newLine);
             emitPos(commentEnd);
 
             if (kind === SyntaxKind.SingleLineCommentTrivia) {
@@ -5649,10 +5650,11 @@ namespace ts {
         }
 
         function emitTrailingCommentOfPosition(commentPos: number, commentEnd: number, _kind: SyntaxKind, hasTrailingNewLine: boolean) {
+            if(!currentSourceFile) return;
             // trailing comments of a position are emitted at /*trailing comment1 */space/*trailing comment*/space
 
             emitPos(commentPos);
-            writeCommentRange(currentSourceFile!.text, getCurrentLineMap(), writer, commentPos, commentEnd, newLine);
+            writeCommentRange(currentSourceFile.text, getCurrentLineMap(), writer, commentPos, commentEnd, newLine);
             emitPos(commentEnd);
 
             if (hasTrailingNewLine) {
@@ -5687,6 +5689,7 @@ namespace ts {
         }
 
         function forEachLeadingCommentWithoutDetachedComments(cb: (commentPos: number, commentEnd: number, kind: SyntaxKind, hasTrailingNewLine: boolean, rangePos: number) => void) {
+            if (!currentSourceFile) return;
             // get the leading comments from detachedPos
             const pos = last(detachedCommentsInfo!).detachedCommentEndPos;
             if (detachedCommentsInfo!.length - 1) {
@@ -5696,11 +5699,11 @@ namespace ts {
                 detachedCommentsInfo = undefined;
             }
 
-            forEachLeadingCommentRange(currentSourceFile!.text, pos, cb, /*state*/ pos);
+            forEachLeadingCommentRange(currentSourceFile.text, pos, cb, /*state*/ pos);
         }
 
         function emitDetachedCommentsAndUpdateCommentsInfo(range: TextRange) {
-            const currentDetachedCommentInfo = emitDetachedComments(currentSourceFile!.text, getCurrentLineMap(), writer, emitComment, range, newLine, commentsDisabled);
+            const currentDetachedCommentInfo = currentSourceFile && emitDetachedComments(currentSourceFile.text, getCurrentLineMap(), writer, emitComment, range, newLine, commentsDisabled);
             if (currentDetachedCommentInfo) {
                 if (detachedCommentsInfo) {
                     detachedCommentsInfo.push(currentDetachedCommentInfo);
@@ -5712,7 +5715,7 @@ namespace ts {
         }
 
         function emitComment(text: string, lineMap: number[], writer: EmitTextWriter, commentPos: number, commentEnd: number, newLine: string) {
-            if (!shouldWriteComment(currentSourceFile!.text, commentPos)) return;
+            if (!currentSourceFile || !shouldWriteComment(currentSourceFile.text, commentPos)) return;
             emitPos(commentPos);
             writeCommentRange(text, lineMap, writer, commentPos, commentEnd, newLine);
             emitPos(commentEnd);
@@ -5724,7 +5727,7 @@ namespace ts {
          * @return true if the comment is a triple-slash comment else false
          */
         function isTripleSlashComment(commentPos: number, commentEnd: number) {
-            return isRecognizedTripleSlashComment(currentSourceFile!.text, commentPos, commentEnd);
+            return !!currentSourceFile && isRecognizedTripleSlashComment(currentSourceFile.text, commentPos, commentEnd);
         }
 
         // Source Maps
