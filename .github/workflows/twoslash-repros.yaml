@@ -24,7 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Use node
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v3
     - uses: microsoft/TypeScript-Twoslash-Repro-Action@master
       with: 
         github-token: ${{ secrets.TS_BOT_GITHUB_TOKEN }}
@@ -36,7 +36,7 @@ jobs:
     - uses: actions/checkout@v3
       with:
         fetch-depth: 0
-    - uses: actions/setup-node@v1
+    - uses: actions/setup-node@v3
       with:
         node-version: 16
     - uses: microsoft/TypeScript-Twoslash-Repro-Action@master
