@@ -5,7 +5,6 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignatures2.ts(16,1): error TS2322: Type 'A' is not assignable to type 'B'.
   Types of parameters 'y' and 'y' are incompatible.
     Type 'S' is not assignable to type 'S[]'.
-      Type '{}' is missing the following properties from type 'S[]': length, pop, push, concat, and 16 more.
 
 
 ==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignatures2.ts (2 errors) ====
@@ -34,5 +33,4 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
 !!! error TS2322: Type 'A' is not assignable to type 'B'.
 !!! error TS2322:   Types of parameters 'y' and 'y' are incompatible.
 !!! error TS2322:     Type 'S' is not assignable to type 'S[]'.
-!!! error TS2322:       Type '{}' is missing the following properties from type 'S[]': length, pop, push, concat, and 16 more.
     

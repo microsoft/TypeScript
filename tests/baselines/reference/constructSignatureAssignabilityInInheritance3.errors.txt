@@ -35,7 +35,6 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/construc
   The types returned by 'new a2(...)' are incompatible between these types.
     Type 'T[]' is not assignable to type 'string[]'.
       Type 'T' is not assignable to type 'string'.
-        Type 'unknown' is not assignable to type 'string'.
 
 
 ==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance3.ts (6 errors) ====
@@ -177,7 +176,6 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/construc
 !!! error TS2430:   The types returned by 'new a2(...)' are incompatible between these types.
 !!! error TS2430:     Type 'T[]' is not assignable to type 'string[]'.
 !!! error TS2430:       Type 'T' is not assignable to type 'string'.
-!!! error TS2430:         Type 'unknown' is not assignable to type 'string'.
                 a2: new <T>(x: T) => T[]; // error
             }
     

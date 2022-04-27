@@ -10,22 +10,20 @@ tests/cases/conformance/types/conditional/conditionalTypes2.ts(24,5): error TS23
       Type 'B | keyof B' is not assignable to type 'A extends string ? keyof A : A'.
         Type 'B' is not assignable to type 'A extends string ? keyof A : A'.
           Type 'A' is not assignable to type 'A extends string ? keyof A : A'.
-            Type 'unknown' is not assignable to type 'A extends string ? keyof A : A'.
-              Type 'keyof B' is not assignable to type 'keyof A'.
-                Type 'string | number | symbol' is not assignable to type 'keyof A'.
-                  Type 'string' is not assignable to type 'keyof A'.
-                    Type 'string' is not assignable to type 'number | "toString" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "length" | "substr" | "valueOf"'.
-                      Type 'keyof B' is not assignable to type 'number | "toString" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "length" | "substr" | "valueOf"'.
-                        Type 'string | number | symbol' is not assignable to type 'number | "toString" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "length" | "substr" | "valueOf"'.
-                          Type 'string' is not assignable to type 'number | "toString" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "length" | "substr" | "valueOf"'.
+            Type 'keyof B' is not assignable to type 'keyof A'.
+              Type 'string | number | symbol' is not assignable to type 'keyof A'.
+                Type 'string' is not assignable to type 'keyof A'.
+                  Type 'string' is not assignable to type 'number | "toString" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "length" | "substr" | "valueOf"'.
+                    Type 'keyof B' is not assignable to type 'number | "toString" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "length" | "substr" | "valueOf"'.
+                      Type 'string | number | symbol' is not assignable to type 'number | "toString" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "length" | "substr" | "valueOf"'.
+                        Type 'string' is not assignable to type 'number | "toString" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "length" | "substr" | "valueOf"'.
 tests/cases/conformance/types/conditional/conditionalTypes2.ts(25,5): error TS2322: Type 'Invariant<A>' is not assignable to type 'Invariant<B>'.
   Types of property 'foo' are incompatible.
     Type 'A extends string ? keyof A : A' is not assignable to type 'B extends string ? keyof B : B'.
       Type 'A | keyof A' is not assignable to type 'B extends string ? keyof B : B'.
         Type 'A' is not assignable to type 'B extends string ? keyof B : B'.
-          Type 'unknown' is not assignable to type 'B extends string ? keyof B : B'.
-            Type 'A' is not assignable to type 'B'.
-              'B' could be instantiated with an arbitrary type which could be unrelated to 'A'.
+          Type 'A' is not assignable to type 'B'.
+            'B' could be instantiated with an arbitrary type which could be unrelated to 'A'.
 tests/cases/conformance/types/conditional/conditionalTypes2.ts(73,12): error TS2345: Argument of type 'Extract<Extract<T, Foo>, Bar>' is not assignable to parameter of type '{ foo: string; bat: string; }'.
   Property 'bat' is missing in type 'Bar & Foo' but required in type '{ foo: string; bat: string; }'.
     Type 'Extract<T, Bar>' is not assignable to type '{ foo: string; bat: string; }'.
@@ -77,14 +75,13 @@ tests/cases/conformance/types/conditional/conditionalTypes2.ts(75,12): error TS2
 !!! error TS2322:       Type 'B | keyof B' is not assignable to type 'A extends string ? keyof A : A'.
 !!! error TS2322:         Type 'B' is not assignable to type 'A extends string ? keyof A : A'.
 !!! error TS2322:           Type 'A' is not assignable to type 'A extends string ? keyof A : A'.
-!!! error TS2322:             Type 'unknown' is not assignable to type 'A extends string ? keyof A : A'.
-!!! error TS2322:               Type 'keyof B' is not assignable to type 'keyof A'.
-!!! error TS2322:                 Type 'string | number | symbol' is not assignable to type 'keyof A'.
-!!! error TS2322:                   Type 'string' is not assignable to type 'keyof A'.
-!!! error TS2322:                     Type 'string' is not assignable to type 'number | "toString" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "length" | "substr" | "valueOf"'.
-!!! error TS2322:                       Type 'keyof B' is not assignable to type 'number | "toString" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "length" | "substr" | "valueOf"'.
-!!! error TS2322:                         Type 'string | number | symbol' is not assignable to type 'number | "toString" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "length" | "substr" | "valueOf"'.
-!!! error TS2322:                           Type 'string' is not assignable to type 'number | "toString" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "length" | "substr" | "valueOf"'.
+!!! error TS2322:             Type 'keyof B' is not assignable to type 'keyof A'.
+!!! error TS2322:               Type 'string | number | symbol' is not assignable to type 'keyof A'.
+!!! error TS2322:                 Type 'string' is not assignable to type 'keyof A'.
+!!! error TS2322:                   Type 'string' is not assignable to type 'number | "toString" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "length" | "substr" | "valueOf"'.
+!!! error TS2322:                     Type 'keyof B' is not assignable to type 'number | "toString" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "length" | "substr" | "valueOf"'.
+!!! error TS2322:                       Type 'string | number | symbol' is not assignable to type 'number | "toString" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "length" | "substr" | "valueOf"'.
+!!! error TS2322:                         Type 'string' is not assignable to type 'number | "toString" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "length" | "substr" | "valueOf"'.
         b = a;  // Error
         ~
 !!! error TS2322: Type 'Invariant<A>' is not assignable to type 'Invariant<B>'.
@@ -92,9 +89,8 @@ tests/cases/conformance/types/conditional/conditionalTypes2.ts(75,12): error TS2
 !!! error TS2322:     Type 'A extends string ? keyof A : A' is not assignable to type 'B extends string ? keyof B : B'.
 !!! error TS2322:       Type 'A | keyof A' is not assignable to type 'B extends string ? keyof B : B'.
 !!! error TS2322:         Type 'A' is not assignable to type 'B extends string ? keyof B : B'.
-!!! error TS2322:           Type 'unknown' is not assignable to type 'B extends string ? keyof B : B'.
-!!! error TS2322:             Type 'A' is not assignable to type 'B'.
-!!! error TS2322:               'B' could be instantiated with an arbitrary type which could be unrelated to 'A'.
+!!! error TS2322:           Type 'A' is not assignable to type 'B'.
+!!! error TS2322:             'B' could be instantiated with an arbitrary type which could be unrelated to 'A'.
     }
     
     // Extract<T, Function> is a T that is known to be a Function

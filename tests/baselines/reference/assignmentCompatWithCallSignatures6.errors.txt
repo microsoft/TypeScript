@@ -12,7 +12,6 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
     Type '{ a: T; b: T; }' is not assignable to type '{ a: Base; b: Base; }'.
       Types of property 'a' are incompatible.
         Type 'T' is not assignable to type 'Base'.
-          Property 'foo' is missing in type '{}' but required in type 'Base'.
 
 
 ==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures6.ts (3 errors) ====
@@ -75,5 +74,3 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
 !!! error TS2322:     Type '{ a: T; b: T; }' is not assignable to type '{ a: Base; b: Base; }'.
 !!! error TS2322:       Types of property 'a' are incompatible.
 !!! error TS2322:         Type 'T' is not assignable to type 'Base'.
-!!! error TS2322:           Property 'foo' is missing in type '{}' but required in type 'Base'.
-!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures6.ts:3:14: 'foo' is declared here.

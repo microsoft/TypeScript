@@ -1,11 +1,7 @@
 tests/cases/compiler/file1.js(2,7): error TS2322: Type 'C' is not assignable to type 'ClassComponent<any>'.
 tests/cases/compiler/tile1.ts(2,30): error TS2344: Type 'State' does not satisfy the constraint 'Lifecycle<Attrs, State>'.
-  Type 'unknown' is not assignable to type 'Lifecycle<Attrs, State>'.
-    Index signature for type 'number' is missing in type '{}'.
 tests/cases/compiler/tile1.ts(6,81): error TS2744: Type parameter defaults can only reference previously declared type parameters.
 tests/cases/compiler/tile1.ts(11,40): error TS2344: Type 'State' does not satisfy the constraint 'Lifecycle<Attrs, State>'.
-  Type 'unknown' is not assignable to type 'Lifecycle<Attrs, State>'.
-    Index signature for type 'number' is missing in type '{}'.
 tests/cases/compiler/tile1.ts(21,2): error TS2416: Property 'view' in type 'C' is not assignable to the same property in base type 'ClassComponent<MyAttrs>'.
   Type '(v: Vnode<MyAttrs, Lifecycle<MyAttrs, any>>) => number' is not assignable to type '(vnode: Vnode<MyAttrs, this>) => number'.
     Types of parameters 'v' and 'vnode' are incompatible.
@@ -22,8 +18,6 @@ tests/cases/compiler/tile1.ts(24,7): error TS2322: Type 'C' is not assignable to
     	oninit?(vnode: Vnode<Attrs, State>): number;
     	                            ~~~~~
 !!! error TS2344: Type 'State' does not satisfy the constraint 'Lifecycle<Attrs, State>'.
-!!! error TS2344:   Type 'unknown' is not assignable to type 'Lifecycle<Attrs, State>'.
-!!! error TS2344:     Index signature for type 'number' is missing in type '{}'.
     	[_: number]: any;
     }
     
@@ -37,8 +31,6 @@ tests/cases/compiler/tile1.ts(24,7): error TS2322: Type 'C' is not assignable to
     	view(this: State, vnode: Vnode<Attrs, State>): number;
     	                                      ~~~~~
 !!! error TS2344: Type 'State' does not satisfy the constraint 'Lifecycle<Attrs, State>'.
-!!! error TS2344:   Type 'unknown' is not assignable to type 'Lifecycle<Attrs, State>'.
-!!! error TS2344:     Index signature for type 'number' is missing in type '{}'.
     }
     
     interface ClassComponent<A> extends Lifecycle<A, ClassComponent<A>> {

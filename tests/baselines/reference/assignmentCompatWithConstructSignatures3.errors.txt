@@ -1,19 +1,15 @@
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures3.ts(47,1): error TS2322: Type 'new (x: number) => number[]' is not assignable to type 'new <T>(x: T) => T[]'.
   Types of parameters 'x' and 'x' are incompatible.
     Type 'T' is not assignable to type 'number'.
-      Type 'unknown' is not assignable to type 'number'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures3.ts(50,1): error TS2322: Type 'new (x: number) => string[]' is not assignable to type 'new <T>(x: T) => string[]'.
   Types of parameters 'x' and 'x' are incompatible.
     Type 'T' is not assignable to type 'number'.
-      Type 'unknown' is not assignable to type 'number'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures3.ts(53,1): error TS2322: Type 'new (x: number) => void' is not assignable to type 'new <T>(x: T) => T'.
   Types of parameters 'x' and 'x' are incompatible.
     Type 'T' is not assignable to type 'number'.
-      Type 'unknown' is not assignable to type 'number'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures3.ts(56,1): error TS2322: Type 'new (x: string, y: number) => string' is not assignable to type 'new <T, U>(x: T, y: U) => T'.
   Types of parameters 'x' and 'x' are incompatible.
     Type 'T' is not assignable to type 'string'.
-      Type 'unknown' is not assignable to type 'string'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures3.ts(59,1): error TS2322: Type 'new (x: (arg: string) => number) => string' is not assignable to type 'new <T, U>(x: (arg: T) => U) => T'.
   Types of parameters 'x' and 'x' are incompatible.
     Types of parameters 'arg' and 'arg' are incompatible.
@@ -64,7 +60,6 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
     Type '{ a: T; b: T; }' is not assignable to type '{ a: string; b: number; }'.
       Types of property 'a' are incompatible.
         Type 'T' is not assignable to type 'string'.
-          Type 'unknown' is not assignable to type 'string'.
 
 
 ==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures3.ts (15 errors) ====
@@ -119,7 +114,6 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
 !!! error TS2322: Type 'new (x: number) => number[]' is not assignable to type 'new <T>(x: T) => T[]'.
 !!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2322:     Type 'T' is not assignable to type 'number'.
-!!! error TS2322:       Type 'unknown' is not assignable to type 'number'.
     var b2: new <T>(x: T) => string[]; 
     a2 = b2; // ok 
     b2 = a2; // ok
@@ -127,7 +121,6 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
 !!! error TS2322: Type 'new (x: number) => string[]' is not assignable to type 'new <T>(x: T) => string[]'.
 !!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2322:     Type 'T' is not assignable to type 'number'.
-!!! error TS2322:       Type 'unknown' is not assignable to type 'number'.
     var b3: new <T>(x: T) => T; 
     a3 = b3; // ok
     b3 = a3; // ok
@@ -135,7 +128,6 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
 !!! error TS2322: Type 'new (x: number) => void' is not assignable to type 'new <T>(x: T) => T'.
 !!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2322:     Type 'T' is not assignable to type 'number'.
-!!! error TS2322:       Type 'unknown' is not assignable to type 'number'.
     var b4: new <T, U>(x: T, y: U) => T; 
     a4 = b4; // ok
     b4 = a4; // ok
@@ -143,7 +135,6 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
 !!! error TS2322: Type 'new (x: string, y: number) => string' is not assignable to type 'new <T, U>(x: T, y: U) => T'.
 !!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2322:     Type 'T' is not assignable to type 'string'.
-!!! error TS2322:       Type 'unknown' is not assignable to type 'string'.
     var b5: new <T, U>(x: (arg: T) => U) => T; 
     a5 = b5; // ok
     b5 = a5; // ok
@@ -236,7 +227,6 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
 !!! error TS2322:     Type '{ a: T; b: T; }' is not assignable to type '{ a: string; b: number; }'.
 !!! error TS2322:       Types of property 'a' are incompatible.
 !!! error TS2322:         Type 'T' is not assignable to type 'string'.
-!!! error TS2322:           Type 'unknown' is not assignable to type 'string'.
     var b15: new <T>(x: T) => T[]; 
     a15 = b15; // ok
     b15 = a15; // ok

@@ -1,9 +1,7 @@
 tests/cases/conformance/types/mapped/mappedTypeConstraints2.ts(10,11): error TS2322: Type 'Mapped2<K>[`get${K}`]' is not assignable to type '{ a: K; }'.
   Type 'Mapped2<K>[`get${string}`]' is not assignable to type '{ a: K; }'.
-    Type 'unknown' is not assignable to type '{ a: K; }'.
 tests/cases/conformance/types/mapped/mappedTypeConstraints2.ts(16,11): error TS2322: Type 'Mapped3<K>[Uppercase<K>]' is not assignable to type '{ a: K; }'.
   Type 'Mapped3<K>[string]' is not assignable to type '{ a: K; }'.
-    Type 'unknown' is not assignable to type '{ a: K; }'.
 tests/cases/conformance/types/mapped/mappedTypeConstraints2.ts(25,57): error TS2322: Type 'Foo<T>[`get${T}`]' is not assignable to type 'T'.
   'T' could be instantiated with an arbitrary type which could be unrelated to 'Foo<T>[`get${T}`]'.
 
@@ -22,7 +20,6 @@ tests/cases/conformance/types/mapped/mappedTypeConstraints2.ts(25,57): error TS2
               ~
 !!! error TS2322: Type 'Mapped2<K>[`get${K}`]' is not assignable to type '{ a: K; }'.
 !!! error TS2322:   Type 'Mapped2<K>[`get${string}`]' is not assignable to type '{ a: K; }'.
-!!! error TS2322:     Type 'unknown' is not assignable to type '{ a: K; }'.
     }
     
     type Mapped3<K extends string> = { [P in K as Uppercase<P>]: { a: P } };
@@ -32,7 +29,6 @@ tests/cases/conformance/types/mapped/mappedTypeConstraints2.ts(25,57): error TS2
               ~
 !!! error TS2322: Type 'Mapped3<K>[Uppercase<K>]' is not assignable to type '{ a: K; }'.
 !!! error TS2322:   Type 'Mapped3<K>[string]' is not assignable to type '{ a: K; }'.
-!!! error TS2322:     Type 'unknown' is not assignable to type '{ a: K; }'.
     }
     
     // Repro from #47794
