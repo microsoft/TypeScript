@@ -241,13 +241,13 @@ Output::
 
 [[90m12:01:21 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg2/tsconfig.json'...
 
-[[90m12:01:23 AM[0m] Project 'pkg3/tsconfig.json' is out of date because oldest output 'pkg3/index.js' is older than newest input 'typings/xterm.d.ts'
+[[90m12:01:22 AM[0m] Project 'pkg3/tsconfig.json' is out of date because oldest output 'pkg3/index.js' is older than newest input 'typings/xterm.d.ts'
 
-[[90m12:01:24 AM[0m] Building project '/user/username/projects/myproject/pkg3/tsconfig.json'...
+[[90m12:01:23 AM[0m] Building project '/user/username/projects/myproject/pkg3/tsconfig.json'...
 
-[[90m12:01:26 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg3/tsconfig.json'...
+[[90m12:01:25 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg3/tsconfig.json'...
 
-[[90m12:01:27 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:26 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -357,9 +357,9 @@ Input::
 
 Output::
 >> Screen clear
-[[90m12:01:31 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:30 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:32 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:31 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -417,13 +417,13 @@ Output::
 
 [[90m12:01:44 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg1/tsconfig.json'...
 
-[[90m12:01:46 AM[0m] Project 'pkg2/tsconfig.json' is out of date because oldest output 'pkg2/index.js' is older than newest input 'typings/xterm.d.ts'
+[[90m12:01:45 AM[0m] Project 'pkg2/tsconfig.json' is out of date because oldest output 'pkg2/index.js' is older than newest input 'typings/xterm.d.ts'
 
-[[90m12:01:47 AM[0m] Building project '/user/username/projects/myproject/pkg2/tsconfig.json'...
+[[90m12:01:46 AM[0m] Building project '/user/username/projects/myproject/pkg2/tsconfig.json'...
 
-[[90m12:01:49 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg2/tsconfig.json'...
+[[90m12:01:48 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg2/tsconfig.json'...
 
-[[90m12:01:50 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:49 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -512,14 +512,14 @@ Input::
 
 Output::
 >> Screen clear
-[[90m12:01:54 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:53 AM[0m] File change detected. Starting incremental compilation...
 
 [96mtsconfig.json[0m:[93m1[0m:[93m10[0m - [91merror[0m[90m TS18002: [0mThe 'files' list in config file '/user/username/projects/myproject/tsconfig.json' is empty.
 
 [7m1[0m {"files":[],"include":[],"references":[]}
 [7m [0m [91m         ~~[0m
 
-[[90m12:01:55 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:01:54 AM[0m] Found 1 error. Watching for file changes.
 
 
 

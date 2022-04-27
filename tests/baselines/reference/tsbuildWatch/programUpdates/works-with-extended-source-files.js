@@ -399,13 +399,13 @@ Input::
 
 Output::
 >> Screen clear
-[[90m12:01:18 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:17 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:19 AM[0m] Project 'project2.tsconfig.json' is out of date because oldest output 'commonFile1.js' is older than newest input 'project2.tsconfig.json'
+[[90m12:01:18 AM[0m] Project 'project2.tsconfig.json' is out of date because oldest output 'commonFile1.js' is older than newest input 'project2.tsconfig.json'
 
-[[90m12:01:20 AM[0m] Building project '/a/b/project2.tsconfig.json'...
+[[90m12:01:19 AM[0m] Building project '/a/b/project2.tsconfig.json'...
 
-[[90m12:01:30 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:29 AM[0m] Found 0 errors. Watching for file changes.
 
 
 

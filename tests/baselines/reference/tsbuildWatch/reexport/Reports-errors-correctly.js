@@ -436,13 +436,13 @@ Output::
 
 [[90m12:01:36 AM[0m] Building project '/user/username/projects/reexport/src/pure/tsconfig.json'...
 
-[[90m12:01:56 AM[0m] Failed to parse file 'src/main/tsconfig.json': Semantic errors.
+[[90m12:01:55 AM[0m] Failed to parse file 'src/main/tsconfig.json': Semantic errors.
 
-[[90m12:01:57 AM[0m] Building project '/user/username/projects/reexport/src/main/tsconfig.json'...
+[[90m12:01:56 AM[0m] Building project '/user/username/projects/reexport/src/main/tsconfig.json'...
 
-[[90m12:01:59 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/reexport/src/main/tsconfig.json'...
+[[90m12:01:58 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/reexport/src/main/tsconfig.json'...
 
-[[90m12:02:00 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:59 AM[0m] Found 0 errors. Watching for file changes.
 
 
 

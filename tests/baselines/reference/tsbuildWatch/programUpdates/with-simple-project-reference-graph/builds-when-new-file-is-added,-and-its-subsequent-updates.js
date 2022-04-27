@@ -711,7 +711,7 @@ export class someClass2 { }
 
 Output::
 >> Screen clear
-[[90m12:01:44 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:43 AM[0m] File change detected. Starting incremental compilation...
 
 
 
@@ -894,7 +894,7 @@ Change:: Build Tests
 Input::
 
 Output::
-[[90m12:02:03 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:02:02 AM[0m] Found 0 errors. Watching for file changes.
 
 
 

@@ -1796,10 +1796,10 @@ namespace ts {
     function invalidateProjectAndScheduleBuilds(state: SolutionBuilderState, resolvedPath: ResolvedConfigFilePath, reloadLevel: ConfigFileProgramReloadLevel) {
         state.reportFileChangeDetected = true;
         invalidateProject(state, resolvedPath, reloadLevel);
-        scheduleBuildInvalidatedProject(state);
+        scheduleBuildInvalidatedProject(state, 250);
     }
 
-    function scheduleBuildInvalidatedProject(state: SolutionBuilderState) {
+    function scheduleBuildInvalidatedProject(state: SolutionBuilderState, time: number) {
         const { hostWithWatch } = state;
         if (!hostWithWatch.setTimeout || !hostWithWatch.clearTimeout) {
             return;
@@ -1807,7 +1807,7 @@ namespace ts {
         if (state.timerToBuildInvalidatedProject) {
             hostWithWatch.clearTimeout(state.timerToBuildInvalidatedProject);
         }
-        state.timerToBuildInvalidatedProject = hostWithWatch.setTimeout(buildNextInvalidatedProject, 250, state);
+        state.timerToBuildInvalidatedProject = hostWithWatch.setTimeout(buildNextInvalidatedProject, time, state);
     }
 
     function buildNextInvalidatedProject(state: SolutionBuilderState) {
@@ -1829,7 +1829,7 @@ namespace ts {
                 if (!info) break; // Nothing to build any more
                 if (info.kind !== InvalidatedProjectKind.UpdateOutputFileStamps) {
                     // Schedule next project for build
-                    scheduleBuildInvalidatedProject(state);
+                    scheduleBuildInvalidatedProject(state, 100);
                     return;
                 }
                 // Updating the timstamps - do it right away

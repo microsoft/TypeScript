@@ -870,7 +870,7 @@ export function multiply(a: number, b: number) { return a * b; }
 
 Output::
 >> Screen clear
-[[90m12:02:13 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:02:12 AM[0m] File change detected. Starting incremental compilation...
 
 
 
@@ -1108,7 +1108,7 @@ Change:: Build Tests
 Input::
 
 Output::
-[[90m12:02:57 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:02:56 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -1508,7 +1508,7 @@ Change:: Build Tests
 Input::
 
 Output::
-[[90m12:03:49 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:03:48 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
