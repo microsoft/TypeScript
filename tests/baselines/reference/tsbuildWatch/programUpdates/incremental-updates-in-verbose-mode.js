@@ -667,11 +667,11 @@ Output::
 
 [[90m12:01:58 AM[0m] Building project '/user/username/projects/sample1/logic/tsconfig.json'...
 
-[[90m12:02:14 AM[0m] Project 'sample1/tests/tsconfig.json' is out of date because oldest output 'sample1/tests/index.js' is older than newest input 'sample1/logic/tsconfig.json'
+[[90m12:02:15 AM[0m] Project 'sample1/tests/tsconfig.json' is out of date because oldest output 'sample1/tests/index.js' is older than newest input 'sample1/logic/tsconfig.json'
 
-[[90m12:02:15 AM[0m] Building project '/user/username/projects/sample1/tests/tsconfig.json'...
+[[90m12:02:16 AM[0m] Building project '/user/username/projects/sample1/tests/tsconfig.json'...
 
-[[90m12:02:28 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:02:29 AM[0m] Found 0 errors. Watching for file changes.
 
 
 

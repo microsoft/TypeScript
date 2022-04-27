@@ -231,7 +231,7 @@ Output::
 
 [[90m12:01:30 AM[0m] Building project '/user/username/projects/demo/zoo/tsconfig.json'...
 
-[[90m12:01:42 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:43 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
