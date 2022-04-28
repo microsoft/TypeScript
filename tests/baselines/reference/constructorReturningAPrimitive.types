@@ -24,7 +24,7 @@ class B<T> {
 >x : T
 
         return x;
->x : T
+>x : unknown
     }
 }
 

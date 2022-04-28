@@ -339,7 +339,7 @@ function f23<T extends unknown>(x: T) {
 
     let y: object = x;  // Error
 >y : object
->x : T
+>x : unknown
 }
 
 // Anything fresh but primitive assignable to { [x: string]: unknown }
@@ -469,11 +469,11 @@ function f30<T, U extends unknown>(t: T, u: U) {
 
     let x: {} = t;
 >x : {}
->t : T
+>t : unknown
 
     let y: {} = u;
 >y : {}
->u : U
+>u : unknown
 }
 
 // Repro from #26796
@@ -496,6 +496,6 @@ function oops<T extends unknown>(arg: T): {} {
 >arg : T
 
     return arg;  // Error
->arg : T
+>arg : unknown
 }
 

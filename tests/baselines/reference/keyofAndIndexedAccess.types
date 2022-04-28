@@ -1268,19 +1268,19 @@ function f91<T, K extends keyof T>(x: T, y: T[keyof T], z: T[K]) {
 >a : {}
 
     a = x;
->a = x : T
+>a = x : unknown
 >a : {}
->x : T
+>x : unknown
 
     a = y;
->a = y : T[keyof T]
+>a = y : unknown
 >a : {}
->y : T[keyof T]
+>y : unknown
 
     a = z;
->a = z : T[K]
+>a = z : unknown
 >a : {}
->z : T[K]
+>z : unknown
 }
 
 function f92<T, K extends keyof T>(x: T, y: T[keyof T], z: T[K]) {
@@ -1294,19 +1294,19 @@ function f92<T, K extends keyof T>(x: T, y: T[keyof T], z: T[K]) {
 >null : null
 
     a = x;
->a = x : T
+>a = x : unknown
 >a : {} | null | undefined
->x : T
+>x : unknown
 
     a = y;
->a = y : T[keyof T]
+>a = y : unknown
 >a : {} | null | undefined
->y : T[keyof T]
+>y : unknown
 
     a = z;
->a = z : T[K]
+>a = z : unknown
 >a : {} | null | undefined
->z : T[K]
+>z : unknown
 }
 
 // Repros from #12011
@@ -2065,7 +2065,7 @@ function fn<T extends I, K extends keyof T>(o: T, k: K) {
 >take<{} | null | undefined>(o[k]) : void
 >take : <T>(p: T) => void
 >null : null
->o[k] : T[K]
+>o[k] : unknown
 >o : T
 >k : K
 
@@ -2089,7 +2089,7 @@ class Unbounded<T> {
         let y: {} | undefined | null = x;
 >y : {} | null | undefined
 >null : null
->x : T[keyof T]
+>x : unknown
     }
 }
 

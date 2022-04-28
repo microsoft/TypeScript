@@ -56,12 +56,12 @@ namespace implicitConstraints {
 >keysOfEmptyObject(a).length : number
 >keysOfEmptyObject(a) : string[]
 >keysOfEmptyObject : (o: {}) => string[]
->a : T
+>a : object
 >length : number
 >keysOfEmptyObject(b).length : number
 >keysOfEmptyObject(b) : string[]
 >keysOfEmptyObject : (o: {}) => string[]
->b : T
+>b : object
 >length : number
 
             return [a, b];
@@ -119,12 +119,12 @@ namespace implicitConstraints {
 >keysOfNonPrimitive(a).length : number
 >keysOfNonPrimitive(a) : string[]
 >keysOfNonPrimitive : (o: object) => string[]
->a : T
+>a : object
 >length : number
 >keysOfNonPrimitive(b).length : number
 >keysOfNonPrimitive(b) : string[]
 >keysOfNonPrimitive : (o: object) => string[]
->b : T
+>b : object
 >length : number
 
             return [a, b];
@@ -187,12 +187,12 @@ namespace explicitConstraintsOfUnknown {
 >keysOfEmptyObject(a).length : number
 >keysOfEmptyObject(a) : string[]
 >keysOfEmptyObject : (o: {}) => string[]
->a : T
+>a : object
 >length : number
 >keysOfEmptyObject(b).length : number
 >keysOfEmptyObject(b) : string[]
 >keysOfEmptyObject : (o: {}) => string[]
->b : T
+>b : object
 >length : number
 
             return [a, b];
@@ -250,12 +250,12 @@ namespace explicitConstraintsOfUnknown {
 >keysOfNonPrimitive(a).length : number
 >keysOfNonPrimitive(a) : string[]
 >keysOfNonPrimitive : (o: object) => string[]
->a : T
+>a : object
 >length : number
 >keysOfNonPrimitive(b).length : number
 >keysOfNonPrimitive(b) : string[]
 >keysOfNonPrimitive : (o: object) => string[]
->b : T
+>b : object
 >length : number
 
             return [a, b];

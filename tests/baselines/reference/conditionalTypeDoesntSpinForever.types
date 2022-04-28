@@ -413,7 +413,7 @@ export enum PubSubRecordIsStoredInRedisAsA {
 >Object.keys : { (o: object): string[]; (o: {}): string[]; }
 >Object : ObjectConstructor
 >keys : { (o: object): string[]; (o: {}): string[]; }
->soFar : SO_FAR
+>soFar : unknown
 
       hasField: (fieldName: string | number | symbol) => fieldName in soFar
 >hasField : (fieldName: string | number | symbol) => boolean

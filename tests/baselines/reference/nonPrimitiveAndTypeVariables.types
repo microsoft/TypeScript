@@ -27,7 +27,7 @@ function foo<T, U>(x: T) {
 
     let a: object = x;  // Error
 >a : object
->x : T
+>x : unknown
 
     let b: U | object = x;  // Error
 >b : object | U

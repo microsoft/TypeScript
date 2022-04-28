@@ -18,22 +18,22 @@ function testFunc2<A extends object>(a: A, sa: Something<A>) {
 >sa : Something<A>
 
     sa = { test: 'hi', arg: a }; // not excess (but currently still not assignable)
->sa = { test: 'hi', arg: a } : { test: string; arg: A; }
+>sa = { test: 'hi', arg: a } : { test: string; arg: object; }
 >sa : Something<A>
->{ test: 'hi', arg: a } : { test: string; arg: A; }
+>{ test: 'hi', arg: a } : { test: string; arg: object; }
 >test : string
 >'hi' : "hi"
->arg : A
->a : A
+>arg : object
+>a : object
 
     sa = { test: 'bye', arg: a, arr: a } // excess
->sa = { test: 'bye', arg: a, arr: a } : { test: string; arg: A; arr: A; }
+>sa = { test: 'bye', arg: a, arr: a } : { test: string; arg: object; arr: A; }
 >sa : Something<A>
->{ test: 'bye', arg: a, arr: a } : { test: string; arg: A; arr: A; }
+>{ test: 'bye', arg: a, arr: a } : { test: string; arg: object; arr: A; }
 >test : string
 >'bye' : "bye"
->arg : A
->a : A
+>arg : object
+>a : object
 >arr : A
 >a : A
 }

@@ -44,7 +44,7 @@ function user<T>(t: T) {
   f2(t); // error in strict, unbounded T doesn't satisfy the constraint
 >f2(t) : void
 >f2 : <T extends {}>(o: T) => void
->t : T
+>t : unknown
 
   f3(t); // error in strict, unbounded T doesn't satisfy the constraint
 >f3(t) : void
