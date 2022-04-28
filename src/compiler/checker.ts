@@ -25460,25 +25460,41 @@ namespace ts {
             // control flow analysis an opportunity to narrow it further. For example, for a reference of a type
             // parameter type 'T extends string | undefined' with a contextual type 'string', we substitute
             // 'string | undefined' to give control flow analysis the opportunity to narrow to type 'string'.
-            if (checkMode && checkMode & CheckMode.Inferential) {
+            if (checkMode && (checkMode & CheckMode.Inferential)) {
                 return type;
             }
 
-            let contextualType: Type | undefined;
-            // If we aren't in a constraint position, or we can't find a contextual type, or the contextual type indicates
-            // that the type in question may be a direct inference source, then don't do anything special.
-            if (!isConstraintPosition(type, reference) && !(contextualType = tryGetContextualTypeWithNoGenericTypes(reference, checkMode))) {
+            // Bail-out early if we don't have anything instantiable in the first place.
+            if (!someType(type, t => !!(t.flags & TypeFlags.Instantiable))) {
                 return type;
             }
 
+            const hasGenericWithUnionConstraint = someType(type, isGenericTypeWithUnionConstraint);
+            // If we only care about the apparent types of a value's constraints, we should narrow based on the constraint.
+            if (hasGenericWithUnionConstraint && isConstraintPosition(type, reference)) {
+                return getTypeWithConstraintsSubstituted();
+            }
+
+            const contextualType = tryGetContextualTypeWithNoGenericTypes(reference, checkMode);
+            // If there's no contextual type, that's a signal that we don't need to perform any substitution.
+            // If there *is* a contextual type, but it has top-level type variables, then it's not appropriate to narrow on
+            // constraints since the original type may be inferred from.
+            if (!contextualType) {
+                return type;
+            }
+
+            // When we have a type parameter constrained to a union type, or unknown, we can typically narrow on the constraint to get better results.
             const substituteConstraints =
-                // When we have a type parameter constrained to a union type, we can typically narrow to get better results.
-                someType(type, isGenericTypeWithUnionConstraint) ||
+                hasGenericWithUnionConstraint ||
                 // When the contextual type is 'unknown', we may need to narrow for compatibility with non-null targets.
                 // This allows some parity with a constraint of '{} | null | undefined'.
-                (type.flags & TypeFlags.Instantiable) && contextualType && isEmptyObjectType(contextualType);
+                (getBaseConstraintOfType(type) || unknownType) === unknownType && isEmptyObjectType(contextualType);
 
-            return substituteConstraints ? mapType(type, t => t.flags & TypeFlags.Instantiable ? getBaseConstraintOfType(t) || unknownType : t) : type;
+            return substituteConstraints ? getTypeWithConstraintsSubstituted() : type;
+
+            function getTypeWithConstraintsSubstituted() {
+                return mapType(type, t => t.flags & TypeFlags.Instantiable ? getBaseConstraintOfType(t) || unknownType : t);
+            }
         }
 
         function isExportOrExportExpression(location: Node) {
