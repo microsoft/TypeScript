@@ -348,9 +348,9 @@ namespace ts {
         // set in a non-modal module resolution setting here. Do note that our behavior is not particularly well defined when these mode-overriding imports
         // are present in a non-modal project; while in theory we'd like to either ignore the mode or provide faithful modern resolution, depending on what we feel is best,
         // in practice, not every cache has the options available to intelligently make the choice to ignore the mode request, and it's unclear how modern "faithful modern
-        // resolution" should be (`node12`? `nodenext`?). As such, witnessing a mode-overriding triple-slash reference in a non-modal module resolution
+        // resolution" should be (`node16`? `nodenext`?). As such, witnessing a mode-overriding triple-slash reference in a non-modal module resolution
         // context should _probably_ be an error - and that should likely be handled by the `Program` (which is what we do).
-        if (resolutionMode === ModuleKind.ESNext && (getEmitModuleResolutionKind(options) === ModuleResolutionKind.Node12 || getEmitModuleResolutionKind(options) === ModuleResolutionKind.NodeNext)) {
+        if (resolutionMode === ModuleKind.ESNext && (getEmitModuleResolutionKind(options) === ModuleResolutionKind.Node16 || getEmitModuleResolutionKind(options) === ModuleResolutionKind.NodeNext)) {
             features |= NodeResolutionFeatures.EsmMode;
         }
         const conditions = features & NodeResolutionFeatures.Exports ? features & NodeResolutionFeatures.EsmMode ? ["node", "import", "types"] : ["node", "require", "types"] : [];
@@ -444,7 +444,7 @@ namespace ts {
     }
 
     function getDefaultNodeResolutionFeatures(options: CompilerOptions) {
-        return getEmitModuleResolutionKind(options) === ModuleResolutionKind.Node12 ? NodeResolutionFeatures.Node12Default :
+        return getEmitModuleResolutionKind(options) === ModuleResolutionKind.Node16 ? NodeResolutionFeatures.Node16Default :
             getEmitModuleResolutionKind(options) === ModuleResolutionKind.NodeNext ? NodeResolutionFeatures.NodeNextDefault :
                 NodeResolutionFeatures.None;
     }
@@ -950,8 +950,8 @@ namespace ts {
                     case ModuleKind.CommonJS:
                         moduleResolution = ModuleResolutionKind.NodeJs;
                         break;
-                    case ModuleKind.Node12:
-                        moduleResolution = ModuleResolutionKind.Node12;
+                    case ModuleKind.Node16:
+                        moduleResolution = ModuleResolutionKind.Node16;
                         break;
                     case ModuleKind.NodeNext:
                         moduleResolution = ModuleResolutionKind.NodeNext;
@@ -972,8 +972,8 @@ namespace ts {
 
             perfLogger.logStartResolveModule(moduleName /* , containingFile, ModuleResolutionKind[moduleResolution]*/);
             switch (moduleResolution) {
-                case ModuleResolutionKind.Node12:
-                    result = node12ModuleNameResolver(moduleName, containingFile, compilerOptions, host, cache, redirectedReference, resolutionMode);
+                case ModuleResolutionKind.Node16:
+                    result = node16ModuleNameResolver(moduleName, containingFile, compilerOptions, host, cache, redirectedReference, resolutionMode);
                     break;
                 case ModuleResolutionKind.NodeNext:
                     result = nodeNextModuleNameResolver(moduleName, containingFile, compilerOptions, host, cache, redirectedReference, resolutionMode);
@@ -1231,22 +1231,22 @@ namespace ts {
         // respecting the `.exports` member of packages' package.json files and its (conditional) mappings of export names
         Exports = 1 << 3,
         // allowing `*` in the LHS of an export to be followed by more content, eg `"./whatever/*.js"`
-        // not currently backported to node 12 - https://github.com/nodejs/Release/issues/690
+        // not supported in node 12 - https://github.com/nodejs/Release/issues/690
         ExportsPatternTrailers = 1 << 4,
         AllFeatures = Imports | SelfName | Exports | ExportsPatternTrailers,
 
-        Node12Default = Imports | SelfName | Exports,
+        Node16Default = Imports | SelfName | Exports | ExportsPatternTrailers,
 
         NodeNextDefault = AllFeatures,
 
         EsmMode = 1 << 5,
     }
 
-    function node12ModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions,
+    function node16ModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions,
             host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference,
             resolutionMode?: ModuleKind.CommonJS | ModuleKind.ESNext): ResolvedModuleWithFailedLookupLocations {
         return nodeNextModuleNameResolverWorker(
-            NodeResolutionFeatures.Node12Default,
+            NodeResolutionFeatures.Node16Default,
             moduleName,
             containingFile,
             compilerOptions,
@@ -1310,7 +1310,7 @@ namespace ts {
         const traceEnabled = isTraceEnabled(compilerOptions, host);
 
         const failedLookupLocations: string[] = [];
-        // conditions are only used by the node12/nodenext resolver - there's no priority order in the list,
+        // conditions are only used by the node16/nodenext resolver - there's no priority order in the list,
         //it's essentially a set (priority is determined by object insertion order in the object we look at).
         const conditions = features & NodeResolutionFeatures.EsmMode ? ["node", "import", "types"] : ["node", "require", "types"];
         if (compilerOptions.noDtsResolution) {

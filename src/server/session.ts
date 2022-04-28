@@ -1288,7 +1288,7 @@ namespace ts.server {
                     const compilerOptions = project.getCompilationSettings();
                     const packageJson = getPackageScopeForPath(project.toPath(packageDirectory + "/package.json"), packageJsonCache, project, compilerOptions);
                     if (!packageJson) return undefined;
-                    // Use fake options instead of actual compiler options to avoid following export map if the project uses node12 or nodenext -
+                    // Use fake options instead of actual compiler options to avoid following export map if the project uses node16 or nodenext -
                     // Mapping from an export map entry across packages is out of scope for now. Returned entrypoints will only be what can be
                     // resolved from the package root under --moduleResolution node
                     const entrypoints = getEntrypointsFromPackageJsonInfo(

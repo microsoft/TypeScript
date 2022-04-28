@@ -89,7 +89,7 @@ namespace ts {
         });
     });
 
-    // https://github.com/microsoft/TypeScript/issues/44434 but with `module: node12`, some `exports` maps blocking direct access, and no `baseUrl`
+    // https://github.com/microsoft/TypeScript/issues/44434 but with `module: node16`, some `exports` maps blocking direct access, and no `baseUrl`
     describe("unittests:: tsbuild:: moduleSpecifiers:: synthesized module specifiers across referenced projects resolve correctly", () => {
         verifyTsc({
             scenario: "moduleSpecifiers",
@@ -140,7 +140,7 @@ namespace ts {
                     {
                         "compilerOptions": {
                             "declaration": true,
-                            "module": "node12"
+                            "module": "node16"
                         }
                     }`,
                 "/src/src-types/package.json": Utils.dedent`
