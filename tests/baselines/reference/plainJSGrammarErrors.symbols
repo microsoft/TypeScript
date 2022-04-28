@@ -465,5 +465,3 @@ const trinaryDynamicImport = import('1', '2', '3')
 const spreadDynamicImport = import(...[])
 >spreadDynamicImport : Symbol(spreadDynamicImport, Decl(plainJSGrammarErrors.js, 204, 5))
 
-return
-
