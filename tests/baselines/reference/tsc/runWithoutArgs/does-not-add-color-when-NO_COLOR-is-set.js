@@ -85,7 +85,7 @@ default: es3
 
 --module, -m
 Specify what module code is generated.
-one of: none, commonjs, amd, umd, system, es6/es2015, es2020, es2022, esnext, node12, nodenext
+one of: none, commonjs, amd, umd, system, es6/es2015, es2020, es2022, esnext, node16, nodenext
 default: undefined
 
 --lib
