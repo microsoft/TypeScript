@@ -1180,7 +1180,8 @@ namespace ts {
 
                 return {
                     resolvedFileName,
-                    failedLookupLocations: result.failedLookupLocations
+                    failedLookupLocations: result.failedLookupLocations,
+                    affectingLocations: result.affectingLocations,
                 };
             });
         }

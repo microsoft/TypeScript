@@ -86,14 +86,16 @@ namespace ts {
         return { fileName: resolved.path, packageId: resolved.packageId };
     }
 
-    function createResolvedModuleWithFailedLookupLocations(resolved: Resolved | undefined, isExternalLibraryImport: boolean | undefined, failedLookupLocations: string[], resultFromCache: ResolvedModuleWithFailedLookupLocations | undefined): ResolvedModuleWithFailedLookupLocations {
+    function createResolvedModuleWithFailedLookupLocations(resolved: Resolved | undefined, isExternalLibraryImport: boolean | undefined, failedLookupLocations: string[], affectingLocations: string[], resultFromCache: ResolvedModuleWithFailedLookupLocations | undefined): ResolvedModuleWithFailedLookupLocations {
         if (resultFromCache) {
             resultFromCache.failedLookupLocations.push(...failedLookupLocations);
+            resultFromCache.affectingLocations.push(...affectingLocations);
             return resultFromCache;
         }
         return {
             resolvedModule: resolved && { resolvedFileName: resolved.path, originalPath: resolved.originalPath === true ? undefined : resolved.originalPath, extension: resolved.extension, isExternalLibraryImport, packageId: resolved.packageId },
-            failedLookupLocations
+            failedLookupLocations,
+            affectingLocations,
         };
     }
 
@@ -103,6 +105,7 @@ namespace ts {
         compilerOptions: CompilerOptions;
         traceEnabled: boolean;
         failedLookupLocations: Push<string>;
+        affectingLocations: Push<string>;
         resultFromCache?: ResolvedModuleWithFailedLookupLocations;
         packageJsonInfoCache: PackageJsonInfoCache | undefined;
         features: NodeResolutionFeatures;
@@ -342,6 +345,7 @@ namespace ts {
         }
 
         const failedLookupLocations: string[] = [];
+        const affectingLocations: string[] = [];
         let features = getDefaultNodeResolutionFeatures(options);
         // Unlike `import` statements, whose mode-calculating APIs are all guaranteed to return `undefined` if we're in an un-mode-ed module resolution
         // setting, type references will return their target mode regardless of options because of how the parser works, so we guard against the mode being
@@ -354,7 +358,7 @@ namespace ts {
             features |= NodeResolutionFeatures.EsmMode;
         }
         const conditions = features & NodeResolutionFeatures.Exports ? features & NodeResolutionFeatures.EsmMode ? ["node", "import", "types"] : ["node", "require", "types"] : [];
-        const moduleResolutionState: ModuleResolutionState = { compilerOptions: options, host, traceEnabled, failedLookupLocations, packageJsonInfoCache: cache, features, conditions };
+        const moduleResolutionState: ModuleResolutionState = { compilerOptions: options, host, traceEnabled, failedLookupLocations, affectingLocations, packageJsonInfoCache: cache, features, conditions };
         let resolved = primaryLookup();
         let primary = true;
         if (!resolved) {
@@ -374,7 +378,7 @@ namespace ts {
                 isExternalLibraryImport: pathContainsNodeModules(fileName),
             };
         }
-        result = { resolvedTypeReferenceDirective, failedLookupLocations };
+        result = { resolvedTypeReferenceDirective, failedLookupLocations, affectingLocations };
         perFolderCache?.set(typeReferenceDirectiveName, /*mode*/ resolutionMode, result);
         if (traceEnabled) traceResult(result);
         return result;
@@ -465,6 +469,7 @@ namespace ts {
             host,
             traceEnabled: isTraceEnabled(options, host),
             failedLookupLocations: [],
+            affectingLocations: [],
             packageJsonInfoCache: cache?.getPackageJsonInfoCache(),
             conditions: emptyArray,
             features: NodeResolutionFeatures.None,
@@ -1310,6 +1315,7 @@ namespace ts {
         const traceEnabled = isTraceEnabled(compilerOptions, host);
 
         const failedLookupLocations: string[] = [];
+        const affectingLocations: string[] = [];
         // conditions are only used by the node12/nodenext resolver - there's no priority order in the list,
         //it's essentially a set (priority is determined by object insertion order in the object we look at).
         const conditions = features & NodeResolutionFeatures.EsmMode ? ["node", "import", "types"] : ["node", "require", "types"];
@@ -1322,13 +1328,20 @@ namespace ts {
             host,
             traceEnabled,
             failedLookupLocations,
+            affectingLocations,
             packageJsonInfoCache: cache,
             features,
             conditions,
         };
 
         const result = forEach(extensions, ext => tryResolve(ext));
-        return createResolvedModuleWithFailedLookupLocations(result?.value?.resolved, result?.value?.isExternalLibraryImport, failedLookupLocations, state.resultFromCache);
+        return createResolvedModuleWithFailedLookupLocations(
+            result?.value?.resolved,
+            result?.value?.isExternalLibraryImport,
+            failedLookupLocations,
+            affectingLocations,
+            state.resultFromCache
+        );
 
         function tryResolve(extensions: Extensions): SearchResult<{ resolved: Resolved, isExternalLibraryImport: boolean }> {
             const loader: ResolutionKindSpecificLoader = (extensions, candidate, onlyRecordFailures, state) => nodeLoadModuleByRelativeName(extensions, candidate, onlyRecordFailures, state, /*considerPackageJson*/ true);
@@ -1652,6 +1665,7 @@ namespace ts {
             host,
             traceEnabled: isTraceEnabled(options, host),
             failedLookupLocations: [],
+            affectingLocations: [],
             packageJsonInfoCache: cache?.getPackageJsonInfoCache(),
             conditions: ["node", "require", "types"],
             features,
@@ -1760,6 +1774,7 @@ namespace ts {
             compilerOptions: CompilerOptions;
             traceEnabled: boolean;
             failedLookupLocations: Push<string>;
+            affectingLocations: Push<string>;
             resultFromCache?: ResolvedModuleWithFailedLookupLocations;
             packageJsonInfoCache: PackageJsonInfoCache | undefined;
             features: number;
@@ -1769,6 +1784,7 @@ namespace ts {
             compilerOptions: options,
             traceEnabled: isTraceEnabled(options, host),
             failedLookupLocations: [],
+            affectingLocations: [],
             packageJsonInfoCache,
             features: 0,
             conditions: [],
@@ -1798,6 +1814,7 @@ namespace ts {
         if (existing !== undefined) {
             if (typeof existing !== "boolean") {
                 if (traceEnabled) trace(host, Diagnostics.File_0_exists_according_to_earlier_cached_lookups, packageJsonPath);
+                state.affectingLocations.push(packageJsonPath);
                 return existing;
             }
             else {
@@ -1815,6 +1832,7 @@ namespace ts {
             const versionPaths = readPackageJsonTypesVersionPaths(packageJsonContent, state);
             const result = { packageDirectory, packageJsonContent, versionPaths, resolvedEntrypoints: undefined };
             state.packageJsonInfoCache?.setPackageJsonInfo(packageJsonPath, result);
+            state.affectingLocations.push(packageJsonPath);
             return result;
         }
         else {
@@ -2374,12 +2392,19 @@ namespace ts {
     export function classicNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: NonRelativeModuleNameResolutionCache, redirectedReference?: ResolvedProjectReference): ResolvedModuleWithFailedLookupLocations {
         const traceEnabled = isTraceEnabled(compilerOptions, host);
         const failedLookupLocations: string[] = [];
-        const state: ModuleResolutionState = { compilerOptions, host, traceEnabled, failedLookupLocations, packageJsonInfoCache: cache, features: NodeResolutionFeatures.None, conditions: [] };
+        const affectingLocations: string[] = [];
+        const state: ModuleResolutionState = { compilerOptions, host, traceEnabled, failedLookupLocations, affectingLocations, packageJsonInfoCache: cache, features: NodeResolutionFeatures.None, conditions: [] };
         const containingDirectory = getDirectoryPath(containingFile);
 
         const resolved = tryResolve(Extensions.TypeScript) || tryResolve(Extensions.JavaScript);
         // No originalPath because classic resolution doesn't resolve realPath
-        return createResolvedModuleWithFailedLookupLocations(resolved && resolved.value, /*isExternalLibraryImport*/ false, failedLookupLocations, state.resultFromCache);
+        return createResolvedModuleWithFailedLookupLocations(
+            resolved && resolved.value,
+             /*isExternalLibraryImport*/ false,
+            failedLookupLocations,
+            affectingLocations,
+            state.resultFromCache
+        );
 
         function tryResolve(extensions: Extensions): SearchResult<Resolved> {
             const resolvedUsingSettings = tryLoadModuleUsingOptionalResolutionSettings(extensions, moduleName, containingDirectory, loadModuleFromFileNoPackageId, state);
@@ -2424,9 +2449,16 @@ namespace ts {
             trace(host, Diagnostics.Auto_discovery_for_typings_is_enabled_in_project_0_Running_extra_resolution_pass_for_module_1_using_cache_location_2, projectName, moduleName, globalCache);
         }
         const failedLookupLocations: string[] = [];
-        const state: ModuleResolutionState = { compilerOptions, host, traceEnabled, failedLookupLocations, packageJsonInfoCache, features: NodeResolutionFeatures.None, conditions: [] };
+        const affectingLocations: string[] = [];
+        const state: ModuleResolutionState = { compilerOptions, host, traceEnabled, failedLookupLocations, affectingLocations, packageJsonInfoCache, features: NodeResolutionFeatures.None, conditions: [] };
         const resolved = loadModuleFromImmediateNodeModulesDirectory(Extensions.DtsOnly, moduleName, globalCache, state, /*typesScopeOnly*/ false, /*cache*/ undefined, /*redirectedReference*/ undefined);
-        return createResolvedModuleWithFailedLookupLocations(resolved, /*isExternalLibraryImport*/ true, failedLookupLocations, state.resultFromCache);
+        return createResolvedModuleWithFailedLookupLocations(
+            resolved,
+            /*isExternalLibraryImport*/ true,
+            failedLookupLocations,
+            affectingLocations,
+            state.resultFromCache
+        );
     }
 
     /**

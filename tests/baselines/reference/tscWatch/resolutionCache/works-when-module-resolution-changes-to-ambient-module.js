@@ -117,10 +117,6 @@ WatchedFiles::
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 /a/b/node_modules/@types/node/index.d.ts:
   {"fileName":"/a/b/node_modules/@types/node/index.d.ts","pollingInterval":250}
-/a/b/node_modules/fs/package.json:
-  {"fileName":"/a/b/node_modules/fs/package.json","pollingInterval":250}
-/a/b/node_modules/@types/fs/package.json:
-  {"fileName":"/a/b/node_modules/@types/fs/package.json","pollingInterval":250}
 /a/b/node_modules/@types/node/package.json:
   {"fileName":"/a/b/node_modules/@types/node/package.json","pollingInterval":250}
 

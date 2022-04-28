@@ -141,6 +141,7 @@ namespace ts {
                 checkResolvedModule(resolution.resolvedModule, createResolvedModule(moduleFile.name));
                 // expect three failed lookup location - attempt to load module as file with all supported extensions
                 assert.equal(resolution.failedLookupLocations.length, supportedTSExtensions[0].length);
+                // TODO
             }
         }
 
@@ -215,6 +216,7 @@ namespace ts {
                     extension: Extension.Ts,
                 },
                 failedLookupLocations: [],
+                affectingLocations: [],
             });
             assert.isDefined(cache.get("/sub"));
             assert.isUndefined(cache.get("/"));
@@ -228,6 +230,7 @@ namespace ts {
                     extension: Extension.Ts,
                 },
                 failedLookupLocations: [],
+                affectingLocations: [],
             });
             assert.isDefined(cache.get("/sub/dir/foo"));
             assert.isDefined(cache.get("/sub/dir"));
@@ -243,6 +246,7 @@ namespace ts {
                     extension: Extension.Ts,
                 },
                 failedLookupLocations: [],
+                affectingLocations: [],
             });
             assert.isDefined(cache.get("/foo/bar"));
             assert.isDefined(cache.get("/foo"));
@@ -257,6 +261,7 @@ namespace ts {
                     extension: Extension.Ts,
                 },
                 failedLookupLocations: [],
+                affectingLocations: [],
             });
             assert.isDefined(cache.get("/foo"));
             assert.isUndefined(cache.get("/"));
@@ -270,6 +275,7 @@ namespace ts {
                     extension: Extension.Ts,
                 },
                 failedLookupLocations: [],
+                affectingLocations: [],
             });
             assert.isDefined(cache.get("c:/foo"));
             assert.isDefined(cache.get("c:/"));
@@ -279,6 +285,7 @@ namespace ts {
             cache.set("/foo/bar/baz", {
                 resolvedModule: undefined,
                 failedLookupLocations: [],
+                affectingLocations: [],
             });
             assert.isDefined(cache.get("/foo/bar/baz"));
             assert.isDefined(cache.get("/foo/bar"));

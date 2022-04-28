@@ -218,9 +218,7 @@ WatchedFiles::
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 /user/username/projects/myproject/packages/b/package.json:
-  {"fileName":"/user/username/projects/myproject/packages/b/package.json","pollingInterval":250}
-/user/username/projects/myproject/packages/b/lib/bar/package.json:
-  {"fileName":"/user/username/projects/myproject/packages/b/lib/bar/package.json","pollingInterval":250}
+  {"fileName":"/user/username/projects/myproject/packages/B/package.json","pollingInterval":250}
 
 FsWatches::
 

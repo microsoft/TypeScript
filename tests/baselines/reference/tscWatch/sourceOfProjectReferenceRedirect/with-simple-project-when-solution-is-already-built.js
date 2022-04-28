@@ -357,8 +357,6 @@ WatchedFiles::
   {"fileName":"/user/username/projects/demo/core/utilities.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/user/username/projects/demo/animals/package.json:
-  {"fileName":"/user/username/projects/demo/animals/package.json","pollingInterval":250}
 
 FsWatches::
 /user/username/projects/demo/animals:

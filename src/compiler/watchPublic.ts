@@ -267,7 +267,6 @@ namespace ts {
         let builderProgram: T;
         let reloadLevel: ConfigFileProgramReloadLevel;                      // level to indicate if the program needs to be reloaded from config file/just filenames etc
         let missingFilesMap: ESMap<Path, FileWatcher>;                       // Map of file watchers for the missing files
-        let packageJsonMap: ESMap<Path, FileWatcher>;                       // map of watchers for package json files used in module resolution
         let watchedWildcardDirectories: ESMap<string, WildcardDirectoryWatcher>; // map of watchers for the wild card directories in the config file
         let timerToUpdateProgram: any;                                      // timer callback to recompile the program
         let timerToInvalidateFailedLookupResolutions: any;                  // timer callback to invalidate resolutions for changes in failed lookup locations
@@ -332,6 +331,7 @@ namespace ts {
         compilerHost.getCompilationSettings = () => compilerOptions;
         compilerHost.useSourceOfProjectReferenceRedirect = maybeBind(host, host.useSourceOfProjectReferenceRedirect);
         compilerHost.watchDirectoryOfFailedLookupLocation = (dir, cb, flags) => watchDirectory(dir, cb, flags, watchOptions, WatchType.FailedLookupLocations);
+        compilerHost.watchAffectingFileLocation = (file, cb) => watchFile(file, cb, PollingInterval.High, watchOptions, WatchType.PackageJson);
         compilerHost.watchTypeRootsDirectory = (dir, cb, flags) => watchDirectory(dir, cb, flags, watchOptions, WatchType.TypeRoots);
         compilerHost.getCachedDirectoryStructureHost = () => cachedDirectoryStructureHost;
         compilerHost.scheduleInvalidateResolutionsOfFailedLookupLocations = scheduleInvalidateResolutionsOfFailedLookupLocations;
@@ -407,10 +407,6 @@ namespace ts {
                 });
                 parsedConfigs = undefined;
             }
-            if (packageJsonMap) {
-                clearMap(packageJsonMap, closeFileWatcher);
-                packageJsonMap = undefined!;
-            }
         }
 
         function getCurrentBuilderProgram() {
@@ -475,13 +471,10 @@ namespace ts {
             compilerHost.hasInvalidatedResolution = hasInvalidatedResolution;
             compilerHost.hasChangedAutomaticTypeDirectiveNames = hasChangedAutomaticTypeDirectiveNames;
             builderProgram = createProgram(rootFileNames, compilerOptions, compilerHost, builderProgram, configFileParsingDiagnostics, projectReferences);
-            // map package json cache entries to their realpaths so we don't try to watch across symlinks
-            const packageCacheEntries = map(resolutionCache.getModuleResolutionCache().getPackageJsonInfoCache().entries(), ([path, data]) => ([compilerHost.realpath ? toPath(compilerHost.realpath(path)) : path, data] as const));
             resolutionCache.finishCachingPerDirectoryResolution();
 
             // Update watches
             updateMissingFilePathsWatch(builderProgram.getProgram(), missingFilesMap || (missingFilesMap = new Map()), watchMissingFilePath);
-            updatePackageJsonWatch(packageCacheEntries, packageJsonMap || (packageJsonMap = new Map()), watchPackageJsonLookupPath);
             if (needsUpdateInTypeRootWatch) {
                 resolutionCache.updateTypeRootsWatch();
             }
@@ -845,24 +838,6 @@ namespace ts {
             return parsedConfigs?.has(missingFilePath) ?
                 noopFileWatcher :
                 watchFilePath(missingFilePath, missingFilePath, onMissingFileChange, PollingInterval.Medium, watchOptions, WatchType.MissingFile);
-        }
-
-        function watchPackageJsonLookupPath(packageJsonPath: Path) {
-            // If the package.json is pulled into the compilation itself (eg, via json imports), don't add a second watcher here
-            return sourceFilesCache.has(packageJsonPath) ?
-                noopFileWatcher :
-                watchFilePath(packageJsonPath, packageJsonPath, onPackageJsonChange, PollingInterval.High, watchOptions, WatchType.PackageJson);
-        }
-
-        function onPackageJsonChange(fileName: string, eventKind: FileWatcherEventKind, path: Path) {
-            updateCachedSystemWithFile(fileName, path, eventKind);
-
-            // package.json changes invalidate module resolution and can change the set of loaded files
-            // so if we witness a change to one, we have to do a full reload
-            reloadLevel = ConfigFileProgramReloadLevel.Full;
-            changesAffectResolution = true;
-            // Update the program
-            scheduleProgramUpdate();
         }
 
         function onMissingFileChange(fileName: string, eventKind: FileWatcherEventKind, missingFilePath: Path) {
