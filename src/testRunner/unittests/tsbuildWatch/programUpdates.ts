@@ -89,13 +89,6 @@ namespace ts.tscWatch {
             });
         });
 
-        const buildTests: TscWatchCompileChange = {
-            caption: "Build Tests",
-            change: noop,
-            // Build tests
-            timeouts: checkSingleTimeoutQueueLengthAndRunAndVerifyNoTimeout,
-        };
-
         describe("validates the changes and watched files", () => {
             const newFileWithoutExtension = "newFile";
             const newFile: File = {
@@ -104,10 +97,10 @@ namespace ts.tscWatch {
             };
 
             function verifyProjectChanges(subScenario: string, allFilesGetter: () => readonly File[]) {
-                const buildLogic: TscWatchCompileChange = {
-                    caption: "Build logic",
+                const buildLogicAndTests: TscWatchCompileChange = {
+                    caption: "Build logic and tests",
                     change: noop,
-                    timeouts: checkSingleTimeoutQueueLengthAndRun, // Builds logic or updates timestamps
+                    timeouts: checkSingleTimeoutQueueLengthAndRunAndVerifyNoTimeout,
                 };
 
                 verifyTscWatch({
@@ -121,12 +114,10 @@ namespace ts.tscWatch {
                     changes: [
                         changeCore(() => `${core[1].content}
 export class someClass { }`, "Make change to core"),
-                        buildLogic,
-                        buildTests,
+                        buildLogicAndTests,
                         // Another change requeues and builds it
                         changeCore(() => core[1].content, "Revert core file"),
-                        buildLogic,
-                        buildTests,
+                        buildLogicAndTests,
                         {
                             caption: "Make two changes",
                             change: sys => {
@@ -140,8 +131,7 @@ export class someClass2 { }`);
                             },
                             timeouts: checkSingleTimeoutQueueLengthAndRun, // Builds core
                         },
-                        buildLogic,
-                        buildTests,
+                        buildLogicAndTests,
                     ]
                 });
 
@@ -172,12 +162,10 @@ function foo() { }`, "Make local change to core"),
                     ),
                     changes: [
                         changeNewFile(newFile.content),
-                        buildLogic,
-                        buildTests,
+                        buildLogicAndTests,
                         changeNewFile(`${newFile.content}
 export class someClass2 { }`),
-                        buildLogic,
-                        buildTests
+                        buildLogicAndTests,
                     ]
                 });
             }
@@ -221,7 +209,12 @@ export class someClass2 { }`),
                     change: sys => sys.writeFile(logic[0].path, logic[0].content),
                     timeouts: checkSingleTimeoutQueueLengthAndRun, // Builds logic
                 },
-                buildTests
+                {
+                    caption: "Build Tests",
+                    change: noop,
+                    // Build tests
+                    timeouts: checkSingleTimeoutQueueLengthAndRunAndVerifyNoTimeout,
+                }
             ]
         });
 

@@ -1284,13 +1284,11 @@ namespace ts {
         return undefined;
     }
 
-    function getNextInvalidatedProject<T extends BuilderProgram>(
+    function createInvalidatedProjectWithInfo<T extends BuilderProgram>(
         state: SolutionBuilderState<T>,
+        info: InvalidateProjectCreateInfo,
         buildOrder: AnyBuildOrder,
-        reportQueue: boolean
-    ): InvalidatedProject<T> | undefined {
-        const info = getNextInvalidatedProjectCreateInfo(state, buildOrder, reportQueue);
-        if (!info) return info;
+    ) {
         verboseReportProjectStatus(state, info.project, info.status);
         return info.kind !== InvalidatedProjectKind.UpdateOutputFileStamps ?
             createBuildOrUpdateInvalidedProject(
@@ -1309,6 +1307,16 @@ namespace ts {
                 info.config,
                 buildOrder as BuildOrder
             );
+    }
+
+    function getNextInvalidatedProject<T extends BuilderProgram>(
+        state: SolutionBuilderState<T>,
+        buildOrder: AnyBuildOrder,
+        reportQueue: boolean
+    ): InvalidatedProject<T> | undefined {
+        const info = getNextInvalidatedProjectCreateInfo(state, buildOrder, reportQueue);
+        if (!info) return info;
+        return createInvalidatedProjectWithInfo(state, info, buildOrder);
     }
 
     function listEmittedFile({ write }: SolutionBuilderState, proj: ParsedCommandLine, file: string) {
@@ -1796,10 +1804,10 @@ namespace ts {
     function invalidateProjectAndScheduleBuilds(state: SolutionBuilderState, resolvedPath: ResolvedConfigFilePath, reloadLevel: ConfigFileProgramReloadLevel) {
         state.reportFileChangeDetected = true;
         invalidateProject(state, resolvedPath, reloadLevel);
-        scheduleBuildInvalidatedProject(state, 250);
+        scheduleBuildInvalidatedProject(state, 250, /*changeDetected*/ true);
     }
 
-    function scheduleBuildInvalidatedProject(state: SolutionBuilderState, time: number) {
+    function scheduleBuildInvalidatedProject(state: SolutionBuilderState, time: number, changeDetected: boolean) {
         const { hostWithWatch } = state;
         if (!hostWithWatch.setTimeout || !hostWithWatch.clearTimeout) {
             return;
@@ -1807,40 +1815,36 @@ namespace ts {
         if (state.timerToBuildInvalidatedProject) {
             hostWithWatch.clearTimeout(state.timerToBuildInvalidatedProject);
         }
-        state.timerToBuildInvalidatedProject = hostWithWatch.setTimeout(buildNextInvalidatedProject, time, state);
+        state.timerToBuildInvalidatedProject = hostWithWatch.setTimeout(buildNextInvalidatedProject, time, state, changeDetected);
     }
 
-    function buildNextInvalidatedProject(state: SolutionBuilderState) {
+    function buildNextInvalidatedProject(state: SolutionBuilderState, changeDetected: boolean) {
         state.timerToBuildInvalidatedProject = undefined;
         if (state.reportFileChangeDetected) {
             state.reportFileChangeDetected = false;
             state.projectErrorsReported.clear();
             reportWatchStatus(state, Diagnostics.File_change_detected_Starting_incremental_compilation);
         }
+        let projectsBuilt = 0;
         const buildOrder = getBuildOrder(state);
         const invalidatedProject = getNextInvalidatedProject(state, buildOrder, /*reportQueue*/ false);
         if (invalidatedProject) {
             invalidatedProject.done();
+            projectsBuilt++;
             while (state.projectPendingBuild.size) {
                 // If already scheduled, skip
                 if (state.timerToBuildInvalidatedProject) return;
                 // Before scheduling check if the next project needs build
                 const info = getNextInvalidatedProjectCreateInfo(state, buildOrder, /*reportQueue*/ false);
                 if (!info) break; // Nothing to build any more
-                if (info.kind !== InvalidatedProjectKind.UpdateOutputFileStamps) {
+                if (info.kind !== InvalidatedProjectKind.UpdateOutputFileStamps && (changeDetected || projectsBuilt === 5)) {
                     // Schedule next project for build
-                    scheduleBuildInvalidatedProject(state, 100);
+                    scheduleBuildInvalidatedProject(state, 100, /*changeDetected*/ false);
                     return;
                 }
-                // Updating the timstamps - do it right away
-                verboseReportProjectStatus(state, info.project, info.status);
-                createUpdateOutputFileStampsProject(
-                    state,
-                    info.project,
-                    info.projectPath,
-                    info.config,
-                    buildOrder as BuildOrder
-                ).done();
+                const project = createInvalidatedProjectWithInfo(state, info, buildOrder);
+                project.done();
+                if (info.kind !== InvalidatedProjectKind.UpdateOutputFileStamps) projectsBuilt++;
             }
         }
         disableCache(state);

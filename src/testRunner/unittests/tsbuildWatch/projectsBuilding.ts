@@ -1,8 +1,8 @@
 namespace ts.tscWatch {
     describe("unittests:: tsbuildWatch:: watchMode:: projectsBuilding", () => {
-        function pkgs<T>(cb: (index: number) => T, maxPkgs: number): T[] {
+        function pkgs<T>(cb: (index: number) => T, count: number, startIndex?: number): T[] {
             const result: T[] = [];
-            for (let index = 0; index < maxPkgs; index++) {
+            for (let index = startIndex || 0; count > 0; index++, count--) {
                 result.push(cb(index));
             }
             return result;
@@ -36,21 +36,12 @@ namespace ts.tscWatch {
                 })
             };
         }
-        function checkBuildPkg(pkg: number): TscWatchCompileChange {
+        function checkBuildPkg(startIndex: number, count: number): TscWatchCompileChange {
             return {
-                caption: `build pkg${pkg}`,
+                caption: `build ${pkgs(index => `pkg${index}`, count, startIndex).join(",")}`,
                 change: noop,
                 timeouts: checkSingleTimeoutQueueLengthAndRun,
             };
-        }
-        function checkBuildPkgs(index: number, count: number) {
-            const result: TscWatchCompileChange[] = [];
-            while (count) {
-                result.push(checkBuildPkg(index));
-                index++;
-                count--;
-            }
-            return result;
         }
         verifyTscWatch({
             scenario: "projectsBuilding",
@@ -72,7 +63,7 @@ namespace ts.tscWatch {
                     change: sys => sys.appendFile(`${projectRoot}/pkg0/index.ts`, `export const someConst = 10;`),
                     timeouts: checkSingleTimeoutQueueLengthAndRun // Build pkg0
                 },
-                ...checkBuildPkgs(1, 2),
+                checkBuildPkg(1, 2),
                 noopChange,
             ]
         });
@@ -96,7 +87,7 @@ namespace ts.tscWatch {
                     change: sys => sys.appendFile(`${projectRoot}/pkg0/index.ts`, `export const someConst = 10;`),
                     timeouts: checkSingleTimeoutQueueLengthAndRun // Build pkg0
                 },
-                ...checkBuildPkgs(1, 4),
+                checkBuildPkg(1, 4),
                 noopChange,
             ]
         });
@@ -120,7 +111,21 @@ namespace ts.tscWatch {
                     change: sys => sys.appendFile(`${projectRoot}/pkg0/index.ts`, `export const someConst = 10;`),
                     timeouts: checkSingleTimeoutQueueLengthAndRun // Build pkg0
                 },
-                ...checkBuildPkgs(1, 7),
+                checkBuildPkg(1, 5),
+                checkBuildPkg(6, 2),
+                noopChange,
+                {
+                    caption: "dts change2",
+                    change: sys => sys.appendFile(`${projectRoot}/pkg0/index.ts`, `export const someConst3 = 10;`),
+                    timeouts: checkSingleTimeoutQueueLengthAndRun // Build pkg0
+                },
+                checkBuildPkg(1, 5),
+                {
+                    caption: "change while building",
+                    change: sys => sys.appendFile(`${projectRoot}/pkg0/index.ts`, `const someConst4 = 10;`),
+                    timeouts: checkSingleTimeoutQueueLengthAndRun // Build pkg0
+                },
+                checkBuildPkg(6, 2),
                 noopChange,
             ]
         });
@@ -144,7 +149,35 @@ namespace ts.tscWatch {
                     change: sys => sys.appendFile(`${projectRoot}/pkg0/index.ts`, `export const someConst = 10;`),
                     timeouts: checkSingleTimeoutQueueLengthAndRun // Build pkg0
                 },
-                ...checkBuildPkgs(1, 22),
+                checkBuildPkg(1, 5),
+                checkBuildPkg(6, 5),
+                checkBuildPkg(11, 5),
+                checkBuildPkg(16, 5),
+                checkBuildPkg(21, 3),
+                noopChange,
+                {
+                    caption: "dts change2",
+                    change: sys => sys.appendFile(`${projectRoot}/pkg0/index.ts`, `export const someConst3 = 10;`),
+                    timeouts: checkSingleTimeoutQueueLengthAndRun // Build pkg0
+                },
+                checkBuildPkg(1, 5),
+                checkBuildPkg(6, 5),
+                {
+                    caption: "change while building",
+                    change: sys => sys.appendFile(`${projectRoot}/pkg0/index.ts`, `const someConst4 = 10;`),
+                    timeouts: checkSingleTimeoutQueueLengthAndRun // Build pkg0
+                },
+                checkBuildPkg(11, 5),
+                {
+                    caption: "change while building: dts changes",
+                    change: sys => sys.appendFile(`${projectRoot}/pkg0/index.ts`, `export const someConst5 = 10;`),
+                    timeouts: checkSingleTimeoutQueueLengthAndRun // Build pkg0
+                },
+                checkBuildPkg(1, 5),
+                checkBuildPkg(6, 5),
+                checkBuildPkg(11, 5),
+                checkBuildPkg(16, 5),
+                checkBuildPkg(21, 3),
                 noopChange,
             ]
         });

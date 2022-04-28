@@ -2595,7 +2595,7 @@ export declare const someConst = 10;
 }
 
 
-Change:: build pkg1
+Change:: build pkg1,pkg2,pkg3,pkg4,pkg5
 
 Input::
 
@@ -2605,6 +2605,30 @@ Output::
 [[90m12:08:12 AM[0m] Building project '/user/username/projects/myproject/pkg1/tsconfig.json'...
 
 [[90m12:08:14 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg1/tsconfig.json'...
+
+[[90m12:08:15 AM[0m] Project 'pkg2/tsconfig.json' is out of date because oldest output 'pkg2/index.js' is older than newest input 'pkg0/tsconfig.json'
+
+[[90m12:08:16 AM[0m] Building project '/user/username/projects/myproject/pkg2/tsconfig.json'...
+
+[[90m12:08:18 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg2/tsconfig.json'...
+
+[[90m12:08:19 AM[0m] Project 'pkg3/tsconfig.json' is out of date because oldest output 'pkg3/index.js' is older than newest input 'pkg0/tsconfig.json'
+
+[[90m12:08:20 AM[0m] Building project '/user/username/projects/myproject/pkg3/tsconfig.json'...
+
+[[90m12:08:22 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg3/tsconfig.json'...
+
+[[90m12:08:23 AM[0m] Project 'pkg4/tsconfig.json' is out of date because oldest output 'pkg4/index.js' is older than newest input 'pkg0/tsconfig.json'
+
+[[90m12:08:24 AM[0m] Building project '/user/username/projects/myproject/pkg4/tsconfig.json'...
+
+[[90m12:08:26 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg4/tsconfig.json'...
+
+[[90m12:08:27 AM[0m] Project 'pkg5/tsconfig.json' is out of date because oldest output 'pkg5/index.js' is older than newest input 'pkg0/tsconfig.json'
+
+[[90m12:08:28 AM[0m] Building project '/user/username/projects/myproject/pkg5/tsconfig.json'...
+
+[[90m12:08:30 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg5/tsconfig.json'...
 
 
 
@@ -2619,171 +2643,6 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-WatchedFiles::
-/user/username/projects/myproject/pkg0/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg0/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg0/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg0/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg1/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg1/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg1/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg1/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg2/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg2/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg2/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg2/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg3/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg3/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg3/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg3/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg4/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg4/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg4/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg4/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg5/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg5/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg5/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg5/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg6/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg6/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg6/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg6/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg7/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg7/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg7/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg7/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg8/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg8/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg8/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg8/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg9/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg9/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg9/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg9/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg10/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg10/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg10/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg10/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg11/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg11/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg11/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg11/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg12/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg12/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg12/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg12/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg13/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg13/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg13/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg13/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg14/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg14/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg14/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg14/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg15/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg15/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg15/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg15/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg16/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg16/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg16/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg16/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg17/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg17/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg17/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg17/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg18/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg18/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg18/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg18/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg19/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg19/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg19/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg19/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg20/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg20/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg20/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg20/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg21/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg21/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg21/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg21/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg22/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg22/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg22/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg22/index.ts","pollingInterval":250}
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/user/username/projects/myproject/pkg0:
-  {"directoryName":"/user/username/projects/myproject/pkg0","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg1:
-  {"directoryName":"/user/username/projects/myproject/pkg1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg2:
-  {"directoryName":"/user/username/projects/myproject/pkg2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg3:
-  {"directoryName":"/user/username/projects/myproject/pkg3","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg4:
-  {"directoryName":"/user/username/projects/myproject/pkg4","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg5:
-  {"directoryName":"/user/username/projects/myproject/pkg5","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg6:
-  {"directoryName":"/user/username/projects/myproject/pkg6","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg7:
-  {"directoryName":"/user/username/projects/myproject/pkg7","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg8:
-  {"directoryName":"/user/username/projects/myproject/pkg8","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg9:
-  {"directoryName":"/user/username/projects/myproject/pkg9","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg10:
-  {"directoryName":"/user/username/projects/myproject/pkg10","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg11:
-  {"directoryName":"/user/username/projects/myproject/pkg11","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg12:
-  {"directoryName":"/user/username/projects/myproject/pkg12","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg13:
-  {"directoryName":"/user/username/projects/myproject/pkg13","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg14:
-  {"directoryName":"/user/username/projects/myproject/pkg14","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg15:
-  {"directoryName":"/user/username/projects/myproject/pkg15","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg16:
-  {"directoryName":"/user/username/projects/myproject/pkg16","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg17:
-  {"directoryName":"/user/username/projects/myproject/pkg17","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg18:
-  {"directoryName":"/user/username/projects/myproject/pkg18","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg19:
-  {"directoryName":"/user/username/projects/myproject/pkg19","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg20:
-  {"directoryName":"/user/username/projects/myproject/pkg20","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg21:
-  {"directoryName":"/user/username/projects/myproject/pkg21","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg22:
-  {"directoryName":"/user/username/projects/myproject/pkg22","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
-exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/pkg1/index.js] file changed its modified time
-//// [/user/username/projects/myproject/pkg1/index.d.ts] file changed its modified time
-//// [/user/username/projects/myproject/pkg1/tsconfig.tsbuildinfo] file changed its modified time
-
-Change:: build pkg2
-
-Input::
-
-Output::
-[[90m12:08:15 AM[0m] Project 'pkg2/tsconfig.json' is out of date because oldest output 'pkg2/index.js' is older than newest input 'pkg0/tsconfig.json'
-
-[[90m12:08:16 AM[0m] Building project '/user/username/projects/myproject/pkg2/tsconfig.json'...
-
-[[90m12:08:18 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg2/tsconfig.json'...
-
-
-
 Program root files: ["/user/username/projects/myproject/pkg2/index.ts"]
 Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg2/tsconfig.json"}
 Program structureReused: Not
@@ -2794,171 +2653,6 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
-
-WatchedFiles::
-/user/username/projects/myproject/pkg0/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg0/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg0/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg0/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg1/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg1/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg1/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg1/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg2/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg2/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg2/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg2/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg3/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg3/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg3/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg3/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg4/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg4/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg4/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg4/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg5/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg5/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg5/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg5/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg6/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg6/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg6/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg6/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg7/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg7/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg7/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg7/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg8/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg8/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg8/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg8/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg9/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg9/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg9/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg9/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg10/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg10/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg10/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg10/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg11/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg11/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg11/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg11/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg12/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg12/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg12/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg12/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg13/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg13/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg13/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg13/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg14/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg14/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg14/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg14/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg15/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg15/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg15/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg15/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg16/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg16/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg16/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg16/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg17/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg17/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg17/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg17/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg18/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg18/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg18/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg18/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg19/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg19/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg19/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg19/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg20/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg20/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg20/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg20/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg21/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg21/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg21/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg21/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg22/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg22/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg22/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg22/index.ts","pollingInterval":250}
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/user/username/projects/myproject/pkg0:
-  {"directoryName":"/user/username/projects/myproject/pkg0","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg1:
-  {"directoryName":"/user/username/projects/myproject/pkg1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg2:
-  {"directoryName":"/user/username/projects/myproject/pkg2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg3:
-  {"directoryName":"/user/username/projects/myproject/pkg3","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg4:
-  {"directoryName":"/user/username/projects/myproject/pkg4","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg5:
-  {"directoryName":"/user/username/projects/myproject/pkg5","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg6:
-  {"directoryName":"/user/username/projects/myproject/pkg6","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg7:
-  {"directoryName":"/user/username/projects/myproject/pkg7","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg8:
-  {"directoryName":"/user/username/projects/myproject/pkg8","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg9:
-  {"directoryName":"/user/username/projects/myproject/pkg9","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg10:
-  {"directoryName":"/user/username/projects/myproject/pkg10","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg11:
-  {"directoryName":"/user/username/projects/myproject/pkg11","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg12:
-  {"directoryName":"/user/username/projects/myproject/pkg12","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg13:
-  {"directoryName":"/user/username/projects/myproject/pkg13","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg14:
-  {"directoryName":"/user/username/projects/myproject/pkg14","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg15:
-  {"directoryName":"/user/username/projects/myproject/pkg15","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg16:
-  {"directoryName":"/user/username/projects/myproject/pkg16","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg17:
-  {"directoryName":"/user/username/projects/myproject/pkg17","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg18:
-  {"directoryName":"/user/username/projects/myproject/pkg18","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg19:
-  {"directoryName":"/user/username/projects/myproject/pkg19","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg20:
-  {"directoryName":"/user/username/projects/myproject/pkg20","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg21:
-  {"directoryName":"/user/username/projects/myproject/pkg21","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg22:
-  {"directoryName":"/user/username/projects/myproject/pkg22","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
-exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/pkg2/index.js] file changed its modified time
-//// [/user/username/projects/myproject/pkg2/index.d.ts] file changed its modified time
-//// [/user/username/projects/myproject/pkg2/tsconfig.tsbuildinfo] file changed its modified time
-
-Change:: build pkg3
-
-Input::
-
-Output::
-[[90m12:08:19 AM[0m] Project 'pkg3/tsconfig.json' is out of date because oldest output 'pkg3/index.js' is older than newest input 'pkg0/tsconfig.json'
-
-[[90m12:08:20 AM[0m] Building project '/user/username/projects/myproject/pkg3/tsconfig.json'...
-
-[[90m12:08:22 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg3/tsconfig.json'...
-
-
 
 Program root files: ["/user/username/projects/myproject/pkg3/index.ts"]
 Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg3/tsconfig.json"}
@@ -2971,171 +2665,6 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-WatchedFiles::
-/user/username/projects/myproject/pkg0/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg0/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg0/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg0/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg1/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg1/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg1/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg1/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg2/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg2/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg2/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg2/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg3/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg3/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg3/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg3/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg4/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg4/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg4/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg4/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg5/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg5/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg5/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg5/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg6/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg6/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg6/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg6/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg7/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg7/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg7/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg7/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg8/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg8/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg8/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg8/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg9/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg9/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg9/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg9/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg10/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg10/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg10/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg10/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg11/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg11/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg11/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg11/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg12/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg12/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg12/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg12/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg13/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg13/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg13/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg13/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg14/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg14/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg14/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg14/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg15/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg15/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg15/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg15/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg16/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg16/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg16/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg16/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg17/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg17/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg17/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg17/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg18/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg18/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg18/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg18/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg19/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg19/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg19/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg19/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg20/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg20/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg20/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg20/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg21/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg21/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg21/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg21/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg22/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg22/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg22/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg22/index.ts","pollingInterval":250}
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/user/username/projects/myproject/pkg0:
-  {"directoryName":"/user/username/projects/myproject/pkg0","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg1:
-  {"directoryName":"/user/username/projects/myproject/pkg1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg2:
-  {"directoryName":"/user/username/projects/myproject/pkg2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg3:
-  {"directoryName":"/user/username/projects/myproject/pkg3","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg4:
-  {"directoryName":"/user/username/projects/myproject/pkg4","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg5:
-  {"directoryName":"/user/username/projects/myproject/pkg5","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg6:
-  {"directoryName":"/user/username/projects/myproject/pkg6","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg7:
-  {"directoryName":"/user/username/projects/myproject/pkg7","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg8:
-  {"directoryName":"/user/username/projects/myproject/pkg8","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg9:
-  {"directoryName":"/user/username/projects/myproject/pkg9","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg10:
-  {"directoryName":"/user/username/projects/myproject/pkg10","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg11:
-  {"directoryName":"/user/username/projects/myproject/pkg11","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg12:
-  {"directoryName":"/user/username/projects/myproject/pkg12","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg13:
-  {"directoryName":"/user/username/projects/myproject/pkg13","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg14:
-  {"directoryName":"/user/username/projects/myproject/pkg14","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg15:
-  {"directoryName":"/user/username/projects/myproject/pkg15","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg16:
-  {"directoryName":"/user/username/projects/myproject/pkg16","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg17:
-  {"directoryName":"/user/username/projects/myproject/pkg17","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg18:
-  {"directoryName":"/user/username/projects/myproject/pkg18","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg19:
-  {"directoryName":"/user/username/projects/myproject/pkg19","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg20:
-  {"directoryName":"/user/username/projects/myproject/pkg20","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg21:
-  {"directoryName":"/user/username/projects/myproject/pkg21","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg22:
-  {"directoryName":"/user/username/projects/myproject/pkg22","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
-exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/pkg3/index.js] file changed its modified time
-//// [/user/username/projects/myproject/pkg3/index.d.ts] file changed its modified time
-//// [/user/username/projects/myproject/pkg3/tsconfig.tsbuildinfo] file changed its modified time
-
-Change:: build pkg4
-
-Input::
-
-Output::
-[[90m12:08:23 AM[0m] Project 'pkg4/tsconfig.json' is out of date because oldest output 'pkg4/index.js' is older than newest input 'pkg0/tsconfig.json'
-
-[[90m12:08:24 AM[0m] Building project '/user/username/projects/myproject/pkg4/tsconfig.json'...
-
-[[90m12:08:26 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg4/tsconfig.json'...
-
-
-
 Program root files: ["/user/username/projects/myproject/pkg4/index.ts"]
 Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg4/tsconfig.json"}
 Program structureReused: Not
@@ -3146,171 +2675,6 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
-
-WatchedFiles::
-/user/username/projects/myproject/pkg0/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg0/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg0/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg0/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg1/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg1/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg1/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg1/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg2/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg2/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg2/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg2/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg3/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg3/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg3/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg3/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg4/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg4/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg4/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg4/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg5/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg5/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg5/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg5/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg6/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg6/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg6/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg6/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg7/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg7/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg7/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg7/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg8/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg8/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg8/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg8/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg9/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg9/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg9/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg9/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg10/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg10/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg10/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg10/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg11/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg11/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg11/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg11/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg12/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg12/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg12/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg12/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg13/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg13/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg13/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg13/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg14/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg14/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg14/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg14/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg15/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg15/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg15/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg15/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg16/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg16/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg16/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg16/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg17/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg17/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg17/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg17/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg18/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg18/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg18/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg18/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg19/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg19/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg19/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg19/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg20/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg20/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg20/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg20/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg21/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg21/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg21/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg21/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg22/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg22/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg22/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg22/index.ts","pollingInterval":250}
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/user/username/projects/myproject/pkg0:
-  {"directoryName":"/user/username/projects/myproject/pkg0","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg1:
-  {"directoryName":"/user/username/projects/myproject/pkg1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg2:
-  {"directoryName":"/user/username/projects/myproject/pkg2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg3:
-  {"directoryName":"/user/username/projects/myproject/pkg3","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg4:
-  {"directoryName":"/user/username/projects/myproject/pkg4","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg5:
-  {"directoryName":"/user/username/projects/myproject/pkg5","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg6:
-  {"directoryName":"/user/username/projects/myproject/pkg6","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg7:
-  {"directoryName":"/user/username/projects/myproject/pkg7","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg8:
-  {"directoryName":"/user/username/projects/myproject/pkg8","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg9:
-  {"directoryName":"/user/username/projects/myproject/pkg9","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg10:
-  {"directoryName":"/user/username/projects/myproject/pkg10","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg11:
-  {"directoryName":"/user/username/projects/myproject/pkg11","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg12:
-  {"directoryName":"/user/username/projects/myproject/pkg12","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg13:
-  {"directoryName":"/user/username/projects/myproject/pkg13","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg14:
-  {"directoryName":"/user/username/projects/myproject/pkg14","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg15:
-  {"directoryName":"/user/username/projects/myproject/pkg15","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg16:
-  {"directoryName":"/user/username/projects/myproject/pkg16","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg17:
-  {"directoryName":"/user/username/projects/myproject/pkg17","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg18:
-  {"directoryName":"/user/username/projects/myproject/pkg18","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg19:
-  {"directoryName":"/user/username/projects/myproject/pkg19","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg20:
-  {"directoryName":"/user/username/projects/myproject/pkg20","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg21:
-  {"directoryName":"/user/username/projects/myproject/pkg21","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg22:
-  {"directoryName":"/user/username/projects/myproject/pkg22","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
-exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/pkg4/index.js] file changed its modified time
-//// [/user/username/projects/myproject/pkg4/index.d.ts] file changed its modified time
-//// [/user/username/projects/myproject/pkg4/tsconfig.tsbuildinfo] file changed its modified time
-
-Change:: build pkg5
-
-Input::
-
-Output::
-[[90m12:08:28 AM[0m] Project 'pkg5/tsconfig.json' is out of date because oldest output 'pkg5/index.js' is older than newest input 'pkg0/tsconfig.json'
-
-[[90m12:08:29 AM[0m] Building project '/user/username/projects/myproject/pkg5/tsconfig.json'...
-
-[[90m12:08:31 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg5/tsconfig.json'...
-
-
 
 Program root files: ["/user/username/projects/myproject/pkg5/index.ts"]
 Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg5/tsconfig.json"}
@@ -3471,20 +2835,56 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+//// [/user/username/projects/myproject/pkg1/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg1/index.d.ts] file changed its modified time
+//// [/user/username/projects/myproject/pkg1/tsconfig.tsbuildinfo] file changed its modified time
+//// [/user/username/projects/myproject/pkg2/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg2/index.d.ts] file changed its modified time
+//// [/user/username/projects/myproject/pkg2/tsconfig.tsbuildinfo] file changed its modified time
+//// [/user/username/projects/myproject/pkg3/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg3/index.d.ts] file changed its modified time
+//// [/user/username/projects/myproject/pkg3/tsconfig.tsbuildinfo] file changed its modified time
+//// [/user/username/projects/myproject/pkg4/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg4/index.d.ts] file changed its modified time
+//// [/user/username/projects/myproject/pkg4/tsconfig.tsbuildinfo] file changed its modified time
 //// [/user/username/projects/myproject/pkg5/index.js] file changed its modified time
 //// [/user/username/projects/myproject/pkg5/index.d.ts] file changed its modified time
 //// [/user/username/projects/myproject/pkg5/tsconfig.tsbuildinfo] file changed its modified time
 
-Change:: build pkg6
+Change:: build pkg6,pkg7,pkg8,pkg9,pkg10
 
 Input::
 
 Output::
-[[90m12:08:32 AM[0m] Project 'pkg6/tsconfig.json' is out of date because oldest output 'pkg6/index.js' is older than newest input 'pkg0/tsconfig.json'
+[[90m12:08:31 AM[0m] Project 'pkg6/tsconfig.json' is out of date because oldest output 'pkg6/index.js' is older than newest input 'pkg0/tsconfig.json'
 
-[[90m12:08:33 AM[0m] Building project '/user/username/projects/myproject/pkg6/tsconfig.json'...
+[[90m12:08:32 AM[0m] Building project '/user/username/projects/myproject/pkg6/tsconfig.json'...
 
-[[90m12:08:35 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg6/tsconfig.json'...
+[[90m12:08:34 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg6/tsconfig.json'...
+
+[[90m12:08:35 AM[0m] Project 'pkg7/tsconfig.json' is out of date because oldest output 'pkg7/index.js' is older than newest input 'pkg0/tsconfig.json'
+
+[[90m12:08:36 AM[0m] Building project '/user/username/projects/myproject/pkg7/tsconfig.json'...
+
+[[90m12:08:38 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg7/tsconfig.json'...
+
+[[90m12:08:39 AM[0m] Project 'pkg8/tsconfig.json' is out of date because oldest output 'pkg8/index.js' is older than newest input 'pkg0/tsconfig.json'
+
+[[90m12:08:40 AM[0m] Building project '/user/username/projects/myproject/pkg8/tsconfig.json'...
+
+[[90m12:08:42 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg8/tsconfig.json'...
+
+[[90m12:08:43 AM[0m] Project 'pkg9/tsconfig.json' is out of date because oldest output 'pkg9/index.js' is older than newest input 'pkg0/tsconfig.json'
+
+[[90m12:08:44 AM[0m] Building project '/user/username/projects/myproject/pkg9/tsconfig.json'...
+
+[[90m12:08:46 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg9/tsconfig.json'...
+
+[[90m12:08:47 AM[0m] Project 'pkg10/tsconfig.json' is out of date because oldest output 'pkg10/index.js' is older than newest input 'pkg0/tsconfig.json'
+
+[[90m12:08:48 AM[0m] Building project '/user/username/projects/myproject/pkg10/tsconfig.json'...
+
+[[90m12:08:50 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg10/tsconfig.json'...
 
 
 
@@ -3499,171 +2899,6 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-WatchedFiles::
-/user/username/projects/myproject/pkg0/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg0/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg0/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg0/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg1/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg1/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg1/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg1/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg2/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg2/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg2/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg2/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg3/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg3/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg3/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg3/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg4/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg4/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg4/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg4/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg5/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg5/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg5/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg5/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg6/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg6/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg6/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg6/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg7/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg7/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg7/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg7/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg8/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg8/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg8/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg8/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg9/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg9/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg9/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg9/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg10/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg10/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg10/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg10/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg11/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg11/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg11/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg11/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg12/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg12/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg12/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg12/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg13/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg13/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg13/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg13/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg14/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg14/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg14/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg14/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg15/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg15/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg15/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg15/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg16/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg16/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg16/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg16/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg17/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg17/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg17/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg17/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg18/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg18/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg18/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg18/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg19/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg19/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg19/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg19/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg20/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg20/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg20/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg20/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg21/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg21/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg21/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg21/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg22/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg22/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg22/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg22/index.ts","pollingInterval":250}
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/user/username/projects/myproject/pkg0:
-  {"directoryName":"/user/username/projects/myproject/pkg0","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg1:
-  {"directoryName":"/user/username/projects/myproject/pkg1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg2:
-  {"directoryName":"/user/username/projects/myproject/pkg2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg3:
-  {"directoryName":"/user/username/projects/myproject/pkg3","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg4:
-  {"directoryName":"/user/username/projects/myproject/pkg4","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg5:
-  {"directoryName":"/user/username/projects/myproject/pkg5","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg6:
-  {"directoryName":"/user/username/projects/myproject/pkg6","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg7:
-  {"directoryName":"/user/username/projects/myproject/pkg7","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg8:
-  {"directoryName":"/user/username/projects/myproject/pkg8","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg9:
-  {"directoryName":"/user/username/projects/myproject/pkg9","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg10:
-  {"directoryName":"/user/username/projects/myproject/pkg10","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg11:
-  {"directoryName":"/user/username/projects/myproject/pkg11","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg12:
-  {"directoryName":"/user/username/projects/myproject/pkg12","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg13:
-  {"directoryName":"/user/username/projects/myproject/pkg13","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg14:
-  {"directoryName":"/user/username/projects/myproject/pkg14","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg15:
-  {"directoryName":"/user/username/projects/myproject/pkg15","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg16:
-  {"directoryName":"/user/username/projects/myproject/pkg16","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg17:
-  {"directoryName":"/user/username/projects/myproject/pkg17","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg18:
-  {"directoryName":"/user/username/projects/myproject/pkg18","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg19:
-  {"directoryName":"/user/username/projects/myproject/pkg19","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg20:
-  {"directoryName":"/user/username/projects/myproject/pkg20","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg21:
-  {"directoryName":"/user/username/projects/myproject/pkg21","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg22:
-  {"directoryName":"/user/username/projects/myproject/pkg22","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
-exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/pkg6/index.js] file changed its modified time
-//// [/user/username/projects/myproject/pkg6/index.d.ts] file changed its modified time
-//// [/user/username/projects/myproject/pkg6/tsconfig.tsbuildinfo] file changed its modified time
-
-Change:: build pkg7
-
-Input::
-
-Output::
-[[90m12:08:36 AM[0m] Project 'pkg7/tsconfig.json' is out of date because oldest output 'pkg7/index.js' is older than newest input 'pkg0/tsconfig.json'
-
-[[90m12:08:37 AM[0m] Building project '/user/username/projects/myproject/pkg7/tsconfig.json'...
-
-[[90m12:08:39 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg7/tsconfig.json'...
-
-
-
 Program root files: ["/user/username/projects/myproject/pkg7/index.ts"]
 Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg7/tsconfig.json"}
 Program structureReused: Not
@@ -3674,171 +2909,6 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
-
-WatchedFiles::
-/user/username/projects/myproject/pkg0/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg0/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg0/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg0/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg1/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg1/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg1/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg1/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg2/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg2/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg2/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg2/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg3/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg3/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg3/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg3/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg4/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg4/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg4/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg4/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg5/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg5/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg5/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg5/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg6/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg6/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg6/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg6/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg7/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg7/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg7/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg7/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg8/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg8/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg8/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg8/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg9/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg9/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg9/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg9/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg10/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg10/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg10/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg10/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg11/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg11/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg11/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg11/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg12/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg12/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg12/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg12/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg13/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg13/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg13/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg13/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg14/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg14/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg14/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg14/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg15/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg15/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg15/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg15/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg16/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg16/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg16/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg16/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg17/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg17/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg17/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg17/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg18/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg18/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg18/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg18/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg19/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg19/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg19/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg19/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg20/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg20/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg20/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg20/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg21/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg21/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg21/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg21/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg22/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg22/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg22/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg22/index.ts","pollingInterval":250}
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/user/username/projects/myproject/pkg0:
-  {"directoryName":"/user/username/projects/myproject/pkg0","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg1:
-  {"directoryName":"/user/username/projects/myproject/pkg1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg2:
-  {"directoryName":"/user/username/projects/myproject/pkg2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg3:
-  {"directoryName":"/user/username/projects/myproject/pkg3","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg4:
-  {"directoryName":"/user/username/projects/myproject/pkg4","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg5:
-  {"directoryName":"/user/username/projects/myproject/pkg5","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg6:
-  {"directoryName":"/user/username/projects/myproject/pkg6","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg7:
-  {"directoryName":"/user/username/projects/myproject/pkg7","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg8:
-  {"directoryName":"/user/username/projects/myproject/pkg8","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg9:
-  {"directoryName":"/user/username/projects/myproject/pkg9","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg10:
-  {"directoryName":"/user/username/projects/myproject/pkg10","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg11:
-  {"directoryName":"/user/username/projects/myproject/pkg11","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg12:
-  {"directoryName":"/user/username/projects/myproject/pkg12","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg13:
-  {"directoryName":"/user/username/projects/myproject/pkg13","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg14:
-  {"directoryName":"/user/username/projects/myproject/pkg14","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg15:
-  {"directoryName":"/user/username/projects/myproject/pkg15","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg16:
-  {"directoryName":"/user/username/projects/myproject/pkg16","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg17:
-  {"directoryName":"/user/username/projects/myproject/pkg17","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg18:
-  {"directoryName":"/user/username/projects/myproject/pkg18","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg19:
-  {"directoryName":"/user/username/projects/myproject/pkg19","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg20:
-  {"directoryName":"/user/username/projects/myproject/pkg20","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg21:
-  {"directoryName":"/user/username/projects/myproject/pkg21","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg22:
-  {"directoryName":"/user/username/projects/myproject/pkg22","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
-exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/pkg7/index.js] file changed its modified time
-//// [/user/username/projects/myproject/pkg7/index.d.ts] file changed its modified time
-//// [/user/username/projects/myproject/pkg7/tsconfig.tsbuildinfo] file changed its modified time
-
-Change:: build pkg8
-
-Input::
-
-Output::
-[[90m12:08:40 AM[0m] Project 'pkg8/tsconfig.json' is out of date because oldest output 'pkg8/index.js' is older than newest input 'pkg0/tsconfig.json'
-
-[[90m12:08:41 AM[0m] Building project '/user/username/projects/myproject/pkg8/tsconfig.json'...
-
-[[90m12:08:43 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg8/tsconfig.json'...
-
-
 
 Program root files: ["/user/username/projects/myproject/pkg8/index.ts"]
 Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg8/tsconfig.json"}
@@ -3851,171 +2921,6 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-WatchedFiles::
-/user/username/projects/myproject/pkg0/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg0/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg0/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg0/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg1/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg1/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg1/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg1/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg2/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg2/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg2/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg2/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg3/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg3/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg3/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg3/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg4/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg4/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg4/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg4/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg5/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg5/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg5/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg5/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg6/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg6/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg6/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg6/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg7/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg7/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg7/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg7/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg8/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg8/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg8/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg8/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg9/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg9/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg9/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg9/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg10/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg10/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg10/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg10/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg11/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg11/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg11/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg11/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg12/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg12/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg12/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg12/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg13/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg13/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg13/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg13/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg14/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg14/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg14/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg14/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg15/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg15/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg15/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg15/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg16/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg16/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg16/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg16/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg17/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg17/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg17/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg17/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg18/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg18/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg18/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg18/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg19/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg19/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg19/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg19/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg20/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg20/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg20/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg20/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg21/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg21/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg21/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg21/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg22/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg22/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg22/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg22/index.ts","pollingInterval":250}
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/user/username/projects/myproject/pkg0:
-  {"directoryName":"/user/username/projects/myproject/pkg0","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg1:
-  {"directoryName":"/user/username/projects/myproject/pkg1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg2:
-  {"directoryName":"/user/username/projects/myproject/pkg2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg3:
-  {"directoryName":"/user/username/projects/myproject/pkg3","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg4:
-  {"directoryName":"/user/username/projects/myproject/pkg4","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg5:
-  {"directoryName":"/user/username/projects/myproject/pkg5","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg6:
-  {"directoryName":"/user/username/projects/myproject/pkg6","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg7:
-  {"directoryName":"/user/username/projects/myproject/pkg7","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg8:
-  {"directoryName":"/user/username/projects/myproject/pkg8","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg9:
-  {"directoryName":"/user/username/projects/myproject/pkg9","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg10:
-  {"directoryName":"/user/username/projects/myproject/pkg10","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg11:
-  {"directoryName":"/user/username/projects/myproject/pkg11","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg12:
-  {"directoryName":"/user/username/projects/myproject/pkg12","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg13:
-  {"directoryName":"/user/username/projects/myproject/pkg13","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg14:
-  {"directoryName":"/user/username/projects/myproject/pkg14","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg15:
-  {"directoryName":"/user/username/projects/myproject/pkg15","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg16:
-  {"directoryName":"/user/username/projects/myproject/pkg16","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg17:
-  {"directoryName":"/user/username/projects/myproject/pkg17","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg18:
-  {"directoryName":"/user/username/projects/myproject/pkg18","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg19:
-  {"directoryName":"/user/username/projects/myproject/pkg19","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg20:
-  {"directoryName":"/user/username/projects/myproject/pkg20","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg21:
-  {"directoryName":"/user/username/projects/myproject/pkg21","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg22:
-  {"directoryName":"/user/username/projects/myproject/pkg22","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
-exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/pkg8/index.js] file changed its modified time
-//// [/user/username/projects/myproject/pkg8/index.d.ts] file changed its modified time
-//// [/user/username/projects/myproject/pkg8/tsconfig.tsbuildinfo] file changed its modified time
-
-Change:: build pkg9
-
-Input::
-
-Output::
-[[90m12:08:44 AM[0m] Project 'pkg9/tsconfig.json' is out of date because oldest output 'pkg9/index.js' is older than newest input 'pkg0/tsconfig.json'
-
-[[90m12:08:45 AM[0m] Building project '/user/username/projects/myproject/pkg9/tsconfig.json'...
-
-[[90m12:08:47 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg9/tsconfig.json'...
-
-
-
 Program root files: ["/user/username/projects/myproject/pkg9/index.ts"]
 Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg9/tsconfig.json"}
 Program structureReused: Not
@@ -4026,171 +2931,6 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
-
-WatchedFiles::
-/user/username/projects/myproject/pkg0/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg0/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg0/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg0/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg1/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg1/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg1/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg1/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg2/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg2/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg2/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg2/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg3/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg3/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg3/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg3/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg4/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg4/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg4/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg4/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg5/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg5/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg5/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg5/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg6/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg6/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg6/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg6/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg7/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg7/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg7/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg7/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg8/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg8/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg8/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg8/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg9/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg9/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg9/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg9/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg10/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg10/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg10/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg10/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg11/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg11/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg11/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg11/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg12/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg12/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg12/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg12/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg13/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg13/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg13/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg13/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg14/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg14/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg14/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg14/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg15/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg15/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg15/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg15/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg16/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg16/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg16/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg16/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg17/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg17/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg17/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg17/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg18/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg18/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg18/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg18/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg19/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg19/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg19/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg19/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg20/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg20/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg20/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg20/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg21/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg21/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg21/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg21/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg22/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg22/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg22/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg22/index.ts","pollingInterval":250}
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/user/username/projects/myproject/pkg0:
-  {"directoryName":"/user/username/projects/myproject/pkg0","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg1:
-  {"directoryName":"/user/username/projects/myproject/pkg1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg2:
-  {"directoryName":"/user/username/projects/myproject/pkg2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg3:
-  {"directoryName":"/user/username/projects/myproject/pkg3","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg4:
-  {"directoryName":"/user/username/projects/myproject/pkg4","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg5:
-  {"directoryName":"/user/username/projects/myproject/pkg5","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg6:
-  {"directoryName":"/user/username/projects/myproject/pkg6","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg7:
-  {"directoryName":"/user/username/projects/myproject/pkg7","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg8:
-  {"directoryName":"/user/username/projects/myproject/pkg8","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg9:
-  {"directoryName":"/user/username/projects/myproject/pkg9","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg10:
-  {"directoryName":"/user/username/projects/myproject/pkg10","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg11:
-  {"directoryName":"/user/username/projects/myproject/pkg11","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg12:
-  {"directoryName":"/user/username/projects/myproject/pkg12","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg13:
-  {"directoryName":"/user/username/projects/myproject/pkg13","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg14:
-  {"directoryName":"/user/username/projects/myproject/pkg14","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg15:
-  {"directoryName":"/user/username/projects/myproject/pkg15","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg16:
-  {"directoryName":"/user/username/projects/myproject/pkg16","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg17:
-  {"directoryName":"/user/username/projects/myproject/pkg17","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg18:
-  {"directoryName":"/user/username/projects/myproject/pkg18","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg19:
-  {"directoryName":"/user/username/projects/myproject/pkg19","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg20:
-  {"directoryName":"/user/username/projects/myproject/pkg20","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg21:
-  {"directoryName":"/user/username/projects/myproject/pkg21","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg22:
-  {"directoryName":"/user/username/projects/myproject/pkg22","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
-exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/pkg9/index.js] file changed its modified time
-//// [/user/username/projects/myproject/pkg9/index.d.ts] file changed its modified time
-//// [/user/username/projects/myproject/pkg9/tsconfig.tsbuildinfo] file changed its modified time
-
-Change:: build pkg10
-
-Input::
-
-Output::
-[[90m12:08:48 AM[0m] Project 'pkg10/tsconfig.json' is out of date because oldest output 'pkg10/index.js' is older than newest input 'pkg0/tsconfig.json'
-
-[[90m12:08:49 AM[0m] Building project '/user/username/projects/myproject/pkg10/tsconfig.json'...
-
-[[90m12:08:51 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg10/tsconfig.json'...
-
-
 
 Program root files: ["/user/username/projects/myproject/pkg10/index.ts"]
 Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg10/tsconfig.json"}
@@ -4351,20 +3091,56 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+//// [/user/username/projects/myproject/pkg6/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg6/index.d.ts] file changed its modified time
+//// [/user/username/projects/myproject/pkg6/tsconfig.tsbuildinfo] file changed its modified time
+//// [/user/username/projects/myproject/pkg7/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg7/index.d.ts] file changed its modified time
+//// [/user/username/projects/myproject/pkg7/tsconfig.tsbuildinfo] file changed its modified time
+//// [/user/username/projects/myproject/pkg8/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg8/index.d.ts] file changed its modified time
+//// [/user/username/projects/myproject/pkg8/tsconfig.tsbuildinfo] file changed its modified time
+//// [/user/username/projects/myproject/pkg9/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg9/index.d.ts] file changed its modified time
+//// [/user/username/projects/myproject/pkg9/tsconfig.tsbuildinfo] file changed its modified time
 //// [/user/username/projects/myproject/pkg10/index.js] file changed its modified time
 //// [/user/username/projects/myproject/pkg10/index.d.ts] file changed its modified time
 //// [/user/username/projects/myproject/pkg10/tsconfig.tsbuildinfo] file changed its modified time
 
-Change:: build pkg11
+Change:: build pkg11,pkg12,pkg13,pkg14,pkg15
 
 Input::
 
 Output::
-[[90m12:08:52 AM[0m] Project 'pkg11/tsconfig.json' is out of date because oldest output 'pkg11/index.js' is older than newest input 'pkg0/tsconfig.json'
+[[90m12:08:51 AM[0m] Project 'pkg11/tsconfig.json' is out of date because oldest output 'pkg11/index.js' is older than newest input 'pkg0/tsconfig.json'
 
-[[90m12:08:53 AM[0m] Building project '/user/username/projects/myproject/pkg11/tsconfig.json'...
+[[90m12:08:52 AM[0m] Building project '/user/username/projects/myproject/pkg11/tsconfig.json'...
 
-[[90m12:08:55 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg11/tsconfig.json'...
+[[90m12:08:54 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg11/tsconfig.json'...
+
+[[90m12:08:55 AM[0m] Project 'pkg12/tsconfig.json' is out of date because oldest output 'pkg12/index.js' is older than newest input 'pkg0/tsconfig.json'
+
+[[90m12:08:56 AM[0m] Building project '/user/username/projects/myproject/pkg12/tsconfig.json'...
+
+[[90m12:08:58 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg12/tsconfig.json'...
+
+[[90m12:08:59 AM[0m] Project 'pkg13/tsconfig.json' is out of date because oldest output 'pkg13/index.js' is older than newest input 'pkg0/tsconfig.json'
+
+[[90m12:09:00 AM[0m] Building project '/user/username/projects/myproject/pkg13/tsconfig.json'...
+
+[[90m12:09:02 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg13/tsconfig.json'...
+
+[[90m12:09:03 AM[0m] Project 'pkg14/tsconfig.json' is out of date because oldest output 'pkg14/index.js' is older than newest input 'pkg0/tsconfig.json'
+
+[[90m12:09:04 AM[0m] Building project '/user/username/projects/myproject/pkg14/tsconfig.json'...
+
+[[90m12:09:06 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg14/tsconfig.json'...
+
+[[90m12:09:07 AM[0m] Project 'pkg15/tsconfig.json' is out of date because oldest output 'pkg15/index.js' is older than newest input 'pkg0/tsconfig.json'
+
+[[90m12:09:08 AM[0m] Building project '/user/username/projects/myproject/pkg15/tsconfig.json'...
+
+[[90m12:09:10 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg15/tsconfig.json'...
 
 
 
@@ -4379,171 +3155,6 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-WatchedFiles::
-/user/username/projects/myproject/pkg0/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg0/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg0/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg0/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg1/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg1/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg1/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg1/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg2/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg2/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg2/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg2/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg3/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg3/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg3/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg3/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg4/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg4/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg4/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg4/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg5/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg5/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg5/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg5/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg6/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg6/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg6/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg6/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg7/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg7/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg7/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg7/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg8/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg8/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg8/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg8/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg9/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg9/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg9/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg9/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg10/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg10/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg10/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg10/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg11/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg11/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg11/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg11/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg12/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg12/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg12/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg12/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg13/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg13/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg13/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg13/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg14/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg14/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg14/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg14/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg15/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg15/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg15/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg15/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg16/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg16/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg16/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg16/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg17/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg17/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg17/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg17/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg18/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg18/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg18/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg18/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg19/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg19/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg19/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg19/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg20/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg20/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg20/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg20/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg21/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg21/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg21/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg21/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg22/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg22/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg22/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg22/index.ts","pollingInterval":250}
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/user/username/projects/myproject/pkg0:
-  {"directoryName":"/user/username/projects/myproject/pkg0","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg1:
-  {"directoryName":"/user/username/projects/myproject/pkg1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg2:
-  {"directoryName":"/user/username/projects/myproject/pkg2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg3:
-  {"directoryName":"/user/username/projects/myproject/pkg3","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg4:
-  {"directoryName":"/user/username/projects/myproject/pkg4","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg5:
-  {"directoryName":"/user/username/projects/myproject/pkg5","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg6:
-  {"directoryName":"/user/username/projects/myproject/pkg6","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg7:
-  {"directoryName":"/user/username/projects/myproject/pkg7","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg8:
-  {"directoryName":"/user/username/projects/myproject/pkg8","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg9:
-  {"directoryName":"/user/username/projects/myproject/pkg9","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg10:
-  {"directoryName":"/user/username/projects/myproject/pkg10","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg11:
-  {"directoryName":"/user/username/projects/myproject/pkg11","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg12:
-  {"directoryName":"/user/username/projects/myproject/pkg12","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg13:
-  {"directoryName":"/user/username/projects/myproject/pkg13","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg14:
-  {"directoryName":"/user/username/projects/myproject/pkg14","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg15:
-  {"directoryName":"/user/username/projects/myproject/pkg15","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg16:
-  {"directoryName":"/user/username/projects/myproject/pkg16","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg17:
-  {"directoryName":"/user/username/projects/myproject/pkg17","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg18:
-  {"directoryName":"/user/username/projects/myproject/pkg18","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg19:
-  {"directoryName":"/user/username/projects/myproject/pkg19","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg20:
-  {"directoryName":"/user/username/projects/myproject/pkg20","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg21:
-  {"directoryName":"/user/username/projects/myproject/pkg21","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg22:
-  {"directoryName":"/user/username/projects/myproject/pkg22","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
-exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/pkg11/index.js] file changed its modified time
-//// [/user/username/projects/myproject/pkg11/index.d.ts] file changed its modified time
-//// [/user/username/projects/myproject/pkg11/tsconfig.tsbuildinfo] file changed its modified time
-
-Change:: build pkg12
-
-Input::
-
-Output::
-[[90m12:08:56 AM[0m] Project 'pkg12/tsconfig.json' is out of date because oldest output 'pkg12/index.js' is older than newest input 'pkg0/tsconfig.json'
-
-[[90m12:08:57 AM[0m] Building project '/user/username/projects/myproject/pkg12/tsconfig.json'...
-
-[[90m12:08:59 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg12/tsconfig.json'...
-
-
-
 Program root files: ["/user/username/projects/myproject/pkg12/index.ts"]
 Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg12/tsconfig.json"}
 Program structureReused: Not
@@ -4554,171 +3165,6 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
-
-WatchedFiles::
-/user/username/projects/myproject/pkg0/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg0/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg0/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg0/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg1/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg1/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg1/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg1/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg2/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg2/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg2/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg2/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg3/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg3/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg3/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg3/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg4/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg4/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg4/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg4/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg5/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg5/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg5/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg5/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg6/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg6/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg6/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg6/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg7/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg7/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg7/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg7/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg8/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg8/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg8/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg8/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg9/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg9/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg9/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg9/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg10/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg10/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg10/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg10/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg11/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg11/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg11/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg11/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg12/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg12/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg12/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg12/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg13/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg13/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg13/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg13/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg14/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg14/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg14/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg14/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg15/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg15/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg15/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg15/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg16/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg16/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg16/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg16/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg17/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg17/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg17/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg17/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg18/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg18/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg18/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg18/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg19/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg19/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg19/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg19/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg20/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg20/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg20/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg20/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg21/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg21/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg21/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg21/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg22/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg22/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg22/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg22/index.ts","pollingInterval":250}
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/user/username/projects/myproject/pkg0:
-  {"directoryName":"/user/username/projects/myproject/pkg0","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg1:
-  {"directoryName":"/user/username/projects/myproject/pkg1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg2:
-  {"directoryName":"/user/username/projects/myproject/pkg2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg3:
-  {"directoryName":"/user/username/projects/myproject/pkg3","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg4:
-  {"directoryName":"/user/username/projects/myproject/pkg4","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg5:
-  {"directoryName":"/user/username/projects/myproject/pkg5","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg6:
-  {"directoryName":"/user/username/projects/myproject/pkg6","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg7:
-  {"directoryName":"/user/username/projects/myproject/pkg7","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg8:
-  {"directoryName":"/user/username/projects/myproject/pkg8","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg9:
-  {"directoryName":"/user/username/projects/myproject/pkg9","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg10:
-  {"directoryName":"/user/username/projects/myproject/pkg10","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg11:
-  {"directoryName":"/user/username/projects/myproject/pkg11","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg12:
-  {"directoryName":"/user/username/projects/myproject/pkg12","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg13:
-  {"directoryName":"/user/username/projects/myproject/pkg13","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg14:
-  {"directoryName":"/user/username/projects/myproject/pkg14","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg15:
-  {"directoryName":"/user/username/projects/myproject/pkg15","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg16:
-  {"directoryName":"/user/username/projects/myproject/pkg16","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg17:
-  {"directoryName":"/user/username/projects/myproject/pkg17","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg18:
-  {"directoryName":"/user/username/projects/myproject/pkg18","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg19:
-  {"directoryName":"/user/username/projects/myproject/pkg19","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg20:
-  {"directoryName":"/user/username/projects/myproject/pkg20","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg21:
-  {"directoryName":"/user/username/projects/myproject/pkg21","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg22:
-  {"directoryName":"/user/username/projects/myproject/pkg22","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
-exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/pkg12/index.js] file changed its modified time
-//// [/user/username/projects/myproject/pkg12/index.d.ts] file changed its modified time
-//// [/user/username/projects/myproject/pkg12/tsconfig.tsbuildinfo] file changed its modified time
-
-Change:: build pkg13
-
-Input::
-
-Output::
-[[90m12:09:00 AM[0m] Project 'pkg13/tsconfig.json' is out of date because oldest output 'pkg13/index.js' is older than newest input 'pkg0/tsconfig.json'
-
-[[90m12:09:01 AM[0m] Building project '/user/username/projects/myproject/pkg13/tsconfig.json'...
-
-[[90m12:09:03 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg13/tsconfig.json'...
-
-
 
 Program root files: ["/user/username/projects/myproject/pkg13/index.ts"]
 Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg13/tsconfig.json"}
@@ -4731,171 +3177,6 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-WatchedFiles::
-/user/username/projects/myproject/pkg0/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg0/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg0/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg0/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg1/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg1/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg1/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg1/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg2/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg2/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg2/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg2/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg3/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg3/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg3/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg3/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg4/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg4/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg4/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg4/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg5/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg5/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg5/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg5/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg6/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg6/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg6/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg6/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg7/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg7/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg7/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg7/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg8/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg8/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg8/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg8/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg9/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg9/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg9/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg9/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg10/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg10/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg10/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg10/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg11/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg11/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg11/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg11/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg12/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg12/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg12/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg12/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg13/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg13/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg13/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg13/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg14/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg14/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg14/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg14/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg15/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg15/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg15/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg15/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg16/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg16/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg16/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg16/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg17/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg17/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg17/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg17/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg18/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg18/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg18/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg18/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg19/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg19/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg19/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg19/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg20/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg20/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg20/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg20/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg21/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg21/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg21/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg21/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg22/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg22/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg22/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg22/index.ts","pollingInterval":250}
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/user/username/projects/myproject/pkg0:
-  {"directoryName":"/user/username/projects/myproject/pkg0","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg1:
-  {"directoryName":"/user/username/projects/myproject/pkg1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg2:
-  {"directoryName":"/user/username/projects/myproject/pkg2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg3:
-  {"directoryName":"/user/username/projects/myproject/pkg3","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg4:
-  {"directoryName":"/user/username/projects/myproject/pkg4","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg5:
-  {"directoryName":"/user/username/projects/myproject/pkg5","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg6:
-  {"directoryName":"/user/username/projects/myproject/pkg6","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg7:
-  {"directoryName":"/user/username/projects/myproject/pkg7","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg8:
-  {"directoryName":"/user/username/projects/myproject/pkg8","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg9:
-  {"directoryName":"/user/username/projects/myproject/pkg9","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg10:
-  {"directoryName":"/user/username/projects/myproject/pkg10","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg11:
-  {"directoryName":"/user/username/projects/myproject/pkg11","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg12:
-  {"directoryName":"/user/username/projects/myproject/pkg12","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg13:
-  {"directoryName":"/user/username/projects/myproject/pkg13","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg14:
-  {"directoryName":"/user/username/projects/myproject/pkg14","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg15:
-  {"directoryName":"/user/username/projects/myproject/pkg15","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg16:
-  {"directoryName":"/user/username/projects/myproject/pkg16","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg17:
-  {"directoryName":"/user/username/projects/myproject/pkg17","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg18:
-  {"directoryName":"/user/username/projects/myproject/pkg18","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg19:
-  {"directoryName":"/user/username/projects/myproject/pkg19","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg20:
-  {"directoryName":"/user/username/projects/myproject/pkg20","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg21:
-  {"directoryName":"/user/username/projects/myproject/pkg21","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg22:
-  {"directoryName":"/user/username/projects/myproject/pkg22","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
-exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/pkg13/index.js] file changed its modified time
-//// [/user/username/projects/myproject/pkg13/index.d.ts] file changed its modified time
-//// [/user/username/projects/myproject/pkg13/tsconfig.tsbuildinfo] file changed its modified time
-
-Change:: build pkg14
-
-Input::
-
-Output::
-[[90m12:09:04 AM[0m] Project 'pkg14/tsconfig.json' is out of date because oldest output 'pkg14/index.js' is older than newest input 'pkg0/tsconfig.json'
-
-[[90m12:09:05 AM[0m] Building project '/user/username/projects/myproject/pkg14/tsconfig.json'...
-
-[[90m12:09:07 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg14/tsconfig.json'...
-
-
-
 Program root files: ["/user/username/projects/myproject/pkg14/index.ts"]
 Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg14/tsconfig.json"}
 Program structureReused: Not
@@ -4906,171 +3187,6 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
-
-WatchedFiles::
-/user/username/projects/myproject/pkg0/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg0/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg0/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg0/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg1/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg1/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg1/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg1/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg2/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg2/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg2/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg2/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg3/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg3/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg3/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg3/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg4/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg4/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg4/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg4/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg5/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg5/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg5/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg5/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg6/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg6/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg6/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg6/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg7/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg7/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg7/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg7/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg8/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg8/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg8/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg8/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg9/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg9/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg9/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg9/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg10/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg10/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg10/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg10/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg11/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg11/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg11/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg11/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg12/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg12/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg12/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg12/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg13/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg13/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg13/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg13/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg14/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg14/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg14/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg14/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg15/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg15/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg15/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg15/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg16/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg16/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg16/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg16/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg17/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg17/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg17/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg17/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg18/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg18/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg18/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg18/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg19/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg19/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg19/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg19/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg20/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg20/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg20/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg20/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg21/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg21/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg21/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg21/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg22/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg22/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg22/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg22/index.ts","pollingInterval":250}
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/user/username/projects/myproject/pkg0:
-  {"directoryName":"/user/username/projects/myproject/pkg0","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg1:
-  {"directoryName":"/user/username/projects/myproject/pkg1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg2:
-  {"directoryName":"/user/username/projects/myproject/pkg2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg3:
-  {"directoryName":"/user/username/projects/myproject/pkg3","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg4:
-  {"directoryName":"/user/username/projects/myproject/pkg4","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg5:
-  {"directoryName":"/user/username/projects/myproject/pkg5","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg6:
-  {"directoryName":"/user/username/projects/myproject/pkg6","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg7:
-  {"directoryName":"/user/username/projects/myproject/pkg7","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg8:
-  {"directoryName":"/user/username/projects/myproject/pkg8","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg9:
-  {"directoryName":"/user/username/projects/myproject/pkg9","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg10:
-  {"directoryName":"/user/username/projects/myproject/pkg10","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg11:
-  {"directoryName":"/user/username/projects/myproject/pkg11","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg12:
-  {"directoryName":"/user/username/projects/myproject/pkg12","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg13:
-  {"directoryName":"/user/username/projects/myproject/pkg13","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg14:
-  {"directoryName":"/user/username/projects/myproject/pkg14","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg15:
-  {"directoryName":"/user/username/projects/myproject/pkg15","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg16:
-  {"directoryName":"/user/username/projects/myproject/pkg16","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg17:
-  {"directoryName":"/user/username/projects/myproject/pkg17","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg18:
-  {"directoryName":"/user/username/projects/myproject/pkg18","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg19:
-  {"directoryName":"/user/username/projects/myproject/pkg19","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg20:
-  {"directoryName":"/user/username/projects/myproject/pkg20","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg21:
-  {"directoryName":"/user/username/projects/myproject/pkg21","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg22:
-  {"directoryName":"/user/username/projects/myproject/pkg22","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
-exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/pkg14/index.js] file changed its modified time
-//// [/user/username/projects/myproject/pkg14/index.d.ts] file changed its modified time
-//// [/user/username/projects/myproject/pkg14/tsconfig.tsbuildinfo] file changed its modified time
-
-Change:: build pkg15
-
-Input::
-
-Output::
-[[90m12:09:09 AM[0m] Project 'pkg15/tsconfig.json' is out of date because oldest output 'pkg15/index.js' is older than newest input 'pkg0/tsconfig.json'
-
-[[90m12:09:10 AM[0m] Building project '/user/username/projects/myproject/pkg15/tsconfig.json'...
-
-[[90m12:09:12 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg15/tsconfig.json'...
-
-
 
 Program root files: ["/user/username/projects/myproject/pkg15/index.ts"]
 Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg15/tsconfig.json"}
@@ -5231,20 +3347,56 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+//// [/user/username/projects/myproject/pkg11/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg11/index.d.ts] file changed its modified time
+//// [/user/username/projects/myproject/pkg11/tsconfig.tsbuildinfo] file changed its modified time
+//// [/user/username/projects/myproject/pkg12/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg12/index.d.ts] file changed its modified time
+//// [/user/username/projects/myproject/pkg12/tsconfig.tsbuildinfo] file changed its modified time
+//// [/user/username/projects/myproject/pkg13/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg13/index.d.ts] file changed its modified time
+//// [/user/username/projects/myproject/pkg13/tsconfig.tsbuildinfo] file changed its modified time
+//// [/user/username/projects/myproject/pkg14/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg14/index.d.ts] file changed its modified time
+//// [/user/username/projects/myproject/pkg14/tsconfig.tsbuildinfo] file changed its modified time
 //// [/user/username/projects/myproject/pkg15/index.js] file changed its modified time
 //// [/user/username/projects/myproject/pkg15/index.d.ts] file changed its modified time
 //// [/user/username/projects/myproject/pkg15/tsconfig.tsbuildinfo] file changed its modified time
 
-Change:: build pkg16
+Change:: build pkg16,pkg17,pkg18,pkg19,pkg20
 
 Input::
 
 Output::
-[[90m12:09:13 AM[0m] Project 'pkg16/tsconfig.json' is out of date because oldest output 'pkg16/index.js' is older than newest input 'pkg0/tsconfig.json'
+[[90m12:09:11 AM[0m] Project 'pkg16/tsconfig.json' is out of date because oldest output 'pkg16/index.js' is older than newest input 'pkg0/tsconfig.json'
 
-[[90m12:09:14 AM[0m] Building project '/user/username/projects/myproject/pkg16/tsconfig.json'...
+[[90m12:09:12 AM[0m] Building project '/user/username/projects/myproject/pkg16/tsconfig.json'...
 
-[[90m12:09:16 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg16/tsconfig.json'...
+[[90m12:09:14 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg16/tsconfig.json'...
+
+[[90m12:09:15 AM[0m] Project 'pkg17/tsconfig.json' is out of date because oldest output 'pkg17/index.js' is older than newest input 'pkg0/tsconfig.json'
+
+[[90m12:09:16 AM[0m] Building project '/user/username/projects/myproject/pkg17/tsconfig.json'...
+
+[[90m12:09:18 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg17/tsconfig.json'...
+
+[[90m12:09:19 AM[0m] Project 'pkg18/tsconfig.json' is out of date because oldest output 'pkg18/index.js' is older than newest input 'pkg0/tsconfig.json'
+
+[[90m12:09:20 AM[0m] Building project '/user/username/projects/myproject/pkg18/tsconfig.json'...
+
+[[90m12:09:22 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg18/tsconfig.json'...
+
+[[90m12:09:23 AM[0m] Project 'pkg19/tsconfig.json' is out of date because oldest output 'pkg19/index.js' is older than newest input 'pkg0/tsconfig.json'
+
+[[90m12:09:24 AM[0m] Building project '/user/username/projects/myproject/pkg19/tsconfig.json'...
+
+[[90m12:09:26 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg19/tsconfig.json'...
+
+[[90m12:09:27 AM[0m] Project 'pkg20/tsconfig.json' is out of date because oldest output 'pkg20/index.js' is older than newest input 'pkg0/tsconfig.json'
+
+[[90m12:09:28 AM[0m] Building project '/user/username/projects/myproject/pkg20/tsconfig.json'...
+
+[[90m12:09:30 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg20/tsconfig.json'...
 
 
 
@@ -5259,171 +3411,6 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-WatchedFiles::
-/user/username/projects/myproject/pkg0/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg0/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg0/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg0/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg1/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg1/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg1/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg1/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg2/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg2/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg2/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg2/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg3/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg3/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg3/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg3/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg4/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg4/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg4/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg4/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg5/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg5/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg5/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg5/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg6/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg6/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg6/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg6/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg7/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg7/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg7/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg7/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg8/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg8/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg8/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg8/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg9/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg9/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg9/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg9/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg10/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg10/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg10/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg10/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg11/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg11/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg11/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg11/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg12/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg12/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg12/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg12/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg13/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg13/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg13/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg13/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg14/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg14/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg14/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg14/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg15/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg15/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg15/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg15/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg16/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg16/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg16/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg16/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg17/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg17/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg17/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg17/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg18/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg18/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg18/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg18/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg19/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg19/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg19/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg19/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg20/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg20/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg20/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg20/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg21/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg21/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg21/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg21/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg22/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg22/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg22/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg22/index.ts","pollingInterval":250}
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/user/username/projects/myproject/pkg0:
-  {"directoryName":"/user/username/projects/myproject/pkg0","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg1:
-  {"directoryName":"/user/username/projects/myproject/pkg1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg2:
-  {"directoryName":"/user/username/projects/myproject/pkg2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg3:
-  {"directoryName":"/user/username/projects/myproject/pkg3","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg4:
-  {"directoryName":"/user/username/projects/myproject/pkg4","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg5:
-  {"directoryName":"/user/username/projects/myproject/pkg5","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg6:
-  {"directoryName":"/user/username/projects/myproject/pkg6","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg7:
-  {"directoryName":"/user/username/projects/myproject/pkg7","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg8:
-  {"directoryName":"/user/username/projects/myproject/pkg8","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg9:
-  {"directoryName":"/user/username/projects/myproject/pkg9","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg10:
-  {"directoryName":"/user/username/projects/myproject/pkg10","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg11:
-  {"directoryName":"/user/username/projects/myproject/pkg11","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg12:
-  {"directoryName":"/user/username/projects/myproject/pkg12","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg13:
-  {"directoryName":"/user/username/projects/myproject/pkg13","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg14:
-  {"directoryName":"/user/username/projects/myproject/pkg14","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg15:
-  {"directoryName":"/user/username/projects/myproject/pkg15","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg16:
-  {"directoryName":"/user/username/projects/myproject/pkg16","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg17:
-  {"directoryName":"/user/username/projects/myproject/pkg17","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg18:
-  {"directoryName":"/user/username/projects/myproject/pkg18","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg19:
-  {"directoryName":"/user/username/projects/myproject/pkg19","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg20:
-  {"directoryName":"/user/username/projects/myproject/pkg20","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg21:
-  {"directoryName":"/user/username/projects/myproject/pkg21","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg22:
-  {"directoryName":"/user/username/projects/myproject/pkg22","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
-exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/pkg16/index.js] file changed its modified time
-//// [/user/username/projects/myproject/pkg16/index.d.ts] file changed its modified time
-//// [/user/username/projects/myproject/pkg16/tsconfig.tsbuildinfo] file changed its modified time
-
-Change:: build pkg17
-
-Input::
-
-Output::
-[[90m12:09:17 AM[0m] Project 'pkg17/tsconfig.json' is out of date because oldest output 'pkg17/index.js' is older than newest input 'pkg0/tsconfig.json'
-
-[[90m12:09:18 AM[0m] Building project '/user/username/projects/myproject/pkg17/tsconfig.json'...
-
-[[90m12:09:20 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg17/tsconfig.json'...
-
-
-
 Program root files: ["/user/username/projects/myproject/pkg17/index.ts"]
 Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg17/tsconfig.json"}
 Program structureReused: Not
@@ -5434,171 +3421,6 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
-
-WatchedFiles::
-/user/username/projects/myproject/pkg0/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg0/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg0/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg0/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg1/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg1/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg1/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg1/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg2/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg2/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg2/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg2/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg3/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg3/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg3/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg3/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg4/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg4/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg4/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg4/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg5/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg5/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg5/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg5/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg6/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg6/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg6/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg6/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg7/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg7/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg7/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg7/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg8/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg8/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg8/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg8/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg9/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg9/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg9/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg9/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg10/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg10/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg10/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg10/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg11/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg11/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg11/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg11/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg12/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg12/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg12/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg12/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg13/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg13/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg13/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg13/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg14/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg14/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg14/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg14/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg15/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg15/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg15/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg15/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg16/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg16/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg16/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg16/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg17/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg17/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg17/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg17/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg18/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg18/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg18/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg18/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg19/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg19/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg19/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg19/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg20/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg20/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg20/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg20/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg21/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg21/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg21/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg21/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg22/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg22/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg22/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg22/index.ts","pollingInterval":250}
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/user/username/projects/myproject/pkg0:
-  {"directoryName":"/user/username/projects/myproject/pkg0","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg1:
-  {"directoryName":"/user/username/projects/myproject/pkg1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg2:
-  {"directoryName":"/user/username/projects/myproject/pkg2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg3:
-  {"directoryName":"/user/username/projects/myproject/pkg3","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg4:
-  {"directoryName":"/user/username/projects/myproject/pkg4","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg5:
-  {"directoryName":"/user/username/projects/myproject/pkg5","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg6:
-  {"directoryName":"/user/username/projects/myproject/pkg6","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg7:
-  {"directoryName":"/user/username/projects/myproject/pkg7","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg8:
-  {"directoryName":"/user/username/projects/myproject/pkg8","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg9:
-  {"directoryName":"/user/username/projects/myproject/pkg9","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg10:
-  {"directoryName":"/user/username/projects/myproject/pkg10","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg11:
-  {"directoryName":"/user/username/projects/myproject/pkg11","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg12:
-  {"directoryName":"/user/username/projects/myproject/pkg12","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg13:
-  {"directoryName":"/user/username/projects/myproject/pkg13","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg14:
-  {"directoryName":"/user/username/projects/myproject/pkg14","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg15:
-  {"directoryName":"/user/username/projects/myproject/pkg15","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg16:
-  {"directoryName":"/user/username/projects/myproject/pkg16","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg17:
-  {"directoryName":"/user/username/projects/myproject/pkg17","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg18:
-  {"directoryName":"/user/username/projects/myproject/pkg18","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg19:
-  {"directoryName":"/user/username/projects/myproject/pkg19","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg20:
-  {"directoryName":"/user/username/projects/myproject/pkg20","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg21:
-  {"directoryName":"/user/username/projects/myproject/pkg21","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg22:
-  {"directoryName":"/user/username/projects/myproject/pkg22","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
-exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/pkg17/index.js] file changed its modified time
-//// [/user/username/projects/myproject/pkg17/index.d.ts] file changed its modified time
-//// [/user/username/projects/myproject/pkg17/tsconfig.tsbuildinfo] file changed its modified time
-
-Change:: build pkg18
-
-Input::
-
-Output::
-[[90m12:09:21 AM[0m] Project 'pkg18/tsconfig.json' is out of date because oldest output 'pkg18/index.js' is older than newest input 'pkg0/tsconfig.json'
-
-[[90m12:09:22 AM[0m] Building project '/user/username/projects/myproject/pkg18/tsconfig.json'...
-
-[[90m12:09:24 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg18/tsconfig.json'...
-
-
 
 Program root files: ["/user/username/projects/myproject/pkg18/index.ts"]
 Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg18/tsconfig.json"}
@@ -5611,171 +3433,6 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-WatchedFiles::
-/user/username/projects/myproject/pkg0/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg0/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg0/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg0/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg1/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg1/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg1/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg1/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg2/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg2/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg2/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg2/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg3/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg3/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg3/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg3/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg4/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg4/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg4/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg4/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg5/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg5/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg5/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg5/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg6/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg6/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg6/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg6/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg7/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg7/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg7/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg7/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg8/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg8/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg8/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg8/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg9/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg9/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg9/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg9/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg10/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg10/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg10/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg10/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg11/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg11/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg11/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg11/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg12/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg12/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg12/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg12/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg13/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg13/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg13/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg13/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg14/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg14/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg14/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg14/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg15/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg15/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg15/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg15/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg16/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg16/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg16/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg16/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg17/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg17/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg17/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg17/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg18/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg18/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg18/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg18/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg19/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg19/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg19/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg19/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg20/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg20/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg20/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg20/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg21/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg21/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg21/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg21/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg22/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg22/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg22/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg22/index.ts","pollingInterval":250}
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/user/username/projects/myproject/pkg0:
-  {"directoryName":"/user/username/projects/myproject/pkg0","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg1:
-  {"directoryName":"/user/username/projects/myproject/pkg1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg2:
-  {"directoryName":"/user/username/projects/myproject/pkg2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg3:
-  {"directoryName":"/user/username/projects/myproject/pkg3","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg4:
-  {"directoryName":"/user/username/projects/myproject/pkg4","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg5:
-  {"directoryName":"/user/username/projects/myproject/pkg5","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg6:
-  {"directoryName":"/user/username/projects/myproject/pkg6","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg7:
-  {"directoryName":"/user/username/projects/myproject/pkg7","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg8:
-  {"directoryName":"/user/username/projects/myproject/pkg8","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg9:
-  {"directoryName":"/user/username/projects/myproject/pkg9","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg10:
-  {"directoryName":"/user/username/projects/myproject/pkg10","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg11:
-  {"directoryName":"/user/username/projects/myproject/pkg11","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg12:
-  {"directoryName":"/user/username/projects/myproject/pkg12","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg13:
-  {"directoryName":"/user/username/projects/myproject/pkg13","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg14:
-  {"directoryName":"/user/username/projects/myproject/pkg14","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg15:
-  {"directoryName":"/user/username/projects/myproject/pkg15","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg16:
-  {"directoryName":"/user/username/projects/myproject/pkg16","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg17:
-  {"directoryName":"/user/username/projects/myproject/pkg17","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg18:
-  {"directoryName":"/user/username/projects/myproject/pkg18","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg19:
-  {"directoryName":"/user/username/projects/myproject/pkg19","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg20:
-  {"directoryName":"/user/username/projects/myproject/pkg20","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg21:
-  {"directoryName":"/user/username/projects/myproject/pkg21","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg22:
-  {"directoryName":"/user/username/projects/myproject/pkg22","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
-exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/pkg18/index.js] file changed its modified time
-//// [/user/username/projects/myproject/pkg18/index.d.ts] file changed its modified time
-//// [/user/username/projects/myproject/pkg18/tsconfig.tsbuildinfo] file changed its modified time
-
-Change:: build pkg19
-
-Input::
-
-Output::
-[[90m12:09:25 AM[0m] Project 'pkg19/tsconfig.json' is out of date because oldest output 'pkg19/index.js' is older than newest input 'pkg0/tsconfig.json'
-
-[[90m12:09:26 AM[0m] Building project '/user/username/projects/myproject/pkg19/tsconfig.json'...
-
-[[90m12:09:28 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg19/tsconfig.json'...
-
-
-
 Program root files: ["/user/username/projects/myproject/pkg19/index.ts"]
 Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg19/tsconfig.json"}
 Program structureReused: Not
@@ -5786,171 +3443,6 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
-
-WatchedFiles::
-/user/username/projects/myproject/pkg0/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg0/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg0/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg0/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg1/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg1/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg1/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg1/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg2/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg2/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg2/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg2/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg3/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg3/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg3/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg3/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg4/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg4/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg4/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg4/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg5/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg5/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg5/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg5/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg6/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg6/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg6/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg6/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg7/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg7/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg7/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg7/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg8/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg8/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg8/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg8/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg9/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg9/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg9/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg9/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg10/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg10/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg10/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg10/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg11/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg11/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg11/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg11/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg12/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg12/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg12/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg12/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg13/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg13/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg13/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg13/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg14/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg14/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg14/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg14/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg15/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg15/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg15/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg15/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg16/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg16/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg16/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg16/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg17/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg17/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg17/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg17/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg18/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg18/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg18/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg18/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg19/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg19/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg19/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg19/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg20/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg20/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg20/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg20/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg21/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg21/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg21/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg21/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg22/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg22/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg22/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg22/index.ts","pollingInterval":250}
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/user/username/projects/myproject/pkg0:
-  {"directoryName":"/user/username/projects/myproject/pkg0","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg1:
-  {"directoryName":"/user/username/projects/myproject/pkg1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg2:
-  {"directoryName":"/user/username/projects/myproject/pkg2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg3:
-  {"directoryName":"/user/username/projects/myproject/pkg3","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg4:
-  {"directoryName":"/user/username/projects/myproject/pkg4","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg5:
-  {"directoryName":"/user/username/projects/myproject/pkg5","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg6:
-  {"directoryName":"/user/username/projects/myproject/pkg6","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg7:
-  {"directoryName":"/user/username/projects/myproject/pkg7","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg8:
-  {"directoryName":"/user/username/projects/myproject/pkg8","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg9:
-  {"directoryName":"/user/username/projects/myproject/pkg9","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg10:
-  {"directoryName":"/user/username/projects/myproject/pkg10","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg11:
-  {"directoryName":"/user/username/projects/myproject/pkg11","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg12:
-  {"directoryName":"/user/username/projects/myproject/pkg12","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg13:
-  {"directoryName":"/user/username/projects/myproject/pkg13","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg14:
-  {"directoryName":"/user/username/projects/myproject/pkg14","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg15:
-  {"directoryName":"/user/username/projects/myproject/pkg15","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg16:
-  {"directoryName":"/user/username/projects/myproject/pkg16","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg17:
-  {"directoryName":"/user/username/projects/myproject/pkg17","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg18:
-  {"directoryName":"/user/username/projects/myproject/pkg18","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg19:
-  {"directoryName":"/user/username/projects/myproject/pkg19","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg20:
-  {"directoryName":"/user/username/projects/myproject/pkg20","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg21:
-  {"directoryName":"/user/username/projects/myproject/pkg21","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg22:
-  {"directoryName":"/user/username/projects/myproject/pkg22","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
-exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/pkg19/index.js] file changed its modified time
-//// [/user/username/projects/myproject/pkg19/index.d.ts] file changed its modified time
-//// [/user/username/projects/myproject/pkg19/tsconfig.tsbuildinfo] file changed its modified time
-
-Change:: build pkg20
-
-Input::
-
-Output::
-[[90m12:09:29 AM[0m] Project 'pkg20/tsconfig.json' is out of date because oldest output 'pkg20/index.js' is older than newest input 'pkg0/tsconfig.json'
-
-[[90m12:09:30 AM[0m] Building project '/user/username/projects/myproject/pkg20/tsconfig.json'...
-
-[[90m12:09:32 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg20/tsconfig.json'...
-
-
 
 Program root files: ["/user/username/projects/myproject/pkg20/index.ts"]
 Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg20/tsconfig.json"}
@@ -6111,20 +3603,40 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+//// [/user/username/projects/myproject/pkg16/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg16/index.d.ts] file changed its modified time
+//// [/user/username/projects/myproject/pkg16/tsconfig.tsbuildinfo] file changed its modified time
+//// [/user/username/projects/myproject/pkg17/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg17/index.d.ts] file changed its modified time
+//// [/user/username/projects/myproject/pkg17/tsconfig.tsbuildinfo] file changed its modified time
+//// [/user/username/projects/myproject/pkg18/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg18/index.d.ts] file changed its modified time
+//// [/user/username/projects/myproject/pkg18/tsconfig.tsbuildinfo] file changed its modified time
+//// [/user/username/projects/myproject/pkg19/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg19/index.d.ts] file changed its modified time
+//// [/user/username/projects/myproject/pkg19/tsconfig.tsbuildinfo] file changed its modified time
 //// [/user/username/projects/myproject/pkg20/index.js] file changed its modified time
 //// [/user/username/projects/myproject/pkg20/index.d.ts] file changed its modified time
 //// [/user/username/projects/myproject/pkg20/tsconfig.tsbuildinfo] file changed its modified time
 
-Change:: build pkg21
+Change:: build pkg21,pkg22,pkg23
 
 Input::
 
 Output::
-[[90m12:09:33 AM[0m] Project 'pkg21/tsconfig.json' is out of date because oldest output 'pkg21/index.js' is older than newest input 'pkg0/tsconfig.json'
+[[90m12:09:32 AM[0m] Project 'pkg21/tsconfig.json' is out of date because oldest output 'pkg21/index.js' is older than newest input 'pkg0/tsconfig.json'
 
-[[90m12:09:34 AM[0m] Building project '/user/username/projects/myproject/pkg21/tsconfig.json'...
+[[90m12:09:33 AM[0m] Building project '/user/username/projects/myproject/pkg21/tsconfig.json'...
 
-[[90m12:09:36 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg21/tsconfig.json'...
+[[90m12:09:35 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg21/tsconfig.json'...
+
+[[90m12:09:36 AM[0m] Project 'pkg22/tsconfig.json' is out of date because oldest output 'pkg22/index.js' is older than newest input 'pkg0/tsconfig.json'
+
+[[90m12:09:37 AM[0m] Building project '/user/username/projects/myproject/pkg22/tsconfig.json'...
+
+[[90m12:09:39 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg22/tsconfig.json'...
+
+[[90m12:09:40 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -6138,173 +3650,6 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
-
-WatchedFiles::
-/user/username/projects/myproject/pkg0/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg0/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg0/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg0/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg1/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg1/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg1/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg1/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg2/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg2/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg2/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg2/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg3/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg3/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg3/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg3/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg4/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg4/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg4/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg4/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg5/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg5/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg5/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg5/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg6/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg6/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg6/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg6/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg7/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg7/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg7/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg7/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg8/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg8/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg8/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg8/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg9/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg9/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg9/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg9/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg10/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg10/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg10/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg10/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg11/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg11/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg11/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg11/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg12/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg12/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg12/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg12/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg13/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg13/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg13/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg13/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg14/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg14/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg14/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg14/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg15/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg15/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg15/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg15/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg16/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg16/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg16/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg16/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg17/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg17/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg17/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg17/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg18/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg18/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg18/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg18/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg19/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg19/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg19/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg19/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg20/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg20/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg20/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg20/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg21/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg21/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg21/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg21/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg22/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg22/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg22/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg22/index.ts","pollingInterval":250}
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/user/username/projects/myproject/pkg0:
-  {"directoryName":"/user/username/projects/myproject/pkg0","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg1:
-  {"directoryName":"/user/username/projects/myproject/pkg1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg2:
-  {"directoryName":"/user/username/projects/myproject/pkg2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg3:
-  {"directoryName":"/user/username/projects/myproject/pkg3","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg4:
-  {"directoryName":"/user/username/projects/myproject/pkg4","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg5:
-  {"directoryName":"/user/username/projects/myproject/pkg5","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg6:
-  {"directoryName":"/user/username/projects/myproject/pkg6","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg7:
-  {"directoryName":"/user/username/projects/myproject/pkg7","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg8:
-  {"directoryName":"/user/username/projects/myproject/pkg8","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg9:
-  {"directoryName":"/user/username/projects/myproject/pkg9","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg10:
-  {"directoryName":"/user/username/projects/myproject/pkg10","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg11:
-  {"directoryName":"/user/username/projects/myproject/pkg11","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg12:
-  {"directoryName":"/user/username/projects/myproject/pkg12","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg13:
-  {"directoryName":"/user/username/projects/myproject/pkg13","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg14:
-  {"directoryName":"/user/username/projects/myproject/pkg14","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg15:
-  {"directoryName":"/user/username/projects/myproject/pkg15","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg16:
-  {"directoryName":"/user/username/projects/myproject/pkg16","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg17:
-  {"directoryName":"/user/username/projects/myproject/pkg17","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg18:
-  {"directoryName":"/user/username/projects/myproject/pkg18","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg19:
-  {"directoryName":"/user/username/projects/myproject/pkg19","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg20:
-  {"directoryName":"/user/username/projects/myproject/pkg20","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg21:
-  {"directoryName":"/user/username/projects/myproject/pkg21","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg22:
-  {"directoryName":"/user/username/projects/myproject/pkg22","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
-exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/pkg21/index.js] file changed its modified time
-//// [/user/username/projects/myproject/pkg21/index.d.ts] file changed its modified time
-//// [/user/username/projects/myproject/pkg21/tsconfig.tsbuildinfo] file changed its modified time
-
-Change:: build pkg22
-
-Input::
-
-Output::
-[[90m12:09:37 AM[0m] Project 'pkg22/tsconfig.json' is out of date because oldest output 'pkg22/index.js' is older than newest input 'pkg0/tsconfig.json'
-
-[[90m12:09:38 AM[0m] Building project '/user/username/projects/myproject/pkg22/tsconfig.json'...
-
-[[90m12:09:40 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg22/tsconfig.json'...
-
-[[90m12:09:41 AM[0m] Found 0 errors. Watching for file changes.
-
-
 
 Program root files: ["/user/username/projects/myproject/pkg22/index.ts"]
 Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg22/tsconfig.json"}
@@ -6465,6 +3810,2913 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+//// [/user/username/projects/myproject/pkg21/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg21/index.d.ts] file changed its modified time
+//// [/user/username/projects/myproject/pkg21/tsconfig.tsbuildinfo] file changed its modified time
+//// [/user/username/projects/myproject/pkg22/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg22/index.d.ts] file changed its modified time
+//// [/user/username/projects/myproject/pkg22/tsconfig.tsbuildinfo] file changed its modified time
+
+Change:: No change
+
+Input::
+
+Output::
+
+WatchedFiles::
+/user/username/projects/myproject/pkg0/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg0/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg0/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg0/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg1/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg1/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg1/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg1/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg2/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg2/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg2/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg2/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg3/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg3/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg3/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg3/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg4/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg4/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg4/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg4/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg5/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg5/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg5/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg5/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg6/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg6/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg6/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg6/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg7/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg7/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg7/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg7/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg8/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg8/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg8/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg8/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg9/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg9/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg9/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg9/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg10/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg10/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg10/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg10/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg11/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg11/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg11/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg11/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg12/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg12/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg12/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg12/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg13/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg13/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg13/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg13/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg14/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg14/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg14/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg14/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg15/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg15/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg15/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg15/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg16/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg16/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg16/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg16/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg17/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg17/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg17/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg17/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg18/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg18/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg18/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg18/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg19/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg19/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg19/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg19/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg20/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg20/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg20/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg20/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg21/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg21/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg21/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg21/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg22/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg22/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg22/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg22/index.ts","pollingInterval":250}
+/user/username/projects/myproject/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
+
+FsWatches::
+
+FsWatchesRecursive::
+/user/username/projects/myproject/pkg0:
+  {"directoryName":"/user/username/projects/myproject/pkg0","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg1:
+  {"directoryName":"/user/username/projects/myproject/pkg1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg2:
+  {"directoryName":"/user/username/projects/myproject/pkg2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg3:
+  {"directoryName":"/user/username/projects/myproject/pkg3","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg4:
+  {"directoryName":"/user/username/projects/myproject/pkg4","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg5:
+  {"directoryName":"/user/username/projects/myproject/pkg5","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg6:
+  {"directoryName":"/user/username/projects/myproject/pkg6","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg7:
+  {"directoryName":"/user/username/projects/myproject/pkg7","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg8:
+  {"directoryName":"/user/username/projects/myproject/pkg8","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg9:
+  {"directoryName":"/user/username/projects/myproject/pkg9","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg10:
+  {"directoryName":"/user/username/projects/myproject/pkg10","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg11:
+  {"directoryName":"/user/username/projects/myproject/pkg11","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg12:
+  {"directoryName":"/user/username/projects/myproject/pkg12","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg13:
+  {"directoryName":"/user/username/projects/myproject/pkg13","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg14:
+  {"directoryName":"/user/username/projects/myproject/pkg14","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg15:
+  {"directoryName":"/user/username/projects/myproject/pkg15","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg16:
+  {"directoryName":"/user/username/projects/myproject/pkg16","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg17:
+  {"directoryName":"/user/username/projects/myproject/pkg17","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg18:
+  {"directoryName":"/user/username/projects/myproject/pkg18","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg19:
+  {"directoryName":"/user/username/projects/myproject/pkg19","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg20:
+  {"directoryName":"/user/username/projects/myproject/pkg20","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg21:
+  {"directoryName":"/user/username/projects/myproject/pkg21","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg22:
+  {"directoryName":"/user/username/projects/myproject/pkg22","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+
+exitCode:: ExitStatus.undefined
+
+
+Change:: dts change2
+
+Input::
+//// [/user/username/projects/myproject/pkg0/index.ts]
+export const pkg0 = 0;const someConst2 = 10;export const someConst = 10;export const someConst3 = 10;
+
+
+Output::
+>> Screen clear
+[[90m12:09:43 AM[0m] File change detected. Starting incremental compilation...
+
+[[90m12:09:44 AM[0m] Project 'pkg0/tsconfig.json' is out of date because oldest output 'pkg0/index.js' is older than newest input 'pkg0/index.ts'
+
+[[90m12:09:45 AM[0m] Building project '/user/username/projects/myproject/pkg0/tsconfig.json'...
+
+
+
+Program root files: ["/user/username/projects/myproject/pkg0/index.ts"]
+Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg0/tsconfig.json"}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/pkg0/index.ts
+
+Semantic diagnostics in builder refreshed for::
+/user/username/projects/myproject/pkg0/index.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/myproject/pkg0/index.ts (computed .d.ts)
+
+WatchedFiles::
+/user/username/projects/myproject/pkg0/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg0/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg0/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg0/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg1/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg1/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg1/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg1/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg2/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg2/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg2/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg2/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg3/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg3/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg3/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg3/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg4/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg4/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg4/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg4/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg5/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg5/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg5/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg5/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg6/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg6/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg6/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg6/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg7/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg7/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg7/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg7/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg8/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg8/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg8/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg8/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg9/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg9/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg9/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg9/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg10/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg10/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg10/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg10/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg11/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg11/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg11/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg11/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg12/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg12/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg12/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg12/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg13/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg13/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg13/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg13/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg14/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg14/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg14/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg14/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg15/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg15/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg15/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg15/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg16/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg16/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg16/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg16/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg17/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg17/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg17/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg17/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg18/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg18/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg18/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg18/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg19/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg19/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg19/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg19/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg20/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg20/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg20/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg20/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg21/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg21/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg21/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg21/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg22/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg22/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg22/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg22/index.ts","pollingInterval":250}
+/user/username/projects/myproject/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
+
+FsWatches::
+
+FsWatchesRecursive::
+/user/username/projects/myproject/pkg0:
+  {"directoryName":"/user/username/projects/myproject/pkg0","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg1:
+  {"directoryName":"/user/username/projects/myproject/pkg1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg2:
+  {"directoryName":"/user/username/projects/myproject/pkg2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg3:
+  {"directoryName":"/user/username/projects/myproject/pkg3","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg4:
+  {"directoryName":"/user/username/projects/myproject/pkg4","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg5:
+  {"directoryName":"/user/username/projects/myproject/pkg5","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg6:
+  {"directoryName":"/user/username/projects/myproject/pkg6","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg7:
+  {"directoryName":"/user/username/projects/myproject/pkg7","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg8:
+  {"directoryName":"/user/username/projects/myproject/pkg8","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg9:
+  {"directoryName":"/user/username/projects/myproject/pkg9","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg10:
+  {"directoryName":"/user/username/projects/myproject/pkg10","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg11:
+  {"directoryName":"/user/username/projects/myproject/pkg11","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg12:
+  {"directoryName":"/user/username/projects/myproject/pkg12","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg13:
+  {"directoryName":"/user/username/projects/myproject/pkg13","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg14:
+  {"directoryName":"/user/username/projects/myproject/pkg14","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg15:
+  {"directoryName":"/user/username/projects/myproject/pkg15","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg16:
+  {"directoryName":"/user/username/projects/myproject/pkg16","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg17:
+  {"directoryName":"/user/username/projects/myproject/pkg17","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg18:
+  {"directoryName":"/user/username/projects/myproject/pkg18","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg19:
+  {"directoryName":"/user/username/projects/myproject/pkg19","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg20:
+  {"directoryName":"/user/username/projects/myproject/pkg20","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg21:
+  {"directoryName":"/user/username/projects/myproject/pkg21","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg22:
+  {"directoryName":"/user/username/projects/myproject/pkg22","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+
+exitCode:: ExitStatus.undefined
+
+//// [/user/username/projects/myproject/pkg0/index.js]
+"use strict";
+exports.__esModule = true;
+exports.someConst3 = exports.someConst = exports.pkg0 = void 0;
+exports.pkg0 = 0;
+var someConst2 = 10;
+exports.someConst = 10;
+exports.someConst3 = 10;
+
+
+//// [/user/username/projects/myproject/pkg0/index.d.ts]
+export declare const pkg0 = 0;
+export declare const someConst = 10;
+export declare const someConst3 = 10;
+
+
+//// [/user/username/projects/myproject/pkg0/tsconfig.tsbuildinfo]
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"10857255042-export const pkg0 = 0;const someConst2 = 10;export const someConst = 10;export const someConst3 = 10;","signature":"-13679921373-export declare const pkg0 = 0;\nexport declare const someConst = 10;\nexport declare const someConst3 = 10;\n"}],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2]},"version":"FakeTSVersion"}
+
+//// [/user/username/projects/myproject/pkg0/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "program": {
+    "fileNames": [
+      "../../../../../a/lib/lib.d.ts",
+      "./index.ts"
+    ],
+    "fileInfos": {
+      "../../../../../a/lib/lib.d.ts": {
+        "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+        "affectsGlobalScope": true
+      },
+      "./index.ts": {
+        "version": "10857255042-export const pkg0 = 0;const someConst2 = 10;export const someConst = 10;export const someConst3 = 10;",
+        "signature": "-13679921373-export declare const pkg0 = 0;\nexport declare const someConst = 10;\nexport declare const someConst3 = 10;\n"
+      }
+    },
+    "options": {
+      "composite": true
+    },
+    "referencedMap": {},
+    "exportedModulesMap": {},
+    "semanticDiagnosticsPerFile": [
+      "../../../../../a/lib/lib.d.ts",
+      "./index.ts"
+    ]
+  },
+  "version": "FakeTSVersion",
+  "size": 883
+}
+
+
+Change:: build pkg1,pkg2,pkg3,pkg4,pkg5
+
+Input::
+
+Output::
+[[90m12:09:58 AM[0m] Project 'pkg1/tsconfig.json' is out of date because oldest output 'pkg1/index.js' is older than newest input 'pkg0/tsconfig.json'
+
+[[90m12:09:59 AM[0m] Building project '/user/username/projects/myproject/pkg1/tsconfig.json'...
+
+[[90m12:10:01 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg1/tsconfig.json'...
+
+[[90m12:10:02 AM[0m] Project 'pkg2/tsconfig.json' is out of date because oldest output 'pkg2/index.js' is older than newest input 'pkg0/tsconfig.json'
+
+[[90m12:10:03 AM[0m] Building project '/user/username/projects/myproject/pkg2/tsconfig.json'...
+
+[[90m12:10:05 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg2/tsconfig.json'...
+
+[[90m12:10:06 AM[0m] Project 'pkg3/tsconfig.json' is out of date because oldest output 'pkg3/index.js' is older than newest input 'pkg0/tsconfig.json'
+
+[[90m12:10:07 AM[0m] Building project '/user/username/projects/myproject/pkg3/tsconfig.json'...
+
+[[90m12:10:09 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg3/tsconfig.json'...
+
+[[90m12:10:10 AM[0m] Project 'pkg4/tsconfig.json' is out of date because oldest output 'pkg4/index.js' is older than newest input 'pkg0/tsconfig.json'
+
+[[90m12:10:11 AM[0m] Building project '/user/username/projects/myproject/pkg4/tsconfig.json'...
+
+[[90m12:10:13 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg4/tsconfig.json'...
+
+[[90m12:10:14 AM[0m] Project 'pkg5/tsconfig.json' is out of date because oldest output 'pkg5/index.js' is older than newest input 'pkg0/tsconfig.json'
+
+[[90m12:10:15 AM[0m] Building project '/user/username/projects/myproject/pkg5/tsconfig.json'...
+
+[[90m12:10:17 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg5/tsconfig.json'...
+
+
+
+Program root files: ["/user/username/projects/myproject/pkg1/index.ts"]
+Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg1/tsconfig.json"}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/pkg1/index.ts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
+
+Program root files: ["/user/username/projects/myproject/pkg2/index.ts"]
+Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg2/tsconfig.json"}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/pkg2/index.ts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
+
+Program root files: ["/user/username/projects/myproject/pkg3/index.ts"]
+Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg3/tsconfig.json"}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/pkg3/index.ts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
+
+Program root files: ["/user/username/projects/myproject/pkg4/index.ts"]
+Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg4/tsconfig.json"}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/pkg4/index.ts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
+
+Program root files: ["/user/username/projects/myproject/pkg5/index.ts"]
+Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg5/tsconfig.json"}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/pkg5/index.ts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
+
+WatchedFiles::
+/user/username/projects/myproject/pkg0/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg0/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg0/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg0/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg1/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg1/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg1/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg1/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg2/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg2/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg2/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg2/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg3/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg3/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg3/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg3/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg4/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg4/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg4/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg4/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg5/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg5/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg5/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg5/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg6/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg6/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg6/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg6/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg7/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg7/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg7/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg7/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg8/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg8/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg8/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg8/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg9/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg9/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg9/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg9/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg10/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg10/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg10/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg10/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg11/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg11/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg11/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg11/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg12/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg12/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg12/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg12/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg13/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg13/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg13/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg13/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg14/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg14/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg14/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg14/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg15/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg15/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg15/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg15/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg16/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg16/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg16/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg16/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg17/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg17/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg17/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg17/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg18/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg18/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg18/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg18/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg19/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg19/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg19/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg19/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg20/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg20/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg20/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg20/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg21/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg21/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg21/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg21/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg22/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg22/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg22/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg22/index.ts","pollingInterval":250}
+/user/username/projects/myproject/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
+
+FsWatches::
+
+FsWatchesRecursive::
+/user/username/projects/myproject/pkg0:
+  {"directoryName":"/user/username/projects/myproject/pkg0","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg1:
+  {"directoryName":"/user/username/projects/myproject/pkg1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg2:
+  {"directoryName":"/user/username/projects/myproject/pkg2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg3:
+  {"directoryName":"/user/username/projects/myproject/pkg3","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg4:
+  {"directoryName":"/user/username/projects/myproject/pkg4","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg5:
+  {"directoryName":"/user/username/projects/myproject/pkg5","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg6:
+  {"directoryName":"/user/username/projects/myproject/pkg6","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg7:
+  {"directoryName":"/user/username/projects/myproject/pkg7","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg8:
+  {"directoryName":"/user/username/projects/myproject/pkg8","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg9:
+  {"directoryName":"/user/username/projects/myproject/pkg9","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg10:
+  {"directoryName":"/user/username/projects/myproject/pkg10","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg11:
+  {"directoryName":"/user/username/projects/myproject/pkg11","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg12:
+  {"directoryName":"/user/username/projects/myproject/pkg12","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg13:
+  {"directoryName":"/user/username/projects/myproject/pkg13","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg14:
+  {"directoryName":"/user/username/projects/myproject/pkg14","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg15:
+  {"directoryName":"/user/username/projects/myproject/pkg15","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg16:
+  {"directoryName":"/user/username/projects/myproject/pkg16","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg17:
+  {"directoryName":"/user/username/projects/myproject/pkg17","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg18:
+  {"directoryName":"/user/username/projects/myproject/pkg18","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg19:
+  {"directoryName":"/user/username/projects/myproject/pkg19","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg20:
+  {"directoryName":"/user/username/projects/myproject/pkg20","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg21:
+  {"directoryName":"/user/username/projects/myproject/pkg21","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg22:
+  {"directoryName":"/user/username/projects/myproject/pkg22","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+
+exitCode:: ExitStatus.undefined
+
+//// [/user/username/projects/myproject/pkg1/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg1/index.d.ts] file changed its modified time
+//// [/user/username/projects/myproject/pkg1/tsconfig.tsbuildinfo] file changed its modified time
+//// [/user/username/projects/myproject/pkg2/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg2/index.d.ts] file changed its modified time
+//// [/user/username/projects/myproject/pkg2/tsconfig.tsbuildinfo] file changed its modified time
+//// [/user/username/projects/myproject/pkg3/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg3/index.d.ts] file changed its modified time
+//// [/user/username/projects/myproject/pkg3/tsconfig.tsbuildinfo] file changed its modified time
+//// [/user/username/projects/myproject/pkg4/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg4/index.d.ts] file changed its modified time
+//// [/user/username/projects/myproject/pkg4/tsconfig.tsbuildinfo] file changed its modified time
+//// [/user/username/projects/myproject/pkg5/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg5/index.d.ts] file changed its modified time
+//// [/user/username/projects/myproject/pkg5/tsconfig.tsbuildinfo] file changed its modified time
+
+Change:: build pkg6,pkg7,pkg8,pkg9,pkg10
+
+Input::
+
+Output::
+[[90m12:10:18 AM[0m] Project 'pkg6/tsconfig.json' is out of date because oldest output 'pkg6/index.js' is older than newest input 'pkg0/tsconfig.json'
+
+[[90m12:10:19 AM[0m] Building project '/user/username/projects/myproject/pkg6/tsconfig.json'...
+
+[[90m12:10:21 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg6/tsconfig.json'...
+
+[[90m12:10:22 AM[0m] Project 'pkg7/tsconfig.json' is out of date because oldest output 'pkg7/index.js' is older than newest input 'pkg0/tsconfig.json'
+
+[[90m12:10:23 AM[0m] Building project '/user/username/projects/myproject/pkg7/tsconfig.json'...
+
+[[90m12:10:25 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg7/tsconfig.json'...
+
+[[90m12:10:26 AM[0m] Project 'pkg8/tsconfig.json' is out of date because oldest output 'pkg8/index.js' is older than newest input 'pkg0/tsconfig.json'
+
+[[90m12:10:27 AM[0m] Building project '/user/username/projects/myproject/pkg8/tsconfig.json'...
+
+[[90m12:10:29 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg8/tsconfig.json'...
+
+[[90m12:10:30 AM[0m] Project 'pkg9/tsconfig.json' is out of date because oldest output 'pkg9/index.js' is older than newest input 'pkg0/tsconfig.json'
+
+[[90m12:10:31 AM[0m] Building project '/user/username/projects/myproject/pkg9/tsconfig.json'...
+
+[[90m12:10:33 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg9/tsconfig.json'...
+
+[[90m12:10:34 AM[0m] Project 'pkg10/tsconfig.json' is out of date because oldest output 'pkg10/index.js' is older than newest input 'pkg0/tsconfig.json'
+
+[[90m12:10:35 AM[0m] Building project '/user/username/projects/myproject/pkg10/tsconfig.json'...
+
+[[90m12:10:37 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg10/tsconfig.json'...
+
+
+
+Program root files: ["/user/username/projects/myproject/pkg6/index.ts"]
+Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg6/tsconfig.json"}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/pkg6/index.ts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
+
+Program root files: ["/user/username/projects/myproject/pkg7/index.ts"]
+Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg7/tsconfig.json"}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/pkg7/index.ts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
+
+Program root files: ["/user/username/projects/myproject/pkg8/index.ts"]
+Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg8/tsconfig.json"}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/pkg8/index.ts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
+
+Program root files: ["/user/username/projects/myproject/pkg9/index.ts"]
+Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg9/tsconfig.json"}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/pkg9/index.ts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
+
+Program root files: ["/user/username/projects/myproject/pkg10/index.ts"]
+Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg10/tsconfig.json"}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/pkg10/index.ts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
+
+WatchedFiles::
+/user/username/projects/myproject/pkg0/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg0/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg0/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg0/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg1/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg1/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg1/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg1/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg2/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg2/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg2/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg2/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg3/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg3/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg3/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg3/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg4/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg4/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg4/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg4/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg5/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg5/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg5/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg5/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg6/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg6/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg6/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg6/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg7/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg7/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg7/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg7/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg8/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg8/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg8/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg8/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg9/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg9/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg9/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg9/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg10/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg10/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg10/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg10/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg11/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg11/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg11/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg11/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg12/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg12/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg12/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg12/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg13/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg13/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg13/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg13/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg14/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg14/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg14/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg14/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg15/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg15/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg15/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg15/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg16/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg16/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg16/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg16/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg17/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg17/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg17/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg17/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg18/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg18/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg18/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg18/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg19/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg19/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg19/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg19/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg20/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg20/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg20/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg20/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg21/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg21/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg21/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg21/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg22/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg22/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg22/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg22/index.ts","pollingInterval":250}
+/user/username/projects/myproject/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
+
+FsWatches::
+
+FsWatchesRecursive::
+/user/username/projects/myproject/pkg0:
+  {"directoryName":"/user/username/projects/myproject/pkg0","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg1:
+  {"directoryName":"/user/username/projects/myproject/pkg1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg2:
+  {"directoryName":"/user/username/projects/myproject/pkg2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg3:
+  {"directoryName":"/user/username/projects/myproject/pkg3","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg4:
+  {"directoryName":"/user/username/projects/myproject/pkg4","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg5:
+  {"directoryName":"/user/username/projects/myproject/pkg5","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg6:
+  {"directoryName":"/user/username/projects/myproject/pkg6","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg7:
+  {"directoryName":"/user/username/projects/myproject/pkg7","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg8:
+  {"directoryName":"/user/username/projects/myproject/pkg8","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg9:
+  {"directoryName":"/user/username/projects/myproject/pkg9","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg10:
+  {"directoryName":"/user/username/projects/myproject/pkg10","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg11:
+  {"directoryName":"/user/username/projects/myproject/pkg11","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg12:
+  {"directoryName":"/user/username/projects/myproject/pkg12","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg13:
+  {"directoryName":"/user/username/projects/myproject/pkg13","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg14:
+  {"directoryName":"/user/username/projects/myproject/pkg14","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg15:
+  {"directoryName":"/user/username/projects/myproject/pkg15","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg16:
+  {"directoryName":"/user/username/projects/myproject/pkg16","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg17:
+  {"directoryName":"/user/username/projects/myproject/pkg17","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg18:
+  {"directoryName":"/user/username/projects/myproject/pkg18","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg19:
+  {"directoryName":"/user/username/projects/myproject/pkg19","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg20:
+  {"directoryName":"/user/username/projects/myproject/pkg20","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg21:
+  {"directoryName":"/user/username/projects/myproject/pkg21","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg22:
+  {"directoryName":"/user/username/projects/myproject/pkg22","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+
+exitCode:: ExitStatus.undefined
+
+//// [/user/username/projects/myproject/pkg6/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg6/index.d.ts] file changed its modified time
+//// [/user/username/projects/myproject/pkg6/tsconfig.tsbuildinfo] file changed its modified time
+//// [/user/username/projects/myproject/pkg7/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg7/index.d.ts] file changed its modified time
+//// [/user/username/projects/myproject/pkg7/tsconfig.tsbuildinfo] file changed its modified time
+//// [/user/username/projects/myproject/pkg8/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg8/index.d.ts] file changed its modified time
+//// [/user/username/projects/myproject/pkg8/tsconfig.tsbuildinfo] file changed its modified time
+//// [/user/username/projects/myproject/pkg9/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg9/index.d.ts] file changed its modified time
+//// [/user/username/projects/myproject/pkg9/tsconfig.tsbuildinfo] file changed its modified time
+//// [/user/username/projects/myproject/pkg10/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg10/index.d.ts] file changed its modified time
+//// [/user/username/projects/myproject/pkg10/tsconfig.tsbuildinfo] file changed its modified time
+
+Change:: change while building
+
+Input::
+//// [/user/username/projects/myproject/pkg0/index.ts]
+export const pkg0 = 0;const someConst2 = 10;export const someConst = 10;export const someConst3 = 10;const someConst4 = 10;
+
+
+Output::
+>> Screen clear
+[[90m12:10:40 AM[0m] File change detected. Starting incremental compilation...
+
+[[90m12:10:41 AM[0m] Project 'pkg0/tsconfig.json' is out of date because oldest output 'pkg0/index.js' is older than newest input 'pkg0/index.ts'
+
+[[90m12:10:42 AM[0m] Building project '/user/username/projects/myproject/pkg0/tsconfig.json'...
+
+[[90m12:10:55 AM[0m] Project 'pkg1/tsconfig.json' is up to date with .d.ts files from its dependencies
+
+[[90m12:10:57 AM[0m] Updating output timestamps of project '/user/username/projects/myproject/pkg1/tsconfig.json'...
+
+[[90m12:10:58 AM[0m] Project 'pkg2/tsconfig.json' is up to date with .d.ts files from its dependencies
+
+[[90m12:11:00 AM[0m] Updating output timestamps of project '/user/username/projects/myproject/pkg2/tsconfig.json'...
+
+[[90m12:11:01 AM[0m] Project 'pkg3/tsconfig.json' is up to date with .d.ts files from its dependencies
+
+[[90m12:11:03 AM[0m] Updating output timestamps of project '/user/username/projects/myproject/pkg3/tsconfig.json'...
+
+[[90m12:11:04 AM[0m] Project 'pkg4/tsconfig.json' is up to date with .d.ts files from its dependencies
+
+[[90m12:11:06 AM[0m] Updating output timestamps of project '/user/username/projects/myproject/pkg4/tsconfig.json'...
+
+[[90m12:11:07 AM[0m] Project 'pkg5/tsconfig.json' is up to date with .d.ts files from its dependencies
+
+[[90m12:11:09 AM[0m] Updating output timestamps of project '/user/username/projects/myproject/pkg5/tsconfig.json'...
+
+[[90m12:11:10 AM[0m] Project 'pkg6/tsconfig.json' is up to date with .d.ts files from its dependencies
+
+[[90m12:11:12 AM[0m] Updating output timestamps of project '/user/username/projects/myproject/pkg6/tsconfig.json'...
+
+[[90m12:11:13 AM[0m] Project 'pkg7/tsconfig.json' is up to date with .d.ts files from its dependencies
+
+[[90m12:11:15 AM[0m] Updating output timestamps of project '/user/username/projects/myproject/pkg7/tsconfig.json'...
+
+[[90m12:11:16 AM[0m] Project 'pkg8/tsconfig.json' is up to date with .d.ts files from its dependencies
+
+[[90m12:11:18 AM[0m] Updating output timestamps of project '/user/username/projects/myproject/pkg8/tsconfig.json'...
+
+[[90m12:11:19 AM[0m] Project 'pkg9/tsconfig.json' is up to date with .d.ts files from its dependencies
+
+[[90m12:11:21 AM[0m] Updating output timestamps of project '/user/username/projects/myproject/pkg9/tsconfig.json'...
+
+[[90m12:11:22 AM[0m] Project 'pkg10/tsconfig.json' is up to date with .d.ts files from its dependencies
+
+[[90m12:11:24 AM[0m] Updating output timestamps of project '/user/username/projects/myproject/pkg10/tsconfig.json'...
+
+
+
+Program root files: ["/user/username/projects/myproject/pkg0/index.ts"]
+Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg0/tsconfig.json"}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/pkg0/index.ts
+
+Semantic diagnostics in builder refreshed for::
+/user/username/projects/myproject/pkg0/index.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/myproject/pkg0/index.ts (computed .d.ts)
+
+WatchedFiles::
+/user/username/projects/myproject/pkg0/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg0/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg0/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg0/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg1/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg1/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg1/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg1/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg2/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg2/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg2/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg2/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg3/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg3/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg3/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg3/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg4/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg4/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg4/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg4/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg5/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg5/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg5/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg5/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg6/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg6/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg6/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg6/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg7/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg7/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg7/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg7/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg8/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg8/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg8/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg8/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg9/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg9/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg9/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg9/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg10/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg10/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg10/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg10/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg11/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg11/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg11/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg11/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg12/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg12/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg12/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg12/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg13/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg13/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg13/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg13/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg14/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg14/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg14/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg14/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg15/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg15/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg15/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg15/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg16/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg16/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg16/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg16/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg17/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg17/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg17/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg17/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg18/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg18/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg18/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg18/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg19/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg19/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg19/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg19/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg20/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg20/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg20/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg20/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg21/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg21/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg21/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg21/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg22/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg22/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg22/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg22/index.ts","pollingInterval":250}
+/user/username/projects/myproject/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
+
+FsWatches::
+
+FsWatchesRecursive::
+/user/username/projects/myproject/pkg0:
+  {"directoryName":"/user/username/projects/myproject/pkg0","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg1:
+  {"directoryName":"/user/username/projects/myproject/pkg1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg2:
+  {"directoryName":"/user/username/projects/myproject/pkg2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg3:
+  {"directoryName":"/user/username/projects/myproject/pkg3","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg4:
+  {"directoryName":"/user/username/projects/myproject/pkg4","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg5:
+  {"directoryName":"/user/username/projects/myproject/pkg5","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg6:
+  {"directoryName":"/user/username/projects/myproject/pkg6","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg7:
+  {"directoryName":"/user/username/projects/myproject/pkg7","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg8:
+  {"directoryName":"/user/username/projects/myproject/pkg8","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg9:
+  {"directoryName":"/user/username/projects/myproject/pkg9","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg10:
+  {"directoryName":"/user/username/projects/myproject/pkg10","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg11:
+  {"directoryName":"/user/username/projects/myproject/pkg11","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg12:
+  {"directoryName":"/user/username/projects/myproject/pkg12","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg13:
+  {"directoryName":"/user/username/projects/myproject/pkg13","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg14:
+  {"directoryName":"/user/username/projects/myproject/pkg14","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg15:
+  {"directoryName":"/user/username/projects/myproject/pkg15","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg16:
+  {"directoryName":"/user/username/projects/myproject/pkg16","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg17:
+  {"directoryName":"/user/username/projects/myproject/pkg17","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg18:
+  {"directoryName":"/user/username/projects/myproject/pkg18","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg19:
+  {"directoryName":"/user/username/projects/myproject/pkg19","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg20:
+  {"directoryName":"/user/username/projects/myproject/pkg20","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg21:
+  {"directoryName":"/user/username/projects/myproject/pkg21","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg22:
+  {"directoryName":"/user/username/projects/myproject/pkg22","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+
+exitCode:: ExitStatus.undefined
+
+//// [/user/username/projects/myproject/pkg0/index.js]
+"use strict";
+exports.__esModule = true;
+exports.someConst3 = exports.someConst = exports.pkg0 = void 0;
+exports.pkg0 = 0;
+var someConst2 = 10;
+exports.someConst = 10;
+exports.someConst3 = 10;
+var someConst4 = 10;
+
+
+//// [/user/username/projects/myproject/pkg0/index.d.ts] file written with same contents
+//// [/user/username/projects/myproject/pkg0/tsconfig.tsbuildinfo]
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"27277091473-export const pkg0 = 0;const someConst2 = 10;export const someConst = 10;export const someConst3 = 10;const someConst4 = 10;","signature":"-13679921373-export declare const pkg0 = 0;\nexport declare const someConst = 10;\nexport declare const someConst3 = 10;\n"}],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2]},"version":"FakeTSVersion"}
+
+//// [/user/username/projects/myproject/pkg0/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "program": {
+    "fileNames": [
+      "../../../../../a/lib/lib.d.ts",
+      "./index.ts"
+    ],
+    "fileInfos": {
+      "../../../../../a/lib/lib.d.ts": {
+        "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+        "affectsGlobalScope": true
+      },
+      "./index.ts": {
+        "version": "27277091473-export const pkg0 = 0;const someConst2 = 10;export const someConst = 10;export const someConst3 = 10;const someConst4 = 10;",
+        "signature": "-13679921373-export declare const pkg0 = 0;\nexport declare const someConst = 10;\nexport declare const someConst3 = 10;\n"
+      }
+    },
+    "options": {
+      "composite": true
+    },
+    "referencedMap": {},
+    "exportedModulesMap": {},
+    "semanticDiagnosticsPerFile": [
+      "../../../../../a/lib/lib.d.ts",
+      "./index.ts"
+    ]
+  },
+  "version": "FakeTSVersion",
+  "size": 905
+}
+
+//// [/user/username/projects/myproject/pkg1/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg1/index.d.ts] file changed its modified time
+//// [/user/username/projects/myproject/pkg1/tsconfig.tsbuildinfo] file changed its modified time
+//// [/user/username/projects/myproject/pkg2/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg2/index.d.ts] file changed its modified time
+//// [/user/username/projects/myproject/pkg2/tsconfig.tsbuildinfo] file changed its modified time
+//// [/user/username/projects/myproject/pkg3/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg3/index.d.ts] file changed its modified time
+//// [/user/username/projects/myproject/pkg3/tsconfig.tsbuildinfo] file changed its modified time
+//// [/user/username/projects/myproject/pkg4/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg4/index.d.ts] file changed its modified time
+//// [/user/username/projects/myproject/pkg4/tsconfig.tsbuildinfo] file changed its modified time
+//// [/user/username/projects/myproject/pkg5/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg5/index.d.ts] file changed its modified time
+//// [/user/username/projects/myproject/pkg5/tsconfig.tsbuildinfo] file changed its modified time
+//// [/user/username/projects/myproject/pkg6/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg6/index.d.ts] file changed its modified time
+//// [/user/username/projects/myproject/pkg6/tsconfig.tsbuildinfo] file changed its modified time
+//// [/user/username/projects/myproject/pkg7/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg7/index.d.ts] file changed its modified time
+//// [/user/username/projects/myproject/pkg7/tsconfig.tsbuildinfo] file changed its modified time
+//// [/user/username/projects/myproject/pkg8/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg8/index.d.ts] file changed its modified time
+//// [/user/username/projects/myproject/pkg8/tsconfig.tsbuildinfo] file changed its modified time
+//// [/user/username/projects/myproject/pkg9/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg9/index.d.ts] file changed its modified time
+//// [/user/username/projects/myproject/pkg9/tsconfig.tsbuildinfo] file changed its modified time
+//// [/user/username/projects/myproject/pkg10/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg10/index.d.ts] file changed its modified time
+//// [/user/username/projects/myproject/pkg10/tsconfig.tsbuildinfo] file changed its modified time
+
+Change:: build pkg11,pkg12,pkg13,pkg14,pkg15
+
+Input::
+
+Output::
+[[90m12:11:25 AM[0m] Project 'pkg11/tsconfig.json' is out of date because oldest output 'pkg11/index.js' is older than newest input 'pkg0/tsconfig.json'
+
+[[90m12:11:26 AM[0m] Building project '/user/username/projects/myproject/pkg11/tsconfig.json'...
+
+[[90m12:11:28 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg11/tsconfig.json'...
+
+[[90m12:11:29 AM[0m] Project 'pkg12/tsconfig.json' is out of date because oldest output 'pkg12/index.js' is older than newest input 'pkg0/tsconfig.json'
+
+[[90m12:11:30 AM[0m] Building project '/user/username/projects/myproject/pkg12/tsconfig.json'...
+
+[[90m12:11:32 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg12/tsconfig.json'...
+
+[[90m12:11:33 AM[0m] Project 'pkg13/tsconfig.json' is out of date because oldest output 'pkg13/index.js' is older than newest input 'pkg0/tsconfig.json'
+
+[[90m12:11:34 AM[0m] Building project '/user/username/projects/myproject/pkg13/tsconfig.json'...
+
+[[90m12:11:36 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg13/tsconfig.json'...
+
+[[90m12:11:37 AM[0m] Project 'pkg14/tsconfig.json' is out of date because oldest output 'pkg14/index.js' is older than newest input 'pkg0/tsconfig.json'
+
+[[90m12:11:38 AM[0m] Building project '/user/username/projects/myproject/pkg14/tsconfig.json'...
+
+[[90m12:11:40 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg14/tsconfig.json'...
+
+[[90m12:11:41 AM[0m] Project 'pkg15/tsconfig.json' is out of date because oldest output 'pkg15/index.js' is older than newest input 'pkg0/tsconfig.json'
+
+[[90m12:11:42 AM[0m] Building project '/user/username/projects/myproject/pkg15/tsconfig.json'...
+
+[[90m12:11:44 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg15/tsconfig.json'...
+
+
+
+Program root files: ["/user/username/projects/myproject/pkg11/index.ts"]
+Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg11/tsconfig.json"}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/pkg11/index.ts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
+
+Program root files: ["/user/username/projects/myproject/pkg12/index.ts"]
+Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg12/tsconfig.json"}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/pkg12/index.ts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
+
+Program root files: ["/user/username/projects/myproject/pkg13/index.ts"]
+Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg13/tsconfig.json"}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/pkg13/index.ts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
+
+Program root files: ["/user/username/projects/myproject/pkg14/index.ts"]
+Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg14/tsconfig.json"}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/pkg14/index.ts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
+
+Program root files: ["/user/username/projects/myproject/pkg15/index.ts"]
+Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg15/tsconfig.json"}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/pkg15/index.ts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
+
+WatchedFiles::
+/user/username/projects/myproject/pkg0/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg0/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg0/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg0/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg1/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg1/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg1/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg1/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg2/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg2/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg2/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg2/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg3/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg3/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg3/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg3/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg4/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg4/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg4/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg4/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg5/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg5/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg5/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg5/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg6/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg6/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg6/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg6/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg7/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg7/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg7/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg7/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg8/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg8/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg8/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg8/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg9/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg9/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg9/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg9/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg10/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg10/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg10/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg10/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg11/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg11/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg11/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg11/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg12/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg12/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg12/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg12/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg13/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg13/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg13/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg13/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg14/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg14/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg14/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg14/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg15/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg15/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg15/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg15/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg16/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg16/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg16/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg16/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg17/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg17/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg17/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg17/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg18/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg18/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg18/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg18/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg19/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg19/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg19/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg19/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg20/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg20/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg20/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg20/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg21/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg21/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg21/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg21/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg22/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg22/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg22/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg22/index.ts","pollingInterval":250}
+/user/username/projects/myproject/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
+
+FsWatches::
+
+FsWatchesRecursive::
+/user/username/projects/myproject/pkg0:
+  {"directoryName":"/user/username/projects/myproject/pkg0","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg1:
+  {"directoryName":"/user/username/projects/myproject/pkg1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg2:
+  {"directoryName":"/user/username/projects/myproject/pkg2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg3:
+  {"directoryName":"/user/username/projects/myproject/pkg3","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg4:
+  {"directoryName":"/user/username/projects/myproject/pkg4","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg5:
+  {"directoryName":"/user/username/projects/myproject/pkg5","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg6:
+  {"directoryName":"/user/username/projects/myproject/pkg6","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg7:
+  {"directoryName":"/user/username/projects/myproject/pkg7","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg8:
+  {"directoryName":"/user/username/projects/myproject/pkg8","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg9:
+  {"directoryName":"/user/username/projects/myproject/pkg9","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg10:
+  {"directoryName":"/user/username/projects/myproject/pkg10","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg11:
+  {"directoryName":"/user/username/projects/myproject/pkg11","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg12:
+  {"directoryName":"/user/username/projects/myproject/pkg12","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg13:
+  {"directoryName":"/user/username/projects/myproject/pkg13","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg14:
+  {"directoryName":"/user/username/projects/myproject/pkg14","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg15:
+  {"directoryName":"/user/username/projects/myproject/pkg15","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg16:
+  {"directoryName":"/user/username/projects/myproject/pkg16","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg17:
+  {"directoryName":"/user/username/projects/myproject/pkg17","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg18:
+  {"directoryName":"/user/username/projects/myproject/pkg18","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg19:
+  {"directoryName":"/user/username/projects/myproject/pkg19","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg20:
+  {"directoryName":"/user/username/projects/myproject/pkg20","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg21:
+  {"directoryName":"/user/username/projects/myproject/pkg21","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg22:
+  {"directoryName":"/user/username/projects/myproject/pkg22","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+
+exitCode:: ExitStatus.undefined
+
+//// [/user/username/projects/myproject/pkg11/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg11/index.d.ts] file changed its modified time
+//// [/user/username/projects/myproject/pkg11/tsconfig.tsbuildinfo] file changed its modified time
+//// [/user/username/projects/myproject/pkg12/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg12/index.d.ts] file changed its modified time
+//// [/user/username/projects/myproject/pkg12/tsconfig.tsbuildinfo] file changed its modified time
+//// [/user/username/projects/myproject/pkg13/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg13/index.d.ts] file changed its modified time
+//// [/user/username/projects/myproject/pkg13/tsconfig.tsbuildinfo] file changed its modified time
+//// [/user/username/projects/myproject/pkg14/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg14/index.d.ts] file changed its modified time
+//// [/user/username/projects/myproject/pkg14/tsconfig.tsbuildinfo] file changed its modified time
+//// [/user/username/projects/myproject/pkg15/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg15/index.d.ts] file changed its modified time
+//// [/user/username/projects/myproject/pkg15/tsconfig.tsbuildinfo] file changed its modified time
+
+Change:: change while building: dts changes
+
+Input::
+//// [/user/username/projects/myproject/pkg0/index.ts]
+export const pkg0 = 0;const someConst2 = 10;export const someConst = 10;export const someConst3 = 10;const someConst4 = 10;export const someConst5 = 10;
+
+
+Output::
+>> Screen clear
+[[90m12:11:48 AM[0m] File change detected. Starting incremental compilation...
+
+[[90m12:11:49 AM[0m] Project 'pkg0/tsconfig.json' is out of date because oldest output 'pkg0/index.js' is older than newest input 'pkg0/index.ts'
+
+[[90m12:11:50 AM[0m] Building project '/user/username/projects/myproject/pkg0/tsconfig.json'...
+
+
+
+Program root files: ["/user/username/projects/myproject/pkg0/index.ts"]
+Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg0/tsconfig.json"}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/pkg0/index.ts
+
+Semantic diagnostics in builder refreshed for::
+/user/username/projects/myproject/pkg0/index.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/myproject/pkg0/index.ts (computed .d.ts)
+
+WatchedFiles::
+/user/username/projects/myproject/pkg0/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg0/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg0/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg0/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg1/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg1/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg1/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg1/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg2/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg2/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg2/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg2/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg3/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg3/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg3/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg3/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg4/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg4/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg4/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg4/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg5/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg5/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg5/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg5/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg6/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg6/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg6/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg6/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg7/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg7/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg7/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg7/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg8/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg8/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg8/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg8/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg9/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg9/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg9/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg9/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg10/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg10/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg10/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg10/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg11/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg11/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg11/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg11/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg12/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg12/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg12/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg12/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg13/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg13/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg13/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg13/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg14/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg14/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg14/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg14/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg15/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg15/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg15/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg15/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg16/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg16/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg16/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg16/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg17/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg17/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg17/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg17/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg18/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg18/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg18/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg18/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg19/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg19/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg19/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg19/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg20/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg20/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg20/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg20/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg21/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg21/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg21/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg21/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg22/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg22/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg22/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg22/index.ts","pollingInterval":250}
+/user/username/projects/myproject/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
+
+FsWatches::
+
+FsWatchesRecursive::
+/user/username/projects/myproject/pkg0:
+  {"directoryName":"/user/username/projects/myproject/pkg0","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg1:
+  {"directoryName":"/user/username/projects/myproject/pkg1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg2:
+  {"directoryName":"/user/username/projects/myproject/pkg2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg3:
+  {"directoryName":"/user/username/projects/myproject/pkg3","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg4:
+  {"directoryName":"/user/username/projects/myproject/pkg4","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg5:
+  {"directoryName":"/user/username/projects/myproject/pkg5","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg6:
+  {"directoryName":"/user/username/projects/myproject/pkg6","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg7:
+  {"directoryName":"/user/username/projects/myproject/pkg7","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg8:
+  {"directoryName":"/user/username/projects/myproject/pkg8","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg9:
+  {"directoryName":"/user/username/projects/myproject/pkg9","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg10:
+  {"directoryName":"/user/username/projects/myproject/pkg10","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg11:
+  {"directoryName":"/user/username/projects/myproject/pkg11","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg12:
+  {"directoryName":"/user/username/projects/myproject/pkg12","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg13:
+  {"directoryName":"/user/username/projects/myproject/pkg13","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg14:
+  {"directoryName":"/user/username/projects/myproject/pkg14","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg15:
+  {"directoryName":"/user/username/projects/myproject/pkg15","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg16:
+  {"directoryName":"/user/username/projects/myproject/pkg16","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg17:
+  {"directoryName":"/user/username/projects/myproject/pkg17","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg18:
+  {"directoryName":"/user/username/projects/myproject/pkg18","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg19:
+  {"directoryName":"/user/username/projects/myproject/pkg19","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg20:
+  {"directoryName":"/user/username/projects/myproject/pkg20","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg21:
+  {"directoryName":"/user/username/projects/myproject/pkg21","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg22:
+  {"directoryName":"/user/username/projects/myproject/pkg22","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+
+exitCode:: ExitStatus.undefined
+
+//// [/user/username/projects/myproject/pkg0/index.js]
+"use strict";
+exports.__esModule = true;
+exports.someConst5 = exports.someConst3 = exports.someConst = exports.pkg0 = void 0;
+exports.pkg0 = 0;
+var someConst2 = 10;
+exports.someConst = 10;
+exports.someConst3 = 10;
+var someConst4 = 10;
+exports.someConst5 = 10;
+
+
+//// [/user/username/projects/myproject/pkg0/index.d.ts]
+export declare const pkg0 = 0;
+export declare const someConst = 10;
+export declare const someConst3 = 10;
+export declare const someConst5 = 10;
+
+
+//// [/user/username/projects/myproject/pkg0/tsconfig.tsbuildinfo]
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"14710086947-export const pkg0 = 0;const someConst2 = 10;export const someConst = 10;export const someConst3 = 10;const someConst4 = 10;export const someConst5 = 10;","signature":"4956132399-export declare const pkg0 = 0;\nexport declare const someConst = 10;\nexport declare const someConst3 = 10;\nexport declare const someConst5 = 10;\n"}],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2]},"version":"FakeTSVersion"}
+
+//// [/user/username/projects/myproject/pkg0/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "program": {
+    "fileNames": [
+      "../../../../../a/lib/lib.d.ts",
+      "./index.ts"
+    ],
+    "fileInfos": {
+      "../../../../../a/lib/lib.d.ts": {
+        "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+        "affectsGlobalScope": true
+      },
+      "./index.ts": {
+        "version": "14710086947-export const pkg0 = 0;const someConst2 = 10;export const someConst = 10;export const someConst3 = 10;const someConst4 = 10;export const someConst5 = 10;",
+        "signature": "4956132399-export declare const pkg0 = 0;\nexport declare const someConst = 10;\nexport declare const someConst3 = 10;\nexport declare const someConst5 = 10;\n"
+      }
+    },
+    "options": {
+      "composite": true
+    },
+    "referencedMap": {},
+    "exportedModulesMap": {},
+    "semanticDiagnosticsPerFile": [
+      "../../../../../a/lib/lib.d.ts",
+      "./index.ts"
+    ]
+  },
+  "version": "FakeTSVersion",
+  "size": 971
+}
+
+
+Change:: build pkg1,pkg2,pkg3,pkg4,pkg5
+
+Input::
+
+Output::
+[[90m12:12:03 AM[0m] Project 'pkg1/tsconfig.json' is out of date because oldest output 'pkg1/index.js' is older than newest input 'pkg0/tsconfig.json'
+
+[[90m12:12:04 AM[0m] Building project '/user/username/projects/myproject/pkg1/tsconfig.json'...
+
+[[90m12:12:06 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg1/tsconfig.json'...
+
+[[90m12:12:07 AM[0m] Project 'pkg2/tsconfig.json' is out of date because oldest output 'pkg2/index.js' is older than newest input 'pkg0/tsconfig.json'
+
+[[90m12:12:08 AM[0m] Building project '/user/username/projects/myproject/pkg2/tsconfig.json'...
+
+[[90m12:12:10 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg2/tsconfig.json'...
+
+[[90m12:12:11 AM[0m] Project 'pkg3/tsconfig.json' is out of date because oldest output 'pkg3/index.js' is older than newest input 'pkg0/tsconfig.json'
+
+[[90m12:12:12 AM[0m] Building project '/user/username/projects/myproject/pkg3/tsconfig.json'...
+
+[[90m12:12:14 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg3/tsconfig.json'...
+
+[[90m12:12:15 AM[0m] Project 'pkg4/tsconfig.json' is out of date because oldest output 'pkg4/index.js' is older than newest input 'pkg0/tsconfig.json'
+
+[[90m12:12:16 AM[0m] Building project '/user/username/projects/myproject/pkg4/tsconfig.json'...
+
+[[90m12:12:18 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg4/tsconfig.json'...
+
+[[90m12:12:19 AM[0m] Project 'pkg5/tsconfig.json' is out of date because oldest output 'pkg5/index.js' is older than newest input 'pkg0/tsconfig.json'
+
+[[90m12:12:20 AM[0m] Building project '/user/username/projects/myproject/pkg5/tsconfig.json'...
+
+[[90m12:12:22 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg5/tsconfig.json'...
+
+
+
+Program root files: ["/user/username/projects/myproject/pkg1/index.ts"]
+Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg1/tsconfig.json"}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/pkg1/index.ts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
+
+Program root files: ["/user/username/projects/myproject/pkg2/index.ts"]
+Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg2/tsconfig.json"}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/pkg2/index.ts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
+
+Program root files: ["/user/username/projects/myproject/pkg3/index.ts"]
+Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg3/tsconfig.json"}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/pkg3/index.ts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
+
+Program root files: ["/user/username/projects/myproject/pkg4/index.ts"]
+Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg4/tsconfig.json"}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/pkg4/index.ts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
+
+Program root files: ["/user/username/projects/myproject/pkg5/index.ts"]
+Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg5/tsconfig.json"}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/pkg5/index.ts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
+
+WatchedFiles::
+/user/username/projects/myproject/pkg0/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg0/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg0/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg0/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg1/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg1/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg1/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg1/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg2/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg2/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg2/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg2/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg3/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg3/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg3/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg3/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg4/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg4/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg4/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg4/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg5/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg5/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg5/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg5/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg6/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg6/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg6/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg6/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg7/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg7/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg7/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg7/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg8/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg8/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg8/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg8/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg9/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg9/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg9/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg9/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg10/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg10/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg10/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg10/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg11/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg11/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg11/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg11/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg12/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg12/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg12/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg12/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg13/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg13/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg13/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg13/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg14/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg14/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg14/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg14/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg15/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg15/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg15/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg15/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg16/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg16/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg16/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg16/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg17/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg17/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg17/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg17/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg18/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg18/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg18/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg18/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg19/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg19/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg19/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg19/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg20/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg20/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg20/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg20/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg21/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg21/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg21/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg21/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg22/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg22/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg22/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg22/index.ts","pollingInterval":250}
+/user/username/projects/myproject/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
+
+FsWatches::
+
+FsWatchesRecursive::
+/user/username/projects/myproject/pkg0:
+  {"directoryName":"/user/username/projects/myproject/pkg0","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg1:
+  {"directoryName":"/user/username/projects/myproject/pkg1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg2:
+  {"directoryName":"/user/username/projects/myproject/pkg2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg3:
+  {"directoryName":"/user/username/projects/myproject/pkg3","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg4:
+  {"directoryName":"/user/username/projects/myproject/pkg4","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg5:
+  {"directoryName":"/user/username/projects/myproject/pkg5","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg6:
+  {"directoryName":"/user/username/projects/myproject/pkg6","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg7:
+  {"directoryName":"/user/username/projects/myproject/pkg7","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg8:
+  {"directoryName":"/user/username/projects/myproject/pkg8","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg9:
+  {"directoryName":"/user/username/projects/myproject/pkg9","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg10:
+  {"directoryName":"/user/username/projects/myproject/pkg10","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg11:
+  {"directoryName":"/user/username/projects/myproject/pkg11","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg12:
+  {"directoryName":"/user/username/projects/myproject/pkg12","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg13:
+  {"directoryName":"/user/username/projects/myproject/pkg13","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg14:
+  {"directoryName":"/user/username/projects/myproject/pkg14","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg15:
+  {"directoryName":"/user/username/projects/myproject/pkg15","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg16:
+  {"directoryName":"/user/username/projects/myproject/pkg16","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg17:
+  {"directoryName":"/user/username/projects/myproject/pkg17","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg18:
+  {"directoryName":"/user/username/projects/myproject/pkg18","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg19:
+  {"directoryName":"/user/username/projects/myproject/pkg19","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg20:
+  {"directoryName":"/user/username/projects/myproject/pkg20","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg21:
+  {"directoryName":"/user/username/projects/myproject/pkg21","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg22:
+  {"directoryName":"/user/username/projects/myproject/pkg22","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+
+exitCode:: ExitStatus.undefined
+
+//// [/user/username/projects/myproject/pkg1/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg1/index.d.ts] file changed its modified time
+//// [/user/username/projects/myproject/pkg1/tsconfig.tsbuildinfo] file changed its modified time
+//// [/user/username/projects/myproject/pkg2/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg2/index.d.ts] file changed its modified time
+//// [/user/username/projects/myproject/pkg2/tsconfig.tsbuildinfo] file changed its modified time
+//// [/user/username/projects/myproject/pkg3/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg3/index.d.ts] file changed its modified time
+//// [/user/username/projects/myproject/pkg3/tsconfig.tsbuildinfo] file changed its modified time
+//// [/user/username/projects/myproject/pkg4/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg4/index.d.ts] file changed its modified time
+//// [/user/username/projects/myproject/pkg4/tsconfig.tsbuildinfo] file changed its modified time
+//// [/user/username/projects/myproject/pkg5/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg5/index.d.ts] file changed its modified time
+//// [/user/username/projects/myproject/pkg5/tsconfig.tsbuildinfo] file changed its modified time
+
+Change:: build pkg6,pkg7,pkg8,pkg9,pkg10
+
+Input::
+
+Output::
+[[90m12:12:23 AM[0m] Project 'pkg6/tsconfig.json' is out of date because oldest output 'pkg6/index.js' is older than newest input 'pkg0/tsconfig.json'
+
+[[90m12:12:24 AM[0m] Building project '/user/username/projects/myproject/pkg6/tsconfig.json'...
+
+[[90m12:12:26 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg6/tsconfig.json'...
+
+[[90m12:12:27 AM[0m] Project 'pkg7/tsconfig.json' is out of date because oldest output 'pkg7/index.js' is older than newest input 'pkg0/tsconfig.json'
+
+[[90m12:12:28 AM[0m] Building project '/user/username/projects/myproject/pkg7/tsconfig.json'...
+
+[[90m12:12:30 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg7/tsconfig.json'...
+
+[[90m12:12:31 AM[0m] Project 'pkg8/tsconfig.json' is out of date because oldest output 'pkg8/index.js' is older than newest input 'pkg0/tsconfig.json'
+
+[[90m12:12:32 AM[0m] Building project '/user/username/projects/myproject/pkg8/tsconfig.json'...
+
+[[90m12:12:34 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg8/tsconfig.json'...
+
+[[90m12:12:35 AM[0m] Project 'pkg9/tsconfig.json' is out of date because oldest output 'pkg9/index.js' is older than newest input 'pkg0/tsconfig.json'
+
+[[90m12:12:36 AM[0m] Building project '/user/username/projects/myproject/pkg9/tsconfig.json'...
+
+[[90m12:12:38 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg9/tsconfig.json'...
+
+[[90m12:12:39 AM[0m] Project 'pkg10/tsconfig.json' is out of date because oldest output 'pkg10/index.js' is older than newest input 'pkg0/tsconfig.json'
+
+[[90m12:12:40 AM[0m] Building project '/user/username/projects/myproject/pkg10/tsconfig.json'...
+
+[[90m12:12:42 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg10/tsconfig.json'...
+
+
+
+Program root files: ["/user/username/projects/myproject/pkg6/index.ts"]
+Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg6/tsconfig.json"}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/pkg6/index.ts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
+
+Program root files: ["/user/username/projects/myproject/pkg7/index.ts"]
+Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg7/tsconfig.json"}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/pkg7/index.ts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
+
+Program root files: ["/user/username/projects/myproject/pkg8/index.ts"]
+Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg8/tsconfig.json"}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/pkg8/index.ts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
+
+Program root files: ["/user/username/projects/myproject/pkg9/index.ts"]
+Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg9/tsconfig.json"}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/pkg9/index.ts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
+
+Program root files: ["/user/username/projects/myproject/pkg10/index.ts"]
+Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg10/tsconfig.json"}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/pkg10/index.ts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
+
+WatchedFiles::
+/user/username/projects/myproject/pkg0/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg0/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg0/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg0/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg1/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg1/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg1/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg1/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg2/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg2/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg2/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg2/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg3/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg3/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg3/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg3/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg4/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg4/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg4/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg4/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg5/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg5/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg5/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg5/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg6/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg6/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg6/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg6/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg7/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg7/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg7/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg7/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg8/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg8/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg8/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg8/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg9/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg9/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg9/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg9/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg10/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg10/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg10/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg10/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg11/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg11/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg11/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg11/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg12/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg12/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg12/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg12/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg13/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg13/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg13/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg13/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg14/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg14/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg14/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg14/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg15/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg15/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg15/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg15/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg16/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg16/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg16/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg16/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg17/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg17/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg17/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg17/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg18/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg18/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg18/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg18/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg19/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg19/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg19/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg19/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg20/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg20/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg20/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg20/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg21/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg21/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg21/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg21/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg22/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg22/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg22/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg22/index.ts","pollingInterval":250}
+/user/username/projects/myproject/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
+
+FsWatches::
+
+FsWatchesRecursive::
+/user/username/projects/myproject/pkg0:
+  {"directoryName":"/user/username/projects/myproject/pkg0","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg1:
+  {"directoryName":"/user/username/projects/myproject/pkg1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg2:
+  {"directoryName":"/user/username/projects/myproject/pkg2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg3:
+  {"directoryName":"/user/username/projects/myproject/pkg3","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg4:
+  {"directoryName":"/user/username/projects/myproject/pkg4","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg5:
+  {"directoryName":"/user/username/projects/myproject/pkg5","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg6:
+  {"directoryName":"/user/username/projects/myproject/pkg6","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg7:
+  {"directoryName":"/user/username/projects/myproject/pkg7","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg8:
+  {"directoryName":"/user/username/projects/myproject/pkg8","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg9:
+  {"directoryName":"/user/username/projects/myproject/pkg9","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg10:
+  {"directoryName":"/user/username/projects/myproject/pkg10","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg11:
+  {"directoryName":"/user/username/projects/myproject/pkg11","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg12:
+  {"directoryName":"/user/username/projects/myproject/pkg12","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg13:
+  {"directoryName":"/user/username/projects/myproject/pkg13","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg14:
+  {"directoryName":"/user/username/projects/myproject/pkg14","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg15:
+  {"directoryName":"/user/username/projects/myproject/pkg15","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg16:
+  {"directoryName":"/user/username/projects/myproject/pkg16","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg17:
+  {"directoryName":"/user/username/projects/myproject/pkg17","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg18:
+  {"directoryName":"/user/username/projects/myproject/pkg18","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg19:
+  {"directoryName":"/user/username/projects/myproject/pkg19","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg20:
+  {"directoryName":"/user/username/projects/myproject/pkg20","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg21:
+  {"directoryName":"/user/username/projects/myproject/pkg21","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg22:
+  {"directoryName":"/user/username/projects/myproject/pkg22","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+
+exitCode:: ExitStatus.undefined
+
+//// [/user/username/projects/myproject/pkg6/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg6/index.d.ts] file changed its modified time
+//// [/user/username/projects/myproject/pkg6/tsconfig.tsbuildinfo] file changed its modified time
+//// [/user/username/projects/myproject/pkg7/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg7/index.d.ts] file changed its modified time
+//// [/user/username/projects/myproject/pkg7/tsconfig.tsbuildinfo] file changed its modified time
+//// [/user/username/projects/myproject/pkg8/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg8/index.d.ts] file changed its modified time
+//// [/user/username/projects/myproject/pkg8/tsconfig.tsbuildinfo] file changed its modified time
+//// [/user/username/projects/myproject/pkg9/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg9/index.d.ts] file changed its modified time
+//// [/user/username/projects/myproject/pkg9/tsconfig.tsbuildinfo] file changed its modified time
+//// [/user/username/projects/myproject/pkg10/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg10/index.d.ts] file changed its modified time
+//// [/user/username/projects/myproject/pkg10/tsconfig.tsbuildinfo] file changed its modified time
+
+Change:: build pkg11,pkg12,pkg13,pkg14,pkg15
+
+Input::
+
+Output::
+[[90m12:12:43 AM[0m] Project 'pkg11/tsconfig.json' is out of date because oldest output 'pkg11/index.js' is older than newest input 'pkg0/tsconfig.json'
+
+[[90m12:12:44 AM[0m] Building project '/user/username/projects/myproject/pkg11/tsconfig.json'...
+
+[[90m12:12:46 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg11/tsconfig.json'...
+
+[[90m12:12:47 AM[0m] Project 'pkg12/tsconfig.json' is out of date because oldest output 'pkg12/index.js' is older than newest input 'pkg0/tsconfig.json'
+
+[[90m12:12:48 AM[0m] Building project '/user/username/projects/myproject/pkg12/tsconfig.json'...
+
+[[90m12:12:50 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg12/tsconfig.json'...
+
+[[90m12:12:51 AM[0m] Project 'pkg13/tsconfig.json' is out of date because oldest output 'pkg13/index.js' is older than newest input 'pkg0/tsconfig.json'
+
+[[90m12:12:52 AM[0m] Building project '/user/username/projects/myproject/pkg13/tsconfig.json'...
+
+[[90m12:12:54 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg13/tsconfig.json'...
+
+[[90m12:12:55 AM[0m] Project 'pkg14/tsconfig.json' is out of date because oldest output 'pkg14/index.js' is older than newest input 'pkg0/tsconfig.json'
+
+[[90m12:12:56 AM[0m] Building project '/user/username/projects/myproject/pkg14/tsconfig.json'...
+
+[[90m12:12:58 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg14/tsconfig.json'...
+
+[[90m12:12:59 AM[0m] Project 'pkg15/tsconfig.json' is out of date because oldest output 'pkg15/index.js' is older than newest input 'pkg0/tsconfig.json'
+
+[[90m12:13:00 AM[0m] Building project '/user/username/projects/myproject/pkg15/tsconfig.json'...
+
+[[90m12:13:02 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg15/tsconfig.json'...
+
+
+
+Program root files: ["/user/username/projects/myproject/pkg11/index.ts"]
+Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg11/tsconfig.json"}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/pkg11/index.ts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
+
+Program root files: ["/user/username/projects/myproject/pkg12/index.ts"]
+Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg12/tsconfig.json"}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/pkg12/index.ts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
+
+Program root files: ["/user/username/projects/myproject/pkg13/index.ts"]
+Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg13/tsconfig.json"}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/pkg13/index.ts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
+
+Program root files: ["/user/username/projects/myproject/pkg14/index.ts"]
+Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg14/tsconfig.json"}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/pkg14/index.ts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
+
+Program root files: ["/user/username/projects/myproject/pkg15/index.ts"]
+Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg15/tsconfig.json"}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/pkg15/index.ts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
+
+WatchedFiles::
+/user/username/projects/myproject/pkg0/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg0/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg0/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg0/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg1/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg1/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg1/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg1/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg2/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg2/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg2/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg2/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg3/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg3/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg3/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg3/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg4/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg4/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg4/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg4/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg5/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg5/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg5/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg5/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg6/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg6/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg6/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg6/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg7/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg7/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg7/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg7/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg8/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg8/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg8/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg8/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg9/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg9/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg9/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg9/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg10/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg10/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg10/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg10/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg11/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg11/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg11/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg11/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg12/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg12/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg12/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg12/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg13/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg13/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg13/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg13/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg14/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg14/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg14/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg14/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg15/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg15/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg15/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg15/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg16/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg16/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg16/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg16/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg17/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg17/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg17/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg17/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg18/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg18/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg18/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg18/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg19/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg19/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg19/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg19/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg20/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg20/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg20/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg20/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg21/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg21/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg21/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg21/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg22/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg22/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg22/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg22/index.ts","pollingInterval":250}
+/user/username/projects/myproject/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
+
+FsWatches::
+
+FsWatchesRecursive::
+/user/username/projects/myproject/pkg0:
+  {"directoryName":"/user/username/projects/myproject/pkg0","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg1:
+  {"directoryName":"/user/username/projects/myproject/pkg1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg2:
+  {"directoryName":"/user/username/projects/myproject/pkg2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg3:
+  {"directoryName":"/user/username/projects/myproject/pkg3","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg4:
+  {"directoryName":"/user/username/projects/myproject/pkg4","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg5:
+  {"directoryName":"/user/username/projects/myproject/pkg5","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg6:
+  {"directoryName":"/user/username/projects/myproject/pkg6","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg7:
+  {"directoryName":"/user/username/projects/myproject/pkg7","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg8:
+  {"directoryName":"/user/username/projects/myproject/pkg8","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg9:
+  {"directoryName":"/user/username/projects/myproject/pkg9","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg10:
+  {"directoryName":"/user/username/projects/myproject/pkg10","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg11:
+  {"directoryName":"/user/username/projects/myproject/pkg11","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg12:
+  {"directoryName":"/user/username/projects/myproject/pkg12","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg13:
+  {"directoryName":"/user/username/projects/myproject/pkg13","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg14:
+  {"directoryName":"/user/username/projects/myproject/pkg14","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg15:
+  {"directoryName":"/user/username/projects/myproject/pkg15","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg16:
+  {"directoryName":"/user/username/projects/myproject/pkg16","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg17:
+  {"directoryName":"/user/username/projects/myproject/pkg17","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg18:
+  {"directoryName":"/user/username/projects/myproject/pkg18","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg19:
+  {"directoryName":"/user/username/projects/myproject/pkg19","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg20:
+  {"directoryName":"/user/username/projects/myproject/pkg20","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg21:
+  {"directoryName":"/user/username/projects/myproject/pkg21","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg22:
+  {"directoryName":"/user/username/projects/myproject/pkg22","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+
+exitCode:: ExitStatus.undefined
+
+//// [/user/username/projects/myproject/pkg11/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg11/index.d.ts] file changed its modified time
+//// [/user/username/projects/myproject/pkg11/tsconfig.tsbuildinfo] file changed its modified time
+//// [/user/username/projects/myproject/pkg12/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg12/index.d.ts] file changed its modified time
+//// [/user/username/projects/myproject/pkg12/tsconfig.tsbuildinfo] file changed its modified time
+//// [/user/username/projects/myproject/pkg13/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg13/index.d.ts] file changed its modified time
+//// [/user/username/projects/myproject/pkg13/tsconfig.tsbuildinfo] file changed its modified time
+//// [/user/username/projects/myproject/pkg14/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg14/index.d.ts] file changed its modified time
+//// [/user/username/projects/myproject/pkg14/tsconfig.tsbuildinfo] file changed its modified time
+//// [/user/username/projects/myproject/pkg15/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg15/index.d.ts] file changed its modified time
+//// [/user/username/projects/myproject/pkg15/tsconfig.tsbuildinfo] file changed its modified time
+
+Change:: build pkg16,pkg17,pkg18,pkg19,pkg20
+
+Input::
+
+Output::
+[[90m12:13:03 AM[0m] Project 'pkg16/tsconfig.json' is out of date because oldest output 'pkg16/index.js' is older than newest input 'pkg0/tsconfig.json'
+
+[[90m12:13:04 AM[0m] Building project '/user/username/projects/myproject/pkg16/tsconfig.json'...
+
+[[90m12:13:06 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg16/tsconfig.json'...
+
+[[90m12:13:07 AM[0m] Project 'pkg17/tsconfig.json' is out of date because oldest output 'pkg17/index.js' is older than newest input 'pkg0/tsconfig.json'
+
+[[90m12:13:08 AM[0m] Building project '/user/username/projects/myproject/pkg17/tsconfig.json'...
+
+[[90m12:13:10 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg17/tsconfig.json'...
+
+[[90m12:13:11 AM[0m] Project 'pkg18/tsconfig.json' is out of date because oldest output 'pkg18/index.js' is older than newest input 'pkg0/tsconfig.json'
+
+[[90m12:13:12 AM[0m] Building project '/user/username/projects/myproject/pkg18/tsconfig.json'...
+
+[[90m12:13:14 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg18/tsconfig.json'...
+
+[[90m12:13:15 AM[0m] Project 'pkg19/tsconfig.json' is out of date because oldest output 'pkg19/index.js' is older than newest input 'pkg0/tsconfig.json'
+
+[[90m12:13:16 AM[0m] Building project '/user/username/projects/myproject/pkg19/tsconfig.json'...
+
+[[90m12:13:18 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg19/tsconfig.json'...
+
+[[90m12:13:19 AM[0m] Project 'pkg20/tsconfig.json' is out of date because oldest output 'pkg20/index.js' is older than newest input 'pkg0/tsconfig.json'
+
+[[90m12:13:20 AM[0m] Building project '/user/username/projects/myproject/pkg20/tsconfig.json'...
+
+[[90m12:13:22 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg20/tsconfig.json'...
+
+
+
+Program root files: ["/user/username/projects/myproject/pkg16/index.ts"]
+Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg16/tsconfig.json"}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/pkg16/index.ts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
+
+Program root files: ["/user/username/projects/myproject/pkg17/index.ts"]
+Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg17/tsconfig.json"}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/pkg17/index.ts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
+
+Program root files: ["/user/username/projects/myproject/pkg18/index.ts"]
+Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg18/tsconfig.json"}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/pkg18/index.ts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
+
+Program root files: ["/user/username/projects/myproject/pkg19/index.ts"]
+Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg19/tsconfig.json"}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/pkg19/index.ts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
+
+Program root files: ["/user/username/projects/myproject/pkg20/index.ts"]
+Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg20/tsconfig.json"}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/pkg20/index.ts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
+
+WatchedFiles::
+/user/username/projects/myproject/pkg0/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg0/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg0/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg0/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg1/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg1/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg1/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg1/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg2/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg2/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg2/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg2/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg3/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg3/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg3/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg3/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg4/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg4/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg4/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg4/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg5/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg5/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg5/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg5/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg6/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg6/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg6/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg6/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg7/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg7/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg7/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg7/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg8/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg8/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg8/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg8/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg9/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg9/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg9/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg9/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg10/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg10/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg10/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg10/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg11/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg11/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg11/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg11/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg12/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg12/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg12/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg12/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg13/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg13/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg13/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg13/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg14/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg14/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg14/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg14/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg15/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg15/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg15/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg15/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg16/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg16/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg16/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg16/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg17/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg17/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg17/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg17/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg18/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg18/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg18/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg18/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg19/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg19/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg19/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg19/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg20/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg20/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg20/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg20/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg21/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg21/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg21/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg21/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg22/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg22/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg22/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg22/index.ts","pollingInterval":250}
+/user/username/projects/myproject/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
+
+FsWatches::
+
+FsWatchesRecursive::
+/user/username/projects/myproject/pkg0:
+  {"directoryName":"/user/username/projects/myproject/pkg0","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg1:
+  {"directoryName":"/user/username/projects/myproject/pkg1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg2:
+  {"directoryName":"/user/username/projects/myproject/pkg2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg3:
+  {"directoryName":"/user/username/projects/myproject/pkg3","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg4:
+  {"directoryName":"/user/username/projects/myproject/pkg4","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg5:
+  {"directoryName":"/user/username/projects/myproject/pkg5","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg6:
+  {"directoryName":"/user/username/projects/myproject/pkg6","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg7:
+  {"directoryName":"/user/username/projects/myproject/pkg7","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg8:
+  {"directoryName":"/user/username/projects/myproject/pkg8","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg9:
+  {"directoryName":"/user/username/projects/myproject/pkg9","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg10:
+  {"directoryName":"/user/username/projects/myproject/pkg10","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg11:
+  {"directoryName":"/user/username/projects/myproject/pkg11","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg12:
+  {"directoryName":"/user/username/projects/myproject/pkg12","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg13:
+  {"directoryName":"/user/username/projects/myproject/pkg13","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg14:
+  {"directoryName":"/user/username/projects/myproject/pkg14","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg15:
+  {"directoryName":"/user/username/projects/myproject/pkg15","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg16:
+  {"directoryName":"/user/username/projects/myproject/pkg16","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg17:
+  {"directoryName":"/user/username/projects/myproject/pkg17","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg18:
+  {"directoryName":"/user/username/projects/myproject/pkg18","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg19:
+  {"directoryName":"/user/username/projects/myproject/pkg19","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg20:
+  {"directoryName":"/user/username/projects/myproject/pkg20","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg21:
+  {"directoryName":"/user/username/projects/myproject/pkg21","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg22:
+  {"directoryName":"/user/username/projects/myproject/pkg22","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+
+exitCode:: ExitStatus.undefined
+
+//// [/user/username/projects/myproject/pkg16/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg16/index.d.ts] file changed its modified time
+//// [/user/username/projects/myproject/pkg16/tsconfig.tsbuildinfo] file changed its modified time
+//// [/user/username/projects/myproject/pkg17/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg17/index.d.ts] file changed its modified time
+//// [/user/username/projects/myproject/pkg17/tsconfig.tsbuildinfo] file changed its modified time
+//// [/user/username/projects/myproject/pkg18/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg18/index.d.ts] file changed its modified time
+//// [/user/username/projects/myproject/pkg18/tsconfig.tsbuildinfo] file changed its modified time
+//// [/user/username/projects/myproject/pkg19/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg19/index.d.ts] file changed its modified time
+//// [/user/username/projects/myproject/pkg19/tsconfig.tsbuildinfo] file changed its modified time
+//// [/user/username/projects/myproject/pkg20/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg20/index.d.ts] file changed its modified time
+//// [/user/username/projects/myproject/pkg20/tsconfig.tsbuildinfo] file changed its modified time
+
+Change:: build pkg21,pkg22,pkg23
+
+Input::
+
+Output::
+[[90m12:13:23 AM[0m] Project 'pkg21/tsconfig.json' is out of date because oldest output 'pkg21/index.js' is older than newest input 'pkg0/tsconfig.json'
+
+[[90m12:13:24 AM[0m] Building project '/user/username/projects/myproject/pkg21/tsconfig.json'...
+
+[[90m12:13:26 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg21/tsconfig.json'...
+
+[[90m12:13:27 AM[0m] Project 'pkg22/tsconfig.json' is out of date because oldest output 'pkg22/index.js' is older than newest input 'pkg0/tsconfig.json'
+
+[[90m12:13:28 AM[0m] Building project '/user/username/projects/myproject/pkg22/tsconfig.json'...
+
+[[90m12:13:30 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg22/tsconfig.json'...
+
+[[90m12:13:31 AM[0m] Found 0 errors. Watching for file changes.
+
+
+
+Program root files: ["/user/username/projects/myproject/pkg21/index.ts"]
+Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg21/tsconfig.json"}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/pkg21/index.ts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
+
+Program root files: ["/user/username/projects/myproject/pkg22/index.ts"]
+Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg22/tsconfig.json"}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/pkg22/index.ts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
+
+WatchedFiles::
+/user/username/projects/myproject/pkg0/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg0/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg0/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg0/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg1/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg1/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg1/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg1/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg2/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg2/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg2/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg2/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg3/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg3/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg3/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg3/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg4/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg4/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg4/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg4/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg5/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg5/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg5/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg5/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg6/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg6/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg6/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg6/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg7/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg7/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg7/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg7/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg8/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg8/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg8/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg8/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg9/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg9/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg9/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg9/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg10/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg10/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg10/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg10/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg11/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg11/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg11/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg11/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg12/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg12/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg12/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg12/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg13/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg13/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg13/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg13/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg14/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg14/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg14/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg14/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg15/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg15/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg15/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg15/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg16/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg16/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg16/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg16/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg17/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg17/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg17/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg17/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg18/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg18/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg18/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg18/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg19/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg19/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg19/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg19/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg20/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg20/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg20/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg20/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg21/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg21/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg21/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg21/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg22/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/pkg22/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/pkg22/index.ts:
+  {"fileName":"/user/username/projects/myproject/pkg22/index.ts","pollingInterval":250}
+/user/username/projects/myproject/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
+
+FsWatches::
+
+FsWatchesRecursive::
+/user/username/projects/myproject/pkg0:
+  {"directoryName":"/user/username/projects/myproject/pkg0","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg1:
+  {"directoryName":"/user/username/projects/myproject/pkg1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg2:
+  {"directoryName":"/user/username/projects/myproject/pkg2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg3:
+  {"directoryName":"/user/username/projects/myproject/pkg3","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg4:
+  {"directoryName":"/user/username/projects/myproject/pkg4","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg5:
+  {"directoryName":"/user/username/projects/myproject/pkg5","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg6:
+  {"directoryName":"/user/username/projects/myproject/pkg6","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg7:
+  {"directoryName":"/user/username/projects/myproject/pkg7","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg8:
+  {"directoryName":"/user/username/projects/myproject/pkg8","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg9:
+  {"directoryName":"/user/username/projects/myproject/pkg9","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg10:
+  {"directoryName":"/user/username/projects/myproject/pkg10","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg11:
+  {"directoryName":"/user/username/projects/myproject/pkg11","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg12:
+  {"directoryName":"/user/username/projects/myproject/pkg12","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg13:
+  {"directoryName":"/user/username/projects/myproject/pkg13","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg14:
+  {"directoryName":"/user/username/projects/myproject/pkg14","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg15:
+  {"directoryName":"/user/username/projects/myproject/pkg15","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg16:
+  {"directoryName":"/user/username/projects/myproject/pkg16","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg17:
+  {"directoryName":"/user/username/projects/myproject/pkg17","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg18:
+  {"directoryName":"/user/username/projects/myproject/pkg18","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg19:
+  {"directoryName":"/user/username/projects/myproject/pkg19","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg20:
+  {"directoryName":"/user/username/projects/myproject/pkg20","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg21:
+  {"directoryName":"/user/username/projects/myproject/pkg21","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/pkg22:
+  {"directoryName":"/user/username/projects/myproject/pkg22","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+
+exitCode:: ExitStatus.undefined
+
+//// [/user/username/projects/myproject/pkg21/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg21/index.d.ts] file changed its modified time
+//// [/user/username/projects/myproject/pkg21/tsconfig.tsbuildinfo] file changed its modified time
 //// [/user/username/projects/myproject/pkg22/index.js] file changed its modified time
 //// [/user/username/projects/myproject/pkg22/index.d.ts] file changed its modified time
 //// [/user/username/projects/myproject/pkg22/tsconfig.tsbuildinfo] file changed its modified time

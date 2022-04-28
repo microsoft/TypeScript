@@ -535,7 +535,7 @@ export declare const someConst = 10;
 }
 
 
-Change:: build pkg1
+Change:: build pkg1,pkg2
 
 Input::
 
@@ -545,6 +545,14 @@ Output::
 [[90m12:01:52 AM[0m] Building project '/user/username/projects/myproject/pkg1/tsconfig.json'...
 
 [[90m12:01:54 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg1/tsconfig.json'...
+
+[[90m12:01:55 AM[0m] Project 'pkg2/tsconfig.json' is out of date because oldest output 'pkg2/index.js' is older than newest input 'pkg0/tsconfig.json'
+
+[[90m12:01:56 AM[0m] Building project '/user/username/projects/myproject/pkg2/tsconfig.json'...
+
+[[90m12:01:58 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg2/tsconfig.json'...
+
+[[90m12:01:59 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -558,53 +566,6 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
-
-WatchedFiles::
-/user/username/projects/myproject/pkg0/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg0/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg0/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg0/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg1/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg1/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg1/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg1/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg2/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg2/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg2/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg2/index.ts","pollingInterval":250}
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/user/username/projects/myproject/pkg0:
-  {"directoryName":"/user/username/projects/myproject/pkg0","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg1:
-  {"directoryName":"/user/username/projects/myproject/pkg1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/pkg2:
-  {"directoryName":"/user/username/projects/myproject/pkg2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
-exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/pkg1/index.js] file changed its modified time
-//// [/user/username/projects/myproject/pkg1/index.d.ts] file changed its modified time
-//// [/user/username/projects/myproject/pkg1/tsconfig.tsbuildinfo] file changed its modified time
-
-Change:: build pkg2
-
-Input::
-
-Output::
-[[90m12:01:55 AM[0m] Project 'pkg2/tsconfig.json' is out of date because oldest output 'pkg2/index.js' is older than newest input 'pkg0/tsconfig.json'
-
-[[90m12:01:56 AM[0m] Building project '/user/username/projects/myproject/pkg2/tsconfig.json'...
-
-[[90m12:01:58 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg2/tsconfig.json'...
-
-[[90m12:01:59 AM[0m] Found 0 errors. Watching for file changes.
-
-
 
 Program root files: ["/user/username/projects/myproject/pkg2/index.ts"]
 Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg2/tsconfig.json"}
@@ -645,6 +606,9 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+//// [/user/username/projects/myproject/pkg1/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg1/index.d.ts] file changed its modified time
+//// [/user/username/projects/myproject/pkg1/tsconfig.tsbuildinfo] file changed its modified time
 //// [/user/username/projects/myproject/pkg2/index.js] file changed its modified time
 //// [/user/username/projects/myproject/pkg2/index.d.ts] file changed its modified time
 //// [/user/username/projects/myproject/pkg2/tsconfig.tsbuildinfo] file changed its modified time
