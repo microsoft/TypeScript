@@ -644,6 +644,53 @@ File '/a/package.json' does not exist.
 File '/package.json' does not exist.
 [[90m12:01:49 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/packages/pkg2/tsconfig.json'...
 
+[[90m12:01:53 AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because oldest output 'packages/pkg1/build/index.js' is older than newest input 'packages/pkg2'
+
+[[90m12:01:54 AM[0m] Building project '/user/username/projects/myproject/packages/pkg1/tsconfig.json'...
+
+Found 'package.json' at '/user/username/projects/myproject/packages/pkg1/package.json'.
+'package.json' does not have a 'typesVersions' field.
+======== Resolving module 'pkg2' from '/user/username/projects/myproject/packages/pkg1/index.ts'. ========
+Module resolution kind is not specified, using 'Node12'.
+File '/user/username/projects/myproject/packages/pkg1/package.json' exists according to earlier cached lookups.
+Loading module 'pkg2' from 'node_modules' folder, target file type 'TypeScript'.
+Directory '/user/username/projects/myproject/packages/pkg1/node_modules' does not exist, skipping all lookups in it.
+Directory '/user/username/projects/myproject/packages/node_modules' does not exist, skipping all lookups in it.
+Found 'package.json' at '/user/username/projects/myproject/node_modules/pkg2/package.json'.
+'package.json' does not have a 'typesVersions' field.
+File '/user/username/projects/myproject/node_modules/pkg2.ts' does not exist.
+File '/user/username/projects/myproject/node_modules/pkg2.tsx' does not exist.
+File '/user/username/projects/myproject/node_modules/pkg2.d.ts' does not exist.
+'package.json' does not have a 'typings' field.
+'package.json' does not have a 'types' field.
+'package.json' has 'main' field 'build/index.cjs' that references '/user/username/projects/myproject/node_modules/pkg2/build/index.cjs'.
+File '/user/username/projects/myproject/node_modules/pkg2/build/index.cjs' exist - use it as a name resolution result.
+File '/user/username/projects/myproject/node_modules/pkg2/build/index.cjs' has an unsupported extension, so skipping it.
+Loading module as file / folder, candidate module location '/user/username/projects/myproject/node_modules/pkg2/build/index.cjs', target file type 'TypeScript'.
+File '/user/username/projects/myproject/node_modules/pkg2/build/index.cjs.ts' does not exist.
+File '/user/username/projects/myproject/node_modules/pkg2/build/index.cjs.tsx' does not exist.
+File '/user/username/projects/myproject/node_modules/pkg2/build/index.cjs.d.ts' does not exist.
+File name '/user/username/projects/myproject/node_modules/pkg2/build/index.cjs' has a '.cjs' extension - stripping it.
+File '/user/username/projects/myproject/node_modules/pkg2/build/index.cts' does not exist.
+File '/user/username/projects/myproject/node_modules/pkg2/build/index.d.cts' exist - use it as a name resolution result.
+Resolving real path for '/user/username/projects/myproject/node_modules/pkg2/build/index.d.cts', result '/user/username/projects/myproject/packages/pkg2/build/index.d.cts'.
+======== Module name 'pkg2' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/build/index.d.cts' with Package ID 'pkg2/build/index.d.cts@1.0.0'. ========
+======== Resolving module './const.cjs' from '/user/username/projects/myproject/packages/pkg2/build/index.d.cts'. ========
+Using compiler options of project reference redirect '/user/username/projects/myproject/packages/pkg2/tsconfig.json'.
+Module resolution kind is not specified, using 'Node12'.
+Loading module as file / folder, candidate module location '/user/username/projects/myproject/packages/pkg2/build/const.cjs', target file type 'TypeScript'.
+File '/user/username/projects/myproject/packages/pkg2/build/const.cjs.ts' does not exist.
+File '/user/username/projects/myproject/packages/pkg2/build/const.cjs.tsx' does not exist.
+File '/user/username/projects/myproject/packages/pkg2/build/const.cjs.d.ts' does not exist.
+File name '/user/username/projects/myproject/packages/pkg2/build/const.cjs' has a '.cjs' extension - stripping it.
+File '/user/username/projects/myproject/packages/pkg2/build/const.cts' does not exist.
+File '/user/username/projects/myproject/packages/pkg2/build/const.d.cts' exist - use it as a name resolution result.
+======== Module name './const.cjs' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/build/const.d.cts'. ========
+File '/a/lib/package.json' does not exist according to earlier cached lookups.
+File '/a/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+[[90m12:01:58 AM[0m] Found 0 errors. Watching for file changes.
+
 
 
 Program root files: ["/user/username/projects/myproject/packages/pkg2/const.cts","/user/username/projects/myproject/packages/pkg2/index.cts"]
@@ -659,6 +706,23 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/packages/pkg2/index.cts (computed .d.ts)
+
+Program root files: ["/user/username/projects/myproject/packages/pkg1/index.ts"]
+Program options: {"outDir":"/user/username/projects/myproject/packages/pkg1/build","module":100,"watch":true,"traceResolution":true,"configFilePath":"/user/username/projects/myproject/packages/pkg1/tsconfig.json"}
+Program structureReused: Not
+Program files::
+/a/lib/lib.es2020.full.d.ts
+/user/username/projects/myproject/packages/pkg2/build/const.d.cts
+/user/username/projects/myproject/packages/pkg2/build/index.d.cts
+/user/username/projects/myproject/packages/pkg1/index.ts
+
+Semantic diagnostics in builder refreshed for::
+/user/username/projects/myproject/packages/pkg2/build/index.d.cts
+/user/username/projects/myproject/packages/pkg1/index.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/myproject/packages/pkg2/build/index.d.cts (used version)
+/user/username/projects/myproject/packages/pkg1/index.ts (computed .d.ts)
 
 WatchedFiles::
 /user/username/projects/myproject/packages/pkg2/tsconfig.json:
@@ -758,6 +822,13 @@ exitCode:: ExitStatus.undefined
   "version": "FakeTSVersion",
   "size": 1019
 }
+
+//// [/user/username/projects/myproject/packages/pkg1/build/index.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.theNum = void 0;
+exports.theNum = 42;
+
 
 //// [/user/username/projects/myproject/packages/pkg2/build/index.cjs]
 "use strict";
