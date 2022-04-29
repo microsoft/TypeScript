@@ -33104,7 +33104,7 @@ namespace ts {
                                 if (sourceFile.impliedNodeFormat === ModuleKind.CommonJS) {
                                     span ??= getSpanOfTokenAtPosition(sourceFile, node.pos)
                                     diagnostics.add(
-                                        createFileDiagnostic(sourceFile, span.start, span.length, Diagnostics.The_current_file_is_a_CommonJS_module_and_cannot_use_await_expressions_at_the_top_level)
+                                        createFileDiagnostic(sourceFile, span.start, span.length, Diagnostics.The_current_file_is_a_CommonJS_module_and_cannot_use_await_at_the_top_level)
                                     );
                                     break;
                                 }
@@ -44196,7 +44196,7 @@ namespace ts {
                                 case ModuleKind.NodeNext:
                                     if (sourceFile.impliedNodeFormat === ModuleKind.CommonJS) {
                                         diagnostics.add(
-                                            createDiagnosticForNode(forInOrOfStatement.awaitModifier, Diagnostics.The_current_file_is_a_CommonJS_module_and_cannot_use_await_expressions_at_the_top_level)
+                                            createDiagnosticForNode(forInOrOfStatement.awaitModifier, Diagnostics.The_current_file_is_a_CommonJS_module_and_cannot_use_await_at_the_top_level)
                                         );
                                         break;
                                     }

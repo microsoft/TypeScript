@@ -900,7 +900,7 @@
         "category": "Error",
         "code": 1308
     },
-    "The current file is a CommonJS module and cannot use 'await' expressions at the top-level.": {
+    "The current file is a CommonJS module and cannot use 'await' at the top level.": {
         "category": "Error",
         "code": 1309
     },
