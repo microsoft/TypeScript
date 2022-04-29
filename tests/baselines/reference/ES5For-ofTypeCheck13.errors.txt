@@ -1,4 +1,4 @@
-tests/cases/conformance/statements/for-ofStatements/ES5For-ofTypeCheck13.ts(4,19): error TS2569: Type 'Set<string>' is not an array type or a string type. Use compiler option '--downlevelIteration' to allow iterating of iterators.
+tests/cases/conformance/statements/for-ofStatements/ES5For-ofTypeCheck13.ts(4,19): error TS2802: Type 'Set<string>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
 
 
 ==== tests/cases/conformance/statements/for-ofStatements/ES5For-ofTypeCheck13.ts (1 errors) ====
@@ -7,4 +7,4 @@ tests/cases/conformance/statements/for-ofStatements/ES5For-ofTypeCheck13.ts(4,19
     strSet.add('World')
     for (const str of strSet) { }
                       ~~~~~~
-!!! error TS2569: Type 'Set<string>' is not an array type or a string type. Use compiler option '--downlevelIteration' to allow iterating of iterators.
+!!! error TS2802: Type 'Set<string>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
