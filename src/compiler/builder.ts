@@ -1496,7 +1496,7 @@ namespace ts {
         const fileInfos = new Map<Path, string>();
         program.fileInfos.forEach((fileInfo, index) => {
             const path = toPath(program.fileNames[index], buildInfoDirectory, getCanonicalFileName);
-            const version = isString(fileInfo) ? fileInfo : (fileInfo as ProgramBuildInfoBuilderStateFileInfo).version;
+            const version = isString(fileInfo) ? fileInfo : (fileInfo as ProgramBuildInfoBuilderStateFileInfo).version; // eslint-disable-line @typescript-eslint/no-unnecessary-type-assertion
             fileInfos.set(path, version);
         });
         return fileInfos;
