@@ -1256,7 +1256,7 @@ namespace ts {
                     continue;
                 }
 
-                if (status.type === UpToDateStatusType.UpToDateWithUpstreamTypes) {
+                if (status.type === UpToDateStatusType.UpToDateWithUpstreamTypes || status.type === UpToDateStatusType.UpToDateWithInputFileText) {
                     reportAndStoreErrors(state, projectPath, getConfigFileParsingDiagnostics(config));
                     return createUpdateOutputFileStampsProject(
                         state,
@@ -1517,6 +1517,8 @@ namespace ts {
         let oldestOutputFileName = "(none)";
         let oldestOutputFileTime = maximumDate;
         let buildInfoTime: Date | undefined;
+        let buildInfoProgram: ProgramBuildInfo | undefined;
+        let buildInfoVersionMap: ESMap<Path, string> | undefined;
         let newestDeclarationFileContentChangedTime;
         if (buildInfoPath) {
             const buildInfoCacheEntry = getBuildInfoCacheEntry(state, buildInfoPath, resolvedPath);
@@ -1551,6 +1553,7 @@ namespace ts {
                         buildInfoFile: buildInfoPath
                     };
                 }
+                buildInfoProgram = buildInfo.program;
             }
 
             oldestOutputFileTime = buildInfoTime;
@@ -1561,6 +1564,7 @@ namespace ts {
         // Check input files
         let newestInputFileName: string = undefined!;
         let newestInputFileTime = minimumDate;
+        let pseudoInputUptodate = false;
         // Get timestamps of input files
         for (const inputFile of project.fileNames) {
             const inputTime = getModifiedTime(state, inputFile);
@@ -1573,11 +1577,24 @@ namespace ts {
 
             // If an buildInfo is older than the newest input, we can stop checking
             if (buildInfoTime && buildInfoTime < inputTime) {
-                return {
-                    type: UpToDateStatusType.OutOfDateWithSelf,
-                    outOfDateOutputFileName: buildInfoPath!,
-                    newerInputFileName: inputFile
-                };
+                let version: string | undefined;
+                let currentVersion: string | undefined;
+                if (buildInfoProgram) {
+                    // Read files and see if they are same, read is anyways cached
+                    if (!buildInfoVersionMap) buildInfoVersionMap = getBuildInfoFileVersionMap(buildInfoProgram, buildInfoPath!, host);
+                    version = buildInfoVersionMap.get(toPath(state, inputFile));
+                    const text = version ? state.readFileWithCache(inputFile) : undefined;
+                    currentVersion = text && (host.createHash || generateDjb2Hash)(text);
+                    if (version && version === currentVersion) pseudoInputUptodate = true;
+                }
+
+                if (!version || version !== currentVersion) {
+                    return {
+                        type: UpToDateStatusType.OutOfDateWithSelf,
+                        outOfDateOutputFileName: buildInfoPath!,
+                        newerInputFileName: inputFile
+                    };
+                }
             }
 
             if (inputTime > newestInputFileTime) {
@@ -1692,7 +1709,11 @@ namespace ts {
 
         // Up to date
         return {
-            type: pseudoUpToDate ? UpToDateStatusType.UpToDateWithUpstreamTypes : UpToDateStatusType.UpToDate,
+            type: pseudoUpToDate ?
+                UpToDateStatusType.UpToDateWithUpstreamTypes :
+                pseudoInputUptodate ?
+                    UpToDateStatusType.UpToDateWithInputFileText :
+                    UpToDateStatusType.UpToDate,
             newestDeclarationFileContentChangedTime,
             newestInputFileTime,
             newestInputFileName,
@@ -1845,6 +1866,7 @@ namespace ts {
                             }
                             // falls through
 
+                        case UpToDateStatusType.UpToDateWithInputFileText:
                         case UpToDateStatusType.UpToDateWithUpstreamTypes:
                         case UpToDateStatusType.OutOfDateWithPrepend:
                             if (!(buildResult & BuildResultFlags.DeclarationOutputUnchanged)) {
@@ -2287,6 +2309,12 @@ namespace ts {
                 return reportStatus(
                     state,
                     Diagnostics.Project_0_is_up_to_date_with_d_ts_files_from_its_dependencies,
+                    relName(state, configFileName)
+                );
+            case UpToDateStatusType.UpToDateWithInputFileText:
+                return reportStatus(
+                    state,
+                    Diagnostics.Project_0_is_up_to_date_but_needs_update_to_timestamps_of_output_files_that_are_older_than_input_files,
                     relName(state, configFileName)
                 );
             case UpToDateStatusType.UpstreamOutOfDate:

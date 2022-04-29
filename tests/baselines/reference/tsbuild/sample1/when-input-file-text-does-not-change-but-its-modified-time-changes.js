@@ -421,19 +421,17 @@ Output::
     * src/logic/tsconfig.json
     * src/tests/tsconfig.json
 
-[[90m12:00:39 AM[0m] Project 'src/core/tsconfig.json' is out of date because output 'src/core/tsconfig.tsbuildinfo' is older than input 'src/core/index.ts'
+[[90m12:00:39 AM[0m] Project 'src/core/tsconfig.json' is up to date but needs update to timestamps of output files that are older than input files
 
-[[90m12:00:40 AM[0m] Building project '/src/core/tsconfig.json'...
+[[90m12:00:40 AM[0m] Updating output timestamps of project '/src/core/tsconfig.json'...
 
-[[90m12:00:41 AM[0m] Updating unchanged output timestamps of project '/src/core/tsconfig.json'...
+[[90m12:00:43 AM[0m] Project 'src/logic/tsconfig.json' is up to date with .d.ts files from its dependencies
 
-[[90m12:00:44 AM[0m] Project 'src/logic/tsconfig.json' is up to date with .d.ts files from its dependencies
+[[90m12:00:44 AM[0m] Updating output timestamps of project '/src/logic/tsconfig.json'...
 
-[[90m12:00:45 AM[0m] Updating output timestamps of project '/src/logic/tsconfig.json'...
+[[90m12:00:47 AM[0m] Project 'src/tests/tsconfig.json' is up to date with .d.ts files from its dependencies
 
-[[90m12:00:48 AM[0m] Project 'src/tests/tsconfig.json' is up to date with .d.ts files from its dependencies
-
-[[90m12:00:49 AM[0m] Updating output timestamps of project '/src/tests/tsconfig.json'...
+[[90m12:00:48 AM[0m] Updating output timestamps of project '/src/tests/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 

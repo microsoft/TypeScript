@@ -762,12 +762,18 @@ namespace ts {
     }
 
     export interface ProgramBundleEmitBuildInfo {
+        fileNames: readonly string[];
+        fileInfos: readonly string[];
         options: CompilerOptions | undefined;
         outSignature?: string;
         dtsChangeTime?: number;
     }
 
     export type ProgramBuildInfo = ProgramMultiFileEmitBuildInfo | ProgramBundleEmitBuildInfo;
+
+    export function isProgramBundleEmitBuildInfo(info: ProgramBuildInfo): info is ProgramBundleEmitBuildInfo {
+        return !!outFile(info.options || {});
+    }
 
     /**
      * Gets the program information to be emitted in buildInfo so that we can use it to create new program
@@ -779,7 +785,17 @@ namespace ts {
         const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(getTsBuildInfoEmitOutputFilePath(state.compilerOptions)!, currentDirectory));
         state.dtsChangeTime = state.hasChangedEmitSignature ? getCurrentTime(host).getTime() : state.dtsChangeTime;
         if (outFilePath) {
+            const fileNames: string[] = [];
+            const fileInfos: string[] = [];
+            state.program!.getRootFileNames().forEach(f => {
+                const sourceFile = state.program!.getSourceFile(f);
+                if (!sourceFile) return;
+                fileNames.push(relativeToBuildInfo(sourceFile.resolvedPath));
+                fileInfos.push(sourceFile.version);
+            });
             const result: ProgramBundleEmitBuildInfo = {
+                fileNames,
+                fileInfos,
                 options: convertToProgramBuildInfoCompilerOptions(state.compilerOptions, "affectsBundleEmitBuildInfo"),
                 outSignature: state.outSignature,
                 dtsChangeTime: state.dtsChangeTime,
@@ -1370,40 +1386,52 @@ namespace ts {
                 { version: fileInfo.version, signature: fileInfo.signature === false ? undefined : fileInfo.version, affectsGlobalScope: fileInfo.affectsGlobalScope, impliedFormat: fileInfo.impliedFormat };
     }
 
-    export function createBuilderProgramUsingProgramBuildInfo(programFromBuildInfo: ProgramBuildInfo, buildInfoPath: string, host: ReadBuildProgramHost): EmitAndSemanticDiagnosticsBuilderProgram {
+    export function createBuilderProgramUsingProgramBuildInfo(program: ProgramBuildInfo, buildInfoPath: string, host: ReadBuildProgramHost): EmitAndSemanticDiagnosticsBuilderProgram {
         const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(buildInfoPath, host.getCurrentDirectory()));
         const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());
 
-        const program = programFromBuildInfo as ProgramMultiFileEmitBuildInfo & ProgramBundleEmitBuildInfo;
-        const filePaths = program.fileNames?.map(toPath);
-        const filePathsSetList = program.fileIdsList?.map(fileIds => new Set(fileIds.map(toFilePath)));
-        const fileInfos = new Map<Path, BuilderState.FileInfo>();
-        const emitSignatures = program.options?.composite && !outFile(program.options) ? new Map<Path, string>() : undefined;
-        program.fileInfos?.forEach((fileInfo, index) => {
-            const path = toFilePath(index + 1 as ProgramBuildInfoFileId);
-            const stateFileInfo = toBuilderStateFileInfo(fileInfo);
-            fileInfos.set(path, stateFileInfo);
-            if (emitSignatures && stateFileInfo.signature) emitSignatures.set(path, stateFileInfo.signature);
-        });
-        program.emitSignatures?.forEach(value => {
-            if (isNumber(value)) emitSignatures!.delete(toFilePath(value));
-            else emitSignatures!.set(toFilePath(value[0]), value[1]);
-        });
-        const state: ReusableBuilderProgramState = {
-            fileInfos,
-            compilerOptions: program.options ? convertToOptionsWithAbsolutePaths(program.options, toAbsolutePath) : {},
-            referencedMap: toManyToManyPathMap(program.referencedMap),
-            exportedModulesMap: toManyToManyPathMap(program.exportedModulesMap),
-            semanticDiagnosticsPerFile: program.semanticDiagnosticsPerFile && arrayToMap(program.semanticDiagnosticsPerFile, value => toFilePath(isNumber(value) ? value : value[0]), value => isNumber(value) ? emptyArray : value[1]),
-            hasReusableDiagnostic: true,
-            affectedFilesPendingEmit: map(program.affectedFilesPendingEmit, value => toFilePath(value[0])),
-            affectedFilesPendingEmitKind: program.affectedFilesPendingEmit && arrayToMap(program.affectedFilesPendingEmit, value => toFilePath(value[0]), value => value[1]),
-            affectedFilesPendingEmitIndex: program.affectedFilesPendingEmit && 0,
-            changedFilesSet: new Set(map(program.changeFileSet, toFilePath)),
-            dtsChangeTime: program.dtsChangeTime,
-            emitSignatures: emitSignatures?.size ? emitSignatures : undefined,
-            outSignature: program.outSignature,
-        };
+        let state: ReusableBuilderProgramState;
+        let filePaths: Path[] | undefined;
+        let filePathsSetList: Set<Path>[] | undefined;
+        if (isProgramBundleEmitBuildInfo(program)) {
+            state = {
+                fileInfos: new Map(),
+                compilerOptions: program.options ? convertToOptionsWithAbsolutePaths(program.options, toAbsolutePath) : {},
+                dtsChangeTime: program.dtsChangeTime,
+                outSignature: program.outSignature,
+            };
+        }
+        else {
+            filePaths = program.fileNames?.map(toPath);
+            filePathsSetList = program.fileIdsList?.map(fileIds => new Set(fileIds.map(toFilePath)));
+            const fileInfos = new Map<Path, BuilderState.FileInfo>();
+            const emitSignatures = program.options?.composite && !outFile(program.options) ? new Map<Path, string>() : undefined;
+            program.fileInfos.forEach((fileInfo, index) => {
+                const path = toFilePath(index + 1 as ProgramBuildInfoFileId);
+                const stateFileInfo = toBuilderStateFileInfo(fileInfo);
+                fileInfos.set(path, stateFileInfo);
+                if (emitSignatures && stateFileInfo.signature) emitSignatures.set(path, stateFileInfo.signature);
+            });
+            program.emitSignatures?.forEach(value => {
+                if (isNumber(value)) emitSignatures!.delete(toFilePath(value));
+                else emitSignatures!.set(toFilePath(value[0]), value[1]);
+            });
+            state = {
+                fileInfos,
+                compilerOptions: program.options ? convertToOptionsWithAbsolutePaths(program.options, toAbsolutePath) : {},
+                referencedMap: toManyToManyPathMap(program.referencedMap),
+                exportedModulesMap: toManyToManyPathMap(program.exportedModulesMap),
+                semanticDiagnosticsPerFile: program.semanticDiagnosticsPerFile && arrayToMap(program.semanticDiagnosticsPerFile, value => toFilePath(isNumber(value) ? value : value[0]), value => isNumber(value) ? emptyArray : value[1]),
+                hasReusableDiagnostic: true,
+                affectedFilesPendingEmit: map(program.affectedFilesPendingEmit, value => toFilePath(value[0])),
+                affectedFilesPendingEmitKind: program.affectedFilesPendingEmit && arrayToMap(program.affectedFilesPendingEmit, value => toFilePath(value[0]), value => value[1]),
+                affectedFilesPendingEmitIndex: program.affectedFilesPendingEmit && 0,
+                changedFilesSet: new Set(map(program.changeFileSet, toFilePath)),
+                dtsChangeTime: program.dtsChangeTime,
+                emitSignatures: emitSignatures?.size ? emitSignatures : undefined,
+            };
+        }
+
         return {
             getState: () => state,
             backupEmitState: noop,
@@ -1438,7 +1466,7 @@ namespace ts {
         }
 
         function toFilePath(fileId: ProgramBuildInfoFileId) {
-            return filePaths[fileId - 1];
+            return filePaths![fileId - 1];
         }
 
         function toFilePathsSet(fileIdsListId: ProgramBuildInfoFileIdListId) {
@@ -1456,6 +1484,22 @@ namespace ts {
             );
             return map;
         }
+    }
+
+    export function getBuildInfoFileVersionMap(
+        program: ProgramBuildInfo,
+        buildInfoPath: string,
+        host: Pick<ReadBuildProgramHost, "useCaseSensitiveFileNames" | "getCurrentDirectory">
+    ): ESMap<Path, string> {
+        const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(buildInfoPath, host.getCurrentDirectory()));
+        const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());
+        const fileInfos = new Map<Path, string>();
+        program.fileInfos.forEach((fileInfo, index) => {
+            const path = toPath(program.fileNames[index], buildInfoDirectory, getCanonicalFileName);
+            const version = isString(fileInfo) ? fileInfo : (fileInfo as ProgramBuildInfoBuilderStateFileInfo).version;
+            fileInfos.set(path, version);
+        });
+        return fileInfos;
     }
 
     export function createRedirectedBuilderProgram(getState: () => { program?: Program | undefined; compilerOptions: CompilerOptions; }, configFileParsingDiagnostics: readonly Diagnostic[]): BuilderProgram {

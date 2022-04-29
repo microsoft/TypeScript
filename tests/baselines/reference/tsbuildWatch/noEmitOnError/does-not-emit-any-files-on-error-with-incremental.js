@@ -651,28 +651,13 @@ Output::
 >> Screen clear
 [[90m12:02:00 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:02:01 AM[0m] Project 'tsconfig.json' is out of date because output 'dev-build/tsconfig.tsbuildinfo' is older than input 'src/main.ts'
+[[90m12:02:01 AM[0m] Project 'tsconfig.json' is up to date but needs update to timestamps of output files that are older than input files
 
-[[90m12:02:02 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
+[[90m12:02:02 AM[0m] Updating output timestamps of project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
-[[90m12:02:03 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/noEmitOnError/tsconfig.json'...
-
-[[90m12:02:05 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:02:04 AM[0m] Found 0 errors. Watching for file changes.
 
 
-
-Program root files: ["/user/username/projects/noEmitOnError/shared/types/db.ts","/user/username/projects/noEmitOnError/src/main.ts","/user/username/projects/noEmitOnError/src/other.ts"]
-Program options: {"outDir":"/user/username/projects/noEmitOnError/dev-build","noEmitOnError":true,"watch":true,"incremental":true,"configFilePath":"/user/username/projects/noEmitOnError/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/noEmitOnError/shared/types/db.ts
-/user/username/projects/noEmitOnError/src/main.ts
-/user/username/projects/noEmitOnError/src/other.ts
-
-Semantic diagnostics in builder refreshed for::
-
-No shapes updated in the builder::
 
 WatchedFiles::
 /user/username/projects/noemitonerror/tsconfig.json:

@@ -23,6 +23,7 @@ namespace ts {
         UpstreamBlocked,
         ComputingUpstream,
         TsVersionOutputOfDate,
+        UpToDateWithInputFileText,
 
         /**
          * Projects with no outputs (i.e. "solution" files)
@@ -68,7 +69,7 @@ namespace ts {
          * We track what the newest input file is.
          */
         export interface UpToDate {
-            type: UpToDateStatusType.UpToDate | UpToDateStatusType.UpToDateWithUpstreamTypes;
+            type: UpToDateStatusType.UpToDate | UpToDateStatusType.UpToDateWithUpstreamTypes | UpToDateStatusType.UpToDateWithInputFileText;
             newestInputFileTime?: Date;
             newestInputFileName?: string;
             newestDeclarationFileContentChangedTime: Date | undefined;

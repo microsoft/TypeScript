@@ -216,23 +216,9 @@ Output::
 >> Screen clear
 [[90m12:00:49 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:03 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:51 AM[0m] Found 0 errors. Watching for file changes.
 
 
-
-Program root files: ["/user/username/projects/solution/app/fileWithError.ts","/user/username/projects/solution/app/fileWithoutError.ts"]
-Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/solution/app/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/solution/app/fileWithError.ts
-/user/username/projects/solution/app/fileWithoutError.ts
-
-Semantic diagnostics in builder refreshed for::
-/user/username/projects/solution/app/fileWithError.ts
-
-Shape signatures in builder refreshed for::
-/user/username/projects/solution/app/filewitherror.ts (computed .d.ts)
 
 WatchedFiles::
 /user/username/projects/solution/app/tsconfig.json:
@@ -250,7 +236,4 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
-//// [/user/username/projects/solution/app/fileWithError.js] file written with same contents
-//// [/user/username/projects/solution/app/fileWithError.d.ts] file written with same contents
-//// [/user/username/projects/solution/app/tsconfig.tsbuildinfo] file written with same contents
-//// [/user/username/projects/solution/app/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
+//// [/user/username/projects/solution/app/tsconfig.tsbuildinfo] file changed its modified time

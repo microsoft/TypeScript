@@ -86,7 +86,7 @@ declare function foo(): number;
 
 
 //// [/user/username/projects/sample1/core/index.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./index.ts"],"js":{"sections":[{"pos":0,"end":30,"kind":"text"}],"hash":"3762995390-function foo() { return 10; }\n"},"dts":{"sections":[{"pos":0,"end":32,"kind":"text"}],"hash":"517738360-declare function foo(): number;\n"}},"program":{"options":{"composite":true,"outFile":"./index.js"},"outSignature":"517738360-declare function foo(): number;\n","dtsChangeTime":30000},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./index.ts"],"js":{"sections":[{"pos":0,"end":30,"kind":"text"}],"hash":"3762995390-function foo() { return 10; }\n"},"dts":{"sections":[{"pos":0,"end":32,"kind":"text"}],"hash":"517738360-declare function foo(): number;\n"}},"program":{"fileNames":["./index.ts"],"fileInfos":["5450201652-function foo() { return 10; }"],"options":{"composite":true,"outFile":"./index.js"},"outSignature":"517738360-declare function foo(): number;\n","dtsChangeTime":30000},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/sample1/core/index.tsbuildinfo.readable.baseline.txt]
 {
@@ -117,6 +117,12 @@ declare function foo(): number;
     }
   },
   "program": {
+    "fileNames": [
+      "./index.ts"
+    ],
+    "fileInfos": {
+      "./index.ts": "5450201652-function foo() { return 10; }"
+    },
     "options": {
       "composite": true,
       "outFile": "./index.js"
@@ -125,7 +131,7 @@ declare function foo(): number;
     "dtsChangeTime": 30000
   },
   "version": "FakeTSVersion",
-  "size": 455
+  "size": 539
 }
 
 //// [/user/username/projects/sample1/core/index.tsbuildinfo.baseline.txt]
@@ -156,7 +162,7 @@ declare function bar(): number;
 
 
 //// [/user/username/projects/sample1/logic/index.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./index.ts"],"js":{"sections":[{"pos":0,"end":30,"kind":"prepend","data":"../core/index.js","texts":[{"pos":0,"end":30,"kind":"text"}]},{"pos":30,"end":69,"kind":"text"}],"hash":"9692417533-function foo() { return 10; }\nfunction bar() { return foo() + 1; }\n;\n"},"dts":{"sections":[{"pos":0,"end":32,"kind":"prepend","data":"../core/index.d.ts","texts":[{"pos":0,"end":32,"kind":"text"}]},{"pos":32,"end":64,"kind":"text"}],"hash":"9641219228-declare function foo(): number;\ndeclare function bar(): number;\n"}},"program":{"options":{"composite":true,"outFile":"./index.js"},"outSignature":"9641219228-declare function foo(): number;\ndeclare function bar(): number;\n","dtsChangeTime":42000},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./index.ts"],"js":{"sections":[{"pos":0,"end":30,"kind":"prepend","data":"../core/index.js","texts":[{"pos":0,"end":30,"kind":"text"}]},{"pos":30,"end":69,"kind":"text"}],"hash":"9692417533-function foo() { return 10; }\nfunction bar() { return foo() + 1; }\n;\n"},"dts":{"sections":[{"pos":0,"end":32,"kind":"prepend","data":"../core/index.d.ts","texts":[{"pos":0,"end":32,"kind":"text"}]},{"pos":32,"end":64,"kind":"text"}],"hash":"9641219228-declare function foo(): number;\ndeclare function bar(): number;\n"}},"program":{"fileNames":["./index.ts"],"fileInfos":["5542925109-function bar() { return foo() + 1 };"],"options":{"composite":true,"outFile":"./index.js"},"outSignature":"9641219228-declare function foo(): number;\ndeclare function bar(): number;\n","dtsChangeTime":42000},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/sample1/logic/index.tsbuildinfo.readable.baseline.txt]
 {
@@ -213,6 +219,12 @@ declare function bar(): number;
     }
   },
   "program": {
+    "fileNames": [
+      "./index.ts"
+    ],
+    "fileInfos": {
+      "./index.ts": "5542925109-function bar() { return foo() + 1 };"
+    },
     "options": {
       "composite": true,
       "outFile": "./index.js"
@@ -221,7 +233,7 @@ declare function bar(): number;
     "dtsChangeTime": 42000
   },
   "version": "FakeTSVersion",
-  "size": 778
+  "size": 869
 }
 
 //// [/user/username/projects/sample1/logic/index.tsbuildinfo.baseline.txt]
@@ -310,7 +322,7 @@ declare function myFunc(): number;
 
 
 //// [/user/username/projects/sample1/core/index.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./index.ts"],"js":{"sections":[{"pos":0,"end":63,"kind":"text"}],"hash":"-6033649947-function foo() { return 10; }\nfunction myFunc() { return 10; }\n"},"dts":{"sections":[{"pos":0,"end":67,"kind":"text"}],"hash":"2172043225-declare function foo(): number;\ndeclare function myFunc(): number;\n"}},"program":{"options":{"composite":true,"outFile":"./index.js"},"outSignature":"2172043225-declare function foo(): number;\ndeclare function myFunc(): number;\n","dtsChangeTime":59000},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./index.ts"],"js":{"sections":[{"pos":0,"end":63,"kind":"text"}],"hash":"-6033649947-function foo() { return 10; }\nfunction myFunc() { return 10; }\n"},"dts":{"sections":[{"pos":0,"end":67,"kind":"text"}],"hash":"2172043225-declare function foo(): number;\ndeclare function myFunc(): number;\n"}},"program":{"fileNames":["./index.ts"],"fileInfos":["-3957203077-function foo() { return 10; }\nfunction myFunc() { return 10; }"],"options":{"composite":true,"outFile":"./index.js"},"outSignature":"2172043225-declare function foo(): number;\ndeclare function myFunc(): number;\n","dtsChangeTime":59000},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/sample1/core/index.tsbuildinfo.readable.baseline.txt]
 {
@@ -341,6 +353,12 @@ declare function myFunc(): number;
     }
   },
   "program": {
+    "fileNames": [
+      "./index.ts"
+    ],
+    "fileInfos": {
+      "./index.ts": "-3957203077-function foo() { return 10; }\nfunction myFunc() { return 10; }"
+    },
     "options": {
       "composite": true,
       "outFile": "./index.js"
@@ -349,7 +367,7 @@ declare function myFunc(): number;
     "dtsChangeTime": 59000
   },
   "version": "FakeTSVersion",
-  "size": 564
+  "size": 683
 }
 
 //// [/user/username/projects/sample1/core/index.tsbuildinfo.baseline.txt]
@@ -426,7 +444,7 @@ declare function bar(): number;
 
 
 //// [/user/username/projects/sample1/logic/index.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./index.ts"],"js":{"sections":[{"pos":0,"end":63,"kind":"prepend","data":"../core/index.js","texts":[{"pos":0,"end":63,"kind":"text"}]},{"pos":63,"end":102,"kind":"text"}],"hash":"-12608297404-function foo() { return 10; }\nfunction myFunc() { return 10; }\nfunction bar() { return foo() + 1; }\n;\n"},"dts":{"sections":[{"pos":0,"end":67,"kind":"prepend","data":"../core/index.d.ts","texts":[{"pos":0,"end":67,"kind":"text"}]},{"pos":67,"end":99,"kind":"text"}],"hash":"-2581247747-declare function foo(): number;\ndeclare function myFunc(): number;\ndeclare function bar(): number;\n"}},"program":{"options":{"composite":true,"outFile":"./index.js"},"outSignature":"-2581247747-declare function foo(): number;\ndeclare function myFunc(): number;\ndeclare function bar(): number;\n","dtsChangeTime":76000},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./index.ts"],"js":{"sections":[{"pos":0,"end":63,"kind":"prepend","data":"../core/index.js","texts":[{"pos":0,"end":63,"kind":"text"}]},{"pos":63,"end":102,"kind":"text"}],"hash":"-12608297404-function foo() { return 10; }\nfunction myFunc() { return 10; }\nfunction bar() { return foo() + 1; }\n;\n"},"dts":{"sections":[{"pos":0,"end":67,"kind":"prepend","data":"../core/index.d.ts","texts":[{"pos":0,"end":67,"kind":"text"}]},{"pos":67,"end":99,"kind":"text"}],"hash":"-2581247747-declare function foo(): number;\ndeclare function myFunc(): number;\ndeclare function bar(): number;\n"}},"program":{"fileNames":["./index.ts"],"fileInfos":["5542925109-function bar() { return foo() + 1 };"],"options":{"composite":true,"outFile":"./index.js"},"outSignature":"-2581247747-declare function foo(): number;\ndeclare function myFunc(): number;\ndeclare function bar(): number;\n","dtsChangeTime":76000},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/sample1/logic/index.tsbuildinfo.readable.baseline.txt]
 {
@@ -483,6 +501,12 @@ declare function bar(): number;
     }
   },
   "program": {
+    "fileNames": [
+      "./index.ts"
+    ],
+    "fileInfos": {
+      "./index.ts": "5542925109-function bar() { return foo() + 1 };"
+    },
     "options": {
       "composite": true,
       "outFile": "./index.js"
@@ -491,7 +515,7 @@ declare function bar(): number;
     "dtsChangeTime": 76000
   },
   "version": "FakeTSVersion",
-  "size": 889
+  "size": 980
 }
 
 //// [/user/username/projects/sample1/logic/index.tsbuildinfo.baseline.txt]
@@ -578,7 +602,7 @@ function myFunc() { return 100; }
 
 //// [/user/username/projects/sample1/core/index.d.ts] file written with same contents
 //// [/user/username/projects/sample1/core/index.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./index.ts"],"js":{"sections":[{"pos":0,"end":64,"kind":"text"}],"hash":"-5849092235-function foo() { return 10; }\nfunction myFunc() { return 100; }\n"},"dts":{"sections":[{"pos":0,"end":67,"kind":"text"}],"hash":"2172043225-declare function foo(): number;\ndeclare function myFunc(): number;\n"}},"program":{"options":{"composite":true,"outFile":"./index.js"},"outSignature":"2172043225-declare function foo(): number;\ndeclare function myFunc(): number;\n","dtsChangeTime":59000},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./index.ts"],"js":{"sections":[{"pos":0,"end":64,"kind":"text"}],"hash":"-5849092235-function foo() { return 10; }\nfunction myFunc() { return 100; }\n"},"dts":{"sections":[{"pos":0,"end":67,"kind":"text"}],"hash":"2172043225-declare function foo(): number;\ndeclare function myFunc(): number;\n"}},"program":{"fileNames":["./index.ts"],"fileInfos":["-6034018805-function foo() { return 10; }\nfunction myFunc() { return 100; }"],"options":{"composite":true,"outFile":"./index.js"},"outSignature":"2172043225-declare function foo(): number;\ndeclare function myFunc(): number;\n","dtsChangeTime":59000},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/sample1/core/index.tsbuildinfo.readable.baseline.txt]
 {
@@ -609,6 +633,12 @@ function myFunc() { return 100; }
     }
   },
   "program": {
+    "fileNames": [
+      "./index.ts"
+    ],
+    "fileInfos": {
+      "./index.ts": "-6034018805-function foo() { return 10; }\nfunction myFunc() { return 100; }"
+    },
     "options": {
       "composite": true,
       "outFile": "./index.js"
@@ -617,7 +647,7 @@ function myFunc() { return 100; }
     "dtsChangeTime": 59000
   },
   "version": "FakeTSVersion",
-  "size": 565
+  "size": 685
 }
 
 //// [/user/username/projects/sample1/core/index.tsbuildinfo.baseline.txt]
@@ -676,7 +706,7 @@ function bar() { return foo() + 1; }
 
 
 //// [/user/username/projects/sample1/logic/index.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./index.ts"],"js":{"sections":[{"pos":0,"end":64,"kind":"prepend","data":"../core/index.js","texts":[{"pos":0,"end":64,"kind":"text"}]},{"pos":64,"end":103,"kind":"text"}],"hash":"-1300839212-function foo() { return 10; }\nfunction myFunc() { return 100; }\nfunction bar() { return foo() + 1; }\n;\n"},"dts":{"sections":[{"pos":0,"end":67,"kind":"prepend","data":"../core/index.d.ts","texts":[{"pos":0,"end":67,"kind":"text"}]},{"pos":67,"end":99,"kind":"text"}],"hash":"-2581247747-declare function foo(): number;\ndeclare function myFunc(): number;\ndeclare function bar(): number;\n"}},"program":{"options":{"composite":true,"outFile":"./index.js"},"outSignature":"-2581247747-declare function foo(): number;\ndeclare function myFunc(): number;\ndeclare function bar(): number;\n","dtsChangeTime":76000},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./index.ts"],"js":{"sections":[{"pos":0,"end":64,"kind":"prepend","data":"../core/index.js","texts":[{"pos":0,"end":64,"kind":"text"}]},{"pos":64,"end":103,"kind":"text"}],"hash":"-1300839212-function foo() { return 10; }\nfunction myFunc() { return 100; }\nfunction bar() { return foo() + 1; }\n;\n"},"dts":{"sections":[{"pos":0,"end":67,"kind":"prepend","data":"../core/index.d.ts","texts":[{"pos":0,"end":67,"kind":"text"}]},{"pos":67,"end":99,"kind":"text"}],"hash":"-2581247747-declare function foo(): number;\ndeclare function myFunc(): number;\ndeclare function bar(): number;\n"}},"program":{"fileNames":["./index.ts"],"fileInfos":["5542925109-function bar() { return foo() + 1 };"],"options":{"composite":true,"outFile":"./index.js"},"outSignature":"-2581247747-declare function foo(): number;\ndeclare function myFunc(): number;\ndeclare function bar(): number;\n","dtsChangeTime":76000},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/sample1/logic/index.tsbuildinfo.readable.baseline.txt]
 {
@@ -733,6 +763,12 @@ function bar() { return foo() + 1; }
     }
   },
   "program": {
+    "fileNames": [
+      "./index.ts"
+    ],
+    "fileInfos": {
+      "./index.ts": "5542925109-function bar() { return foo() + 1 };"
+    },
     "options": {
       "composite": true,
       "outFile": "./index.js"
@@ -741,7 +777,7 @@ function bar() { return foo() + 1; }
     "dtsChangeTime": 76000
   },
   "version": "FakeTSVersion",
-  "size": 889
+  "size": 980
 }
 
 //// [/user/username/projects/sample1/logic/index.tsbuildinfo.baseline.txt]

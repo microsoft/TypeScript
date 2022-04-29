@@ -20,14 +20,14 @@ namespace ts {
          * Otherwise undefined
          * Thus non undefined value indicates, module emit
          */
-        readonly referencedMap: BuilderState.ReadonlyManyToManyPathMap | undefined;
+        readonly referencedMap?: BuilderState.ReadonlyManyToManyPathMap | undefined;
         /**
          * Contains the map of exported modules ReferencedSet=exported module files from the file if module emit is enabled
          * Otherwise undefined
          *
          * This is equivalent to referencedMap, but for the emitted .d.ts file.
          */
-        readonly exportedModulesMap: BuilderState.ManyToManyPathMap | undefined;
+        readonly exportedModulesMap?: BuilderState.ManyToManyPathMap | undefined;
 
         /**
          * true if file version is used as signature
