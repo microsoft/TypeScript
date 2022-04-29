@@ -138,6 +138,22 @@ namespace ts {
                 ]
             });
 
+            verifyTscWithEdits({
+                scenario: "sample1",
+                subScenario: "when input file text does not change but its modified time changes",
+                fs: () => projFs,
+                commandLineArgs: ["--b", "/src/tests", "--verbose"],
+                edits: [
+                    {
+                        subScenario: "upstream project changes without changing file text",
+                        modifyFs: fs => {
+                            const time = new Date(fs.time());
+                            fs.utimesSync("/src/core/index.ts", time, time);
+                        },
+                    },
+                ]
+            });
+
             verifyTsc({
                 scenario: "sample1",
                 subScenario: "indicates that it would skip builds during a dry build",
