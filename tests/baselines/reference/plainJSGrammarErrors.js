@@ -205,6 +205,8 @@ const nullaryDynamicImport = import()
 const trinaryDynamicImport = import('1', '2', '3')
 const spreadDynamicImport = import(...[])
 
+return
+
 
 //// [plainJSGrammarErrors.js]
 class C {
@@ -405,3 +407,4 @@ function foo() { new.targe; }
 const nullaryDynamicImport = import();
 const trinaryDynamicImport = import('1', '2', '3');
 const spreadDynamicImport = import(...[]);
+return;

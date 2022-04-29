@@ -513,3 +513,5 @@ tests/cases/conformance/salsa/plainJSGrammarErrors.js(205,36): error TS1325: Arg
                                        ~~~~~
 !!! error TS1325: Argument of dynamic import cannot be spread element.
     
+    return
+    
