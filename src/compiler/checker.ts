@@ -33102,7 +33102,7 @@ namespace ts {
                             case ModuleKind.Node16:
                             case ModuleKind.NodeNext:
                                 if (sourceFile.impliedNodeFormat === ModuleKind.CommonJS) {
-                                    span ??= getSpanOfTokenAtPosition(sourceFile, node.pos)
+                                    span ??= getSpanOfTokenAtPosition(sourceFile, node.pos);
                                     diagnostics.add(
                                         createFileDiagnostic(sourceFile, span.start, span.length, Diagnostics.The_current_file_is_a_CommonJS_module_and_cannot_use_await_at_the_top_level)
                                     );
@@ -33117,7 +33117,7 @@ namespace ts {
                                 }
                                 // fallthrough
                             default:
-                                span ??= getSpanOfTokenAtPosition(sourceFile, node.pos)
+                                span ??= getSpanOfTokenAtPosition(sourceFile, node.pos);
                                 diagnostics.add(
                                     createFileDiagnostic(sourceFile, span.start, span.length,
                                         Diagnostics.Top_level_await_expressions_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_node16_or_nodenext_and_the_target_option_is_set_to_es2017_or_higher
