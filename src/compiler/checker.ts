@@ -3537,9 +3537,6 @@ namespace ts {
                         if (isSyncImport && sourceFile.impliedNodeFormat === ModuleKind.ESNext && !getResolutionModeOverrideForClause(overrideClause)) {
                             error(errorNode, Diagnostics.Module_0_cannot_be_imported_using_this_construct_The_specifier_only_resolves_to_an_ES_module_which_cannot_be_imported_synchronously_Use_dynamic_import_instead, moduleReference);
                         }
-                        if (mode === ModuleKind.ESNext && compilerOptions.resolveJsonModule && resolvedModule.extension === Extension.Json) {
-                            error(errorNode, Diagnostics.JSON_imports_are_experimental_in_ES_module_mode_imports);
-                        }
                     }
                     // merged symbol is module declaration symbol combined with all augmentations
                     return getMergedSymbol(sourceFile.symbol);
