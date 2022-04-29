@@ -59,6 +59,8 @@ WatchedFiles::
   {"fileName":"/user/username/projects/solution/app/fileWithError.ts","pollingInterval":250}
 /user/username/projects/solution/app/filewithouterror.ts:
   {"fileName":"/user/username/projects/solution/app/fileWithoutError.ts","pollingInterval":250}
+/user/username/projects/solution/app/package.json:
+  {"fileName":"/user/username/projects/solution/app/package.json","pollingInterval":250}
 
 FsWatches::
 
@@ -191,6 +193,8 @@ WatchedFiles::
   {"fileName":"/user/username/projects/solution/app/fileWithError.ts","pollingInterval":250}
 /user/username/projects/solution/app/filewithouterror.ts:
   {"fileName":"/user/username/projects/solution/app/fileWithoutError.ts","pollingInterval":250}
+/user/username/projects/solution/app/package.json:
+  {"fileName":"/user/username/projects/solution/app/package.json","pollingInterval":250}
 
 FsWatches::
 
@@ -242,6 +246,8 @@ WatchedFiles::
   {"fileName":"/user/username/projects/solution/app/fileWithError.ts","pollingInterval":250}
 /user/username/projects/solution/app/filewithouterror.ts:
   {"fileName":"/user/username/projects/solution/app/fileWithoutError.ts","pollingInterval":250}
+/user/username/projects/solution/app/package.json:
+  {"fileName":"/user/username/projects/solution/app/package.json","pollingInterval":250}
 
 FsWatches::
 

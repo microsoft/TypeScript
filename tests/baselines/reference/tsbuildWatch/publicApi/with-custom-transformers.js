@@ -90,10 +90,14 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/shared/tsconfig.json","pollingInterval":250}
 /user/username/projects/myproject/shared/index.ts:
   {"fileName":"/user/username/projects/myproject/shared/index.ts","pollingInterval":250}
+/user/username/projects/myproject/shared/package.json:
+  {"fileName":"/user/username/projects/myproject/shared/package.json","pollingInterval":250}
 /user/username/projects/myproject/webpack/tsconfig.json:
   {"fileName":"/user/username/projects/myproject/webpack/tsconfig.json","pollingInterval":250}
 /user/username/projects/myproject/webpack/index.ts:
   {"fileName":"/user/username/projects/myproject/webpack/index.ts","pollingInterval":250}
+/user/username/projects/myproject/webpack/package.json:
+  {"fileName":"/user/username/projects/myproject/webpack/package.json","pollingInterval":250}
 /user/username/projects/myproject/tsconfig.json:
   {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
 
@@ -302,10 +306,14 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/shared/tsconfig.json","pollingInterval":250}
 /user/username/projects/myproject/shared/index.ts:
   {"fileName":"/user/username/projects/myproject/shared/index.ts","pollingInterval":250}
+/user/username/projects/myproject/shared/package.json:
+  {"fileName":"/user/username/projects/myproject/shared/package.json","pollingInterval":250}
 /user/username/projects/myproject/webpack/tsconfig.json:
   {"fileName":"/user/username/projects/myproject/webpack/tsconfig.json","pollingInterval":250}
 /user/username/projects/myproject/webpack/index.ts:
   {"fileName":"/user/username/projects/myproject/webpack/index.ts","pollingInterval":250}
+/user/username/projects/myproject/webpack/package.json:
+  {"fileName":"/user/username/projects/myproject/webpack/package.json","pollingInterval":250}
 /user/username/projects/myproject/tsconfig.json:
   {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
 

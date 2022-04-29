@@ -282,7 +282,7 @@ namespace ts {
         Full
     }
 
-    export interface SharedExtendedConfigFileWatcher<T> extends FileWatcher {
+    export interface SharedFileWatcher<T> extends FileWatcher {
         watcher: FileWatcher;
         projects: Set<T>;
     }
@@ -290,37 +290,56 @@ namespace ts {
     /**
      * Updates the map of shared extended config file watches with a new set of extended config files from a base config file of the project
      */
-    export function updateSharedExtendedConfigFileWatcher<T>(
+     export function updateSharedExtendedConfigFileWatcher<T>(
         projectPath: T,
         options: CompilerOptions | undefined,
-        extendedConfigFilesMap: ESMap<Path, SharedExtendedConfigFileWatcher<T>>,
+        extendedConfigFilesMap: ESMap<Path, SharedFileWatcher<T>>,
         createExtendedConfigFileWatch: (extendedConfigPath: string, extendedConfigFilePath: Path) => FileWatcher,
         toPath: (fileName: string) => Path,
+     ) {
+         return updateSharedFileWatcher(
+             projectPath,
+             options?.configFile?.extendedSourceFiles || emptyArray,
+             extendedConfigFilesMap,
+             createExtendedConfigFileWatch,
+             toPath
+         );
+    }
+
+    /**
+     * Updates the map of shared extended config file watches with a new set of extended config files from a base config file of the project
+     */
+    export function updateSharedFileWatcher<T>(
+        projectPath: T,
+        filesToWatch: readonly string[],
+        fileWatchersMap: ESMap<Path, SharedFileWatcher<T>>,
+        createFileWatcher: (file: string, path: Path) => FileWatcher,
+        toPath: (fileName: string) => Path,
     ) {
-        const extendedConfigs = arrayToMap(options?.configFile?.extendedSourceFiles || emptyArray, toPath);
+        const filesToWatchMap = arrayToMap(filesToWatch, toPath);
         // remove project from all unrelated watchers
-        extendedConfigFilesMap.forEach((watcher, extendedConfigFilePath) => {
-            if (!extendedConfigs.has(extendedConfigFilePath)) {
+        fileWatchersMap.forEach((watcher, fileToWatchPath) => {
+            if (!filesToWatchMap.has(fileToWatchPath)) {
                 watcher.projects.delete(projectPath);
                 watcher.close();
             }
         });
-        // Update the extended config files watcher
-        extendedConfigs.forEach((extendedConfigFileName, extendedConfigFilePath) => {
-            const existing = extendedConfigFilesMap.get(extendedConfigFilePath);
+        // Update the files watcher
+        filesToWatchMap.forEach((fileToWatch, fileToWatchPath) => {
+            const existing = fileWatchersMap.get(fileToWatchPath);
             if (existing) {
                 existing.projects.add(projectPath);
             }
             else {
-                // start watching previously unseen extended config
-                extendedConfigFilesMap.set(extendedConfigFilePath, {
+                // start watching previously unseen file
+                fileWatchersMap.set(fileToWatchPath, {
                     projects: new Set([projectPath]),
-                    watcher: createExtendedConfigFileWatch(extendedConfigFileName, extendedConfigFilePath),
+                    watcher: createFileWatcher(fileToWatch, fileToWatchPath),
                     close: () => {
-                        const existing = extendedConfigFilesMap.get(extendedConfigFilePath);
+                        const existing = fileWatchersMap.get(fileToWatchPath);
                         if (!existing || existing.projects.size !== 0) return;
                         existing.watcher.close();
-                        extendedConfigFilesMap.delete(extendedConfigFilePath);
+                        fileWatchersMap.delete(fileToWatchPath);
                     },
                 });
             }
@@ -332,7 +351,7 @@ namespace ts {
      */
     export function clearSharedExtendedConfigFileWatcher<T>(
         projectPath: T,
-        extendedConfigFilesMap: ESMap<Path, SharedExtendedConfigFileWatcher<T>>,
+        extendedConfigFilesMap: ESMap<Path, SharedFileWatcher<T>>,
     ) {
         extendedConfigFilesMap.forEach(watcher => {
             if (watcher.projects.delete(projectPath)) watcher.close();

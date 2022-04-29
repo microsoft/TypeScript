@@ -65,6 +65,8 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/a.js","pollingInterval":250}
 /user/username/projects/myproject/b.ts:
   {"fileName":"/user/username/projects/myproject/b.ts","pollingInterval":250}
+/user/username/projects/myproject/package.json:
+  {"fileName":"/user/username/projects/myproject/package.json","pollingInterval":250}
 
 FsWatches::
 
@@ -111,6 +113,8 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/a.js","pollingInterval":250}
 /user/username/projects/myproject/b.ts:
   {"fileName":"/user/username/projects/myproject/b.ts","pollingInterval":250}
+/user/username/projects/myproject/package.json:
+  {"fileName":"/user/username/projects/myproject/package.json","pollingInterval":250}
 
 FsWatches::
 
@@ -164,6 +168,8 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/a.js","pollingInterval":250}
 /user/username/projects/myproject/b.ts:
   {"fileName":"/user/username/projects/myproject/b.ts","pollingInterval":250}
+/user/username/projects/myproject/package.json:
+  {"fileName":"/user/username/projects/myproject/package.json","pollingInterval":250}
 
 FsWatches::
 

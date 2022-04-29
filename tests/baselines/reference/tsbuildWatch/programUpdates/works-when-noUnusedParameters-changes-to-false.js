@@ -53,6 +53,8 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
 /user/username/projects/myproject/index.ts:
   {"fileName":"/user/username/projects/myproject/index.ts","pollingInterval":250}
+/user/username/projects/myproject/package.json:
+  {"fileName":"/user/username/projects/myproject/package.json","pollingInterval":250}
 
 FsWatches::
 
@@ -96,6 +98,8 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
 /user/username/projects/myproject/index.ts:
   {"fileName":"/user/username/projects/myproject/index.ts","pollingInterval":250}
+/user/username/projects/myproject/package.json:
+  {"fileName":"/user/username/projects/myproject/package.json","pollingInterval":250}
 
 FsWatches::
 

@@ -198,14 +198,20 @@ WatchedFiles::
   {"fileName":"/user/username/projects/sample1/core/anotherModule.ts","pollingInterval":250}
 /user/username/projects/sample1/core/index.ts:
   {"fileName":"/user/username/projects/sample1/core/index.ts","pollingInterval":250}
+/user/username/projects/sample1/core/package.json:
+  {"fileName":"/user/username/projects/sample1/core/package.json","pollingInterval":250}
 /user/username/projects/sample1/logic/tsconfig.json:
   {"fileName":"/user/username/projects/sample1/logic/tsconfig.json","pollingInterval":250}
 /user/username/projects/sample1/logic/index.ts:
   {"fileName":"/user/username/projects/sample1/logic/index.ts","pollingInterval":250}
+/user/username/projects/sample1/logic/package.json:
+  {"fileName":"/user/username/projects/sample1/logic/package.json","pollingInterval":250}
 /user/username/projects/sample1/tests/tsconfig.json:
   {"fileName":"/user/username/projects/sample1/tests/tsconfig.json","pollingInterval":250}
 /user/username/projects/sample1/tests/index.ts:
   {"fileName":"/user/username/projects/sample1/tests/index.ts","pollingInterval":250}
+/user/username/projects/sample1/tests/package.json:
+  {"fileName":"/user/username/projects/sample1/tests/package.json","pollingInterval":250}
 
 FsWatches::
 
@@ -536,14 +542,20 @@ WatchedFiles::
   {"fileName":"/user/username/projects/sample1/core/anotherModule.ts","pollingInterval":250}
 /user/username/projects/sample1/core/index.ts:
   {"fileName":"/user/username/projects/sample1/core/index.ts","pollingInterval":250}
+/user/username/projects/sample1/core/package.json:
+  {"fileName":"/user/username/projects/sample1/core/package.json","pollingInterval":250}
 /user/username/projects/sample1/logic/tsconfig.json:
   {"fileName":"/user/username/projects/sample1/logic/tsconfig.json","pollingInterval":250}
 /user/username/projects/sample1/logic/index.ts:
   {"fileName":"/user/username/projects/sample1/logic/index.ts","pollingInterval":250}
+/user/username/projects/sample1/logic/package.json:
+  {"fileName":"/user/username/projects/sample1/logic/package.json","pollingInterval":250}
 /user/username/projects/sample1/tests/tsconfig.json:
   {"fileName":"/user/username/projects/sample1/tests/tsconfig.json","pollingInterval":250}
 /user/username/projects/sample1/tests/index.ts:
   {"fileName":"/user/username/projects/sample1/tests/index.ts","pollingInterval":250}
+/user/username/projects/sample1/tests/package.json:
+  {"fileName":"/user/username/projects/sample1/tests/package.json","pollingInterval":250}
 
 FsWatches::
 
@@ -715,14 +727,20 @@ WatchedFiles::
   {"fileName":"/user/username/projects/sample1/core/anotherModule.ts","pollingInterval":250}
 /user/username/projects/sample1/core/index.ts:
   {"fileName":"/user/username/projects/sample1/core/index.ts","pollingInterval":250}
+/user/username/projects/sample1/core/package.json:
+  {"fileName":"/user/username/projects/sample1/core/package.json","pollingInterval":250}
 /user/username/projects/sample1/logic/tsconfig.json:
   {"fileName":"/user/username/projects/sample1/logic/tsconfig.json","pollingInterval":250}
 /user/username/projects/sample1/logic/index.ts:
   {"fileName":"/user/username/projects/sample1/logic/index.ts","pollingInterval":250}
+/user/username/projects/sample1/logic/package.json:
+  {"fileName":"/user/username/projects/sample1/logic/package.json","pollingInterval":250}
 /user/username/projects/sample1/tests/tsconfig.json:
   {"fileName":"/user/username/projects/sample1/tests/tsconfig.json","pollingInterval":250}
 /user/username/projects/sample1/tests/index.ts:
   {"fileName":"/user/username/projects/sample1/tests/index.ts","pollingInterval":250}
+/user/username/projects/sample1/tests/package.json:
+  {"fileName":"/user/username/projects/sample1/tests/package.json","pollingInterval":250}
 
 FsWatches::
 

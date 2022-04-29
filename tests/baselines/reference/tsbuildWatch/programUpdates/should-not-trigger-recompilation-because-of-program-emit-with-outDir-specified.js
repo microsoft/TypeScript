@@ -67,6 +67,8 @@ WatchedFiles::
   {"fileName":"/user/username/projects/sample1/core/anotherModule.ts","pollingInterval":250}
 /user/username/projects/sample1/core/index.ts:
   {"fileName":"/user/username/projects/sample1/core/index.ts","pollingInterval":250}
+/user/username/projects/sample1/core/package.json:
+  {"fileName":"/user/username/projects/sample1/core/package.json","pollingInterval":250}
 
 FsWatches::
 
@@ -160,6 +162,8 @@ WatchedFiles::
   {"fileName":"/user/username/projects/sample1/core/anotherModule.ts","pollingInterval":250}
 /user/username/projects/sample1/core/index.ts:
   {"fileName":"/user/username/projects/sample1/core/index.ts","pollingInterval":250}
+/user/username/projects/sample1/core/package.json:
+  {"fileName":"/user/username/projects/sample1/core/package.json","pollingInterval":250}
 
 FsWatches::
 
@@ -213,6 +217,8 @@ WatchedFiles::
   {"fileName":"/user/username/projects/sample1/core/anotherModule.ts","pollingInterval":250}
 /user/username/projects/sample1/core/index.ts:
   {"fileName":"/user/username/projects/sample1/core/index.ts","pollingInterval":250}
+/user/username/projects/sample1/core/package.json:
+  {"fileName":"/user/username/projects/sample1/core/package.json","pollingInterval":250}
 /user/username/projects/sample1/core/file3.ts:
   {"fileName":"/user/username/projects/sample1/core/file3.ts","pollingInterval":250}
 
@@ -301,6 +307,8 @@ WatchedFiles::
   {"fileName":"/user/username/projects/sample1/core/anotherModule.ts","pollingInterval":250}
 /user/username/projects/sample1/core/index.ts:
   {"fileName":"/user/username/projects/sample1/core/index.ts","pollingInterval":250}
+/user/username/projects/sample1/core/package.json:
+  {"fileName":"/user/username/projects/sample1/core/package.json","pollingInterval":250}
 /user/username/projects/sample1/core/file3.ts:
   {"fileName":"/user/username/projects/sample1/core/file3.ts","pollingInterval":250}
 

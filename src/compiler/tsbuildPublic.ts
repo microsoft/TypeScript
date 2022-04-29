@@ -226,7 +226,8 @@ namespace ts {
         readonly rootNames: readonly string[];
         readonly baseWatchOptions: WatchOptions | undefined;
 
-        readonly resolvedConfigFilePaths: ESMap<string, ResolvedConfigFilePath>;
+        readonly resolvedConfigFilePaths: ESMap<ResolvedConfigFileName, ResolvedConfigFilePath>;
+        readonly resolvedPackageJsonPaths: ESMap<ResolvedConfigFileName, string>;
         readonly configFileCache: ESMap<ResolvedConfigFilePath, ConfigFileCacheEntry>;
         /** Map from config file name to up-to-date status */
         readonly projectStatus: ESMap<ResolvedConfigFilePath, UpToDateStatus>;
@@ -257,9 +258,8 @@ namespace ts {
         readonly allWatchedWildcardDirectories: ESMap<ResolvedConfigFilePath, ESMap<string, WildcardDirectoryWatcher>>;
         readonly allWatchedInputFiles: ESMap<ResolvedConfigFilePath, ESMap<Path, FileWatcher>>;
         readonly allWatchedConfigFiles: ESMap<ResolvedConfigFilePath, FileWatcher>;
-        readonly allWatchedExtendedConfigFiles: ESMap<Path, SharedExtendedConfigFileWatcher<ResolvedConfigFilePath>>;
-        readonly allWatchedPackageJsonFiles: ESMap<ResolvedConfigFilePath, ESMap<Path, FileWatcher>>;
-        readonly lastCachedPackageJsonLookups: ESMap<ResolvedConfigFilePath, readonly (readonly [Path, object | boolean])[] | undefined>;
+        readonly allWatchedExtendedConfigFiles: ESMap<Path, SharedFileWatcher<ResolvedConfigFilePath>>;
+        readonly allWatchedPackageJsonFiles: ESMap<Path, SharedFileWatcher<ResolvedConfigFilePath>>;
 
         timerToBuildInvalidatedProject: any;
         reportFileChangeDetected: boolean;
@@ -310,6 +310,7 @@ namespace ts {
             baseWatchOptions,
 
             resolvedConfigFilePaths: new Map(),
+            resolvedPackageJsonPaths: new Map(),
             configFileCache: new Map(),
             projectStatus: new Map(),
             buildInfoChecked: new Map(),
@@ -341,7 +342,6 @@ namespace ts {
             allWatchedConfigFiles: new Map(),
             allWatchedExtendedConfigFiles: new Map(),
             allWatchedPackageJsonFiles: new Map(),
-            lastCachedPackageJsonLookups: new Map(),
 
             timerToBuildInvalidatedProject: undefined,
             reportFileChangeDetected: false,
@@ -459,6 +459,7 @@ namespace ts {
 
         // Clear all to ResolvedConfigFilePaths cache to start fresh
         state.resolvedConfigFilePaths.clear();
+        state.resolvedPackageJsonPaths.clear();
 
         // TODO(rbuckton): Should be a `Set`, but that requires changing the code below that uses `mutateMapSkippingNewValues`
         const currentProjects = new Map(
@@ -484,14 +485,7 @@ namespace ts {
                 { onDeleteValue: closeFileWatcher }
             );
 
-            state.allWatchedExtendedConfigFiles.forEach(watcher => {
-                watcher.projects.forEach(project => {
-                    if (!currentProjects.has(project)) {
-                        watcher.projects.delete(project);
-                    }
-                });
-                watcher.close();
-            });
+            state.allWatchedExtendedConfigFiles.forEach(closeSharedWatcherOfUnknownProjects);
 
             mutateMapSkippingNewValues(
                 state.allWatchedWildcardDirectories,
@@ -505,13 +499,18 @@ namespace ts {
                 { onDeleteValue: existingMap => existingMap.forEach(closeFileWatcher) }
             );
 
-            mutateMapSkippingNewValues(
-                state.allWatchedPackageJsonFiles,
-                currentProjects,
-                { onDeleteValue: existingMap => existingMap.forEach(closeFileWatcher) }
-            );
+            state.allWatchedPackageJsonFiles.forEach(closeSharedWatcherOfUnknownProjects);
         }
         return state.buildOrder = buildOrder;
+
+        function closeSharedWatcherOfUnknownProjects(watcher: SharedFileWatcher<ResolvedConfigFilePath>) {
+            watcher.projects.forEach(project => {
+                if (!currentProjects.has(project)) {
+                    watcher.projects.delete(project);
+                }
+            });
+            watcher.close();
+        }
     }
 
     function getBuildOrderFor(state: SolutionBuilderState, project: string | undefined, onlyReferences: boolean | undefined): AnyBuildOrder | undefined {
@@ -569,7 +568,7 @@ namespace ts {
     function disableCache(state: SolutionBuilderState) {
         if (!state.cache) return;
 
-        const { cache, host, compilerHost, extendedConfigCache, moduleResolutionCache, typeReferenceDirectiveResolutionCache } = state;
+        const { cache, host, compilerHost, extendedConfigCache, moduleResolutionCache, typeReferenceDirectiveResolutionCache, } = state;
 
         host.readFile = cache.originalReadFile;
         host.fileExists = cache.originalFileExists;
@@ -874,11 +873,6 @@ namespace ts {
                 config.projectReferences
             );
             if (state.watch) {
-                state.lastCachedPackageJsonLookups.set(projectPath, state.moduleResolutionCache && map(
-                    state.moduleResolutionCache.getPackageJsonInfoCache().entries(),
-                    ([path, data]) => ([state.host.realpath && data ? toPath(state, state.host.realpath(path)) : path, data] as const)
-                ));
-
                 state.builderPrograms.set(projectPath, program);
             }
             step++;
@@ -1216,10 +1210,9 @@ namespace ts {
                 config.fileNames = getFileNamesFromConfigSpecs(config.options.configFile!.configFileSpecs!, getDirectoryPath(project), config.options, state.parseConfigFileHost);
                 updateErrorForNoInputFiles(config.fileNames, project, config.options.configFile!.configFileSpecs!, config.errors, canJsonReportNoInputFiles(config.raw));
                 watchInputFiles(state, project, projectPath, config);
-                watchPackageJsonFiles(state, project, projectPath, config);
             }
 
-            const status = getUpToDateStatus(state, config, projectPath);
+            const status = getUpToDateStatus(state, config, project, projectPath);
             verboseReportProjectStatus(state, project, status);
             if (!options.force) {
                 if (status.type === UpToDateStatusType.UpToDate) {
@@ -1345,7 +1338,7 @@ namespace ts {
         }
     }
 
-    function getUpToDateStatusWorker(state: SolutionBuilderState, project: ParsedCommandLine, resolvedPath: ResolvedConfigFilePath): UpToDateStatus {
+    function getUpToDateStatusWorker(state: SolutionBuilderState, project: ParsedCommandLine, resolved: ResolvedConfigFileName, resolvedPath: ResolvedConfigFilePath): UpToDateStatus {
         const force = !!state.options.force;
         let newestInputFileName: string = undefined!;
         let newestInputFileTime = minimumDate;
@@ -1433,7 +1426,7 @@ namespace ts {
                 usesPrepend = usesPrepend || !!(ref.prepend);
                 const resolvedRef = resolveProjectReferencePath(ref);
                 const resolvedRefPath = toResolvedConfigFilePath(state, resolvedRef);
-                const refStatus = getUpToDateStatus(state, parseConfigFile(state, resolvedRef, resolvedRefPath), resolvedRefPath);
+                const refStatus = getUpToDateStatus(state, parseConfigFile(state, resolvedRef, resolvedRefPath), resolvedRef, resolvedRefPath);
 
                 // Its a circular reference ignore the status of this project
                 if (refStatus.type === UpToDateStatusType.ComputingUpstream ||
@@ -1507,13 +1500,16 @@ namespace ts {
             if (configStatus) return configStatus;
 
             // Check extended config time
-            const extendedConfigStatus = forEach(project.options.configFile!.extendedSourceFiles || emptyArray, configFile => checkConfigFileUpToDateStatus(state, configFile, oldestOutputFileTime, oldestOutputFileName));
+            const extendedConfigStatus = forEach(
+                project.options.configFile!.extendedSourceFiles || emptyArray,
+                configFile => checkConfigFileUpToDateStatus(state, configFile, oldestOutputFileTime, oldestOutputFileName)
+            );
             if (extendedConfigStatus) return extendedConfigStatus;
 
             // Check package file time
             const dependentPackageFileStatus = forEach(
-                state.lastCachedPackageJsonLookups.get(resolvedPath) || emptyArray,
-                ([path]) => checkConfigFileUpToDateStatus(state, path, oldestOutputFileTime, oldestOutputFileName)
+                getPackageJsonsFromConfig(state, resolved, project),
+                file => checkConfigFileUpToDateStatus(state, file, oldestOutputFileTime, oldestOutputFileName)
             );
             if (dependentPackageFileStatus) return dependentPackageFileStatus;
         }
@@ -1553,7 +1549,7 @@ namespace ts {
         };
     }
 
-    function getUpToDateStatus(state: SolutionBuilderState, project: ParsedCommandLine | undefined, resolvedPath: ResolvedConfigFilePath): UpToDateStatus {
+    function getUpToDateStatus(state: SolutionBuilderState, project: ParsedCommandLine | undefined, resolved: ResolvedConfigFileName, resolvedPath: ResolvedConfigFilePath): UpToDateStatus {
         if (project === undefined) {
             return { type: UpToDateStatusType.Unbuildable, reason: "File deleted mid-build" };
         }
@@ -1563,7 +1559,7 @@ namespace ts {
             return prior;
         }
 
-        const actual = getUpToDateStatusWorker(state, project, resolvedPath);
+        const actual = getUpToDateStatusWorker(state, project, resolved, resolvedPath);
         state.projectStatus.set(resolvedPath, actual);
         return actual;
     }
@@ -1772,6 +1768,12 @@ namespace ts {
         scheduleBuildInvalidatedProject(state);
     }
 
+    function invalidateProjectAndScheduledBuildsOfSharedFileWacher(state: SolutionBuilderState, sharedWatcher: SharedFileWatcher<ResolvedConfigFilePath> | undefined, reloadLevel: ConfigFileProgramReloadLevel) {
+        sharedWatcher?.projects.forEach(projectConfigFilePath =>
+            invalidateProjectAndScheduleBuilds(state, projectConfigFilePath, reloadLevel)
+        );
+    }
+
     function scheduleBuildInvalidatedProject(state: SolutionBuilderState) {
         const { hostWithWatch } = state;
         if (!hostWithWatch.setTimeout || !hostWithWatch.clearTimeout) {
@@ -1827,8 +1829,10 @@ namespace ts {
             state.allWatchedExtendedConfigFiles,
             (extendedConfigFileName, extendedConfigFilePath) => state.watchFile(
                 extendedConfigFileName,
-                () => state.allWatchedExtendedConfigFiles.get(extendedConfigFilePath)?.projects.forEach(projectConfigFilePath =>
-                    invalidateProjectAndScheduleBuilds(state, projectConfigFilePath, ConfigFileProgramReloadLevel.Full)
+                () => invalidateProjectAndScheduledBuildsOfSharedFileWacher(
+                    state,
+                    state.allWatchedExtendedConfigFiles.get(extendedConfigFilePath),
+                    ConfigFileProgramReloadLevel.Full,
                 ),
                 PollingInterval.High,
                 parsed?.watchOptions,
@@ -1888,22 +1892,43 @@ namespace ts {
         );
     }
 
+    function getPackageJsonsFromConfig(state: SolutionBuilderState, resolved: ResolvedConfigFileName, parsed: ParsedCommandLine): string[] {
+        const result: string[] = [getPackageJsonPathFromConfig(state, resolved)];
+        parsed.projectReferences?.forEach(ref => result.push(getPackageJsonPathFromConfig(state, resolveProjectName(state, ref.path))));
+        return result;
+    }
+
+    function getPackageJsonPathFromConfig(state: SolutionBuilderState, resolved: ResolvedConfigFileName) {
+        const { resolvedPackageJsonPaths } = state;
+        const path = resolvedPackageJsonPaths.get(resolved);
+        if (path !== undefined) return path;
+
+        const packageJsonPath = combinePaths(getDirectoryPath(resolved), "package.json");
+        resolvedPackageJsonPaths.set(resolved, packageJsonPath);
+        return packageJsonPath;
+    }
+
     function watchPackageJsonFiles(state: SolutionBuilderState, resolved: ResolvedConfigFileName, resolvedPath: ResolvedConfigFilePath, parsed: ParsedCommandLine) {
-        if (!state.watch || !state.lastCachedPackageJsonLookups) return;
-        mutateMap(
-            getOrCreateValueMapFromConfigFileMap(state.allWatchedPackageJsonFiles, resolvedPath),
-            new Map(state.lastCachedPackageJsonLookups.get(resolvedPath)),
-            {
-                createNewValue: (path, _input) => state.watchFile(
-                    path,
-                    () => invalidateProjectAndScheduleBuilds(state, resolvedPath, ConfigFileProgramReloadLevel.None),
-                    PollingInterval.High,
-                    parsed?.watchOptions,
-                    WatchType.PackageJson,
-                    resolved
+        if (!state.watch) return;
+         // Container if no files are specified in the project, nothing to watch
+        if (!parsed.fileNames.length && !canJsonReportNoInputFiles(parsed.raw)) return;
+        updateSharedFileWatcher(
+            resolvedPath,
+            getPackageJsonsFromConfig(state, resolved, parsed),
+            state.allWatchedPackageJsonFiles,
+            (file, path) => state.watchFile(
+                file,
+                () => invalidateProjectAndScheduledBuildsOfSharedFileWacher(
+                    state,
+                    state.allWatchedPackageJsonFiles.get(path),
+                    ConfigFileProgramReloadLevel.None,
                 ),
-                onDeleteValue: closeFileWatcher,
-            }
+                PollingInterval.High,
+                parsed?.watchOptions,
+                WatchType.PackageJson,
+                resolved
+            ),
+            fileName => toPath(state, fileName),
         );
     }
 
@@ -1934,7 +1959,7 @@ namespace ts {
         clearMap(state.allWatchedExtendedConfigFiles, closeFileWatcherOf);
         clearMap(state.allWatchedWildcardDirectories, watchedWildcardDirectories => clearMap(watchedWildcardDirectories, closeFileWatcherOf));
         clearMap(state.allWatchedInputFiles, watchedWildcardDirectories => clearMap(watchedWildcardDirectories, closeFileWatcher));
-        clearMap(state.allWatchedPackageJsonFiles, watchedPacageJsonFiles => clearMap(watchedPacageJsonFiles, closeFileWatcher));
+        clearMap(state.allWatchedPackageJsonFiles, closeFileWatcherOf);
     }
 
     /**
@@ -1958,7 +1983,7 @@ namespace ts {
             getUpToDateStatusOfProject: project => {
                 const configFileName = resolveProjectName(state, project);
                 const configFilePath = toResolvedConfigFilePath(state, configFileName);
-                return getUpToDateStatus(state, parseConfigFile(state, configFileName, configFilePath), configFilePath);
+                return getUpToDateStatus(state, parseConfigFile(state, configFileName, configFilePath), configFileName, configFilePath);
             },
             invalidateProject: (configFilePath, reloadLevel) => invalidateProject(state, configFilePath, reloadLevel || ConfigFileProgramReloadLevel.None),
             buildNextInvalidatedProject: () => buildNextInvalidatedProject(state),

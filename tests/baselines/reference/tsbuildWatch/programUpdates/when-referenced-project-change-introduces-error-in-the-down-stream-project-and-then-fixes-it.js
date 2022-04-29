@@ -84,10 +84,14 @@ WatchedFiles::
   {"fileName":"/user/username/projects/sample1/Library/tsconfig.json","pollingInterval":250}
 /user/username/projects/sample1/library/library.ts:
   {"fileName":"/user/username/projects/sample1/Library/library.ts","pollingInterval":250}
+/user/username/projects/sample1/library/package.json:
+  {"fileName":"/user/username/projects/sample1/Library/package.json","pollingInterval":250}
 /user/username/projects/sample1/app/tsconfig.json:
   {"fileName":"/user/username/projects/sample1/App/tsconfig.json","pollingInterval":250}
 /user/username/projects/sample1/app/app.ts:
   {"fileName":"/user/username/projects/sample1/App/app.ts","pollingInterval":250}
+/user/username/projects/sample1/app/package.json:
+  {"fileName":"/user/username/projects/sample1/App/package.json","pollingInterval":250}
 
 FsWatches::
 
@@ -232,10 +236,14 @@ WatchedFiles::
   {"fileName":"/user/username/projects/sample1/Library/tsconfig.json","pollingInterval":250}
 /user/username/projects/sample1/library/library.ts:
   {"fileName":"/user/username/projects/sample1/Library/library.ts","pollingInterval":250}
+/user/username/projects/sample1/library/package.json:
+  {"fileName":"/user/username/projects/sample1/Library/package.json","pollingInterval":250}
 /user/username/projects/sample1/app/tsconfig.json:
   {"fileName":"/user/username/projects/sample1/App/tsconfig.json","pollingInterval":250}
 /user/username/projects/sample1/app/app.ts:
   {"fileName":"/user/username/projects/sample1/App/app.ts","pollingInterval":250}
+/user/username/projects/sample1/app/package.json:
+  {"fileName":"/user/username/projects/sample1/App/package.json","pollingInterval":250}
 
 FsWatches::
 
@@ -363,10 +371,14 @@ WatchedFiles::
   {"fileName":"/user/username/projects/sample1/Library/tsconfig.json","pollingInterval":250}
 /user/username/projects/sample1/library/library.ts:
   {"fileName":"/user/username/projects/sample1/Library/library.ts","pollingInterval":250}
+/user/username/projects/sample1/library/package.json:
+  {"fileName":"/user/username/projects/sample1/Library/package.json","pollingInterval":250}
 /user/username/projects/sample1/app/tsconfig.json:
   {"fileName":"/user/username/projects/sample1/App/tsconfig.json","pollingInterval":250}
 /user/username/projects/sample1/app/app.ts:
   {"fileName":"/user/username/projects/sample1/App/app.ts","pollingInterval":250}
+/user/username/projects/sample1/app/package.json:
+  {"fileName":"/user/username/projects/sample1/App/package.json","pollingInterval":250}
 
 FsWatches::
 
